@@ -10,6 +10,12 @@ it, and label every component **FORCED** (a theorem given the definitions),
 **GAUGE** (a convention that provably cannot affect selection), or
 **OPEN** (a genuine degree of freedom requiring the robustness program of §6).
 
+**Machine-check clarification (2026-07-18):** the proposed L1/L2 finite bases
+are now mechanically checked, but their identification with actual schema
+classes is not. Here, "finite layer checked" means arithmetic and finite
+partitioning conditional on a semantic realization; it does not mean a
+cubical or fibration proof.
+
 ---
 
 ## 0. The Problem, Stated Fairly
@@ -316,3 +322,44 @@ run id `v2b-l1-sigma-dsq`.
 V2b status: PASSED. The final accepted/canonical hashes are
 `blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4` and
 `blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4`.
+
+---
+
+## 9. Machine-Check Boundary and T1 Consequence (2026-07-18)
+
+`agda/CountingLemmas.agda` proves both displayed cardinalities from explicit
+schema/basis isomorphisms. The Rust checker independently enumerates the
+proposed index sets, validates their finite partitions, checks a submitted L2
+graph, and tests numerical parity with the evaluator. Neither layer derives a
+schema classifier from the current AST, which has no `coe`, `hcom`, fibration
+semantics, or quotient by definitional interderivability.
+
+These checks therefore do not close T1. After the Step-16 probe was corrected
+to require symbolic raw-catalog membership and the engine's semantic-minimality
+screen, the high-dimensional L1 and high-reference-count L2 maximizers ceased
+to be lane candidates. A role-corrected Axiomatic candidate with `kappa = 3`
+remains raw-generable and engine-minimal, with `nu = 108` and `rho = 36`. Its
+score comes from P5-record inheritance, not L1 or L2, and it clears Bar_16.
+Exhaustive Step-16 search also remains unavailable. Thus validating L1 and L2
+can support the first fifteen scores, but cannot prove that no sixteenth step
+exists.
+
+## 10. P5-record Domain Audit (2026-07-18)
+
+The remaining Axiomatic candidate does not satisfy the unique-maximal-import
+hypothesis of the stated Telescopic Elimination theorem.  Its imports are
+`{L14,L15}`; the accepted reference DAG has
+`reach(14)={14,13,12,11,10}` and `reach(15)={15,10}`, so neither import
+subsumes the other.  The evaluator nevertheless uses the historical-nu maximum
+`L15`, a different operation from reachability maximum.
+
+`crates/pen-eval/src/p5_record.rs` now computes this premise from the accepted
+telescope history, and `agda/P5RecordBoundary.agda` proves the fixed finite
+case independently.  Both also preserve the intended reference cases: Step 13
+has dominant import `L12`, and Step 14 has dominant import `L13`.
+
+This invalidates the candidate's *P5 theorem justification* for `nu=108`; it
+does not prove internality.  The principled internal theorem is conditional on
+a transparent elaboration/erasure equivalence, which the current untyped AST
+cannot supply.  See `docs/P5_RECORD_INTERNALITY.md` for the exact boundary and
+its consequence for T1.

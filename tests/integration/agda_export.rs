@@ -48,6 +48,10 @@ fn export_agda_emits_the_frozen_manifest_and_witness_source() {
     assert_eq!(actual_payload, expected_payload);
     assert!(output_dir.join("BridgePayload.agda").exists());
     assert!(output_dir.join("AbstractionBarrier.agda").exists());
+    assert!(output_dir.join("CountingLemmas.agda").exists());
+    assert!(output_dir.join("ProvenanceBound.agda").exists());
+    assert!(output_dir.join("P5RecordBoundary.agda").exists());
+    assert!(output_dir.join("CertifiedHalt.agda").exists());
     assert!(output_dir.join("StepWitness.agda").exists());
 
     fs::remove_dir_all(output_dir).ok();

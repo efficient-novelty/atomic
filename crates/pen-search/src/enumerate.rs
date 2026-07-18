@@ -42,6 +42,20 @@ pub struct EnumerationSurfaceDiagnostics {
     pub claim_widening_band9_active: bool,
 }
 
+/// Exact membership of a hand-constructed telescope in the clause catalog
+/// that the raw enumerator can produce for a particular context.
+///
+/// `assess_strict_admissibility` intentionally checks the post-generation
+/// policy gates only; expression-size, leaf-domain, and feature bounds are
+/// enforced while the catalog is generated.  Probes that inject candidates
+/// directly must therefore check this separately or they can accidentally
+/// credit out-of-surface witnesses as live lane candidates.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct RawSurfaceMembership {
+    pub is_member: bool,
+    pub rejection_reasons: Vec<String>,
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct EnumerationContext {
     pub library_size: u32,
@@ -284,6 +298,109 @@ impl EnumerationContext {
     }
 }
 
+/// Checks raw-catalog membership without materializing the (potentially
+/// enormous) clause catalog.
+pub fn assess_raw_surface_membership(
+    base_context: EnumerationContext,
+    telescope: &Telescope,
+) -> RawSurfaceMembership {
+    let Ok(clause_kappa) = u16::try_from(telescope.kappa()) else {
+        return RawSurfaceMembership {
+            is_member: false,
+            rejection_reasons: vec!["clause count exceeds u16".to_owned()],
+        };
+    };
+    if base_context.require_curvature_shell_clauses && clause_kappa < 6 {
+        return RawSurfaceMembership {
+            is_member: false,
+            rejection_reasons: vec![
+                "curvature-shell catalogs require at least six clauses".to_owned(),
+            ],
+        };
+    }
+
+    let mut rejection_reasons = Vec::new();
+    for (position, clause) in telescope.clauses.iter().enumerate() {
+        let clause_context = EnumerationContext {
+            scope_size: base_context.scope_size.saturating_add(position as u32),
+            ..base_context
+        };
+
+        let in_catalog = if let Some(options) =
+            late_clause_options(position, clause_context, clause_kappa)
+        {
+            options.into_iter().any(|candidate| {
+                candidate == *clause
+                    && raw_clause_matches_context(&candidate.expr, clause_context)
+                    && raw_clause_matches_position(
+                        base_context,
+                        clause_kappa,
+                        position,
+                        &candidate.expr,
+                    )
+            })
+        } else {
+            raw_expr_is_generated(&clause.expr, clause_context)
+                && clause.role == primary_role(&clause.expr)
+                && raw_clause_matches_context(&clause.expr, clause_context)
+                && raw_clause_matches_position(base_context, clause_kappa, position, &clause.expr)
+        };
+
+        if !in_catalog {
+            rejection_reasons.push(format!(
+                "clause {position} is absent from the raw catalog (role {:?}, expression {:?})",
+                clause.role, clause.expr
+            ));
+        }
+    }
+
+    RawSurfaceMembership {
+        is_member: rejection_reasons.is_empty(),
+        rejection_reasons,
+    }
+}
+
+fn raw_expr_is_generated(expr: &Expr, context: EnumerationContext) -> bool {
+    fn leaf_lib_is_available(index: u32, context: EnumerationContext) -> bool {
+        if index == 0 || index > context.library_size {
+            return false;
+        }
+        let start = context.library_size.saturating_sub(1).max(1);
+        index >= start || context.historical_anchor_ref == Some(index)
+    }
+
+    fn generated(expr: &Expr, context: EnumerationContext, nodes: &mut u32) -> bool {
+        *nodes = nodes.saturating_add(1);
+        match expr {
+            Expr::Univ => true,
+            Expr::Var(index) => (1..=context.scope_size).contains(index),
+            Expr::Lib(index) => leaf_lib_is_available(*index, context),
+            Expr::PathCon(dimension) => (1..=context.max_path_dimension).contains(dimension),
+            Expr::Lam(body) => generated(body, context, nodes),
+            Expr::Trunc(body) => context.include_trunc && generated(body, context, nodes),
+            Expr::Flat(body) | Expr::Sharp(body) | Expr::Disc(body) | Expr::Shape(body) => {
+                context.include_modal && generated(body, context, nodes)
+            }
+            Expr::Next(body) | Expr::Eventually(body) => {
+                context.include_temporal && generated(body, context, nodes)
+            }
+            Expr::Bang(body) | Expr::WhyNot(body) => {
+                context.include_linear_exponential && generated(body, context, nodes)
+            }
+            Expr::App(left, right) | Expr::Pi(left, right) | Expr::Sigma(left, right) => {
+                generated(left, context, nodes) && generated(right, context, nodes)
+            }
+            // These atoms occur only on focused/specialized late-family
+            // surfaces.  When such a surface is active, `late_clause_options`
+            // above checks exact membership before reaching this fallback.
+            Expr::Id(_, _, _) | Expr::Refl(_) | Expr::Susp(_) => false,
+        }
+    }
+
+    let mut nodes = 0;
+    generated(expr, context, &mut nodes) && nodes <= u32::from(context.max_expr_nodes)
+}
+
 pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
     enumerate_exprs(context)
         .into_iter()
@@ -309,10 +426,7 @@ pub fn enumerate_next_clauses(context: EnumerationContext) -> Vec<ClauseRec> {
                 && (!context.require_hilbert_functional_clauses
                     || supports_hilbert_functional_clause(expr))
                 && (!context.require_temporal_shell_clauses
-                    || supports_temporal_shell_clause(
-                        expr,
-                        context.include_linear_exponential,
-                    ))
+                    || supports_temporal_shell_clause(expr, context.include_linear_exponential))
         })
         .map(|expr| ClauseRec::new(primary_role(&expr), expr))
         .collect()
@@ -3280,10 +3394,7 @@ fn raw_clause_matches_context(expr: &Expr, context: EnumerationContext) -> bool 
         && (!context.require_operator_bundle_clauses || supports_operator_bundle_clause(expr))
         && (!context.require_hilbert_functional_clauses || supports_hilbert_functional_clause(expr))
         && (!context.require_temporal_shell_clauses
-            || supports_temporal_shell_clause(
-                expr,
-                context.include_linear_exponential,
-            ))
+            || supports_temporal_shell_clause(expr, context.include_linear_exponential))
 }
 
 fn raw_clause_matches_position(
@@ -5138,8 +5249,8 @@ fn contains_eliminator_expr(expr: &Expr) -> bool {
 #[cfg(test)]
 mod tests {
     use super::{
-        EnumerationContext, LateFamilySurface, build_clause_catalog, clause_sort_key,
-        compare_clause_sort_order, enumerate_exprs, enumerate_next_clauses,
+        EnumerationContext, LateFamilySurface, assess_raw_surface_membership, build_clause_catalog,
+        clause_sort_key, compare_clause_sort_order, enumerate_exprs, enumerate_next_clauses,
         enumerate_raw_telescopes, enumerate_telescopes, raw_clause_catalog_widths,
         raw_clause_catalog_widths_with_progress, supports_axiomatic_bundle_clause_at_position,
         supports_connection_shell_clause_at_position, supports_curvature_shell_clause_at_position,
@@ -5243,6 +5354,111 @@ mod tests {
             let exprs = super::enumerate_exprs_exact(context, nodes, &mut cache);
             assert_eq!(exprs.len(), super::exact_expr_count(context, nodes));
         }
+    }
+
+    #[test]
+    fn symbolic_raw_surface_membership_matches_materialized_small_catalog() {
+        let context = EnumerationContext {
+            library_size: 4,
+            scope_size: 1,
+            max_path_dimension: 2,
+            include_trunc: true,
+            include_modal: true,
+            include_temporal: true,
+            include_linear_exponential: true,
+            max_expr_nodes: 3,
+            require_former_eliminator_clauses: false,
+            require_initial_hit_clauses: false,
+            require_truncation_hit_clauses: false,
+            require_higher_hit_clauses: false,
+            require_sphere_lift_clauses: false,
+            require_axiomatic_bundle_clauses: false,
+            require_modal_shell_clauses: false,
+            require_connection_shell_clauses: false,
+            require_curvature_shell_clauses: false,
+            require_operator_bundle_clauses: false,
+            require_hilbert_functional_clauses: false,
+            require_temporal_shell_clauses: false,
+            historical_anchor_ref: Some(1),
+            late_family_surface: LateFamilySurface::None,
+        };
+        let catalog = build_clause_catalog(context, 2);
+        let baseline = vec![
+            catalog.clauses_at(0)[0].clone(),
+            catalog.clauses_at(1)[0].clone(),
+        ];
+
+        for position in 0..2 {
+            for clause in catalog.clauses_at(position) {
+                let mut clauses = baseline.clone();
+                clauses[position] = clause.clone();
+                let membership = assess_raw_surface_membership(context, &Telescope::new(clauses));
+                assert!(
+                    membership.is_member,
+                    "catalog clause rejected: {membership:?}"
+                );
+            }
+        }
+
+        let mut wrong_role = baseline.clone();
+        wrong_role[0].role = ClauseRole::Computation;
+        let outside_leaf_window = vec![
+            ClauseRec::new(ClauseRole::Formation, Expr::Lib(2)),
+            baseline[1].clone(),
+        ];
+        let outside_path_bound = vec![
+            ClauseRec::new(ClauseRole::PathAttach, Expr::PathCon(3)),
+            baseline[1].clone(),
+        ];
+        let outside_node_bound = vec![
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::Lam(Box::new(Expr::Lam(Box::new(
+                    Expr::Univ,
+                )))))),
+            ),
+            baseline[1].clone(),
+        ];
+        let outside_position_scope = vec![
+            ClauseRec::new(ClauseRole::Introduction, Expr::Var(2)),
+            baseline[1].clone(),
+        ];
+
+        for clauses in [
+            wrong_role,
+            outside_leaf_window,
+            outside_path_bound,
+            outside_node_bound,
+            outside_position_scope,
+        ] {
+            let membership = assess_raw_surface_membership(context, &Telescope::new(clauses));
+            assert!(!membership.is_member);
+            assert!(!membership.rejection_reasons.is_empty());
+        }
+
+        let curvature_context = EnumerationContext {
+            require_curvature_shell_clauses: true,
+            max_expr_nodes: 5,
+            ..context
+        };
+        let curvature_telescope = Telescope::new(vec![
+            ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Lib(4)),
+                    Box::new(Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1)))),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::App(
+                    Box::new(Expr::Lib(4)),
+                    Box::new(Expr::Var(1)),
+                ))),
+            ),
+        ]);
+        assert!(build_clause_catalog(curvature_context, 2).is_empty());
+        assert!(!assess_raw_surface_membership(curvature_context, &curvature_telescope).is_member);
     }
 
     #[test]

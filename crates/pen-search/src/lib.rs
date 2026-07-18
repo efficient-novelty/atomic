@@ -1,6 +1,7 @@
 pub mod accept;
 pub mod bounds;
 pub mod branch_bound;
+pub mod certified_halt;
 pub mod config;
 pub mod dedupe;
 pub mod diversify;
@@ -17,4 +18,5 @@ pub mod priority;
 pub mod resume;
 pub mod scheduler;
 pub mod state;
+pub mod step16_automaton;
 pub mod worker;

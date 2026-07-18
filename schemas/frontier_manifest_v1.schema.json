@@ -344,6 +344,10 @@
         "ast_schema_hash": {
           "type": "string"
         },
+        "elaborator_hash": {
+          "type": "string",
+          "default": ""
+        },
         "evaluator_hash": {
           "type": "string"
         },
@@ -352,6 +356,10 @@
         },
         "search_semantics_hash": {
           "type": "string"
+        },
+        "token_rules_hash": {
+          "type": "string",
+          "default": ""
         },
         "type_rules_hash": {
           "type": "string"

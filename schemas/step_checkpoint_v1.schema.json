@@ -133,11 +133,19 @@
         "ast_schema_hash": {
           "type": "string"
         },
+        "elaborator_hash": {
+          "type": "string",
+          "default": ""
+        },
         "evaluator_hash": {
           "type": "string"
         },
         "search_semantics_hash": {
           "type": "string"
+        },
+        "token_rules_hash": {
+          "type": "string",
+          "default": ""
         },
         "type_rules_hash": {
           "type": "string"
@@ -434,6 +442,30 @@
           "additionalProperties": false,
           "required": [
             "Eventually"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "Bang": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "Bang"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "WhyNot": {
+              "$ref": "#/$defs/Expr"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "WhyNot"
           ]
         }
       ]

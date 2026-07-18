@@ -36,6 +36,14 @@
     "host": {
       "$ref": "#/$defs/HostInfo"
     },
+    "owner_pid": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint32",
+      "minimum": 0
+    },
     "position": {
       "$ref": "#/$defs/RunPosition"
     },
@@ -193,6 +201,11 @@
         "ast_schema_hash": {
           "type": "string"
         },
+        "elaborator_hash": {
+          "description": "Semantic-kernel hashes (SEMANTIC_NORMALIZATION_PROGRAM §0.3).\n`#[serde(default)]` keeps frozen pre-kernel artifacts parseable;\nan absent stored hash reads as a mismatch, which invalidates\nsemantic certificates without blocking structural resume.",
+          "type": "string",
+          "default": ""
+        },
         "evaluator_hash": {
           "type": "string"
         },
@@ -201,6 +214,10 @@
         },
         "store_schema_hash": {
           "type": "string"
+        },
+        "token_rules_hash": {
+          "type": "string",
+          "default": ""
         },
         "type_rules_hash": {
           "type": "string"

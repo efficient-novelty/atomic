@@ -23,6 +23,10 @@ use time::format_description::well_known::Rfc3339;
 const SUPPORT_MODULES: &[&str] = &[
     "BridgePayload.agda",
     "AbstractionBarrier.agda",
+    "CountingLemmas.agda",
+    "ProvenanceBound.agda",
+    "P5RecordBoundary.agda",
+    "CertifiedHalt.agda",
     "StepWitness.agda",
 ];
 
@@ -302,6 +306,9 @@ mod tests {
         assert!(output_dir.join("BridgePayload.agda").exists());
         assert!(output_dir.join("AbstractionBarrier.agda").exists());
         assert!(output_dir.join("StepWitness.agda").exists());
+        assert!(output_dir.join("ProvenanceBound.agda").exists());
+        assert!(output_dir.join("P5RecordBoundary.agda").exists());
+        assert!(output_dir.join("CertifiedHalt.agda").exists());
         assert!(output_dir.join("Step01.agda").exists());
         assert!(output_dir.join("Payload01.agda").exists());
         assert!(output_dir.join("manifest.json").exists());

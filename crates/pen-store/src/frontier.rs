@@ -196,6 +196,8 @@ mod tests {
                 evaluator_hash: "blake3:eval".to_owned(),
                 search_semantics_hash: "blake3:search".to_owned(),
                 record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+                elaborator_hash: "blake3:elab".to_owned(),
+                token_rules_hash: "blake3:token".to_owned(),
             },
             counts: FrontierCounts {
                 prefixes_created: 11,

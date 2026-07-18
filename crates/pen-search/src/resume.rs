@@ -7,6 +7,13 @@ pub struct CurrentCompat {
     pub evaluator_hash: String,
     pub search_semantics_hash: String,
     pub record_layout_id: String,
+    /// Semantic-kernel hashes (SEMANTIC_NORMALIZATION_PROGRAM §0.3).
+    /// They participate in the frontier full-match (like
+    /// `search_semantics_hash`) but NOT in the structural step ladder:
+    /// a kernel change invalidates semantic certificates and frontier
+    /// accelerators, not the frozen structural history.
+    pub elaborator_hash: String,
+    pub token_rules_hash: String,
 }
 
 impl CurrentCompat {
@@ -16,6 +23,8 @@ impl CurrentCompat {
             type_rules_hash: self.type_rules_hash.clone(),
             evaluator_hash: self.evaluator_hash.clone(),
             search_semantics_hash: self.search_semantics_hash.clone(),
+            elaborator_hash: self.elaborator_hash.clone(),
+            token_rules_hash: self.token_rules_hash.clone(),
         }
     }
 }
@@ -57,6 +66,8 @@ fn same_frontier_compat(current: &CurrentCompat, resume: &ResumeCompatible) -> b
         && current.evaluator_hash == resume.evaluator_hash
         && current.search_semantics_hash == resume.search_semantics_hash
         && current.record_layout_id == resume.record_layout_id
+        && current.elaborator_hash == resume.elaborator_hash
+        && current.token_rules_hash == resume.token_rules_hash
 }
 
 fn same_ast_type_eval_checkpoint(current: &CheckpointCompat, stored: &CheckpointCompat) -> bool {
@@ -76,6 +87,8 @@ pub fn checkpoint_compat_from_resume(value: &ResumeCompatible) -> CheckpointComp
         type_rules_hash: value.type_rules_hash.clone(),
         evaluator_hash: value.evaluator_hash.clone(),
         search_semantics_hash: value.search_semantics_hash.clone(),
+        elaborator_hash: value.elaborator_hash.clone(),
+        token_rules_hash: value.token_rules_hash.clone(),
     }
 }
 
@@ -95,6 +108,8 @@ mod tests {
             evaluator_hash: "blake3:eval".to_owned(),
             search_semantics_hash: "blake3:search".to_owned(),
             record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+            elaborator_hash: "blake3:elab".to_owned(),
+            token_rules_hash: "blake3:token".to_owned(),
         }
     }
 
@@ -121,6 +136,8 @@ mod tests {
             evaluator_hash: "blake3:eval".to_owned(),
             search_semantics_hash: "blake3:search".to_owned(),
             record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+            elaborator_hash: "blake3:elab".to_owned(),
+            token_rules_hash: "blake3:token".to_owned(),
         }
     }
 
@@ -153,11 +170,8 @@ mod tests {
     fn resume_policy_requires_reevaluation_when_evaluator_changes() {
         let current = current();
         let frontier = frontier_manifest(ResumeCompatible {
-            ast_schema_hash: "blake3:ast".to_owned(),
-            type_rules_hash: "blake3:type".to_owned(),
             evaluator_hash: "blake3:old-eval".to_owned(),
-            search_semantics_hash: "blake3:search".to_owned(),
-            record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+            ..matching_resume()
         });
 
         assert_eq!(
@@ -171,15 +185,53 @@ mod tests {
         let current = current();
         let frontier = frontier_manifest(ResumeCompatible {
             ast_schema_hash: "blake3:old-ast".to_owned(),
-            type_rules_hash: "blake3:type".to_owned(),
-            evaluator_hash: "blake3:eval".to_owned(),
-            search_semantics_hash: "blake3:search".to_owned(),
-            record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+            ..matching_resume()
         });
 
         assert_eq!(
             decide_resume(&current, &frontier),
             ResumeDecision::MigrationRequired
+        );
+    }
+
+    #[test]
+    fn resume_policy_drops_frontier_when_the_semantic_kernel_changes() {
+        // A kernel (elaborator/token-rules) change invalidates the frontier
+        // accelerator, like a search-semantics change...
+        let current = current();
+        let frontier = frontier_manifest(ResumeCompatible {
+            elaborator_hash: "blake3:old-elab".to_owned(),
+            ..matching_resume()
+        });
+        assert_eq!(
+            decide_resume(&current, &frontier),
+            ResumeDecision::StepCheckpoint
+        );
+        let frontier = frontier_manifest(ResumeCompatible {
+            token_rules_hash: "blake3:old-token".to_owned(),
+            ..matching_resume()
+        });
+        assert_eq!(
+            decide_resume(&current, &frontier),
+            ResumeDecision::StepCheckpoint
+        );
+    }
+
+    #[test]
+    fn step_ladder_ignores_semantic_kernel_hashes() {
+        // ...but the structural step ladder deliberately ignores the
+        // semantic-kernel hashes: frozen pre-kernel checkpoints (empty
+        // stored hashes) still resume structurally, and the mismatch
+        // instead invalidates semantic certificates downstream.
+        let current = current().checkpoint_compat();
+        let stored_pre_kernel = CheckpointCompat {
+            elaborator_hash: String::new(),
+            token_rules_hash: String::new(),
+            ..current.clone()
+        };
+        assert_eq!(
+            decide_step_resume(&current, &stored_pre_kernel),
+            ResumeDecision::StepCheckpoint
         );
     }
 
@@ -191,6 +243,8 @@ mod tests {
             type_rules_hash: "blake3:type".to_owned(),
             evaluator_hash: "blake3:eval".to_owned(),
             search_semantics_hash: "blake3:search".to_owned(),
+            elaborator_hash: "blake3:elab".to_owned(),
+            token_rules_hash: "blake3:token".to_owned(),
         };
 
         assert_eq!(

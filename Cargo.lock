@@ -517,8 +517,10 @@ dependencies = [
 name = "pen-type"
 version = "0.1.0"
 dependencies = [
+ "blake3",
  "pen-core",
  "serde",
+ "serde_json",
  "thiserror",
 ]
 

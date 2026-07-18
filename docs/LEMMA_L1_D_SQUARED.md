@@ -5,6 +5,14 @@ Telescopic Elimination theorem. Two steps flagged for mechanization. One new
 off-trace discrepancy discovered in the engine (§6). Companion to
 `EVALUATOR_DERIVATION.md` (principle P4).
 
+**Machine-check clarification (2026-07-18):** the cubical argument remains a
+proof sketch. `agda/CountingLemmas.agda` checks the cardinality theorem from an
+explicit schema/basis isomorphism, and
+`crates/pen-eval/src/counting_lemmas.rs` enumerates the finite basis tags. No
+MBTT instance of that isomorphism is supplied. Availability, the transpose
+obstruction, exhaustiveness, and union-staging therefore remain semantic proof
+obligations; this work does not prove that Genesis halts after Step 15.
+
 ---
 
 ## 1. Statement
@@ -199,3 +207,19 @@ verification program as **V2b**.
   a weave's (i,j) and (j,i) transports are related only propositionally),
   and the **(post+1)/2** H-space chaining term (unchanged; still the sharpest
   exposure).
+
+## 8. Machine-Checked Finite Layer (2026-07-18)
+
+The Rust checker enumerates one beta tag and every ordered
+`(principal, probe)` tag for a single positive dimension, then checks the
+beta/diagonal/off-diagonal partition and total `1 + d^2`. The Agda theorem
+`l1-conditional-cardinality` proves `Presented Schema (1 + d * d)` only from
+an `L1Semantic Schema d` classifier/realizer isomorphism. Constructing that
+isomorphism for computation schemas modulo definitional interderivability is
+exactly the remaining cubical-semantic burden in Section 5.
+
+The multi-constructor evaluator discrepancy in Section 6 was subsequently
+closed by V2b: the evaluator now sums the per-constructor squares and the
+strict fifteen-step trace was unchanged. That engine correction is not a proof
+that cross-constructor semantic surfaces form a disjoint sum, so the formal L1
+checker intentionally remains the single-constructor statement above.

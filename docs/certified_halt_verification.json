@@ -1,0 +1,917 @@
+{
+  "schema_version": 2,
+  "date": "2026-07-18",
+  "theorem_scope": "unconditional SAT for the shipped structural evaluator; UNSAT for the proof-carrying support-local calculus; conditional, not yet global, halt theorem for the intended semantics",
+  "bar_numerator": 354333,
+  "bar_denominator": 39040,
+  "bar_16": "354333/39040",
+  "shipped": {
+    "schema_version": 1,
+    "config": {
+      "step_index": 16,
+      "library_size": 15,
+      "ambient_depth": 2,
+      "max_expr_nodes": 6,
+      "min_clause_kappa": 2,
+      "max_clause_kappa": 4,
+      "available_library_refs": [
+        14,
+        15
+      ],
+      "max_path_dimension": 1,
+      "include_trunc": false,
+      "include_modal": true,
+      "include_temporal": true,
+      "include_linear_exponential": false,
+      "historical_anchor_ref": null,
+      "late_family_surface": "none",
+      "unary_constructor_count": 7,
+      "binary_constructor_count": 3
+    },
+    "completeness": {
+      "raw_expression_surface_exact": true,
+      "actual_position_scopes_used": true,
+      "sat_witness_replay_complete": true,
+      "exhaustive_telescope_quotient": false,
+      "global_maximum_certified": false,
+      "unsat_certificate_available": false,
+      "limitation": "The finite expression automaton exactly counts the raw position catalogs, but this version does not multiply observation states through every telescope-level connectivity, canonical-identification, and semantic-minimality transition. It gives a complete SAT proof by exact witness replay, not an exhaustive maximum or UNSAT proof."
+    },
+    "bar_16": "354333/39040",
+    "surfaces": [
+      {
+        "clause_kappa": 2,
+        "positions": [
+          {
+            "clause_kappa": 2,
+            "position": 0,
+            "scope_size": 2,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "662184",
+            "checker_valid_expression_count": "643716",
+            "finite_signature_count": 2780,
+            "checker_valid_signature_count": 2164,
+            "polymorphic_temporal_expression_count": "102",
+            "spatial_temporal_expression_count": "8"
+          },
+          {
+            "clause_kappa": 2,
+            "position": 1,
+            "scope_size": 3,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "910182",
+            "checker_valid_expression_count": "886809",
+            "finite_signature_count": 6193,
+            "checker_valid_signature_count": 5200,
+            "polymorphic_temporal_expression_count": "183",
+            "spatial_temporal_expression_count": "12"
+          }
+        ],
+        "raw_telescope_product": "602707957488",
+        "checker_valid_telescope_product": "570853142244"
+      },
+      {
+        "clause_kappa": 3,
+        "positions": [
+          {
+            "clause_kappa": 3,
+            "position": 0,
+            "scope_size": 2,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "662184",
+            "checker_valid_expression_count": "643716",
+            "finite_signature_count": 2780,
+            "checker_valid_signature_count": 2164,
+            "polymorphic_temporal_expression_count": "102",
+            "spatial_temporal_expression_count": "8"
+          },
+          {
+            "clause_kappa": 3,
+            "position": 1,
+            "scope_size": 3,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "910182",
+            "checker_valid_expression_count": "886809",
+            "finite_signature_count": 6193,
+            "checker_valid_signature_count": 5200,
+            "polymorphic_temporal_expression_count": "183",
+            "spatial_temporal_expression_count": "12"
+          },
+          {
+            "clause_kappa": 3,
+            "position": 2,
+            "scope_size": 4,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "1207872",
+            "checker_valid_expression_count": "1179072",
+            "finite_signature_count": 12242,
+            "checker_valid_signature_count": 10795,
+            "polymorphic_temporal_expression_count": "284",
+            "spatial_temporal_expression_count": "16"
+          }
+        ],
+        "raw_telescope_product": "727994066026945536",
+        "checker_valid_telescope_product": "673076956131917568"
+      },
+      {
+        "clause_kappa": 4,
+        "positions": [
+          {
+            "clause_kappa": 4,
+            "position": 0,
+            "scope_size": 2,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "662184",
+            "checker_valid_expression_count": "643716",
+            "finite_signature_count": 2780,
+            "checker_valid_signature_count": 2164,
+            "polymorphic_temporal_expression_count": "102",
+            "spatial_temporal_expression_count": "8"
+          },
+          {
+            "clause_kappa": 4,
+            "position": 1,
+            "scope_size": 3,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "910182",
+            "checker_valid_expression_count": "886809",
+            "finite_signature_count": 6193,
+            "checker_valid_signature_count": 5200,
+            "polymorphic_temporal_expression_count": "183",
+            "spatial_temporal_expression_count": "12"
+          },
+          {
+            "clause_kappa": 4,
+            "position": 2,
+            "scope_size": 4,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "1207872",
+            "checker_valid_expression_count": "1179072",
+            "finite_signature_count": 12242,
+            "checker_valid_signature_count": 10795,
+            "polymorphic_temporal_expression_count": "284",
+            "spatial_temporal_expression_count": "16"
+          },
+          {
+            "clause_kappa": 4,
+            "position": 3,
+            "scope_size": 5,
+            "max_expr_nodes": 6,
+            "raw_expression_count": "1559142",
+            "checker_valid_expression_count": "1524393",
+            "finite_signature_count": 21468,
+            "checker_valid_signature_count": 19494,
+            "polymorphic_temporal_expression_count": "405",
+            "spatial_temporal_expression_count": "20"
+          }
+        ],
+        "raw_telescope_product": "1135046124093383916890112",
+        "checker_valid_telescope_product": "1026033800388802217236224"
+      }
+    ],
+    "witnesses": [
+      {
+        "name": "hit_no_formation_d1",
+        "mechanism": "HIT no-formation branch inherits the shipped +|B| term",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 1
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Var": 1
+              }
+            }
+          ]
+        },
+        "raw_surface_member": true,
+        "raw_surface_rejections": [],
+        "type_correct": true,
+        "type_error": null,
+        "admissible": true,
+        "admissibility_class": "admitted_and_focus_aligned",
+        "admissibility_reason": "open_band_structural",
+        "connected": true,
+        "references_active_window": false,
+        "self_contained": true,
+        "historical_reanchor": false,
+        "semantically_minimal": true,
+        "terminal_components": [
+          [
+            0
+          ]
+        ],
+        "detachable_subbundle_count": 1,
+        "bar_clearing_detachable_subbundle_count": 0,
+        "canonically_identified_with_accepted": false,
+        "nu": {
+          "nu_g": 0,
+          "nu_c": 17,
+          "nu_h": 2,
+          "total": 19,
+          "rho": "19/2"
+        },
+        "clears_bar": true,
+        "p5_import_audit": null,
+        "conditional_p5_nu_c": null,
+        "certifies_sat": true
+      },
+      {
+        "name": "temporal_polymorphic_kappa2",
+        "mechanism": "two recognized polymorphic temporal eliminators each receive |B|",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "raw_surface_member": true,
+        "raw_surface_rejections": [],
+        "type_correct": true,
+        "type_error": null,
+        "admissible": true,
+        "admissibility_class": "admitted_and_focus_aligned",
+        "admissibility_reason": "open_band_structural",
+        "connected": true,
+        "references_active_window": false,
+        "self_contained": true,
+        "historical_reanchor": false,
+        "semantically_minimal": true,
+        "terminal_components": [
+          [
+            0
+          ]
+        ],
+        "detachable_subbundle_count": 1,
+        "bar_clearing_detachable_subbundle_count": 0,
+        "canonically_identified_with_accepted": false,
+        "nu": {
+          "nu_g": 0,
+          "nu_c": 32,
+          "nu_h": 0,
+          "total": 32,
+          "rho": "16/1"
+        },
+        "clears_bar": true,
+        "p5_import_audit": null,
+        "conditional_p5_nu_c": null,
+        "certifies_sat": true
+      },
+      {
+        "name": "axiomatic_single_l15_kappa3",
+        "mechanism": "single-import Axiomatic record inherits nu(L15) under the structural evaluator",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 15
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 15
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "raw_surface_member": true,
+        "raw_surface_rejections": [],
+        "type_correct": true,
+        "type_error": null,
+        "admissible": true,
+        "admissibility_class": "admitted_and_focus_aligned",
+        "admissibility_reason": "open_band_structural",
+        "connected": true,
+        "references_active_window": true,
+        "self_contained": false,
+        "historical_reanchor": false,
+        "semantically_minimal": true,
+        "terminal_components": [
+          [
+            0
+          ]
+        ],
+        "detachable_subbundle_count": 1,
+        "bar_clearing_detachable_subbundle_count": 0,
+        "canonically_identified_with_accepted": false,
+        "nu": {
+          "nu_g": 1,
+          "nu_c": 106,
+          "nu_h": 0,
+          "total": 107,
+          "rho": "107/3"
+        },
+        "clears_bar": true,
+        "p5_import_audit": {
+          "direct_imports": [
+            15
+          ],
+          "dominant_imports": [
+            15
+          ],
+          "unique_dominant_import": 15,
+          "unique_dominant_import_holds": true
+        },
+        "conditional_p5_nu_c": 106,
+        "certifies_sat": true
+      },
+      {
+        "name": "axiomatic_inheritance_kappa3",
+        "mechanism": "the shipped structural evaluator scores incomparable imports {L14,L15}, while the P5 audit records that no unique dominant import exists",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 15
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "raw_surface_member": true,
+        "raw_surface_rejections": [],
+        "type_correct": true,
+        "type_error": null,
+        "admissible": true,
+        "admissibility_class": "admitted_and_focus_aligned",
+        "admissibility_reason": "open_band_structural",
+        "connected": true,
+        "references_active_window": true,
+        "self_contained": false,
+        "historical_reanchor": false,
+        "semantically_minimal": true,
+        "terminal_components": [
+          [
+            0
+          ]
+        ],
+        "detachable_subbundle_count": 1,
+        "bar_clearing_detachable_subbundle_count": 0,
+        "canonically_identified_with_accepted": false,
+        "nu": {
+          "nu_g": 1,
+          "nu_c": 107,
+          "nu_h": 0,
+          "total": 108,
+          "rho": "36/1"
+        },
+        "clears_bar": true,
+        "p5_import_audit": {
+          "direct_imports": [
+            14,
+            15
+          ],
+          "dominant_imports": [],
+          "unique_dominant_import": null,
+          "unique_dominant_import_holds": false
+        },
+        "conditional_p5_nu_c": null,
+        "certifies_sat": true
+      }
+    ],
+    "observed_maxima": [
+      {
+        "clause_kappa": 2,
+        "max_verified_witness_nu": 32,
+        "max_verified_witness_rho": "16/1",
+        "max_verified_witness_name": "temporal_polymorphic_kappa2",
+        "clearing_witness_names": [
+          "hit_no_formation_d1",
+          "temporal_polymorphic_kappa2"
+        ],
+        "is_global_maximum": false
+      },
+      {
+        "clause_kappa": 3,
+        "max_verified_witness_nu": 108,
+        "max_verified_witness_rho": "36/1",
+        "max_verified_witness_name": "axiomatic_inheritance_kappa3",
+        "clearing_witness_names": [
+          "axiomatic_single_l15_kappa3",
+          "axiomatic_inheritance_kappa3"
+        ],
+        "is_global_maximum": false
+      },
+      {
+        "clause_kappa": 4,
+        "max_verified_witness_nu": null,
+        "max_verified_witness_rho": null,
+        "max_verified_witness_name": null,
+        "clearing_witness_names": [],
+        "is_global_maximum": false
+      }
+    ],
+    "decision": "sat",
+    "digest": "blake3:739656a9f9597de1c527cc121c9b2782f53a4ba0edcb28e5af7c55be3f05a94e"
+  },
+  "shipped_replay": {
+    "valid": true,
+    "decision": "sat",
+    "errors": []
+  },
+  "shipped_sat": true,
+  "certified_linear_theorem": {
+    "caps": {
+      "min_kappa": 2,
+      "max_kappa": 4,
+      "max_direct_support": 2,
+      "max_path_dimension": 1,
+      "max_expr_nodes": 6,
+      "allowed_imports": [
+        14,
+        15
+      ],
+      "allow_truncation": false,
+      "allow_modal": true,
+      "allow_temporal": true,
+      "allow_linear_exponential": false
+    },
+    "per_kappa": [
+      {
+        "kappa": 2,
+        "foundation": 2,
+        "former": 4,
+        "hit": 8,
+        "suspension": 5,
+        "map": 8,
+        "modal": 5,
+        "axiomatic": 7,
+        "synthesis": 6,
+        "unknown": 4,
+        "maximum": 8
+      },
+      {
+        "kappa": 3,
+        "foundation": 3,
+        "former": 6,
+        "hit": 11,
+        "suspension": 5,
+        "map": 10,
+        "modal": 8,
+        "axiomatic": 10,
+        "synthesis": 9,
+        "unknown": 6,
+        "maximum": 11
+      },
+      {
+        "kappa": 4,
+        "foundation": 4,
+        "former": 8,
+        "hit": 14,
+        "suspension": 5,
+        "map": 12,
+        "modal": 12,
+        "axiomatic": 13,
+        "synthesis": 12,
+        "unknown": 8,
+        "maximum": 14
+      }
+    ],
+    "coefficient": 4,
+    "every_ceiling_is_bounded": true
+  },
+  "finite_bounds": [
+    {
+      "kappa": 2,
+      "class_cases": [
+        {
+          "class": "foundation",
+          "ceiling_nu": 2,
+          "cross_product_left": 78080,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "former",
+          "ceiling_nu": 4,
+          "cross_product_left": 156160,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "hit",
+          "ceiling_nu": 8,
+          "cross_product_left": 312320,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "suspension",
+          "ceiling_nu": 5,
+          "cross_product_left": 195200,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "map",
+          "ceiling_nu": 8,
+          "cross_product_left": 312320,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "modal",
+          "ceiling_nu": 5,
+          "cross_product_left": 195200,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "axiomatic",
+          "ceiling_nu": 7,
+          "cross_product_left": 273280,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "synthesis",
+          "ceiling_nu": 6,
+          "cross_product_left": 234240,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "unknown",
+          "ceiling_nu": 4,
+          "cross_product_left": 156160,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        }
+      ],
+      "all_classes_enumerated": true,
+      "maximum_nu": 8,
+      "maximizing_classes": [
+        "hit",
+        "map"
+      ],
+      "maximum_rho": "4/1",
+      "first_clearing_integer_nu": 19,
+      "integer_margin_to_clear": 11,
+      "maximum_cross_product_left": 312320,
+      "maximum_cross_product_right": 708666,
+      "maximum_strictly_below_bar": true
+    },
+    {
+      "kappa": 3,
+      "class_cases": [
+        {
+          "class": "foundation",
+          "ceiling_nu": 3,
+          "cross_product_left": 117120,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "former",
+          "ceiling_nu": 6,
+          "cross_product_left": 234240,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "hit",
+          "ceiling_nu": 11,
+          "cross_product_left": 429440,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "suspension",
+          "ceiling_nu": 5,
+          "cross_product_left": 195200,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "map",
+          "ceiling_nu": 10,
+          "cross_product_left": 390400,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "modal",
+          "ceiling_nu": 8,
+          "cross_product_left": 312320,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "axiomatic",
+          "ceiling_nu": 10,
+          "cross_product_left": 390400,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "synthesis",
+          "ceiling_nu": 9,
+          "cross_product_left": 351360,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "unknown",
+          "ceiling_nu": 6,
+          "cross_product_left": 234240,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        }
+      ],
+      "all_classes_enumerated": true,
+      "maximum_nu": 11,
+      "maximizing_classes": [
+        "hit"
+      ],
+      "maximum_rho": "11/3",
+      "first_clearing_integer_nu": 28,
+      "integer_margin_to_clear": 17,
+      "maximum_cross_product_left": 429440,
+      "maximum_cross_product_right": 1062999,
+      "maximum_strictly_below_bar": true
+    },
+    {
+      "kappa": 4,
+      "class_cases": [
+        {
+          "class": "foundation",
+          "ceiling_nu": 4,
+          "cross_product_left": 156160,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "former",
+          "ceiling_nu": 8,
+          "cross_product_left": 312320,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "hit",
+          "ceiling_nu": 14,
+          "cross_product_left": 546560,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "suspension",
+          "ceiling_nu": 5,
+          "cross_product_left": 195200,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "map",
+          "ceiling_nu": 12,
+          "cross_product_left": 468480,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "modal",
+          "ceiling_nu": 12,
+          "cross_product_left": 468480,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "axiomatic",
+          "ceiling_nu": 13,
+          "cross_product_left": 507520,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "synthesis",
+          "ceiling_nu": 12,
+          "cross_product_left": 468480,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        },
+        {
+          "class": "unknown",
+          "ceiling_nu": 8,
+          "cross_product_left": 312320,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ],
+      "all_classes_enumerated": true,
+      "maximum_nu": 14,
+      "maximizing_classes": [
+        "hit"
+      ],
+      "maximum_rho": "7/2",
+      "first_clearing_integer_nu": 37,
+      "integer_margin_to_clear": 23,
+      "maximum_cross_product_left": 546560,
+      "maximum_cross_product_right": 1417332,
+      "maximum_strictly_below_bar": true
+    }
+  ],
+  "corrected_calculus_unsat": true,
+  "semantic_boundary": {
+    "certified_calculus_class_partition_complete": true,
+    "finite_bound_cases_complete": true,
+    "anchored_provenance_embedding_supplied": false,
+    "shipped_raw_telescope_quotient_complete": false,
+    "original_global_halt_proven": false,
+    "outstanding_obligations": [
+      "extract typed natural schema families and individual demand orbits modulo normalization, weakening, and univalent equality",
+      "prove window locality/expiration and the J2/J3 disposition of every active demand orbit",
+      "construct a valid anchored injection for each counted family, or weakening/erasure inverse evidence for an internal flow",
+      "re-audit all fifteen candidate cones, selective orders, winners, and scores under the strengthened law",
+      "prove that every Step-16 candidate is either certifiably internal or has a complete EGP-certified opaque normal form"
+    ]
+  },
+  "genesis_conservativity": {
+    "structural_evaluator_left_unchanged": true,
+    "history_identical_before_and_after_audit": true,
+    "accepted_steps": 15,
+    "history": [
+      {
+        "step": 1,
+        "nu": 1,
+        "kappa": 2
+      },
+      {
+        "step": 2,
+        "nu": 1,
+        "kappa": 1
+      },
+      {
+        "step": 3,
+        "nu": 2,
+        "kappa": 1
+      },
+      {
+        "step": 4,
+        "nu": 5,
+        "kappa": 3
+      },
+      {
+        "step": 5,
+        "nu": 7,
+        "kappa": 3
+      },
+      {
+        "step": 6,
+        "nu": 8,
+        "kappa": 3
+      },
+      {
+        "step": 7,
+        "nu": 10,
+        "kappa": 3
+      },
+      {
+        "step": 8,
+        "nu": 18,
+        "kappa": 5
+      },
+      {
+        "step": 9,
+        "nu": 17,
+        "kappa": 4
+      },
+      {
+        "step": 10,
+        "nu": 19,
+        "kappa": 4
+      },
+      {
+        "step": 11,
+        "nu": 26,
+        "kappa": 5
+      },
+      {
+        "step": 12,
+        "nu": 34,
+        "kappa": 6
+      },
+      {
+        "step": 13,
+        "nu": 46,
+        "kappa": 7
+      },
+      {
+        "step": 14,
+        "nu": 62,
+        "kappa": 9
+      },
+      {
+        "step": 15,
+        "nu": 103,
+        "kappa": 8
+      }
+    ],
+    "sum_nu": 359,
+    "sum_kappa": 64,
+    "replayed_bar_16": "354333/39040",
+    "frozen_bar_16": "354333/39040",
+    "bar_matches": true,
+    "step13_unique_dominant_import": 12,
+    "step14_unique_dominant_import": 13
+  },
+  "digest": "blake3:6eabef2c5457477b07e246107815472ed75c1a9a3460d20683d593f5bfcdc1aa"
+}

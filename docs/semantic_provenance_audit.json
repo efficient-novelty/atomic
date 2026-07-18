@@ -1,0 +1,887 @@
+{
+  "guarded_step15_internality": {
+    "conclusion_nu_zero_proved": false,
+    "erasure_map_available": false,
+    "flow": "Step-15-generated guarded flow over sealed B15 (the Step-16 internal branch)",
+    "inverse_laws_available": false,
+    "required_theorem": "construct typed normal schema families for sealed B15 and every Step-15-generated guarded Step-16 internal candidate, then prove erasure after weakening is identity and weakening after erasure is univalently equal to identity",
+    "typed_family_extraction_available": false,
+    "weakening_map_available": false
+  },
+  "historical_provenance_replay": {
+    "all_historical_credit_provenanced": false,
+    "coefficient_enumerated_without_bar": true,
+    "expected_totals": [
+      1,
+      1,
+      2,
+      5,
+      7,
+      8,
+      10,
+      18,
+      17,
+      19,
+      26,
+      34,
+      46,
+      62,
+      103
+    ],
+    "j2_window_orbit_extraction_available": false,
+    "j3_orbit_derivability_available": false,
+    "local_role_coefficient": 4,
+    "numerical_replay_complete": true,
+    "recomputed_totals": [
+      1,
+      1,
+      2,
+      5,
+      7,
+      8,
+      10,
+      18,
+      17,
+      19,
+      26,
+      34,
+      46,
+      62,
+      103
+    ],
+    "steps": [
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [],
+        "class": "Foundation",
+        "coarse_focus_packages": [],
+        "direct_support": [],
+        "kappa": 2,
+        "nu_c": 1,
+        "nu_g": 0,
+        "nu_h": 0,
+        "nu_total": 1,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 1
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [],
+        "class": "Foundation",
+        "coarse_focus_packages": [],
+        "direct_support": [],
+        "kappa": 1,
+        "nu_c": 0,
+        "nu_g": 1,
+        "nu_h": 0,
+        "nu_total": 1,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 2
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [],
+        "class": "Map",
+        "coarse_focus_packages": [
+          "former_eliminator"
+        ],
+        "direct_support": [
+          2
+        ],
+        "kappa": 1,
+        "nu_c": 1,
+        "nu_g": 1,
+        "nu_h": 0,
+        "nu_total": 2,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 3
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [],
+        "class": "Former",
+        "coarse_focus_packages": [
+          "former_eliminator"
+        ],
+        "direct_support": [],
+        "kappa": 3,
+        "nu_c": 3,
+        "nu_g": 2,
+        "nu_h": 0,
+        "nu_total": 5,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 4
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 1,
+            "coarse_focus_packages": [
+              "initial_hit"
+            ],
+            "legacy_formula": "sum over path constructors of d_i^2",
+            "mechanism": "dimension_squared",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Hit",
+        "coarse_focus_packages": [
+          "initial_hit"
+        ],
+        "direct_support": [],
+        "kappa": 3,
+        "nu_c": 0,
+        "nu_g": 5,
+        "nu_h": 2,
+        "nu_total": 7,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 5
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 1,
+            "coarse_focus_packages": [
+              "truncation_hit"
+            ],
+            "legacy_formula": "sum over path constructors of d_i^2",
+            "mechanism": "dimension_squared",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Hit",
+        "coarse_focus_packages": [
+          "truncation_hit"
+        ],
+        "direct_support": [],
+        "kappa": 3,
+        "nu_c": 0,
+        "nu_g": 6,
+        "nu_h": 2,
+        "nu_total": 8,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 6
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 4,
+            "coarse_focus_packages": [
+              "higher_hit"
+            ],
+            "legacy_formula": "sum over path constructors of d_i^2",
+            "mechanism": "dimension_squared",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Hit",
+        "coarse_focus_packages": [
+          "higher_hit"
+        ],
+        "direct_support": [],
+        "kappa": 3,
+        "nu_c": 0,
+        "nu_g": 5,
+        "nu_h": 5,
+        "nu_total": 10,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 7
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 9,
+            "coarse_focus_packages": [
+              "sphere_lift"
+            ],
+            "legacy_formula": "sum over path constructors of d_i^2",
+            "mechanism": "dimension_squared",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Hit",
+        "coarse_focus_packages": [
+          "sphere_lift"
+        ],
+        "direct_support": [],
+        "kappa": 5,
+        "nu_c": 3,
+        "nu_g": 5,
+        "nu_h": 10,
+        "nu_total": 18,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 8
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 8,
+            "coarse_focus_packages": [
+              "axiomatic_bundle"
+            ],
+            "legacy_formula": "two pre/post composition faces per map clause",
+            "mechanism": "adjoint_completion",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 9,
+            "coarse_focus_packages": [
+              "axiomatic_bundle"
+            ],
+            "legacy_formula": "ordered r x r interface transport matrix",
+            "mechanism": "reference_squared",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Map",
+        "coarse_focus_packages": [
+          "axiomatic_bundle"
+        ],
+        "direct_support": [
+          5,
+          7,
+          8
+        ],
+        "kappa": 4,
+        "nu_c": 17,
+        "nu_g": 0,
+        "nu_h": 0,
+        "nu_total": 17,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 9
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 9,
+            "coarse_focus_packages": [
+              "modal_shell"
+            ],
+            "legacy_formula": "one legacy schema per sealed library entry",
+            "mechanism": "p6_uniform_specialization",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 6,
+            "coarse_focus_packages": [
+              "modal_shell"
+            ],
+            "legacy_formula": "unordered pairwise coherence among distinct modal kinds",
+            "mechanism": "modal_pairwise_coherence",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Modal",
+        "coarse_focus_packages": [
+          "modal_shell"
+        ],
+        "direct_support": [],
+        "kappa": 4,
+        "nu_c": 17,
+        "nu_g": 2,
+        "nu_h": 0,
+        "nu_total": 19,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 10
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 19,
+            "coarse_focus_packages": [
+              "connection_shell"
+            ],
+            "legacy_formula": "nu of reachability-dominant historical import",
+            "mechanism": "p5_inherited_surface",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 5,
+            "coarse_focus_packages": [
+              "connection_shell"
+            ],
+            "legacy_formula": "one local eliminative face per clause plus a support spanning tree",
+            "mechanism": "p5_local_and_bridge",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Axiomatic",
+        "coarse_focus_packages": [
+          "connection_shell"
+        ],
+        "direct_support": [
+          10
+        ],
+        "kappa": 5,
+        "nu_c": 24,
+        "nu_g": 2,
+        "nu_h": 0,
+        "nu_total": 26,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 11
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 26,
+            "coarse_focus_packages": [
+              "curvature_shell"
+            ],
+            "legacy_formula": "nu of reachability-dominant historical import",
+            "mechanism": "p5_inherited_surface",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 6,
+            "coarse_focus_packages": [
+              "curvature_shell"
+            ],
+            "legacy_formula": "one local eliminative face per clause plus a support spanning tree",
+            "mechanism": "p5_local_and_bridge",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Axiomatic",
+        "coarse_focus_packages": [
+          "curvature_shell"
+        ],
+        "direct_support": [
+          11
+        ],
+        "kappa": 6,
+        "nu_c": 32,
+        "nu_g": 2,
+        "nu_h": 0,
+        "nu_total": 34,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 12
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 34,
+            "coarse_focus_packages": [
+              "operator_bundle"
+            ],
+            "legacy_formula": "nu of reachability-dominant historical import",
+            "mechanism": "p5_inherited_surface",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 8,
+            "coarse_focus_packages": [
+              "operator_bundle"
+            ],
+            "legacy_formula": "one local eliminative face per clause plus a support spanning tree",
+            "mechanism": "p5_local_and_bridge",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Axiomatic",
+        "coarse_focus_packages": [
+          "operator_bundle"
+        ],
+        "direct_support": [
+          11,
+          12
+        ],
+        "kappa": 7,
+        "nu_c": 42,
+        "nu_g": 4,
+        "nu_h": 0,
+        "nu_total": 46,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 13
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 46,
+            "coarse_focus_packages": [
+              "hilbert_functional"
+            ],
+            "legacy_formula": "nu of reachability-dominant historical import",
+            "mechanism": "p5_inherited_surface",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 11,
+            "coarse_focus_packages": [
+              "hilbert_functional"
+            ],
+            "legacy_formula": "one local eliminative face per clause plus a support spanning tree",
+            "mechanism": "p5_local_and_bridge",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Axiomatic",
+        "coarse_focus_packages": [
+          "hilbert_functional"
+        ],
+        "direct_support": [
+          11,
+          12,
+          13
+        ],
+        "kappa": 9,
+        "nu_c": 57,
+        "nu_g": 5,
+        "nu_h": 0,
+        "nu_total": 62,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 14
+      },
+      {
+        "all_credited_families_provenanced": false,
+        "amplification_claims": [
+          {
+            "claimed_units": 42,
+            "coarse_focus_packages": [
+              "temporal_shell"
+            ],
+            "legacy_formula": "polymorphic temporal eliminators times library size",
+            "mechanism": "p6_uniform_specialization",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 38,
+            "coarse_focus_packages": [
+              "temporal_shell"
+            ],
+            "legacy_formula": "distributive laws times inherited modal novelty",
+            "mechanism": "distributive_inheritance",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          },
+          {
+            "claimed_units": 15,
+            "coarse_focus_packages": [
+              "temporal_shell"
+            ],
+            "legacy_formula": "temporal shift inherits the loop-bearing library's d_i^2 payload",
+            "mechanism": "combinatorial_synthesis",
+            "obligation": "enumerate the natural families, quotient uniform instances, and give each independent family a unique charged local role or pre-existing semantic demand orbit; the focus label alone is not a witness",
+            "orbit_correspondence_available": false
+          }
+        ],
+        "class": "Synthesis",
+        "coarse_focus_packages": [
+          "temporal_shell"
+        ],
+        "direct_support": [
+          10
+        ],
+        "kappa": 8,
+        "nu_c": 86,
+        "nu_g": 2,
+        "nu_h": 15,
+        "nu_total": 103,
+        "numerical_score_preserved": true,
+        "orbit_inventory_available": false,
+        "revised_audit_status": "incomplete_typed_family_and_orbit_extraction",
+        "revised_audited_nu": null,
+        "schema_family_extraction_available": false,
+        "step": 15
+      }
+    ],
+    "unresolved_obligations": [
+      "J2: implement typed depth-two demand-orbit extraction for every historical window, especially (S14,S15)",
+      "J3: decide each extracted orbit's derivability modulo weakening and univalent equality",
+      "enumerate normalized historical schema families and inject every credited unit into a charged local role or pre-existing live orbit",
+      "construct the guarded Step-15 weakening/erasure inverse certificate before claiming conservative internality"
+    ]
+  },
+  "semantic_debt": {
+    "focus_label_o16_empty": true,
+    "inventory_input_valid": true,
+    "j2_assumed_at_16": false,
+    "j2_j3_conditionally_sufficient_at_16": false,
+    "j3_assumed_at_16": false,
+    "rejected_inventory_stages": [],
+    "semantic_o16_empty_if_assumptions": null,
+    "stages": [
+      {
+        "coarse_focus_packages": [],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": true,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(1): enumerate normalized demand orbits for the depth-two window",
+          "J3(1): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 1
+      },
+      {
+        "coarse_focus_packages": [],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": true,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(2): enumerate normalized demand orbits for the depth-two window",
+          "J3(2): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 2
+      },
+      {
+        "coarse_focus_packages": [
+          "former_eliminator"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(3): enumerate normalized demand orbits for the depth-two window",
+          "J3(3): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 3
+      },
+      {
+        "coarse_focus_packages": [
+          "former_eliminator"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(4): enumerate normalized demand orbits for the depth-two window",
+          "J3(4): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 4
+      },
+      {
+        "coarse_focus_packages": [
+          "initial_hit"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(5): enumerate normalized demand orbits for the depth-two window",
+          "J3(5): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 5
+      },
+      {
+        "coarse_focus_packages": [
+          "truncation_hit"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(6): enumerate normalized demand orbits for the depth-two window",
+          "J3(6): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 6
+      },
+      {
+        "coarse_focus_packages": [
+          "higher_hit"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(7): enumerate normalized demand orbits for the depth-two window",
+          "J3(7): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 7
+      },
+      {
+        "coarse_focus_packages": [
+          "sphere_lift"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(8): enumerate normalized demand orbits for the depth-two window",
+          "J3(8): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 8
+      },
+      {
+        "coarse_focus_packages": [
+          "axiomatic_bundle"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(9): enumerate normalized demand orbits for the depth-two window",
+          "J3(9): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 9
+      },
+      {
+        "coarse_focus_packages": [
+          "modal_shell"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(10): enumerate normalized demand orbits for the depth-two window",
+          "J3(10): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 10
+      },
+      {
+        "coarse_focus_packages": [
+          "connection_shell"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(11): enumerate normalized demand orbits for the depth-two window",
+          "J3(11): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 11
+      },
+      {
+        "coarse_focus_packages": [
+          "curvature_shell"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(12): enumerate normalized demand orbits for the depth-two window",
+          "J3(12): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 12
+      },
+      {
+        "coarse_focus_packages": [
+          "operator_bundle"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(13): enumerate normalized demand orbits for the depth-two window",
+          "J3(13): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 13
+      },
+      {
+        "coarse_focus_packages": [
+          "hilbert_functional"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(14): enumerate normalized demand orbits for the depth-two window",
+          "J3(14): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 14
+      },
+      {
+        "coarse_focus_packages": [
+          "temporal_shell"
+        ],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(15): enumerate normalized demand orbits for the depth-two window",
+          "J3(15): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 15
+      },
+      {
+        "coarse_focus_packages": [],
+        "depth_two_window_locality_assumed": false,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": true,
+        "focus_orbit_correspondence_if_assumptions": false,
+        "j2_extraction_assumed": false,
+        "j3_derivability_assumed": false,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [
+          "J2(16): enumerate normalized demand orbits for the depth-two window",
+          "J3(16): decide derivability of every extracted orbit"
+        ],
+        "semantic_debt_empty_if_assumptions": null,
+        "stage": 16
+      }
+    ],
+    "window_locality_assumed_at_16": false
+  }
+}

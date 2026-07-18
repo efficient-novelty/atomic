@@ -31,6 +31,15 @@
 //! debt; it computes nothing about candidates, ν, or bars, and is
 //! independent of the T1 adjudication (its result stands under Reading A
 //! and Reading B alike).
+//!
+//! **Granularity boundary.** This module proves only the engine's coarse
+//! package-label claim.  It does not enumerate semantic demand orbits and
+//! therefore cannot by itself close J2/J3.  Use
+//! [`crate::semantic_provenance::audit_semantic_debt`] for the stricter
+//! orbit-level audit; that audit deliberately reports semantic O(16)
+//! emptiness as unknown in the built-in replay. User-supplied orbit and
+//! derivability assumptions produce only a conditional result until a typed
+//! verifier can mint opaque certificates.
 
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::Telescope;
@@ -119,8 +128,9 @@ pub struct O16EmptinessReport {
     pub discharge_persistence_holds: bool,
     /// Packages whose demand-interval is NOT contiguous (findings).
     pub persistence_violations: Vec<&'static str>,
-    /// The verified conjunction: O(16) empty, 4..=15 all guarded, 16 the
-    /// first debt-free structural stage, persistence holds.
+    /// The verified package-label conjunction: O(16) empty, 4..=15 all
+    /// guarded, 16 the first debt-free structural stage, persistence holds.
+    /// This is not an individual-orbit J2/J3 completeness result.
     pub guard_rail_verified: bool,
 }
 

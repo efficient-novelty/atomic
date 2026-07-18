@@ -6,6 +6,14 @@ flagged for mechanization, one of them genuinely delicate (§5.1). The κ = 1
 carve-out in the engine is *explained* rather than anomalous (§3). Companion to
 `EVALUATOR_DERIVATION.md` (principle P5-morphism).
 
+**Machine-check clarification (2026-07-18):** the fibration argument remains a
+proof sketch. The finite basis `(Fin 2 x Fin kappa) + (Fin r x Fin r)` is
+checked conditionally in Agda and explicitly enumerated in Rust. Rust's
+semantic fields are trusted caller assertions, not proof objects, while Agda
+requires a complete schema/basis isomorphism. Face/transport disjointness,
+transport staging, nontrivial monodromy, and the propositional-inverse
+obstruction remain unmechanized.
+
 ---
 
 ## 1. Statement
@@ -198,3 +206,19 @@ load-bearing wall that four independent structures lean on.
   whatever the enumeration says, followed by the strict-lane rerun (V2c).
 - V-program additions: V2c (H-space enumeration + rerun), and the Möbius
   anchor joins V1's direct-enumerator test set as its first target.
+
+## 7. Machine-Checked Finite Layer (2026-07-18)
+
+The Rust checker verifies `kappa >= 2`, distinct nonempty references,
+well-formed submitted edges, and strong connectivity. Conditional on explicit
+semantic assertions, it checks the disjoint face/diagonal/off-diagonal basis
+and total `2 * kappa + r^2`. The Möbius total 8 and Hopf total 17 tests are
+conditional arithmetic anchors only. In particular, the Hopf test submits a
+cycle over extracted reference names; it does not derive a fibration graph or
+charged semantics from the telescope.
+
+The Agda theorem `l2-conditional-cardinality` makes the complete boundary
+precise: callers must provide classifier and realizer maps with both inverse
+laws. The current AST has no `coe`, `hcom`, fibration witness, or definitional
+equality quotient from which to construct those maps, so the obligations in
+Section 5 remain open.

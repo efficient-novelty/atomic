@@ -131,6 +131,14 @@ pub struct RunCompat {
     pub evaluator_hash: String,
     pub search_semantics_hash: String,
     pub store_schema_hash: String,
+    /// Semantic-kernel hashes (SEMANTIC_NORMALIZATION_PROGRAM §0.3).
+    /// `#[serde(default)]` keeps frozen pre-kernel artifacts parseable;
+    /// an absent stored hash reads as a mismatch, which invalidates
+    /// semantic certificates without blocking structural resume.
+    #[serde(default)]
+    pub elaborator_hash: String,
+    #[serde(default)]
+    pub token_rules_hash: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
@@ -139,6 +147,10 @@ pub struct CheckpointCompat {
     pub type_rules_hash: String,
     pub evaluator_hash: String,
     pub search_semantics_hash: String,
+    #[serde(default)]
+    pub elaborator_hash: String,
+    #[serde(default)]
+    pub token_rules_hash: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
@@ -148,6 +160,10 @@ pub struct ResumeCompatible {
     pub evaluator_hash: String,
     pub search_semantics_hash: String,
     pub record_layout_id: String,
+    #[serde(default)]
+    pub elaborator_hash: String,
+    #[serde(default)]
+    pub token_rules_hash: String,
 }
 
 impl Default for ResumeCompatible {
@@ -158,6 +174,8 @@ impl Default for ResumeCompatible {
             evaluator_hash: String::new(),
             search_semantics_hash: String::new(),
             record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+            elaborator_hash: String::new(),
+            token_rules_hash: String::new(),
         }
     }
 }
@@ -381,6 +399,8 @@ mod tests {
                 evaluator_hash: "blake3:eval".to_owned(),
                 search_semantics_hash: "blake3:search".to_owned(),
                 store_schema_hash: "blake3:store".to_owned(),
+                elaborator_hash: "blake3:elab".to_owned(),
+                token_rules_hash: "blake3:token".to_owned(),
             },
             host: HostInfo {
                 os: "windows".to_owned(),
@@ -450,6 +470,8 @@ mod tests {
                 type_rules_hash: "blake3:type".to_owned(),
                 evaluator_hash: "blake3:eval".to_owned(),
                 search_semantics_hash: "blake3:search".to_owned(),
+                elaborator_hash: "blake3:elab".to_owned(),
+                token_rules_hash: "blake3:token".to_owned(),
             },
             objective: StepObjective {
                 bar: Rational::new(401, 100),
@@ -515,6 +537,8 @@ mod tests {
                 evaluator_hash: "blake3:eval".to_owned(),
                 search_semantics_hash: "blake3:search".to_owned(),
                 record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+                elaborator_hash: "blake3:elab".to_owned(),
+                token_rules_hash: "blake3:token".to_owned(),
             },
             counts: FrontierCounts {
                 prefixes_created: 26_114_992,

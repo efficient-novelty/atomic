@@ -121,6 +121,8 @@ pub(crate) fn current_run_compat() -> RunCompat {
         evaluator_hash: tagged_hash("evaluator-v1"),
         search_semantics_hash: tagged_hash("search-semantics-v1"),
         store_schema_hash: tagged_hash("store-schema-v1"),
+        elaborator_hash: pen_type::elaborate::elaborator_hash(),
+        token_rules_hash: pen_type::elaborate::token_rules_hash(),
     }
 }
 
@@ -131,6 +133,8 @@ pub(crate) fn current_search_compat() -> CurrentCompat {
         evaluator_hash: tagged_hash("evaluator-v1"),
         search_semantics_hash: tagged_hash("search-semantics-v1"),
         record_layout_id: FRONTIER_RECORD_LAYOUT_ID.to_owned(),
+        elaborator_hash: pen_type::elaborate::elaborator_hash(),
+        token_rules_hash: pen_type::elaborate::token_rules_hash(),
     }
 }
 
@@ -141,6 +145,8 @@ pub(crate) fn checkpoint_compat() -> CheckpointCompat {
         type_rules_hash: compat.type_rules_hash,
         evaluator_hash: compat.evaluator_hash,
         search_semantics_hash: compat.search_semantics_hash,
+        elaborator_hash: compat.elaborator_hash,
+        token_rules_hash: compat.token_rules_hash,
     }
 }
 
@@ -1379,6 +1385,8 @@ fn write_frontier_snapshot(
             evaluator_hash: compat.evaluator_hash,
             search_semantics_hash: compat.search_semantics_hash,
             record_layout_id: compat.record_layout_id,
+            elaborator_hash: compat.elaborator_hash,
+            token_rules_hash: compat.token_rules_hash,
         },
         counts: runtime.counts,
         files: runtime.files,

@@ -12,8 +12,7 @@
 //! (a) of the canonical-course note and contradicts the book's halt section.
 
 use pen_search::halting_probe::{
-    run_adversarial_probe, step16_surface_diagnostics, verify_genesis_squeeze,
-    LaneStep16Outcome,
+    LaneStep16Outcome, run_adversarial_probe, step16_surface_diagnostics, verify_genesis_squeeze,
 };
 use std::env;
 use std::fs;
@@ -40,7 +39,7 @@ fn main() {
         let adversarial = run_adversarial_probe();
         let payload = serde_json::json!({
             "artifact": "genesis_halting_adversarial_probe",
-            "date": pen_search::halting_probe::T1_DATE,
+            "date": pen_search::halting_probe::T1_SURFACE_AUDIT_DATE,
             "phase": "surface diagnostics + adversarial gate probe \
                       (exhaustive search infeasible at the measured surface; \
                       pass --search only with a strategy fitting it)",
@@ -63,14 +62,16 @@ fn main() {
         );
         for trace in &adversarial.candidates {
             println!(
-                "  {}: identified {}, admissibility {} ({}), type_ok {}, connected {}, \
-                 nu {}, rho {:?}, clears {}, SURVIVES {}",
+                "  {}: identified {}, generated {}, admissibility {} ({}), type_ok {}, \
+                 connected {}, minimal {}, nu {}, rho {:?}, clears {}, SURVIVES {}",
                 trace.name,
                 trace.identified_with_sealed_structure,
+                trace.raw_surface_member,
                 trace.admissibility_class,
                 trace.admissibility_reason,
                 trace.type_checks,
                 trace.connectivity_passes,
+                trace.semantically_minimal,
                 trace.nu_total,
                 trace.rho,
                 trace.clears_bar,
@@ -89,9 +90,9 @@ fn main() {
         LaneStep16Outcome::SqueezeHeld { engine_report } => {
             format!("squeeze held ({engine_report})")
         }
-        LaneStep16Outcome::Accepted { rho, objective_bar, .. } => format!(
-            "FALSIFIER (a): sixteenth extension sealed, rho {rho} vs bar {objective_bar}"
-        ),
+        LaneStep16Outcome::Accepted {
+            rho, objective_bar, ..
+        } => format!("FALSIFIER (a): sixteenth extension sealed, rho {rho} vs bar {objective_bar}"),
         LaneStep16Outcome::ProbeFailure { error } => format!("PROBE FAILURE: {error}"),
     };
     println!(

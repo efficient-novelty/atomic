@@ -6,6 +6,13 @@
 
 ## 1. Summary
 
+**Current correction (2026-07-18):** Sections 1-8 are retained as the
+historical record of the original injected probe. Their seven-survivor
+conclusion is superseded: that probe did not check whether hand-built
+candidates belonged to the raw generator catalog and did not run the engine's
+semantic-minimality screen. A further exact regression audit found four known
+candidate survivors; see Sections 9 and 11.
+
 The external half of the halt claim **failed its adversarial engine probe**. Seven hand-constructed, formula-maximizing candidates pass the lane's entire per-candidate gate stack — canonical identification, strict admissibility, type check, connectivity — and clear Bar₁₆ = 354333/39040 ≈ 9.077 by factors of 1.2× to 4.2×. The admissibility layer admits them as `admitted_and_focus_aligned` with reason `open_band_structural`: at step 16, for the first time in the sequence, no structural debt imposes a focus family, and the lane's generic "open band" is exposed. The internal half of the claim (identification and trivial-derivability leave the internal class at ν = 0) **passed** everywhere it was tested.
 
 Whether this trips falsifier (a) of the canonical-course note as registered, or instead exposes an unimplemented layer of univalent identification in the evaluator, is the open adjudication of §6.
@@ -87,3 +94,114 @@ The closing observation of §7 has since been formalized (`book/debt_guard_theor
 **Action 4 — standing.** The replacement narrative ("runtime begins where debt ends") remains conditional on Theorem 17(2) and is quoted, everywhere it appears, with its condition.
 
 **Effect on §4's pending items.** The relocation changes what is load-bearing. The full-run acceptance confirmation (§4 ii) is no longer the decisive question — Theorem 17 reduces the adjudication from an engine-competition fact to a valuation question, so the OOM-blocked step-16 search stays blocked without blocking anything. The minimality screen (§4 i) is likewise demoted to hygiene. What now decides the halt, exhaustively: the blind derivations of V-int/V-opq (V1) and of L1/L2's validity domains, produced by a context that has never seen this document's §3 table, evaluated against Theorem 17, with Genesis 1–15 conservativity as the regression gate.
+
+---
+
+## 9. Correction: Raw-Surface and Minimality Audit (2026-07-18)
+
+The original adversarial probe injected hand-built telescopes after raw
+generation. It established how downstream formulas and gates treated those
+shapes, but not that the lane could generate them. The corrected probe now
+requires exact symbolic raw-catalog membership and the engine's detachable-SCC
+semantic-minimality screen before reporting a survivor.
+
+At Step 16, the raw library-leaf window is `{Lib(14), Lib(15)}`, there is no
+historical anchor, and `max_path_dimension = 1`. The wide-reference weaves, the
+four-clause inheritance candidate using `Lib(13)`, and the dimension 4/5 HITs
+are therefore outside the raw surface. The three-clause inheritance witness
+was also corrected from the non-generated `Computation` role to the
+generator-assigned `Introduction` role.
+
+| candidate family | raw member | engine-minimal | clears | current survivor |
+| --- | --- | --- | --- | --- |
+| wide-reference Map weaves | no | varies | yes | no |
+| raw Map boundary (`kappa = 2`, `r = 2`) | yes | yes | no | no |
+| Axiomatic inheritance, `kappa = 3` | yes | yes | yes | **yes** |
+| Axiomatic inheritance, `kappa = 4` | no | no | yes | no |
+| HIT, `d = 4` or `d = 5` | no | yes | yes | no |
+| raw HIT boundary (`d = 1`) | yes | yes | no | no |
+
+The raw Map boundary has `nu = 8`, `rho = 4`. The originally recorded formed
+HIT boundary has `nu = 6`, `rho = 3`; a later exact no-formation witness has
+`nu = 19`, `rho = 19/2` and clears. The role-corrected two-import Axiomatic
+survivor has `(nu_G, nu_C, nu_H) = (1, 107, 0)`, total `nu = 108`, and
+`rho = 36`, so `squeeze_supported` remains false.
+
+This supersedes the sevenfold wording above and the present-lane L1 conclusion
+in Section 8. The later regression suite records four known raw-generable,
+engine-minimal clearers: no-formation HIT, temporal polymorphism, single-L15
+Axiomatic, and the two-import Axiomatic witness. This is not an exhaustive
+Step-16 maximum search and not proof that a completed full run would select a
+particular candidate. It also shows that mechanizing L1 and L2 alone cannot
+close the halt claim.
+
+---
+
+## 10. P5-record / internality audit (2026-07-18)
+
+The surviving syntax still scores `nu=108` in the shipped structural
+evaluator, but that score is not an instance of the stated P5-record theorem.
+P5 assumes a unique reachability-maximal direct import.  In the accepted
+Genesis DAG, `L14` reaches `{14,13,12,11,10}` and `L15` reaches `{15,10}`;
+neither reaches the other.  Therefore the candidate's direct-import set
+`{L14,L15}` has no `L_max`.  The evaluator's choice of the reference with
+largest historical `nu` silently replaces, rather than verifies, this premise.
+
+The result is machine-checked in `crates/pen-eval/src/p5_record.rs` and
+`agda/P5RecordBoundary.agda`.  The same audit confirms that Steps 13 and 14 do
+have their required dominant imports, so Genesis 1-15 is preserved at this
+premise.  The adversarial report now carries this audit and records one P5
+domain failure among the four currently replayed engine survivors.
+
+This does **not** establish the stronger internality claim.  `nu=0` follows
+from a transparent-elaboration witness giving typed old-library realizers and
+inherited reductions for all three clauses.  The current AST stores neither
+definitions nor reduction semantics, so it admits both a transparent reading
+and an opaque-declaration reading.  The exact conclusion is: the known
+two-import survivor is not a theorem-certified P5 clearer, while its true
+semantic novelty remains underdetermined.  Consequently this audit removes
+that positive P5 witness but, by itself, does not prove the exhaustive halt at
+fifteen.  See
+`docs/P5_RECORD_INTERNALITY.md`.
+
+---
+
+## 11. Proof-carrying replacement and dual certificate (2026-07-18)
+
+The recommended replacement sequence has now been executed. Exact
+regressions pin all four survivors. A finite-signature checker counts the
+actual position-specific expression catalogs and gives tamper-evident SAT
+certificates, while explicitly withholding a raw-global maximum or UNSAT
+claim. A separate proof-carrying evaluator requires private typed witnesses
+for transparency, H formation/elimination, P5 lift/elimination, and temporal
+naturality; the shallow AST cannot mint them.
+
+On that corrected calculus, exhaustive enumeration of all nine classes for
+`kappa=2,3,4` yields maxima `8,11,14`, below the first clearing integers
+`19,28,37`. Agda independently checks all 27 ceilings and their exact
+cross-multiplied inequalities against `354333/39040`. The fifteen-step
+structural replay remains value-for-value unchanged (`sum nu=359`,
+`sum kappa=64`), and Steps 13/14 keep dominant imports L12/L13.
+
+This is an unconditional UNSAT theorem for the new calculus, not yet an
+unconditional theorem about the intended semantic schema quotient. The
+remaining boundary is now executable in
+`crates/pen-eval/src/semantic_provenance.rs`: a counted family needs both an
+injective provenance tag and a family-specific anchor showing that it is paid
+by the named clause/role or actually discharges the named live demand output.
+The built-in audit reproduces the fifteen legacy numbers but deliberately
+leaves every revised score null. It also withholds semantic O(16) emptiness,
+window locality, historical reselection, and the Step-15-generated internality
+witness. An exact realizer/saturation theorem is not needed for the upper
+bound, but these extraction and completeness certificates are. The serialized
+result therefore records:
+
+```text
+shipped_sat = true
+corrected_calculus_unsat = true
+original_global_halt_proven = false
+```
+
+See `docs/CERTIFIED_HALT_15.md` and
+`docs/certified_halt_verification.json`; the stricter conditional audit is
+`docs/semantic_provenance_audit.json`.

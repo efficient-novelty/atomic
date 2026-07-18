@@ -53,6 +53,8 @@ mod tests {
                 type_rules_hash: "blake3:type".to_owned(),
                 evaluator_hash: "blake3:eval".to_owned(),
                 search_semantics_hash: "blake3:search".to_owned(),
+                elaborator_hash: "blake3:elab".to_owned(),
+                token_rules_hash: "blake3:token".to_owned(),
             },
             objective: StepObjective {
                 bar: Rational::new(5, 2),

@@ -8,7 +8,54 @@ The hand-written baseline support modules are:
 
 - `BridgePayload.agda`
 - `AbstractionBarrier.agda`
+- `CountingLemmas.agda` (conditional finite-cardinality proofs for L1/L2)
+- `ProvenanceBound.agda` (injection-based debt-credit and local-role bounds)
+- `P5RecordBoundary.agda` (conditional internality plus the failed P5 import-DAG premise)
+- `CertifiedHalt.agda` (proof-carrying amplification boundary and support-local Step-16 bound)
 - `StepWitness.agda`
+
+`CountingLemmas.agda` proves the equations `1 + d²` and `2κ + r²` from
+explicit schema/basis isomorphisms.  The isomorphisms are hypotheses: the
+current MBTT AST has no cubical `coe`/`hcom` semantics or fibration witness
+with which to discharge availability, independence, and exhaustiveness.
+It also defines the weaker `AtMost A n` boundary: an injection from `A` into
+an explicit finite code of size at most `n`. Upper bounds use `AtMost`; they do
+not require every finite tag to be realized.
+
+`ProvenanceBound.agda` formalizes extraction-guarded debt-credit provenance.
+An actual marginal schema must inject either into a charged `(local role,
+kernel clause)` tag or into a code supplied by previously live demand orbits.
+The certificate also carries a `ValidAnchor` proof for every schema/tag pair,
+so an arbitrary injective numbering is insufficient. When debt is empty, only
+the local product remains. A semantic certificate covering the four displayed
+local-role slots gives `AtMost Marginal (4*κ)`; weakening that same certificate
+gives the bar-blind envelope `AtMost Marginal (9*κ)`. The latter is not an
+independent nine-role fallback. Both results are conditional on the faithful,
+valid classifier, which Agda does not infer from a class label or the current
+shallow syntax.
+
+`P5RecordBoundary.agda` separates two statements that cannot be conflated:
+transparent elaboration implies marginal novelty zero, while P5-record credit
+requires a reachability-dominant direct import.  It proves that Steps 13 and 14
+have the required dominant imports and that the Step-16 `{L14,L15}` candidate
+does not.  It does **not** invent the missing transparent-elaboration witness;
+the current AST has no typed definitions or reduction semantics from which to
+construct one. Given weakening and erasure with both inverse laws, however,
+it now proves directly that the type of non-weakened marginal schemas embeds
+in the empty finite code, hence is `AtMost 0`.
+
+`CertifiedHalt.agda` parameterizes the three amplification records by external
+evidence propositions (HIT formation, P5 irreducibility/dominance, and typed
+temporal naturality); it exports no freely inhabited evidence token. It gives the
+support-local depth-2 code, and checks its nine finite Step-16 cap cases. The
+widest code bounds are `14`, `24`, and `36` for clause costs `2`, `3`, and `4`.
+The semantic boundary is now a faithful injection into that code, not an exact
+isomorphism. It separately mirrors all 27 cases of the tighter proof-carrying
+class calculus, obtaining exact maxima `8`, `11`, and `14`, and checks their
+cross-multiplied strict inequalities against `Bar16 = 354333/39040`. It also
+connects the conditional four-role provenance bound to the independent
+`9*κ < Bar16*κ` arithmetic. Constructing the operational classifier remains
+an explicit proof obligation rather than an AST-shape axiom.
 
 `pen-cli export-agda` copies those support modules into each output directory so the
 generated `PayloadNN.agda` and `StepNN.agda` files form a self-contained verification
