@@ -1,0 +1,534 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-18",
+  "scope": "frozen Step-16 raw surface: 2<=kappa<=4, r<=2, d<=1, six expression nodes; operational halt only",
+  "a5": {
+    "adjudication": "adopted",
+    "clause": "On a debt-free field, acceptance requires a certified clearing; unrankable candidates cannot be accepted.",
+    "adjudication_source": "explicit caller/user authority; never inferred by the engine",
+    "theorem_is_conditional_on_a5": false
+  },
+  "bar_numerator": 354333,
+  "bar_denominator": 39040,
+  "bar_16": "354333/39040",
+  "surface_caps": {
+    "min_kappa": 2,
+    "max_kappa": 4,
+    "max_direct_support": 2,
+    "max_path_dimension": 1,
+    "max_expr_nodes": 6,
+    "allowed_imports": [
+      14,
+      15
+    ],
+    "allow_truncation": false,
+    "allow_modal": true,
+    "allow_temporal": true,
+    "allow_linear_exponential": false
+  },
+  "semantic_exhaustion_digest": "blake3:5f2ff655260c7c5a7894557aef445d97bd45907e41a522f626c836aaf75bade8",
+  "semantic_exhaustion_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+  "semantic_exhaustion_closure_digest": "blake3:bad84e9cb1e6f0075af529ef0eb32d82b91292b2341e3b66d09a18d4dada9e70",
+  "raw_partition": [
+    {
+      "kappa": 2,
+      "raw_total": "602707957488",
+      "internal": "134405441711",
+      "egp_marginal": "436447700533",
+      "invalid_named_bare_univ": "31854815244",
+      "unclassified": "0",
+      "sum_matches_raw_total": true,
+      "unclassified_is_zero": true
+    },
+    {
+      "kappa": 3,
+      "raw_total": "727994066026945536",
+      "internal": "85462881238554189",
+      "egp_marginal": "587614074893363379",
+      "invalid_named_bare_univ": "54917109895027968",
+      "unclassified": "0",
+      "sum_matches_raw_total": true,
+      "unclassified_is_zero": true
+    },
+    {
+      "kappa": 4,
+      "raw_total": "1135046124093383916890112",
+      "internal": "70452049326669225329863",
+      "egp_marginal": "955581751062132991906361",
+      "invalid_named_bare_univ": "109012323704581699653888",
+      "unclassified": "0",
+      "sum_matches_raw_total": true,
+      "unclassified_is_zero": true
+    }
+  ],
+  "classes": [
+    {
+      "class": "Foundation",
+      "class_label": "foundation",
+      "conditional_rule_kind": "egp_rankable",
+      "decision_rule": "typed extraction decides internal-by-weakening versus EGP-marginal; no class amplification token is required",
+      "egp_outcome": "normalized Marg2 families carry generator-clause EGP anchors",
+      "required_token_failures": [],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 2,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 78080,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 3,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 117120,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 4,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 156160,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Former",
+      "class_label": "former",
+      "conditional_rule_kind": "egp_rankable",
+      "decision_rule": "typed extraction decides internal-by-weakening versus EGP-marginal; no class amplification token is required",
+      "egp_outcome": "normalized Marg2 families carry generator-clause EGP anchors",
+      "required_token_failures": [],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 4,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 156160,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 6,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 234240,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 8,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 312320,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Hit",
+      "class_label": "hit",
+      "conditional_rule_kind": "required_token_failure",
+      "decision_rule": "certified_novelty::evaluate_opaque requires FrozenHFormCertificate for every Hit; complete() in turn requires its private typed-eliminator token",
+      "egp_outcome": null,
+      "required_token_failures": [
+        {
+          "token_type": "TrustedHFormEliminatorToken",
+          "outcome": "no_public_constructor",
+          "condition": "TelescopeClass::Hit"
+        }
+      ],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 8,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 312320,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 11,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 429440,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 14,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 546560,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Suspension",
+      "class_label": "suspension",
+      "conditional_rule_kind": "egp_rankable",
+      "decision_rule": "typed extraction decides internal-by-weakening versus EGP-marginal; no class amplification token is required",
+      "egp_outcome": "normalized Marg2 families carry generator-clause EGP anchors",
+      "required_token_failures": [],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 5,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 195200,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 5,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 195200,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 5,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 195200,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Map",
+      "class_label": "map",
+      "conditional_rule_kind": "egp_rankable",
+      "decision_rule": "typed extraction decides internal-by-weakening versus EGP-marginal; no class amplification token is required",
+      "egp_outcome": "normalized Marg2 families carry generator-clause EGP anchors",
+      "required_token_failures": [],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 8,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 312320,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 10,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 390400,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 12,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 468480,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Modal",
+      "class_label": "modal",
+      "conditional_rule_kind": "egp_rankable",
+      "decision_rule": "typed extraction decides internal-by-weakening versus EGP-marginal; no class amplification token is required",
+      "egp_outcome": "normalized Marg2 families carry generator-clause EGP anchors",
+      "required_token_failures": [],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 5,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 195200,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 8,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 312320,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 12,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 468480,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Axiomatic",
+      "class_label": "axiomatic",
+      "conditional_rule_kind": "required_token_failure",
+      "decision_rule": "evaluate_opaque first rejects absence of a unique dominant import; otherwise FrozenP5Certificate requires the private typed lift/eliminator token",
+      "egp_outcome": null,
+      "required_token_failures": [
+        {
+          "token_type": "P5UniqueDominantImportPremise",
+          "outcome": "no_unique_dominant_import_or_continue_to_token_gate",
+          "condition": "P5ImportAudit::unique_dominant_import.is_none()"
+        },
+        {
+          "token_type": "TrustedP5LiftEliminatorToken",
+          "outcome": "no_public_constructor",
+          "condition": "P5ImportAudit::unique_dominant_import.is_some()"
+        }
+      ],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 7,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 273280,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 10,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 390400,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 13,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 507520,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Synthesis",
+      "class_label": "synthesis",
+      "conditional_rule_kind": "egp_or_required_token_failure",
+      "decision_rule": "empty synthesis_sites is EGP-rankable at the base ceiling; a nonempty site set requires both private synthesis tokens",
+      "egp_outcome": "synthesis_sites(candidate).is_empty() gives the normalized base-family verdict",
+      "required_token_failures": [
+        {
+          "token_type": "TrustedSynthesisPolymorphicEliminatorToken",
+          "outcome": "no_public_constructor",
+          "condition": "!synthesis_sites(candidate).is_empty()"
+        },
+        {
+          "token_type": "TrustedSynthesisNaturalityToken",
+          "outcome": "no_public_constructor",
+          "condition": "!synthesis_sites(candidate).is_empty()"
+        }
+      ],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 6,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 234240,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 9,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 351360,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 12,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 468480,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    },
+    {
+      "class": "Unknown",
+      "class_label": "unknown",
+      "conditional_rule_kind": "egp_rankable",
+      "decision_rule": "typed extraction decides internal-by-weakening versus EGP-marginal; no class amplification token is required",
+      "egp_outcome": "normalized Marg2 families carry generator-clause EGP anchors",
+      "required_token_failures": [],
+      "ceilings": [
+        {
+          "kappa": 2,
+          "conditional_ceiling_nu": 4,
+          "first_clearing_integer_nu": 19,
+          "cross_product_left": 156160,
+          "cross_product_right": 708666,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 3,
+          "conditional_ceiling_nu": 6,
+          "first_clearing_integer_nu": 28,
+          "cross_product_left": 234240,
+          "cross_product_right": 1062999,
+          "strictly_below_bar": true
+        },
+        {
+          "kappa": 4,
+          "conditional_ceiling_nu": 8,
+          "first_clearing_integer_nu": 37,
+          "cross_product_left": 312320,
+          "cross_product_right": 1417332,
+          "strictly_below_bar": true
+        }
+      ]
+    }
+  ],
+  "token_source_digest": "blake3:f64a29baf5b01e888314c5fd213d93b9170fb9e875fd8d048d1940318714c328",
+  "public_token_audit": [
+    {
+      "token_type": "TrustedTransparentElaborationToken",
+      "audit_scope": "certified_novelty::Trusted* wrapper only; public pen_type issuers are audited by concrete witnesses",
+      "struct_found": true,
+      "all_fields_private": true,
+      "public_associated_constructors": [],
+      "constructible_from_frozen_public_api": false
+    },
+    {
+      "token_type": "TrustedHFormEliminatorToken",
+      "audit_scope": "certified_novelty::Trusted* wrapper only; public pen_type issuers are audited by concrete witnesses",
+      "struct_found": true,
+      "all_fields_private": true,
+      "public_associated_constructors": [],
+      "constructible_from_frozen_public_api": false
+    },
+    {
+      "token_type": "TrustedP5LiftEliminatorToken",
+      "audit_scope": "certified_novelty::Trusted* wrapper only; public pen_type issuers are audited by concrete witnesses",
+      "struct_found": true,
+      "all_fields_private": true,
+      "public_associated_constructors": [],
+      "constructible_from_frozen_public_api": false
+    },
+    {
+      "token_type": "TrustedSynthesisPolymorphicEliminatorToken",
+      "audit_scope": "certified_novelty::Trusted* wrapper only; public pen_type issuers are audited by concrete witnesses",
+      "struct_found": true,
+      "all_fields_private": true,
+      "public_associated_constructors": [],
+      "constructible_from_frozen_public_api": false
+    },
+    {
+      "token_type": "TrustedSynthesisNaturalityToken",
+      "audit_scope": "certified_novelty::Trusted* wrapper only; public pen_type issuers are audited by concrete witnesses",
+      "struct_found": true,
+      "all_fields_private": true,
+      "public_associated_constructors": [],
+      "constructible_from_frozen_public_api": false
+    }
+  ],
+  "public_required_token_witnesses": [
+    {
+      "name": "p5_vacuous_public_typed_lift",
+      "candidate": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": {
+              "Pi": [
+                {
+                  "Lib": 15
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          },
+          {
+            "role": "formation",
+            "expr": {
+              "Sigma": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Var": 1
+            }
+          }
+        ]
+      },
+      "canonical_key": "acbb79ca",
+      "class": "Axiomatic",
+      "raw_surface_member": true,
+      "raw_surface_rejections": [],
+      "shallow_type_checks": true,
+      "guarded_admitted": true,
+      "admissibility_class": "admitted_and_focus_aligned",
+      "admissibility_reason": "open_band_structural",
+      "connectivity_passes": true,
+      "references_active_window": true,
+      "identified_with_sealed_structure": false,
+      "semantically_minimal": true,
+      "bar_clearing_detachable_subbundles": 0,
+      "structural_nu": 108,
+      "structural_rho": "36/1",
+      "structural_clears_bar": true,
+      "public_issuer": "pen_type::elaborate::issue_typed_lift_token",
+      "required_token_capability": "P5 typed lift/eliminator evidence",
+      "token_issued": true,
+      "token_subject_hash": "blake3:7477338026222ebe11715cfce5373e3fb56e75ea01320ca2e892380621c60732",
+      "token_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+      "token_derivation_hash": "blake3:624cb19c15b0dfdfe15038f9e8d39c86eee183aff5a246dab67bbd90df3d65ea",
+      "token_dominant_import": 15,
+      "token_lift_clauses": [
+        0
+      ],
+      "token_error": null,
+      "public_fresh_kernel_assertion_available": true,
+      "survives_frozen_candidate_gates": true,
+      "falsifies_f_ip2": true
+    }
+  ],
+  "completeness": {
+    "raw_product_partition_complete": true,
+    "classifier_total_by_exhaustive_match": true,
+    "all_nine_classes_mapped_once": true,
+    "every_class_has_conditional_formula_rule": true,
+    "candidate_wise_class_to_verdict_join_proved": false,
+    "class_rows_are_conditional_formula_rules": true,
+    "every_conditional_ceiling_strictly_below_bar": true,
+    "every_token_failure_named": true,
+    "no_public_required_token_route": false
+  },
+  "falsifiers": {
+    "f_ip1_uncovered_raw_class": true,
+    "f_ip2_public_required_token_route": true,
+    "f_ip3_a5_rejected": false
+  },
+  "mechanical_boundary_complete": false,
+  "no_certifiably_clearing_step16": false,
+  "theorem_status": "blocked_by_ip1_falsifier",
+  "digest": "blake3:839ec86f0ab54e7aef920090609fcb88e09844207a9656b79ed84253ccbe802c"
+}

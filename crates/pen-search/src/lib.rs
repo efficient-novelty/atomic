@@ -11,6 +11,7 @@ pub mod expand;
 pub mod falsifier_disposition;
 pub mod frontier;
 pub mod halting_probe;
+pub mod ip1_certification_boundary;
 pub mod motif;
 pub mod narrative;
 pub mod prefix_cache;
