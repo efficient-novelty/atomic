@@ -358,6 +358,18 @@ pub enum OrbitResolution {
         discharged_by_step: u32,
         derivability: SemanticAssumptionRef,
     },
+    /// Answered by an accepted step: the named step exports a family that
+    /// discharges the orbit's required outputs (checked evidence).
+    Answered {
+        discharged_by_step: u32,
+        answer: SemanticAssumptionRef,
+    },
+    /// The generating window rotated out without discharge or transport.
+    /// A checked expiry is a certified finding, never silent debt freedom.
+    Expired {
+        expired_at_stage: u32,
+        expiry: SemanticAssumptionRef,
+    },
 }
 
 /// An individual semantic demand orbit modulo substitution and univalent
@@ -403,6 +415,8 @@ impl SemanticDemandOrbit {
                 OrbitResolution::Derivable { derivability, .. } => {
                     derivability.is_supplied_assumption()
                 }
+                OrbitResolution::Answered { answer, .. } => answer.is_supplied_assumption(),
+                OrbitResolution::Expired { expiry, .. } => expiry.is_supplied_assumption(),
             }
     }
 }
@@ -561,6 +575,12 @@ fn audit_stage_orbits(
                     OrbitResolution::Derivable {
                         discharged_by_step, ..
                     } => *discharged_by_step < coarse.stage,
+                    OrbitResolution::Answered {
+                        discharged_by_step, ..
+                    } => *discharged_by_step < coarse.stage,
+                    OrbitResolution::Expired {
+                        expired_at_stage, ..
+                    } => *expired_at_stage <= coarse.stage,
                 }
         });
     let j2 = structurally_valid
@@ -658,7 +678,7 @@ pub enum CreditMechanism {
 }
 
 impl CreditMechanism {
-    fn required_local_role(self) -> LocalRole {
+    pub fn required_local_role(self) -> LocalRole {
         match self {
             Self::IntrinsicKernel => LocalRole::KernelHead,
             Self::AdjointCompletion => LocalRole::AdjointMate,

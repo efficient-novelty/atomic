@@ -5,6 +5,8 @@ pub mod certified_novelty;
 pub mod coherence;
 pub mod counting_lemmas;
 pub mod debt_guard;
+pub mod demand_orbits;
+pub mod egp;
 pub mod epsilon_closure;
 pub mod epsilon_closure_post_run;
 pub mod halting;
