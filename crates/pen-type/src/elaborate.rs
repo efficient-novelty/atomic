@@ -48,7 +48,7 @@ use thiserror::Error;
 pub const ELABORATOR_VERSION_TAG: &str = "elaborator-v1";
 
 /// Version tag for the token issuance rules (program ground rule 3).
-pub const TOKEN_RULES_VERSION_TAG: &str = "token-rules-v1";
+pub const TOKEN_RULES_VERSION_TAG: &str = "token-rules-v2";
 
 /// Checker discipline: at most two ambient parameters (mirrors
 /// `check.rs`'s hardcoded maximum).
@@ -1231,6 +1231,8 @@ pub enum TokenError {
         direct_imports: Vec<u32>,
         dominant_imports: Vec<u32>,
     },
+    #[error("dominant import L{dominant_import} is never directly applied")]
+    NoDominantApplications { dominant_import: u32 },
     #[error("lift at clause {clause_index} is not typed against any exported formation of the dominant import")]
     LiftNotTypedAgainstExportedFormation {
         clause_index: u16,
@@ -1609,11 +1611,19 @@ pub fn issue_typed_lift_token(
         if !clause.expr.lib_refs().contains(&dominant_import) {
             continue;
         }
-        lift_clauses.push(clause_index);
         let clause_scope = elaboration.ambient_parameters + u32::from(clause_index);
         let fuel = elaboration.fuel.static_bound;
         let mut applications = Vec::new();
         collect_dominant_applications(&clause.expr, dominant_import, 0, &mut applications);
+        // A bare `Lib(dominant)` is an import, not a lift.  In particular,
+        // it cannot discharge the P5 typing premise vacuously merely by
+        // occurring as the domain or codomain of a formation.  Record a
+        // lift clause only when there is at least one actual application
+        // whose argument is checked below.
+        if applications.is_empty() {
+            continue;
+        }
+        lift_clauses.push(clause_index);
         for (binder_depth, argument) in applications {
             let argument_scope = clause_scope + binder_depth;
             let mut typed = false;
@@ -1654,6 +1664,9 @@ pub fn issue_typed_lift_token(
                 });
             }
         }
+    }
+    if lift_clauses.is_empty() {
+        return Err(TokenError::NoDominantApplications { dominant_import });
     }
 
     let payload = serde_json::json!({
@@ -1857,7 +1870,7 @@ mod tests {
     #[test]
     fn hash_tags_are_frozen() {
         assert_eq!(ELABORATOR_VERSION_TAG, "elaborator-v1");
-        assert_eq!(TOKEN_RULES_VERSION_TAG, "token-rules-v1");
+        assert_eq!(TOKEN_RULES_VERSION_TAG, "token-rules-v2");
         assert!(elaborator_hash().starts_with("blake3:"));
         assert!(token_rules_hash().starts_with("blake3:"));
         assert_ne!(elaborator_hash(), token_rules_hash());
@@ -2088,14 +2101,21 @@ mod tests {
         // Step 13 (Metric): direct imports {11, 12}; 12 reaches 11 — the
         // unique dominant import, matching the sealed P5 record.
         let metric = signature.entry(13).expect("step 13").telescope.clone();
-        let token = issue_typed_lift_token(&signature, &metric, 12).expect("step 13 lift");
-        assert_eq!(token.dominant_import(), 12);
-        replay_typed_lift_token(&signature, &metric, 12, &token).expect("replay");
+        assert_eq!(
+            issue_typed_lift_token(&signature, &metric, 12),
+            Err(TokenError::NoDominantApplications {
+                dominant_import: 12,
+            })
+        );
 
         // Step 14 (Hilbert): direct imports {11, 12, 13}; dominant 13.
         let hilbert = signature.entry(14).expect("step 14").telescope.clone();
-        let token = issue_typed_lift_token(&signature, &hilbert, 13).expect("step 14 lift");
-        assert_eq!(token.dominant_import(), 13);
+        assert_eq!(
+            issue_typed_lift_token(&signature, &hilbert, 13),
+            Err(TokenError::NoDominantApplications {
+                dominant_import: 13,
+            })
+        );
 
         // The two-import Step-16 survivor shape {14, 15}: reachability
         // incomparable — no dominant import (matches p5_record and the
@@ -2127,6 +2147,21 @@ mod tests {
             error,
             TokenError::LiftNotTypedAgainstExportedFormation { clause_index: 2, .. }
         ));
+
+        // A bare occurrence of L15 is an import but not a typed lift.  This
+        // exact shape was the IP-1 public-issuance witness before the
+        // non-vacuity requirement was enforced.
+        let vacuous = tel(vec![
+            pi(Expr::Lib(15), Expr::Var(1)),
+            sigma(Expr::Var(1), Expr::Var(1)),
+            Expr::Var(1),
+        ]);
+        assert_eq!(
+            issue_typed_lift_token(&signature, &vacuous, 15),
+            Err(TokenError::NoDominantApplications {
+                dominant_import: 15,
+            })
+        );
     }
 
     #[test]
@@ -2194,17 +2229,29 @@ mod tests {
 
     #[test]
     fn mutated_import_fails_lift_token_replay() {
-        let signature = SealedSignature::genesis_del_h15();
-        let metric = signature.entry(13).expect("step 13").telescope.clone();
-        let token = issue_typed_lift_token(&signature, &metric, 12).expect("lift");
+        let signature = SealedSignature::from_telescopes(vec![(
+            1,
+            tel(vec![pi(pi(Expr::Univ, Expr::Univ), Expr::Univ)]),
+        )]);
+        let candidate = tel(vec![
+            app(Expr::Lib(1), pi(Expr::Univ, Expr::Univ)),
+            Expr::Var(1),
+        ]);
+        let token = issue_typed_lift_token(&signature, &candidate, 1).expect("typed lift");
+        assert_eq!(token.lift_clauses(), &[0]);
+        replay_typed_lift_token(&signature, &candidate, 1, &token).expect("replay");
 
-        // Perturb an import: Lib(12) -> Lib(11) in clause 5.
-        let mut mutated = metric.clone();
-        mutated.clauses[4] = ClauseRec::new(
-            ClauseRole::Formation,
-            pi(Expr::Lib(11), Expr::Lib(11)),
+        // Perturb the checked application argument.  Candidate binding is
+        // checked before re-issuance, so the old derivation cannot migrate.
+        let mut mutated = candidate.clone();
+        mutated.clauses[0] = ClauseRec::new(
+            ClauseRole::Introduction,
+            app(
+                Expr::Lib(1),
+                sigma(Expr::Univ, Expr::Univ),
+            ),
         );
-        let error = replay_typed_lift_token(&signature, &mutated, 12, &token).unwrap_err();
+        let error = replay_typed_lift_token(&signature, &mutated, 1, &token).unwrap_err();
         assert!(matches!(
             error,
             TokenReplayError::SubjectHashMismatch { .. }

@@ -21,7 +21,8 @@ use pen_core::hash::blake3_hex;
 use pen_core::telescope::{Telescope, TelescopeClass};
 use pen_eval::bar::{clears_bar, compute_rho};
 use pen_eval::certified_novelty::{
-    CertifiedSurfaceCaps, ClassCeilings, FreshKernelCertificate, derive_linear_bound,
+    CertifiedSurfaceCaps, ClassCeilings, FreshKernelCertificate, ReplayedP5LiftCapability,
+    derive_linear_bound,
 };
 use pen_eval::halting::{accepted_canonical_keys, genesis_bar_16, genesis_history};
 use pen_eval::minimality::analyze_semantic_minimality;
@@ -36,7 +37,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
 pub const IP1_DATE: &str = "2026-07-18";
-pub const IP1_SCHEMA_VERSION: u32 = 1;
+pub const IP1_SCHEMA_VERSION: u32 = 2;
 const BAR_NUMERATOR: u64 = 354_333;
 const BAR_DENOMINATOR: u64 = 39_040;
 const EXPECTED_EXHAUSTION_DIGEST: &str =
@@ -59,7 +60,7 @@ const ALL_CLASSES: [TelescopeClass; 9] = [
 const TRUSTED_TOKEN_TYPES: [&str; 5] = [
     "TrustedTransparentElaborationToken",
     "TrustedHFormEliminatorToken",
-    "TrustedP5LiftEliminatorToken",
+    "ReplayedP5LiftCapability",
     "TrustedSynthesisPolymorphicEliminatorToken",
     "TrustedSynthesisNaturalityToken",
 ];
@@ -174,6 +175,8 @@ pub struct PublicRequiredTokenWitness {
     pub token_dominant_import: Option<u32>,
     pub token_lift_clauses: Vec<u16>,
     pub token_error: Option<String>,
+    pub sidecar_adapter_succeeded: bool,
+    pub sidecar_adapter_error: Option<String>,
     pub public_fresh_kernel_assertion_available: bool,
     pub survives_frozen_candidate_gates: bool,
     pub falsifies_f_ip2: bool,
@@ -339,7 +342,7 @@ fn class_rule(
         ),
         TelescopeClass::Axiomatic => (
             ConditionalClassRuleKind::RequiredTokenFailure,
-            "evaluate_opaque first rejects absence of a unique dominant import; otherwise FrozenP5Certificate requires the private typed lift/eliminator token",
+            "evaluate_opaque first rejects absence of a unique dominant import; otherwise FrozenP5Certificate requires a non-vacuous TypedLiftToken replayed through ReplayedP5LiftCapability",
             None,
             vec![
                 RequiredTokenFailure {
@@ -348,8 +351,8 @@ fn class_rule(
                     condition: "P5ImportAudit::unique_dominant_import.is_none()".to_owned(),
                 },
                 RequiredTokenFailure {
-                    token_type: "TrustedP5LiftEliminatorToken".to_owned(),
-                    outcome: "no_public_constructor".to_owned(),
+                    token_type: "ReplayedP5LiftCapability".to_owned(),
+                    outcome: "requires_successful_non_vacuous_kernel_issuance_and_definition_replay".to_owned(),
                     condition: "P5ImportAudit::unique_dominant_import.is_some()".to_owned(),
                 },
             ],
@@ -537,16 +540,28 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
         token_dominant_import,
         token_lift_clauses,
         token_error,
+        sidecar_adapter_succeeded,
+        sidecar_adapter_error,
     ) = match issued {
-        Ok(token) => (
-            true,
-            Some(token.subject_hash().to_owned()),
-            Some(token.signature_digest().to_owned()),
-            Some(token.derivation_hash().to_owned()),
-            Some(token.dominant_import()),
-            token.lift_clauses().to_vec(),
-            None,
-        ),
+        Ok(token) => {
+            let adapter =
+                ReplayedP5LiftCapability::from_kernel_token(&signature, &candidate, 15, &token);
+            let (sidecar_adapter_succeeded, sidecar_adapter_error) = match adapter {
+                Ok(_) => (true, None),
+                Err(error) => (false, Some(error.to_string())),
+            };
+            (
+                true,
+                Some(token.subject_hash().to_owned()),
+                Some(token.signature_digest().to_owned()),
+                Some(token.derivation_hash().to_owned()),
+                Some(token.dominant_import()),
+                token.lift_clauses().to_vec(),
+                None,
+                sidecar_adapter_succeeded,
+                sidecar_adapter_error,
+            )
+        }
         Err(error) => (
             false,
             None,
@@ -555,6 +570,8 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
             None,
             Vec::new(),
             Some(error.to_string()),
+            false,
+            Some("kernel token did not issue; sidecar replay was not attempted".to_owned()),
         ),
     };
     let fresh_kernel = FreshKernelCertificate::assert_all_clauses_opaque(&candidate, &library);
@@ -568,10 +585,10 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
         && !identified_with_sealed_structure
         && semantically_minimal
         && bar_clearing_detachable_subbundles == 0;
-    let falsifies_f_ip2 = survives_frozen_candidate_gates && token_issued;
+    let falsifies_f_ip2 = survives_frozen_candidate_gates && sidecar_adapter_succeeded;
 
     PublicRequiredTokenWitness {
-        name: "p5_vacuous_public_typed_lift".to_owned(),
+        name: "p5_vacuous_public_typed_lift_rejected".to_owned(),
         canonical_key: canonical_key_telescope(&candidate).0,
         class: candidate.classify(&library),
         candidate,
@@ -598,6 +615,8 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
         token_dominant_import,
         token_lift_clauses,
         token_error,
+        sidecar_adapter_succeeded,
+        sidecar_adapter_error,
         public_fresh_kernel_assertion_available,
         survives_frozen_candidate_gates,
         falsifies_f_ip2,
@@ -696,9 +715,10 @@ fn build_certificate(adjudication: A5Adjudication) -> Ip1CertificationBoundary {
                 && !failure.outcome.is_empty()
                 && !failure.condition.is_empty()
         });
-    // Do not narrow F-IP2 to the disconnected `Trusted*` wrapper types after
-    // seeing the result.  The preregistered falsifier says ANY public route to
-    // required evidence.  The concrete pen_type issuer witness is dispositive.
+    // F-IP2 requires an end-to-end route, not merely a public function whose
+    // result cannot discharge the sidecar premise.  P5 is audited through the
+    // public issuer AND the replay adapter; a failure at either boundary is a
+    // named token failure.  This keeps the issuer public and fail-closed.
     let no_public_required_token_route = !public_required_token_witnesses
         .iter()
         .any(|witness| witness.falsifies_f_ip2);
@@ -892,10 +912,10 @@ mod tests {
     }
 
     #[test]
-    fn public_p5_issuer_witness_triggers_f_ip2_despite_private_wrapper() {
+    fn vacuous_public_p5_issuance_is_rejected_before_sidecar_adaptation() {
         let certificate = run_ip1_certification_boundary(A5Adjudication::Undecided);
-        assert!(!certificate.completeness.no_public_required_token_route);
-        assert!(certificate.falsifiers.f_ip2_public_required_token_route);
+        assert!(certificate.completeness.no_public_required_token_route);
+        assert!(!certificate.falsifiers.f_ip2_public_required_token_route);
         assert_eq!(certificate.public_required_token_witnesses.len(), 1);
         let witness = &certificate.public_required_token_witnesses[0];
         assert!(witness.raw_surface_member);
@@ -906,12 +926,19 @@ mod tests {
         assert!(!witness.identified_with_sealed_structure);
         assert!(witness.semantically_minimal);
         assert_eq!(witness.bar_clearing_detachable_subbundles, 0);
-        assert!(witness.token_issued);
-        assert_eq!(witness.token_dominant_import, Some(15));
-        assert_eq!(witness.token_lift_clauses, vec![0]);
+        assert!(!witness.token_issued);
+        assert_eq!(witness.token_dominant_import, None);
+        assert!(witness.token_lift_clauses.is_empty());
+        assert!(
+            witness
+                .token_error
+                .as_deref()
+                .is_some_and(|error| error.contains("never directly applied"))
+        );
+        assert!(!witness.sidecar_adapter_succeeded);
+        assert!(witness.sidecar_adapter_error.is_some());
         assert!(witness.survives_frozen_candidate_gates);
-        assert!(witness.falsifies_f_ip2);
-        // This narrower fact remains true, but is explicitly non-dispositive.
+        assert!(!witness.falsifies_f_ip2);
         assert_eq!(
             certificate.public_token_audit.len(),
             TRUSTED_TOKEN_TYPES.len()
@@ -919,16 +946,24 @@ mod tests {
         for audit in &certificate.public_token_audit {
             assert!(audit.struct_found, "{}", audit.token_type);
             assert!(audit.all_fields_private, "{}", audit.token_type);
-            assert!(
-                audit.public_associated_constructors.is_empty(),
-                "{}",
-                audit.token_type
-            );
-            assert!(
-                !audit.constructible_from_frozen_public_api,
-                "{}",
-                audit.token_type
-            );
+            if audit.token_type == "ReplayedP5LiftCapability" {
+                assert_eq!(
+                    audit.public_associated_constructors,
+                    vec!["from_kernel_token"]
+                );
+                assert!(audit.constructible_from_frozen_public_api);
+            } else {
+                assert!(
+                    audit.public_associated_constructors.is_empty(),
+                    "{}",
+                    audit.token_type
+                );
+                assert!(
+                    !audit.constructible_from_frozen_public_api,
+                    "{}",
+                    audit.token_type
+                );
+            }
         }
     }
 

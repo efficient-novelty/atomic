@@ -255,6 +255,7 @@ fn token_error_name(error: &TokenError) -> &'static str {
         TokenError::NaturalitySquareMismatch { .. } => "naturality_square_mismatch",
         TokenError::NoDirectImports => "no_direct_imports",
         TokenError::NoDominantImport { .. } => "no_dominant_import",
+        TokenError::NoDominantApplications { .. } => "no_dominant_applications",
         TokenError::LiftNotTypedAgainstExportedFormation { .. } => {
             "lift_not_typed_against_exported_formation"
         }

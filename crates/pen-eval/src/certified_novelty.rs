@@ -24,6 +24,10 @@ use pen_core::clause::ClauseRole;
 use pen_core::expr::Expr;
 use pen_core::library::Library;
 use pen_core::telescope::{Telescope, TelescopeClass};
+use pen_type::elaborate::{
+    SealedSignature, TokenReplayError, TypedLiftToken, candidate_hash as kernel_candidate_hash,
+    replay_typed_lift_token,
+};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 use thiserror::Error;
@@ -505,21 +509,80 @@ pub struct P5LocalLift {
     pub dominant_import: u32,
 }
 
-/// Trusted semantic capability asserting a typed P5 lift and record
-/// eliminator.  Graph dominance and the finite API are still checked below;
-/// this private token covers precisely the typing fact absent from the AST.
+/// Sidecar capability produced only by replaying a kernel `TypedLiftToken`.
+///
+/// This capability deliberately asserts no record eliminator and contains no
+/// free-form theorem label.  Its private fields bind the exact sealed
+/// signature, candidate subject, kernel derivation, dominant import, visible
+/// library prefix, and the clauses at which applications were actually
+/// checked.  The public adapter below is the sole production constructor.
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct TrustedP5LiftEliminatorToken {
+pub struct ReplayedP5LiftCapability {
     candidate_key: String,
+    kernel_subject_hash: String,
+    signature_digest: String,
+    derivation_hash: String,
+    visible_library: u32,
     dominant_import: u32,
-    api_clauses: BTreeSet<u16>,
-    theorem_id: String,
+    lift_clauses: BTreeSet<u16>,
 }
 
-impl TrustedP5LiftEliminatorToken {
-    pub fn theorem_id(&self) -> &str {
-        &self.theorem_id
+impl ReplayedP5LiftCapability {
+    /// Replay a private-field kernel token and adapt exactly the fact it
+    /// proves.  No token field, label, or caller-supplied digest is trusted.
+    pub fn from_kernel_token(
+        signature: &SealedSignature,
+        candidate: &Telescope,
+        visible_library: u32,
+        token: &TypedLiftToken,
+    ) -> Result<Self, P5KernelAdapterError> {
+        replay_typed_lift_token(signature, candidate, visible_library, token)?;
+        let lift_clauses = token.lift_clauses().iter().copied().collect::<BTreeSet<_>>();
+        if lift_clauses.is_empty() || lift_clauses.len() != token.lift_clauses().len() {
+            return Err(P5KernelAdapterError::InvalidLiftClauseSet);
+        }
+        Ok(Self {
+            candidate_key: canonical_key_telescope(candidate).0,
+            kernel_subject_hash: kernel_candidate_hash(candidate),
+            signature_digest: token.signature_digest().to_owned(),
+            derivation_hash: token.derivation_hash().to_owned(),
+            visible_library,
+            dominant_import: token.dominant_import(),
+            lift_clauses,
+        })
     }
+
+    pub fn kernel_subject_hash(&self) -> &str {
+        &self.kernel_subject_hash
+    }
+
+    pub fn signature_digest(&self) -> &str {
+        &self.signature_digest
+    }
+
+    pub fn derivation_hash(&self) -> &str {
+        &self.derivation_hash
+    }
+
+    pub fn visible_library(&self) -> u32 {
+        self.visible_library
+    }
+
+    pub fn dominant_import(&self) -> u32 {
+        self.dominant_import
+    }
+
+    pub fn lift_clauses(&self) -> &BTreeSet<u16> {
+        &self.lift_clauses
+    }
+}
+
+#[derive(Clone, Debug, Error, Eq, PartialEq)]
+pub enum P5KernelAdapterError {
+    #[error("kernel P5 token failed definition replay: {0}")]
+    Replay(#[from] TokenReplayError),
+    #[error("kernel P5 token has an empty or duplicate lift-clause set")]
+    InvalidLiftClauseSet,
 }
 
 /// Frozen support-local P5 certificate.
@@ -535,16 +598,28 @@ pub struct FrozenP5Certificate {
     pub minimal_complete_api: BTreeSet<u16>,
     pub bridges: BTreeSet<P5BridgeSchema>,
     pub local_lifts: BTreeSet<P5LocalLift>,
-    pub typed_lift_eliminator: TrustedP5LiftEliminatorToken,
+    pub replayed_typed_lift: ReplayedP5LiftCapability,
 }
 
 impl FrozenP5Certificate {
-    pub fn complete_local(
+    /// Build the sidecar certificate through the replay boundary.  Keeping
+    /// token adaptation inside this constructor prevents a caller from
+    /// presenting strings or copying token metadata into a trusted wrapper.
+    pub fn complete_local_from_kernel(
+        signature: &SealedSignature,
         candidate: &Telescope,
+        visible_library: u32,
         graph: &ImportDag,
         kernel: &FreshKernelCertificate,
-        typed_lift_eliminator: TrustedP5LiftEliminatorToken,
+        token: &TypedLiftToken,
     ) -> Result<Self, P5CertificateError> {
+        let replayed_typed_lift =
+            ReplayedP5LiftCapability::from_kernel_token(
+                signature,
+                candidate,
+                visible_library,
+                token,
+            )?;
         let audit = P5ImportAudit::check(candidate, graph);
         let dominant_import =
             audit
@@ -554,12 +629,17 @@ impl FrozenP5Certificate {
                     dominant_imports: audit.dominant_imports,
                 })?;
         let candidate_key = canonical_key_telescope(candidate).0;
-        if typed_lift_eliminator.candidate_key != candidate_key
-            || typed_lift_eliminator.dominant_import != dominant_import
-            || typed_lift_eliminator.api_clauses != kernel.irreducible_clauses
-            || typed_lift_eliminator.theorem_id.is_empty()
+        if replayed_typed_lift.candidate_key != candidate_key
+            || replayed_typed_lift.kernel_subject_hash != kernel_candidate_hash(candidate)
+            || replayed_typed_lift.signature_digest != signature.digest()
+            || replayed_typed_lift.derivation_hash != token.derivation_hash()
+            || replayed_typed_lift.visible_library != visible_library
+            || replayed_typed_lift.dominant_import != dominant_import
+            || !replayed_typed_lift
+                .lift_clauses
+                .is_subset(&kernel.irreducible_clauses)
         {
-            return Err(P5CertificateError::TypedLiftEliminatorTokenMismatch);
+            return Err(P5CertificateError::KernelLiftCapabilityMismatch);
         }
         let bridges = candidate
             .lib_refs()
@@ -570,8 +650,8 @@ impl FrozenP5Certificate {
                 target_import,
             })
             .collect();
-        let local_lifts = kernel
-            .irreducible_clauses
+        let local_lifts = replayed_typed_lift
+            .lift_clauses
             .iter()
             .copied()
             .map(|kernel_clause| P5LocalLift {
@@ -585,7 +665,7 @@ impl FrozenP5Certificate {
             minimal_complete_api: kernel.irreducible_clauses.clone(),
             bridges,
             local_lifts,
-            typed_lift_eliminator,
+            replayed_typed_lift,
         })
     }
 }
@@ -599,8 +679,10 @@ pub enum P5CertificateError {
         direct_imports: Vec<u32>,
         dominant_imports: Vec<u32>,
     },
-    #[error("trusted typed P5 lift/eliminator token does not match the candidate API")]
-    TypedLiftEliminatorTokenMismatch,
+    #[error(transparent)]
+    KernelAdapter(#[from] P5KernelAdapterError),
+    #[error("replayed kernel P5 lift capability does not match the candidate API")]
+    KernelLiftCapabilityMismatch,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -1319,13 +1401,20 @@ fn validate_p5(
             reason: "minimal complete API does not cover the fresh kernel exactly".to_owned(),
         });
     }
-    if certificate.typed_lift_eliminator.candidate_key != certificate.candidate_key
-        || certificate.typed_lift_eliminator.dominant_import != dominant
-        || certificate.typed_lift_eliminator.api_clauses != kernel.irreducible_clauses
-        || certificate.typed_lift_eliminator.theorem_id.is_empty()
+    if certificate.replayed_typed_lift.candidate_key != certificate.candidate_key
+        || certificate.replayed_typed_lift.kernel_subject_hash
+            != kernel_candidate_hash(candidate)
+        || certificate.replayed_typed_lift.signature_digest.is_empty()
+        || certificate.replayed_typed_lift.derivation_hash.is_empty()
+        || certificate.replayed_typed_lift.dominant_import != dominant
+        || certificate.replayed_typed_lift.lift_clauses.is_empty()
+        || !certificate
+            .replayed_typed_lift
+            .lift_clauses
+            .is_subset(&kernel.irreducible_clauses)
     {
         return Err(CertifiedNoveltyError::InvalidP5Certificate {
-            reason: "trusted typed lift/eliminator token does not match the API".to_owned(),
+            reason: "replayed kernel lift binding does not match the candidate API".to_owned(),
         });
     }
     let expected_bridges = candidate
@@ -1360,6 +1449,11 @@ fn validate_p5(
     if distinct_lift_heads.len() != certificate.local_lifts.len() {
         return Err(CertifiedNoveltyError::InvalidP5Certificate {
             reason: "multiple inherited lifts were assigned to one fresh head".to_owned(),
+        });
+    }
+    if distinct_lift_heads != certificate.replayed_typed_lift.lift_clauses {
+        return Err(CertifiedNoveltyError::InvalidP5Certificate {
+            reason: "local lifts differ from the replayed kernel lift clauses".to_owned(),
         });
     }
     Ok((
@@ -1672,19 +1766,6 @@ mod tests {
         }
     }
 
-    fn trusted_p5_token(
-        candidate: &Telescope,
-        dominant_import: u32,
-        kernel: &FreshKernelCertificate,
-    ) -> TrustedP5LiftEliminatorToken {
-        TrustedP5LiftEliminatorToken {
-            candidate_key: canonical_key_telescope(candidate).0,
-            dominant_import,
-            api_clauses: kernel.irreducible_clauses.clone(),
-            theorem_id: "test-only:typed-p5-lift-eliminator".to_owned(),
-        }
-    }
-
     fn trusted_synthesis_tokens(
         candidate: &Telescope,
     ) -> (
@@ -1925,99 +2006,150 @@ mod tests {
     }
 
     #[test]
-    fn certified_one_import_p5_record_is_local_and_linearly_bounded() {
-        let (library, _, _) = genesis_history();
+    fn replayed_kernel_p5_lift_builds_only_the_checked_local_lifts() {
+        let signature = SealedSignature::from_telescopes(vec![(
+            1,
+            Telescope::new(vec![ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Pi(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                    Box::new(Expr::Univ),
+                ),
+            )]),
+        )]);
         let candidate = Telescope::new(vec![
             ClauseRec::new(
-                ClauseRole::Formation,
-                Expr::Pi(Box::new(Expr::Lib(15)), Box::new(Expr::Var(1))),
-            ),
-            ClauseRec::new(
-                ClauseRole::Formation,
-                Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
-            ),
-            ClauseRec::new(
                 ClauseRole::Introduction,
-                Expr::App(Box::new(Expr::Lib(15)), Box::new(Expr::Var(1))),
+                Expr::App(
+                    Box::new(Expr::Lib(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                ),
             ),
+            ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)),
         ]);
-        let mut opaque = OpaqueExtensionCertificate::local(&candidate, &library);
-        opaque.p5 = Some(
-            FrozenP5Certificate::complete_local(
-                &candidate,
-                &graph(),
-                &opaque.kernel,
-                trusted_p5_token(&candidate, 15, &opaque.kernel),
-            )
-            .expect("single import is dominant"),
-        );
-        let report = evaluate_certified_novelty(
+        let token = pen_type::elaborate::issue_typed_lift_token(&signature, &candidate, 1)
+            .expect("non-vacuous typed lift");
+        let kernel = FreshKernelCertificate::assert_all_clauses_opaque(&candidate, &Vec::new());
+        let certificate = FrozenP5Certificate::complete_local_from_kernel(
+            &signature,
             &candidate,
-            &ExtensionCertificate::Opaque(opaque),
-            &library,
-            &graph(),
-            &caps(),
+            1,
+            &ImportDag::default(),
+            &kernel,
+            &token,
         )
-        .expect("certified local P5 basis");
+        .expect("replayed kernel token adapts");
 
-        assert_eq!(report.components.p5_bridges, 0);
-        assert_eq!(report.components.p5_local_lifts, 3);
-        assert_eq!(report.nu, 9);
-        assert!(
-            report
-                .uncredited_amplifications
-                .contains(&AmplificationKind::HistoricalP5Inheritance)
+        assert_eq!(certificate.dominant_import, 1);
+        assert_eq!(certificate.minimal_complete_api, [0, 1].into_iter().collect());
+        assert_eq!(certificate.local_lifts.len(), 1);
+        assert!(certificate.local_lifts.contains(&P5LocalLift {
+            kernel_clause: 0,
+            dominant_import: 1,
+        }));
+        assert_eq!(
+            certificate.replayed_typed_lift.kernel_subject_hash(),
+            pen_type::elaborate::candidate_hash(&candidate)
         );
-        assert!(report.linear_theorem_holds);
+        assert_eq!(
+            certificate.replayed_typed_lift.signature_digest(),
+            signature.digest()
+        );
+        assert_eq!(
+            certificate.replayed_typed_lift.derivation_hash(),
+            token.derivation_hash()
+        );
+        assert_eq!(certificate.replayed_typed_lift.visible_library(), 1);
+        assert_eq!(certificate.replayed_typed_lift.dominant_import(), 1);
+        assert_eq!(
+            certificate.replayed_typed_lift.lift_clauses(),
+            &[0].into_iter().collect()
+        );
     }
 
     #[test]
-    fn p5_certificate_rejects_a_typed_token_for_the_wrong_dominant_import() {
-        let (library, _, _) = genesis_history();
+    fn p5_kernel_adapter_rejects_candidate_and_signature_mutations() {
+        let signature = SealedSignature::from_telescopes(vec![(
+            1,
+            Telescope::new(vec![ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Pi(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                    Box::new(Expr::Univ),
+                ),
+            )]),
+        )]);
         let candidate = Telescope::new(vec![
             ClauseRec::new(
-                ClauseRole::Formation,
-                Expr::Pi(Box::new(Expr::Lib(15)), Box::new(Expr::Var(1))),
-            ),
-            ClauseRec::new(
-                ClauseRole::Formation,
-                Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
-            ),
-            ClauseRec::new(
                 ClauseRole::Introduction,
-                Expr::App(Box::new(Expr::Lib(15)), Box::new(Expr::Var(1))),
+                Expr::App(
+                    Box::new(Expr::Lib(1)),
+                    Box::new(Expr::Pi(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                ),
             ),
+            ClauseRec::new(ClauseRole::Introduction, Expr::Var(1)),
         ]);
-        let kernel = FreshKernelCertificate::assert_all_clauses_opaque(&candidate, &library);
-        assert_eq!(
-            FrozenP5Certificate::complete_local(
-                &candidate,
-                &graph(),
-                &kernel,
-                trusted_p5_token(&candidate, 14, &kernel),
+        let token = pen_type::elaborate::issue_typed_lift_token(&signature, &candidate, 1)
+            .expect("non-vacuous typed lift");
+
+        let mut mutated_candidate = candidate.clone();
+        mutated_candidate.clauses[1] =
+            ClauseRec::new(ClauseRole::Formation, Expr::Var(1));
+        assert!(matches!(
+            ReplayedP5LiftCapability::from_kernel_token(
+                &signature,
+                &mutated_candidate,
+                1,
+                &token,
             ),
-            Err(P5CertificateError::TypedLiftEliminatorTokenMismatch)
-        );
+            Err(P5KernelAdapterError::Replay(
+                TokenReplayError::SubjectHashMismatch { .. }
+            ))
+        ));
+
+        let mutated_signature = SealedSignature::from_telescopes(vec![(
+            1,
+            Telescope::new(vec![ClauseRec::new(
+                ClauseRole::Formation,
+                Expr::Pi(
+                    Box::new(Expr::Sigma(Box::new(Expr::Univ), Box::new(Expr::Univ))),
+                    Box::new(Expr::Univ),
+                ),
+            )]),
+        )]);
+        assert!(matches!(
+            ReplayedP5LiftCapability::from_kernel_token(
+                &mutated_signature,
+                &candidate,
+                1,
+                &token,
+            ),
+            Err(P5KernelAdapterError::Replay(
+                TokenReplayError::SignatureDigestMismatch { .. }
+            ))
+        ));
     }
 
     #[test]
-    fn step13_and_step14_keep_their_p5_dominant_imports() {
+    fn step13_and_step14_keep_graph_dominance_but_do_not_mint_vacuous_lifts() {
         let graph = graph();
+        let signature = SealedSignature::genesis_del_h15();
         for (step, expected) in [(13, 12), (14, 13)] {
             let candidate = Telescope::reference(step);
-            let empty_library = Vec::new();
-            let kernel =
-                FreshKernelCertificate::assert_all_clauses_opaque(&candidate, &empty_library);
-            let certificate = FrozenP5Certificate::complete_local(
-                &candidate,
-                &graph,
-                &kernel,
-                trusted_p5_token(&candidate, expected, &kernel),
-            )
-            .expect("historical P5 package has a dominant import");
-            assert_eq!(certificate.dominant_import, expected);
-            assert_eq!(certificate.minimal_complete_api.len(), candidate.kappa());
-            assert_eq!(certificate.local_lifts.len(), candidate.kappa());
+            assert_eq!(
+                P5ImportAudit::check(&candidate, &graph).unique_dominant_import,
+                Some(expected)
+            );
+            assert!(matches!(
+                pen_type::elaborate::issue_typed_lift_token(
+                    &signature,
+                    &candidate,
+                    step - 1,
+                ),
+                Err(pen_type::elaborate::TokenError::NoDominantApplications {
+                    dominant_import,
+                }) if dominant_import == expected
+            ));
         }
     }
 
