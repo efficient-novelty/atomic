@@ -116,7 +116,7 @@ pub struct StageReselection {
     pub legacy_nu: u32,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, Eq, PartialEq, Serialize)]
 pub struct FirstDivergence {
     pub stage: u32,
     pub field: String,
@@ -128,7 +128,7 @@ pub struct FirstDivergence {
 /// (no candidate cleared the revised bar) — the latter is the certified
 /// independence-flavored outcome, published with the complete revised
 /// prefix and the halted stage's whole cone.
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum ReselectionOutcome {
     CompletedThroughStage15,

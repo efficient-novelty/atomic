@@ -8,6 +8,1039 @@
     "typed_family_extraction_available": false,
     "weakening_map_available": false
   },
+  "guarded_step15_internality_kernel": {
+    "closure_digest": "blake3:bad84e9cb1e6f0075af529ef0eb32d82b91292b2341e3b66d09a18d4dada9e70",
+    "conclusion_nu_zero_proved_for_guarded_subspace": true,
+    "conditional": {
+      "family_count": 25,
+      "flow_name": "Step-15-generated guarded flow over sealed B15 (the Step-16 internal branch)",
+      "marginal_nu": 0,
+      "weakening_erasure_are_inverse": true
+    },
+    "derivation_hash": "blake3:e0f7bc3cc99f8ce21ddba323b634e5f3eb9e01d18dfca9382105940d547317bd",
+    "erasure_map_available": true,
+    "excluded_flows": [
+      {
+        "description": "re-reference of the sealed window (Lib 13/14/15)",
+        "non_weakening_families": [
+          "blake3:6cef344648205d7057ce00fa04a4c7d39f0952c07c3c0ec5a87b4f7cdfaaaefa",
+          "blake3:44f3aa13e548da0edb27ec2f2475b6115c9dfa404d68f20e1b47b30300da3656",
+          "blake3:a16e5dfce13f796cb66647ae212ca49633c42bbcaecbf0b23e7b83b08eadcb16"
+        ],
+        "subject_hash": "blake3:78421956b6891e5dcb835d564d880fa52bd61df5fac2c6a436e0951109dae321"
+      }
+    ],
+    "flow_name": "Step-15-generated guarded flow over sealed B15 (the Step-16 internal branch)",
+    "guarded_flows": [
+      {
+        "description": "verbatim re-proposal of the Step-13 entry",
+        "family_count": 7,
+        "subject_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "weakening_images": [
+          [
+            "blake3:6c282423d329045adb01fc78b57cfc6ffa5202d728f764c79aff07d3c1a6ef69",
+            "blake3:6c282423d329045adb01fc78b57cfc6ffa5202d728f764c79aff07d3c1a6ef69",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:ff39aab404e36fcab64185115669c67950a5e2ce2c2b00e287f6747253f28bf9",
+            "blake3:ff39aab404e36fcab64185115669c67950a5e2ce2c2b00e287f6747253f28bf9",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 2
+            }
+          ],
+          [
+            "blake3:5b5cc4e6699606c7c95a6a820b675c3b22971dbbbb85af99aeb12b70b90c44a7",
+            "blake3:5b5cc4e6699606c7c95a6a820b675c3b22971dbbbb85af99aeb12b70b90c44a7",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:d2f229cc0699dffe6bfdb264ad38d42bce82524d9d4b5b85455b5dc493740e94",
+            "blake3:d2f229cc0699dffe6bfdb264ad38d42bce82524d9d4b5b85455b5dc493740e94",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 2
+            }
+          ],
+          [
+            "blake3:dc80026e749c7aea2d39d2f59bb5a2279459185089a87b15da6fd3b6f4be1a75",
+            "blake3:dc80026e749c7aea2d39d2f59bb5a2279459185089a87b15da6fd3b6f4be1a75",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Lib": 12
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Lib": 12
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 0
+            }
+          ],
+          [
+            "blake3:39ccb1e581ea1181886ae2a55ac05bfe8380ae3e9b4f56a78de2013eee5fba86",
+            "blake3:39ccb1e581ea1181886ae2a55ac05bfe8380ae3e9b4f56a78de2013eee5fba86",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:5d8049ee807abc2be54c5b0eecb207e04af5cfd798dc56042782b0ab11f59f97",
+            "blake3:5d8049ee807abc2be54c5b0eecb207e04af5cfd798dc56042782b0ab11f59f97",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ]
+        ]
+      },
+      {
+        "description": "verbatim re-proposal of the Step-14 entry",
+        "family_count": 9,
+        "subject_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "weakening_images": [
+          [
+            "blake3:8a2441a8803f40963de9b5c6822a10a2254a3955e7b2c9acfe5b66fbff152a60",
+            "blake3:8a2441a8803f40963de9b5c6822a10a2254a3955e7b2c9acfe5b66fbff152a60",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Pi": [
+                          {
+                            "Var": 1
+                          },
+                          "Univ"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Pi": [
+                          {
+                            "Var": 1
+                          },
+                          "Univ"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:c28cce3af15b53295f6efe9c86d9eeed20b9d6dcc59548f3cf4662b06206169c",
+            "blake3:c28cce3af15b53295f6efe9c86d9eeed20b9d6dcc59548f3cf4662b06206169c",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:67e059834272d801e4a90b7db4e6d9f71317189b9bcf9f38fddeab1f0b2429b0",
+            "blake3:67e059834272d801e4a90b7db4e6d9f71317189b9bcf9f38fddeab1f0b2429b0",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:782f1ab45be3781abebd240dfe12d9a7d5457db3f800107816cb869f615c5025",
+            "blake3:782f1ab45be3781abebd240dfe12d9a7d5457db3f800107816cb869f615c5025",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Lam": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Lam": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 2
+            }
+          ],
+          [
+            "blake3:6c282423d329045adb01fc78b57cfc6ffa5202d728f764c79aff07d3c1a6ef69",
+            "blake3:6c282423d329045adb01fc78b57cfc6ffa5202d728f764c79aff07d3c1a6ef69",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:d452e71c56cdfa7c1a37a8127d6ec221e855cd91af1ea114d1e87c1c58f2eca0",
+            "blake3:d452e71c56cdfa7c1a37a8127d6ec221e855cd91af1ea114d1e87c1c58f2eca0",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 13
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 13
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:5d8049ee807abc2be54c5b0eecb207e04af5cfd798dc56042782b0ab11f59f97",
+            "blake3:5d8049ee807abc2be54c5b0eecb207e04af5cfd798dc56042782b0ab11f59f97",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:024419116f59097d412c1db10c9de2783e73e8f7fbfa5bbb5f75a2617e4d8c16",
+            "blake3:024419116f59097d412c1db10c9de2783e73e8f7fbfa5bbb5f75a2617e4d8c16",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:a03f0106804ce72c764a557d559f9c2a58c401de980e9a4e609b114e4407973d",
+            "blake3:a03f0106804ce72c764a557d559f9c2a58c401de980e9a4e609b114e4407973d",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    "Univ"
+                  ]
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    "Univ"
+                  ]
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ]
+        ]
+      },
+      {
+        "description": "verbatim re-proposal of the Step-15 entry",
+        "family_count": 8,
+        "subject_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "weakening_images": [
+          [
+            "blake3:18662ed11fa7a3f79a9c1f0e8152184fd762bada38ce4825a228157a834c5a0b",
+            "blake3:18662ed11fa7a3f79a9c1f0e8152184fd762bada38ce4825a228157a834c5a0b",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Next": {
+                  "Var": 1
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Next": {
+                  "Var": 1
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:61d43fb2a2484c34f4cd7160d489052ea7165cfd525bbc0efa828bc610d66a09",
+            "blake3:61d43fb2a2484c34f4cd7160d489052ea7165cfd525bbc0efa828bc610d66a09",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Eventually": {
+                  "Var": 1
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Eventually": {
+                  "Var": 1
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:fdb8aef8157f794441864c08403813b4bd71e482bc449522126be8bfd86bb783",
+            "blake3:fdb8aef8157f794441864c08403813b4bd71e482bc449522126be8bfd86bb783",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:a43a136988d267a4b88050c84ba8350c4f64455f5c7f7dde82cce789c0ac5458",
+            "blake3:a43a136988d267a4b88050c84ba8350c4f64455f5c7f7dde82cce789c0ac5458",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 10
+                    },
+                    {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  ]
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 10
+                    },
+                    {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  ]
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:64688ddee4d188b31b5189604d015d1ee5645f3332a9da4d1ea87e1fd74738ff",
+            "blake3:64688ddee4d188b31b5189604d015d1ee5645f3332a9da4d1ea87e1fd74738ff",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Flat": {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Next": {
+                      "Flat": {
+                        "Var": 1
+                      }
+                    }
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Flat": {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Next": {
+                      "Flat": {
+                        "Var": 1
+                      }
+                    }
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:b48a6d0aab57918c584040a9e4f7c8d4a6dc4b368b1a83a87188b364a5c7d685",
+            "blake3:b48a6d0aab57918c584040a9e4f7c8d4a6dc4b368b1a83a87188b364a5c7d685",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Sharp": {
+                      "Eventually": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Sharp": {
+                        "Var": 1
+                      }
+                    }
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Sharp": {
+                      "Eventually": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Sharp": {
+                        "Var": 1
+                      }
+                    }
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:008e9b5bc999cadd745712ca00288bcb98a03bbb8196495d79e240c5787420fd",
+            "blake3:008e9b5bc999cadd745712ca00288bcb98a03bbb8196495d79e240c5787420fd",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Eventually": {
+                        "Var": 1
+                      }
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Eventually": {
+                        "Var": 1
+                      }
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 2
+            }
+          ],
+          [
+            "blake3:6e1d7d90121f29da13db7ed2880a32cc925671e75f9d0f843f180386fa70db3d",
+            "blake3:6e1d7d90121f29da13db7ed2880a32cc925671e75f9d0f843f180386fa70db3d",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ]
+        ]
+      },
+      {
+        "description": "bare variable presentation",
+        "family_count": 1,
+        "subject_hash": "blake3:b91de792c5d342fcceb46786b9d8d2c24f904faad31929d74e1e1b389d4c7fba",
+        "weakening_images": [
+          [
+            "blake3:808370c22b94bf561c528f309051ec6adfdf84af0745dfe09911c3d690b47512",
+            "blake3:808370c22b94bf561c528f309051ec6adfdf84af0745dfe09911c3d690b47512",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Var": 1
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Var": 1
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ]
+        ]
+      },
+      {
+        "description": "truncation-context re-expression of a higher path",
+        "family_count": 2,
+        "subject_hash": "blake3:abe39add7db7b4bf334abc183c9261141e33c2f1155d3432c1fe603527f7c74a",
+        "weakening_images": [
+          [
+            "blake3:0dc251734517893fa08c7b660a8ae10cda39c0d2b394627d33d939a63eb21570",
+            "blake3:0dc251734517893fa08c7b660a8ae10cda39c0d2b394627d33d939a63eb21570",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "Trunc": {
+                  "Var": 1
+                }
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "Trunc": {
+                  "Var": 1
+                }
+              },
+              "right_steps": 0,
+              "scope_len": 1
+            }
+          ],
+          [
+            "blake3:2e9b079904a83cd1918ad12d2ee4b0f313bb6bbbfe14133747b4ed7c8fd7e09f",
+            "blake3:2e9b079904a83cd1918ad12d2ee4b0f313bb6bbbfe14133747b4ed7c8fd7e09f",
+            {
+              "equal": true,
+              "left_normal_form": {
+                "PathCon": 2
+              },
+              "left_steps": 0,
+              "right_normal_form": {
+                "PathCon": 2
+              },
+              "right_steps": 0,
+              "scope_len": 0
+            }
+          ]
+        ]
+      }
+    ],
+    "inverse_laws_available": true,
+    "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+    "typed_family_extraction_available": true,
+    "weakening_map_available": true
+  },
   "historical_provenance_replay": {
     "all_historical_credit_provenanced": false,
     "coefficient_enumerated_without_bar": true,
@@ -574,7 +1607,276 @@
       "construct the guarded Step-15 weakening/erasure inverse certificate before claiming conservative internality"
     ]
   },
+  "kernel_orbit_extraction": {
+    "closure_digest": "blake3:bad84e9cb1e6f0075af529ef0eb32d82b91292b2341e3b66d09a18d4dada9e70",
+    "derivation_hash": "blake3:3c057f16a4c48a1b3d93554f5746768b98f4d7e0153b34f8b433f0dc3af3dc2a",
+    "locality_holds": true,
+    "locality_ledger_digest": "blake3:bc450275e9280e8d90e7e5a90b0a9236b302a41aad65ce28983c5df2b833b71e",
+    "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a"
+  },
   "semantic_debt": {
+    "focus_label_o16_empty": true,
+    "inventory_input_valid": true,
+    "j2_assumed_at_16": true,
+    "j2_j3_conditionally_sufficient_at_16": true,
+    "j3_assumed_at_16": true,
+    "rejected_inventory_stages": [],
+    "semantic_o16_empty_if_assumptions": true,
+    "stages": [
+      {
+        "coarse_focus_packages": [],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": true,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": true,
+        "stage": 1
+      },
+      {
+        "coarse_focus_packages": [],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 0,
+        "focus_label_debt_free": true,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": true,
+        "stage": 2
+      },
+      {
+        "coarse_focus_packages": [
+          "former_eliminator"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 1,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 3
+      },
+      {
+        "coarse_focus_packages": [
+          "former_eliminator"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 1,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 4
+      },
+      {
+        "coarse_focus_packages": [
+          "initial_hit"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 5
+      },
+      {
+        "coarse_focus_packages": [
+          "truncation_hit"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 6
+      },
+      {
+        "coarse_focus_packages": [
+          "higher_hit"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 7
+      },
+      {
+        "coarse_focus_packages": [
+          "sphere_lift"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 8
+      },
+      {
+        "coarse_focus_packages": [
+          "axiomatic_bundle"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 9
+      },
+      {
+        "coarse_focus_packages": [
+          "modal_shell"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 10
+      },
+      {
+        "coarse_focus_packages": [
+          "connection_shell"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 11
+      },
+      {
+        "coarse_focus_packages": [
+          "curvature_shell"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 12
+      },
+      {
+        "coarse_focus_packages": [
+          "operator_bundle"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 13
+      },
+      {
+        "coarse_focus_packages": [
+          "hilbert_functional"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 14
+      },
+      {
+        "coarse_focus_packages": [
+          "temporal_shell"
+        ],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 2,
+        "focus_label_debt_free": false,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 1,
+        "live_required_output_count": 1,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": false,
+        "stage": 15
+      },
+      {
+        "coarse_focus_packages": [],
+        "depth_two_window_locality_assumed": true,
+        "extracted_orbit_count": 1,
+        "focus_label_debt_free": true,
+        "focus_orbit_correspondence_if_assumptions": true,
+        "j2_extraction_assumed": true,
+        "j3_derivability_assumed": true,
+        "live_orbit_count": 0,
+        "live_required_output_count": 0,
+        "obligations": [],
+        "semantic_debt_empty_if_assumptions": true,
+        "stage": 16
+      }
+    ],
+    "window_locality_assumed_at_16": true
+  },
+  "semantic_debt_without_kernel_inventories": {
     "focus_label_o16_empty": true,
     "inventory_input_valid": true,
     "j2_assumed_at_16": false,
@@ -883,5 +2185,10 @@
       }
     ],
     "window_locality_assumed_at_16": false
+  },
+  "semantic_reselection_reference": {
+    "artifact": "docs/semantic_reselection.json",
+    "first_divergence": "stage 1, field score (legacy 1, revised 2)",
+    "outcome": "halted_no_clearing_candidate at stage 2"
   }
 }

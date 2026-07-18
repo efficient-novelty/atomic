@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "date": "2026-07-18",
   "theorem_scope": "unconditional SAT for the shipped structural evaluator; UNSAT for the proof-carrying support-local calculus; conditional, not yet global, halt theorem for the intended semantics",
   "bar_numerator": 354333,
@@ -814,15 +814,113 @@
     "certified_calculus_class_partition_complete": true,
     "finite_bound_cases_complete": true,
     "anchored_provenance_embedding_supplied": false,
-    "shipped_raw_telescope_quotient_complete": false,
+    "shipped_raw_telescope_quotient_complete": true,
     "original_global_halt_proven": false,
     "outstanding_obligations": [
-      "extract typed natural schema families and individual demand orbits modulo normalization, weakening, and univalent equality",
-      "prove window locality/expiration and the J2/J3 disposition of every active demand orbit",
-      "construct a valid anchored injection for each counted family, or weakening/erasure inverse evidence for an internal flow",
-      "re-audit all fifteen candidate cones, selective orders, winners, and scores under the strengthened law",
-      "prove that every Step-16 candidate is either certifiably internal or has a complete EGP-certified opaque normal form"
+      "outcome (B) certified: the semantic reselection halts at stage 2 with a stage-1 score divergence (docs/semantic_reselection.json); a completed revised history — and with it the anchored embedding — does not exist under the strengthened law",
+      "the original global halt remains unproven: no revised fifteen-stage history supplies a semantic Bar16, and the legacy 354333/39040 may not stand in for it",
+      "declared-choice fork (Two-Law bridge, book ledger): (i) treat the shipped structural audit as a constitutive scoring bridge with a separately justified semantic halt gate, or (ii) adopt the semantic audit and re-derive its history"
     ]
+  },
+  "semantic_normalization": {
+    "program": "docs/SEMANTIC_NORMALIZATION_PROGRAM.md",
+    "elaborator_hash": "blake3:90738a35307702164f211ee6d7cb40233dcda7be37aac84836a00480f6699737",
+    "token_rules_hash": "blake3:10eb6582245a38e43792f1f3f6fdcb22b99758bfa709e1a6044486e1a6df1452",
+    "binding_convention": "kernel-v1-debruijn-levels",
+    "equality_procedure": "kernel-v1-beta-normal-equality",
+    "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+    "closure_digest": "blake3:bad84e9cb1e6f0075af529ef0eb32d82b91292b2341e3b66d09a18d4dada9e70",
+    "fuel_certificate_within_bound": true,
+    "fuel_total_observed": 2,
+    "orbit_extraction_derivation_hash": "blake3:3c057f16a4c48a1b3d93554f5746768b98f4d7e0153b34f8b433f0dc3af3dc2a",
+    "semantic_o16_empty_if_assumptions": true,
+    "j2_kernel_verified_at_16": true,
+    "j3_kernel_verified_at_16": true,
+    "window_locality_kernel_verified_at_16": true,
+    "internality_derivation_hash": "blake3:e0f7bc3cc99f8ce21ddba323b634e5f3eb9e01d18dfca9382105940d547317bd",
+    "internality_marginal_nu": 0,
+    "internality_guarded_flows": 5,
+    "internality_excluded_flows": 1,
+    "falsifier_dispositions": [
+      {
+        "name": "hit_no_formation_d1",
+        "required_token": "typed_eliminator",
+        "required_token_outcome": "no_formation_clause",
+        "marginal_families": 1,
+        "egp_marginal_nu": 1,
+        "egp_local_capacity": 8
+      },
+      {
+        "name": "temporal_polymorphic_kappa2",
+        "required_token": "typed_eliminator",
+        "required_token_outcome": "no_oriented_basis",
+        "marginal_families": 0,
+        "egp_marginal_nu": 0,
+        "egp_local_capacity": 8
+      },
+      {
+        "name": "axiomatic_single_l15_kappa3",
+        "required_token": "typed_lift",
+        "required_token_outcome": "lift_not_typed_against_exported_formation",
+        "marginal_families": 3,
+        "egp_marginal_nu": 3,
+        "egp_local_capacity": 12
+      },
+      {
+        "name": "axiomatic_inheritance_kappa3",
+        "required_token": "typed_lift",
+        "required_token_outcome": "no_dominant_import",
+        "marginal_families": 3,
+        "egp_marginal_nu": 3,
+        "egp_local_capacity": 12
+      }
+    ],
+    "exhaustion_strata": [
+      {
+        "kappa": 2,
+        "raw_total": "602707957488",
+        "internal": "134405441711",
+        "egp_marginal": "436447700533",
+        "invalid_named_bare_univ": "31854815244",
+        "unclassified": "0"
+      },
+      {
+        "kappa": 3,
+        "raw_total": "727994066026945536",
+        "internal": "85462881238554189",
+        "egp_marginal": "587614074893363379",
+        "invalid_named_bare_univ": "54917109895027968",
+        "unclassified": "0"
+      },
+      {
+        "kappa": 4,
+        "raw_total": "1135046124093383916890112",
+        "internal": "70452049326669225329863",
+        "egp_marginal": "955581751062132991906361",
+        "invalid_named_bare_univ": "109012323704581699653888",
+        "unclassified": "0"
+      }
+    ],
+    "exhaustion_digest": "blake3:5f2ff655260c7c5a7894557aef445d97bd45907e41a522f626c836aaf75bade8",
+    "exhaustion_every_stratum_classified": true,
+    "exhaustion_reproduction": "cargo run -p pen-search --release --example step16_semantic_exhaustion -- --out docs/step16_semantic_exhaustion.json",
+    "reselection_outcome": {
+      "kind": "halted_no_clearing_candidate",
+      "stage": 2,
+      "bar": "1/2"
+    },
+    "reselection_first_divergence": {
+      "stage": 1,
+      "field": "score",
+      "legacy": "1",
+      "revised": "2"
+    },
+    "reselection_digest": "blake3:0a24ec121a8441180b862f9d033382a2a5a054ef12820830bd430d2ec31159dd",
+    "reselection_lawful_continuations": [
+      "declare the shipped structural audit a constitutive scoring bridge with a separately justified semantic halt gate",
+      "adopt the semantic audit and continue re-deriving its history"
+    ],
+    "agda_witness_module": "ProvenanceWitness16"
   },
   "genesis_conservativity": {
     "structural_evaluator_left_unchanged": true,
@@ -913,5 +1011,5 @@
     "step13_unique_dominant_import": 12,
     "step14_unique_dominant_import": 13
   },
-  "digest": "blake3:6eabef2c5457477b07e246107815472ed75c1a9a3460d20683d593f5bfcdc1aa"
+  "digest": "blake3:6177acf4e2c1588152c8cd5921a2d9d4757156eef65f13dee34e4cc0f412bddf"
 }
