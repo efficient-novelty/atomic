@@ -15,8 +15,7 @@
 //! - the demand-orbit side comes from the Phase 3 extraction (stage
 //!   inventories with kernel-verified J2/J3/locality).
 //!
-//! Kernel-v1 mechanism assignment (frozen; the classifier enforces the
-//! mechanism-to-role table, so a wrong assignment fails closed):
+//! Kernel-v1 mechanism assignment (frozen, EXCLUSIVE precedence):
 //! - a family whose canonical form references the library is
 //!   `P5InheritedSurface` (support action);
 //! - otherwise a path-constructor family is `DimensionSquared`
@@ -24,6 +23,13 @@
 //! - otherwise a modal/temporal-formed family is
 //!   `ModalPairwiseCoherence` (coherence);
 //! - everything else is `IntrinsicKernel` (kernel head).
+//!
+//! The classifier's role table checks only mechanism/role CONSISTENCY;
+//! the assignment itself is gated here by an independent faithfulness
+//! check against the family's kernel-derived canonical normal form
+//! (`mechanism_is_faithful`), which fails closed on any contradiction —
+//! that check, not the classifier, is what makes a wrong assignment
+//! unrepresentable in a bridge-built submission.
 //!
 //! This is a one-way upper-bound classifier: no realizer or saturation
 //! claim is made, and a family that obtains no valid anchor keeps the
@@ -107,10 +113,32 @@ fn contains_modal_or_temporal(expr: &Expr) -> bool {
     }
 }
 
+/// Independent faithfulness gate: the assigned mechanism must be exactly
+/// what the exclusive-precedence predicates over the family's canonical
+/// normal form dictate. A divergence (e.g. a mutated assignment table)
+/// fails closed here.
+pub fn mechanism_is_faithful(family: &ExtractedFamily, mechanism: CreditMechanism) -> bool {
+    let normal_form = &family.presentation.canonical_normal_form;
+    let has_library = references_library(normal_form);
+    let has_path = contains_path_constructor(normal_form);
+    let has_modal_temporal = contains_modal_or_temporal(normal_form);
+    match mechanism {
+        CreditMechanism::P5InheritedSurface => has_library,
+        CreditMechanism::DimensionSquared => !has_library && has_path,
+        CreditMechanism::ModalPairwiseCoherence => !has_library && !has_path && has_modal_temporal,
+        CreditMechanism::IntrinsicKernel => !has_library && !has_path && !has_modal_temporal,
+        _ => false,
+    }
+}
+
 #[derive(Clone, Debug, Error, Eq, PartialEq)]
 pub enum EgpBridgeError {
     #[error("marginal family {family} has no generator instance")]
     NoGeneratorInstance { family: String },
+    #[error("mechanism assignment for family {family} is not faithful to its normal form")]
+    MechanismNotFaithful { family: String },
+    #[error("orbit extraction does not cover candidate stage {stage}")]
+    StageNotCovered { stage: u32 },
     #[error("classifier rejected the kernel-backed submission: {0}")]
     Classifier(ProvenanceError),
 }
@@ -150,6 +178,11 @@ pub fn classify_candidate(
                 family: family.id.as_str().to_string(),
             })?;
         let mechanism = assign_mechanism(family);
+        if !mechanism_is_faithful(family, mechanism) {
+            return Err(EgpBridgeError::MechanismNotFaithful {
+                family: family.id.as_str().to_string(),
+            });
+        }
         let role: LocalRole = mechanism.required_local_role();
         let typed = to_typed_normal_family(extraction, family);
         credited.push(CreditedSchemaFamily {
@@ -172,10 +205,11 @@ pub fn classify_candidate(
             },
             anchor_validity_assumption: SemanticAssumptionRef::verified(
                 format!(
-                    "kernel-v1 Anchors(f, pi(f)): family {} is the {:?} content of its \
-                     generator clause {}",
+                    "kernel-v1 Anchors(f, pi(f)): mechanism {mechanism:?} for family {} \
+                     computed from its kernel-derived canonical normal form per the \
+                     frozen exclusive-precedence table, faithfulness gated by the \
+                     bridge; anchored at generator clause {}",
                     family.id.as_str(),
-                    role,
                     generator.clause_index
                 ),
                 extraction.derivation_hash.clone(),
@@ -183,11 +217,14 @@ pub fn classify_candidate(
         });
     }
 
-    let stage_inventory = orbits
-        .stage(candidate_stage)
-        .cloned()
-        .into_iter()
-        .collect::<Vec<_>>();
+    // A stage the orbit extraction never covered must not become a
+    // debt-free claim through an empty orbit list with Verified stamps.
+    let Some(stage_inventory) = orbits.stage(candidate_stage).cloned() else {
+        return Err(EgpBridgeError::StageNotCovered {
+            stage: candidate_stage,
+        });
+    };
+    let stage_inventory = vec![stage_inventory];
     let submission = CandidateProvenanceSubmission {
         candidate_stage,
         kappa,
@@ -371,7 +408,7 @@ mod tests {
     }
 
     #[test]
-    fn mechanism_assignment_respects_the_classifier_role_table() {
+    fn mechanism_assignment_is_pinned_and_faithfulness_gated() {
         let (signature, closure, _) = harness();
         let single = tel(vec![
             pi(Expr::Lib(15), Expr::Var(1)),
@@ -380,11 +417,61 @@ mod tests {
         ]);
         let extraction = extract_candidate_families(&signature, &closure, &single, 15);
         let extraction = extraction.extraction().expect("extracts");
-        for family in extraction.marginal_families() {
-            let mechanism = assign_mechanism(family);
-            // The classifier's own table must accept the assignment; a
-            // divergence would fail derive_conditional_at_most closed.
-            let _role = mechanism.required_local_role();
-        }
+        // Pinned per-family mechanism/role assignments (exclusive
+        // precedence): the two library-referencing families take
+        // P5InheritedSurface/SupportAction, the pure Sigma family takes
+        // IntrinsicKernel/KernelHead.
+        let mut assignments: Vec<(String, String)> = extraction
+            .marginal_families()
+            .map(|family| {
+                let mechanism = assign_mechanism(family);
+                assert!(
+                    mechanism_is_faithful(family, mechanism),
+                    "assignment must satisfy its own faithfulness gate"
+                );
+                (
+                    format!("{mechanism:?}"),
+                    format!("{:?}", mechanism.required_local_role()),
+                )
+            })
+            .collect();
+        assignments.sort();
+        assert_eq!(
+            assignments,
+            vec![
+                ("IntrinsicKernel".to_string(), "KernelHead".to_string()),
+                ("P5InheritedSurface".to_string(), "SupportAction".to_string()),
+                ("P5InheritedSurface".to_string(), "SupportAction".to_string()),
+            ]
+        );
+        // The gate itself fails closed on a contradicting assignment.
+        let library_family = extraction
+            .marginal_families()
+            .find(|family| {
+                !family
+                    .presentation
+                    .canonical_normal_form
+                    .lib_refs()
+                    .is_empty()
+            })
+            .expect("library-referencing family");
+        assert!(!mechanism_is_faithful(
+            library_family,
+            CreditMechanism::IntrinsicKernel
+        ));
+        assert!(!mechanism_is_faithful(
+            library_family,
+            CreditMechanism::DimensionSquared
+        ));
+    }
+
+    #[test]
+    fn uncovered_stages_are_rejected_not_stamped_debt_free() {
+        let (signature, closure, orbits) = harness();
+        let single = tel(vec![pi(Expr::Lib(15), Expr::Var(1))]);
+        let extraction = extract_candidate_families(&signature, &closure, &single, 15);
+        let extraction = extraction.extraction().expect("extracts").clone();
+        let error = classify_candidate(&extraction, &orbits, 17, 1).unwrap_err();
+        assert_eq!(error, EgpBridgeError::StageNotCovered { stage: 17 });
     }
 }

@@ -14,6 +14,15 @@
 //!   characteristic families checked by the kernel (a discharge whose
 //!   accepted entry does NOT exhibit the package's characteristic former
 //!   fails closed).
+//! - The live-orbit set MIRRORS the frozen guard rail by construction —
+//!   the audit's focus/orbit correspondence requires exactly that — so
+//!   stage-16 live emptiness is not itself new content. The semantic
+//!   content this extraction adds, beyond the coarse labels, is: (a) the
+//!   typed GROUNDING of every structural-era live orbit in a family its
+//!   window actually presents (fail closed otherwise), (b) the
+//!   kernel-CHECKED discharge evidence of every Answered orbit, and
+//!   (c) the exhaustive locality ledger. A hypothetical timeline whose
+//!   demands had no typed window content would fail this extraction.
 //! - J2 (extraction completeness) is totality of this derivation: the
 //!   inventory is the image of a deterministic total function of the
 //!   sealed timeline and window families — replay re-derives it.
@@ -179,6 +188,15 @@ pub enum OrbitExtractionError {
         package: String,
         answer_step: u32,
     },
+    #[error(
+        "live demand {package} at stage {stage} has no typed grounding: window step \
+         {window_step} presents no family"
+    )]
+    LiveDemandNotGrounded {
+        stage: u32,
+        package: String,
+        window_step: u32,
+    },
     #[error("window locality failed: {expiries} undischarged expiries")]
     LocalityFailed { expiries: usize },
 }
@@ -247,15 +265,40 @@ pub fn kernel_stage_inventories(
         let window = stage_window(stage);
         let mut orbits = Vec::new();
 
-        // LIVE orbits: one per required package, grounded in the window.
+        // LIVE orbits: one per required package. During the structural
+        // era each live orbit must be GROUNDED in a typed family the
+        // generating window actually presents — a required package whose
+        // window presents nothing fails closed (the extraction consults
+        // kernel content; the guard-rail correspondence is a program
+        // requirement, but the grounding makes the refinement
+        // falsifiable rather than a relabeling of the timeline).
         for package in &record.required_packages {
+            let grounding = if stage >= 4 {
+                let newest = window[1];
+                let window_families = step_families(closure, newest);
+                let Some(grounding_family) = window_families.first() else {
+                    return Err(OrbitExtractionError::LiveDemandNotGrounded {
+                        stage,
+                        package: (*package).to_string(),
+                        window_step: newest,
+                    });
+                };
+                format!(
+                    "grounded-by:{} ({} window families of step {})",
+                    grounding_family.id.as_str(),
+                    window_families.len(),
+                    newest
+                )
+            } else {
+                "pre-structural band".to_string()
+            };
             let class = demand_class(package, window);
             orbits.push(SemanticDemandOrbit {
                 id: orbit_id(stage, package, "live"),
                 package: (*package).to_string(),
                 generated_by_window: window,
                 normalized_demand_type: format!(
-                    "characteristic:{:?}",
+                    "characteristic:{:?}; {grounding}",
                     package_characteristic(package)
                 ),
                 required_outputs: vec![DemandOutputPosition {
@@ -452,9 +495,13 @@ mod tests {
     #[test]
     fn stage_sixteen_live_demand_summand_is_empty_by_extraction_not_assertion() {
         let extraction = extraction();
-        // Stage 16's window (S14, S15): the temporal-shell demand was
-        // discharged by step 15 (DCT) — an Answered orbit with checked
-        // family evidence — and NO live orbit remains.
+        // Stage 16's live emptiness mirrors the frozen guard rail (the
+        // correspondence is required); what the kernel adds is that the
+        // temporal-shell demand's DISCHARGE by step 15 (DCT) carries
+        // checked family evidence, every earlier live orbit was typed-
+        // grounded in its window, and the locality ledger closes with no
+        // expiries — so the empty (S14,S15) vector is corroborated, not
+        // trusted by itself.
         assert_eq!(extraction.live_orbit_count(16), 0);
         let sixteen = extraction.stage(16).expect("stage 16");
         let answered: Vec<_> = sixteen

@@ -10,6 +10,7 @@ pub mod egp;
 pub mod epsilon_closure;
 pub mod epsilon_closure_post_run;
 pub mod halting;
+pub mod internality;
 pub mod lambda_structure;
 pub mod lambda_trigger;
 pub mod lambda_trigger_v2;

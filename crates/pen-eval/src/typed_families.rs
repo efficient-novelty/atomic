@@ -44,7 +44,7 @@ use pen_type::elaborate::{
 use pen_type::equality::{EqualityWitness, KERNEL_EQUALITY_PROCEDURE, univalent_equality};
 use pen_type::normalize::KERNEL_BINDING_CONVENTION;
 use serde::Serialize;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
 /// Canonical identifier of a natural family. Private field, no
@@ -443,6 +443,13 @@ fn match_instance(
         (Expr::Var(level), _) if *level <= pattern_params => {
             if let Some(bound) = bindings.get(level) {
                 bound == target
+            } else if !is_parameter_scope_expr(target, target_params) {
+                // The candidate subexpression references a TARGET binder
+                // level: binding it would capture — the recorded
+                // substitution could not replay in the pattern's scope
+                // and a genuinely distinct dependent family would be
+                // merged away. Fail closed.
+                false
             } else {
                 bindings.insert(*level, target.clone());
                 true
@@ -450,8 +457,10 @@ fn match_instance(
         }
         (Expr::Var(pattern_level), Expr::Var(target_level)) => {
             // Rigid binder levels must sit at the same depth above their
-            // respective parameter telescopes.
-            *pattern_level - pattern_params == *target_level - target_params
+            // respective parameter telescopes; a free target parameter
+            // (level <= target_params) can never match a rigid binder.
+            *target_level > target_params
+                && *pattern_level - pattern_params == *target_level - target_params
         }
         (Expr::Univ, Expr::Univ) => true,
         (Expr::Lib(a), Expr::Lib(b)) => a == b,
@@ -485,8 +494,45 @@ fn match_instance(
     }
 }
 
+/// A substitution is a RENAMING only when it is variable-for-variable and
+/// injective: a diagonal map (two parameters sent to one variable) is a
+/// proper uniform specialization and must be subsumed into its family,
+/// not minted as separate credit.
 fn is_renaming_substitution(bindings: &BTreeMap<u32, Expr>) -> bool {
-    bindings.values().all(|value| matches!(value, Expr::Var(_)))
+    let mut seen = BTreeSet::new();
+    bindings.values().all(|value| match value {
+        Expr::Var(level) => seen.insert(*level),
+        _ => false,
+    })
+}
+
+/// True iff every free reference in `expr` stays within the target's
+/// parameter telescope (no target binder levels escape into a binding).
+fn is_parameter_scope_expr(expr: &Expr, target_params: u32) -> bool {
+    match expr {
+        Expr::Var(level) => *level <= target_params,
+        Expr::Univ | Expr::Lib(_) | Expr::PathCon(_) => true,
+        Expr::App(a, b) | Expr::Pi(a, b) | Expr::Sigma(a, b) => {
+            is_parameter_scope_expr(a, target_params) && is_parameter_scope_expr(b, target_params)
+        }
+        Expr::Id(a, b, c) => {
+            is_parameter_scope_expr(a, target_params)
+                && is_parameter_scope_expr(b, target_params)
+                && is_parameter_scope_expr(c, target_params)
+        }
+        Expr::Lam(inner)
+        | Expr::Refl(inner)
+        | Expr::Susp(inner)
+        | Expr::Trunc(inner)
+        | Expr::Flat(inner)
+        | Expr::Sharp(inner)
+        | Expr::Disc(inner)
+        | Expr::Shape(inner)
+        | Expr::Next(inner)
+        | Expr::Eventually(inner)
+        | Expr::Bang(inner)
+        | Expr::WhyNot(inner) => is_parameter_scope_expr(inner, target_params),
+    }
 }
 
 /// A family pattern participates in instance subsumption only when it has
@@ -773,6 +819,21 @@ pub fn to_typed_normal_family(
             extraction.derivation_hash.clone(),
         ),
     };
+    // The naturality derivation certifies renaming-stability of the
+    // canonicalization quotient (its square is true by construction of
+    // the quotient and recorded as a replayable witness). A square that
+    // failed to close (e.g. fuel exhaustion) must NOT become Verified
+    // evidence: it fails closed and the classifier rejects the family.
+    let naturality = if family.naturality.square.equal {
+        SemanticAssumptionRef::verified(
+            "kernel-v1 renaming-stability of the canonicalization quotient",
+            extraction.derivation_hash.clone(),
+        )
+    } else {
+        SemanticAssumptionRef::missing(
+            "kernel-v1 renaming-stability square failed to close for this family",
+        )
+    };
     TypedNormalFamily {
         id: SchemaFamilyId(family.id.as_str().to_string()),
         judgement,
@@ -783,10 +844,7 @@ pub fn to_typed_normal_family(
             .enumerate()
             .map(|(index, sort)| format!("p{}:{:?}", index + 1, sort))
             .collect(),
-        naturality: SemanticAssumptionRef::verified(
-            "kernel-v1 renaming naturality",
-            extraction.derivation_hash.clone(),
-        ),
+        naturality,
         univalent_class: UnivalentClassId(family.id.as_str().to_string()),
     }
 }
@@ -1079,6 +1137,57 @@ mod tests {
         let forged_signature = SealedSignature::from_telescopes(telescopes);
         let forged_closure = predecessor_closure(&forged_signature).expect("closure");
         assert_ne!(forged_closure.digest, closure.digest);
+    }
+
+    #[test]
+    fn dependent_families_are_never_capture_merged_into_nondependent_patterns() {
+        // Adversarial-review regression (in-cone witness): clause 3's
+        // canonical form Pi(A, Next(<binder>)) is a DEPENDENT family; a
+        // capture-incoherent metavariable binding used to absorb it as a
+        // "specialization" of the non-dependent Pi(A1, A2) family from
+        // clause 2, silently removing a marginal family from the AtMost
+        // accounting. It must be minted as its own marginal family.
+        let (signature, closure) = genesis();
+        let witness = tel(vec![
+            sigma(Expr::Var(1), Expr::Var(1)),
+            pi(Expr::Var(1), Expr::Var(2)),
+            pi(Expr::Var(1), Expr::Next(Box::new(Expr::Var(4)))),
+        ]);
+        let outcome = extract_candidate_families(&signature, &closure, &witness, 15);
+        let extraction = outcome.extraction().expect("extracts");
+        assert_eq!(extraction.families.len(), 3, "no capture-merge");
+        // And the recorded substitutions of any legitimate
+        // specialization stay within the target's parameter scope.
+        for family in &extraction.families {
+            for instance in &family.instances {
+                if let InstanceKind::Specialization { substitution } = &instance.kind {
+                    for (_, bound) in substitution {
+                        assert!(
+                            bound
+                                .var_refs()
+                                .iter()
+                                .all(|level| *level
+                                    <= family.presentation.parameters.len() as u32),
+                            "capture-incoherent substitution recorded"
+                        );
+                    }
+                }
+            }
+        }
+        // Diagonal specializations, by contrast, ARE members of their
+        // family (injective-renaming discipline): App(A1, A2) subsumes
+        // App(A1, A1).
+        let diagonal = tel(vec![
+            app(Expr::Var(1), Expr::Var(2)),
+            app(Expr::Var(1), Expr::Var(1)),
+        ]);
+        let outcome = extract_candidate_families(&signature, &closure, &diagonal, 15);
+        let extraction = outcome.extraction().expect("extracts");
+        assert_eq!(extraction.families.len(), 1, "diagonal must be subsumed");
+        assert!(matches!(
+            extraction.families[0].instances[1].kind,
+            InstanceKind::Specialization { .. }
+        ));
     }
 
     #[test]
