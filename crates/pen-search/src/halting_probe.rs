@@ -273,6 +273,10 @@ pub struct AdversarialGateTrace {
     /// The falsifier condition: not identified, raw-generable, admitted,
     /// type-correct, connected, semantically minimal, and clearing Bar₁₆.
     pub survives_all_gates_and_clears: bool,
+    /// Phase 5a (SEMANTIC_NORMALIZATION_PROGRAM): the full typed-family
+    /// disposition — family inventory, token attempts with exact kernel
+    /// failure points, and the EGP anchor verdict.
+    pub semantic_disposition: Option<crate::falsifier_disposition::SemanticFalsifierDisposition>,
     pub telescope: Telescope,
 }
 
@@ -538,6 +542,14 @@ pub fn run_adversarial_probe() -> AdversarialProbeReport {
     let accepted_keys = accepted_canonical_keys();
     let import_dag = ImportDag::genesis_prefix(15);
 
+    // Phase 5a semantic context: the sealed signature, the typed
+    // predecessor closure, and the kernel orbit extraction, built once.
+    let signature = pen_type::elaborate::SealedSignature::genesis_del_h15();
+    let closure = pen_eval::typed_families::predecessor_closure(&signature)
+        .expect("the sealed corpus yields a predecessor closure");
+    let orbits = pen_eval::demand_orbits::kernel_stage_inventories(&signature, &closure)
+        .expect("the sealed timeline yields kernel orbit inventories");
+
     let candidates = adversarial_candidates(&admissibility)
         .into_iter()
         .map(|(name, rationale, telescope)| {
@@ -565,6 +577,10 @@ pub fn run_adversarial_probe() -> AdversarialProbeReport {
             let p5_import_audit = (telescope.classify(&library)
                 == pen_core::telescope::TelescopeClass::Axiomatic)
                 .then(|| P5ImportAudit::check(&telescope, &import_dag));
+            let semantic_disposition =
+                Some(crate::falsifier_disposition::build_semantic_disposition(
+                    &signature, &closure, &orbits, &telescope,
+                ));
 
             AdversarialGateTrace {
                 name,
@@ -595,6 +611,7 @@ pub fn run_adversarial_probe() -> AdversarialProbeReport {
                     && connectivity
                     && semantically_minimal
                     && clears,
+                semantic_disposition,
                 telescope,
             }
         })
@@ -792,6 +809,108 @@ mod tests {
         assert!(l2_boundary.raw_surface_member);
         assert_eq!(l2_boundary.nu_total, 8);
         assert!(!l2_boundary.clears_bar);
+
+        // ------------------------------------------------------------------
+        // Phase 5a (SEMANTIC_NORMALIZATION_PROGRAM §5a): every survivor
+        // carries a full typed-family disposition with the exact kernel
+        // failure point of its required token, and a failed token never
+        // becomes bounded opaque credit — the EGP verdict counts only
+        // closure-checked marginal families with valid anchors.
+        // ------------------------------------------------------------------
+        let disposition = |name: &str| {
+            report
+                .candidates
+                .iter()
+                .find(|trace| trace.name == name)
+                .and_then(|trace| trace.semantic_disposition.as_ref())
+                .unwrap_or_else(|| panic!("{name}: semantic disposition should exist"))
+        };
+
+        // hit_no_formation_d1: required H-form eliminator fails with NO
+        // FORMATION CLAUSE; one marginal family; EGP marginal nu 1.
+        let hit_disposition = disposition("hit_no_formation_d1");
+        assert_eq!(hit_disposition.required_token, "typed_eliminator");
+        assert_eq!(
+            hit_disposition.required_token_outcome(),
+            Some("no_formation_clause")
+        );
+        assert_eq!(hit_disposition.marginal_families.len(), 1);
+        assert_eq!(hit_disposition.egp_marginal_nu, Some(1));
+        assert_eq!(hit_disposition.egp_debt_free_bound_holds, Some(true));
+
+        // temporal_polymorphic_kappa2: eliminator fails with NO ORIENTED
+        // BASIS; the Pi clauses are not naturality squares; ZERO marginal
+        // families (internal-identical to the DCT bridge); EGP 0.
+        let temporal_disposition = disposition("temporal_polymorphic_kappa2");
+        assert_eq!(
+            temporal_disposition.required_token_outcome(),
+            Some("no_oriented_basis")
+        );
+        assert!(temporal_disposition.token_attempts.iter().any(|attempt| {
+            attempt.token.starts_with("naturality[")
+                && attempt.outcome == "not_a_naturality_square"
+        }));
+        assert_eq!(temporal_disposition.marginal_families.len(), 0);
+        assert_eq!(temporal_disposition.egp_marginal_nu, Some(0));
+
+        // axiomatic_single_l15_kappa3: required P5 lift fails at the
+        // STUCK FRESH HEAD (the lift argument types against none of the
+        // DCT's exported formations); three marginal families; EGP 3.
+        let single_disposition = disposition("axiomatic_single_l15_kappa3");
+        assert_eq!(single_disposition.required_token, "typed_lift");
+        assert_eq!(
+            single_disposition.required_token_outcome(),
+            Some("lift_not_typed_against_exported_formation")
+        );
+        assert_eq!(single_disposition.marginal_families.len(), 3);
+        assert_eq!(single_disposition.egp_marginal_nu, Some(3));
+        assert_eq!(single_disposition.egp_debt_free_bound_holds, Some(true));
+
+        // axiomatic_inheritance_kappa3: required P5 lift fails with NO
+        // REACHABILITY-DOMINANT IMPORT ({14,15} incomparable); three
+        // marginal families; EGP 3.
+        let inheritance_disposition = disposition("axiomatic_inheritance_kappa3");
+        assert_eq!(
+            inheritance_disposition.required_token_outcome(),
+            Some("no_dominant_import")
+        );
+        assert_eq!(inheritance_disposition.marginal_families.len(), 3);
+        assert_eq!(inheritance_disposition.egp_marginal_nu, Some(3));
+
+        // The strengthened-law summary across the four survivors: the
+        // structural scores 107/32/108/19 collapse to typed marginal
+        // families 3/0/3/1 — every survivor sits far below its 4*kappa
+        // capacity, and none obtained its required token.
+        for name in [
+            "axiomatic_single_l15_kappa3",
+            "temporal_polymorphic_kappa2",
+            "axiomatic_inheritance_kappa3",
+            "hit_no_formation_d1",
+        ] {
+            let semantic = disposition(name);
+            assert!(semantic.kernel_invalid.is_none(), "{name}: kernel-invalid");
+            assert_ne!(
+                semantic.required_token_outcome(),
+                Some("ok"),
+                "{name}: a survivor's required token must NOT issue"
+            );
+            let marginal_nu = semantic.egp_marginal_nu.expect("egp verdict");
+            let capacity = semantic.egp_local_capacity.expect("egp capacity");
+            assert!(
+                marginal_nu <= capacity,
+                "{name}: marginal nu exceeds 4*kappa capacity"
+            );
+            // Serialized replayability: the disposition embeds the
+            // extraction derivation hash.
+            assert!(semantic.extraction_derivation_hash.is_some());
+        }
+        let serialized =
+            serde_json::to_string(&report.candidates.iter().map(|trace| {
+                (&trace.name, &trace.semantic_disposition)
+            }).collect::<Vec<_>>())
+            .expect("dispositions serialize");
+        assert!(serialized.contains("no_formation_clause"));
+        assert!(serialized.contains("no_dominant_import"));
     }
 
     /// Fast and allocation-safe: measures the step-16 surface by exact

@@ -8,6 +8,7 @@ pub mod diversify;
 pub mod engine;
 pub mod enumerate;
 pub mod expand;
+pub mod falsifier_disposition;
 pub mod frontier;
 pub mod halting_probe;
 pub mod motif;
