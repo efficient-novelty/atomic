@@ -1,5 +1,7 @@
 use anyhow::{Context, Result, bail};
 use pen_search::ip1_certification_boundary::{A5Adjudication, ip1_json_pretty, replay_ip1_json};
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::path::PathBuf;
 
 fn main() -> Result<()> {
@@ -27,17 +29,27 @@ fn main() -> Result<()> {
         }
     }
 
+    if let Some(parent) = output.parent() {
+        std::fs::create_dir_all(parent)
+            .with_context(|| format!("creating {}", parent.display()))?;
+    }
+    let mut sink = OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&output)
+        .with_context(|| {
+            format!(
+                "create new {} (refusing to overwrite an existing burned artifact)",
+                output.display()
+            )
+        })?;
     let json = ip1_json_pretty(adjudication);
     let replay = replay_ip1_json(&json);
     if !replay.valid {
         bail!("fresh IP-1 certificate failed replay: {:?}", replay.errors);
     }
-    if let Some(parent) = output.parent() {
-        std::fs::create_dir_all(parent)
-            .with_context(|| format!("creating {}", parent.display()))?;
-    }
-    std::fs::write(&output, format!("{json}\n"))
-        .with_context(|| format!("writing {}", output.display()))?;
+    sink.write_all(format!("{json}\n").as_bytes())
+        .with_context(|| format!("writing new {}", output.display()))?;
     println!(
         "wrote {}: status={}, mechanical_complete={}, theorem={}",
         output.display(),

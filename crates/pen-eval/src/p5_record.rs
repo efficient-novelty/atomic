@@ -12,6 +12,7 @@
 //! Minimal Complete API of constructively irreducible operations.
 
 use pen_core::telescope::Telescope;
+use pen_type::elaborate::SealedSignature;
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use thiserror::Error;
@@ -37,6 +38,28 @@ impl ImportDag {
             .map(|(offset, telescope)| {
                 let step = u32::try_from(offset + 1).expect("history length fits u32");
                 (step, telescope.lib_refs())
+            })
+            .collect();
+        Self { direct_imports }
+    }
+
+    /// Reconstruct the graph from the same sealed signature that governs
+    /// kernel token issuance.  Sidecar consumers use this exact graph (or
+    /// compare a supplied graph against it), so reachability evidence cannot
+    /// silently come from a different historical context.
+    pub fn from_signature(signature: &SealedSignature) -> Self {
+        let direct_imports = signature
+            .entries()
+            .iter()
+            .map(|entry| {
+                (
+                    entry.step,
+                    entry
+                        .direct_imports
+                        .iter()
+                        .copied()
+                        .collect::<BTreeSet<_>>(),
+                )
             })
             .collect();
         Self { direct_imports }

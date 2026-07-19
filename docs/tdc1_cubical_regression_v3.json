@@ -1,0 +1,649 @@
+{
+  "schema": "tdc1-cubical-step5-8-regression-v3",
+  "supersedes_without_overwriting": [
+    "tdc1-typed-d4-certificate-v1",
+    "tdc1-cubical-step5-8-regression-v2"
+  ],
+  "cubical_fragment_version": "tdc1-cubical-fragment-v3",
+  "pathcon_attachment_axiom_version": "tdc1-pathcon-attachment-implicit-base-constant-boundary-theory-axiom-v1",
+  "pathcon_attachment_axiom_status": "conditional_theory_relative",
+  "pathcon_attachment_derived_from_shallow_kernel": false,
+  "pathcon_attachment_user_adopted": false,
+  "complete_union_staging": false,
+  "intended_path_schema_exhaustiveness_proved": false,
+  "historical_steps": [
+    {
+      "step": 5,
+      "label": "S1",
+      "dimension": 1,
+      "recorded_path_nu": 2,
+      "realized_registered_basis_count": 2,
+      "certified_path_nu": null,
+      "exact_index_bijection": true,
+      "unique_source_bound_tokens": true,
+      "basis_derivation_hash": "blake3:125de9dc7bfb6c6debccc935b27293e6bf063ea3ed95106ae1e453115deff05c",
+      "token_audit": [
+        {
+          "key": {
+            "kind": "beta"
+          },
+          "subject_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "signature_digest": "blake3:11c74244bfb002c53bc4f3b9a3c7013e7e38460ad03ce63bf9bc41e535fc8458",
+          "source_digest": "blake3:be57b07687bee0bd9b20aff3255fb40a3dbae4355d9601f10040a9def6db0c8f",
+          "term_hash": "blake3:45fcdbb14c81455aafd6edc6abe37a2685b9bd80057e5e2c005a82e6fa3f82cb",
+          "normal_form_hash": "blake3:35d0257d4fc4da48f7790bfea6bedf1984a6a183fb3bdd86689f13005b8615ea",
+          "derivation_hash": "blake3:a9c2231dd6b73ee10732fcb68e9275305db96bac281994fe7bd7e102db6962a9"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 0,
+            "probe": 0
+          },
+          "subject_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "signature_digest": "blake3:11c74244bfb002c53bc4f3b9a3c7013e7e38460ad03ce63bf9bc41e535fc8458",
+          "source_digest": "blake3:be57b07687bee0bd9b20aff3255fb40a3dbae4355d9601f10040a9def6db0c8f",
+          "term_hash": "blake3:7e2125eb107fa4ffb4ed15ba9707a633f5e22cd7fe5faaa8e6d0812e233ebd5e",
+          "normal_form_hash": "blake3:e3a4ef40a55ab720b9c6aec187960e2f264a8a6ae2d8534c7c4c89ecc573fa40",
+          "derivation_hash": "blake3:b341468ccff6565d7799eff048ba7dd93a7d75c350d8e65ba7acaafd524f9658"
+        }
+      ],
+      "recorded_total_nu": 7,
+      "certified_total_nu": null,
+      "registered_basis_replay_passed": true,
+      "intended_schema_exhaustiveness_proved": false,
+      "full_total_regression_passed": false,
+      "blockers": [
+        "the registered 1+d^2 basis is replayed but no theorem classifies all intended path schemas by that basis",
+        "the conditional closed cubical fragment checks only the registered PathCon beta/Kan terms; it does not reconstruct every formation, introduction, elimination, or chaining family in the historical total",
+        "cubical family weakening and univalent equality have not been integrated into the global semantic-family quotient"
+      ]
+    },
+    {
+      "step": 6,
+      "label": "Trunc",
+      "dimension": 1,
+      "recorded_path_nu": 2,
+      "realized_registered_basis_count": 2,
+      "certified_path_nu": null,
+      "exact_index_bijection": true,
+      "unique_source_bound_tokens": true,
+      "basis_derivation_hash": "blake3:4714f63eaed68a346eb92c20bc99f41a8857dac64d7838ff20b1c90b21d95ded",
+      "token_audit": [
+        {
+          "key": {
+            "kind": "beta"
+          },
+          "subject_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "signature_digest": "blake3:0ee6911b2820caeb0e745b4e44fa0875b8bfbca8f66b6a4921694ebde1cf44fd",
+          "source_digest": "blake3:a9f53e0f73a923a411418e87ecb5bbb56404d985e5dc3f7e4d1624e6f87861af",
+          "term_hash": "blake3:0a50f65931d440fe64438d834a8bb902cd9db8c34758fb898fe18223eba78069",
+          "normal_form_hash": "blake3:2a9c955236dcef7a45f28b71ae0eddda619b6c176b1ad893d2c435dd72792f81",
+          "derivation_hash": "blake3:a181a0ac8962c865b67a8a2ee2472db3c801c352b7a1eec28855d247b4a12d33"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 0,
+            "probe": 0
+          },
+          "subject_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "signature_digest": "blake3:0ee6911b2820caeb0e745b4e44fa0875b8bfbca8f66b6a4921694ebde1cf44fd",
+          "source_digest": "blake3:a9f53e0f73a923a411418e87ecb5bbb56404d985e5dc3f7e4d1624e6f87861af",
+          "term_hash": "blake3:5e6f7bde89eb8f71271d710b6e575529768de827a5051d1527a8b3fa243e530b",
+          "normal_form_hash": "blake3:ef25e82a5e1ee092d7d4dd8a36571fea2b88c73ebda5a7b0ee1f255226a3801d",
+          "derivation_hash": "blake3:7fc6f1907cc378e544ddc34bd0ae46f971146fd374aa59951d878114b8d72e11"
+        }
+      ],
+      "recorded_total_nu": 8,
+      "certified_total_nu": null,
+      "registered_basis_replay_passed": true,
+      "intended_schema_exhaustiveness_proved": false,
+      "full_total_regression_passed": false,
+      "blockers": [
+        "the registered 1+d^2 basis is replayed but no theorem classifies all intended path schemas by that basis",
+        "the conditional closed cubical fragment checks only the registered PathCon beta/Kan terms; it does not reconstruct every formation, introduction, elimination, or chaining family in the historical total",
+        "cubical family weakening and univalent equality have not been integrated into the global semantic-family quotient",
+        "the shallow Trunc telescope does not type a Trunc functoriality schema in this fragment"
+      ]
+    },
+    {
+      "step": 7,
+      "label": "S2",
+      "dimension": 2,
+      "recorded_path_nu": 5,
+      "realized_registered_basis_count": 5,
+      "certified_path_nu": null,
+      "exact_index_bijection": true,
+      "unique_source_bound_tokens": true,
+      "basis_derivation_hash": "blake3:641eb270568536c8f7929b76091782d2a18a5abc1f4700c85233b0c4f39969fa",
+      "token_audit": [
+        {
+          "key": {
+            "kind": "beta"
+          },
+          "subject_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "signature_digest": "blake3:e8cba04def50e09c83b1e28a252bb6f2e327e6468027a3d9353e20d9ad19e5ed",
+          "source_digest": "blake3:1a25776bce85860e9647edda77cb7816cfd387953eebac7d3f5538031be41a70",
+          "term_hash": "blake3:1f11b750eb001d2443cdae78155cd2952a99861895d6622e7e3843321019d285",
+          "normal_form_hash": "blake3:6fd723654ed73b9b317659a1cdcbab6032262f0914a83e50e7ba891790343f2b",
+          "derivation_hash": "blake3:081a87d86a585a4425889daba1e0204e552f39a9d1ed918217aca14543426af8"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 0,
+            "probe": 0
+          },
+          "subject_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "signature_digest": "blake3:e8cba04def50e09c83b1e28a252bb6f2e327e6468027a3d9353e20d9ad19e5ed",
+          "source_digest": "blake3:1a25776bce85860e9647edda77cb7816cfd387953eebac7d3f5538031be41a70",
+          "term_hash": "blake3:c5af2c38abaeaa9d5fb118149ef6f4e23814a6fe02d1b5c9db0edba599525a5b",
+          "normal_form_hash": "blake3:e6041799c9b535d62e821b0816093cb520cd9db497f7b935c0d16e24b81d680e",
+          "derivation_hash": "blake3:16f8f768b786291dc4726bc628a51d8da75833871361ae6a2ba25b39c9cb7ec2"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 0,
+            "probe": 1
+          },
+          "subject_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "signature_digest": "blake3:e8cba04def50e09c83b1e28a252bb6f2e327e6468027a3d9353e20d9ad19e5ed",
+          "source_digest": "blake3:1a25776bce85860e9647edda77cb7816cfd387953eebac7d3f5538031be41a70",
+          "term_hash": "blake3:406a23fef31fbe7e84ae912318ae88b1c97c72c1a179292f59a1813300551008",
+          "normal_form_hash": "blake3:ff236707e0c82c0a5a8976678ce0b6ef0da7046cc55752ecdbc8ed5d66095a90",
+          "derivation_hash": "blake3:badf63487a38e0b5a53a428a97debb44da40f322dbff3ab2ad308b218428c0ea"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 1,
+            "probe": 0
+          },
+          "subject_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "signature_digest": "blake3:e8cba04def50e09c83b1e28a252bb6f2e327e6468027a3d9353e20d9ad19e5ed",
+          "source_digest": "blake3:1a25776bce85860e9647edda77cb7816cfd387953eebac7d3f5538031be41a70",
+          "term_hash": "blake3:03a3f5c8381480393654698563c801edd310f2ffe5e6ff9de76b90a4136a67cf",
+          "normal_form_hash": "blake3:978ba7cdbca5544c19fc79577f3d073b337092e2eb48d770ee69166d7830723a",
+          "derivation_hash": "blake3:bc069f86205a57396e8ddd42cdf80403f856810f8b71dbf3e1ed7cde7a5c6e38"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 1,
+            "probe": 1
+          },
+          "subject_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "signature_digest": "blake3:e8cba04def50e09c83b1e28a252bb6f2e327e6468027a3d9353e20d9ad19e5ed",
+          "source_digest": "blake3:1a25776bce85860e9647edda77cb7816cfd387953eebac7d3f5538031be41a70",
+          "term_hash": "blake3:8fa061c88e0a195aa92271113f7df06a0a5f69af016b70d81699866b24cb8646",
+          "normal_form_hash": "blake3:62ab12a16d13eaaeef17e0fa67030b6b9d71ee7501a251c7174b341542f76912",
+          "derivation_hash": "blake3:b21dac14e02d71770d9b12c0623a3bd88087820422959b55984f3371514b2725"
+        }
+      ],
+      "recorded_total_nu": 10,
+      "certified_total_nu": null,
+      "registered_basis_replay_passed": true,
+      "intended_schema_exhaustiveness_proved": false,
+      "full_total_regression_passed": false,
+      "blockers": [
+        "the registered 1+d^2 basis is replayed but no theorem classifies all intended path schemas by that basis",
+        "the conditional closed cubical fragment checks only the registered PathCon beta/Kan terms; it does not reconstruct every formation, introduction, elimination, or chaining family in the historical total",
+        "cubical family weakening and univalent equality have not been integrated into the global semantic-family quotient"
+      ]
+    },
+    {
+      "step": 8,
+      "label": "S3",
+      "dimension": 3,
+      "recorded_path_nu": 10,
+      "realized_registered_basis_count": 10,
+      "certified_path_nu": null,
+      "exact_index_bijection": true,
+      "unique_source_bound_tokens": true,
+      "basis_derivation_hash": "blake3:e0d0a41c0bb0041df89d11140aaf6f5c1c7163f4533ef1a79e3ca133460f38c1",
+      "token_audit": [
+        {
+          "key": {
+            "kind": "beta"
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:2d1b40b0aa07641d774598a5378a364d2b1ed7866cef4f0ef189c725768c35a3",
+          "normal_form_hash": "blake3:beb7c5a16eead07a285b2f373b3782040c449dcc9fd6abd22fdf7f473b452fe8",
+          "derivation_hash": "blake3:16e326cfa58037cce1aa8529116b0073d847d621db5ce022cae6b6786c84dd86"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 0,
+            "probe": 0
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:24d50bbe37dcfc562fc73dd96afe8c09ea43f387f8a7aa8149321fee3c636a61",
+          "normal_form_hash": "blake3:d3050aaf7e4ac54c6a860fba6f0105794892ac8659f4a9dbad3d6a176baad0c0",
+          "derivation_hash": "blake3:b19da12904b2d1e5bd1874ceb9b23f35756ac14b1cf80ba8fb66b612df819c28"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 0,
+            "probe": 1
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:b0afd7da74890e6b56b146c8bf5fb54706b68ba2f21ebe299db2ae6cb44e2f71",
+          "normal_form_hash": "blake3:89728607ff24482114a3a63c6b6346c72c6b511d45506e82819d1448aa87c088",
+          "derivation_hash": "blake3:bbb81673124733da72a77620b6e5189982bcef79d509ef5e2e7b1d75d70fc7f6"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 0,
+            "probe": 2
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:82c5b9de4f526f1d200bb307b53e29bfc6485eb6769db62f9005df1aeb8a4bf0",
+          "normal_form_hash": "blake3:997d3b4a98e2610a5b4b5e45eb2a9a48c1579339b3f7f03a8cd2937c4da8bd4d",
+          "derivation_hash": "blake3:560dc144e2cfbb7a4eb3a8e21aa639d2470f4ef4870aa23b01083f7e297f6ced"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 1,
+            "probe": 0
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:2a3954f4aba701032b3f35560485558e5667caea71f1fe4c70879cb27222c94e",
+          "normal_form_hash": "blake3:39838d7542598a873a807f2f91b37ee4c9b3ee76d82a80a49386bda7215a9d93",
+          "derivation_hash": "blake3:c3683eeaac2116bd7701c29fc958f018ce41f657bd61cd91604215639fac2e2a"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 1,
+            "probe": 1
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:bf076d0febff823277f930808e64fc6851238aa031c815ce1c47739c0dbee0fb",
+          "normal_form_hash": "blake3:2c53ba8d47f763da250b665bb404136141c41585ffa1d063dc8600213f3b1748",
+          "derivation_hash": "blake3:540671986d4b93741183a68adcf92a5ddfc3cc8afa46bafcd3955f78eaa7bd8d"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 1,
+            "probe": 2
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:406f70de640b71ca6be124266a4a4c63b04f5200e78c387b0ef4740673ad19a5",
+          "normal_form_hash": "blake3:cf6a4263a5413e0f15ee28d04fb5c11479e86647abdd2b7c0e66ee5376cce2bc",
+          "derivation_hash": "blake3:3dfc6352f571a753f5c1fcfa3be501fdae519da2bfd26e988e58ef5b4fdc1d3a"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 2,
+            "probe": 0
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:8dd53776efa613378eb95ce6f807f840d811990a3dd2e2c70fce9a38c2154c09",
+          "normal_form_hash": "blake3:e2614fe4684a8b4a141de71f8485148f3ed6ad1adf0fdebf03bb3c09e0f721f1",
+          "derivation_hash": "blake3:84766cf5dedb731a53dde0fa19f51bcd8d92b7a91d33ac5d9a30f2ea725d46b9"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 2,
+            "probe": 1
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:caba1d6661d8eea86b99876f185f17048dbef05386ed0b8ca4b37287f81be4e8",
+          "normal_form_hash": "blake3:0dcd7c7eb41e8b13946ef748ca889c00b31db08283fc47d909ff1b2904238650",
+          "derivation_hash": "blake3:d4117ea87e4f9811926a0e3f01fbe37fbc6ea3ea9b54526de2d46c2e80f18ff3"
+        },
+        {
+          "key": {
+            "kind": "kan",
+            "principal": 2,
+            "probe": 2
+          },
+          "subject_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+          "source_digest": "blake3:50bad9099e766aee432967918ffea6462b30f5d60c545b3ba390fce12fa7d982",
+          "term_hash": "blake3:688862ea8f16b7e1bf292cebde34a1d1aeb78c580c423e027d948d8273de72c1",
+          "normal_form_hash": "blake3:52c2a80350b2790860871b7a4b88c19d8ccefe5d6e7937c911ce0bac9bfded62",
+          "derivation_hash": "blake3:de8f9803a6414a595f103bbe99ec3fcdf0286c8f212719c58f9953233783ecce"
+        }
+      ],
+      "recorded_total_nu": 18,
+      "certified_total_nu": null,
+      "registered_basis_replay_passed": true,
+      "intended_schema_exhaustiveness_proved": false,
+      "full_total_regression_passed": false,
+      "blockers": [
+        "the registered 1+d^2 basis is replayed but no theorem classifies all intended path schemas by that basis",
+        "the conditional closed cubical fragment checks only the registered PathCon beta/Kan terms; it does not reconstruct every formation, introduction, elimination, or chaining family in the historical total",
+        "cubical family weakening and univalent equality have not been integrated into the global semantic-family quotient",
+        "the shallow S3 telescope does not type the recorded mu/unit coherence and cell-action schemas"
+      ]
+    }
+  ],
+  "registered_d4": {
+    "step": null,
+    "label": "registered-d4",
+    "dimension": 4,
+    "recorded_path_nu": 17,
+    "realized_registered_basis_count": 17,
+    "certified_path_nu": null,
+    "exact_index_bijection": true,
+    "unique_source_bound_tokens": true,
+    "basis_derivation_hash": "blake3:85acbc699b5a48eb89d5865d11bc90c324c03ac3202616310f29769f1765d9cb",
+    "token_audit": [
+      {
+        "key": {
+          "kind": "beta"
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:440faf7fecb52a4a85a252bfbfcff04ad743c1dad31a2d802efa04bc698c97d6",
+        "normal_form_hash": "blake3:6d8a7d010e8ea40634b02bfce652ea8b23a5d1c23b8b63dc08565791938a23d1",
+        "derivation_hash": "blake3:2fdf640ad48be3ecb155268b1a7bcc76c34c6c41e3961958090ba5471b21a671"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 0,
+          "probe": 0
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:2e71c4ccc540db04284dae5352ab1829382670b4bbe2ff862ee80285445310a4",
+        "normal_form_hash": "blake3:75df1917a6f72a08e7f6dd84df7cae4b760a06f53a238bbe022b79e64a991740",
+        "derivation_hash": "blake3:3f64617384e91ebbf96f2099e3fbcd07b9c3c3ab191ac0e06a2e7ccd39df5b31"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 0,
+          "probe": 1
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:8b47020aeaa3b2d3f8050ec6811623f622a83c10c1dd00ad3f6ac60fc891cd1e",
+        "normal_form_hash": "blake3:bfebb44068776316a1b2e06921e9640afaf4c26fb98c79ff3c6007b38f6ea43b",
+        "derivation_hash": "blake3:069c91402dae0f054518a2f49b6feab6dc5fc49eed864abdf09430483b26fe4d"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 0,
+          "probe": 2
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:c590b888963c81aae8f9d5413e8ed01d4aa29bb2bb00a35752d5b296bf6dee44",
+        "normal_form_hash": "blake3:f048a4ed35fcd3822675d9e8959cc8c3a5880968f67cdd2cb2f9e320ec97470c",
+        "derivation_hash": "blake3:703b06183490ecba3fb9ee9bd73201b6fe2f5023ec101fbfa19e07b0cc635fe7"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 0,
+          "probe": 3
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:e085f77825213362dea1fe99ee4a00eed1f394c188e1e84c30937b6d96bcfaad",
+        "normal_form_hash": "blake3:3e946e99217d02915af644c0ea4c1a48e38247a162241225b2d588db72619093",
+        "derivation_hash": "blake3:75e266657e655ec901e61d9ef30c08ee5e7dfd429e356bd84dbb3eedf9c0e503"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 1,
+          "probe": 0
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:4d4988795ca00d82bb9f7333f19e3fc8e83aec5405b737a096ca53c1c378c2cb",
+        "normal_form_hash": "blake3:6684fbe72630257ab2e50add621e42c486d8d3385fdf07c892e3a902c496cb44",
+        "derivation_hash": "blake3:aecbd1806ecd67b9d4451960e09dc0f171919afbb721310e27a90222610c7531"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 1,
+          "probe": 1
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:130b566b33d30ec214bf8c6461495442c323675e7debc1db62e57dfc763586d0",
+        "normal_form_hash": "blake3:0dadbb5e966907ca747896e0965d623d0bcacca4b1906d75abf21f8d5e7e0ed0",
+        "derivation_hash": "blake3:9f04e808bbbef2c5aecc4db90739b0e4f72c7392d5f7832a1d87e7c7a815ab7e"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 1,
+          "probe": 2
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:f515eb6751c922f1cd2d8fa04542722ec24d937223d89b2d0f8a87f51ffa23a9",
+        "normal_form_hash": "blake3:697f4b19c06781a15e142f3379610285b058a7dbdf2f4c6df3e045e1a4f4bf6f",
+        "derivation_hash": "blake3:3c0f5bf3a034790b4059ad8c73b08f651724765176db4fae3ef4599aae48dcf3"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 1,
+          "probe": 3
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:fe511e11cf308e0304fa574bb16995440b86b9ec442511d5f0d401505d7d9ace",
+        "normal_form_hash": "blake3:5694f5ba331e027648ba9a0aae6a30ec1193409da6c82bf0183ad3d594010d2e",
+        "derivation_hash": "blake3:075783ce1c125a4148eabdf171538ed8a07f469941899d4566b28b3e0bd818cf"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 2,
+          "probe": 0
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:e19dc3707b27c8df404d9439be08bc5b76fd22bd4e4306ea8ab95c32ff40965f",
+        "normal_form_hash": "blake3:20d7beb339bd00183e6657ec7961c650ba6709c9b2f647862a8810cf9e79f178",
+        "derivation_hash": "blake3:1320e3825ad6a852936b398aa6bc527c8bd68f4549b741e917088dbec74e4aac"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 2,
+          "probe": 1
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:5b8f012b28e7089bdbca4f9e28b91f0df333cbe9100d6dc1b8edecdb7adca26d",
+        "normal_form_hash": "blake3:b9a609f0cc5f73c28f75f4b0598cd4787c95d86976f3c153fb1df9041d86b45d",
+        "derivation_hash": "blake3:283ec69edc355ad5b214ca41be6ba9e047da41d1f86e72e460f983ba0b53c934"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 2,
+          "probe": 2
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:21d1f7639ea1819d9474410bc4c6190734ad471a102cf21e26d9761567a2f9aa",
+        "normal_form_hash": "blake3:52d04d6836b46d380641fc84a9a9b3129bb5796fddfef3c5779edb001df4a50a",
+        "derivation_hash": "blake3:2b4514ca396386f67ea6ece1c9bc77c28b3e6fbc9514c52360ce2cd114828d63"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 2,
+          "probe": 3
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:5bf0994b51221de9605075910f5bb33356c0e597ac14bd5866811faa5427cd2d",
+        "normal_form_hash": "blake3:c83ae8aab70ed78eca2b04800e6b8c3c3801e99b0ee22fe30568da777531f2be",
+        "derivation_hash": "blake3:6fe217477e5a9490c5faeb2b44daacbfe2bfb6dece7e9d148f4b02d1edae0a7e"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 3,
+          "probe": 0
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:97c63a953a05dcc83ef66f7a70991c6fd90ad6e84ccced810a29fc1d6406cc5f",
+        "normal_form_hash": "blake3:47bb81ebe585ba5fb6170c394d4b4f7a09dc3a3363c96a20996e674956a72b30",
+        "derivation_hash": "blake3:040b7c26edffe42fb5030f63408b857dfcbf42946c4c40ee3805cb0f920d0be7"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 3,
+          "probe": 1
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:6e763ac66552b2ba9a16034d2dc50e8287af21866a053f92bf7b5cd3f4ac3932",
+        "normal_form_hash": "blake3:64a97e69afbf81674e7ff8ed865ee4f2ce703318cc062d0d1f12c2850c39b2ae",
+        "derivation_hash": "blake3:62e6d9b80498398facd6ca174f6326e9ef3d3055909043c1053bfa52cd91b166"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 3,
+          "probe": 2
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:edcd2a9b593ffa5dba83e469d20072fb146afa56eb8781d9ef598b1b06ed53c8",
+        "normal_form_hash": "blake3:06c68fda41f5edb4536d6208a1ff0d55c13896833c49451347b04fac16e57fed",
+        "derivation_hash": "blake3:060a9e6eda757c0294f479f1319676c3d37d04afd0c673f2ef906acf2a8f5dff"
+      },
+      {
+        "key": {
+          "kind": "kan",
+          "principal": 3,
+          "probe": 3
+        },
+        "subject_hash": "blake3:1b232e2ee9aa6ebaa0be3b445b0d4637c5c1d215a54b00eb9777b4a22ec08d7b",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "source_digest": "blake3:94f498de6076ae1bc81f4a9a1951e270bc57c4d273a45464d435b7b543a80a2b",
+        "term_hash": "blake3:b1a1528dbc42073680326829f28c2b64b93227c430c471e19a634e9a0546163d",
+        "normal_form_hash": "blake3:9b67b80290aed7ee9233a803198009dea29810705719fcc0bd3abfab6fa00edc",
+        "derivation_hash": "blake3:db36bac1c8a0f99c1335218d79979c020c6926fb7e7878c41acecf85ba874521"
+      }
+    ],
+    "recorded_total_nu": null,
+    "certified_total_nu": null,
+    "registered_basis_replay_passed": true,
+    "intended_schema_exhaustiveness_proved": false,
+    "full_total_regression_passed": false,
+    "blockers": [
+      "the registered 1+d^2 basis is replayed but no theorem classifies all intended path schemas by that basis",
+      "the conditional closed cubical fragment checks only the registered PathCon beta/Kan terms; it does not reconstruct every formation, introduction, elimination, or chaining family in the historical total",
+      "cubical family weakening and univalent equality have not been integrated into the global semantic-family quotient",
+      "under the frozen extracted-orbit inventory, the conditional capacity diagnostic has no injection for the sixteen registered Kan terms; intended semantic J2/J3 remain open"
+    ]
+  },
+  "conditional_typed_basis_replay_passed": true,
+  "full_historical_total_regression_passed": false,
+  "provenance_obstructions": [
+    {
+      "subject": "Step 8 (S3)",
+      "inventory_stage": 8,
+      "dimension_squared_kan_families": 9,
+      "local_telescope_kappa": 5,
+      "local_role_capacity_rule": "blind upper bound: at most one independently chargeable local coherence anchor per telescope clause",
+      "local_coherence_slots_upper_bound": 5,
+      "live_demand_outputs": 1,
+      "available_distinct_anchors_upper_bound": 6,
+      "closure_digest": "blake3:bad84e9cb1e6f0075af529ef0eb32d82b91292b2341e3b66d09a18d4dada9e70",
+      "orbit_derivation_hash": "blake3:3c057f16a4c48a1b3d93554f5746768b98f4d7e0153b34f8b433f0dc3af3dc2a",
+      "kernel_inventory_j2_verified": true,
+      "kernel_inventory_j3_verified": true,
+      "intended_semantic_j2_complete": false,
+      "intended_semantic_j3_complete": false,
+      "conditional_injective_assignment_possible": false,
+      "certified_provenance_obstruction": false,
+      "conclusion": "Conditional diagnostic only: under the frozen extracted-orbit inventory and one-anchor-per-clause bound, 9 separately counted Kan families do not inject into 6 local/live anchors; intended semantic J2/J3 completeness is not proved"
+    },
+    {
+      "subject": "registered d=4 candidate",
+      "inventory_stage": 16,
+      "dimension_squared_kan_families": 16,
+      "local_telescope_kappa": 2,
+      "local_role_capacity_rule": "blind upper bound: at most one independently chargeable local coherence anchor per telescope clause",
+      "local_coherence_slots_upper_bound": 2,
+      "live_demand_outputs": 0,
+      "available_distinct_anchors_upper_bound": 2,
+      "closure_digest": "blake3:bad84e9cb1e6f0075af529ef0eb32d82b91292b2341e3b66d09a18d4dada9e70",
+      "orbit_derivation_hash": "blake3:3c057f16a4c48a1b3d93554f5746768b98f4d7e0153b34f8b433f0dc3af3dc2a",
+      "kernel_inventory_j2_verified": true,
+      "kernel_inventory_j3_verified": true,
+      "intended_semantic_j2_complete": false,
+      "intended_semantic_j3_complete": false,
+      "conditional_injective_assignment_possible": false,
+      "certified_provenance_obstruction": false,
+      "conclusion": "Conditional diagnostic only: under the frozen extracted-orbit inventory and one-anchor-per-clause bound, 16 separately counted Kan families do not inject into 2 local/live anchors; intended semantic J2/J3 completeness is not proved"
+    }
+  ],
+  "semantic_weakening_complete": false,
+  "novelty_numeric": null,
+  "registered_zone": "Z4",
+  "falsifier_f_t1": true,
+  "step16_verdict_valid": false,
+  "d5_attempted": false,
+  "remaining_obligations": [
+    "type and replay the non-path families in the Step 5--8 historical totals",
+    "extend semantic weakening/univalent equality to normalized cubical family terms",
+    "prove intended semantic J2/J3 completeness before promoting the derived provenance-capacity arithmetic from a conditional diagnostic",
+    "prove general typed hcom union staging and a semantic classification theorem before treating the registered 1+d^2 basis as exhaustive",
+    "supply an injective provenance discipline that does not multiply uniform Kan specializations without independent export or live demand",
+    "only after those gates pass may a numeric Step-16 verdict or a d=5 experiment be attempted"
+  ],
+  "result_digest": "blake3:075791e9024a8c36a3f0dab593fa1460fb8288d3e9fc3345aa76c48cff978e56"
+}

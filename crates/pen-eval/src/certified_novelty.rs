@@ -538,7 +538,11 @@ impl ReplayedP5LiftCapability {
         token: &TypedLiftToken,
     ) -> Result<Self, P5KernelAdapterError> {
         replay_typed_lift_token(signature, candidate, visible_library, token)?;
-        let lift_clauses = token.lift_clauses().iter().copied().collect::<BTreeSet<_>>();
+        let lift_clauses = token
+            .lift_clauses()
+            .iter()
+            .copied()
+            .collect::<BTreeSet<_>>();
         if lift_clauses.is_empty() || lift_clauses.len() != token.lift_clauses().len() {
             return Err(P5KernelAdapterError::InvalidLiftClauseSet);
         }
@@ -634,13 +638,15 @@ impl FrozenP5Certificate {
         token: &TypedLiftToken,
         record_internality: TrustedP5RecordInternalityCapability,
     ) -> Result<Self, P5CertificateError> {
-        let replayed_typed_lift =
-            ReplayedP5LiftCapability::from_kernel_token(
-                signature,
-                candidate,
-                visible_library,
-                token,
-            )?;
+        if *graph != ImportDag::from_signature(signature) {
+            return Err(P5CertificateError::SignatureImportDagMismatch);
+        }
+        let replayed_typed_lift = ReplayedP5LiftCapability::from_kernel_token(
+            signature,
+            candidate,
+            visible_library,
+            token,
+        )?;
         let audit = P5ImportAudit::check(candidate, graph);
         let dominant_import =
             audit
@@ -702,6 +708,8 @@ impl FrozenP5Certificate {
 
 #[derive(Clone, Debug, Error, Eq, PartialEq)]
 pub enum P5CertificateError {
+    #[error("P5 import DAG does not replay exactly from the sealed signature")]
+    SignatureImportDagMismatch,
     #[error(
         "P5 requires one reachability-dominant direct import; imports {direct_imports:?} have dominant set {dominant_imports:?}"
     )]
@@ -1003,6 +1011,9 @@ pub fn evaluate_certified_novelty(
     caps: &CertifiedSurfaceCaps,
 ) -> Result<CertifiedNoveltyReport, CertifiedNoveltyError> {
     validate_signature_library_context(signature, library)?;
+    if *graph != ImportDag::from_signature(signature) {
+        return Err(CertifiedNoveltyError::SignatureImportDagMismatch);
+    }
     validate_surface(candidate, caps)?;
     let theorem = derive_linear_bound(caps)?;
     let normalized = NormalizedCandidate::from_telescope(candidate, library);
@@ -1154,8 +1165,7 @@ fn evaluate_opaque(
                     requirement: "FrozenP5Certificate",
                 },
             )?;
-            let (bridges, lifts) =
-                validate_p5(candidate, &opaque.kernel, p5, dominant, signature)?;
+            let (bridges, lifts) = validate_p5(candidate, &opaque.kernel, p5, dominant, signature)?;
             components(kernel, k, 0, 0, bridges, lifts, 0)
         }
         TelescopeClass::Synthesis => {
@@ -1471,8 +1481,7 @@ fn validate_p5(
         });
     }
     if certificate.replayed_typed_lift.candidate_key != certificate.candidate_key
-        || certificate.replayed_typed_lift.kernel_subject_hash
-            != kernel_candidate_hash(candidate)
+        || certificate.replayed_typed_lift.kernel_subject_hash != kernel_candidate_hash(candidate)
         || certificate.replayed_typed_lift.signature_digest != signature.digest()
         || certificate.replayed_typed_lift.derivation_hash.is_empty()
         || certificate.replayed_typed_lift.visible_library != signature.len() as u32
@@ -1716,6 +1725,8 @@ pub enum CertifiedNoveltyError {
     SurfaceViolation { reason: String },
     #[error("sealed signature and evaluation library do not replay to the same context")]
     SignatureLibraryMismatch,
+    #[error("sealed signature and P5 import DAG do not replay to the same context")]
+    SignatureImportDagMismatch,
     #[error("certificate belongs to a different canonical candidate")]
     CandidateKeyMismatch,
     #[error("transparent certificate must contain exactly one witness per clause")]
@@ -1959,16 +1970,15 @@ mod tests {
             )
             .expect("test elaboration token matches"),
         );
-        let report =
-            evaluate_certified_novelty(
-                &candidate,
-                &certificate,
-                &SealedSignature::genesis_del_h15(),
-                &library,
-                &graph(),
-                &caps(),
-            )
-                .expect("exact old-library presentation is transparent");
+        let report = evaluate_certified_novelty(
+            &candidate,
+            &certificate,
+            &SealedSignature::genesis_del_h15(),
+            &library,
+            &graph(),
+            &caps(),
+        )
+        .expect("exact old-library presentation is transparent");
 
         assert_eq!(report.disposition, CertifiedDisposition::Transparent);
         assert_eq!(report.nu, 0);
@@ -2174,7 +2184,7 @@ mod tests {
             &signature,
             &candidate,
             1,
-            &ImportDag::default(),
+            &ImportDag::from_signature(&signature),
             &kernel,
             &token,
             trusted_p5_record_internality(&signature, &candidate, &kernel),
@@ -2182,7 +2192,10 @@ mod tests {
         .expect("replayed kernel token adapts");
 
         assert_eq!(certificate.dominant_import, 1);
-        assert_eq!(certificate.minimal_complete_api, [0, 1].into_iter().collect());
+        assert_eq!(
+            certificate.minimal_complete_api,
+            [0, 1].into_iter().collect()
+        );
         assert_eq!(certificate.local_lifts.len(), 1);
         assert!(certificate.local_lifts.contains(&P5LocalLift {
             kernel_clause: 0,
@@ -2233,16 +2246,26 @@ mod tests {
         let token = pen_type::elaborate::issue_typed_lift_token(&signature, &candidate, 1)
             .expect("non-vacuous typed lift");
 
-        let mut mutated_candidate = candidate.clone();
-        mutated_candidate.clauses[1] =
-            ClauseRec::new(ClauseRole::Formation, Expr::Var(1));
         assert!(matches!(
-            ReplayedP5LiftCapability::from_kernel_token(
-                &signature,
-                &mutated_candidate,
-                1,
-                &token,
-            ),
+            ReplayedP5LiftCapability::from_kernel_token(&signature, &candidate, 0, &token),
+            Err(P5KernelAdapterError::Replay(_))
+        ));
+
+        let mut mutated_candidate = candidate.clone();
+        mutated_candidate.clauses[1] = ClauseRec::new(ClauseRole::Formation, Expr::Var(1));
+        assert!(matches!(
+            ReplayedP5LiftCapability::from_kernel_token(&signature, &mutated_candidate, 1, &token,),
+            Err(P5KernelAdapterError::Replay(
+                TokenReplayError::SubjectHashMismatch { .. }
+            ))
+        ));
+
+        let mut mutated_imports = candidate.clone();
+        mutated_imports
+            .clauses
+            .push(ClauseRec::new(ClauseRole::Formation, Expr::Lib(2)));
+        assert!(matches!(
+            ReplayedP5LiftCapability::from_kernel_token(&signature, &mutated_imports, 1, &token,),
             Err(P5KernelAdapterError::Replay(
                 TokenReplayError::SubjectHashMismatch { .. }
             ))
@@ -2259,12 +2282,7 @@ mod tests {
             )]),
         )]);
         assert!(matches!(
-            ReplayedP5LiftCapability::from_kernel_token(
-                &mutated_signature,
-                &candidate,
-                1,
-                &token,
-            ),
+            ReplayedP5LiftCapability::from_kernel_token(&mutated_signature, &candidate, 1, &token,),
             Err(P5KernelAdapterError::Replay(
                 TokenReplayError::SignatureDigestMismatch { .. }
             ))
@@ -2305,7 +2323,7 @@ mod tests {
             &signature,
             &candidate,
             1,
-            &ImportDag::default(),
+            &ImportDag::from_signature(&signature),
             &kernel,
             &token,
             trusted_p5_record_internality(&signature, &candidate, &kernel),
@@ -2332,7 +2350,7 @@ mod tests {
             &certificate,
             &signature,
             &library,
-            &ImportDag::default(),
+            &ImportDag::from_signature(&signature),
             &caps,
         )
         .expect("matching signature/library context validates");
@@ -2342,8 +2360,20 @@ mod tests {
                 &candidate,
                 &certificate,
                 &signature,
-                &Library::new(),
+                &library,
                 &ImportDag::default(),
+                &caps,
+            ),
+            Err(CertifiedNoveltyError::SignatureImportDagMismatch)
+        );
+
+        assert_eq!(
+            evaluate_certified_novelty(
+                &candidate,
+                &certificate,
+                &signature,
+                &Library::new(),
+                &ImportDag::from_signature(&signature),
                 &caps,
             ),
             Err(CertifiedNoveltyError::SignatureLibraryMismatch)
@@ -2366,7 +2396,7 @@ mod tests {
                 &certificate,
                 &mutated_signature,
                 &mutated_library,
-                &ImportDag::default(),
+                &ImportDag::from_signature(&mutated_signature),
                 &caps,
             ),
             Err(CertifiedNoveltyError::InvalidP5Certificate { .. })

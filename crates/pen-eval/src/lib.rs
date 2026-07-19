@@ -29,3 +29,4 @@ pub mod sh1_capacity;
 pub mod sh1_staircase;
 pub mod typed_families;
 pub mod tdc1;
+pub mod tdc1_cubical;

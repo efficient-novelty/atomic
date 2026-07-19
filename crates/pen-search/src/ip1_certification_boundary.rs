@@ -13,6 +13,9 @@
 //! keeps it `Undecided`; building or replaying this certificate cannot silently
 //! adopt a new law.
 
+#[path = "ip1_candidate_join.rs"]
+pub mod candidate_join;
+
 use crate::enumerate::{EnumerationContext, assess_raw_surface_membership};
 use pen_core::canonical::canonical_key_telescope;
 use pen_core::clause::{ClauseRec, ClauseRole};
@@ -57,10 +60,11 @@ const ALL_CLASSES: [TelescopeClass; 9] = [
     TelescopeClass::Unknown,
 ];
 
-const TRUSTED_TOKEN_TYPES: [&str; 5] = [
+const TRUSTED_TOKEN_TYPES: [&str; 6] = [
     "TrustedTransparentElaborationToken",
     "TrustedHFormEliminatorToken",
     "ReplayedP5LiftCapability",
+    "TrustedP5RecordInternalityCapability",
     "TrustedSynthesisPolymorphicEliminatorToken",
     "TrustedSynthesisNaturalityToken",
 ];
@@ -177,6 +181,10 @@ pub struct PublicRequiredTokenWitness {
     pub token_error: Option<String>,
     pub sidecar_adapter_succeeded: bool,
     pub sidecar_adapter_error: Option<String>,
+    /// Independent minimal-record/API evidence required in addition to the
+    /// replayed lift.  There is intentionally no production constructor yet.
+    pub record_internality_capability_available: bool,
+    pub complete_p5_route_succeeded: bool,
     pub public_fresh_kernel_assertion_available: bool,
     pub survives_frozen_candidate_gates: bool,
     pub falsifies_f_ip2: bool,
@@ -342,7 +350,7 @@ fn class_rule(
         ),
         TelescopeClass::Axiomatic => (
             ConditionalClassRuleKind::RequiredTokenFailure,
-            "evaluate_opaque first rejects absence of a unique dominant import; otherwise FrozenP5Certificate requires a non-vacuous TypedLiftToken replayed through ReplayedP5LiftCapability",
+            "evaluate_opaque first rejects absence of a unique dominant import; otherwise FrozenP5Certificate requires both a non-vacuous TypedLiftToken replayed through ReplayedP5LiftCapability and independent TrustedP5RecordInternalityCapability evidence",
             None,
             vec![
                 RequiredTokenFailure {
@@ -352,7 +360,14 @@ fn class_rule(
                 },
                 RequiredTokenFailure {
                     token_type: "ReplayedP5LiftCapability".to_owned(),
-                    outcome: "requires_successful_non_vacuous_kernel_issuance_and_definition_replay".to_owned(),
+                    outcome:
+                        "requires_successful_non_vacuous_kernel_issuance_and_definition_replay"
+                            .to_owned(),
+                    condition: "P5ImportAudit::unique_dominant_import.is_some()".to_owned(),
+                },
+                RequiredTokenFailure {
+                    token_type: "TrustedP5RecordInternalityCapability".to_owned(),
+                    outcome: "no_public_constructor".to_owned(),
                     condition: "P5ImportAudit::unique_dominant_import.is_some()".to_owned(),
                 },
             ],
@@ -577,6 +592,12 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
     let fresh_kernel = FreshKernelCertificate::assert_all_clauses_opaque(&candidate, &library);
     let public_fresh_kernel_assertion_available =
         fresh_kernel.irreducible_clauses.len() == candidate.kappa();
+    // Lift checking and record internality are deliberately independent.
+    // The latter has no production constructor, so a successful public lift
+    // adapter alone is not an end-to-end P5 route.
+    let record_internality_capability_available = false;
+    let complete_p5_route_succeeded =
+        sidecar_adapter_succeeded && record_internality_capability_available;
     let survives_frozen_candidate_gates = raw.is_member
         && shallow_type_checks
         && decision.is_admitted()
@@ -585,7 +606,7 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
         && !identified_with_sealed_structure
         && semantically_minimal
         && bar_clearing_detachable_subbundles == 0;
-    let falsifies_f_ip2 = survives_frozen_candidate_gates && sidecar_adapter_succeeded;
+    let falsifies_f_ip2 = survives_frozen_candidate_gates && complete_p5_route_succeeded;
 
     PublicRequiredTokenWitness {
         name: "p5_vacuous_public_typed_lift_rejected".to_owned(),
@@ -607,7 +628,8 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
         structural_rho: rho.to_string(),
         structural_clears_bar,
         public_issuer: "pen_type::elaborate::issue_typed_lift_token".to_owned(),
-        required_token_capability: "P5 typed lift/eliminator evidence".to_owned(),
+        required_token_capability:
+            "ReplayedP5LiftCapability plus TrustedP5RecordInternalityCapability".to_owned(),
         token_issued,
         token_subject_hash,
         token_signature_digest,
@@ -617,6 +639,8 @@ fn p5_public_token_witness() -> PublicRequiredTokenWitness {
         token_error,
         sidecar_adapter_succeeded,
         sidecar_adapter_error,
+        record_internality_capability_available,
+        complete_p5_route_succeeded,
         public_fresh_kernel_assertion_available,
         survives_frozen_candidate_gates,
         falsifies_f_ip2,
@@ -717,8 +741,9 @@ fn build_certificate(adjudication: A5Adjudication) -> Ip1CertificationBoundary {
         });
     // F-IP2 requires an end-to-end route, not merely a public function whose
     // result cannot discharge the sidecar premise.  P5 is audited through the
-    // public issuer AND the replay adapter; a failure at either boundary is a
-    // named token failure.  This keeps the issuer public and fail-closed.
+    // public issuer, replay adapter, AND independent record-internality
+    // evidence; a failure at any boundary is a named token failure.  This
+    // keeps the lift issuer public without turning it into full P5 evidence.
     let no_public_required_token_route = !public_required_token_witnesses
         .iter()
         .any(|witness| witness.falsifies_f_ip2);
@@ -937,6 +962,8 @@ mod tests {
         );
         assert!(!witness.sidecar_adapter_succeeded);
         assert!(witness.sidecar_adapter_error.is_some());
+        assert!(!witness.record_internality_capability_available);
+        assert!(!witness.complete_p5_route_succeeded);
         assert!(witness.survives_frozen_candidate_gates);
         assert!(!witness.falsifies_f_ip2);
         assert_eq!(
@@ -965,6 +992,15 @@ mod tests {
                 );
             }
         }
+        let internality = certificate
+            .public_token_audit
+            .iter()
+            .find(|audit| audit.token_type == "TrustedP5RecordInternalityCapability")
+            .expect("record-internality capability is audited independently");
+        assert!(internality.struct_found);
+        assert!(internality.all_fields_private);
+        assert!(internality.public_associated_constructors.is_empty());
+        assert!(!internality.constructible_from_frozen_public_api);
     }
 
     #[test]
