@@ -1,0 +1,290 @@
+{
+  "schema": "branch-invariance-bi0-semantic-register-f-al1-prime-v5",
+  "date": "2026-07-22",
+  "t_bi_result_digest": "blake3:6a6567019566214221f7329733a688910aa0b0a6c6b8f6812ee02002c3061a46",
+  "t_bi_intrinsic_sequence_seal": "blake3:51028c19ee808dd8c444e973e1412551fd5adea775bd09785567f3ae7045139e",
+  "t_bi_intrinsic_isolation_digest": "blake3:fe6c61950f84baaf5415098558e9792ff22c8c56fa31e2410f47d365747f397f",
+  "t_bi_intrinsic_isolation_schema": "t-bi-intrinsic-typed-phase-dag-isolation-v2",
+  "t_bi_intrinsic_isolation_theorem_id": "T-BI-B3-v2-typed-evidence-bound-transitive-pre-seal-isolation",
+  "t_bi_intrinsic_isolation_exact_typed_phase_surface": true,
+  "t_bi_intrinsic_isolation_no_forbidden_capability": true,
+  "t_bi_intrinsic_isolation_synthetic_receipt_input_accepted": false,
+  "t_bi_role_declaration_count": 250,
+  "t_bi_proved_family_count": 61,
+  "t_bi_named_impossibility_count": 189,
+  "t_bi_named_registry_residual_count": 0,
+  "t_bi_named_quotient_residual_count": 0,
+  "t_bi_named_a3_residual_count": 0,
+  "t_bi_total_named_residual_count": 0,
+  "t_bi_silent_residue_count": 0,
+  "t_bi_b1_proved": true,
+  "t_bi_b2_proved": true,
+  "t_bi_b3_proved": true,
+  "t_bi_special_cases_proved": true,
+  "t_bi_extraction_complete": true,
+  "t_bi_operational_rows": [
+    {
+      "stage": 1,
+      "winner_candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 2,
+      "winner_candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 3,
+      "winner_candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 4,
+      "winner_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 5,
+      "winner_candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 6,
+      "winner_candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 7,
+      "winner_candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 8,
+      "winner_candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 9,
+      "winner_candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 10,
+      "winner_candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 11,
+      "winner_candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 12,
+      "winner_candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 13,
+      "winner_candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 14,
+      "winner_candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 15,
+      "winner_candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    }
+  ],
+  "t_bi_exact_operational_regression": true,
+  "structural_register": [
+    1,
+    1,
+    2,
+    5,
+    7,
+    8,
+    10,
+    17,
+    17,
+    19,
+    26,
+    34,
+    46,
+    62,
+    103
+  ],
+  "authoritative_semantic_register": [
+    1,
+    0,
+    1,
+    3,
+    6,
+    3,
+    1,
+    1,
+    0,
+    4,
+    1,
+    0,
+    2,
+    3,
+    6
+  ],
+  "non_authoritative_extraction_floor": null,
+  "bare_register_table": [
+    {
+      "stage": 1,
+      "structural": 1,
+      "semantic": 1
+    },
+    {
+      "stage": 2,
+      "structural": 1,
+      "semantic": 0
+    },
+    {
+      "stage": 3,
+      "structural": 2,
+      "semantic": 1
+    },
+    {
+      "stage": 4,
+      "structural": 5,
+      "semantic": 3
+    },
+    {
+      "stage": 5,
+      "structural": 7,
+      "semantic": 6
+    },
+    {
+      "stage": 6,
+      "structural": 8,
+      "semantic": 3
+    },
+    {
+      "stage": 7,
+      "structural": 10,
+      "semantic": 1
+    },
+    {
+      "stage": 8,
+      "structural": 17,
+      "semantic": 1
+    },
+    {
+      "stage": 9,
+      "structural": 17,
+      "semantic": 0
+    },
+    {
+      "stage": 10,
+      "structural": 19,
+      "semantic": 4
+    },
+    {
+      "stage": 11,
+      "structural": 26,
+      "semantic": 1
+    },
+    {
+      "stage": 12,
+      "structural": 34,
+      "semantic": 0
+    },
+    {
+      "stage": 13,
+      "structural": 46,
+      "semantic": 2
+    },
+    {
+      "stage": 14,
+      "structural": 62,
+      "semantic": 3
+    },
+    {
+      "stage": 15,
+      "structural": 103,
+      "semantic": 6
+    }
+  ],
+  "bare_register_table_exact": true,
+  "register_value_projection_exact": true,
+  "t_bi_f_al1_prime_passed": true,
+  "t_bi_side_passed": true,
+  "chronological_result_digest": "blake3:1d7fb570da6825385f7bf21c914a05e0d6a4968b3b60ba58243f892931d1fe3b",
+  "chronological_baseline_v4_result_digest": "blake3:1b00718cc6ae78202ff736d855b4906e01362ad0a4916a85619fe64c34950d00",
+  "chronological_exact_54_plus_18_partition": true,
+  "chronological_exact_sealed_72_id_join": true,
+  "chronological_support_hardening_digest": "blake3:9fa64f105d179a4ed035a5cec55b048b8b8c7241d1d231b5c2538d33f7de4b29",
+  "chronological_support_graph_normal_form_proved": true,
+  "chronological_support_zero_mint_capability_proved": true,
+  "chronological_support_replacement_evidence_hash": "blake3:005e4b3cc5e524861459a5c6d8803e84ad2d0b792f41fb3b99da1ada77016fd4",
+  "chronological_support_replacement_evidence_bound": true,
+  "chronological_inherited_71_exact": true,
+  "chronological_changed_case_ids": [
+    "blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571"
+  ],
+  "chronological_derived_count": 72,
+  "chronological_total_count": 72,
+  "chronological_named_gap_count": 0,
+  "chronological_former_derived_count": 9,
+  "chronological_former_expected_count": 9,
+  "chronological_t_sm1b_derived_count": 18,
+  "chronological_t_sm1b_surface_count": 18,
+  "chronological_blocking_case_ids": [],
+  "chronological_zero_accounting": true,
+  "f_sm1_fixed_positive_gate_passed": true,
+  "join_effect_proof": {
+    "theorem_id": "T-BI0-E1-closed-prerequisite-join-effect",
+    "bound_prerequisite_digests": [
+      "blake3:6a6567019566214221f7329733a688910aa0b0a6c6b8f6812ee02002c3061a46",
+      "blake3:1d7fb570da6825385f7bf21c914a05e0d6a4968b3b60ba58243f892931d1fe3b"
+    ],
+    "operations": [
+      "issue_t_bi_prerequisite",
+      "issue_chronological_prerequisite",
+      "join_prerequisite_projections",
+      "seal_bi0_certificate"
+    ],
+    "derived_capabilities": [
+      "read_t_bi_prerequisite",
+      "read_chronological_prerequisite",
+      "compare_prerequisite_projections",
+      "content_hashing"
+    ],
+    "forbidden_successor_capabilities": [],
+    "every_capability_derived_from_closed_operation_enum": true,
+    "no_successor_capability": true,
+    "proved": true,
+    "derivation_hash": "blake3:f75720c062a0a47a60d77547a437cbc98adcff0121525b160c23a8b4ca1d5655"
+  },
+  "bi0_attempt_executed": true,
+  "bi0_passed": true,
+  "bi1_invoked": false,
+  "non_enacted_cone_invoked": false,
+  "non_enacted_branch_work_executed": false,
+  "outcome": "BI0_SEMANTIC_REGISTER_V5_PASSED",
+  "permitted_conclusion": "Both independent BI-0 prerequisites pass. BI-1 is reopened only as a separate create-new successor; this artifact evaluates no non-enacted branch and issues no cone verdict.",
+  "required_successor_action": "Run BI-1 create-new under the adopted branch-invariance program, consuming this sealed BI-0 v5 capability.",
+  "result_digest": "blake3:23bb16925183b7b6c314e8143d735611ed2553a8bba1307d34cee34223ce7138"
+}

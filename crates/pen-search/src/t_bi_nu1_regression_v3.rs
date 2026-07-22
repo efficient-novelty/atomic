@@ -5,11 +5,11 @@
 //! contribute a family, orbit, output coordinate, or count to issuance.
 
 use crate::act_local_provenance_v3::{
-    issue_act_local_sequence_v3, ActLocalProvenanceV3Certificate, ActLocalV3Gap,
-    ACT_LOCAL_PROVENANCE_V3_SCHEMA, T_BI_NU1_V3_THEOREM_ID,
+    ACT_LOCAL_PROVENANCE_V3_SCHEMA, ActLocalProvenanceV3Certificate, ActLocalV3Gap,
+    T_BI_NU1_V3_THEOREM_ID, issue_act_local_sequence_v3,
 };
 use crate::phase5b_history_certification::{
-    Phase5bHistoryCertificate, PHASE5B_HISTORY_CERT_SCHEMA,
+    PHASE5B_HISTORY_CERT_SCHEMA, Phase5bHistoryCertificate,
 };
 use pen_core::hash::blake3_hex;
 use pen_core::telescope::Telescope;
@@ -613,8 +613,8 @@ fn certificate_digest(certificate: &TBiNu1RegressionV3Certificate) -> String {
     tagged_hash("regression-certificate", &projection)
 }
 
-pub fn issue_t_bi_nu1_regression_v3_certificate(
-) -> Result<TBiNu1RegressionV3Certificate, TBiNu1RegressionV3Error> {
+pub fn issue_t_bi_nu1_regression_v3_certificate()
+-> Result<TBiNu1RegressionV3Certificate, TBiNu1RegressionV3Error> {
     replay_adoption_and_burn()?;
     let entries = (1..=15)
         .map(|stage| (stage, Telescope::reference(stage)))

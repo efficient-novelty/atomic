@@ -5,13 +5,25 @@
 
 #[path = "../src/motive_typed_open_specialization_v4.rs"]
 mod motive_typed_open_specialization_v4;
+// T-SM1a is a path-included additive successor.  Re-export its two already
+// registered frozen-v3 dependencies at this example crate's root so its
+// `crate::` imports resolve without recursively path-including their private
+// dependency graph.
+mod chronological_slot_map_v3 {
+    pub use pen_search::chronological_slot_map_v3::*;
+}
+mod contextual_formation_coherence_v3 {
+    pub use pen_search::contextual_formation_coherence_v3::*;
+}
+#[path = "../src/t_sm1a_contextual_formation_v4.rs"]
+mod t_sm1a_contextual_formation_v4;
 
+use pen_core::clause::ClauseRec;
+use pen_core::telescope::Telescope;
 use pen_eval::a3_demand_grammar::{
     A3DemandOutputType, A3RuleConstructor, generate_a3_window_for_exact_prefix_unbounded,
 };
 use pen_search::contextual_formation_coherence_v3::kernel_context_from_parameter_sorts;
-use pen_core::clause::ClauseRec;
-use pen_core::telescope::Telescope;
 use pen_type::contextual_internality::{
     ContextualMotive, issue_ambient_context_declaration_token,
     issue_explicit_ambient_context_declaration_token,
@@ -33,6 +45,7 @@ struct OpenSourceDiagnostic {
     older_clause: u16,
     older_expression: pen_core::expr::Expr,
     older_kernel_type: pen_type::elaborate::KernelTy,
+    older_renaming: pen_eval::typed_families::RenamingMap,
     newest_clause: u16,
     source_context: Vec<pen_type::elaborate::KernelTy>,
     target_context: Vec<pen_type::elaborate::KernelTy>,
@@ -46,12 +59,8 @@ struct OpenSourceDiagnostic {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     if std::env::args().nth(1).as_deref() == Some("audit") {
-        let audit =
-            motive_typed_open_specialization_v4::issue_t_sm1b_corpus_audit_v4()?;
+        let audit = motive_typed_open_specialization_v4::issue_t_sm1b_corpus_audit_v4()?;
         println!("{}", serde_json::to_string_pretty(&audit)?);
-        if audit.positive_artifact_permitted {
-            return Err("positive artifact emission is intentionally not implemented here".into());
-        }
         return Ok(());
     }
     let full = SealedSignature::genesis_del_h15();
@@ -110,54 +119,42 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .iter()
             .map(|ty| match ty {
                 pen_type::elaborate::KernelTy::Type => ContextualMotive::Type,
-                pen_type::elaborate::KernelTy::El(term) => {
-                    ContextualMotive::Element(term.clone())
-                }
+                pen_type::elaborate::KernelTy::El(term) => ContextualMotive::Element(term.clone()),
                 _ => ContextualMotive::Neutral,
             })
             .collect::<Vec<_>>();
-        let inferred_v2_attempt = issue_ambient_context_declaration_token(
-            &full,
-            &body,
-            15,
-            motives.clone(),
-        )
-        .map_err(|error| error.to_string())
-        .and_then(|declaration| {
-            issue_actual_body_closure_derivation_v2(
-                &full,
-                &body,
-                15,
-                0,
-                Some(&declaration),
-                &BTreeMap::new(),
-            )
-            .map(|token| format!("ok:{}", token.derivation_hash()))
-            .map_err(|error| error.to_string())
-        })
-        .unwrap_or_else(|error| format!("error:{error}"));
-        let explicit_v2_attempt = issue_explicit_ambient_context_declaration_token(
-            &full,
-            &body,
-            15,
-            motives,
-        )
-        .map_err(|error| error.to_string())
-        .and_then(|declaration| {
-            issue_explicit_contextual_closure_derivation_v2(&full, &declaration)
-                .map(|token| format!("ok:{}", token.derivation_hash()))
+        let inferred_v2_attempt =
+            issue_ambient_context_declaration_token(&full, &body, 15, motives.clone())
                 .map_err(|error| error.to_string())
-        })
-        .unwrap_or_else(|error| format!("error:{error}"));
+                .and_then(|declaration| {
+                    issue_actual_body_closure_derivation_v2(
+                        &full,
+                        &body,
+                        15,
+                        0,
+                        Some(&declaration),
+                        &BTreeMap::new(),
+                    )
+                    .map(|token| format!("ok:{}", token.derivation_hash()))
+                    .map_err(|error| error.to_string())
+                })
+                .unwrap_or_else(|error| format!("error:{error}"));
+        let explicit_v2_attempt =
+            issue_explicit_ambient_context_declaration_token(&full, &body, 15, motives)
+                .map_err(|error| error.to_string())
+                .and_then(|declaration| {
+                    issue_explicit_contextual_closure_derivation_v2(&full, &declaration)
+                        .map(|token| format!("ok:{}", token.derivation_hash()))
+                        .map_err(|error| error.to_string())
+                })
+                .unwrap_or_else(|error| format!("error:{error}"));
         let dependent_motives = if newest.clause_index == 6 {
             vec![
                 DependentContextMotive::Independent {
                     motive: ContextualMotive::Type,
                 },
                 DependentContextMotive::ElementOfApplicationHead {
-                    head: pen_core::expr::Expr::Eventually(Box::new(
-                        pen_core::expr::Expr::Var(1),
-                    )),
+                    head: pen_core::expr::Expr::Eventually(Box::new(pen_core::expr::Expr::Var(1))),
                 },
             ]
         } else {
@@ -165,12 +162,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 motive: ContextualMotive::Type,
             }]
         };
-        let dependent = issue_dependent_ambient_context_declaration(
-            &full,
-            &body,
-            15,
-            dependent_motives,
-        );
+        let dependent =
+            issue_dependent_ambient_context_declaration(&full, &body, 15, dependent_motives);
         let dependent_declaration_attempt = dependent
             .as_ref()
             .map(|token| format!("ok:{}", token.projection().declaration_hash))
@@ -186,6 +179,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             older_clause: older.clause_index,
             older_expression: older.canonical_presentation.canonical_normal_form.clone(),
             older_kernel_type: older.kernel_type.clone(),
+            older_renaming: older.canonical_presentation.renaming.clone(),
             newest_clause: newest.clause_index,
             source_context,
             target_context: kernel_context_from_parameter_sorts(&target_parameters),

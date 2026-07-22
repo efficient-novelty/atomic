@@ -1,0 +1,169 @@
+{
+  "schema": "branch-invariance-bi0-semantic-register-f-al1-prime-v4",
+  "date": "2026-07-22",
+  "t_bi_nu1_result_digest": "blake3:367196cae48f921b828ac4edecaa81e340202b78795917f122712f06bec2940d",
+  "t_bi_nu1_intrinsic_seal": "blake3:c4ce9c0f9a8529b85ec4bed4e04eb3a6861c84a938f3587d9fe088eedc1f993e",
+  "t_bi_role_declaration_count": 250,
+  "t_bi_proved_family_count": 0,
+  "t_bi_named_impossibility_count": 0,
+  "t_bi_named_registry_residual_count": 250,
+  "t_bi_resolved_role_declaration_count": 0,
+  "t_bi_silent_residue_count": 0,
+  "t_bi_extraction_complete": false,
+  "t_bi_operational_rows": [
+    {
+      "stage": 1,
+      "winner_candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 2,
+      "winner_candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 3,
+      "winner_candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 4,
+      "winner_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 5,
+      "winner_candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 6,
+      "winner_candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 7,
+      "winner_candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 8,
+      "winner_candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 9,
+      "winner_candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 10,
+      "winner_candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 11,
+      "winner_candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 12,
+      "winner_candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 13,
+      "winner_candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 14,
+      "winner_candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    },
+    {
+      "stage": 15,
+      "winner_candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+      "winner_admissible_under_recorded_regime": true,
+      "operational_row_exact": true
+    }
+  ],
+  "t_bi_exact_operational_regression": true,
+  "structural_register": [
+    1,
+    1,
+    2,
+    5,
+    7,
+    8,
+    10,
+    17,
+    17,
+    19,
+    26,
+    34,
+    46,
+    62,
+    103
+  ],
+  "authoritative_semantic_register": null,
+  "non_authoritative_extraction_floor": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "bare_register_table": [],
+  "bare_register_table_exact": false,
+  "t_bi_f_al1_prime_passed": false,
+  "t_bi_side_passed": false,
+  "chronological_result_digest": "blake3:1b00718cc6ae78202ff736d855b4906e01362ad0a4916a85619fe64c34950d00",
+  "chronological_exact_54_plus_18_partition": true,
+  "chronological_exact_sealed_72_id_join": true,
+  "chronological_derived_count": 71,
+  "chronological_named_gap_count": 1,
+  "chronological_former_derived_count": 8,
+  "chronological_former_expected_count": 9,
+  "chronological_blocker_counts": {
+    "T_SM1B_DEPENDENT_TARGET_CYCLE": 1
+  },
+  "chronological_blocking_case_ids": [
+    "blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571"
+  ],
+  "chronological_no_partial_promotion": true,
+  "f_sm1_fixed_positive_gate_passed": false,
+  "bi0_attempt_executed": true,
+  "bi0_passed": false,
+  "bi1_invoked": false,
+  "non_enacted_cone_invoked": false,
+  "non_enacted_branch_work_executed": false,
+  "outcome": "BI0_SEMANTIC_REGISTER_V4_FALSE_AT_BOTH_PREREQUISITES",
+  "permitted_conclusion": "BI-0 is false at both prerequisites. T-BI-NU1 has no complete semantic ledger, and the fixed chronological positive gate forbids partial promotion. BI-1 and the non-enacted cone remain closed.",
+  "required_successor_action": "Close the named T-BI unified-registry/C1/anchor residuals and replace the cyclic chronological identity slot map with a versioned dependency-respecting successor; then rerun both prerequisites and BI-0 create-new.",
+  "result_digest": "blake3:017a9aa66c50123435817cd831b4d16e4b86125dba9a875c7c89c846da1fcc3a"
+}

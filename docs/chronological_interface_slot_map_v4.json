@@ -1,0 +1,1142 @@
+{
+  "schema": "chronological-interface-slot-map-fixed-positive-gate-v4",
+  "date": "2026-07-22",
+  "t_sm1a_audit_hash": "blake3:aae08948754f49d9c251408a9dd32765bb51232509d7c99995e6ee5d1de2bb84",
+  "t_sm1a_reissued": true,
+  "t_sm1a_surface_count": 54,
+  "t_sm1a_derived_count": 54,
+  "t_sm1a_named_gap_count": 0,
+  "t_sm1b_audit_hash": "blake3:8865dc7c816409c48285ff964d1f26f534bb315428c78e1806e2acb4ef4ec8c7",
+  "t_sm1b_reissued": true,
+  "t_sm1b_surface_count": 18,
+  "t_sm1b_derived_count": 17,
+  "t_sm1b_named_gap_count": 1,
+  "t_sm1b_blocker_counts": {
+    "T_SM1B_DEPENDENT_TARGET_CYCLE": 1
+  },
+  "frozen_v3_reissuance_hash": "blake3:20cc2a5797ab27d89ab2c2482211d1499503cb1d65da958516479c7db219697f",
+  "frozen_v3_reissued": true,
+  "cases": [
+    {
+      "instance_id": "blake3:008952120d4024c87cf17be6a62654eeb6e596153285709343a41a38d5fcd922",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:f8875bf24b47d07a870c0fc9e0052952af1e733a9aa201f84b1ab31fb59f9219"
+      },
+      "row_hash": "blake3:85845dd236871fa805068f949d33b366fa28487aaf4194bcc37a9bb08d3de3e8"
+    },
+    {
+      "instance_id": "blake3:00c9e7d8fc9c19a785ea9c5cd10e548e35aa857ec039b60dbdb05a5f774f5a63",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:5beb3d1e611496047b30e7beaed629764427af0d91d887ad46d180ffc945ca44"
+      },
+      "row_hash": "blake3:040bc073facf14530c73cef5dd290510a720e1308ddb351728ea2c3d9144d68f"
+    },
+    {
+      "instance_id": "blake3:03df6ccb8f67b48dcd987a95aabfe52f4670160f9b7767d3fc799f83a12440c1",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:2ac2034cd823a91cc90bedfd064bf4c9061056d731614bb37b4d03523e3cad93"
+      },
+      "row_hash": "blake3:7cb7fbb18865ce83ed9a143b7fbff46246b44809b993cb4c1caef381f75819ea"
+    },
+    {
+      "instance_id": "blake3:0506964f1b05e36f45879fbaa5d8dd1a7719230d17b6a34aba01593d6c655395",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:e8de33240ddfe25c1b9fe2313ac3ccf819ba16c0af06d6e19dce0b6c3eb51b6d"
+      },
+      "row_hash": "blake3:d674d62948cf6f6e7fe8a92765ca64e4d82564d6293d6a493407c7f7bc0a1363"
+    },
+    {
+      "instance_id": "blake3:08f30d63031147e340112184525370d013172af2698f3adced8b74e09e50286d",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:f6cd680c3a04f2ee3518bc993b0ddc8dfb7d3162f02403600c8441032cb89a41"
+      },
+      "row_hash": "blake3:3491ae00f95b9038eb39828d844b6b1354fd1d9a9adb2c4a05636736483251c4"
+    },
+    {
+      "instance_id": "blake3:098e9443752790a09a302baa29bb026194fbd38d952a5af719b5d10d92a84a5b",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:dd4986c454cd6ebe886136fec91764563eb1e5bf2f1b160dd677e42ac6527d9f"
+      },
+      "row_hash": "blake3:df3b18f5cb11bc5d390e71fb04a94eb1851ff26c0e244513fb498c911498afa9"
+    },
+    {
+      "instance_id": "blake3:10592127d9bc6c5e57f3792650634329686fa14d4145afecac487c7a3d52c803",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:148c8580bda7b4cb4e2e11f27e827459a973933df61b06d82395a2bc627433fb"
+      },
+      "row_hash": "blake3:84fb267374bd32e0d2cf7cf958279cef5c1f6b14ce51c2f28008268e4b5322e9"
+    },
+    {
+      "instance_id": "blake3:13dbf6a7e0f5a489f99e52ad021e41afef524810c75e629465f894130eb5400e",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:dfb41226d60b64e9a34ec1e4cf47c31c28c45bcc72671326ae53e4ed148e225c"
+      },
+      "row_hash": "blake3:2f3902fc3af60b019eaf8e8cfa0a11474f149e54527dc34e4d5a7373d0c26096"
+    },
+    {
+      "instance_id": "blake3:13e31e4bc0a6f4bbb7f2a61e39d8be02227e30ed91876991812d678befe39a4e",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:e42dfbe45d5b51a05387e226839a1e1420c253cdee805b6ff6f20ff71723976f"
+      },
+      "row_hash": "blake3:652582af822a5721f71c1427e5cc7fcea397724d0222b5708c73f6a4ea1097b5"
+    },
+    {
+      "instance_id": "blake3:1668b8204de5863815c05add014c3c66dbc428983c1568c467b4e8c04dc7f058",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:84288183b42dfdb1e21b7863514b01a8a4e8de7786ca5c53ff89bf6e7ad27dfd"
+      },
+      "row_hash": "blake3:5a0899a0c5e25e8743e45a031df5811872976fda41a4b5860a9afe610b7613ea"
+    },
+    {
+      "instance_id": "blake3:186c87a8ecb67cd1234c58b8a945316d47cdb8f398e8f7ee6e2d003efb7aead0",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:3791773e50b11526085a6e5cda9a158d1c4130370727f5823457bb56d70f2b9e"
+      },
+      "row_hash": "blake3:7ebdb96df2ebc49807e874d4c1f613cb72a19c01c42d6a37e5360348fffb934f"
+    },
+    {
+      "instance_id": "blake3:1d9253a3fc9321bf50295062f5bec9f788be5d2c085f8e57503d2f1ceee92d2a",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:922de1d89925589a92db765eb0f25415c20ce1b41d558957b3d180e9705f66ee"
+      },
+      "row_hash": "blake3:41fc45ccf3353dc743868dfca39ad8219678584e8dc2f09ff7d349453526fbbd"
+    },
+    {
+      "instance_id": "blake3:212f69b146dfac02a6a3a995bc52f3588c63d96dee1e2f722426466f22e8511b",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:0090086029ad37cdd87bec77902181cca4ad4d457ea2f23ef968a706adff55fb"
+      },
+      "row_hash": "blake3:e21ba847e6c0959789e5faaf71a1baacdbced7248a484fce8b7445d12f5656bb"
+    },
+    {
+      "instance_id": "blake3:2155ca6ba698f2aeb89142e3ef6a954ea9133970a7fe1bf2a1315780524f1505",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:362eab31eb51e59acc2b40c6303bf707f2c4ecd699eff63a0f024e6f18e3cc62"
+      },
+      "row_hash": "blake3:adaa086187af1f8742195135d9c8286868a39584eb0d9c0b54b02c0f8e016a1b"
+    },
+    {
+      "instance_id": "blake3:21b067983ee7c8328496aaef9f5e71988abfb5530906c96d4107fb9838ae2540",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:abfc533d1a68e6686225d981e76fb365535af486bdd5491d724b41a9a5cbb16d"
+      },
+      "row_hash": "blake3:c0b7e62abd53ab8c78d64ff0ec1f2664cd3ff86cd0aeffc86520769fc67c2d8d"
+    },
+    {
+      "instance_id": "blake3:21e35a4389357cf8623289b86520562420d28dd56db0ae04ed2a837fedff8ed0",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:67b109f9bb44737636c98b34d6659896e6b2e04375f52c661cbfd2cafb7809e0"
+      },
+      "row_hash": "blake3:ff94d58e13f52c11d80342e35de8a1c0c757c371c320a33f8b262aedc5779922"
+    },
+    {
+      "instance_id": "blake3:246e1951511b3f14dbe1dec9ff6943e67c3ed01c6fc3193d2151b48f6c8b7fd3",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:4354cf3ea8cb01156f101ee869bca55d986fe5159c012b21be4aba86631a6754"
+      },
+      "row_hash": "blake3:524d3d1eed10b8414a4b6d984137f3397a7751bd1782e69ed8ddc64f3a08e711"
+    },
+    {
+      "instance_id": "blake3:2828821957474eaf9840f91edb1b35523ad0e01f184d33cf75231c4a878556d6",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:4a0b9a9758e3e7c691c129b7df79464e5fc3a008a6ef49c9b477dd072b7bcfd5"
+      },
+      "row_hash": "blake3:34f0f20557bb618034578e2707f006db9365bd9c9974b89748e2de58949cba7c"
+    },
+    {
+      "instance_id": "blake3:2b123bebb8af99f8bad6ca1c3609503ff64ea97286d1ab6dce25d5b58f963cb6",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:a7f52f14b52bf2ebf14dc36163d4191caa308493940296a7228127e62b978948"
+      },
+      "row_hash": "blake3:10a61f80cf0cc0f5d2ef08890c8b08e63572498d35c700e40f0b59a187e157b5"
+    },
+    {
+      "instance_id": "blake3:2be398315be81ee4128b2a0673aaf22278abd9367388e33fdb4a7e48c29fc2a2",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:5851022605eff1dcc5a76c78b37c1a8fc702a6c7da55d36f3875cb2287c629c0"
+      },
+      "row_hash": "blake3:86b65936e1bafa840763abadf9b2195c18dc80a296ea1c3cbbe12e068aa4c8c5"
+    },
+    {
+      "instance_id": "blake3:30b10b3f8b7d56dacfc2ef243f276b50fae7d0f4f9e80b4bfad777c834b9a87c",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:860db2fefda9a3baa8ba44a2eb025b7a7025db3d56772a7557e8a94a3f1e38bc"
+      },
+      "row_hash": "blake3:ab3b83f553961ee914204e607db2e0cc340f5af8ff680fbc8c77708b532485e2"
+    },
+    {
+      "instance_id": "blake3:351e31cd689dfeb8599aaea5ff75749ed689be618dd471db0aab176be61a65b8",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:1b5f49bdf1b47f03ab6a9bad1dd3bc2a8a382c09cf29b4f506fcd2b40e403b1c"
+      },
+      "row_hash": "blake3:ab94516d4ca05a1f2d51f7dbf8829ff9e9684c857f94ef73b105297ce3a2dd48"
+    },
+    {
+      "instance_id": "blake3:385dbdf6dac6a901cb9d5f5572c9718fb7e9abcbba0095e6544f9ee3333098d6",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:a326d37dfb2b1b02f04b1040684f93e52b3e5742021789ce86126d7acde89440"
+      },
+      "row_hash": "blake3:82fe18ebeaf08814ff7b653bbfa6911dc6940b74c7e8805e71015203b78e4ba6"
+    },
+    {
+      "instance_id": "blake3:39c7cda3f9efcb26619d317d8fca9017509ba9cd5da12b32e9cba61bc4642190",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:a51d77d316de738024435410cfd30ca6c97ce7e79be4faae5afa9c8fb47c02f8"
+      },
+      "row_hash": "blake3:449d00c9d477a9bbbed3c45bbe26c5be3fc3105618c05dcf42334706618a69f4"
+    },
+    {
+      "instance_id": "blake3:3b38ba7c3a8364cce69be725b8020d1d2553c3e5bb99be1cb63cbc1963dda247",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:337608fbe4f214f40e4978ac8d71b0ab5a7a889514059dab0f3275caa5b8b181"
+      },
+      "row_hash": "blake3:fdeaa7d601e92b0c9d2e89a75abda4825a4a945c3a840772bfea26e4306bf4ed"
+    },
+    {
+      "instance_id": "blake3:3d6a1ba0b64380cfa7994cf9c2e7e5b9fe629ba5c9a313921ac875b1bab05a41",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:2de04756f15de04b52070a834b39c2834897660bc7f714d437097d4a6fa88692"
+      },
+      "row_hash": "blake3:ab9914d06cc55a69663fd75f0b7d4ea410a7e88419119d4f3991b2da616a5e36"
+    },
+    {
+      "instance_id": "blake3:411079d3c05608de75a60b8f108987327a7bce8a085a0fa243794d371a8db63a",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:569fe374ddb3856b92f7b7eed68a3ab71507be77ca95baadc78075e83a292fc5"
+      },
+      "row_hash": "blake3:760ecade94eff6e604df605781e64fba0995d13c1c6dafa30a15940174d57a9e"
+    },
+    {
+      "instance_id": "blake3:42b8377fd1fc84470d88ebaa2bd1d7f8f0adb52e3cf8f2ce2c058aefc8bb654f",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:0ae196f8b8d074da512e2570d7707c7594ee9ff4f3019ce8fb06317413f52212"
+      },
+      "row_hash": "blake3:f96f321336cafbc2898d7da30cfc0808c9abe55d1e93b3dd86965b55ca7d3e34"
+    },
+    {
+      "instance_id": "blake3:4964b54a6cebaaaa9cbf26652f18d272e8b441734a2759c8a8eea13998b7fb75",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:05b8e93d134d0aa31f0556b4dcf04fec34e7955e4ce42f20573b7512c600e08e"
+      },
+      "row_hash": "blake3:43c38290470db2f853d5f7ab4df90a83cc507c971fc719fa6541232f3404b2bf"
+    },
+    {
+      "instance_id": "blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "named_blocker",
+        "blocker": "T_SM1B_DEPENDENT_TARGET_CYCLE",
+        "reason": "dependent-context replay failed: motive for parameter 2 depends on non-predecessors [1, 2]"
+      },
+      "row_hash": "blake3:9bc3b4e70094b252e66ddc4ecfe7f74bd5957ce07271812f9d071f7b082bc034"
+    },
+    {
+      "instance_id": "blake3:4fb49b402c40b49d8fa3ad52b85ab79d8d7ba2ab8772e92e2b43450d6524e5ef",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:299e89835a531a62c5b78d0f859885ad11a3a35518a06c894fee9d15a32d05e1"
+      },
+      "row_hash": "blake3:aae01b6609d3be6d1e08b861db9290d10090de82a3cbb1a2e9d8d101320c95a6"
+    },
+    {
+      "instance_id": "blake3:50da7ddf8c962ada3f398e249381141e6bcc83a52b6c0ae75391b79c246b04db",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:992e9730b301b26b5c03f603bf6a23883949cbca0844374740271a23a5760986"
+      },
+      "row_hash": "blake3:72b226a31292866ffd45680d77cc08d3d4f07cc9945dbadc916c49db5e55c781"
+    },
+    {
+      "instance_id": "blake3:564d1cab839a1b090c6d90a0ca0a23994ee2c3bd99abb9a8faad9b36ec4e8e92",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:9fe4e2ace681ec80fec5c578bff96410b936ad3c0bc7c00cea053e1a91d2a739"
+      },
+      "row_hash": "blake3:4cbf4e36d44951207aadd8b7a7e43fc79224b564c42cc81bf5f6499aae83d2c1"
+    },
+    {
+      "instance_id": "blake3:58b887448b287fddac166f39daec190ca55cd281dc7e25dfd147b6cb16df2a4c",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:3731630eca9729112447cc1fde1ae217ab9b51a595ef814a26852b7d0d5c7586"
+      },
+      "row_hash": "blake3:31804678797b93e5da33e51c3ad4d1f965aa12a38d0df8f817740b6d77470cae"
+    },
+    {
+      "instance_id": "blake3:5a63088c4ac314350c437b76226a1bfd76114d2d50e0f42a84c532060ee38027",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:42f8c78dfb604c737e5f8b850f357005d3cf9867d3b6666cc20002f3304dcc28"
+      },
+      "row_hash": "blake3:51046445d9cd37847fcb648e1dcc95ae465011e06e502361926411caf74b992c"
+    },
+    {
+      "instance_id": "blake3:60ec9538ca28b04d5b80a3fc0debcc5aa1ea82810de82f3213cf9b7102176511",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:6586401eedfcc0cef63429e9b223de0e7d40cb2f58ce83236de5f031b03737f6"
+      },
+      "row_hash": "blake3:371922d06ec8109c69cb5045dbc848d7723c810ee7342f67c1ce69b62e4961b9"
+    },
+    {
+      "instance_id": "blake3:60f89d2b373ae978b4265f9c4839a4a4ac256fad1b619ad67f8611cfd216ed44",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:1e19610bc8c714cd8c841bcad501ab40172de3372d06b9f3db7cd654e392f55e"
+      },
+      "row_hash": "blake3:103e38f3e32f99b316c90e65accc5c39c501ef466f22ab8f6577e900dc9af052"
+    },
+    {
+      "instance_id": "blake3:635d63c3488adda439fb3625eac7bc7b6d4d37b1f22bc883ed7fdfca9c608013",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:966324651c7a52c0753c221f586fd5615ada17b1aaed95376de7f1f01962cc89"
+      },
+      "row_hash": "blake3:5abae647280ded1e447962f1ed5359384d0b8c8ef312fa09888971b6b82af35a"
+    },
+    {
+      "instance_id": "blake3:6689417d503d8b44653bb8d8b305f9e4bca1c066c70f9cc94c1c8142b1f5a11e",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:277f82df7aa5bf5727e18386bd532ec8d8ea4b2ed17f243950e6e797a6ceae67"
+      },
+      "row_hash": "blake3:59731a9af18ea33c86a5996b9770fb81754b500a3c62e1ef2760c1b4c2ac93bf"
+    },
+    {
+      "instance_id": "blake3:67a0673831534e432223e8a315215992512f40e60f30f9cc979341854826f807",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:79f1fa7ac20d6606d811f71a6f2002272a522d03dcab67a9232b5a9d13a28f16"
+      },
+      "row_hash": "blake3:738f741985c9a0bea63ecd7a8cce43bd27988bb7a2ad595fcc27ccb7b34de6c0"
+    },
+    {
+      "instance_id": "blake3:6d79800daf9e00cc42363108c716acd9a93a31709e87e775e76228466bfab029",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:89ffd9726610e81803a1d9f4f72a2f7d6e5016f437572fb03f9f0e2f681c734b"
+      },
+      "row_hash": "blake3:1fa4213fd49043135b6c4ab44b37030583ef552ac5e07e41bd8c714fe3f5246d"
+    },
+    {
+      "instance_id": "blake3:7032d405b8b598fdd200b3027248bab019dd2346f27f388d6368c05a4d1649f7",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:f2ba1d43d1c174c6ae924ca193c20ad07e2d7af39f729c8e20cb60b6b7d60044"
+      },
+      "row_hash": "blake3:fca212b4c09a5e2504d41741333d500b3a093c82b57cf3c0cfeb00a9402537d2"
+    },
+    {
+      "instance_id": "blake3:738432bf18dcd7df0f2ba0133a04d5ab1df62cb20189fabbf2bcb90df763eb3a",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:290a9a7cc08a17234904a9a3a18959798cd85c7b569b69938039db8ed96bb5f0"
+      },
+      "row_hash": "blake3:d5fa693489d38d77b023f48888256f71b10f8598eae29f90038e6d1fbfc5893a"
+    },
+    {
+      "instance_id": "blake3:8033baa539eb6589a372bbc54d4a1598d5b4839d87925ee0d1bbbad64a0a7f09",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:eba564dd7defb88c29661ea96eaf5dde0a473e6a7533e27ad29c3f160d01ed45"
+      },
+      "row_hash": "blake3:b6566e952a5df73960745899d816524b4e35008e91b29f898c14c72f1762e701"
+    },
+    {
+      "instance_id": "blake3:8240c74b3c1e85ba56378747da9027b1448e0cd6ea09032701811422bd413e00",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:78fd877e5c62dce5c711c968dcea87e75f59fb6d704d0009fc1218303b1ae36c"
+      },
+      "row_hash": "blake3:795aea008581f805edfb742c830763e24c800a566e9afb43ad767331cf2d57b4"
+    },
+    {
+      "instance_id": "blake3:8bd242df2a1f17ffc23893779ebaf3bf42cd00eaa50786472570cf5275a719ea",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:79f6ec7b9a9eaa4977246a76ace9297334798fc560350be26027a8da04028b38"
+      },
+      "row_hash": "blake3:002e1aa63030811a0c58beb618529053212f983dc568ee146950f73137e443ab"
+    },
+    {
+      "instance_id": "blake3:98cc97310a1dab3e2494de99c1b620bd05d7012ef85775258788896abc14d73b",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:67edf5585cdb515ca5b5857341bc89560ed57dd60310e573bccaf20ba23ec692"
+      },
+      "row_hash": "blake3:558dfcfd4bc719aec12abbea7700e4b26775250f4a88aee0496c6fe6acea3d65"
+    },
+    {
+      "instance_id": "blake3:99605d9dd77233adc3acdd183965f5ee7f59d464df6e850ebc549e5ebdd31676",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:881ea5dc4e4b85f4d7dc196512d30bd93e4504c9ba0b61a849ded4524b3e3cf6"
+      },
+      "row_hash": "blake3:c8294e1a5279cd97fa96502e227bb52c720bd96fc5b05b79d895e2f5a1e1e2a1"
+    },
+    {
+      "instance_id": "blake3:9fb9bc9e5507cc135cbb95cf860b9525de7e96263c6708f0b8a80b8ec45e7686",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:9f653504015a57fdbc1331d23cb0f126b627e3d815a634168fc29c544ac27acb"
+      },
+      "row_hash": "blake3:9d06aa37a3df8aa1c61d82438abda190daac80f6f2ac34745df6a8fa26904747"
+    },
+    {
+      "instance_id": "blake3:a4ab8f5c49d7143a30c0493374cb5a37d665c481bc56d607769b98ed1a351187",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:806edee5a4d400f53bd92e3cb87eb307f0952bd8d43a61fcaf35e597f3cf6f49"
+      },
+      "row_hash": "blake3:51dc296d61624decd780eb3417c11e39c36feb0fba4aa334bc17b532ee76c742"
+    },
+    {
+      "instance_id": "blake3:a525d88d8b54d9a49f3934842736e40691065053aaa3c3948d53f3d25cf09022",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:9dc02fcbcb43ed84dd46c289c999249aecb488177f9da69c588e65dea0131370"
+      },
+      "row_hash": "blake3:a3f07ed7af74b46c0c42401b8236ed38a65ffdf1233468cba3017b98a1edc567"
+    },
+    {
+      "instance_id": "blake3:a5bb302f84eb7d87f636649414d5697d925cc893613209d3978020a4f23b68f6",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:edae0bd1033e92ba43a1b57691325aa6578300c0725518e6f27fac807985be42"
+      },
+      "row_hash": "blake3:f3d17ed60517ac5c45eb04c66c098cf249bfe7c57852ac70093e3ad3ff50ad34"
+    },
+    {
+      "instance_id": "blake3:accdb30938dbd0ab17a8deaf5c8a5018ddac1d7d52e43c537390fe1efa26d6a3",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:9012a9cfee786800613dc04e3d3674c1dbb7c78575c5f1994ac62db55eb3186a"
+      },
+      "row_hash": "blake3:0e7a5cb2b18f5e3b2be2d2700dd000be89f1f6b277a17a190e3af8cb33d78298"
+    },
+    {
+      "instance_id": "blake3:ad5ecc8b61f2b1db7c8dbca8fa0fc6125178d400f408866c14ef7eebf00036f1",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:6796e184252c625b9068611adba6c7221e59e17c4a6ec634bedadd65a8704a6d"
+      },
+      "row_hash": "blake3:86313386bf1b552fbe75c0ae8682588367d0404964eb00bef2638c87be4de659"
+    },
+    {
+      "instance_id": "blake3:b58e45291859c7302c08d8ced3bb88c61cb504cded1e946bf1db01228eca7c85",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:2565b4286ebb35c8e0476b60aa1af296db4c24995e0cfa5ee1cd19330bb770b7"
+      },
+      "row_hash": "blake3:047326adc715a3fe26e6e9864887844fcb39772a0913b610d2fa141f2db32e94"
+    },
+    {
+      "instance_id": "blake3:b73cf9ea93ad3ff695ab043a25248a656f1e33a93aef387a075f121b7e64f500",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 1,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:6006937ff88bb7510df98e58e36f3fd2c4b0772c82c380bff666af896081669e"
+      },
+      "row_hash": "blake3:e427e46e4c789da0b15b9499690e9b97cf9c6d1fd62820c2ce7fbf07db663ae4"
+    },
+    {
+      "instance_id": "blake3:b9eb695796847a42002656fb49fc3d71d14ddafb55f3c6a05a88b3bee6970c39",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 0,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:9b590202dbb134715b17bc177dc004e3a246deb20d908bcc7bb642c9a5adc8dc"
+      },
+      "row_hash": "blake3:d56be3c09845d3f280eaf84f2cb9b27d2d5b93fe833c9a75f24165b1b7ae113b"
+    },
+    {
+      "instance_id": "blake3:ba33ee0f8dde2fdf213d87087f1186a73d0001fa9e3c13005fefda023f0e8c05",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:bf274883a0fa9b7086495b202fd42dc15c213f3a2079c26509f62f76edff91d5"
+      },
+      "row_hash": "blake3:e9a43bb0126ef334dece234c36bf019379acc3849d843e875aa1f74193bca67f"
+    },
+    {
+      "instance_id": "blake3:c1b2511d64564907661e97cb9b928494c709c0c3742cd3ec3b263d68f662c7b2",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:f218ce10bfaaa78d28cbbf41023d4ac43b8626fe00610603a2d50f72caade3cc"
+      },
+      "row_hash": "blake3:f1fefe65bd3c66a2c1057c045d98836683cba0617568a4b6cd0f55589ffed59c"
+    },
+    {
+      "instance_id": "blake3:c34c5ad2d436cf3ae78a8094566c61077733052fd293d7a6c357ee06ef8c587d",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:a40d5a7c6bc1728f28e5a8bcee3e5dfb6d798e8b4b6e0ccb70cb7f812c914d54"
+      },
+      "row_hash": "blake3:b25f6f6c92939d7317d407f2dd731c535516dc7ae9afbb2a4c1afffa47fc116e"
+    },
+    {
+      "instance_id": "blake3:c9b593516df0bde26336d93003ac0624482f697c90b1f9d555c91fb053b1148a",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 5,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:aa612de4282c0682dd5c6ed3cb090c8cb3571fe8c888714d525748f9d0d44c83"
+      },
+      "row_hash": "blake3:db79fad51442a8683ca2e02493269f8a0c7ecabcc60c758576e13cb7d19c6e30"
+    },
+    {
+      "instance_id": "blake3:d158db738b534e63ef46fd03c6d262c065e5a7258f51103d17fe9b958eb73742",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:3526ad95bc8935dcd2ef3e01ba3bb350a36b5ccc759fd812ab0a3e39d1b78f31"
+      },
+      "row_hash": "blake3:c2c19b9302ccccc3f5d4cfdaeb17e05564eee163f9dfb9ca7de9f12b33f813a9"
+    },
+    {
+      "instance_id": "blake3:d4380b4923fe6587a830d69148b508be376c7bb5017e6560fec8f47d12721c8f",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 4,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:d3b62f31b197d6f76100cea4de7855d65c9cdd09b86796ebce622de3a59db612"
+      },
+      "row_hash": "blake3:5f5accc088dab22bbbc2e7f21044baca86d587e350f28271171f09ce305e6ae2"
+    },
+    {
+      "instance_id": "blake3:da0d388fe737c7513a62ff6e2a14ae286870fff928649d9fb72a4bcb47ac7abb",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:61afeea81406971955a3efa89707f9780846f0ecef7e4fb2f600a60d6acd564d"
+      },
+      "row_hash": "blake3:3d7e2303ec2c3158c42175f0e9c7fb47c2782810d148eb7c5311171a7dc4fc60"
+    },
+    {
+      "instance_id": "blake3:da53a6423b9daa5af1b1ac9d319fe0598e57fca512c8d59f841dcb629ae2ecb3",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 3,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:bf9a9d84be200ec0318bc80bbfeeab24ea80f71c4a9716610c35596b23494545"
+      },
+      "row_hash": "blake3:b6fe11bdc21410d95ab65961714524f010748a3b81e09db596481e007b517702"
+    },
+    {
+      "instance_id": "blake3:e01d2d64feaf450f8e0a9d1884c5bddeebfac1790efcbb2bbaf4d3f28554397d",
+      "theorem_component": "T-SM1b",
+      "older_step": 14,
+      "older_clause": 7,
+      "newest_step": 15,
+      "newest_clause": 6,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": true,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:a915a580591da5de9af00bf6f85dcad5610d9d2bb45c11d1b4c76247a37eac1d"
+      },
+      "row_hash": "blake3:75660af122548fa5ee0d1fb75955ad85ddfa23e538c6ac9c43e54b89fd2db164"
+    },
+    {
+      "instance_id": "blake3:e9958d434bddb6b892e13d9c07f8bdaf474cd19d91da019c6f93317aeb777033",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 2,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:8021c2f0182107d2359226831a5fb9f19dca49d38b0c0f5ed98bd3bfc8b42440"
+      },
+      "row_hash": "blake3:15f021b30126509f6ad8db502aa40b00dc4475fa18db4fc45868332686bdba2f"
+    },
+    {
+      "instance_id": "blake3:ea67cd7d76750f47bf6f42d7237bb28acf2b4ee271dc899310ac1d8922cf6023",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 6,
+      "newest_step": 15,
+      "newest_clause": 5,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:6f2de71239c2e23ceeb04a5061e967a240e7321449e9b367a960ad80548c0500"
+      },
+      "row_hash": "blake3:4a5fc7e08f8a4b2b34cf5c4ecc85ffc9d23bbe30a4272c3909e80c69dd9fb2ab"
+    },
+    {
+      "instance_id": "blake3:f2835945980a9c8f9247a86e48eda333ec91cafc05ed1980fc4da47d0ed0b7e7",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 3,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:ba807bbd8ce107fc5dcf13fda13d44adc4de0f1e7011d604b9e0855e5ad65fe6"
+      },
+      "row_hash": "blake3:ba6a42f02c7d735891ae171c6156adb88ce26d9b034bb244a5087ba640b3cbf7"
+    },
+    {
+      "instance_id": "blake3:f4a2028b5bd1e7b85846d41b9d1c36e0584947c0a20b80a15a880e6b5b5d3755",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 0,
+      "newest_step": 15,
+      "newest_clause": 1,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:586df0981aabe14d2c50abc8d1161a663a43454713b08eeec843932cc4591e9f"
+      },
+      "row_hash": "blake3:7f4b1e7f04a1586723e34032b78240344dca5ab33d8cfa6d1707a7c88eea6715"
+    },
+    {
+      "instance_id": "blake3:f6f467b4ee54ee4ee3ac76755321aa8d1a23176b3747ff0404d90791d974b041",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 8,
+      "newest_step": 15,
+      "newest_clause": 4,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:f402637f9eb76414c8e9cfcbd3dfe064fe82cab055cd4b079ef61d5e52fc498f"
+      },
+      "row_hash": "blake3:f1b103bfba0d794bcf869183fbf398e5473030e3383b9c5804557da003cbc4b6"
+    },
+    {
+      "instance_id": "blake3:ff661e72e90d7033513ae001090fcbc02e3048b9118e0a05b307c4aa741b16a0",
+      "theorem_component": "T-SM1a",
+      "older_step": 14,
+      "older_clause": 2,
+      "newest_step": 15,
+      "newest_clause": 7,
+      "independently_sealed_discharge": true,
+      "former_gap_instance": false,
+      "disposition": {
+        "disposition": "derived",
+        "evidence_hash": "blake3:924c246c490f80c681552a23b14f837b902d72d1e424f1fc022dc2a28d7c27ef"
+      },
+      "row_hash": "blake3:d1342b623fd2c679ee5a238e11c48967f1ee8849243c25b7aad4f5d7431da2ef"
+    }
+  ],
+  "joined_case_count": 72,
+  "joined_case_ids_unique": true,
+  "theorem_surfaces_disjoint": true,
+  "exact_54_plus_18_partition": true,
+  "exact_sealed_72_id_join": true,
+  "sealed_discharge_count": 72,
+  "sealed_discharge_derived_count": 71,
+  "sealed_discharge_named_gap_count": 1,
+  "former_expected_instance_ids": [
+    "blake3:03df6ccb8f67b48dcd987a95aabfe52f4670160f9b7767d3fc799f83a12440c1",
+    "blake3:2828821957474eaf9840f91edb1b35523ad0e01f184d33cf75231c4a878556d6",
+    "blake3:30b10b3f8b7d56dacfc2ef243f276b50fae7d0f4f9e80b4bfad777c834b9a87c",
+    "blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571",
+    "blake3:6689417d503d8b44653bb8d8b305f9e4bca1c066c70f9cc94c1c8142b1f5a11e",
+    "blake3:99605d9dd77233adc3acdd183965f5ee7f59d464df6e850ebc549e5ebdd31676",
+    "blake3:b58e45291859c7302c08d8ced3bb88c61cb504cded1e946bf1db01228eca7c85",
+    "blake3:d4380b4923fe6587a830d69148b508be376c7bb5017e6560fec8f47d12721c8f",
+    "blake3:e01d2d64feaf450f8e0a9d1884c5bddeebfac1790efcbb2bbaf4d3f28554397d"
+  ],
+  "former_derived_instance_ids": [
+    "blake3:03df6ccb8f67b48dcd987a95aabfe52f4670160f9b7767d3fc799f83a12440c1",
+    "blake3:2828821957474eaf9840f91edb1b35523ad0e01f184d33cf75231c4a878556d6",
+    "blake3:30b10b3f8b7d56dacfc2ef243f276b50fae7d0f4f9e80b4bfad777c834b9a87c",
+    "blake3:6689417d503d8b44653bb8d8b305f9e4bca1c066c70f9cc94c1c8142b1f5a11e",
+    "blake3:99605d9dd77233adc3acdd183965f5ee7f59d464df6e850ebc549e5ebdd31676",
+    "blake3:b58e45291859c7302c08d8ced3bb88c61cb504cded1e946bf1db01228eca7c85",
+    "blake3:d4380b4923fe6587a830d69148b508be376c7bb5017e6560fec8f47d12721c8f",
+    "blake3:e01d2d64feaf450f8e0a9d1884c5bddeebfac1790efcbb2bbaf4d3f28554397d"
+  ],
+  "former_named_gap_instance_ids": [
+    "blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571"
+  ],
+  "former_nine_exact": false,
+  "no_partial_promotion": true,
+  "fixed_positive_gate_passed": false,
+  "bi0_prerequisite_reopened": false,
+  "positive_artifact_permitted": false,
+  "outcome": "F_SM1_V4_HONEST_NEGATIVE",
+  "conclusion": "At least one of the fixed 72 chronological discharges remains a named theorem blocker. Partial promotion is forbidden, so the chronological side of BI-0 remains closed and no BI-1 or cone work is authorized.",
+  "result_digest": "blake3:1b00718cc6ae78202ff736d855b4906e01362ad0a4916a85619fe64c34950d00"
+}
