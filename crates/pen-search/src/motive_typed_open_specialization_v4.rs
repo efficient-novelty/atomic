@@ -695,6 +695,7 @@ pub fn issue_motive_typed_open_specialization_v4(
     {
         return Err(OpenSpecializationV4Error::InternalPreservationFailed);
     }
+    let substitution_body = source.expression().clone();
     let mut projection = MotiveTypedOpenSpecializationProjectionV4 {
         version: MOTIVE_TYPED_OPEN_SPECIALIZATION_V4_VERSION.to_owned(),
         signature_digest: signature.digest().to_owned(),
@@ -705,7 +706,7 @@ pub fn issue_motive_typed_open_specialization_v4(
         target_totality: target_totality_token.projection().clone(),
         target_motives,
         images,
-        substitution_body: substitution.body().clone(),
+        substitution_body,
         substitution_result: substitution.result().clone(),
         substitution_derivation_hash: substitution.derivation_hash().to_owned(),
         source_rule_induction,
@@ -1180,4 +1181,3 @@ pub enum OpenSpecializationV4Error {
     #[error("reissuance mismatch")]
     ReplayMismatch,
 }
-

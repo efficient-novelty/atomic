@@ -298,6 +298,10 @@ pub struct V4PathQuotientProof {
     pub stage: u32,
     pub dimension: u32,
     pub expected_family_count: usize,
+    pub expected_key_hashes: Vec<String>,
+    pub observed_key_hashes: Vec<String>,
+    pub exact_key_coverage: bool,
+    pub every_key_unique: bool,
     pub family_ids: Vec<String>,
     pub pairwise_decisions: Vec<Value>,
     pub pair_count_exact: bool,
@@ -1015,10 +1019,25 @@ fn build_path_families(
             pairwise_decisions.push(value(&decision));
         }
     }
+    let expected_keys = path_terms(&typing)
+        .into_iter()
+        .map(|(key, _)| path_key_hash(&key))
+        .collect::<Vec<_>>();
+    let observed_key_hashes = built
+        .iter()
+        .map(|family| path_key_hash(&family.key))
+        .collect::<Vec<_>>();
     let expected_family_count = 1 + (typing.dimension * typing.dimension) as usize;
     let expected_pair_count = expected_family_count.saturating_mul(expected_family_count - 1) / 2;
     let pair_count_exact = pairwise_decisions.len() == expected_pair_count;
-    let no_uniform_coordinate_multiplied = true;
+    let exact_key_coverage = observed_key_hashes == expected_keys;
+    let every_key_unique = observed_key_hashes.iter().collect::<BTreeSet<_>>().len()
+        == observed_key_hashes.len();
+    let no_uniform_coordinate_multiplied = exact_key_coverage
+        && every_key_unique
+        && pair_count_exact
+        && every_pair_decided
+        && every_ordered_key_distinct;
     let complete = built.len() == expected_family_count
         && pair_count_exact
         && every_pair_decided
@@ -1034,6 +1053,10 @@ fn build_path_families(
         stage,
         dimension: typing.dimension,
         expected_family_count,
+        expected_key_hashes: expected_keys,
+        observed_key_hashes,
+        exact_key_coverage,
+        every_key_unique,
         family_ids: built
             .iter()
             .map(|family| family.evidence.family_id.clone())
@@ -1055,4 +1078,657 @@ fn build_path_families(
         );
     }
     Ok((built, Some(quotient)))
+}
+
+#[derive(Clone)]
+struct UnifiedBuild {
+    families: Vec<V4UnifiedSemanticFamily>,
+    clause_family_by_clause: BTreeMap<u16, String>,
+    path_family_by_key_hash: BTreeMap<String, String>,
+    path_evidence_by_family: BTreeMap<String, V4PathFamilyEvidence>,
+    generic_r1: Option<V4GenericR1Proof>,
+    path_quotient: Option<V4PathQuotientProof>,
+    r2_removed_occurrence_hashes: Vec<String>,
+    r2_parent_membership_replayed: bool,
+}
+
+fn family_instance_clauses(family: &ExtractedFamily) -> BTreeSet<u16> {
+    family
+        .instances
+        .iter()
+        .map(|instance| instance.clause_index)
+        .collect()
+}
+
+fn direct_memberships(
+    family: &ExtractedFamily,
+    v3: &ActLocalProvenanceV3Certificate,
+) -> (Vec<String>, Vec<String>, bool) {
+    let clauses = family_instance_clauses(family);
+    let surviving = v3
+        .natural_family_rows
+        .iter()
+        .filter(|row| clauses.contains(&row.representative_role.owner_clause))
+        .map(|row| row.semantic_family_id.clone())
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .collect::<Vec<_>>();
+    let removed = v3
+        .role_occurrences_before_quotient
+        .iter()
+        .filter(|occurrence| {
+            occurrence.removed_by_adopted_r2 && clauses.contains(&occurrence.owner_clause)
+        })
+        .map(|occurrence| occurrence.derivation_hash.clone())
+        .collect::<Vec<_>>();
+    let parent_replayed = v3
+        .role_occurrences_before_quotient
+        .iter()
+        .filter(|occurrence| {
+            occurrence.removed_by_adopted_r2 && clauses.contains(&occurrence.owner_clause)
+        })
+        .all(|removed| {
+            v3.natural_family_rows.iter().any(|parent| {
+                parent.representative_role.owner_clause == removed.owner_clause
+                    && parent.representative_role.mechanism == removed.mechanism
+                    && parent.representative_role.local_role == removed.local_role
+                    && !parent.removed_by_r2
+            })
+        });
+    (surviving, removed, parent_replayed)
+}
+
+fn path_key_hash(key: &PathSchemaKey) -> String {
+    tagged_hash("path-key", key)
+}
+
+fn row_path_key(row: &ActLocalV3NaturalFamilyRow) -> Option<PathSchemaKey> {
+    match row.representative_role.kind.as_str() {
+        "hit_path_beta" => Some(PathSchemaKey::Beta),
+        "hit_kan_coherence" => {
+            let coordinates = row
+                .representative_role
+                .coordinate
+                .get("coordinates")?;
+            let principal = u32::try_from(coordinates.get("left_axis")?.as_u64()?).ok()?;
+            let probe = u32::try_from(coordinates.get("right_axis")?.as_u64()?).ok()?;
+            Some(PathSchemaKey::Kan { principal, probe })
+        }
+        _ => None,
+    }
+}
+
+fn placeholder_anchor(marginality: &V4MarginalityDisposition) -> V4AnchorDisposition {
+    if marginality.is_marginal() {
+        // Replaced by `anchor_unified_families` before the package can issue.
+        V4AnchorDisposition::ImpossibleCollision {
+            theorem_id: "uninitialized-anchor-placeholder".to_owned(),
+            clause: 0,
+            role: LocalRole::KernelHead,
+            competing_family_ids: Vec::new(),
+            no_constructed_exported_a3_fallback: false,
+            proof_hash: String::new(),
+        }
+    } else if matches!(
+        marginality,
+        V4MarginalityDisposition::R1CarrierPackageProvenance { .. }
+    ) {
+        V4AnchorDisposition::PackageProvenanceNotSeparateCredit
+    } else {
+        V4AnchorDisposition::NotMarginalInternal
+    }
+}
+
+fn build_unified_families(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    elaboration: &pen_type::elaborate::TelescopeElaboration,
+    extraction: &pen_eval::typed_families::CandidateFamilyExtraction,
+    v3: &ActLocalProvenanceV3Certificate,
+) -> Result<UnifiedBuild, ActLocalSemanticProvenanceV4Error> {
+    let r1_requested = v3.theorem_gaps.iter().any(|gap| {
+        gap.kind == "ROLE_SCHEMA_EXTRACTION_GAP"
+            && gap.family_id.as_ref().and_then(|id| {
+                v3.natural_family_rows
+                    .iter()
+                    .find(|row| &row.semantic_family_id == id)
+            })
+            .is_some_and(|row| row.representative_role.kind == "foundation_completion")
+    });
+    let generic_r1 = if r1_requested {
+        let proof = prove_generic_r1(prefix, candidate, elaboration, v3)?.ok_or_else(|| {
+            ActLocalSemanticProvenanceV4Error::Family(
+                "foundation-completion declaration has no generic R1 package".to_owned(),
+            )
+        })?;
+        if !proof.proved {
+            return Err(ActLocalSemanticProvenanceV4Error::Family(
+                "generic R1 package proof did not close".to_owned(),
+            ));
+        }
+        Some(proof)
+    } else {
+        None
+    };
+
+    let mut families = Vec::new();
+    let mut clause_family_by_clause = BTreeMap::new();
+    let mut r2_parent_membership_replayed = true;
+    let mut r2_removed_occurrence_hashes = v3
+        .role_occurrences_before_quotient
+        .iter()
+        .filter(|occurrence| occurrence.removed_by_adopted_r2)
+        .map(|occurrence| occurrence.derivation_hash.clone())
+        .collect::<Vec<_>>();
+    r2_removed_occurrence_hashes.sort();
+
+    for family in &extraction.families {
+        let generator = generator_clause(family).ok_or_else(|| {
+            ActLocalSemanticProvenanceV4Error::Family(
+                "candidate family lacks a generator".to_owned(),
+            )
+        })?;
+        let (surviving_parent_membership_ids, removed_children, parent_replayed) =
+            direct_memberships(family, v3);
+        r2_parent_membership_replayed &= parent_replayed;
+
+        // R2 operates at semantic parent membership.  A clause presentation
+        // whose sole proposed member was the removed generated action is not
+        // allowed to re-enter the unified ledger through syntax alone.
+        if !removed_children.is_empty()
+            && surviving_parent_membership_ids.is_empty()
+            && generic_r1
+                .as_ref()
+                .map_or(true, |proof| proof.carrier_clause != generator)
+        {
+            continue;
+        }
+
+        let term = clause_term_evidence(candidate, elaboration, family)?;
+        if !term.typing_replayed || !term.normalization_replayed || !term.naturality_replayed {
+            return Err(ActLocalSemanticProvenanceV4Error::Family(format!(
+                "clause family {} did not replay typing/normalization/naturality",
+                family.id.as_str()
+            )));
+        }
+        let mut family_id = family.id.as_str().to_owned();
+        let mut marginality = marginality_projection(&family.marginality);
+        let mut source = V4FamilySource::Clause {
+            generator_clause: generator,
+            kernel_role: family.generator_role,
+        };
+        let (mut desired_mechanism, mut desired_role) =
+            mechanism_for_clause_role(family.generator_role);
+        let mut desired_clause = generator;
+        if let Some(proof) = &generic_r1 {
+            if generator == proof.carrier_clause {
+                marginality = V4MarginalityDisposition::R1CarrierPackageProvenance {
+                    generic_r1_derivation_hash: proof.derivation_hash.clone(),
+                };
+            } else if generator == proof.completion_clause {
+                family_id = tagged_hash(
+                    "generic-R1-completed-package-family",
+                    &(
+                        family.id.as_str(),
+                        proof.carrier_clause,
+                        proof.completion_clause,
+                        &proof.derivation_hash,
+                    ),
+                );
+                source = V4FamilySource::R1CompletedPackage {
+                    carrier_clause: proof.carrier_clause,
+                    completion_clause: proof.completion_clause,
+                    generic_r1_derivation_hash: proof.derivation_hash.clone(),
+                };
+                desired_mechanism = CreditMechanism::IntrinsicKernel;
+                desired_role = LocalRole::KernelHead;
+                desired_clause = proof.completion_clause;
+            }
+        }
+        let anchor = placeholder_anchor(&marginality);
+        let mut row = V4UnifiedSemanticFamily {
+            family_id: family_id.clone(),
+            stage,
+            source,
+            term,
+            marginal: marginality.is_marginal(),
+            marginality,
+            desired_mechanism,
+            desired_clause,
+            desired_role,
+            surviving_parent_membership_ids,
+            r2_removed_child_occurrence_hashes: removed_children,
+            parent_membership_replayed: parent_replayed,
+            anchor,
+            credited: false,
+            role_declaration_ids: Vec::new(),
+            derivation_hash: String::new(),
+        };
+        row.derivation_hash = tagged_hash("unified-semantic-family", &row);
+        for instance in &family.instances {
+            if clause_family_by_clause
+                .insert(instance.clause_index, family_id.clone())
+                .is_some()
+            {
+                return Err(ActLocalSemanticProvenanceV4Error::Family(format!(
+                    "clause {} was admitted by two unified clause families",
+                    instance.clause_index
+                )));
+            }
+        }
+        families.push(row);
+    }
+
+    let (path_families, path_quotient) = build_path_families(prefix, stage, candidate)?;
+    let quotient_hash = path_quotient
+        .as_ref()
+        .map(|proof| proof.derivation_hash.clone())
+        .unwrap_or_default();
+    let mut path_family_by_key_hash = BTreeMap::new();
+    let mut path_evidence_by_family = BTreeMap::new();
+    for built in path_families {
+        let key_hash = path_key_hash(&built.key);
+        let memberships = v3
+            .natural_family_rows
+            .iter()
+            .filter(|row| row_path_key(row).as_ref() == Some(&built.key))
+            .map(|row| row.semantic_family_id.clone())
+            .collect::<Vec<_>>();
+        let marginality = if built.evidence.marginal {
+            let proof = json!({
+                "procedure": "typed-cubical-predecessor-family-equality-v1",
+                "decisions": built.evidence.predecessor_equality_decisions,
+                "comparison_complete": built.evidence.predecessor_comparison_complete,
+                "no_predecessor_preimage": built.evidence.no_predecessor_preimage,
+            });
+            let proof_hash = value_hash("cubical-path-marginality", &proof);
+            V4MarginalityDisposition::MarginalNoPreimage { proof, proof_hash }
+        } else {
+            let proof = json!({
+                "procedure": "typed-cubical-predecessor-family-equality-v1",
+                "decisions": built.evidence.predecessor_equality_decisions,
+                "comparison_complete": built.evidence.predecessor_comparison_complete,
+                "no_predecessor_preimage": false,
+            });
+            let proof_hash = value_hash("cubical-path-marginality", &proof);
+            V4MarginalityDisposition::InternalIdentical { proof, proof_hash }
+        };
+        let mechanism = match built.key {
+            PathSchemaKey::Beta => CreditMechanism::IntrinsicKernel,
+            PathSchemaKey::Kan { .. } => CreditMechanism::DimensionSquared,
+        };
+        let mut row = V4UnifiedSemanticFamily {
+            family_id: built.evidence.family_id.clone(),
+            stage,
+            source: V4FamilySource::CubicalPath {
+                path_clause: built.evidence.path_clause,
+                key: built.evidence.key.clone(),
+                path_quotient_derivation_hash: quotient_hash.clone(),
+            },
+            term: built.evidence.term.clone(),
+            marginal: marginality.is_marginal(),
+            anchor: placeholder_anchor(&marginality),
+            marginality,
+            desired_mechanism: mechanism,
+            desired_clause: built.evidence.path_clause,
+            desired_role: built.evidence.desired_role,
+            surviving_parent_membership_ids: memberships,
+            r2_removed_child_occurrence_hashes: Vec::new(),
+            parent_membership_replayed: true,
+            credited: false,
+            role_declaration_ids: Vec::new(),
+            derivation_hash: String::new(),
+        };
+        row.derivation_hash = tagged_hash("unified-semantic-family", &row);
+        if path_family_by_key_hash
+            .insert(key_hash, row.family_id.clone())
+            .is_some()
+        {
+            return Err(ActLocalSemanticProvenanceV4Error::Cubical(
+                "duplicate cubical path key".to_owned(),
+            ));
+        }
+        if path_evidence_by_family
+            .insert(row.family_id.clone(), built.evidence)
+            .is_some()
+        {
+            return Err(ActLocalSemanticProvenanceV4Error::Cubical(
+                "duplicate cubical natural family".to_owned(),
+            ));
+        }
+        families.push(row);
+    }
+
+    let ids = families
+        .iter()
+        .map(|family| family.family_id.clone())
+        .collect::<BTreeSet<_>>();
+    if ids.len() != families.len() {
+        return Err(ActLocalSemanticProvenanceV4Error::Family(
+            "unified clause/path quotient emitted duplicate family IDs".to_owned(),
+        ));
+    }
+    Ok(UnifiedBuild {
+        families,
+        clause_family_by_clause,
+        path_family_by_key_hash,
+        path_evidence_by_family,
+        generic_r1,
+        path_quotient,
+        r2_removed_occurrence_hashes,
+        r2_parent_membership_replayed,
+    })
+}
+
+fn anchor_unified_families(
+    stage: u32,
+    candidate_digest: &str,
+    a3: &V4ExactA3Inventory,
+    families: &mut [V4UnifiedSemanticFamily],
+) -> Result<(), ActLocalSemanticProvenanceV4Error> {
+    let mut claims = BTreeMap::<(u16, LocalRole), Vec<usize>>::new();
+    for (index, family) in families.iter_mut().enumerate() {
+        if matches!(
+            family.marginality,
+            V4MarginalityDisposition::R1CarrierPackageProvenance { .. }
+        ) {
+            family.anchor = V4AnchorDisposition::PackageProvenanceNotSeparateCredit;
+        } else if family.marginal {
+            claims
+                .entry((family.desired_clause, family.desired_role))
+                .or_default()
+                .push(index);
+        } else {
+            family.anchor = V4AnchorDisposition::NotMarginalInternal;
+        }
+    }
+    for ((clause, role), indices) in claims {
+        if indices.len() == 1 {
+            let index = indices[0];
+            let exact_relation_hash = tagged_hash(
+                "exact-family-local-role-relation",
+                &(
+                    stage,
+                    candidate_digest,
+                    &families[index].family_id,
+                    families[index].desired_mechanism,
+                    clause,
+                    role,
+                    &families[index].term.derivation_hash,
+                ),
+            );
+            let injection_hash = tagged_hash(
+                "global-act-local-role-injection",
+                &(
+                    ANCHOR_INJECTION_V1,
+                    stage,
+                    candidate_digest,
+                    &families[index].family_id,
+                    clause,
+                    role,
+                    &exact_relation_hash,
+                ),
+            );
+            families[index].anchor = V4AnchorDisposition::CreditedLocalRole {
+                clause,
+                role,
+                exact_relation_hash,
+                injection_hash,
+            };
+            families[index].credited = true;
+        } else {
+            let mut competing_family_ids = indices
+                .iter()
+                .map(|index| families[*index].family_id.clone())
+                .collect::<Vec<_>>();
+            competing_family_ids.sort();
+            for index in indices {
+                let proof_hash = tagged_hash(
+                    "named-anchor-collision-impossibility",
+                    &(
+                        ANCHOR_INJECTION_V1,
+                        stage,
+                        candidate_digest,
+                        clause,
+                        role,
+                        &families[index].family_id,
+                        &competing_family_ids,
+                        a3.complete,
+                        a3.usable_credit_position_count,
+                    ),
+                );
+                families[index].anchor = V4AnchorDisposition::ImpossibleCollision {
+                    theorem_id: format!(
+                        "{ANCHOR_INJECTION_V1}-S{stage}-C{clause}-{role:?}"
+                    ),
+                    clause,
+                    role,
+                    competing_family_ids: competing_family_ids.clone(),
+                    no_constructed_exported_a3_fallback: a3.complete
+                        && a3.usable_credit_position_count == 0,
+                    proof_hash,
+                };
+            }
+        }
+    }
+    if families.iter().any(|family| {
+        family.marginal
+            && matches!(
+                &family.anchor,
+                V4AnchorDisposition::ImpossibleCollision { theorem_id, .. }
+                    if theorem_id == "uninitialized-anchor-placeholder"
+            )
+    }) {
+        return Err(ActLocalSemanticProvenanceV4Error::Invariant(
+            "a marginal family retained the anchor placeholder".to_owned(),
+        ));
+    }
+    Ok(())
+}
+
+fn role_gap_rows<'a>(
+    v3: &'a ActLocalProvenanceV3Certificate,
+) -> Result<Vec<(&'a crate::act_local_provenance_v3::ActLocalV3Gap, &'a ActLocalV3NaturalFamilyRow)>, ActLocalSemanticProvenanceV4Error>
+{
+    let rows = v3
+        .theorem_gaps
+        .iter()
+        .filter(|gap| gap.kind == "ROLE_SCHEMA_EXTRACTION_GAP")
+        .map(|gap| {
+            let id = gap.family_id.as_ref().ok_or_else(|| {
+                ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                    "role gap {} has no v3 family ID",
+                    gap.id
+                ))
+            })?;
+            let row = v3
+                .natural_family_rows
+                .iter()
+                .find(|row| &row.semantic_family_id == id)
+                .ok_or_else(|| {
+                    ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                        "role gap {} has no v3 natural-family row",
+                        gap.id
+                    ))
+                })?;
+            if row.gap_id.as_deref() != Some(gap.id.as_str()) {
+                return Err(ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                    "v3 role gap {} is not the row's exact gap",
+                    gap.id
+                )));
+            }
+            Ok((gap, row))
+        })
+        .collect::<Result<Vec<_>, ActLocalSemanticProvenanceV4Error>>()?;
+    let ids = rows
+        .iter()
+        .map(|(gap, _)| gap.id.as_str())
+        .collect::<BTreeSet<_>>();
+    if ids.len() != rows.len() {
+        return Err(ActLocalSemanticProvenanceV4Error::Resolution(
+            "v3 role-schema gaps are not uniquely named".to_owned(),
+        ));
+    }
+    Ok(rows)
+}
+
+fn family_index_by_id(
+    families: &[V4UnifiedSemanticFamily],
+    family_id: &str,
+) -> Option<usize> {
+    families
+        .iter()
+        .position(|family| family.family_id == family_id)
+}
+
+fn resolve_role_declarations(
+    stage: u32,
+    v3: &ActLocalProvenanceV3Certificate,
+    a3: &V4ExactA3Inventory,
+    build: &mut UnifiedBuild,
+) -> Result<Vec<V4RoleDeclarationResolution>, ActLocalSemanticProvenanceV4Error> {
+    let registry = HISTORICAL_ROLE_KINDS.into_iter().collect::<BTreeSet<_>>();
+    let rows = role_gap_rows(v3)?;
+    let mut resolutions = Vec::new();
+    for (gap, row) in rows {
+        let occurrence = row.representative_role.clone();
+        let route = role_term_route(row);
+        let proved_family_id = match route {
+            RoleTermRoute::DirectClause => build
+                .clause_family_by_clause
+                .get(&occurrence.owner_clause)
+                .cloned(),
+            RoleTermRoute::GenericR1 => build.generic_r1.as_ref().and_then(|proof| {
+                build
+                    .clause_family_by_clause
+                    .get(&proof.completion_clause)
+                    .cloned()
+            }),
+            RoleTermRoute::CubicalBeta | RoleTermRoute::CubicalKan => row_path_key(row)
+                .and_then(|key| build.path_family_by_key_hash.get(&path_key_hash(&key)).cloned()),
+            RoleTermRoute::NoRegisteredTerm => None,
+        };
+        let resolution = if let Some(family_id) = proved_family_id {
+            let index = family_index_by_id(&build.families, &family_id).ok_or_else(|| {
+                ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                    "role {} resolved to missing unified family {family_id}",
+                    gap.id
+                ))
+            })?;
+            let family = &mut build.families[index];
+            if !family.term.typing_replayed
+                || !family.term.normalization_replayed
+                || !family.term.naturality_replayed
+            {
+                return Err(ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                    "role {} points at a family without complete term evidence",
+                    gap.id
+                )));
+            }
+            family.role_declaration_ids.push(gap.id.clone());
+            let quotient_relation_hash = match route {
+                RoleTermRoute::CubicalBeta | RoleTermRoute::CubicalKan => build
+                    .path_evidence_by_family
+                    .get(&family_id)
+                    .map(|evidence| evidence.derivation_hash.clone())
+                    .ok_or_else(|| {
+                        ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                            "cubical role {} lacks path quotient evidence",
+                            gap.id
+                        ))
+                    })?,
+                _ => tagged_hash(
+                    "role-to-unified-clause-family",
+                    &(
+                        &gap.id,
+                        &row.derivation_hash,
+                        &family_id,
+                        &family.term.derivation_hash,
+                    ),
+                ),
+            };
+            V4RoleResolution::ProvedFamily {
+                family_id,
+                term_derivation_hash: family.term.derivation_hash.clone(),
+                quotient_relation_hash,
+                additional_credit_minted: false,
+            }
+        } else {
+            if route != RoleTermRoute::NoRegisteredTerm {
+                return Err(ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                    "registered role route for {} did not construct a family",
+                    gap.id
+                )));
+            }
+            let role_kind_in_exhaustive_registry = registry.contains(occurrence.kind.as_str());
+            let candidate_clause_term_registry_exhausted = build
+                .clause_family_by_clause
+                .contains_key(&occurrence.owner_clause);
+            let cubical_path_registry_exhausted = !matches!(
+                occurrence.kind.as_str(),
+                "hit_path_beta" | "hit_kan_coherence"
+            );
+            let exact_a3_inventory_exhausted = a3.complete;
+            let no_registered_term_constructor = true;
+            let no_constructed_exported_a3_output = a3.complete
+                && a3.orbits.iter().all(|orbit| {
+                    !orbit.usable_credit_position
+                        && !orbit.output_term_constructed
+                        && !orbit.output_term_kernel_typed
+                });
+            let proved = role_kind_in_exhaustive_registry
+                && candidate_clause_term_registry_exhausted
+                && cubical_path_registry_exhausted
+                && exact_a3_inventory_exhausted
+                && no_registered_term_constructor
+                && no_constructed_exported_a3_output;
+            let mut proof = V4ImpossibilityProof {
+                theorem_id: format!("{ROLE_TERM_REGISTRY_V1}-{}", gap.id),
+                stage,
+                declaration_id: gap.id.clone(),
+                role_kind: occurrence.kind.clone(),
+                owner_clause: occurrence.owner_clause,
+                exact_coordinate: occurrence.coordinate.clone(),
+                finite_registry_version: ROLE_TERM_REGISTRY_V1.to_owned(),
+                role_kind_in_exhaustive_registry,
+                candidate_clause_term_registry_exhausted,
+                cubical_path_registry_exhausted,
+                exact_a3_inventory_exhausted,
+                no_registered_term_constructor,
+                no_constructed_exported_a3_output,
+                conclusion: "No term constructor in the frozen clause/cubical registry realizes this declaration, and the exact-prefix A3 generator constructs no independently exported output term; the declaration is resolved as impossible ordinary semantic-family credit in this language version.".to_owned(),
+                proved,
+                derivation_hash: String::new(),
+            };
+            proof.derivation_hash = tagged_hash("role-term-impossibility", &proof);
+            if !proof.proved {
+                return Err(ActLocalSemanticProvenanceV4Error::Resolution(format!(
+                    "named impossibility for {} did not prove",
+                    gap.id
+                )));
+            }
+            V4RoleResolution::TheoremBackedImpossibility { proof }
+        };
+        let mut row_resolution = V4RoleDeclarationResolution {
+            stage,
+            declaration_id: gap.id.clone(),
+            v3_gap_id: gap.id.clone(),
+            v3_family_row_hash: row.derivation_hash.clone(),
+            occurrence,
+            resolution,
+            resolved: true,
+            silent_residue: false,
+            derivation_hash: String::new(),
+        };
+        row_resolution.derivation_hash = tagged_hash("role-declaration-resolution", &row_resolution);
+        resolutions.push(row_resolution);
+    }
+    for family in &mut build.families {
+        family.role_declaration_ids.sort();
+        family.role_declaration_ids.dedup();
+        family.derivation_hash = tagged_hash("unified-semantic-family", family);
+    }
+    resolutions.sort_by(|left, right| left.declaration_id.cmp(&right.declaration_id));
+    Ok(resolutions)
 }
