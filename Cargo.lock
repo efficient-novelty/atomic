@@ -470,6 +470,7 @@ dependencies = [
  "blake3",
  "schemars",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -477,6 +478,20 @@ name = "pen-eval"
 version = "0.1.0"
 dependencies = [
  "num-rational",
+ "pen-core",
+ "pen-schema",
+ "pen-type",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror",
+]
+
+[[package]]
+name = "pen-schema"
+version = "0.1.0"
+dependencies = [
+ "blake3",
  "pen-core",
  "pen-type",
  "serde",
@@ -491,10 +506,12 @@ dependencies = [
  "anyhow",
  "pen-core",
  "pen-eval",
+ "pen-schema",
  "pen-store",
  "pen-type",
  "serde",
  "serde_json",
+ "sha2",
  "thiserror",
  "toml",
 ]

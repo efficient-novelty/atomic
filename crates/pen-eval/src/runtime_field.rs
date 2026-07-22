@@ -50,7 +50,7 @@
 use crate::nu::structural_nu;
 use crate::runtime_bar::phi;
 use crate::runtime_dedup::map_expr;
-use pen_core::canonical::{canonical_key_expr, CanonKey};
+use pen_core::canonical::{CanonKey, canonical_key_expr};
 use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
@@ -380,8 +380,7 @@ pub fn run_step_loop(
             let bar = if sealing_index == 0 {
                 Rational::zero()
             } else {
-                phi(sealing_index as usize + 1)
-                    * Rational::new(sum_nu as i64, sum_kappa as i64)
+                phi(sealing_index as usize + 1) * Rational::new(sum_nu as i64, sum_kappa as i64)
             };
 
             // One selection round: budgeted deterministic scan for the
@@ -394,13 +393,9 @@ pub fn run_step_loop(
                     break;
                 };
                 scored += 1;
-                let Some(scored_candidate) = score_candidate(
-                    &candidate,
-                    base,
-                    &accepted_clause_keys,
-                    &library,
-                    &history,
-                ) else {
+                let Some(scored_candidate) =
+                    score_candidate(&candidate, base, &accepted_clause_keys, &library, &history)
+                else {
                     continue;
                 };
                 if scored_candidate.rho < bar {
@@ -468,20 +463,26 @@ pub fn field_nu_profile(
     cadence_steps: u32,
     policy: &FieldPolicy,
 ) -> Vec<Vec<u32>> {
-    run_step_loop(schema, ambient_library, ambient_history, cadence_steps, policy)
-        .into_iter()
-        .map(|report| report.accepted.iter().map(|app| app.nu).collect())
-        .collect()
+    run_step_loop(
+        schema,
+        ambient_library,
+        ambient_history,
+        cadence_steps,
+        policy,
+    )
+    .into_iter()
+    .map(|report| report.accepted.iter().map(|app| app.nu).collect())
+    .collect()
 }
 
 #[cfg(test)]
 mod tests {
     use super::{
-        genesis_reference_context, instantiate_binding, instantiate_partial_binding,
-        is_transport_image, run_step_loop, schema_slot_count, CandidateStream, FieldPolicy,
+        CandidateStream, FieldPolicy, genesis_reference_context, instantiate_binding,
+        instantiate_partial_binding, is_transport_image, run_step_loop, schema_slot_count,
     };
     use crate::lambda_trigger_v2::frozen_structure_schema_variants_v2;
-    use pen_core::canonical::{canonical_key_expr, canonical_key_telescope, CanonKey};
+    use pen_core::canonical::{CanonKey, canonical_key_expr, canonical_key_telescope};
     use pen_core::expr::Expr;
     use std::collections::BTreeSet;
 

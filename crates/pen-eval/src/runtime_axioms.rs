@@ -206,8 +206,8 @@ fn as_i64(value: u64) -> i64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        embed_in_external_clock, erase_external_clock, AuditDisposition, ClockEmbeddingError,
-        IntegrationError, MarginalAudit, RealizedLedger,
+        AuditDisposition, ClockEmbeddingError, IntegrationError, MarginalAudit, RealizedLedger,
+        embed_in_external_clock, erase_external_clock,
     };
     use crate::nu::structural_nu;
     use pen_core::{

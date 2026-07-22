@@ -1,0 +1,310 @@
+{
+  "schema": "schema2-global-e4-assembly-v3",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/inductive_telescope_internality_adjudication.md",
+      "role": "adopted_inductive_rule_and_guard_firewall",
+      "byte_length": 4938,
+      "blake3": "blake3:6d2c393efb5cb8cb3d8194f6f891334b0dd67f9dd0229298fe291aaffb8fb421"
+    },
+    {
+      "path": "docs/schema2_global_e4_assembly_v2.json",
+      "role": "predecessor_f_i2_assembly",
+      "byte_length": 8031,
+      "blake3": "blake3:e62504f2475759f6676bdb037bec34d0c9526e57e34e84c755ecba866547abe2"
+    },
+    {
+      "path": "docs/schema2_inductive_internality_v1.json",
+      "role": "resolved_witness_successor",
+      "byte_length": 9059,
+      "blake3": "blake3:163c37180705dff104038d3d9c58371c79da8f206f3450cbd744149013a599c0"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "exact_raw_catalog_membership",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch_v2.rs",
+      "role": "ordered_internal_classifier",
+      "byte_length": 30426,
+      "blake3": "blake3:1ddfd71b206751bc00830ddc681dec18670f0c19f1e6475ac5de3f0fd1b82c11"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v2.rs",
+      "role": "failed_predecessor_rerun",
+      "byte_length": 19979,
+      "blake3": "blake3:4f1ea2244270c8063a307c9f78dbf93a6482aaf2ce4f74f6674430075203c22d"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v3.rs",
+      "role": "fail_fast_guarded_successor_assembly",
+      "byte_length": 24049,
+      "blake3": "blake3:14fc7bbba517b1ac20f5887a4dbbdf5fc6c3ac81c969c8a3cc69c9ff78b5ca07"
+    }
+  ],
+  "predecessor_global_e4_v2_digest": "blake3:de80a123d2542782b8559ae7d52beccf152317a10e83199747cbdddd1b882e95",
+  "predecessor_global_e4_v2_replayed": true,
+  "inductive_internality_digest": "blake3:267ff195edb832ee250a422aab483fcde9db019b0d5154e3d3253f056253b3d7",
+  "inductive_internality_replayed": true,
+  "global_e4_v3_executed": true,
+  "predecessor_unknown_resolved": {
+    "candidate": {
+      "clauses": [
+        {
+          "role": "formation",
+          "expr": "Univ"
+        },
+        {
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Var": 1
+            }
+          }
+        }
+      ]
+    },
+    "raw_surface_membership": {
+      "is_member": true,
+      "rejection_reasons": []
+    },
+    "decision": {
+      "internal": {
+        "certificate": {
+          "candidate": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": "Univ"
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Lam": {
+                    "Var": 1
+                  }
+                }
+              }
+            ]
+          },
+          "predecessor_attempt_hash": "blake3:4329dff9ead775e24c25bfc66f6ef568cd8200c409144181a561f38fcc877afb",
+          "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+          "clauses": [
+            {
+              "clause_index": 0,
+              "expression": "Univ",
+              "root_rule": "univ-form",
+              "leaf_rules": [
+                "univ-form"
+              ],
+              "predecessor_kind": "ambient_arena_reference",
+              "kind": "direct_ambient_arena_reference",
+              "field_dependencies": [],
+              "certified_internal_prefix_before": [],
+              "dependency_certificate_hashes": [],
+              "dependencies_are_strictly_prior": true,
+              "every_dependency_already_internal": true,
+              "projection_not_identity": false,
+              "identity_not_projection": false,
+              "guarded_inverse_laws_satisfied": true,
+              "earned_internal": true,
+              "derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+            },
+            {
+              "clause_index": 1,
+              "expression": {
+                "Lam": {
+                  "Var": 1
+                }
+              },
+              "root_rule": "lam-intro",
+              "leaf_rules": [
+                "field-ref-0"
+              ],
+              "predecessor_kind": "candidate_local_dependency",
+              "kind": "inductive_constant_projection",
+              "field_dependencies": [
+                0
+              ],
+              "certified_internal_prefix_before": [
+                0
+              ],
+              "dependency_certificate_hashes": [
+                "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+              ],
+              "dependencies_are_strictly_prior": true,
+              "every_dependency_already_internal": true,
+              "projection_not_identity": true,
+              "identity_not_projection": false,
+              "guarded_inverse_laws_satisfied": true,
+              "earned_internal": true,
+              "derivation_hash": "blake3:4a7f986bb232a44acb238af78b7f32223d717ea513a5169cf0479da0b0f26441"
+            }
+          ],
+          "certified_internal_prefix": [
+            0,
+            1
+          ],
+          "every_clause_earned_internal": true,
+          "no_forward_missing_or_cyclic_dependency": true,
+          "projection_identity_separation_checked": true,
+          "all_guarded_inverse_laws_satisfied": true,
+          "internal_certificate_issued": true,
+          "failure_code": null,
+          "derivation_hash": "blake3:2346cfcc8889fa0cef0d17a2c935e87b07394809a9efcc9cbccc8e15759b6015"
+        },
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:216e9c7616ea92b2539320cf204533c70453491da11a01ffab23160299b88b97"
+      }
+    },
+    "exact_raw_catalog_member": true,
+    "classified_internal": true,
+    "marginal_nu": 0,
+    "projection_clause_depends_on_certified_field_zero": true,
+    "derivation_hash": "blake3:31d64b8c3a2adabbb9b1cb360b6ccc88b2a1a35dbd99184f0e044ba8c306d54a"
+  },
+  "next_guarded_unknown": {
+    "candidate": {
+      "clauses": [
+        {
+          "role": "formation",
+          "expr": "Univ"
+        },
+        {
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Var": 3
+            }
+          }
+        }
+      ]
+    },
+    "raw_surface_membership": {
+      "is_member": true,
+      "rejection_reasons": []
+    },
+    "decision": {
+      "named_typed_obstruction": {
+        "legacy_decision": {
+          "named_typed_obstruction": {
+            "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+            "telescope_class": "Unknown",
+            "elaboration_derivation_hash": "blake3:70f4e365ad6abae5ad2d20c3e838b2142a85ee567e91c2130537b5ce59452652",
+            "candidate_digest": "blake3:7d1c819485c11291d847f86946f805f61ff7b7b00e0e8b2a9fc52f094990c7d4",
+            "derivation_hash": "blake3:5ece0dcb3010894be8240b3d05fb17d61b56bd6b6b72e662e95433b833b1511d"
+          }
+        },
+        "internal_attempt": {
+          "candidate": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": "Univ"
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Lam": {
+                    "Var": 3
+                  }
+                }
+              }
+            ]
+          },
+          "predecessor_attempt_hash": "blake3:22609d0aaa26a65e98b8d6c5c3ae3c8a28f3215a7b99247c8a6f9d8610b8394f",
+          "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+          "clauses": [
+            {
+              "clause_index": 0,
+              "expression": "Univ",
+              "root_rule": "univ-form",
+              "leaf_rules": [
+                "univ-form"
+              ],
+              "predecessor_kind": "ambient_arena_reference",
+              "kind": "direct_ambient_arena_reference",
+              "field_dependencies": [],
+              "certified_internal_prefix_before": [],
+              "dependency_certificate_hashes": [],
+              "dependencies_are_strictly_prior": true,
+              "every_dependency_already_internal": true,
+              "projection_not_identity": false,
+              "identity_not_projection": false,
+              "guarded_inverse_laws_satisfied": false,
+              "earned_internal": false,
+              "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+            },
+            {
+              "clause_index": 1,
+              "expression": {
+                "Lam": {
+                  "Var": 3
+                }
+              },
+              "root_rule": "lam-intro",
+              "leaf_rules": [
+                "local-var-1"
+              ],
+              "predecessor_kind": "structural_identity",
+              "kind": "direct_structural_identity",
+              "field_dependencies": [],
+              "certified_internal_prefix_before": [],
+              "dependency_certificate_hashes": [],
+              "dependencies_are_strictly_prior": true,
+              "every_dependency_already_internal": true,
+              "projection_not_identity": false,
+              "identity_not_projection": true,
+              "guarded_inverse_laws_satisfied": false,
+              "earned_internal": false,
+              "derivation_hash": "blake3:8d9f75d3a787dda330b8a4ce09f6ad3965a918f9dd2efb12f43977d826dd411a"
+            }
+          ],
+          "certified_internal_prefix": [],
+          "every_clause_earned_internal": false,
+          "no_forward_missing_or_cyclic_dependency": true,
+          "projection_identity_separation_checked": true,
+          "all_guarded_inverse_laws_satisfied": false,
+          "internal_certificate_issued": false,
+          "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+          "derivation_hash": "blake3:6265b70fc50ad21b1339a41b693852da7ac7bddcc711361afff0c8a7b5cb7e4d"
+        }
+      }
+    },
+    "exact_raw_catalog_member": true,
+    "ambient_parameters": 1,
+    "guarded_clauses": [
+      0,
+      1
+    ],
+    "guarded_inverse_laws_satisfied": false,
+    "internal_certificate_issued": false,
+    "named_internal_gap": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+    "f_g4_retained": true,
+    "derivation_hash": "blake3:67e9047e57caa642e55f51311c282905005401990a3cc32c3d12576fffa427d3"
+  },
+  "unknown_survivor_count_lower_bound": 1,
+  "fail_fast_catalog_scan_terminated": true,
+  "no_unknown_survives": false,
+  "class_exhaustion_proved": false,
+  "global_e4_complete": false,
+  "five_pending_memberships_now_authorized": false,
+  "forbidden_outputs": {
+    "five_pending_membership_verdicts_issued": false,
+    "independent_family_tokens_issued": false,
+    "e2b_executed": false,
+    "historical_scores_recomputed": false,
+    "fq2_evaluated": false,
+    "agent_a_f_t1_discharge_executed": false,
+    "e5_guard_rail_f1_executed": false,
+    "classifier_bridge_or_fork_executed": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "global_e4_v3_resolved_projection_witness_next_guarded_unknown_blocks_exhaustion",
+  "permitted_conclusion": "Inductive telescope internality resolves [Univ,Lam(Var(1))] as zero-credit Internal projection. The exact guarded candidate [Univ,Lam(Var(3))] then survives because no weakening/erasure inverse certificate is attached, so F-G4 still prevents exhaustion.",
+  "required_successor_action": "Prove the existing guarded weakening/erasure inverse laws at candidate-clause granularity for the one-ambient-parameter identity family, or retain the named gap. Then rerun global E-4 create-new; do not issue membership or count outputs first.",
+  "result_digest": "blake3:2c71ad9af7cd8934e05941961247c76f217ac1386546d8dba90f44ef79cabb24"
+}

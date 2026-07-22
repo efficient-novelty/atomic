@@ -108,9 +108,7 @@ impl Expr {
             | Self::Next(body)
             | Self::Eventually(body) => body.is_linear_exponential(),
             Self::Id(a, x, y) => {
-                a.is_linear_exponential()
-                    || x.is_linear_exponential()
-                    || y.is_linear_exponential()
+                a.is_linear_exponential() || x.is_linear_exponential() || y.is_linear_exponential()
             }
             Self::Univ | Self::Var(_) | Self::Lib(_) | Self::PathCon(_) => false,
         }

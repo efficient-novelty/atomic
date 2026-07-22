@@ -1,6 +1,6 @@
 use crate::bar::compute_rho;
 use crate::lambda_structure::frozen_structure_schema_variants;
-use crate::nu::{structural_nu, NativeNuResult};
+use crate::nu::{NativeNuResult, structural_nu};
 use crate::runtime_bar::{fib, fresh_stratum_bars_through, inherited_bars, post_15_ledger};
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::rational::Rational;

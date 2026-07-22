@@ -1,0 +1,194 @@
+{
+  "schema": "schema2-global-e4-assembly-v2",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/internal_classifier_branch_adjudication.md",
+      "role": "adopted_successor_and_sequence",
+      "byte_length": 4771,
+      "blake3": "blake3:34b2747244089a2b61b971ab776443cf4aa5ecf6a0ba808aef88738a601c3f9a"
+    },
+    {
+      "path": "docs/schema2_global_e4_assembly_v1.json",
+      "role": "failed_predecessor_assembly",
+      "byte_length": 5370,
+      "blake3": "blake3:edd765cc68e53f9914f74ac6dd6b007cd3dd0b1e24767fa4f30393b02bacbd86"
+    },
+    {
+      "path": "docs/schema2_internal_classifier_branch_v1.json",
+      "role": "witness_first_internal_decision",
+      "byte_length": 7140,
+      "blake3": "blake3:b4785040f0a04a1d2dd8ac6e4d8185100ae52a22f0a48e25b3fe3928760b13ae"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "exact_raw_catalog_membership",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch.rs",
+      "role": "certificate_backed_internal_classifier",
+      "byte_length": 29392,
+      "blake3": "blake3:86181c07bdc5fb7e010d316c4e722c1c7daf9626a2248c9db6008a2bf79a3ad2"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly.rs",
+      "role": "predecessor_global_assembly",
+      "byte_length": 23514,
+      "blake3": "blake3:399d0bea5ff6a74b8e6f030a634364e96c557faa85daedda9f0640c56f61065f"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v2.rs",
+      "role": "fail_fast_successor_assembly",
+      "byte_length": 19979,
+      "blake3": "blake3:4f1ea2244270c8063a307c9f78dbf93a6482aaf2ce4f74f6674430075203c22d"
+    }
+  ],
+  "predecessor_global_e4_digest": "blake3:edb3260ba046361b80f00d248a0fa8d5f27625a3041fcfd6532fba998e076a0e",
+  "predecessor_global_e4_replayed": true,
+  "internal_branch_digest": "blake3:bcc8f6dfdcf06d3419e1818206cbe26e336192dadfa6305831bb9f4093ff61d4",
+  "internal_branch_replayed": true,
+  "internal_branch_priority_adopted": true,
+  "global_e4_successor_rerun_executed": true,
+  "unknown_survivors": [
+    {
+      "candidate": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Var": 1
+              }
+            }
+          }
+        ]
+      },
+      "raw_surface_membership": {
+        "is_member": true,
+        "rejection_reasons": []
+      },
+      "internal_successor_decision": {
+        "named_typed_obstruction": {
+          "legacy_decision": {
+            "named_typed_obstruction": {
+              "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+              "telescope_class": "Unknown",
+              "elaboration_derivation_hash": "blake3:ca690e741ea0351818a3b71ffb588881eddab6e5864f44724aa33461ad1991a9",
+              "candidate_digest": "blake3:09e281cf55d61d66ec1b64dcac943fcf0ef8b138a915da508eaf7677be345f75",
+              "derivation_hash": "blake3:6ae36e4ccc03c3c2b8351224acb800ba016cd5dfaab30a28732e9eaec03307b2"
+            }
+          },
+          "internal_attempt": {
+            "candidate": {
+              "clauses": [
+                {
+                  "role": "formation",
+                  "expr": "Univ"
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "Lam": {
+                      "Var": 1
+                    }
+                  }
+                }
+              ]
+            },
+            "candidate_digest": "blake3:9b26691576f27c9fc652d9b33b881b1ee847182ecf80c474f36d2e89ab2217fa",
+            "predecessor_context": "B15: exact sealed Genesis predecessor closure through Step 15",
+            "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+            "visible_library": 15,
+            "ambient_parameters": 0,
+            "elaboration_derivation_hash": "blake3:ca690e741ea0351818a3b71ffb588881eddab6e5864f44724aa33461ad1991a9",
+            "clauses": [
+              {
+                "clause_index": 0,
+                "expression": "Univ",
+                "normal_form": "Univ",
+                "declared_role": "formation",
+                "kernel_role": "formation",
+                "root_rule": "univ-form",
+                "leaf_rules": [
+                  "univ-form"
+                ],
+                "kind": "ambient_arena_reference",
+                "candidate_local_field_dependencies": [],
+                "predecessor_library_dependencies": [],
+                "derived_over_exact_b15": true,
+                "guarded_form_applies": false,
+                "weakening_erasure_inverse_laws_checked": true,
+                "derivation_hash": "blake3:045a1199cf7b9bb67ff8ec65e0dbf19c4f87c4dc32355023ee7c66ffe01f0b14"
+              },
+              {
+                "clause_index": 1,
+                "expression": {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                "normal_form": {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                "declared_role": "introduction",
+                "kernel_role": "introduction",
+                "root_rule": "lam-intro",
+                "leaf_rules": [
+                  "field-ref-0"
+                ],
+                "kind": "candidate_local_dependency",
+                "candidate_local_field_dependencies": [
+                  0
+                ],
+                "predecessor_library_dependencies": [],
+                "derived_over_exact_b15": false,
+                "guarded_form_applies": false,
+                "weakening_erasure_inverse_laws_checked": true,
+                "derivation_hash": "blake3:fae64ebbe8d09596b20e93bac78c7ab151ed13fbd915823f36cca0ec226588f3"
+              }
+            ],
+            "every_clause_derived_over_exact_b15": false,
+            "all_applicable_weakening_erasure_inverse_laws_checked": true,
+            "internal_certificate_issued": false,
+            "failure_code": "F_I2_WITNESS_LAMBDA_DEPENDS_ON_CANDIDATE_LOCAL_FIELD_NOT_B15",
+            "derivation_hash": "blake3:4329dff9ead775e24c25bfc66f6ef568cd8200c409144181a561f38fcc877afb"
+          }
+        }
+      },
+      "exact_raw_catalog_member": true,
+      "internal_certificate_issued": false,
+      "f_i2_triggered": true,
+      "f_g4_retained": true,
+      "derivation_hash": "blake3:6896455801e2672e814923a9146e56aead6aa57a3fa5b507ed42ad2ef57bf276"
+    }
+  ],
+  "unknown_survivor_count_lower_bound": 1,
+  "fail_fast_catalog_scan_terminated": true,
+  "no_unknown_survives": false,
+  "class_exhaustion_proved": false,
+  "global_e4_complete": false,
+  "five_pending_memberships_now_authorized": false,
+  "forbidden_outputs": {
+    "five_pending_membership_verdicts_issued": false,
+    "independent_family_tokens_issued": false,
+    "e2b_executed": false,
+    "historical_scores_recomputed": false,
+    "fq2_evaluated": false,
+    "agent_a_f_t1_discharge_executed": false,
+    "e5_guard_rail_f1_executed": false,
+    "classifier_bridge_or_fork_executed": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "global_e4_v2_executed_exact_f_i2_f_g4_survivor_exhaustion_not_proved",
+  "permitted_conclusion": "The adopted Internal branch was executed before the class branch. The exact raw witness failed its B15 derivability obligation and survived as named Unknown, so global E-4 exhaustion remains false.",
+  "required_successor_action": "Stop before the five membership verdicts. Adjudicate the binding-level mismatch explicitly: retain Lam(Var(1)) and reopen the grammar, or adopt a versioned corrected identity candidate Lam(Var(2)); do not reinterpret the frozen absolute-level term in place.",
+  "result_digest": "blake3:de80a123d2542782b8559ae7d52beccf152317a10e83199747cbdddd1b882e95"
+}

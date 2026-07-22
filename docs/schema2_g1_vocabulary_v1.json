@@ -1,0 +1,1352 @@
+{
+  "schema": "schema2-steps-9-15-g1-vocabulary-survey-v1",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/agent_e_grammar_completion_plan.md",
+      "role": "g1_scope_sequence_and_firewall",
+      "signature_ground": true,
+      "byte_length": 6057,
+      "blake3": "blake3:3fff0b9d4256bed50ab84110d75dc9d2d53b58cacb11e24660b30cf6974c06ad"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "frozen_schema2_grammar_specification",
+      "signature_ground": true,
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544"
+    },
+    {
+      "path": "docs/endpoint_premise_api_adjudication.md",
+      "role": "adopted_endpoint_implementation_constraint",
+      "signature_ground": true,
+      "byte_length": 6060,
+      "blake3": "blake3:694c3369fc71194c62f4d7d88bdcdf2904fd92c45c343afc9d716e6534773789"
+    },
+    {
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "sealed_reference_trace",
+      "signature_ground": true,
+      "byte_length": 19443,
+      "blake3": "blake3:d9831c28c380d1fdc313f757b393e26e81df1505d87ae35291d3eb8f214cf545"
+    },
+    {
+      "path": "tests/fixtures/trajectory/reference_steps_until_15.json",
+      "role": "historical_row_identity_only_not_constructor_ground",
+      "signature_ground": false,
+      "byte_length": 5305,
+      "blake3": "blake3:7c814e20f4af7650863d7b5b2dbedfc7dc4be88c6ed9472c74d53bc4cd345bb2"
+    },
+    {
+      "path": "docs/schema2_m1_sweep_v1.json",
+      "role": "archival_replay_only_explicit_non_ground",
+      "signature_ground": false,
+      "byte_length": 13355,
+      "blake3": "blake3:f6d04e35d192f86a66b03bd8a82a74e151548c88d1ac20f6c948bd9f80e68579"
+    },
+    {
+      "path": "docs/steps_9_15_signature_adjudication.md",
+      "role": "g1_batch_proposal_not_yet_adopted",
+      "signature_ground": false,
+      "byte_length": 10199,
+      "blake3": "blake3:b71f4e7814062be1e9ddba4e633397b7ab5f217eec68d73bea78645ae6ca9d1d"
+    }
+  ],
+  "archival_m1_replay_valid": true,
+  "archival_m1_is_signature_ground": false,
+  "steps": [
+    {
+      "step": 9,
+      "label": "Hopf",
+      "expected_class": "Map",
+      "computed_class": "Map",
+      "class_matches_plan": true,
+      "predecessor_entry_count": 8,
+      "predecessor_signature_digest": "blake3:ac214686168ca9db360782f7b09fa9e89ade5e6839e933a72ae14e282d423e7a",
+      "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "fixture_candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "candidate_hash_matches_fixture": true,
+      "fixture_canonical_hash": "blake3:db6a9c039fc70d0f2595143ed87bd948041943105ba106556b71ae8c09c9f777",
+      "clause_kappa": 4,
+      "bit_kappa": 78,
+      "clauses": [
+        {
+          "index": 0,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 8
+              },
+              {
+                "Lib": 7
+              }
+            ]
+          },
+          "compact_expr": "Pi(L8,L7)",
+          "library_refs": [
+            7,
+            8
+          ],
+          "variable_refs": [],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "hopf_map_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 1,
+          "role": "introduction",
+          "expr": {
+            "App": [
+              {
+                "Lib": 5
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "App(L5,v1)",
+          "library_refs": [
+            5
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "hopf_fiber_instance",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 2,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Lib": 8
+                },
+                {
+                  "Lib": 7
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(App(L8,L7))",
+          "library_refs": [
+            7,
+            8
+          ],
+          "variable_refs": [],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "hopf_total_witness",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 3,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 7
+              },
+              {
+                "Lib": 8
+              }
+            ]
+          },
+          "compact_expr": "Pi(L7,L8)",
+          "library_refs": [
+            7,
+            8
+          ],
+          "variable_refs": [],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "hopf_reverse_or_classifying_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        }
+      ],
+      "exact_trace_signature_reconstructed": true,
+      "semantic_interpretation_status": "trace_exact_stronger_semantics_underdetermined_batch_adjudication_required"
+    },
+    {
+      "step": 10,
+      "label": "Cohesion",
+      "expected_class": "Modal",
+      "computed_class": "Modal",
+      "class_matches_plan": true,
+      "predecessor_entry_count": 9,
+      "predecessor_signature_digest": "blake3:78e6444fdb136cda56a23714ebf9464adb3dac1c32fb49e7063bbb8cdc6d7f32",
+      "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+      "fixture_candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+      "candidate_hash_matches_fixture": true,
+      "fixture_canonical_hash": "blake3:09bed8af6371d3ac8be4c5d4bd59321753f2a027ff9685808b8bab6ce8ac4ef5",
+      "clause_kappa": 4,
+      "bit_kappa": 45,
+      "clauses": [
+        {
+          "index": 0,
+          "role": "formation",
+          "expr": {
+            "Flat": {
+              "Var": 1
+            }
+          },
+          "compact_expr": "Flat(v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "flat_former",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 1,
+          "role": "formation",
+          "expr": {
+            "Sharp": {
+              "Var": 1
+            }
+          },
+          "compact_expr": "Sharp(v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "sharp_former",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 2,
+          "role": "formation",
+          "expr": {
+            "Disc": {
+              "Var": 1
+            }
+          },
+          "compact_expr": "Disc(v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "disc_former",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 3,
+          "role": "formation",
+          "expr": {
+            "Shape": {
+              "Var": 1
+            }
+          },
+          "compact_expr": "Shape(v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "shape_former",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        }
+      ],
+      "exact_trace_signature_reconstructed": true,
+      "semantic_interpretation_status": "trace_exact_stronger_semantics_underdetermined_batch_adjudication_required"
+    },
+    {
+      "step": 11,
+      "label": "Connections",
+      "expected_class": "Axiomatic",
+      "computed_class": "Axiomatic",
+      "class_matches_plan": true,
+      "predecessor_entry_count": 10,
+      "predecessor_signature_digest": "blake3:6aecbe0f3688ae5d072497af8b2d008969d6d0d5efe4b5bee9b0480a21a7228d",
+      "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+      "fixture_candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+      "candidate_hash_matches_fixture": true,
+      "fixture_canonical_hash": "blake3:0b747d5eea40ef4cece4f40b64c7dbdff0db9ed74f209e5c6c79346f7165ae27",
+      "clause_kappa": 5,
+      "bit_kappa": 79,
+      "clauses": [
+        {
+          "index": 0,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 10
+              },
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "Pi(L10,Pi(v1,v1))",
+          "library_refs": [
+            10
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "connection_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 1,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(Pi(v1,v2))",
+          "library_refs": [],
+          "variable_refs": [
+            1,
+            2
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "connection_intro",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 2,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Flat": {
+                  "Var": 1
+                }
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "Pi(Flat(v1),v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "flat_connection_action",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 3,
+          "role": "introduction",
+          "expr": {
+            "App": [
+              {
+                "Lib": 10
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "App(L10,v1)",
+          "library_refs": [
+            10
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "modal_connection_instance",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 4,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Var": 1
+            }
+          },
+          "compact_expr": "Lam(v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "connection_unit_action",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        }
+      ],
+      "exact_trace_signature_reconstructed": true,
+      "semantic_interpretation_status": "trace_exact_stronger_semantics_underdetermined_batch_adjudication_required"
+    },
+    {
+      "step": 12,
+      "label": "Curvature",
+      "expected_class": "Axiomatic",
+      "computed_class": "Axiomatic",
+      "class_matches_plan": true,
+      "predecessor_entry_count": 11,
+      "predecessor_signature_digest": "blake3:a743317dc1b629d988ffa744c95b69ed4dd572ce70979fd742d0d3756a2f2eb0",
+      "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+      "fixture_candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+      "candidate_hash_matches_fixture": true,
+      "fixture_canonical_hash": "blake3:fd636363062e2cc44259d330cd96e319979d8ae7ff02eb065599bb2541d03cac",
+      "clause_kappa": 6,
+      "bit_kappa": 121,
+      "clauses": [
+        {
+          "index": 0,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 11
+              },
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "Pi(L11,Pi(v1,v1))",
+          "library_refs": [
+            11
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "curvature_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 1,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Lib": 11
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(App(L11,v1))",
+          "library_refs": [
+            11
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "curvature_intro",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 2,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Lib": 11
+              }
+            ]
+          },
+          "compact_expr": "Pi(v1,L11)",
+          "library_refs": [
+            11
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "connection_targeting_map",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 3,
+          "role": "introduction",
+          "expr": {
+            "App": [
+              {
+                "Lib": 11
+              },
+              {
+                "App": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "App(L11,App(v1,v2))",
+          "library_refs": [
+            11
+          ],
+          "variable_refs": [
+            1,
+            2
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "connection_composite_instance",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 4,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(Pi(v1,v2))",
+          "library_refs": [],
+          "variable_refs": [
+            1,
+            2
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "curvature_law_action",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 5,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 11
+              },
+              {
+                "Lib": 11
+              }
+            ]
+          },
+          "compact_expr": "Pi(L11,L11)",
+          "library_refs": [
+            11
+          ],
+          "variable_refs": [],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "connection_endomap",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        }
+      ],
+      "exact_trace_signature_reconstructed": true,
+      "semantic_interpretation_status": "trace_exact_stronger_semantics_underdetermined_batch_adjudication_required"
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "expected_class": "Axiomatic",
+      "computed_class": "Axiomatic",
+      "class_matches_plan": true,
+      "predecessor_entry_count": 12,
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+      "fixture_candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+      "candidate_hash_matches_fixture": true,
+      "fixture_canonical_hash": "blake3:4eefcc446fb659c101cb538dcf4b06695c165d6e977e64ab7580a2451af0f5ae",
+      "clause_kappa": 7,
+      "bit_kappa": 138,
+      "clauses": [
+        {
+          "index": 0,
+          "role": "formation",
+          "expr": {
+            "Sigma": [
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "Sigma(Pi(v1,v1),Pi(v1,v1))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "operator_pair_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 1,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              },
+              {
+                "Lib": 11
+              }
+            ]
+          },
+          "compact_expr": "Pi(Sigma(v1,v2),L11)",
+          "library_refs": [
+            11
+          ],
+          "variable_refs": [
+            1,
+            2
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "metric_connection_map",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 2,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "Pi(v1,Pi(v1,v1))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "binary_metric_operation",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 3,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(App(v1,v2))",
+          "library_refs": [],
+          "variable_refs": [
+            1,
+            2
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "metric_evaluation",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 4,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 12
+              },
+              {
+                "Lib": 12
+              }
+            ]
+          },
+          "compact_expr": "Pi(L12,L12)",
+          "library_refs": [
+            12
+          ],
+          "variable_refs": [],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "curvature_endomap",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 5,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Var": 1
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(Pi(v1,v1))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "metric_operator_action",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 6,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 12
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "Pi(L12,v1)",
+          "library_refs": [
+            12
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "curvature_supported_family",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        }
+      ],
+      "exact_trace_signature_reconstructed": true,
+      "semantic_interpretation_status": "trace_exact_stronger_semantics_underdetermined_batch_adjudication_required"
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "expected_class": "Axiomatic",
+      "computed_class": "Axiomatic",
+      "class_matches_plan": true,
+      "predecessor_entry_count": 13,
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+      "fixture_candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+      "candidate_hash_matches_fixture": true,
+      "fixture_canonical_hash": "blake3:435eaca75694e1e58b26739b2f6d8c5d77cc0c601c2681e63ced81692f25c67d",
+      "clause_kappa": 9,
+      "bit_kappa": 169,
+      "clauses": [
+        {
+          "index": 0,
+          "role": "formation",
+          "expr": {
+            "Sigma": [
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      "Univ"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "Sigma(Pi(v1,Pi(v1,Univ)),v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "hilbert_functional_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 1,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "Pi(v1,v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "hilbert_endomap",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 2,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "Pi(v1,Sigma(v1,v1))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "decomposition_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 3,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lam": {
+                  "Var": 1
+                }
+              },
+              {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "Pi(Lam(v1),Sigma(v1,v2))",
+          "library_refs": [],
+          "variable_refs": [
+            1,
+            2
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "spectral_shell",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 4,
+          "role": "formation",
+          "expr": {
+            "Sigma": [
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              },
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            ]
+          },
+          "compact_expr": "Sigma(Pi(v1,v1),Pi(v1,v1))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "operator_algebra_pair",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 5,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 13
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "Pi(L13,v1)",
+          "library_refs": [
+            13
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "metric_supported_family",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 6,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 12
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "Pi(L12,v1)",
+          "library_refs": [
+            12
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "curvature_supported_family",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 7,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Lib": 11
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          "compact_expr": "Pi(L11,v1)",
+          "library_refs": [
+            11
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "connection_supported_family",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        },
+        {
+          "index": 8,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Pi": [
+                {
+                  "Var": 1
+                },
+                "Univ"
+              ]
+            }
+          },
+          "compact_expr": "Lam(Pi(v1,Univ))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "functional_derivative_action",
+          "semantic_status": "adjudication_required_trace_signature_exact_semantic_refinement_unfixed",
+          "j3_role": null
+        }
+      ],
+      "exact_trace_signature_reconstructed": true,
+      "semantic_interpretation_status": "trace_exact_stronger_semantics_underdetermined_batch_adjudication_required"
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "expected_class": "Synthesis",
+      "computed_class": "Synthesis",
+      "class_matches_plan": true,
+      "predecessor_entry_count": 14,
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+      "fixture_candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+      "candidate_hash_matches_fixture": true,
+      "fixture_canonical_hash": "blake3:6f4b65c28060999af4bac3fa46a9da3bd8e1bbdbc99f41ecc94291012a0573a4",
+      "clause_kappa": 8,
+      "bit_kappa": 229,
+      "clauses": [
+        {
+          "index": 0,
+          "role": "formation",
+          "expr": {
+            "Next": {
+              "Var": 1
+            }
+          },
+          "compact_expr": "Next(v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "next_former",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "operator_former_next"
+        },
+        {
+          "index": 1,
+          "role": "formation",
+          "expr": {
+            "Eventually": {
+              "Var": 1
+            }
+          },
+          "compact_expr": "Eventually(v1)",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "eventually_former",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "operator_former_eventually"
+        },
+        {
+          "index": 2,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Next": {
+                  "Var": 1
+                }
+              },
+              {
+                "Eventually": {
+                  "Var": 1
+                }
+              }
+            ]
+          },
+          "compact_expr": "Pi(Next(v1),Eventually(v1))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "next_eventually_comparison",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "comparison_map"
+        },
+        {
+          "index": 3,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Lib": 10
+                },
+                {
+                  "Next": {
+                    "Var": 1
+                  }
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(App(L10,Next(v1)))",
+          "library_refs": [
+            10
+          ],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "cohesive_temporal_interaction",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "interaction_clause"
+        },
+        {
+          "index": 4,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Flat": {
+                  "Next": {
+                    "Var": 1
+                  }
+                }
+              },
+              {
+                "Next": {
+                  "Flat": {
+                    "Var": 1
+                  }
+                }
+              }
+            ]
+          },
+          "compact_expr": "Pi(Flat(Next(v1)),Next(Flat(v1)))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "flat_next_exchange",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "flat_exchange_law"
+        },
+        {
+          "index": 5,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Sharp": {
+                  "Eventually": {
+                    "Var": 1
+                  }
+                }
+              },
+              {
+                "Eventually": {
+                  "Sharp": {
+                    "Var": 1
+                  }
+                }
+              }
+            ]
+          },
+          "compact_expr": "Pi(Sharp(Eventually(v1)),Eventually(Sharp(v1)))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "sharp_eventually_exchange",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "sharp_exchange_law"
+        },
+        {
+          "index": 6,
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Eventually": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          "compact_expr": "Lam(App(Eventually(v1),v2))",
+          "library_refs": [],
+          "variable_refs": [
+            1,
+            2
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "eventually_eliminator",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "eliminator"
+        },
+        {
+          "index": 7,
+          "role": "formation",
+          "expr": {
+            "Pi": [
+              {
+                "Next": {
+                  "Next": {
+                    "Var": 1
+                  }
+                }
+              },
+              {
+                "Next": {
+                  "Var": 1
+                }
+              }
+            ]
+          },
+          "compact_expr": "Pi(Next(Next(v1)),Next(v1))",
+          "library_refs": [],
+          "variable_refs": [
+            1
+          ],
+          "every_library_ref_in_predecessor": true,
+          "proposed_registered_name": "next_composition",
+          "semantic_status": "pre_adjudicated_j3_exact_positional_match",
+          "j3_role": "composition_law"
+        }
+      ],
+      "exact_trace_signature_reconstructed": true,
+      "semantic_interpretation_status": "j3_signature_list_pre_adjudicated_raw_typing_registration_gated_with_batch"
+    }
+  ],
+  "surveyed_step_count": 7,
+  "surveyed_clause_count": 43,
+  "proposal": {
+    "proposal_path": "docs/steps_9_15_signature_adjudication.md",
+    "batch_rule": "steps-9-15-trace-faithful-signature-batch-v1",
+    "status": "adjudication_required",
+    "proposal_marks_adjudication_required": true,
+    "proposal_contains_single_adoption_block": true,
+    "step15_j3_list_matches_trace": true,
+    "step10_trace_export_count": 4,
+    "step10_extra_primitive_laws_authorized": false,
+    "hopf_classifier_strengthening_authorized": false,
+    "step8_unit_coherence_generator_authorized_by_g1": false,
+    "g6_unit_coherence_decision_deferred": true,
+    "endpoint_premise_api_already_adopted": true,
+    "constructor_work_authorized": false
+  },
+  "verdict_blindness_statement": "Only the sealed trace, frozen grammar specification, pre-adjudicated Step-15 J3 list, and adopted endpoint implementation rule ground this proposal. No bar, archived count, pending verdict, sweep outcome, or desired score effect grounds a signature or generator.",
+  "forbidden_outputs": {
+    "schema2_constructor_issued": false,
+    "generator_issued": false,
+    "membership_verdict_issued": false,
+    "independent_family_verdict_issued": false,
+    "e2b_executed": false,
+    "stage_count_issued": false,
+    "score_evaluated": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "adjudication_required_g1_complete_constructor_work_gated",
+  "permitted_conclusion": "The exact Steps 9-15 vocabulary, predecessor bindings, raw roles, and Step-15/J3 correspondence have been reconstructed, and one trace-faithful batch proposal has been emitted. Semantic enrichment of Steps 9-14 is underdetermined. G-2 through G-8 remain closed until the batch is adopted.",
+  "result_digest": "blake3:186c9bf1231b34294a20171a0e42170cd622dc3ba976d1f91ca6d54cff232289"
+}

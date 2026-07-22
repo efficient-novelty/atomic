@@ -1,0 +1,2226 @@
+{
+  "schema": "schema2-grammar-completion-g2-g7-v1",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/agent_e_grammar_completion_plan.md",
+      "role": "phase_order_and_firewall",
+      "signature_or_rule_ground": true,
+      "byte_length": 6057,
+      "blake3": "blake3:3fff0b9d4256bed50ab84110d75dc9d2d53b58cacb11e24660b30cf6974c06ad"
+    },
+    {
+      "path": "docs/steps_9_15_signature_adoption.md",
+      "role": "adopted_batch_authority",
+      "signature_or_rule_ground": true,
+      "byte_length": 1368,
+      "blake3": "blake3:7d9b4af6d3f6383647a6f78ece1d9c9d9de10fa1d5f085d1374ebfb15cb56a38"
+    },
+    {
+      "path": "docs/steps_9_15_signature_adjudication.md",
+      "role": "normative_signature_batch",
+      "signature_or_rule_ground": true,
+      "byte_length": 10199,
+      "blake3": "blake3:b71f4e7814062be1e9ddba4e633397b7ab5f217eec68d73bea78645ae6ca9d1d"
+    },
+    {
+      "path": "docs/schema2_g1_vocabulary_v1.json",
+      "role": "exact_g1_predecessor",
+      "signature_or_rule_ground": true,
+      "byte_length": 40649,
+      "blake3": "blake3:064d58bc711a59ab29ff048d50401bdea49628488aabc17717e882551e0d49de"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "frozen_grammar_spec",
+      "signature_or_rule_ground": true,
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544"
+    },
+    {
+      "path": "docs/endpoint_premise_api_adjudication.md",
+      "role": "adopted_public_endpoint_rule",
+      "signature_or_rule_ground": true,
+      "byte_length": 6060,
+      "blake3": "blake3:694c3369fc71194c62f4d7d88bdcdf2904fd92c45c343afc9d716e6534773789"
+    },
+    {
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "sealed_reference_trace",
+      "signature_or_rule_ground": true,
+      "byte_length": 19443,
+      "blake3": "blake3:d9831c28c380d1fdc313f757b393e26e81df1505d87ae35291d3eb8f214cf545"
+    },
+    {
+      "path": "docs/EVALUATOR_DERIVATION.md",
+      "role": "registered_p6_derived_material",
+      "signature_or_rule_ground": true,
+      "byte_length": 22845,
+      "blake3": "blake3:b579ae24043af40d430b528d7684b0a18d116c89709ebfe05e1408887ad3792e"
+    },
+    {
+      "path": "docs/HSPACE_ENUMERATION.md",
+      "role": "step8_trace_interpretation_only",
+      "signature_or_rule_ground": true,
+      "byte_length": 9699,
+      "blake3": "blake3:97954d23e8e8d754bf6d9cea87034ea4017bd9dcae88d61728be91e2e82c4308"
+    },
+    {
+      "path": "docs/schema2_m1_sweep_v1.json",
+      "role": "archival_replay_explicit_non_ground",
+      "signature_or_rule_ground": false,
+      "byte_length": 13355,
+      "blake3": "blake3:f6d04e35d192f86a66b03bd8a82a74e151548c88d1ac20f6c948bd9f80e68579"
+    },
+    {
+      "path": "crates/pen-type/src/cubical/typed_boundary.rs",
+      "role": "historically_pinned_private_endpoint_audit",
+      "signature_or_rule_ground": true,
+      "byte_length": 199287,
+      "blake3": "blake3:0d3f746ddb3a3c28441980f3ab9733762a94fe46f380be5d5a174659c07e8274"
+    },
+    {
+      "path": "crates/pen-type/src/public_endpoint.rs",
+      "role": "replay_only_public_endpoint_projection",
+      "signature_or_rule_ground": true,
+      "byte_length": 10712,
+      "blake3": "blake3:0a27d3e6ddfde901a0b373f0ccbaf1e6d5e4f9b024840617ef1b0d90c5954862"
+    },
+    {
+      "path": "agda/Schema2GrammarCompletion.agda",
+      "role": "safe_proof_mirror",
+      "signature_or_rule_ground": true,
+      "byte_length": 7002,
+      "blake3": "blake3:4fb261044837f2ccc6d11a11b55083f1e8e3020f977c99890426760597a0ca6a"
+    }
+  ],
+  "g1_replayed": true,
+  "adoption_replayed": true,
+  "registrations": [
+    {
+      "step": 9,
+      "label": "Hopf",
+      "class": "Map",
+      "clause_index": 0,
+      "registered_name": "hopf_map_shell",
+      "predecessor_signature_digest": "blake3:ac214686168ca9db360782f7b09fa9e89ade5e6839e933a72ae14e282d423e7a",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 8
+          },
+          {
+            "Lib": 7
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 8
+          },
+          {
+            "Lib": 7
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": false,
+      "naturality_mode": "constant_family_under_genuine_nonrenaming_ambient_action",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:1a4ea7d002440dc0d97a0b597b292073b0fb138cc3a0150d236371f5b39a3626",
+      "normalization_natural": true
+    },
+    {
+      "step": 9,
+      "label": "Hopf",
+      "class": "Map",
+      "clause_index": 1,
+      "registered_name": "hopf_fiber_instance",
+      "predecessor_signature_digest": "blake3:ac214686168ca9db360782f7b09fa9e89ade5e6839e933a72ae14e282d423e7a",
+      "raw_expr": {
+        "App": [
+          {
+            "Lib": 5
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "\"Neutral\"",
+      "normal_form": {
+        "App": [
+          {
+            "Lib": 5
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:9d4d18f52ffa785011c1d283553eb451bdc8df714c24d7e90429c21c605dfaba",
+      "normalization_natural": true
+    },
+    {
+      "step": 9,
+      "label": "Hopf",
+      "class": "Map",
+      "clause_index": 2,
+      "registered_name": "hopf_total_witness",
+      "predecessor_signature_digest": "blake3:ac214686168ca9db360782f7b09fa9e89ade5e6839e933a72ae14e282d423e7a",
+      "raw_expr": {
+        "Lam": {
+          "App": [
+            {
+              "Lib": 8
+            },
+            {
+              "Lib": 7
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Neutral\"]}",
+      "normal_form": {
+        "Lam": {
+          "App": [
+            {
+              "Lib": 8
+            },
+            {
+              "Lib": 7
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": false,
+      "naturality_mode": "constant_family_under_genuine_nonrenaming_ambient_action",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:69b058359edffdc38c20b50509350e5062a80adf621708deb819b70a8423b2ac",
+      "normalization_natural": true
+    },
+    {
+      "step": 9,
+      "label": "Hopf",
+      "class": "Map",
+      "clause_index": 3,
+      "registered_name": "hopf_reverse_or_classifying_shell",
+      "predecessor_signature_digest": "blake3:ac214686168ca9db360782f7b09fa9e89ade5e6839e933a72ae14e282d423e7a",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 7
+          },
+          {
+            "Lib": 8
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 7
+          },
+          {
+            "Lib": 8
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": false,
+      "naturality_mode": "constant_family_under_genuine_nonrenaming_ambient_action",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:321ad8ee52fcb02cca9ca5c866709e5273894ba3414c322b05baaf1307f49a1c",
+      "normalization_natural": true
+    },
+    {
+      "step": 10,
+      "label": "Cohesion",
+      "class": "Modal",
+      "clause_index": 0,
+      "registered_name": "flat_former",
+      "predecessor_signature_digest": "blake3:78e6444fdb136cda56a23714ebf9464adb3dac1c32fb49e7063bbb8cdc6d7f32",
+      "raw_expr": {
+        "Flat": {
+          "Var": 1
+        }
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Flat": {
+          "Var": 1
+        }
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:a35a4741ff503809440b0015d7febcf08d518c338ac2e296314ef4bf319490b9",
+      "normalization_natural": true
+    },
+    {
+      "step": 10,
+      "label": "Cohesion",
+      "class": "Modal",
+      "clause_index": 1,
+      "registered_name": "sharp_former",
+      "predecessor_signature_digest": "blake3:78e6444fdb136cda56a23714ebf9464adb3dac1c32fb49e7063bbb8cdc6d7f32",
+      "raw_expr": {
+        "Sharp": {
+          "Var": 1
+        }
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Sharp": {
+          "Var": 1
+        }
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:84da121f068f782cd2115733882291ae4af520316a607d54ea5045c3f4641149",
+      "normalization_natural": true
+    },
+    {
+      "step": 10,
+      "label": "Cohesion",
+      "class": "Modal",
+      "clause_index": 2,
+      "registered_name": "disc_former",
+      "predecessor_signature_digest": "blake3:78e6444fdb136cda56a23714ebf9464adb3dac1c32fb49e7063bbb8cdc6d7f32",
+      "raw_expr": {
+        "Disc": {
+          "Var": 1
+        }
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Disc": {
+          "Var": 1
+        }
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:bd9447dd6a8044c1fd2052a889a4ab54184cbb679fd17123ffb91d07e1447ec6",
+      "normalization_natural": true
+    },
+    {
+      "step": 10,
+      "label": "Cohesion",
+      "class": "Modal",
+      "clause_index": 3,
+      "registered_name": "shape_former",
+      "predecessor_signature_digest": "blake3:78e6444fdb136cda56a23714ebf9464adb3dac1c32fb49e7063bbb8cdc6d7f32",
+      "raw_expr": {
+        "Shape": {
+          "Var": 1
+        }
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Shape": {
+          "Var": 1
+        }
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:1863332a5606280138b99fe14854100960ef3f24b21d89ae08fb9e5b124d831c",
+      "normalization_natural": true
+    },
+    {
+      "step": 11,
+      "label": "Connections",
+      "class": "Axiomatic",
+      "clause_index": 0,
+      "registered_name": "connection_shell",
+      "predecessor_signature_digest": "blake3:6aecbe0f3688ae5d072497af8b2d008969d6d0d5efe4b5bee9b0480a21a7228d",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 10
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 10
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 2,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:5c2e754e7eb4604af81eec5240b9c898ded9e199f8039f9c25947f3f4d70cc8c",
+      "normalization_natural": true
+    },
+    {
+      "step": 11,
+      "label": "Connections",
+      "class": "Axiomatic",
+      "clause_index": 1,
+      "registered_name": "connection_intro",
+      "predecessor_signature_digest": "blake3:6aecbe0f3688ae5d072497af8b2d008969d6d0d5efe4b5bee9b0480a21a7228d",
+      "raw_expr": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Type\"]}",
+      "normal_form": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 2,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:d4bad8dd33bc1de464d95c816179bc25fd7d276b74788e8827125c9a480fa1f9",
+      "normalization_natural": true
+    },
+    {
+      "step": 11,
+      "label": "Connections",
+      "class": "Axiomatic",
+      "clause_index": 2,
+      "registered_name": "flat_connection_action",
+      "predecessor_signature_digest": "blake3:6aecbe0f3688ae5d072497af8b2d008969d6d0d5efe4b5bee9b0480a21a7228d",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Flat": {
+              "Var": 1
+            }
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Flat": {
+              "Var": 1
+            }
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:c07bd72a24d112b7822cb25f86fad2363ccc8ccab1b9ed585bcaddea78a08862",
+      "normalization_natural": true
+    },
+    {
+      "step": 11,
+      "label": "Connections",
+      "class": "Axiomatic",
+      "clause_index": 3,
+      "registered_name": "modal_connection_instance",
+      "predecessor_signature_digest": "blake3:6aecbe0f3688ae5d072497af8b2d008969d6d0d5efe4b5bee9b0480a21a7228d",
+      "raw_expr": {
+        "App": [
+          {
+            "Lib": 10
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "\"Neutral\"",
+      "normal_form": {
+        "App": [
+          {
+            "Lib": 10
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:343b203bb77dec662c4bcf4dfff0e6aebb74fa9c77aa6d9178c18af38f009d10",
+      "normalization_natural": true
+    },
+    {
+      "step": 11,
+      "label": "Connections",
+      "class": "Axiomatic",
+      "clause_index": 4,
+      "registered_name": "connection_unit_action",
+      "predecessor_signature_digest": "blake3:6aecbe0f3688ae5d072497af8b2d008969d6d0d5efe4b5bee9b0480a21a7228d",
+      "raw_expr": {
+        "Lam": {
+          "Var": 1
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Type\"]}",
+      "normal_form": {
+        "Lam": {
+          "Var": 1
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:d7b3c04b98296351f0af3ac31ec273d995c5c4d4426a7f1a444e87afb9d8abca",
+      "normalization_natural": true
+    },
+    {
+      "step": 12,
+      "label": "Curvature",
+      "class": "Axiomatic",
+      "clause_index": 0,
+      "registered_name": "curvature_shell",
+      "predecessor_signature_digest": "blake3:a743317dc1b629d988ffa744c95b69ed4dd572ce70979fd742d0d3756a2f2eb0",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 11
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 11
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 2,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:ecbf89378c18819a02463e8f7fb5f417a7bb69ddff33000fa422d67e863256aa",
+      "normalization_natural": true
+    },
+    {
+      "step": 12,
+      "label": "Curvature",
+      "class": "Axiomatic",
+      "clause_index": 1,
+      "registered_name": "curvature_intro",
+      "predecessor_signature_digest": "blake3:a743317dc1b629d988ffa744c95b69ed4dd572ce70979fd742d0d3756a2f2eb0",
+      "raw_expr": {
+        "Lam": {
+          "App": [
+            {
+              "Lib": 11
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Neutral\"]}",
+      "normal_form": {
+        "Lam": {
+          "App": [
+            {
+              "Lib": 11
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:4534abab5c0d9adfe2550d20126d315c0efcb49c5e9fc2e0bc7038fb6bf80978",
+      "normalization_natural": true
+    },
+    {
+      "step": 12,
+      "label": "Curvature",
+      "class": "Axiomatic",
+      "clause_index": 2,
+      "registered_name": "connection_targeting_map",
+      "predecessor_signature_digest": "blake3:a743317dc1b629d988ffa744c95b69ed4dd572ce70979fd742d0d3756a2f2eb0",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Lib": 11
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Lib": 11
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:abaea57cc93fc1a4d80bb4335f8c4dc5f858043e65850bb2f2a52e31c93b2b81",
+      "normalization_natural": true
+    },
+    {
+      "step": 12,
+      "label": "Curvature",
+      "class": "Axiomatic",
+      "clause_index": 3,
+      "registered_name": "connection_composite_instance",
+      "predecessor_signature_digest": "blake3:a743317dc1b629d988ffa744c95b69ed4dd572ce70979fd742d0d3756a2f2eb0",
+      "raw_expr": {
+        "App": [
+          {
+            "Lib": 11
+          },
+          {
+            "App": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "\"Neutral\"",
+      "normal_form": {
+        "App": [
+          {
+            "Lib": 11
+          },
+          {
+            "App": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:30a66caf0c3ea2df84b8a6f6b26c041d4bcc9e10a5142d75a0af26f1cc026a4b",
+      "normalization_natural": true
+    },
+    {
+      "step": 12,
+      "label": "Curvature",
+      "class": "Axiomatic",
+      "clause_index": 4,
+      "registered_name": "curvature_law_action",
+      "predecessor_signature_digest": "blake3:a743317dc1b629d988ffa744c95b69ed4dd572ce70979fd742d0d3756a2f2eb0",
+      "raw_expr": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Type\"]}",
+      "normal_form": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 2,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:106772b75ec898a97cb0adc7d088dd017c032113fbb64f784b35a3541a273c18",
+      "normalization_natural": true
+    },
+    {
+      "step": 12,
+      "label": "Curvature",
+      "class": "Axiomatic",
+      "clause_index": 5,
+      "registered_name": "connection_endomap",
+      "predecessor_signature_digest": "blake3:a743317dc1b629d988ffa744c95b69ed4dd572ce70979fd742d0d3756a2f2eb0",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 11
+          },
+          {
+            "Lib": 11
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 11
+          },
+          {
+            "Lib": 11
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": false,
+      "naturality_mode": "constant_family_under_genuine_nonrenaming_ambient_action",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:8c513a2e2131ab6755ebd9353936242b1d5b10d22e6c4e14ceb0a856f21756cb",
+      "normalization_natural": true
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "class": "Axiomatic",
+      "clause_index": 0,
+      "registered_name": "operator_pair_shell",
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "raw_expr": {
+        "Sigma": [
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Sigma": [
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:318f9beef237cf5d87409099b7d53668a59633b1b8b0d56db054c8471e12c5c0",
+      "normalization_natural": true
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "class": "Axiomatic",
+      "clause_index": 1,
+      "registered_name": "metric_connection_map",
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Sigma": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          },
+          {
+            "Lib": 11
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Sigma": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          },
+          {
+            "Lib": 11
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:458855b2fe841236b8fc02295fec6b1f10d77f2e0706d2d9f4d4d28adaba446e",
+      "normalization_natural": true
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "class": "Axiomatic",
+      "clause_index": 2,
+      "registered_name": "binary_metric_operation",
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:dd2a4fd8ace8af5350684aff672e2a87842ef8ae426aaa316c03513c91cb0f01",
+      "normalization_natural": true
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "class": "Axiomatic",
+      "clause_index": 3,
+      "registered_name": "metric_evaluation",
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "raw_expr": {
+        "Lam": {
+          "App": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Neutral\"]}",
+      "normal_form": {
+        "Lam": {
+          "App": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:744e0c0dbd1bb98b660993d954709231aafa0316841e1286fd0408bc325964cb",
+      "normalization_natural": true
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "class": "Axiomatic",
+      "clause_index": 4,
+      "registered_name": "curvature_endomap",
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 12
+          },
+          {
+            "Lib": 12
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 12
+          },
+          {
+            "Lib": 12
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": false,
+      "naturality_mode": "constant_family_under_genuine_nonrenaming_ambient_action",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:b622e1bc1e75021e1c15ff30c6a16b1059b2c4c9da67c60d7c2025fa0b0f8021",
+      "normalization_natural": true
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "class": "Axiomatic",
+      "clause_index": 5,
+      "registered_name": "metric_operator_action",
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "raw_expr": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Type\"]}",
+      "normal_form": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            {
+              "Var": 1
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:199451b2607bbd926d3785ae186660bade84b310b6a667367c6c09187290f4e6",
+      "normalization_natural": true
+    },
+    {
+      "step": 13,
+      "label": "Metric",
+      "class": "Axiomatic",
+      "clause_index": 6,
+      "registered_name": "curvature_supported_family",
+      "predecessor_signature_digest": "blake3:7ce822571cefa6e5c6351044b5c637305867b1af2b0df564e5e9a32ebb5b772b",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 12
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 12
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:34fae337557229473640642feedae85f9ab150dc21d7ee6cf77756664bf62f12",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 0,
+      "registered_name": "hilbert_functional_shell",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Sigma": [
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  "Univ"
+                ]
+              }
+            ]
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Sigma": [
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  "Univ"
+                ]
+              }
+            ]
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:9b99f98f994f70d86cc1b2e22972e72df84eee68e12fce0ada61f5769a03344a",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 1,
+      "registered_name": "hilbert_endomap",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:b051f16351ed55e09738b019165e5ba1f5657a7b072e3792aeb98129c2217cde",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 2,
+      "registered_name": "decomposition_shell",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Sigma": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Var": 1
+          },
+          {
+            "Sigma": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:f9bc64e0b71ae4181a052f3e4722b7d2e5aa059a6bc9cf064c2be6959da16ea4",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 3,
+      "registered_name": "spectral_shell",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lam": {
+              "Var": 1
+            }
+          },
+          {
+            "Sigma": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lam": {
+              "Var": 1
+            }
+          },
+          {
+            "Sigma": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 2
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 2,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:935c1b0d631d83ca79b2e9debe051f2b9ee859838d11ce975c0cf54b502f9ed4",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 4,
+      "registered_name": "operator_algebra_pair",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Sigma": [
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Sigma": [
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          },
+          {
+            "Pi": [
+              {
+                "Var": 1
+              },
+              {
+                "Var": 1
+              }
+            ]
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:62021be9edec2655f0c3d6dd3f1e31b38943e877aec4de8aa1e6358db808e2eb",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 5,
+      "registered_name": "metric_supported_family",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 13
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 13
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:38057688f9c84f49dbf5bb9eb90cfd3d5fa35a543cfc094797eab5cb14b8d38e",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 6,
+      "registered_name": "curvature_supported_family",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 12
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 12
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:12f795c6bed8b47a1eadd34a6ffa09920e26b55edb481f45e72258ff144c4477",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 7,
+      "registered_name": "connection_supported_family",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Lib": 11
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Lib": 11
+          },
+          {
+            "Var": 1
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:a03276ecf051e4d6725b22c64e8bf0c3866e5576e23551938481a8e39867519b",
+      "normalization_natural": true
+    },
+    {
+      "step": 14,
+      "label": "Hilbert",
+      "class": "Axiomatic",
+      "clause_index": 8,
+      "registered_name": "functional_derivative_action",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "raw_expr": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            "Univ"
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Type\"]}",
+      "normal_form": {
+        "Lam": {
+          "Pi": [
+            {
+              "Var": 1
+            },
+            "Univ"
+          ]
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:df5681dd3100e3a3e08906e8d53e9f0a4c9d9ca57f9d3c775adf50cc59f4f6ae",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 0,
+      "registered_name": "next_former",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Next": {
+          "Var": 1
+        }
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Next": {
+          "Var": 1
+        }
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:3ae62e2a8636e2708da63e5f059507901c063d3771ceb3c65e30e170759d0537",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 1,
+      "registered_name": "eventually_former",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Eventually": {
+          "Var": 1
+        }
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Eventually": {
+          "Var": 1
+        }
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:7090f19cb4f4659a3eb2558390948cf86be664704c3104936641bed5fc0d05b3",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 2,
+      "registered_name": "next_eventually_comparison",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Next": {
+              "Var": 1
+            }
+          },
+          {
+            "Eventually": {
+              "Var": 1
+            }
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Next": {
+              "Var": 1
+            }
+          },
+          {
+            "Eventually": {
+              "Var": 1
+            }
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:0c070a8e57690e94dbc06324ac6fa9db15e71e2844b6fa1b9f8456ea038f9bf6",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 3,
+      "registered_name": "cohesive_temporal_interaction",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Lam": {
+          "App": [
+            {
+              "Lib": 10
+            },
+            {
+              "Next": {
+                "Var": 1
+              }
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Neutral\"]}",
+      "normal_form": {
+        "Lam": {
+          "App": [
+            {
+              "Lib": 10
+            },
+            {
+              "Next": {
+                "Var": 1
+              }
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:8b06e5faf3e5230c5393442f8875421d388a38036d6926e4ea1426b564a14417",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 4,
+      "registered_name": "flat_next_exchange",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Flat": {
+              "Next": {
+                "Var": 1
+              }
+            }
+          },
+          {
+            "Next": {
+              "Flat": {
+                "Var": 1
+              }
+            }
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Flat": {
+              "Next": {
+                "Var": 1
+              }
+            }
+          },
+          {
+            "Next": {
+              "Flat": {
+                "Var": 1
+              }
+            }
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:f8893bd1b1f87e47f7db6db9f34a82008c2fcf4b2608f1b878a1d5aa91887d15",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 5,
+      "registered_name": "sharp_eventually_exchange",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Sharp": {
+              "Eventually": {
+                "Var": 1
+              }
+            }
+          },
+          {
+            "Eventually": {
+              "Sharp": {
+                "Var": 1
+              }
+            }
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Sharp": {
+              "Eventually": {
+                "Var": 1
+              }
+            }
+          },
+          {
+            "Eventually": {
+              "Sharp": {
+                "Var": 1
+              }
+            }
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:2a173f699f37ef5b3c99039f51aaf08e79a7e052581a3df08dd8581bf148bd2d",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 6,
+      "registered_name": "eventually_eliminator",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Lam": {
+          "App": [
+            {
+              "Eventually": {
+                "Var": 1
+              }
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "declared_role": "introduction",
+      "kernel_role": "introduction",
+      "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Neutral\"]}",
+      "normal_form": {
+        "Lam": {
+          "App": [
+            {
+              "Eventually": {
+                "Var": 1
+              }
+            },
+            {
+              "Var": 2
+            }
+          ]
+        }
+      },
+      "coarse_premise_count": 1,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:04fd893013c7dfc539b09d0fd464b215b26dc4b5de7641f036211ce35ee11f17",
+      "normalization_natural": true
+    },
+    {
+      "step": 15,
+      "label": "DCT",
+      "class": "Synthesis",
+      "clause_index": 7,
+      "registered_name": "next_composition",
+      "predecessor_signature_digest": "blake3:a440d7df1d88fb210d79848975cd776847dcb5bdd930a25ab727e29b279c0459",
+      "raw_expr": {
+        "Pi": [
+          {
+            "Next": {
+              "Next": {
+                "Var": 1
+              }
+            }
+          },
+          {
+            "Next": {
+              "Var": 1
+            }
+          }
+        ]
+      },
+      "declared_role": "formation",
+      "kernel_role": "formation",
+      "kernel_type_json": "\"Type\"",
+      "normal_form": {
+        "Pi": [
+          {
+            "Next": {
+              "Next": {
+                "Var": 1
+              }
+            }
+          },
+          {
+            "Next": {
+              "Var": 1
+            }
+          }
+        ]
+      },
+      "coarse_premise_count": 0,
+      "coarse_premises_preserved_not_erased": true,
+      "term_level_elaboration_succeeded": true,
+      "normalization_stable": true,
+      "support_local": true,
+      "ambient_parameter_dependency": true,
+      "naturality_mode": "typed_carrier_parameter_action_A_to_TruncB",
+      "genuine_nonrenaming_substitution_hash": "blake3:ef384237ecd840f09616ae3cafc688471d79aa307c67673cbcca31def31bb58f",
+      "substitution_preservation_hash": "blake3:d74018e133651886fd275d2cf0e89580b0c64c784476957f27e9352bbe60530b",
+      "normalization_naturality_hash": "blake3:8551b0259199ad15c92d29c8fd6d29ad6eb329e6c45518abacf6e8f87d02fc85",
+      "normalization_natural": true
+    }
+  ],
+  "phases": [
+    {
+      "phase": "G2_modal",
+      "registered_steps": [
+        10
+      ],
+      "registered_signature_count": 4,
+      "primitive_export_count": 4,
+      "extra_primitive_export_count": 0,
+      "typed": true,
+      "normalization_natural": true,
+      "rule": "four_trace_formers_no_extra_adjoint_primitives"
+    },
+    {
+      "phase": "G3_temporal",
+      "registered_steps": [
+        15
+      ],
+      "registered_signature_count": 8,
+      "primitive_export_count": 8,
+      "extra_primitive_export_count": 0,
+      "typed": true,
+      "normalization_natural": true,
+      "rule": "exact_eight_role_j3_mapping"
+    },
+    {
+      "phase": "G4_map_axiomatic",
+      "registered_steps": [
+        9,
+        11,
+        12,
+        13,
+        14
+      ],
+      "registered_signature_count": 31,
+      "primitive_export_count": 31,
+      "extra_primitive_export_count": 0,
+      "typed": true,
+      "normalization_natural": true,
+      "rule": "trace_signatures_normative_semantic_nicknames_non_normative"
+    }
+  ],
+  "p6_synthesis": {
+    "primitive_step15_signature_count": 8,
+    "extra_p6_primitive_exports": 0,
+    "comparison_present": true,
+    "interaction_present": true,
+    "flat_exchange_present": true,
+    "sharp_exchange_present": true,
+    "composition_present": true,
+    "p6_used_as_derived_closure_only": true,
+    "empty_named_gap": null,
+    "derivation_hash": "blake3:295a2f612f1dbec5c033f5cabf4cedad36be2e68d3f148ce842943b772de2466"
+  },
+  "g6_unit_coherence": {
+    "decision": "no_generator_justified_by_trace_and_frozen_spec",
+    "step8_clause_index": 4,
+    "exact_raw_clause": {
+      "Lam": {
+        "Var": 2
+      }
+    },
+    "raw_clause_is_path_or_identity_syntax": false,
+    "registered_left_unit_type_exists": true,
+    "registered_left_unit_term_exists": false,
+    "noncircular_generator_rule_found_in_trace_or_spec": false,
+    "generator_issued": false,
+    "m1_replayed_as_archival_predecessor": true,
+    "m1_used_as_decision_ground": false,
+    "count_verdict_bar_or_score_used_as_ground": false,
+    "named_gap": "G6_STEP8_TRACE_HAS_COHERENCE_SIGNATURE_BUT_NO_TYPED_NONCIRCULAR_PATH_TERM_RULE",
+    "derivation_hash": "blake3:5cc74843e74b0d8cbc529f712fac7e8e41ad9b3cbdf600a669006e04a09d6857"
+  },
+  "g7_induction": {
+    "ordinary_constructor_count": 9,
+    "prior_public_cubical_constructor_count": 8,
+    "newly_public_endpoint_constructor_count": 4,
+    "total_public_cubical_constructor_count": 12,
+    "public_endpoint_constructor_inventory": [
+      "endpoint_evaluation_hypothesis",
+      "endpoint_method_hypothesis",
+      "endpoint_path_elim",
+      "endpoint_elim_neutral"
+    ],
+    "every_endpoint_term_typed": true,
+    "every_endpoint_substitution_natural": true,
+    "ordinary_inference_rejects_endpoint_premises": true,
+    "endpoint_premise_charges_zero": true,
+    "trunc_regression_replayed": true,
+    "every_trace_signature_normalization_natural": true,
+    "agda_safe_without_k": true,
+    "agda_contains_postulate": false,
+    "intended_inventory_exhaustive_under_adopted_batch": true,
+    "derivation_hash": "blake3:3b2805faacb1d021c9864884c6044608e4b8abb6e1df97e2daf835fb72ae8da3"
+  },
+  "all_43_trace_signatures_registered": true,
+  "no_extra_primitive_export_rule_holds": true,
+  "step15_j3_exact": true,
+  "full_adopted_grammar_normalization_naturality_complete": true,
+  "g8_now_authorized": true,
+  "global_e4_membership_assembly_executed": false,
+  "forbidden_outputs": {
+    "membership_verdict_issued": false,
+    "independent_family_verdict_issued": false,
+    "e2b_executed": false,
+    "stage_count_issued": false,
+    "fq2_score_evaluated": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "g2_g7_complete_g8_authorized_no_membership_or_count_output",
+  "result_digest": "blake3:26ccc358c25ace6501e81125363064730c1642cfe775b0a931e8298bc5d60215"
+}

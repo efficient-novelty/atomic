@@ -714,8 +714,7 @@ impl SingleClauseStructuralNuContext {
             + u8::from(profile.kappa < 2 && facts.has_lib_pointer);
         let path_count = profile.path_count + u32::from(facts.is_path_con);
         // facts.path_dimension is 0 for non-path clauses, so this is a no-op there.
-        let path_dim_sq_sum =
-            profile.path_dim_sq_sum + facts.path_dimension * facts.path_dimension;
+        let path_dim_sq_sum = profile.path_dim_sq_sum + facts.path_dimension * facts.path_dimension;
         let (pre_path_count, post_path_entry_count) = if profile.path_count == 0 {
             if facts.is_path_con {
                 (profile.kappa, 0)
@@ -1386,11 +1385,12 @@ fn is_modal_wrapping_temporal(expr: &Expr) -> bool {
 
 fn is_temporal_wrapping_modal(expr: &Expr) -> bool {
     match expr {
-        Expr::Next(inner) | Expr::Eventually(inner) | Expr::Bang(inner) | Expr::WhyNot(inner) =>
+        Expr::Next(inner) | Expr::Eventually(inner) | Expr::Bang(inner) | Expr::WhyNot(inner) => {
             matches!(
-            inner.as_ref(),
-            Expr::Flat(_) | Expr::Sharp(_) | Expr::Disc(_) | Expr::Shape(_)
-        ),
+                inner.as_ref(),
+                Expr::Flat(_) | Expr::Sharp(_) | Expr::Disc(_) | Expr::Shape(_)
+            )
+        }
         _ => false,
     }
 }
@@ -1863,7 +1863,8 @@ impl SingleClauseStructuralNuPotential {
     fn hit_upper_with_new_path(&self, profile: &TelescopeNuProfile) -> u32 {
         self.hit_total(
             1,
-            self.max_path_dimension.saturating_mul(self.max_path_dimension),
+            self.max_path_dimension
+                .saturating_mul(self.max_path_dimension),
             profile.has_formation,
             profile.kappa,
             u32::from(profile.any_parametric_formation),
@@ -1877,7 +1878,8 @@ impl SingleClauseStructuralNuPotential {
         // the square-sum is the accumulated sum plus (at most one addable
         // clause in this context) the largest permitted dimension squared.
         let addable_sq = if self.can_add_path {
-            self.max_path_dimension.saturating_mul(self.max_path_dimension)
+            self.max_path_dimension
+                .saturating_mul(self.max_path_dimension)
         } else {
             0
         };

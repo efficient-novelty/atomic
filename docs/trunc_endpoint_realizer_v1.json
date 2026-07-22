@@ -1,0 +1,428 @@
+{
+  "schema": "trunc-endpoint-realizer-v1",
+  "date": "2026-07-19",
+  "versions": {
+    "endpoint_fragment": "tdc1-trunc-endpoint-dependent-pathcon-realizer-v1",
+    "boundary_axiom_v3": "pathcon-attachment-declared-bound-boundary-theory-axiom-v3-element-overlay",
+    "element_overlay": "historical-element-declaration-overlay-v1",
+    "boundary_charge_policy": "boundary-charge-zero-reference-only-v1",
+    "handoff_api": "tdc1-historical-prefix-v3-c6-typed-handoff-v1"
+  },
+  "source": {
+    "step": 6,
+    "kind": "trunc",
+    "dimension": 1,
+    "full_h15_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+    "exact_b5_signature_digest": "blake3:0ee6911b2820caeb0e745b4e44fa0875b8bfbca8f66b6a4921694ebde1cf44fd",
+    "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+    "full_telescope_digest": "blake3:70640ae784c584e2ae522cce26f1d7d1dce4520493aea9766647ec3e270bbc45",
+    "prefix_telescope_digest": "blake3:70640ae784c584e2ae522cce26f1d7d1dce4520493aea9766647ec3e270bbc45",
+    "full_typing_derivation_hash": "blake3:a8b72d8602dae04603ca3427cccced84ff8faeae972e8a8f91dffbf41c554fa5",
+    "prefix_typing_derivation_hash": "blake3:3ab31aeb26dc3275b7c58a4e7c41909e69ca6893c3ec9e57de2610ebc04e368b"
+  },
+  "declared_boundary": {
+    "context_label": "A:Type; x,y:Trunc(A)",
+    "full_typed_boundary_derivation_hash": "blake3:eb028fd7a8ec7cb8835b2816eb13dc697049661fef4cc6f314b440b7d28ffe37",
+    "prefix_typed_boundary_derivation_hash": "blake3:e01f184a9a3d75a6818ba9a56ce9b5144bcbfe921313620e1f45b75b799e049e",
+    "full_boundary_binding_digest": "blake3:de594ac32cc6267bd4e12aa21b9a0096a07d955a4a33895dda89d271bc2dd48a",
+    "prefix_boundary_binding_digest": "blake3:6feda40af86b7751f852511b1d01da77538b482fb3e221b9790f2ea2ffbe4821",
+    "endpoints": [
+      {
+        "axis": 0,
+        "endpoint": false,
+        "parameter_index": 1,
+        "parameter_name": "x",
+        "parameter_type": "Element { owner: Trunc(Var(1)) }",
+        "parameter_context_digest": "blake3:b1a04051f599700a0022d075fac5b0ddd81d084ea4195417e4c36775aeb540d3",
+        "boundary_term_normal_form_digest": "blake3:a4e80be9b664991477fcbe4eb25d2c813001b8424089bb0cf323a44b83b77882"
+      },
+      {
+        "axis": 0,
+        "endpoint": true,
+        "parameter_index": 2,
+        "parameter_name": "y",
+        "parameter_type": "Element { owner: Trunc(Var(1)) }",
+        "parameter_context_digest": "blake3:b1a04051f599700a0022d075fac5b0ddd81d084ea4195417e4c36775aeb540d3",
+        "boundary_term_normal_form_digest": "blake3:a921eb7e7a34351fe56c1ad0c9da0c36b35e9d6df44bf223852d7b86000f39cb"
+      }
+    ],
+    "exact_x_y_distinction": true,
+    "overlay_entry_used": false
+  },
+  "method": {
+    "shape": "PathP(i -> P(squash(x,y,i)), method(x), method(y))",
+    "formal_schema_premises_explicit": true,
+    "context_free_endpoint_hypotheses_rejected": true,
+    "premise_source_digest_full": "blake3:ba66624a1ec1f1bec48d60e264dd6c4213d7cbdfb061f1e307f564bba0a797f5",
+    "premise_source_digest_prefix": "blake3:824158c6fcf28cfca524ceeb1eba35bab3034d640a93ed1fce75680c84abac52",
+    "premise_context_derivation_hash_full": "blake3:30f855d1c488bb4de14ab8243643f140e41f0e80ae6fd17be9f23c6422ebad2f",
+    "premise_context_derivation_hash_prefix": "blake3:17ff3b8c2e89a936269e255117c72b3aa7d6be735f9594d75d7222cabdac7d7d",
+    "method_shape_digest_full": "blake3:6585d4191a073f7b07e911c6b1d42b304d4da32770e29be33842d20f52121844",
+    "method_shape_digest_prefix": "blake3:178f5b9185a563c85cd23a4960731bd149a7b3c13503604336157d9510575483",
+    "computation_audit_derivation_hash_full": "blake3:7ab90215943a69fd7e1b2f69ef3839a93893de699d4c9e90e35db8f013b3519f",
+    "computation_audit_derivation_hash_prefix": "blake3:192f7348c5c5cbc02987f237b47ace75124e70eef761d0146aa1dede31b06a89",
+    "zero_restriction_computes_to_method_image": true,
+    "one_restriction_computes_to_method_image": true,
+    "zero_scrutinee_computes_by_endpoint_instantiation": true,
+    "one_scrutinee_computes_by_endpoint_instantiation": true,
+    "constructor_scrutinee_computes_to_dependent_method": true,
+    "typed_neutral_stays_stuck_at_motive_instance": true,
+    "boundary_aware_coe_targets_right_endpoint": true
+  },
+  "scopes": [
+    {
+      "scope": "full_h15",
+      "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+      "typed_boundary_derivation_hash": "blake3:eb028fd7a8ec7cb8835b2816eb13dc697049661fef4cc6f314b440b7d28ffe37",
+      "boundary_attachment_derivation_hash": "blake3:9be102a6c18ddc5b6c0a5d3772566245a8f0866d44445eb50ccaced7c677560b",
+      "boundary_basis_presentation_derivation_hash": "blake3:7f98652712f42439610e20de0e54b7791a34e8a5f3208cce79b06515d8cfecca",
+      "endpoint_premise_context_derivation_hash": "blake3:30f855d1c488bb4de14ab8243643f140e41f0e80ae6fd17be9f23c6422ebad2f",
+      "method_shape_digest": "blake3:6585d4191a073f7b07e911c6b1d42b304d4da32770e29be33842d20f52121844",
+      "key_correspondence": [
+        {
+          "boundary_key": "beta",
+          "path_key": "beta"
+        },
+        {
+          "boundary_key": "principal_transport(0)",
+          "path_key": "kan(0,0)"
+        }
+      ],
+      "key_bijection_digest": "blake3:c8f3fda01a7b966b56dbbe7c54d3548b2516cdff7896ea588dc093ff162d710b",
+      "path_basis_derivation_hash": "blake3:2b5e1fe898c0c8cc5f24ccdcce828d747b79e887c9f2a5295ae75f62ef0501b7",
+      "path_realizations": [
+        {
+          "key": "beta",
+          "term_hash": "blake3:ebf4887619b98153fac351ca050bd5226ec99ef0177acea99fbe930b18abc2dc",
+          "normal_form_hash": "blake3:25a8f80710d396a9732aa4607946843f225c07da2867c2eb95d86ed809c9a633",
+          "type_hash": "blake3:dd963d53b9424c182030930e69d1d25d8482176f25e1f7b79437dab436171075",
+          "derivation_hash": "blake3:0c58bb04fe7362b4957ce0003b83c9daf42b26c442385bb0398462e4541d2c0f"
+        },
+        {
+          "key": "kan(0,0)",
+          "term_hash": "blake3:0368c61afe380d524edd91b7fb2426cbc49079329eb4a983eab518d58ce40533",
+          "normal_form_hash": "blake3:ecf1af7a43867e6621b41b1863aa64b9db166a7883d0533448a5386a33871eeb",
+          "type_hash": "blake3:d209dab69e3adcbc000efe6e7a943fcd87b8573928d1d8871cae70c083168101",
+          "derivation_hash": "blake3:50bbca84e652fa6a681f15941eb3c1f1e0ce4946aa415e7cdc271a239045390d"
+        }
+      ],
+      "expected_basis_count": 2,
+      "realized_basis_count": 2,
+      "exact_key_set": true,
+      "replayed": true,
+      "bundle_derivation_hash": "blake3:a96ea0b126edb93431b64b2fe2dc79480110a711224f1da9a3b65133dced9528"
+    },
+    {
+      "scope": "historical_prefix_b5",
+      "signature_digest": "blake3:0ee6911b2820caeb0e745b4e44fa0875b8bfbca8f66b6a4921694ebde1cf44fd",
+      "typed_boundary_derivation_hash": "blake3:e01f184a9a3d75a6818ba9a56ce9b5144bcbfe921313620e1f45b75b799e049e",
+      "boundary_attachment_derivation_hash": "blake3:a69ea71f3868581d03e920e58d756310d210dd8179a16b6bb4ff977bd08f8502",
+      "boundary_basis_presentation_derivation_hash": "blake3:fb6d4f52845bfa54317349ef8293272e55985b550c035ee4870952ff2eb6cd37",
+      "endpoint_premise_context_derivation_hash": "blake3:17ff3b8c2e89a936269e255117c72b3aa7d6be735f9594d75d7222cabdac7d7d",
+      "method_shape_digest": "blake3:178f5b9185a563c85cd23a4960731bd149a7b3c13503604336157d9510575483",
+      "key_correspondence": [
+        {
+          "boundary_key": "beta",
+          "path_key": "beta"
+        },
+        {
+          "boundary_key": "principal_transport(0)",
+          "path_key": "kan(0,0)"
+        }
+      ],
+      "key_bijection_digest": "blake3:c8f3fda01a7b966b56dbbe7c54d3548b2516cdff7896ea588dc093ff162d710b",
+      "path_basis_derivation_hash": "blake3:0a02b16cb8398ed428b2396cc3d0eaeeef17a74ba18426d6f11a53d3c5a6e6b2",
+      "path_realizations": [
+        {
+          "key": "beta",
+          "term_hash": "blake3:ef7b236b466602391e6c95477a33c7510dc81cfe34354cc625b77409ab50c5e8",
+          "normal_form_hash": "blake3:1438ae35b69e634e687558021a4ea54feaa573f56a51316ca5f5586c81fd4185",
+          "type_hash": "blake3:dd963d53b9424c182030930e69d1d25d8482176f25e1f7b79437dab436171075",
+          "derivation_hash": "blake3:43440ad985319eaf19cf9fa4e1f4fcc6d97390c270926b832c3ded55d278992f"
+        },
+        {
+          "key": "kan(0,0)",
+          "term_hash": "blake3:3d1a80f97d321527b376b2d99961cc4972cb6c6df8fe0e023b7008e52792f719",
+          "normal_form_hash": "blake3:acf640c9652fba152c99a609ce4dfa9ba3fedc042b51569398b3d05a907cc015",
+          "type_hash": "blake3:d209dab69e3adcbc000efe6e7a943fcd87b8573928d1d8871cae70c083168101",
+          "derivation_hash": "blake3:cfdb4ca4899924bd14a6b3640556fc5647cb51652376b4fe55fbe7358048f07e"
+        }
+      ],
+      "expected_basis_count": 2,
+      "realized_basis_count": 2,
+      "exact_key_set": true,
+      "replayed": true,
+      "bundle_derivation_hash": "blake3:4f83441c3f41dd1daa297326f0b67560ba225c3ef49ae4eb52a7fc345d3d935a"
+    }
+  ],
+  "restricted_instantiation": {
+    "theorem_scope": "sort-identical variable images; arbitrary typed instance images remain an explicit gap",
+    "owner_identity_derivation_hash": "blake3:c5c65290f568a2a5cca313f995e5a77d9631de4419a981fb8902fe7ac568ee64",
+    "zero_endpoint_identity_derivation_hash": "blake3:83fc10a0e12708151eb153b3120ebfd85bcfa2354b194edac11cfbcff3536788",
+    "one_endpoint_identity_derivation_hash": "blake3:a04013d52bf305065a7918bbd0193f5aedff421984d2677f3f4e24da964fd6a6",
+    "endpoint_swap_derivation_hash": "blake3:d612a34f5cebca4446291e17675cd98ccc280564081838122b79b7f5c96e7af0",
+    "all_images_are_sort_identical_variables": true,
+    "all_four_fixed_context_maps_replayed": true,
+    "variable_instances": [
+      {
+        "kind": "identity",
+        "source_to_target_variables": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "zero_target_variable": 2,
+        "one_target_variable": 3,
+        "zero_boundary_parameter": 1,
+        "one_boundary_parameter": 2,
+        "has_degenerate_endpoints": false,
+        "owner_substitution_derivation_hash": "blake3:c5c65290f568a2a5cca313f995e5a77d9631de4419a981fb8902fe7ac568ee64",
+        "zero_endpoint_substitution_derivation_hash": "blake3:83fc10a0e12708151eb153b3120ebfd85bcfa2354b194edac11cfbcff3536788",
+        "one_endpoint_substitution_derivation_hash": "blake3:a04013d52bf305065a7918bbd0193f5aedff421984d2677f3f4e24da964fd6a6",
+        "substitution_derivation_hash": "blake3:05e54f2045c5f356253122fb92ba004ec15f525d32274d6c9981a40761332339",
+        "premise_source_digest": "blake3:2be326629bb0edfb1d22df0113e0317d8e3793b7799441e5b13277c9dee74a41",
+        "premise_context_derivation_hash": "blake3:379cc46b9920103e3ca4e31cb7755d61c3ca3769d997b72d41de13bcf62bca22",
+        "computation_audit_derivation_hash": "blake3:c8461ad0f006db48356d3d91c0555ba7e35ffec62488c729764dc7c58707283b",
+        "derivation_hash": "blake3:233bac04cde6fb3c20eca32499d7a1a4ac8536774c9eadb1a25ba302fd6617d4"
+      },
+      {
+        "kind": "swap",
+        "source_to_target_variables": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "zero_target_variable": 3,
+        "one_target_variable": 2,
+        "zero_boundary_parameter": 2,
+        "one_boundary_parameter": 1,
+        "has_degenerate_endpoints": false,
+        "owner_substitution_derivation_hash": "blake3:7e63ef818460da33b0a0b3caad5ab376c8cd9786f52787b3f470a9d97a517860",
+        "zero_endpoint_substitution_derivation_hash": "blake3:c36d925b914146a2c80802827c229bcfd1fa1feeca178c8b1592e4fa38c6b4f4",
+        "one_endpoint_substitution_derivation_hash": "blake3:0af7675cb91c667cb5341163d11fb83ae105948e613af5aef46f5680c0ae6ec1",
+        "substitution_derivation_hash": "blake3:d612a34f5cebca4446291e17675cd98ccc280564081838122b79b7f5c96e7af0",
+        "premise_source_digest": "blake3:86326575c4a744fb8242b3dc9c5c4d428abb5b956429b98bcff131ecce9f6499",
+        "premise_context_derivation_hash": "blake3:c0215a76323b4e986a2801cdc2b4c8cd952299e809c2ea7daa8bdd9d66fa4504",
+        "computation_audit_derivation_hash": "blake3:2dae1e78a28f90803ce378f00507f980cda937f941821e6a3eb9801ceb05c0a8",
+        "derivation_hash": "blake3:27c0bd94ad1883c7f61b0351b684c7b1aacc93f07133c12d09f448639502223d"
+      },
+      {
+        "kind": "collapse_to_x",
+        "source_to_target_variables": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "zero_target_variable": 2,
+        "one_target_variable": 2,
+        "zero_boundary_parameter": 1,
+        "one_boundary_parameter": 1,
+        "has_degenerate_endpoints": true,
+        "owner_substitution_derivation_hash": "blake3:2ca9634eced08e04cf3b6fb39b0181aa03585c5f9bfb8975434bd3da8ff221cb",
+        "zero_endpoint_substitution_derivation_hash": "blake3:9f8ff8f9c0e49e41f8c5bb73a60fd31fc74a98c7bed1b533c33d1a392618fbee",
+        "one_endpoint_substitution_derivation_hash": "blake3:6bcbe0850d94c460e990ef0976617f040de0e18efac09693a67f1f7fcd635046",
+        "substitution_derivation_hash": "blake3:2ee46cafd6a640013d9d45f9851c7a6f08367db92c6eeacaf7c07d031dc41ff4",
+        "premise_source_digest": "blake3:8752237887ef391d03623a77782a294bad789922bca06a64fcc649854affb485",
+        "premise_context_derivation_hash": "blake3:3d677f5e928a3a62a3544aea08d2b7d02a2d91d42aa0e410b05cdebc2ea289d3",
+        "computation_audit_derivation_hash": "blake3:f9c2aadc34116cbd39af28b396faa20b98ae14efc20649efa4b606c2b603a589",
+        "derivation_hash": "blake3:47d3b7c2e68e5860700402659aaac2e01601d7c12a71f377b13f17c9592cb800"
+      },
+      {
+        "kind": "collapse_to_y",
+        "source_to_target_variables": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "zero_target_variable": 3,
+        "one_target_variable": 3,
+        "zero_boundary_parameter": 2,
+        "one_boundary_parameter": 2,
+        "has_degenerate_endpoints": true,
+        "owner_substitution_derivation_hash": "blake3:ad334595bc4d570b447787bb1ecc90cfe6ddaf165b00e2d3abebcb1925d810ad",
+        "zero_endpoint_substitution_derivation_hash": "blake3:fea828b7e35bfb26f2301676bfe512787de0f6b1f559f9114f467f8b8ed85871",
+        "one_endpoint_substitution_derivation_hash": "blake3:893863b8123dc1159006f3e75da551b06f90e7b8d30c16f06155018a292489cb",
+        "substitution_derivation_hash": "blake3:eb43ba903f1a04ed272dbdf25552fcb5402e5428ff5af56ef705dc577ea4b5e4",
+        "premise_source_digest": "blake3:c281f84e6007b17895ae355e3704692d6bbfbec217c178ff90f1910918e8f7ab",
+        "premise_context_derivation_hash": "blake3:6600bdc6790cbf63a001a86418065533fbb1b78b00188b2239600fc01715439f",
+        "computation_audit_derivation_hash": "blake3:37598d9985642f82d060cb45a31c788f5520138dd08f3614790792194710db55",
+        "derivation_hash": "blake3:b4f949467dc00c1b6c1e4f078305140be6bf9d67d8f5675ab3f7e7cedbb1f902"
+      }
+    ],
+    "arbitrary_typed_images_used": false,
+    "inherited_arbitrary_typed_image_gap": "C1_ARBITRARY_TYPED_INSTANCE_SORT_PRESERVATION"
+  },
+  "agent_a_handoff": {
+    "api_version": "tdc1-historical-prefix-v3-c6-typed-handoff-v1",
+    "registered_counts": [
+      2,
+      2,
+      5,
+      10
+    ],
+    "rows": [
+      {
+        "kind": "s1",
+        "step": 5,
+        "dimension": 1,
+        "prefix_signature_digest": "blake3:11c74244bfb002c53bc4f3b9a3c7013e7e38460ad03ce63bf9bc41e535fc8458",
+        "evidence_kind": "archival_constant_bridge",
+        "expected_basis_count": 2,
+        "realized_basis_count": 2,
+        "child_derivation_hash": "blake3:29f76eaf1700ad76a423be6df0336f29f078fb3ff2768b542969fbcbfdf76db0",
+        "wrapper_derivation_hash": "blake3:5510bb3aa572c055bd84403e9bfe7e88a27bc03902aef2981af6073a2a72d948"
+      },
+      {
+        "kind": "trunc",
+        "step": 6,
+        "dimension": 1,
+        "prefix_signature_digest": "blake3:0ee6911b2820caeb0e745b4e44fa0875b8bfbca8f66b6a4921694ebde1cf44fd",
+        "evidence_kind": "trunc_endpoint_dependent_v1",
+        "expected_basis_count": 2,
+        "realized_basis_count": 2,
+        "child_derivation_hash": "blake3:4f83441c3f41dd1daa297326f0b67560ba225c3ef49ae4eb52a7fc345d3d935a",
+        "wrapper_derivation_hash": "blake3:24e6aecef1f94c91af81e39e70f54378be50e84f77a1872202234da9d09dcde0"
+      },
+      {
+        "kind": "s2",
+        "step": 7,
+        "dimension": 2,
+        "prefix_signature_digest": "blake3:e8cba04def50e09c83b1e28a252bb6f2e327e6468027a3d9353e20d9ad19e5ed",
+        "evidence_kind": "archival_constant_bridge",
+        "expected_basis_count": 5,
+        "realized_basis_count": 5,
+        "child_derivation_hash": "blake3:69fcbffdbaf7ea2a38c404422ccfcc72d457cefe75c3f55d993903289c4ac127",
+        "wrapper_derivation_hash": "blake3:74ea4a2104ea6e7b286b0bab9cd32df030a9348e7253fd182ffedfd7ebd16aba"
+      },
+      {
+        "kind": "s3",
+        "step": 8,
+        "dimension": 3,
+        "prefix_signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+        "evidence_kind": "archival_constant_bridge",
+        "expected_basis_count": 10,
+        "realized_basis_count": 10,
+        "child_derivation_hash": "blake3:875427e0bb735f45bffc27e02eb8b31452c932b816072294a11d4716394899f8",
+        "wrapper_derivation_hash": "blake3:86cbf5317cd99472d3f6409659838ed7dcf84b92afcaec596f98a5d6fe405711"
+      }
+    ],
+    "all_replayed": true,
+    "derivation_hash": "blake3:0d000438fb6de471818ffb93cf6654a7aeb956223d4b4e488c6a9d167be9e0fb"
+  },
+  "archival_bindings": [
+    {
+      "name": "HIST-CERT v1",
+      "path": "docs/hist_cert_v1.json",
+      "byte_length": 207055,
+      "sha256": "6D9FE83446ACEFB66AEB86168B5E96C677DAD355F3E2CF7D44F1EA5298AE6726",
+      "internal_digest": "blake3:e840f99c519756bc6215fbf8db03a738dae7c9127043599c06eaafed25d77c27",
+      "exact_bytes_pinned": true
+    },
+    {
+      "name": "BOUNDARY-AUDIT v1",
+      "path": "docs/boundary_audit_v1.json",
+      "byte_length": 38629,
+      "sha256": "1A3D8575784A1987C7A56EE13D265F56CC7F47F808EE3E4D28B248A85A7E7CB4",
+      "internal_digest": "blake3:76c389766a5c54582d1e2ffe9942db5c53cd3764137cfc62254b9857e1f1c435",
+      "exact_bytes_pinned": true
+    },
+    {
+      "name": "TDC cubical regression v3",
+      "path": "docs/tdc1_cubical_regression_v3.json",
+      "byte_length": 36033,
+      "sha256": "65CF20883420C5777BF487FFFCE046A447E097DDEFD0772E4B58BF3808F12753",
+      "internal_digest": "blake3:075791e9024a8c36a3f0dab593fa1460fb8288d3e9fc3345aa76c48cff978e56",
+      "exact_bytes_pinned": true
+    },
+    {
+      "name": "IP-1 schema 3",
+      "path": "docs/ip1_candidate_verdict_join_v3.json",
+      "byte_length": 168692,
+      "sha256": "4913E818C080D67C81CE1770F047E22DB9EA6975BFE704FB01352F268FA2B729",
+      "internal_digest": "blake3:e4cb89fe83476fb8a0eee43bcc976053bcbbff0bd6db35607d7e8154a3ef858b",
+      "exact_bytes_pinned": true
+    },
+    {
+      "name": "IP-1 schema 4",
+      "path": "docs/ip1_candidate_verdict_join_v4.json",
+      "byte_length": 535972,
+      "sha256": "4094B2E65E36507157029760C71FF62BA241E82D066CF590F9184DE66BEDB5F4",
+      "internal_digest": "blake3:6a6c3ccfe4731080bfaa944b98f50afe2bde1eb29fdd679b8f62e3a42f72d1e2",
+      "exact_bytes_pinned": true
+    },
+    {
+      "name": "IP-1 schema 5 element overlay",
+      "path": "docs/ip1_candidate_verdict_join_v5_element_overlay.json",
+      "byte_length": 484717,
+      "sha256": "C4CFBB693BB3EB6F2CBBDD14495475EE856BE64EC42890A4FC5B2EA612EB1AA2",
+      "internal_digest": "blake3:ee5a0883ef0a81450035d472c855a81d259d6058498983eddc05707b8c3b637b",
+      "exact_bytes_pinned": true
+    }
+  ],
+  "falsifiers": {
+    "f_tr1_registered_computation_realizable_under_formal_method_premises": true,
+    "f_tr2_exact_archival_bytes_unchanged": true,
+    "f_tr2_definition_replay_external_gate_required": true,
+    "definition_replay_proved_by_this_certificate": false,
+    "f_tr3_exactly_two_exported_keys": true,
+    "f_tr4_arbitrary_typed_images_unused_and_gap_named": true
+  },
+  "conditionality": {
+    "conditional_on_boundary_axiom_v3": true,
+    "judgement_is_under_formal_eliminator_method_premises": true,
+    "closed_term_without_method_premises_proved": false,
+    "trunc_element_overlay_entry_required": false,
+    "registered_trunc_c6_endpoint_realizer_proved": true,
+    "general_c6_proved": false,
+    "basis_independence_proved": false,
+    "intended_basis_exhaustiveness_proved": false,
+    "candidate_level_c8_proved": false,
+    "intended_schema_classification_proved": false,
+    "step16_or_global_halt_proved": false
+  },
+  "obstruction_retired": "C6_TRUNC_DECLARED_ENDPOINT_PATHCON_REALIZER",
+  "remaining_obligations": [
+    "C6_V3_GENERAL_HISTORICAL_TERM_LEVEL_COMPLETION",
+    "C1_ARBITRARY_TYPED_INSTANCE_SORT_PRESERVATION",
+    "C8_CANDIDATE_BOUNDARY_PROVENANCE_JOIN",
+    "INTENDED_DEPTH_TWO_SCHEMA_CLASSIFICATION",
+    "F-B2-HIST-CERT-V3-CREATE-NEW-RERUN-PENDING"
+  ],
+  "result_digest": "blake3:62b9e72a0047dd578f6881dfbeff9ff3b87cd19118e3f84ea917fdef604a84a1"
+}

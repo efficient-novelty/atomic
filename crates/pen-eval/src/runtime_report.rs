@@ -33,9 +33,9 @@
 
 use crate::lambda_trigger::rational_string;
 use crate::runtime_bar::fib;
-use crate::runtime_dedup::{band_export, engagement_fraction, nu_profile, TypedObligations};
+use crate::runtime_dedup::{TypedObligations, band_export, engagement_fraction, nu_profile};
 use crate::runtime_field::{
-    genesis_reference_context, run_step_loop, CadenceStepReport, FieldPolicy,
+    CadenceStepReport, FieldPolicy, genesis_reference_context, run_step_loop,
 };
 use pen_core::rational::Rational;
 use serde::Serialize;
@@ -236,10 +236,7 @@ pub fn build_runtime_calculus_run(
                     sealed: export.sealed,
                     attachment_exported: export.attachment_exported,
                     echo_exported: export.echo_exported,
-                    exported_share: rational_string(Rational::new(
-                        exported as i64,
-                        d_tot as i64,
-                    )),
+                    exported_share: rational_string(Rational::new(exported as i64, d_tot as i64)),
                     band: band_label(
                         export.sealed,
                         export.attachment_exported,
@@ -284,7 +281,7 @@ pub fn build_runtime_calculus_run(
 #[cfg(test)]
 mod tests {
     use super::{band_label, demand_window_split, first_engagement_crossing};
-    use crate::runtime_dedup::{band_export, TypedObligations};
+    use crate::runtime_dedup::{TypedObligations, band_export};
 
     #[test]
     fn demand_window_split_is_the_ledger_recurrence() {
@@ -335,7 +332,11 @@ mod tests {
         let export = band_export(window, 7);
         assert!(!export.sealed);
         assert_eq!(
-            band_label(export.sealed, export.attachment_exported, export.echo_exported),
+            band_label(
+                export.sealed,
+                export.attachment_exported,
+                export.echo_exported
+            ),
             "unsealed-full-export"
         );
 
@@ -344,14 +345,22 @@ mod tests {
         assert!(export.sealed);
         assert_eq!(export.echo_exported, 3);
         assert_eq!(
-            band_label(export.sealed, export.attachment_exported, export.echo_exported),
+            band_label(
+                export.sealed,
+                export.attachment_exported,
+                export.echo_exported
+            ),
             "depth-2"
         );
 
         // Fully serviced: no band.
         let export = band_export(window, 13);
         assert_eq!(
-            band_label(export.sealed, export.attachment_exported, export.echo_exported),
+            band_label(
+                export.sealed,
+                export.attachment_exported,
+                export.echo_exported
+            ),
             "none"
         );
     }

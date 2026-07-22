@@ -161,9 +161,7 @@ pub fn constant_stratum_crossing(nu: u64, kappa: u64, max_n: usize) -> usize {
 /// kappa_spec <= 10 this is at most 7; crossing at 16 would require
 /// kappa_spec in [610, 987).
 pub fn spec_kappa_debt_crossing(kappa_spec: u64) -> usize {
-    (1..=64)
-        .find(|n| fib(*n) > kappa_spec)
-        .unwrap_or(0)
+    (1..=64).find(|n| fib(*n) > kappa_spec).unwrap_or(0)
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

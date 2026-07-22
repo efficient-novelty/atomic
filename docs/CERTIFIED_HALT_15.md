@@ -4,6 +4,17 @@
 implemented, but the mathematical global-halt theorem remains conditional on
 typed semantic certificates that the present shallow AST cannot construct.
 
+**Selective-Law version note.** The immutable EGP-v1 burned reselection is
+`docs/semantic_reselection.json`: it first diverges at the Stage-1 score and
+halts at Stage 2. It is evidence against EGP-v1, not evidence against every
+typed Selective Law. The fresh-declaration/generative-basis EGP-v2 law and its
+score-blind Stage 1--4 gate were preregistered separately in
+`docs/EGP_V2_BOOTSTRAP_PROGRAM.md`. The burned result is recorded in
+`docs/EGP_V2_BOOTSTRAP_RESULT.md`: Stages 1 and 2 re-enact with score `1`, but
+the run halts at Stage 3 because its one-atom completion has density `1` below
+the revised bar `4/3`. The bootstrap gate fails; there is still no revised
+Bar16 or global-halt conclusion.
+
 ## Result
 
 The machine check now reports three different propositions separately:
@@ -172,9 +183,12 @@ executable without pretending that user-supplied theorem names are checked
 proofs. Its generated artifact reproduces the legacy vector
 `1,1,2,5,7,8,10,18,17,19,26,34,46,62,103`, but every
 `revised_audited_nu` is `null`, semantic O(16) is unknown, and the J2/J3 and
-internality flags remain false. No saturation or realization theorem is needed
-for the eventual upper bound. Until the obligations above are discharged, the
-strongest correct conclusion is:
+internality flags remain false. Separately, the EGP-v1 full reselection burned
+at Stage 2 as described above. EGP-v2 changes the counted object from marginal
+families to a certified independent generative basis, so it must produce a new
+artifact rather than overwrite either result. No saturation or realization
+theorem is needed for the eventual upper bound. Until the obligations above
+are discharged, the strongest correct conclusion is:
 
 ```text
 shipped evaluator: SAT

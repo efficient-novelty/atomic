@@ -1,0 +1,251 @@
+{
+  "schema": "schema2-e3-e4-class-induction-successor-v4",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_v3.json",
+      "role": "strict_byte_pinned_e3_e4_predecessor",
+      "byte_length": 19987,
+      "blake3": "blake3:a3eaf47ba09ce7d3ec1bace233cbf59e9fb271dcbad35cee32abe1e4293d3127"
+    },
+    {
+      "path": "docs/e2_phase_order_adjudication.md",
+      "role": "adopted_p1_phase_and_output_boundary",
+      "byte_length": 3741,
+      "blake3": "blake3:6f6eb9e071bd05ce172a113da96653ba281d7eab215a23364ee556a0992f246f"
+    },
+    {
+      "path": "docs/agent_e_schema2_plan.md",
+      "role": "governing_e3_e4_execution_plan",
+      "byte_length": 9562,
+      "blake3": "blake3:d06d2039f1cd83e2d5509478aede30d2e09e2548f262cea9e0f88abbfe2767db"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "frozen_intended_schema2_specification",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544"
+    },
+    {
+      "path": "crates/pen-schema/src/e34_class_induction.rs",
+      "role": "operational_class_induction_issuer",
+      "byte_length": 50409,
+      "blake3": "blake3:666c69781a73f85e9ecde97011be109ffd6308601cb734ec8691dedcd2a224be"
+    },
+    {
+      "path": "agda/Schema2E3E4ClassInduction.agda",
+      "role": "safe_constructive_proof_mirror",
+      "byte_length": 24186,
+      "blake3": "blake3:b734450d38008472ea4b709aa80a4e70d1b1ae9a73b68a16be5cbfe19c326443"
+    }
+  ],
+  "predecessor": {
+    "path": "docs/schema2_v3.json",
+    "schema": "schema2-e3-e4-successor-v3",
+    "result_digest": "blake3:ced5aabffbc592100f09251f8eb4bfdfacbfe6e94b94a6dbc82736d9e00487fe",
+    "strict_replay_valid": true,
+    "e3_global_complete": false,
+    "e4_global_complete": false,
+    "e2b_executed": false,
+    "global_halt_proved": false
+  },
+  "ordinary": {
+    "version": "schema2-class-indexed-e3-e4-attempt-v1",
+    "aggregate_derivation_hash": "blake3:c4e7d0683248b9da761d1e5452fc7f105ee70f759e36851a94c1702195f8f4dc",
+    "registered_constructor_count": 9,
+    "registered_constructors": [
+      "fresh_formation",
+      "point_or_unit_intro",
+      "path_constructor_intro",
+      "recursor",
+      "inductor",
+      "trunc_parametric_action",
+      "post_path_operation",
+      "post_path_coherence",
+      "cell_action"
+    ],
+    "inventory_exhaustive_for_operational_registry": true,
+    "every_constructor_normalized_and_natural": true,
+    "genuine_typed_substitution_used": true,
+    "source_and_target_normal_forms_rechecked": true,
+    "presentation_disposition_and_support_preserved": true,
+    "intended_schema2_inventory_exhaustive": false
+  },
+  "cubical": {
+    "exemplar_count": 4,
+    "enum_constructor_count": 12,
+    "public_constructor_count": 8,
+    "private_endpoint_premise_constructor_count": 4,
+    "observed_public_constructors": [
+      "point",
+      "motive_base",
+      "path_method",
+      "path_elim",
+      "dim_lambda",
+      "dim_app",
+      "coe",
+      "hcom"
+    ],
+    "recursive_match_exhaustive_over_kernel_enum": true,
+    "public_constructor_inventory_exhaustive": true,
+    "typing_preserved": true,
+    "normalization_replay_stable": true,
+    "dimension_substitution_witness_count": 17,
+    "every_checked_dimension_action_natural": true,
+    "coe_node_count": 1,
+    "hcom_node_count": 1,
+    "typed_tube_face_count": 2,
+    "checked_overlap_count": 1,
+    "registered_trunc_endpoint_replayed": true,
+    "registered_trunc_basis_count": 2,
+    "generic_endpoint_premise_induction_complete": false,
+    "registered_bundle_e1_naturality_complete": false
+  },
+  "per_class": [
+    {
+      "class": "foundation",
+      "registered_ordinary_constructors": [
+        "fresh_formation",
+        "point_or_unit_intro"
+      ],
+      "every_registered_constructor_normalized_and_natural": true,
+      "public_dependent_cubical_induction_available": false,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_INTENDED_CLASS_INDEXED_SCHEMA2_GRAMMAR_NOT_EXHAUSTIVE"
+      ]
+    },
+    {
+      "class": "former",
+      "registered_ordinary_constructors": [
+        "recursor",
+        "inductor"
+      ],
+      "every_registered_constructor_normalized_and_natural": true,
+      "public_dependent_cubical_induction_available": false,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_INTENDED_CLASS_INDEXED_SCHEMA2_GRAMMAR_NOT_EXHAUSTIVE"
+      ]
+    },
+    {
+      "class": "map",
+      "registered_ordinary_constructors": [
+        "trunc_parametric_action",
+        "post_path_operation"
+      ],
+      "every_registered_constructor_normalized_and_natural": true,
+      "public_dependent_cubical_induction_available": false,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_MAP_NATURAL_TRANSFORMATION_AND_EXPORTED_SUPPORT_ACTION_GRAMMAR_INCOMPLETE"
+      ]
+    },
+    {
+      "class": "axiomatic",
+      "registered_ordinary_constructors": [
+        "post_path_coherence"
+      ],
+      "every_registered_constructor_normalized_and_natural": true,
+      "public_dependent_cubical_induction_available": false,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_ADJOINT_MATE_AND_INTERCHANGE_GRAMMAR_INCOMPLETE"
+      ]
+    },
+    {
+      "class": "modal",
+      "registered_ordinary_constructors": [],
+      "every_registered_constructor_normalized_and_natural": false,
+      "public_dependent_cubical_induction_available": false,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_TYPED_MODAL_SCHEMA_CONSTRUCTOR_AND_NATURALITY_RULES_NOT_DEFINED"
+      ]
+    },
+    {
+      "class": "hit_v2",
+      "registered_ordinary_constructors": [
+        "path_constructor_intro",
+        "cell_action"
+      ],
+      "every_registered_constructor_normalized_and_natural": true,
+      "public_dependent_cubical_induction_available": true,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_GENERIC_ENDPOINT_PREMISE_CONTEXT_CUBICAL_INDUCTION_NOT_PUBLIC",
+        "E34_REGISTERED_BOUNDARY_BUNDLE_TRANSPORT_UNDER_E1_SUBSTITUTION_NOT_PROVED"
+      ]
+    },
+    {
+      "class": "synthesis",
+      "registered_ordinary_constructors": [],
+      "every_registered_constructor_normalized_and_natural": false,
+      "public_dependent_cubical_induction_available": false,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_TYPED_SYNTHESIS_SCHEMA_CONSTRUCTOR_AND_NATURALITY_RULES_NOT_DEFINED"
+      ]
+    },
+    {
+      "class": "unknown",
+      "registered_ordinary_constructors": [],
+      "every_registered_constructor_normalized_and_natural": false,
+      "public_dependent_cubical_induction_available": false,
+      "intended_constructor_inventory_exhaustive": false,
+      "complete": false,
+      "named_gaps": [
+        "E34_TOTAL_TYPED_RAW_CANDIDATE_TO_SCHEMA2_CLASSIFIER_NOT_PROVED",
+        "E34_UNKNOWN_ROWS_REQUIRE_TYPED_CLASSIFICATION_BEFORE_ELIMINATION"
+      ]
+    }
+  ],
+  "agda": {
+    "source_bound": true,
+    "safe_without_k_declared": true,
+    "postulates_absent": true,
+    "nine_constructor_naturality_induction_declared": true,
+    "class_indexed_theorem_declared": true,
+    "dependent_cubical_action_induction_declared": true,
+    "coe_and_hcom_present": true,
+    "absent_modal_and_synthesis_constructors_proved": true,
+    "endpoint_premise_api_left_empty": true,
+    "rust_agda_operational_correspondence_proved": false
+  },
+  "every_class_complete": false,
+  "full_intended_schema2_e3_complete": false,
+  "full_e4_complete": false,
+  "forbidden_outputs": {
+    "independent_verdict_issued": false,
+    "ordinary_family_token_issued": false,
+    "stage_count_issued": false,
+    "e2b_executed": false,
+    "global_e3_claimed": false,
+    "global_e4_claimed": false,
+    "global_halt_proved": false
+  },
+  "outcome": "full_operational_nine_constructor_e3_naturality_and_public_dependent_cubical_action_induction_complete_global_intended_schema2_still_partial",
+  "permitted_conclusion": "Every constructor in the nine-kind operational ordinary registry is normalization-natural under a genuine typed ambient substitution, and all eight constructors admitted by the public cubical context are covered by typed dimension-action induction, including dependent coe and hcom. This does not cover the four private endpoint-premise forms or supply missing modal, synthesis, map, axiomatic, unknown-class, and raw-candidate grammar; therefore global E-3/E-4, Independent verdicts, E-2b, counts, and halt remain unavailable.",
+  "remaining_obligations": [
+    "publish a generic motive-typed endpoint-premise context and prove normalization/action induction for endpoint evaluation hypothesis, endpoint method hypothesis, endpoint PathCon elimination, and endpoint neutral elimination",
+    "prove transport/naturality of registered boundary bundles under arbitrary legal E-1 substitutions rather than replaying only the sealed Trunc endpoint bundle",
+    "adjudicate and implement typed modal and synthesis schema constructors plus map natural transformations, exported support action, axiomatic adjoint/mate/interchange, and unknown-row classification",
+    "prove that the intended raw candidate grammar is exhausted by the class-indexed typed constructors; only then may E-4 completeness and Independent verdict issuance be enabled",
+    "after complete E-4, execute E-2b and its count regression in the P1 order"
+  ],
+  "result_digest": "blake3:c5b598eba49f66cb7f845fdab43ab217a40b7d9ce2ec971a91989712711fcc4a"
+}

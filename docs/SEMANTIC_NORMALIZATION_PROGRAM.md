@@ -1,4 +1,26 @@
-# Semantic Normalization Program
+# Semantic Normalization Program (EGP-v1; executed)
+
+> **DEMAND-COMPLETE v1 successor note (2026-07-19):** the Phase-3 demand
+> completeness premise remains open. The coarse ladder replays with its
+> stage-3 wrinkle, but the current orbit extractor mirrors the caller/focus
+> timeline and has not been identified with an independent operational
+> `C(W)`. The missing historical instance grammar, orbit quotient, and
+> `D`-membership decision block intended-instance J2/J3. F1 and F5 are not
+> triggered; semantic `O(16)` emptiness and the `d = 4` demand-orphan result
+> remain conditional. See `docs/DEMAND_COMPLETENESS_RESULT.md`. This program's
+> burned EGP-v1 history is unchanged.
+
+> **Version boundary (2026-07-18).** This document preregistered EGP-v1.
+> Its first full reselection is the immutable burned result
+> `docs/semantic_reselection.json` (4107 bytes; SHA-256
+> `4F6669F8A11554E8A1B7982CDCFF64C82B280EA5A60B348A4736407D1F60AFC4`).
+> It re-enacted the Stage-1 winner but first diverged on score (`2` versus
+> `1`), then halted at Stage 2 with no clearing candidate. EGP-v2 is a new
+> law-change experiment, not a repair of this run, and was preregistered in
+> `docs/EGP_V2_BOOTSTRAP_PROGRAM.md`. Its burned result is reported separately
+> in `docs/EGP_V2_BOOTSTRAP_RESULT.md`: the fresh-formation interpretation
+> repairs Stages 1 and 2, but the run halts at Stage 3 and does not pass its
+> bootstrap proof gate.
 
 **Date registered:** 2026-07-18.
 **Target:** discharge the extraction, anchoring, historical-reselection, and
@@ -306,7 +328,7 @@ t1_adversarial_probe_records_only_raw_minimal_clearing_survivors --lib`
 extended: no unguarded semantic credit; per-falsifier family inventory,
 failure trace, anchor disposition, and exact score serialized.
 
-### 5b. The historical reselection (burned run; preregistered decision gate)
+### 5b. The EGP-v1 historical reselection (burned run; executed decision gate)
 
 Do not merely rescore the recorded winners. Starting from the initial state,
 run a full sequential semantic reselection:
@@ -396,11 +418,14 @@ No equality with the legacy scores is a completion criterion, and no divergence
 may be repaired silently. A divergence is itself a certified result routed
 through the Phase 5b decision gate.
 
-**Current status.** This document is an implementation program, not evidence
-that these criteria hold. The present `semantic_provenance_audit.json` retains
-`null` revised scores, unknown semantic O(16), and false J2/J3 and internality
-flags. The existing Agda arithmetic proves only what follows *if* typed valid
-anchors, debt freedom, and inverse-law witnesses are supplied.
+**Current EGP-v1 status.** The burned `semantic_reselection.json` certifies
+outcome (B): the first score divergence occurs at Stage 1 and the revised run
+halts at Stage 2. It does not satisfy C7 or C8, and it supplies no revised
+Bar16. The older conditional `semantic_provenance_audit.json` separately
+retains `null` revised scores, unknown semantic O(16), and false J2/J3 and
+internality flags. The existing Agda arithmetic proves only what follows *if*
+typed valid anchors, debt freedom, and inverse-law witnesses are supplied.
+The EGP-v2 bootstrap is governed solely by its separate preregistration.
 
 ## 8. Grader matrix
 
@@ -429,7 +454,8 @@ Nothing here derives clock calibration (runtime no-go stands), the public-event
 extractor (Section 11 program), phase-with-descent (WP6's merged target), or any
 quantitative constant. This program does one thing: it attempts to turn the
 conditional EGP boundary into typed, replayable family/orbit certificates and
-an exhaustive revised Genesis trace — or produces a checked obstruction. Only
-the successful completion branch settles that the intended sequence halts at
-Step 15 because of what its candidates mean, rather than because of what the
-legacy evaluator happens to count.
+an exhaustive revised Genesis trace — or produces a checked obstruction.
+EGP-v1 produced the latter. Only a separately preregistered successful law can
+settle that the intended sequence halts at Step 15 because of what its
+candidates mean, rather than because of what the legacy evaluator happens to
+count.

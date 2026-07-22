@@ -1,0 +1,3358 @@
+{
+  "schema": "schema2-ambient-former-closure-internality-v1",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/ambient_former_closure_adjudication.md",
+      "role": "adopted_option_a_partition",
+      "byte_length": 5705,
+      "blake3": "blake3:b745012062e17e7da625baedf7c302970549f85a2ad51b6913eab602910bf1dd"
+    },
+    {
+      "path": "docs/SCHEMA2_GLOBAL_E4_V5_RESULT.md",
+      "role": "exact_application_body_gap",
+      "byte_length": 1818,
+      "blake3": "blake3:77d1f98ac636f12df69ce443227241444ff6e72a9faedb5590296615e853c153"
+    },
+    {
+      "path": "docs/schema2_structural_lambda_internality_v1.json",
+      "role": "classifier_predecessor_artifact",
+      "byte_length": 10033,
+      "blake3": "blake3:dff956e802729920be6bf41be5a71483fc0744228211a86df67744079cccfcc7"
+    },
+    {
+      "path": "crates/pen-type/src/ambient_former_internality.rs",
+      "role": "term_level_transparent_former_tokens",
+      "byte_length": 36309,
+      "blake3": "blake3:c0f1a77c4e1f7dcb11f230f7c075cdc7b197931d27e453f7ed5528780e7e2347"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch_v4.rs",
+      "role": "structural_lambda_classifier_predecessor",
+      "byte_length": 27575,
+      "blake3": "blake3:a3589f2d2a850d5ec1594b97b41229d5810b5e1874ec43dc3c79b545a53fab9c"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch_v5.rs",
+      "role": "ambient_former_classifier_successor",
+      "byte_length": 39486,
+      "blake3": "blake3:2be7567552f6122e4cc411eeb69d50593cfe3cdfd2ada3429f886985e016110f"
+    }
+  ],
+  "predecessor_structural_digest": "blake3:1fabce65fe81b17bed17f26b565244f895251a74b9481ff847cc1a824589441b",
+  "predecessor_structural_replayed": true,
+  "adjudication_option_a_adopted": true,
+  "registered_transparent_formers": [
+    "ambient_universe",
+    "variable_reference",
+    "sealed_library_constant",
+    "lambda_introduction",
+    "application",
+    "pi_formation",
+    "sigma_formation",
+    "identity_formation",
+    "reflexivity_introduction",
+    "suspension_formation",
+    "truncation_formation",
+    "flat_formation",
+    "sharp_formation",
+    "discrete_formation",
+    "shape_formation",
+    "next_formation",
+    "eventually_formation"
+  ],
+  "former_obligations": [
+    {
+      "former": "ambient_universe",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": "Univ"
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:b75cd8cae237b069824e5890f7638277522f39191502217a535ba68194e68f68",
+        "elaboration_hash": "blake3:ae129368cc8a5c9a66f5a930752e2ae245e625906d359f076bbc2eb13a47d986",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": "Univ"
+        },
+        "clause_normal_form": {
+          "Lam": "Univ"
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": "Univ"
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": "Univ",
+              "scope_len": 2,
+              "derivation_rule": "univ-form",
+              "former": "ambient_universe",
+              "provenance": "ambient_universe",
+              "premises": [],
+              "certified_field_dependencies": [],
+              "normal_form": "Univ",
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": "Univ"
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:4b7fec6672499b9879ccb8d635b7ec2d4ab2fc59a05677b9ba364cf28b316219"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:7e69d89419b56cc746621e75c2ce2f700da6fbc8216ff0a21be562d58104d26a"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:6b109d82dd5dc4af97f2bcc1c061c4ef43cfae551f20d34daf4942c794d4adc6"
+    },
+    {
+      "former": "variable_reference",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Var": 2
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:ecf9b8f6e6ee90a36a4f838250f11b9580aac8425bd1953d88658b53bfa4e9a7",
+        "elaboration_hash": "blake3:67b803996ede7f15d818901a63ef983f16911d35a328bfe906e06fd8b0f46003",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Var": 2
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Var": 2
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Var": 2
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Var": 2
+              },
+              "scope_len": 2,
+              "derivation_rule": "local-var-1",
+              "former": "variable_reference",
+              "provenance": {
+                "local_binder": {
+                  "binder": 1
+                }
+              },
+              "premises": [],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Var": 2
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Var": 2
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:99af2874ca690ba9174e15d71555493a051f47c582a24472f70deea4caa87f96"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:6166262e7fd6e85a9432666774760e2bf35a6bea01f5248dd3f786937542b6cc"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:dab7e18e65fc0d5a844a23e5024e55cbb3e24d0d279e967918726d304781408e"
+    },
+    {
+      "former": "sealed_library_constant",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Lib": 14
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:b2fd15148bf6f9a9b60c9c361df099a649f8fb51cfe5083041a74bbfb81f7bf3",
+        "elaboration_hash": "blake3:8ffaab3a4cbb55f5b4557d97b8b5b26a046f945d86fe0752aa58a53df2ba005c",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Lib": 14
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Lib": 14
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Lib": 14
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Lib": 14
+              },
+              "scope_len": 2,
+              "derivation_rule": "library-constant",
+              "former": "sealed_library_constant",
+              "provenance": {
+                "sealed_library_constant": {
+                  "step": 14
+                }
+              },
+              "premises": [],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Lib": 14
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Lib": 14
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:6938201848b6a5771ff251def1ecf9c3dd360c54d79ecdf230ffa9b3fdb24f2f"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:b4b9e4273773ae02f2407a7bb4b9fac5affb1b56a4246a641118225d6c1d6ca5"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:86dbeaddaa47cbbb72c47597019a58c06586518e4d67e6efec3c74d695a15d6a"
+    },
+    {
+      "former": "lambda_introduction",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Lam": "Univ"
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:4b630cc7102535068637031f6bf57616f066d4c140811eb63a6f6e677acc176e",
+        "elaboration_hash": "blake3:f7691c577134668e09122f4ec6c8482b0c38a0f3eb84ae8e77a5d36652b79a69",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Lam": "Univ"
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Lam": "Univ"
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Lam": "Univ"
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:2955f6770dd794aa5e190978f786e7c174b6f58f0972a7c91235270f75d4b917"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Lam": "Univ"
+              },
+              "scope_len": 2,
+              "derivation_rule": "lam-intro",
+              "former": "lambda_introduction",
+              "provenance": {
+                "transparent_former": {
+                  "former": "lambda_introduction",
+                  "premise_hashes": [
+                    "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": "Univ",
+                  "scope_len": 3,
+                  "derivation_rule": "univ-form",
+                  "former": "ambient_universe",
+                  "provenance": "ambient_universe",
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": "Univ",
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Lam": "Univ"
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:2955f6770dd794aa5e190978f786e7c174b6f58f0972a7c91235270f75d4b917"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Lam": "Univ"
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:9cf2ba82c23b9d98dde502d0b899af13a03a73b73b56666bba0e7de59521cac0"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:9e66c42ba167166f65b2e5ebe47f98e29d073b8644df766f40c16b870deccb2c"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:59cb8586702fe777f1e8e0ce83497ca2ee7baf10cb6810fc065bdf232d403ca3"
+    },
+    {
+      "former": "application",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "App": [
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:53bcf820a41f7f97c123462332b774d45552357f0be5f4e57d254a95ffc8433a",
+        "elaboration_hash": "blake3:39a29c8b2974a321bc4af2b7f6fcb209da677415026de1936cf9ef721e05d54c",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "App": [
+              {
+                "Lib": 14
+              },
+              {
+                "Lib": 15
+              }
+            ]
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "App": [
+              {
+                "Lib": 14
+              },
+              {
+                "Lib": 15
+              }
+            ]
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "App": [
+                {
+                  "Lib": 14
+                },
+                {
+                  "Lib": 15
+                }
+              ]
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:58313377a50e3b1a3a3e792ec7815fb2383da82027ab105a749c6eee757b5c41"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "App": [
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              },
+              "scope_len": 2,
+              "derivation_rule": "app-stuck",
+              "former": "application",
+              "provenance": {
+                "transparent_former": {
+                  "former": "application",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038",
+                    "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                },
+                {
+                  "expression": {
+                    "Lib": 15
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 15
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 15
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "App": [
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:58313377a50e3b1a3a3e792ec7815fb2383da82027ab105a749c6eee757b5c41"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "App": [
+                {
+                  "Lib": 14
+                },
+                {
+                  "Lib": 15
+                }
+              ]
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:d5c544fdf253a553ce8d7d3f41749646bc5fe07fbe2220117d5f29c2a31cd43f"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:3d3ccf013aef0ede4e2d9e940e85010d9019da73308cd87f5ae4701d669d1f78"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:4c4aab1aa76b979e84d5fe151bda82b393c667acfcde7222eb34f22b7f498df9"
+    },
+    {
+      "former": "pi_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Pi": [
+                  "Univ",
+                  "Univ"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:5e15afa093a0d960ac415e9d471b6f5d0aede376a9ebb36c6d9bab854f636424",
+        "elaboration_hash": "blake3:b5cbdb919fe650fc643efed6c7163be29891a72424e3dc4bf6cbea1216cdb6a7",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Pi": [
+              "Univ",
+              "Univ"
+            ]
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Pi": [
+              "Univ",
+              "Univ"
+            ]
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Pi": [
+                "Univ",
+                "Univ"
+              ]
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:21a070ba6e4cac16402a1774d02f95df4c7567a1139323c027e6b01192016065"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Pi": [
+                  "Univ",
+                  "Univ"
+                ]
+              },
+              "scope_len": 2,
+              "derivation_rule": "pi-form",
+              "former": "pi_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "pi_formation",
+                  "premise_hashes": [
+                    "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869",
+                    "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": "Univ",
+                  "scope_len": 2,
+                  "derivation_rule": "univ-form",
+                  "former": "ambient_universe",
+                  "provenance": "ambient_universe",
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": "Univ",
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869"
+                },
+                {
+                  "expression": "Univ",
+                  "scope_len": 3,
+                  "derivation_rule": "univ-form",
+                  "former": "ambient_universe",
+                  "provenance": "ambient_universe",
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": "Univ",
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Pi": [
+                  "Univ",
+                  "Univ"
+                ]
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:21a070ba6e4cac16402a1774d02f95df4c7567a1139323c027e6b01192016065"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Pi": [
+                "Univ",
+                "Univ"
+              ]
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:842ee9fd5ca04855b423463aaed11cd7fba3471d4017e2efe804cff9c59a7386"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:dce4fc506aff040f3ef721caaee001ec2bbdc69cf45563cac5be6e4408c94b82"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:b29cf0c7286bd3d66c89909656c0c0812d02c900c0f08a8ca745dfbd44c52943"
+    },
+    {
+      "former": "sigma_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Sigma": [
+                  "Univ",
+                  "Univ"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:42deb1bafb1e088277e2763fe1a391b8d01264d5dbddf62e830df8232562fef4",
+        "elaboration_hash": "blake3:af9c453487646d48223b105c8e41e12fc9c4cfac98737774c6a1bf72f6f3a0c8",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Sigma": [
+              "Univ",
+              "Univ"
+            ]
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Sigma": [
+              "Univ",
+              "Univ"
+            ]
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Sigma": [
+                "Univ",
+                "Univ"
+              ]
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:07a78917fbdd2c2a9c3dace3b1677ce218a3e6c3fe729034157056139cd18c74"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Sigma": [
+                  "Univ",
+                  "Univ"
+                ]
+              },
+              "scope_len": 2,
+              "derivation_rule": "sigma-form",
+              "former": "sigma_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "sigma_formation",
+                  "premise_hashes": [
+                    "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869",
+                    "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": "Univ",
+                  "scope_len": 2,
+                  "derivation_rule": "univ-form",
+                  "former": "ambient_universe",
+                  "provenance": "ambient_universe",
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": "Univ",
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869"
+                },
+                {
+                  "expression": "Univ",
+                  "scope_len": 3,
+                  "derivation_rule": "univ-form",
+                  "former": "ambient_universe",
+                  "provenance": "ambient_universe",
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": "Univ",
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Sigma": [
+                  "Univ",
+                  "Univ"
+                ]
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:07a78917fbdd2c2a9c3dace3b1677ce218a3e6c3fe729034157056139cd18c74"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Sigma": [
+                "Univ",
+                "Univ"
+              ]
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:85c679411d93420eebfebe2a023723cc7a22a29005f1e97ef44ba67d2487208b"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:645308e15aa0929bbbee006f58831b5086b8fd897618c0523ca76df757a844c5"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:182be9eef768acf8a8ad3ee3894cd27a2b6aaa48a53ac0a46305b7fe9a4f8f7c"
+    },
+    {
+      "former": "identity_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Id": [
+                  "Univ",
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:4f0f2ec7e942a82f43090c444bd0b8a507c35a9a57f6732710d2a11acb616d5b",
+        "elaboration_hash": "blake3:8f9234c7bd1734ba69dd7692fcd21915f7fdbb16cdd1eb79cd6d41401e1540ba",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Id": [
+              "Univ",
+              {
+                "Lib": 14
+              },
+              {
+                "Lib": 15
+              }
+            ]
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Id": [
+              "Univ",
+              {
+                "Lib": 14
+              },
+              {
+                "Lib": 15
+              }
+            ]
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Id": [
+                "Univ",
+                {
+                  "Lib": 14
+                },
+                {
+                  "Lib": 15
+                }
+              ]
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:0f51b54bc285f009444fb7da616641f2a1eb2711fd07ecb6637067c8d52e3a79"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Id": [
+                  "Univ",
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              },
+              "scope_len": 2,
+              "derivation_rule": "id-form",
+              "former": "identity_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "identity_formation",
+                  "premise_hashes": [
+                    "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869",
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038",
+                    "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": "Univ",
+                  "scope_len": 2,
+                  "derivation_rule": "univ-form",
+                  "former": "ambient_universe",
+                  "provenance": "ambient_universe",
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": "Univ",
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869"
+                },
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                },
+                {
+                  "expression": {
+                    "Lib": 15
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 15
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 15
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Id": [
+                  "Univ",
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:0f51b54bc285f009444fb7da616641f2a1eb2711fd07ecb6637067c8d52e3a79"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Id": [
+                "Univ",
+                {
+                  "Lib": 14
+                },
+                {
+                  "Lib": 15
+                }
+              ]
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:81c6b00b4ee16035ee129a43438835c616aa8004965d0f3e05d17bf3d14355af"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:eb461b5232e82ecc6c9b0556bebaa75816a8385669fdef7cab4f41fa9aff8bf6"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:3ec343fe7d6b3ce19ea663e96bc1f50f8dd88949589169513deaeac6217d9824"
+    },
+    {
+      "former": "reflexivity_introduction",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Refl": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:efb97c883dcad7fd78aa742bd403ffd2ef1609f89627177cb9fcd162d55f2561",
+        "elaboration_hash": "blake3:9d0d5c75ae5633671d3858581960788370718a23b0cefa9fe0d2f5ce2aaa1bf7",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Refl": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Refl": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Refl": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:63c415603720053728cb96693cdd4f4342bd3718e54d77c07d3e6440097bfe98"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Refl": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "refl-intro",
+              "former": "reflexivity_introduction",
+              "provenance": {
+                "transparent_former": {
+                  "former": "reflexivity_introduction",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Refl": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:63c415603720053728cb96693cdd4f4342bd3718e54d77c07d3e6440097bfe98"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Refl": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:14ee70d3a83204b20e826cc001eb352ecdcfe1688c0adbf3ca342f4de0bbd647"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:7bcd3a4249b872e9076aae4374161de2d084681cca8551af57a4a57ce059c466"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:9d60f592a617841c8cf11dded73d1fc3f365e2234baef37ca22c0f388f8cc690"
+    },
+    {
+      "former": "suspension_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Susp": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:7768ce266802ecda50eda4514c4a7d824414c6e03deec5cb157d2b7da2a8876c",
+        "elaboration_hash": "blake3:a9965d06c325a0371dfb073ab999c6f74371e3f75f267fe1aea20dece5953128",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Susp": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Susp": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Susp": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:4876264e60f5526fdefb1248fd87391bdc964aeaa81fa71a9f1cf27edb43a787"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Susp": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "susp-form",
+              "former": "suspension_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "suspension_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Susp": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:4876264e60f5526fdefb1248fd87391bdc964aeaa81fa71a9f1cf27edb43a787"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Susp": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:f84b76181fc0f646d49391bd636f3666227e37f8410edc416f30fae64bef6bb1"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:086a8bca6ed666e3435489adfa1eed1e40d2b7b108781d6d8df57bdc955e3678"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:6d4e6b75319c3ea825389aab818c2b7caa81324a57ccfae5d60c96067480ea05"
+    },
+    {
+      "former": "truncation_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Trunc": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:759879357b75b53e5d5c82ab232de90ef9405f9957f0f45fd9370799937bdbb6",
+        "elaboration_hash": "blake3:4ea11c23893b0a0a55ecd9c639c569c7939b4727919c8178ac2fa3c55496c104",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Trunc": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Trunc": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Trunc": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:2851a19deae6b15cff3cf0f663b5d8dfb884db177ca98cd58dc3f4c999ea15ba"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Trunc": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "trunc-form",
+              "former": "truncation_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "truncation_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Trunc": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:2851a19deae6b15cff3cf0f663b5d8dfb884db177ca98cd58dc3f4c999ea15ba"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Trunc": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:486ad9d9d1167600139a8ee99c55eca8d9814450646ad9db548f43054283eafe"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:9563a377ff801d874f829f77c66851c544933178e373c5e835b4c0bde0ef2d17"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:ac6500f155b3515b234cd302799f09b18b7ab4c83690bbc18a486b529da0b366"
+    },
+    {
+      "former": "flat_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Flat": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:7716470297c5c59066785b6f8737abb448a7bb1c9bc095fb16213d4154577eba",
+        "elaboration_hash": "blake3:4247ff7b57d51aee361c4f65bdb6be882bee9d6d14ba80991c55e97fb45ec75d",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Flat": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Flat": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Flat": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:c2c4fef84a6aaf49e8ad8fb59dc507f8d8cbd821ae341a1ed6bb8dc871c8ed09"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Flat": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "flat-form",
+              "former": "flat_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "flat_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Flat": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:c2c4fef84a6aaf49e8ad8fb59dc507f8d8cbd821ae341a1ed6bb8dc871c8ed09"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Flat": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:d9cb59958dcf5dcb241da31067bb7c3c128572344febaf5b4c1c1743c1e71cfa"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:6cd9eac811d22dd3af882881d5a8806d7173cbb746512eaedd60c65605d8fda5"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:260a8b5e3489ab7d825869ccf19794cba5ad5e35bbf977274a7f3f77be5c4070"
+    },
+    {
+      "former": "sharp_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Sharp": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:9a48a1777d8cc76bfd1d772d34fe61d536a14804317040f785edf7eddf43b38d",
+        "elaboration_hash": "blake3:6d201d5c45756e42a023b6a409c964988193f4f2323e4cfa593a145aa65770df",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Sharp": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Sharp": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Sharp": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:1b36264b1d0f6332cb8f3072ad303f75ed05bb52584940bf8dbcfb8cf73a1ee8"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Sharp": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "sharp-form",
+              "former": "sharp_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "sharp_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Sharp": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:1b36264b1d0f6332cb8f3072ad303f75ed05bb52584940bf8dbcfb8cf73a1ee8"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Sharp": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:2497e31f31dab6a7c42047cd6feb702e9a7f779cdac219df114eefcd5decfbe6"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:46605e4143ef4363473c7e94c6a8b28c4827f002e498384e0ad000176bf480df"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:e79e88e62b03821463f96df2f4a671a078257e8acd30becd0d4b5090a80c711d"
+    },
+    {
+      "former": "discrete_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Disc": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:7ccbc12c9637636da5966325899b070c57608f5b0d7875075b1fd02b7ce6cf61",
+        "elaboration_hash": "blake3:3b991d10c2d8274e57f1ed98a9116fa7040176f95facdea4de87df69169424e6",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Disc": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Disc": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Disc": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:c945f193ced298857e75d9c6916255958e5d46587843b3f1d3002c7014c2f28e"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Disc": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "disc-form",
+              "former": "discrete_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "discrete_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Disc": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:c945f193ced298857e75d9c6916255958e5d46587843b3f1d3002c7014c2f28e"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Disc": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:ca14c9c89b1befe6f7f204b2024a76c63db6c102068f71afd5bbc20ccd294cac"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:0812cb22dd19de9dbcc687be70ee9643165b3cee6dcc4b3cdd9d027c7dab4d7d"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:fdabfe45accaf19a6cce0ebeea4c8e19a44c7ed7519660b4d5feabd25d7dc4d8"
+    },
+    {
+      "former": "shape_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Shape": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:185d647c301e308de588e7df2c74cd2e9c1939b44981bfb28bfe59be2481dc77",
+        "elaboration_hash": "blake3:b97528806970e7844eeab3b667954f4d2a2d4a4e3e83707de6b617a1f7ba7432",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Shape": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Shape": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Shape": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:30e0f9f2e8552b7da1e2cce8f060400359d3575f0191b959446a25ccc19674e8"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Shape": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "shape-form",
+              "former": "shape_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "shape_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Shape": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:30e0f9f2e8552b7da1e2cce8f060400359d3575f0191b959446a25ccc19674e8"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Shape": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:b74d0fb234676a29da860a35fb9c0dfd9689c49c0f300453e2b2d48eda40fc7d"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:c0a0678ba6b2f5b99d05a540a0a45f3f69a571314a8b47c2cb21231646b31ffb"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:4d1374b2275697d7a5b8616ad393da147a2e10051f39dbae3b22a601fda25493"
+    },
+    {
+      "former": "next_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Next": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:12b0685af5006dc40ac99b8b34611f36f4660117d5012a2392b9f47d0599143f",
+        "elaboration_hash": "blake3:70607eb6614353eb1cdb77a1b4e58663f60f0cb8a59324728e4eace8b331e922",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Next": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Next": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Next": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:7826075d272e7a1a224e8c454af320ede8ee294a0cc21be09911bb211ba6573c"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Next": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "next-form",
+              "former": "next_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "next_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Next": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:7826075d272e7a1a224e8c454af320ede8ee294a0cc21be09911bb211ba6573c"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Next": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:b1d99c6c3e92e5902dd79e4beda88d1edd2b49d1f93ee03dda1cf76887fb445c"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:0ab0d031ff5a7f0097303002576d89861a45c02422d008f4a4e3f88119370781"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:026638809ee8125dae13f8de4c4b83e31d41ffad8eddf2b1894850fe5e6787cc"
+    },
+    {
+      "former": "eventually_formation",
+      "witness": {
+        "clauses": [
+          {
+            "role": "formation",
+            "expr": "Univ"
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Eventually": {
+                  "Lib": 14
+                }
+              }
+            }
+          }
+        ]
+      },
+      "evidence": {
+        "version": "kernel-ambient-former-closure-internal-v1",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "candidate_hash": "blake3:8a0fd7ae89f0e780a446c84b2cfec8dc8d03b202eacf1e8a940c2f5c9d338160",
+        "elaboration_hash": "blake3:88020f1a50d11a91a9daa2dc748531138e2dea80d3ab6cbb7f61dd91743c807a",
+        "clause_index": 1,
+        "declared_role": "introduction",
+        "kernel_role": "introduction",
+        "outer_scope": 1,
+        "expression": {
+          "Lam": {
+            "Eventually": {
+              "Lib": 14
+            }
+          }
+        },
+        "clause_normal_form": {
+          "Lam": {
+            "Eventually": {
+              "Lib": 14
+            }
+          }
+        },
+        "certified_prior_clauses": {
+          "0": "blake3:obligation-field-zero"
+        },
+        "term_evidence": {
+          "expression": {
+            "Lam": {
+              "Eventually": {
+                "Lib": 14
+              }
+            }
+          },
+          "scope_len": 1,
+          "derivation_rule": "lam-intro",
+          "former": "lambda_introduction",
+          "provenance": {
+            "transparent_former": {
+              "former": "lambda_introduction",
+              "premise_hashes": [
+                "blake3:fcc4d0fa83de6cda1c99abd51313359e7aa59a6d9c2fc3400ec007e1309678ce"
+              ]
+            }
+          },
+          "premises": [
+            {
+              "expression": {
+                "Eventually": {
+                  "Lib": 14
+                }
+              },
+              "scope_len": 2,
+              "derivation_rule": "eventually-form",
+              "former": "eventually_formation",
+              "provenance": {
+                "transparent_former": {
+                  "former": "eventually_formation",
+                  "premise_hashes": [
+                    "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "Lib": 14
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "library-constant",
+                  "former": "sealed_library_constant",
+                  "provenance": {
+                    "sealed_library_constant": {
+                      "step": 14
+                    }
+                  },
+                  "premises": [],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "Lib": 14
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Eventually": {
+                  "Lib": 14
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:fcc4d0fa83de6cda1c99abd51313359e7aa59a6d9c2fc3400ec007e1309678ce"
+            }
+          ],
+          "certified_field_dependencies": [],
+          "normal_form": {
+            "Lam": {
+              "Eventually": {
+                "Lib": 14
+              }
+            }
+          },
+          "normalization_steps": 0,
+          "registered_transparent_former": true,
+          "all_premises_internal": true,
+          "no_candidate_fresh_head": true,
+          "typed_result_preserved": true,
+          "full_provenance_retained": true,
+          "independent_demand_orbit_exported": false,
+          "internal_term_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:749fd90d16cf9fac346fb3ead150d10444de1f307a16e546bec02f2011a00c6f"
+        },
+        "candidate_declared_formation_excluded": true,
+        "charged_path_constructor_excluded": true,
+        "every_dependency_strictly_prior": true,
+        "every_premise_replayed_internal": true,
+        "typed_result_preserved": true,
+        "full_provenance_retained": true,
+        "standing_orbit_exception_preserved": true,
+        "closed_candidate": true,
+        "internal_closure_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:b106edcdf48153bc49bc90d163553d12cbbea2dc6d5ee2f88936132a255bf388"
+      },
+      "target_occurs_in_replayed_tree": true,
+      "typed_result_preserved": true,
+      "full_provenance_retained": true,
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:257822a66dbde7aedb379581b039ffda836957e99cac5c3dea771fda657da036"
+    }
+  ],
+  "former_inventory_complete": true,
+  "falsifiers": {
+    "pathcon_rejected_as_charged": true,
+    "candidate_declared_formation_rejected": true,
+    "uncertified_premise_rejected": true,
+    "candidate_fresh_head_rejected": true,
+    "guarded_candidate_rejected_without_inverse_evidence": true,
+    "derivation_hash": "blake3:192631eb5d43516a0eb56e0b8f3c366c38bc4f758baddc2ce6dadc4dca7dc01b"
+  },
+  "opaque_constructor_token_public_fields_exposed": false,
+  "application_predecessor_was_unknown": true,
+  "application_successor_decision": {
+    "internal_ambient_former": {
+      "certificate": {
+        "candidate": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": "Univ"
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 14
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "predecessor_decision": {
+          "named_typed_obstruction": {
+            "predecessor_decision": {
+              "named_typed_obstruction": {
+                "predecessor_decision": {
+                  "named_typed_obstruction": {
+                    "legacy_decision": {
+                      "named_typed_obstruction": {
+                        "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                        "telescope_class": "Unknown",
+                        "elaboration_derivation_hash": "blake3:39a29c8b2974a321bc4af2b7f6fcb209da677415026de1936cf9ef721e05d54c",
+                        "candidate_digest": "blake3:7d350f45240ef7df777d63628ce57a205d51fe29f60231f6fe280d007cd358c7",
+                        "derivation_hash": "blake3:da59b2cf37347cefa56657b2226347bb623b2b57df93d02cc17ca15b0cc54249"
+                      }
+                    },
+                    "internal_attempt": {
+                      "candidate": {
+                        "clauses": [
+                          {
+                            "role": "formation",
+                            "expr": "Univ"
+                          },
+                          {
+                            "role": "introduction",
+                            "expr": {
+                              "Lam": {
+                                "App": [
+                                  {
+                                    "Lib": 14
+                                  },
+                                  {
+                                    "Lib": 15
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "predecessor_attempt_hash": "blake3:31584d4631ee33539db0f6a9cf4bda727680247a37bf609868bb00623adc306a",
+                      "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                      "clauses": [
+                        {
+                          "clause_index": 0,
+                          "expression": "Univ",
+                          "root_rule": "univ-form",
+                          "leaf_rules": [
+                            "univ-form"
+                          ],
+                          "predecessor_kind": "ambient_arena_reference",
+                          "kind": "direct_ambient_arena_reference",
+                          "field_dependencies": [],
+                          "certified_internal_prefix_before": [],
+                          "dependency_certificate_hashes": [],
+                          "dependencies_are_strictly_prior": true,
+                          "every_dependency_already_internal": true,
+                          "projection_not_identity": false,
+                          "identity_not_projection": false,
+                          "guarded_inverse_laws_satisfied": true,
+                          "earned_internal": true,
+                          "derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+                        },
+                        {
+                          "clause_index": 1,
+                          "expression": {
+                            "Lam": {
+                              "App": [
+                                {
+                                  "Lib": 14
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            }
+                          },
+                          "root_rule": "lam-intro",
+                          "leaf_rules": [
+                            "library-constant",
+                            "library-constant"
+                          ],
+                          "predecessor_kind": "unsupported_structural_derivation",
+                          "kind": "unsupported",
+                          "field_dependencies": [],
+                          "certified_internal_prefix_before": [
+                            0
+                          ],
+                          "dependency_certificate_hashes": [],
+                          "dependencies_are_strictly_prior": true,
+                          "every_dependency_already_internal": true,
+                          "projection_not_identity": false,
+                          "identity_not_projection": false,
+                          "guarded_inverse_laws_satisfied": true,
+                          "earned_internal": false,
+                          "derivation_hash": "blake3:bddb9bb8c73a8aaf385a006623e85ca91aa5f2e775650657f60c9b29e12dfdd7"
+                        }
+                      ],
+                      "certified_internal_prefix": [
+                        0
+                      ],
+                      "every_clause_earned_internal": false,
+                      "no_forward_missing_or_cyclic_dependency": true,
+                      "projection_identity_separation_checked": true,
+                      "all_guarded_inverse_laws_satisfied": true,
+                      "internal_certificate_issued": false,
+                      "failure_code": "INDUCTIVE_TELESCOPE_INTERNALITY_NOT_PROVED_FOR_CANDIDATE",
+                      "derivation_hash": "blake3:d23ba74ee745d633939ec53143e77322c3265dcf538d01ae8624e422f980391a"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "inherited_internal_clauses": [
+          {
+            "clause_index": 0,
+            "predecessor_clause_derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+          }
+        ],
+        "constructor_evidence": [
+          {
+            "version": "kernel-ambient-former-closure-internal-v1",
+            "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+            "visible_library": 15,
+            "candidate_hash": "blake3:53bcf820a41f7f97c123462332b774d45552357f0be5f4e57d254a95ffc8433a",
+            "elaboration_hash": "blake3:39a29c8b2974a321bc4af2b7f6fcb209da677415026de1936cf9ef721e05d54c",
+            "clause_index": 1,
+            "declared_role": "introduction",
+            "kernel_role": "introduction",
+            "outer_scope": 1,
+            "expression": {
+              "Lam": {
+                "App": [
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              }
+            },
+            "clause_normal_form": {
+              "Lam": {
+                "App": [
+                  {
+                    "Lib": 14
+                  },
+                  {
+                    "Lib": 15
+                  }
+                ]
+              }
+            },
+            "certified_prior_clauses": {
+              "0": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+            },
+            "term_evidence": {
+              "expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 14
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "scope_len": 1,
+              "derivation_rule": "lam-intro",
+              "former": "lambda_introduction",
+              "provenance": {
+                "transparent_former": {
+                  "former": "lambda_introduction",
+                  "premise_hashes": [
+                    "blake3:58313377a50e3b1a3a3e792ec7815fb2383da82027ab105a749c6eee757b5c41"
+                  ]
+                }
+              },
+              "premises": [
+                {
+                  "expression": {
+                    "App": [
+                      {
+                        "Lib": 14
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  },
+                  "scope_len": 2,
+                  "derivation_rule": "app-stuck",
+                  "former": "application",
+                  "provenance": {
+                    "transparent_former": {
+                      "former": "application",
+                      "premise_hashes": [
+                        "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038",
+                        "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                      ]
+                    }
+                  },
+                  "premises": [
+                    {
+                      "expression": {
+                        "Lib": 14
+                      },
+                      "scope_len": 2,
+                      "derivation_rule": "library-constant",
+                      "former": "sealed_library_constant",
+                      "provenance": {
+                        "sealed_library_constant": {
+                          "step": 14
+                        }
+                      },
+                      "premises": [],
+                      "certified_field_dependencies": [],
+                      "normal_form": {
+                        "Lib": 14
+                      },
+                      "normalization_steps": 0,
+                      "registered_transparent_former": true,
+                      "all_premises_internal": true,
+                      "no_candidate_fresh_head": true,
+                      "typed_result_preserved": true,
+                      "full_provenance_retained": true,
+                      "independent_demand_orbit_exported": false,
+                      "internal_term_issued": true,
+                      "marginal_nu": 0,
+                      "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                    },
+                    {
+                      "expression": {
+                        "Lib": 15
+                      },
+                      "scope_len": 2,
+                      "derivation_rule": "library-constant",
+                      "former": "sealed_library_constant",
+                      "provenance": {
+                        "sealed_library_constant": {
+                          "step": 15
+                        }
+                      },
+                      "premises": [],
+                      "certified_field_dependencies": [],
+                      "normal_form": {
+                        "Lib": 15
+                      },
+                      "normalization_steps": 0,
+                      "registered_transparent_former": true,
+                      "all_premises_internal": true,
+                      "no_candidate_fresh_head": true,
+                      "typed_result_preserved": true,
+                      "full_provenance_retained": true,
+                      "independent_demand_orbit_exported": false,
+                      "internal_term_issued": true,
+                      "marginal_nu": 0,
+                      "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                    }
+                  ],
+                  "certified_field_dependencies": [],
+                  "normal_form": {
+                    "App": [
+                      {
+                        "Lib": 14
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  },
+                  "normalization_steps": 0,
+                  "registered_transparent_former": true,
+                  "all_premises_internal": true,
+                  "no_candidate_fresh_head": true,
+                  "typed_result_preserved": true,
+                  "full_provenance_retained": true,
+                  "independent_demand_orbit_exported": false,
+                  "internal_term_issued": true,
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:58313377a50e3b1a3a3e792ec7815fb2383da82027ab105a749c6eee757b5c41"
+                }
+              ],
+              "certified_field_dependencies": [],
+              "normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 14
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "normalization_steps": 0,
+              "registered_transparent_former": true,
+              "all_premises_internal": true,
+              "no_candidate_fresh_head": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "independent_demand_orbit_exported": false,
+              "internal_term_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:d5c544fdf253a553ce8d7d3f41749646bc5fe07fbe2220117d5f29c2a31cd43f"
+            },
+            "candidate_declared_formation_excluded": true,
+            "charged_path_constructor_excluded": true,
+            "every_dependency_strictly_prior": true,
+            "every_premise_replayed_internal": true,
+            "typed_result_preserved": true,
+            "full_provenance_retained": true,
+            "standing_orbit_exception_preserved": true,
+            "closed_candidate": true,
+            "internal_closure_issued": true,
+            "marginal_nu": 0,
+            "derivation_hash": "blake3:632ac565396096880131b53bcd1302d7fe8f352dd0d0d9123bc9dd69c7ae0e1f"
+          }
+        ],
+        "final_certified_clause_hashes": {
+          "0": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a",
+          "1": "blake3:632ac565396096880131b53bcd1302d7fe8f352dd0d0d9123bc9dd69c7ae0e1f"
+        },
+        "every_clause_covered_exactly_once": true,
+        "ordered_prefix_discipline_replayed": true,
+        "every_constructor_projection_replayed": true,
+        "every_premise_internal": true,
+        "typed_results_preserved": true,
+        "full_provenance_retained": true,
+        "charged_and_fresh_heads_excluded": true,
+        "standing_orbit_exception_preserved": true,
+        "internal_certificate_issued": true,
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:15cf3a86f98788b68112874dac3b7e73b0d44062585dbee510fae518820bf599"
+      },
+      "marginal_nu": 0,
+      "derivation_hash": "blake3:7a141adfee8365559975e927178fb3c042c3f9d6f29ab75dbce8fa8bfe0168d9"
+    }
+  },
+  "application_now_internal": true,
+  "inherited_internal_clause_count": 1,
+  "constructor_evidence_count": 1,
+  "application_stuckness_accepted_as_computation_fact": true,
+  "all_constructor_evidence_replayed": true,
+  "marginal_nu": 0,
+  "global_e4_v6_authorized": true,
+  "forbidden_outputs": {
+    "global_e4_v6_executed": false,
+    "pending_membership_verdicts_issued": false,
+    "e2b_executed": false,
+    "stage_count_issued": false,
+    "fq2_evaluated": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "transparent_ambient_formers_internal_at_term_level_application_witness_resolved",
+  "permitted_conclusion": "Every registered transparent former has a replayed term-level witness with typed normalization, complete sealed provenance, and nu=0. [Univ,Lam(App(Lib(14),Lib(15)))] now earns Internal even though its application is stuck; candidate-fresh heads, charged PathCon, candidate formation, uncertified premises, and unguarded ambient parameters remain excluded. Global E-4 v6 may run create-new.",
+  "result_digest": "blake3:41b5451dc892b7d131230524df3ca8a5df1efe9fee49ea812c9c1de7944756c4"
+}

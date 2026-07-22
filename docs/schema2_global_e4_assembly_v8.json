@@ -1,0 +1,2376 @@
+{
+  "schema": "schema2-global-e4-assembly-v8",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_global_e4_assembly_v7.json",
+      "role": "guarded_application_predecessor",
+      "byte_length": 34849,
+      "blake3": "blake3:15c5333a5258c87c6abab700dba00c822ef911ce6f616e91c84b4c3f924660ab"
+    },
+    {
+      "path": "docs/schema2_contextual_internality_v1.json",
+      "role": "contextual_internality_successor",
+      "byte_length": 102601,
+      "blake3": "blake3:dc4712dcfbf29b2b1cf071103c7a7497297cac21e02bf80be4e925d69131d0b9"
+    },
+    {
+      "path": "docs/contextual_internality_adjudication.md",
+      "role": "adopted_rule_and_f_a5",
+      "byte_length": 5169,
+      "blake3": "blake3:fa3ce105ecb83d3ee458b44a3bded3735f403474ce9b5b00b91b0c7de1a7cae3"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "exact_raw_catalog_membership",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-type/src/contextual_internality.rs",
+      "role": "motive_typed_contextual_token",
+      "byte_length": 36288,
+      "blake3": "blake3:0660c60547dbf83e1925f4a7c5882d27a50c9ac03344bfdaddb45ee4f279e924"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch_v7.rs",
+      "role": "contextual_classifier_and_raw_disconnect",
+      "byte_length": 46033,
+      "blake3": "blake3:80cf53b84878ff5815be5c6aa3537bdb7a1ca6cb13b1575e61a9711ec81bffd7"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v7.rs",
+      "role": "predecessor_fail_fast_assembly",
+      "byte_length": 30686,
+      "blake3": "blake3:699f618c5909310075da1138058869f5877ef11bcc85359b4f0107a9971428e2"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v8.rs",
+      "role": "live_context_fail_fast_successor",
+      "byte_length": 30051,
+      "blake3": "blake3:c9e055fadfb12d812ebd6fddb8c07582fcae9f8f5581e89bb2cf01d8512e06d4"
+    }
+  ],
+  "predecessor_global_e4_v7_digest": "blake3:2a4509f58c9f79b70fbebc158688eb35f1414ab42ec236fd1f96fe31ab0b61fa",
+  "predecessor_global_e4_v7_replayed": true,
+  "contextual_internality_digest": "blake3:298a9e705419c8aac9cbb567c81c2dd22e2df986aeee1c1905935cd052386367",
+  "contextual_internality_replayed": true,
+  "global_e4_v8_executed": true,
+  "predecessor_v7_witness_resolved": {
+    "candidate": {
+      "clauses": [
+        {
+          "role": "formation",
+          "expr": "Univ"
+        },
+        {
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Var": 3
+                },
+                {
+                  "Lib": 15
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "raw_surface_membership": {
+      "is_member": true,
+      "rejection_reasons": []
+    },
+    "predecessor_decision": {
+      "named_typed_obstruction": {
+        "predecessor_decision": {
+          "named_typed_obstruction": {
+            "predecessor_decision": {
+              "named_typed_obstruction": {
+                "predecessor_decision": {
+                  "named_typed_obstruction": {
+                    "predecessor_decision": {
+                      "named_typed_obstruction": {
+                        "legacy_decision": {
+                          "named_typed_obstruction": {
+                            "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                            "telescope_class": "Unknown",
+                            "elaboration_derivation_hash": "blake3:e78d5afa3ef0774552ed74fc1183e69df6284f9f7a521dd5fb417553e09fffc8",
+                            "candidate_digest": "blake3:670ca06a3578de1a78a8fd3632cbe425994fe380818e5f511293177cab05d820",
+                            "derivation_hash": "blake3:69eb4c94ad5ac84b9cda0f50cf419d046bf9b45a4574d5e5d6658c7d3bce6daf"
+                          }
+                        },
+                        "internal_attempt": {
+                          "candidate": {
+                            "clauses": [
+                              {
+                                "role": "formation",
+                                "expr": "Univ"
+                              },
+                              {
+                                "role": "introduction",
+                                "expr": {
+                                  "Lam": {
+                                    "App": [
+                                      {
+                                        "Var": 3
+                                      },
+                                      {
+                                        "Lib": 15
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "predecessor_attempt_hash": "blake3:a61d044c5679f2380c0e1ec4660598d3bad9fb6548ef19c276950d5c303a070d",
+                          "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                          "clauses": [
+                            {
+                              "clause_index": 0,
+                              "expression": "Univ",
+                              "root_rule": "univ-form",
+                              "leaf_rules": [
+                                "univ-form"
+                              ],
+                              "predecessor_kind": "ambient_arena_reference",
+                              "kind": "direct_ambient_arena_reference",
+                              "field_dependencies": [],
+                              "certified_internal_prefix_before": [],
+                              "dependency_certificate_hashes": [],
+                              "dependencies_are_strictly_prior": true,
+                              "every_dependency_already_internal": true,
+                              "projection_not_identity": false,
+                              "identity_not_projection": false,
+                              "guarded_inverse_laws_satisfied": false,
+                              "earned_internal": false,
+                              "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                            },
+                            {
+                              "clause_index": 1,
+                              "expression": {
+                                "Lam": {
+                                  "App": [
+                                    {
+                                      "Var": 3
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                }
+                              },
+                              "root_rule": "lam-intro",
+                              "leaf_rules": [
+                                "local-var-1",
+                                "library-constant"
+                              ],
+                              "predecessor_kind": "unsupported_structural_derivation",
+                              "kind": "unsupported",
+                              "field_dependencies": [],
+                              "certified_internal_prefix_before": [],
+                              "dependency_certificate_hashes": [],
+                              "dependencies_are_strictly_prior": true,
+                              "every_dependency_already_internal": true,
+                              "projection_not_identity": false,
+                              "identity_not_projection": false,
+                              "guarded_inverse_laws_satisfied": false,
+                              "earned_internal": false,
+                              "derivation_hash": "blake3:934a1fc8780dd13d54e9617f21973b96abd6390809a4998af7281929284d13b0"
+                            }
+                          ],
+                          "certified_internal_prefix": [],
+                          "every_clause_earned_internal": false,
+                          "no_forward_missing_or_cyclic_dependency": true,
+                          "projection_identity_separation_checked": true,
+                          "all_guarded_inverse_laws_satisfied": false,
+                          "internal_certificate_issued": false,
+                          "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                          "derivation_hash": "blake3:2481969823fb19a66ba8eea7aae9d4aed2ad2ccc3c67fd6a2b5624c4fe965946"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "successor_decision": {
+      "internal_guarded_closure": {
+        "certificate": {
+          "candidate": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": "Univ"
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 3
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "erased_base_candidate": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": "Univ"
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 2
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "predecessor_decision": {
+            "named_typed_obstruction": {
+              "predecessor_decision": {
+                "named_typed_obstruction": {
+                  "predecessor_decision": {
+                    "named_typed_obstruction": {
+                      "predecessor_decision": {
+                        "named_typed_obstruction": {
+                          "predecessor_decision": {
+                            "named_typed_obstruction": {
+                              "legacy_decision": {
+                                "named_typed_obstruction": {
+                                  "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                  "telescope_class": "Unknown",
+                                  "elaboration_derivation_hash": "blake3:e78d5afa3ef0774552ed74fc1183e69df6284f9f7a521dd5fb417553e09fffc8",
+                                  "candidate_digest": "blake3:670ca06a3578de1a78a8fd3632cbe425994fe380818e5f511293177cab05d820",
+                                  "derivation_hash": "blake3:69eb4c94ad5ac84b9cda0f50cf419d046bf9b45a4574d5e5d6658c7d3bce6daf"
+                                }
+                              },
+                              "internal_attempt": {
+                                "candidate": {
+                                  "clauses": [
+                                    {
+                                      "role": "formation",
+                                      "expr": "Univ"
+                                    },
+                                    {
+                                      "role": "introduction",
+                                      "expr": {
+                                        "Lam": {
+                                          "App": [
+                                            {
+                                              "Var": 3
+                                            },
+                                            {
+                                              "Lib": 15
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "predecessor_attempt_hash": "blake3:a61d044c5679f2380c0e1ec4660598d3bad9fb6548ef19c276950d5c303a070d",
+                                "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                                "clauses": [
+                                  {
+                                    "clause_index": 0,
+                                    "expression": "Univ",
+                                    "root_rule": "univ-form",
+                                    "leaf_rules": [
+                                      "univ-form"
+                                    ],
+                                    "predecessor_kind": "ambient_arena_reference",
+                                    "kind": "direct_ambient_arena_reference",
+                                    "field_dependencies": [],
+                                    "certified_internal_prefix_before": [],
+                                    "dependency_certificate_hashes": [],
+                                    "dependencies_are_strictly_prior": true,
+                                    "every_dependency_already_internal": true,
+                                    "projection_not_identity": false,
+                                    "identity_not_projection": false,
+                                    "guarded_inverse_laws_satisfied": false,
+                                    "earned_internal": false,
+                                    "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                                  },
+                                  {
+                                    "clause_index": 1,
+                                    "expression": {
+                                      "Lam": {
+                                        "App": [
+                                          {
+                                            "Var": 3
+                                          },
+                                          {
+                                            "Lib": 15
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "root_rule": "lam-intro",
+                                    "leaf_rules": [
+                                      "local-var-1",
+                                      "library-constant"
+                                    ],
+                                    "predecessor_kind": "unsupported_structural_derivation",
+                                    "kind": "unsupported",
+                                    "field_dependencies": [],
+                                    "certified_internal_prefix_before": [],
+                                    "dependency_certificate_hashes": [],
+                                    "dependencies_are_strictly_prior": true,
+                                    "every_dependency_already_internal": true,
+                                    "projection_not_identity": false,
+                                    "identity_not_projection": false,
+                                    "guarded_inverse_laws_satisfied": false,
+                                    "earned_internal": false,
+                                    "derivation_hash": "blake3:934a1fc8780dd13d54e9617f21973b96abd6390809a4998af7281929284d13b0"
+                                  }
+                                ],
+                                "certified_internal_prefix": [],
+                                "every_clause_earned_internal": false,
+                                "no_forward_missing_or_cyclic_dependency": true,
+                                "projection_identity_separation_checked": true,
+                                "all_guarded_inverse_laws_satisfied": false,
+                                "internal_certificate_issued": false,
+                                "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                                "derivation_hash": "blake3:2481969823fb19a66ba8eea7aae9d4aed2ad2ccc3c67fd6a2b5624c4fe965946"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "erased_base_decision": {
+            "internal_predecessor": {
+              "predecessor_decision": {
+                "internal_ambient_former": {
+                  "certificate": {
+                    "candidate": {
+                      "clauses": [
+                        {
+                          "role": "formation",
+                          "expr": "Univ"
+                        },
+                        {
+                          "role": "introduction",
+                          "expr": {
+                            "Lam": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                    "visible_library": 15,
+                    "predecessor_decision": {
+                      "named_typed_obstruction": {
+                        "predecessor_decision": {
+                          "named_typed_obstruction": {
+                            "predecessor_decision": {
+                              "named_typed_obstruction": {
+                                "legacy_decision": {
+                                  "named_typed_obstruction": {
+                                    "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                    "telescope_class": "Unknown",
+                                    "elaboration_derivation_hash": "blake3:4915251687fe396ab576a76d98ac3ed8f832da5adfe46f717226da19845aa35c",
+                                    "candidate_digest": "blake3:de0c26d98f4c865aadfc6c80d46b38b348dfc52f3016adbba630922fac2c489c",
+                                    "derivation_hash": "blake3:1930926ae61786f5e731d7bb0d082123c6074bc5421f5384ca84b077587741e4"
+                                  }
+                                },
+                                "internal_attempt": {
+                                  "candidate": {
+                                    "clauses": [
+                                      {
+                                        "role": "formation",
+                                        "expr": "Univ"
+                                      },
+                                      {
+                                        "role": "introduction",
+                                        "expr": {
+                                          "Lam": {
+                                            "App": [
+                                              {
+                                                "Var": 2
+                                              },
+                                              {
+                                                "Lib": 15
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "predecessor_attempt_hash": "blake3:f1b2b4502079a709bc7e5a14dacd816215bfe0bf94721114fcad4de5e401b296",
+                                  "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                                  "clauses": [
+                                    {
+                                      "clause_index": 0,
+                                      "expression": "Univ",
+                                      "root_rule": "univ-form",
+                                      "leaf_rules": [
+                                        "univ-form"
+                                      ],
+                                      "predecessor_kind": "ambient_arena_reference",
+                                      "kind": "direct_ambient_arena_reference",
+                                      "field_dependencies": [],
+                                      "certified_internal_prefix_before": [],
+                                      "dependency_certificate_hashes": [],
+                                      "dependencies_are_strictly_prior": true,
+                                      "every_dependency_already_internal": true,
+                                      "projection_not_identity": false,
+                                      "identity_not_projection": false,
+                                      "guarded_inverse_laws_satisfied": true,
+                                      "earned_internal": true,
+                                      "derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+                                    },
+                                    {
+                                      "clause_index": 1,
+                                      "expression": {
+                                        "Lam": {
+                                          "App": [
+                                            {
+                                              "Var": 2
+                                            },
+                                            {
+                                              "Lib": 15
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "root_rule": "lam-intro",
+                                      "leaf_rules": [
+                                        "local-var-1",
+                                        "library-constant"
+                                      ],
+                                      "predecessor_kind": "unsupported_structural_derivation",
+                                      "kind": "unsupported",
+                                      "field_dependencies": [],
+                                      "certified_internal_prefix_before": [
+                                        0
+                                      ],
+                                      "dependency_certificate_hashes": [],
+                                      "dependencies_are_strictly_prior": true,
+                                      "every_dependency_already_internal": true,
+                                      "projection_not_identity": false,
+                                      "identity_not_projection": false,
+                                      "guarded_inverse_laws_satisfied": true,
+                                      "earned_internal": false,
+                                      "derivation_hash": "blake3:11ab12dfb055f88028995451c6f5099a959609c335e1b683ebe7c5e2f572e567"
+                                    }
+                                  ],
+                                  "certified_internal_prefix": [
+                                    0
+                                  ],
+                                  "every_clause_earned_internal": false,
+                                  "no_forward_missing_or_cyclic_dependency": true,
+                                  "projection_identity_separation_checked": true,
+                                  "all_guarded_inverse_laws_satisfied": true,
+                                  "internal_certificate_issued": false,
+                                  "failure_code": "INDUCTIVE_TELESCOPE_INTERNALITY_NOT_PROVED_FOR_CANDIDATE",
+                                  "derivation_hash": "blake3:068b378bc3c61226993de00b9196e5fabcf8317d53d1c3d92d2c19e3df1e06e6"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "inherited_internal_clauses": [
+                      {
+                        "clause_index": 0,
+                        "predecessor_clause_derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+                      }
+                    ],
+                    "constructor_evidence": [
+                      {
+                        "version": "kernel-ambient-former-closure-internal-v1",
+                        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                        "visible_library": 15,
+                        "candidate_hash": "blake3:6eb5a88d1781a06be5c8c0e1d2082cbbd3712137a952ed11675313ab06a691f2",
+                        "elaboration_hash": "blake3:4915251687fe396ab576a76d98ac3ed8f832da5adfe46f717226da19845aa35c",
+                        "clause_index": 1,
+                        "declared_role": "introduction",
+                        "kernel_role": "introduction",
+                        "outer_scope": 1,
+                        "expression": {
+                          "Lam": {
+                            "App": [
+                              {
+                                "Var": 2
+                              },
+                              {
+                                "Lib": 15
+                              }
+                            ]
+                          }
+                        },
+                        "clause_normal_form": {
+                          "Lam": {
+                            "App": [
+                              {
+                                "Var": 2
+                              },
+                              {
+                                "Lib": 15
+                              }
+                            ]
+                          }
+                        },
+                        "certified_prior_clauses": {
+                          "0": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+                        },
+                        "term_evidence": {
+                          "expression": {
+                            "Lam": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            }
+                          },
+                          "scope_len": 1,
+                          "derivation_rule": "lam-intro",
+                          "former": "lambda_introduction",
+                          "provenance": {
+                            "transparent_former": {
+                              "former": "lambda_introduction",
+                              "premise_hashes": [
+                                "blake3:a9fc24b9b56f913a7a1853201a081359a33d2c6be71f3495cda9d2bf1b8fc336"
+                              ]
+                            }
+                          },
+                          "premises": [
+                            {
+                              "expression": {
+                                "App": [
+                                  {
+                                    "Var": 2
+                                  },
+                                  {
+                                    "Lib": 15
+                                  }
+                                ]
+                              },
+                              "scope_len": 2,
+                              "derivation_rule": "app-stuck",
+                              "former": "application",
+                              "provenance": {
+                                "transparent_former": {
+                                  "former": "application",
+                                  "premise_hashes": [
+                                    "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b",
+                                    "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                                  ]
+                                }
+                              },
+                              "premises": [
+                                {
+                                  "expression": {
+                                    "Var": 2
+                                  },
+                                  "scope_len": 2,
+                                  "derivation_rule": "local-var-1",
+                                  "former": "variable_reference",
+                                  "provenance": {
+                                    "local_binder": {
+                                      "binder": 1
+                                    }
+                                  },
+                                  "premises": [],
+                                  "certified_field_dependencies": [],
+                                  "normal_form": {
+                                    "Var": 2
+                                  },
+                                  "normalization_steps": 0,
+                                  "registered_transparent_former": true,
+                                  "all_premises_internal": true,
+                                  "no_candidate_fresh_head": true,
+                                  "typed_result_preserved": true,
+                                  "full_provenance_retained": true,
+                                  "independent_demand_orbit_exported": false,
+                                  "internal_term_issued": true,
+                                  "marginal_nu": 0,
+                                  "derivation_hash": "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b"
+                                },
+                                {
+                                  "expression": {
+                                    "Lib": 15
+                                  },
+                                  "scope_len": 2,
+                                  "derivation_rule": "library-constant",
+                                  "former": "sealed_library_constant",
+                                  "provenance": {
+                                    "sealed_library_constant": {
+                                      "step": 15
+                                    }
+                                  },
+                                  "premises": [],
+                                  "certified_field_dependencies": [],
+                                  "normal_form": {
+                                    "Lib": 15
+                                  },
+                                  "normalization_steps": 0,
+                                  "registered_transparent_former": true,
+                                  "all_premises_internal": true,
+                                  "no_candidate_fresh_head": true,
+                                  "typed_result_preserved": true,
+                                  "full_provenance_retained": true,
+                                  "independent_demand_orbit_exported": false,
+                                  "internal_term_issued": true,
+                                  "marginal_nu": 0,
+                                  "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                                }
+                              ],
+                              "certified_field_dependencies": [],
+                              "normal_form": {
+                                "App": [
+                                  {
+                                    "Var": 2
+                                  },
+                                  {
+                                    "Lib": 15
+                                  }
+                                ]
+                              },
+                              "normalization_steps": 0,
+                              "registered_transparent_former": true,
+                              "all_premises_internal": true,
+                              "no_candidate_fresh_head": true,
+                              "typed_result_preserved": true,
+                              "full_provenance_retained": true,
+                              "independent_demand_orbit_exported": false,
+                              "internal_term_issued": true,
+                              "marginal_nu": 0,
+                              "derivation_hash": "blake3:a9fc24b9b56f913a7a1853201a081359a33d2c6be71f3495cda9d2bf1b8fc336"
+                            }
+                          ],
+                          "certified_field_dependencies": [],
+                          "normal_form": {
+                            "Lam": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            }
+                          },
+                          "normalization_steps": 0,
+                          "registered_transparent_former": true,
+                          "all_premises_internal": true,
+                          "no_candidate_fresh_head": true,
+                          "typed_result_preserved": true,
+                          "full_provenance_retained": true,
+                          "independent_demand_orbit_exported": false,
+                          "internal_term_issued": true,
+                          "marginal_nu": 0,
+                          "derivation_hash": "blake3:48749a0a904e93ef0b6e82067292d2fd70f2ce29d0dec1f451710e098f996ad1"
+                        },
+                        "candidate_declared_formation_excluded": true,
+                        "charged_path_constructor_excluded": true,
+                        "every_dependency_strictly_prior": true,
+                        "every_premise_replayed_internal": true,
+                        "typed_result_preserved": true,
+                        "full_provenance_retained": true,
+                        "standing_orbit_exception_preserved": true,
+                        "closed_candidate": true,
+                        "internal_closure_issued": true,
+                        "marginal_nu": 0,
+                        "derivation_hash": "blake3:1af0e3f9718e748c899894e57eb1d0779c7c5e65dfaa53c8d54da05182d4c206"
+                      }
+                    ],
+                    "final_certified_clause_hashes": {
+                      "0": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a",
+                      "1": "blake3:1af0e3f9718e748c899894e57eb1d0779c7c5e65dfaa53c8d54da05182d4c206"
+                    },
+                    "every_clause_covered_exactly_once": true,
+                    "ordered_prefix_discipline_replayed": true,
+                    "every_constructor_projection_replayed": true,
+                    "every_premise_internal": true,
+                    "typed_results_preserved": true,
+                    "full_provenance_retained": true,
+                    "charged_and_fresh_heads_excluded": true,
+                    "standing_orbit_exception_preserved": true,
+                    "internal_certificate_issued": true,
+                    "marginal_nu": 0,
+                    "derivation_hash": "blake3:e2c4080734f4531882b947ff1c46998b04f796825a41df5310d6c1af64a1a081"
+                  },
+                  "marginal_nu": 0,
+                  "derivation_hash": "blake3:5a36ca681812dc60092e5f101fec15bf1dba0f73ec634d6261e28e4c4b5a17c6"
+                }
+              }
+            }
+          },
+          "clause_evidence": [
+            {
+              "version": "kernel-guarded-clause-weakening-erasure-v1",
+              "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+              "visible_library": 15,
+              "base_candidate_hash": "blake3:6eb5a88d1781a06be5c8c0e1d2082cbbd3712137a952ed11675313ab06a691f2",
+              "guarded_candidate_hash": "blake3:6e4d4fb48548992b83d2a7700efc8f3fa9eb38ad66972c5bdba99da5c752505e",
+              "base_elaboration_hash": "blake3:4915251687fe396ab576a76d98ac3ed8f832da5adfe46f717226da19845aa35c",
+              "guarded_elaboration_hash": "blake3:e78d5afa3ef0774552ed74fc1183e69df6284f9f7a521dd5fb417553e09fffc8",
+              "clause_index": 0,
+              "base_outer_scope": 0,
+              "guarded_outer_scope": 1,
+              "base_expression": "Univ",
+              "guarded_expression": "Univ",
+              "weakened_expression": "Univ",
+              "erased_expression": "Univ",
+              "erase_after_weaken_expression": "Univ",
+              "weaken_after_erase_expression": "Univ",
+              "weakening_matches_guarded": {
+                "scope_len": 1,
+                "left_normal_form": "Univ",
+                "right_normal_form": "Univ",
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "erasure_matches_base": {
+                "scope_len": 0,
+                "left_normal_form": "Univ",
+                "right_normal_form": "Univ",
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "erasure_after_weakening": {
+                "scope_len": 0,
+                "left_normal_form": "Univ",
+                "right_normal_form": "Univ",
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "weakening_after_erasure": {
+                "scope_len": 1,
+                "left_normal_form": "Univ",
+                "right_normal_form": "Univ",
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "inserted_ambient_is_unused": true,
+              "both_inverse_laws_checked": true,
+              "derivation_hash": "blake3:2dc3f0c6deb7cc992bd30d690c37a2668103f5ef8249834b8c305aeb3c283fdf"
+            },
+            {
+              "version": "kernel-guarded-clause-weakening-erasure-v1",
+              "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+              "visible_library": 15,
+              "base_candidate_hash": "blake3:6eb5a88d1781a06be5c8c0e1d2082cbbd3712137a952ed11675313ab06a691f2",
+              "guarded_candidate_hash": "blake3:6e4d4fb48548992b83d2a7700efc8f3fa9eb38ad66972c5bdba99da5c752505e",
+              "base_elaboration_hash": "blake3:4915251687fe396ab576a76d98ac3ed8f832da5adfe46f717226da19845aa35c",
+              "guarded_elaboration_hash": "blake3:e78d5afa3ef0774552ed74fc1183e69df6284f9f7a521dd5fb417553e09fffc8",
+              "clause_index": 1,
+              "base_outer_scope": 1,
+              "guarded_outer_scope": 2,
+              "base_expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 2
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "guarded_expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 3
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "weakened_expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 3
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "erased_expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 2
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "erase_after_weaken_expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 2
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "weaken_after_erase_expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 3
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "weakening_matches_guarded": {
+                "scope_len": 2,
+                "left_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 3
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "right_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 3
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "erasure_matches_base": {
+                "scope_len": 1,
+                "left_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 2
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "right_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 2
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "erasure_after_weakening": {
+                "scope_len": 1,
+                "left_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 2
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "right_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 2
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "weakening_after_erasure": {
+                "scope_len": 2,
+                "left_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 3
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "right_normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 3
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "left_steps": 0,
+                "right_steps": 0,
+                "equal": true
+              },
+              "inserted_ambient_is_unused": true,
+              "both_inverse_laws_checked": true,
+              "derivation_hash": "blake3:1f551ff8c1ddbb9418892a372d5a1dafe3461a57035d2d4d7beb70cf73e9723e"
+            }
+          ],
+          "ambient_parameter_unused_in_every_clause": true,
+          "both_inverse_laws_replayed_per_clause": true,
+          "base_candidate_internal": true,
+          "internal_certificate_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:22b24f47350ed28b587514d85e61fc9c7e36de5ef410953e98107fa3dc4a33bd"
+        },
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:5f9cbc68e9ac0d1fd569058eb4f02de90be095d9fbf3030463943ab5a3efe998"
+      }
+    },
+    "exact_raw_catalog_member": true,
+    "inferred_ambient_arity": 1,
+    "application_head_derivation_rule": "local-var-1",
+    "ambient_use_count": 0,
+    "application_head_is_local_binder": true,
+    "erased_base_internal": true,
+    "per_clause_inverse_laws_replayed": true,
+    "classified_internal": true,
+    "marginal_nu": 0,
+    "derivation_hash": "blake3:77c8b41c30d00d0265a0d534bc820158098dd37916b80694bfd3e6598b2c429a"
+  },
+  "next_live_context_unknown": {
+    "candidate": {
+      "clauses": [
+        {
+          "role": "formation",
+          "expr": "Univ"
+        },
+        {
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Var": 3
+                },
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "raw_surface_membership": {
+      "is_member": true,
+      "rejection_reasons": []
+    },
+    "raw_decision_without_declaration": {
+      "named_typed_obstruction": {
+        "predecessor_decision": {
+          "named_typed_obstruction": {
+            "predecessor_decision": {
+              "named_typed_obstruction": {
+                "predecessor_decision": {
+                  "named_typed_obstruction": {
+                    "predecessor_decision": {
+                      "named_typed_obstruction": {
+                        "predecessor_decision": {
+                          "named_typed_obstruction": {
+                            "legacy_decision": {
+                              "named_typed_obstruction": {
+                                "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                "telescope_class": "Unknown",
+                                "elaboration_derivation_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                                "candidate_digest": "blake3:dfa414d2ef8e2e571f5a4c2752e0780ec501011c31b5822eee3ac95dd495a5f5",
+                                "derivation_hash": "blake3:82160b56f014a961a5f15b8b1c4165531a30950c0915ccf337b3ae0a5d1aebd7"
+                              }
+                            },
+                            "internal_attempt": {
+                              "candidate": {
+                                "clauses": [
+                                  {
+                                    "role": "formation",
+                                    "expr": "Univ"
+                                  },
+                                  {
+                                    "role": "introduction",
+                                    "expr": {
+                                      "Lam": {
+                                        "App": [
+                                          {
+                                            "Var": 3
+                                          },
+                                          {
+                                            "App": [
+                                              {
+                                                "Var": 1
+                                              },
+                                              {
+                                                "Lib": 15
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "predecessor_attempt_hash": "blake3:db587138bda95828b9b84df8da240ffc0d11f870b50b084d9e285401a34c2fbd",
+                              "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                              "clauses": [
+                                {
+                                  "clause_index": 0,
+                                  "expression": "Univ",
+                                  "root_rule": "univ-form",
+                                  "leaf_rules": [
+                                    "univ-form"
+                                  ],
+                                  "predecessor_kind": "ambient_arena_reference",
+                                  "kind": "direct_ambient_arena_reference",
+                                  "field_dependencies": [],
+                                  "certified_internal_prefix_before": [],
+                                  "dependency_certificate_hashes": [],
+                                  "dependencies_are_strictly_prior": true,
+                                  "every_dependency_already_internal": true,
+                                  "projection_not_identity": false,
+                                  "identity_not_projection": false,
+                                  "guarded_inverse_laws_satisfied": false,
+                                  "earned_internal": false,
+                                  "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                                },
+                                {
+                                  "clause_index": 1,
+                                  "expression": {
+                                    "Lam": {
+                                      "App": [
+                                        {
+                                          "Var": 3
+                                        },
+                                        {
+                                          "App": [
+                                            {
+                                              "Var": 1
+                                            },
+                                            {
+                                              "Lib": 15
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "root_rule": "lam-intro",
+                                  "leaf_rules": [
+                                    "local-var-1",
+                                    "ambient-param-1",
+                                    "library-constant"
+                                  ],
+                                  "predecessor_kind": "unsupported_structural_derivation",
+                                  "kind": "unsupported",
+                                  "field_dependencies": [],
+                                  "certified_internal_prefix_before": [],
+                                  "dependency_certificate_hashes": [],
+                                  "dependencies_are_strictly_prior": true,
+                                  "every_dependency_already_internal": true,
+                                  "projection_not_identity": false,
+                                  "identity_not_projection": false,
+                                  "guarded_inverse_laws_satisfied": false,
+                                  "earned_internal": false,
+                                  "derivation_hash": "blake3:601166e167209b9fb58c189fa571aa8a02c85489d5a040b89031e992f002379a"
+                                }
+                              ],
+                              "certified_internal_prefix": [],
+                              "every_clause_earned_internal": false,
+                              "no_forward_missing_or_cyclic_dependency": true,
+                              "projection_identity_separation_checked": true,
+                              "all_guarded_inverse_laws_satisfied": false,
+                              "internal_certificate_issued": false,
+                              "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                              "derivation_hash": "blake3:3741818533596b3890a682560f2691134698ddc9d7ca221e436ef923c5da9fd4"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "contextual_failure": "frozen raw Telescope carries no ambient-motive declaration"
+      }
+    },
+    "decision_with_explicit_declaration": {
+      "internal_contextual": {
+        "certificate": {
+          "candidate": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": "Univ"
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 3
+                      },
+                      {
+                        "App": [
+                          {
+                            "Var": 1
+                          },
+                          {
+                            "Lib": 15
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "predecessor_decision": {
+            "named_typed_obstruction": {
+              "predecessor_decision": {
+                "named_typed_obstruction": {
+                  "predecessor_decision": {
+                    "named_typed_obstruction": {
+                      "predecessor_decision": {
+                        "named_typed_obstruction": {
+                          "predecessor_decision": {
+                            "named_typed_obstruction": {
+                              "legacy_decision": {
+                                "named_typed_obstruction": {
+                                  "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                  "telescope_class": "Unknown",
+                                  "elaboration_derivation_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                                  "candidate_digest": "blake3:dfa414d2ef8e2e571f5a4c2752e0780ec501011c31b5822eee3ac95dd495a5f5",
+                                  "derivation_hash": "blake3:82160b56f014a961a5f15b8b1c4165531a30950c0915ccf337b3ae0a5d1aebd7"
+                                }
+                              },
+                              "internal_attempt": {
+                                "candidate": {
+                                  "clauses": [
+                                    {
+                                      "role": "formation",
+                                      "expr": "Univ"
+                                    },
+                                    {
+                                      "role": "introduction",
+                                      "expr": {
+                                        "Lam": {
+                                          "App": [
+                                            {
+                                              "Var": 3
+                                            },
+                                            {
+                                              "App": [
+                                                {
+                                                  "Var": 1
+                                                },
+                                                {
+                                                  "Lib": 15
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "predecessor_attempt_hash": "blake3:db587138bda95828b9b84df8da240ffc0d11f870b50b084d9e285401a34c2fbd",
+                                "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                                "clauses": [
+                                  {
+                                    "clause_index": 0,
+                                    "expression": "Univ",
+                                    "root_rule": "univ-form",
+                                    "leaf_rules": [
+                                      "univ-form"
+                                    ],
+                                    "predecessor_kind": "ambient_arena_reference",
+                                    "kind": "direct_ambient_arena_reference",
+                                    "field_dependencies": [],
+                                    "certified_internal_prefix_before": [],
+                                    "dependency_certificate_hashes": [],
+                                    "dependencies_are_strictly_prior": true,
+                                    "every_dependency_already_internal": true,
+                                    "projection_not_identity": false,
+                                    "identity_not_projection": false,
+                                    "guarded_inverse_laws_satisfied": false,
+                                    "earned_internal": false,
+                                    "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                                  },
+                                  {
+                                    "clause_index": 1,
+                                    "expression": {
+                                      "Lam": {
+                                        "App": [
+                                          {
+                                            "Var": 3
+                                          },
+                                          {
+                                            "App": [
+                                              {
+                                                "Var": 1
+                                              },
+                                              {
+                                                "Lib": 15
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "root_rule": "lam-intro",
+                                    "leaf_rules": [
+                                      "local-var-1",
+                                      "ambient-param-1",
+                                      "library-constant"
+                                    ],
+                                    "predecessor_kind": "unsupported_structural_derivation",
+                                    "kind": "unsupported",
+                                    "field_dependencies": [],
+                                    "certified_internal_prefix_before": [],
+                                    "dependency_certificate_hashes": [],
+                                    "dependencies_are_strictly_prior": true,
+                                    "every_dependency_already_internal": true,
+                                    "projection_not_identity": false,
+                                    "identity_not_projection": false,
+                                    "guarded_inverse_laws_satisfied": false,
+                                    "earned_internal": false,
+                                    "derivation_hash": "blake3:601166e167209b9fb58c189fa571aa8a02c85489d5a040b89031e992f002379a"
+                                  }
+                                ],
+                                "certified_internal_prefix": [],
+                                "every_clause_earned_internal": false,
+                                "no_forward_missing_or_cyclic_dependency": true,
+                                "projection_identity_separation_checked": true,
+                                "all_guarded_inverse_laws_satisfied": false,
+                                "internal_certificate_issued": false,
+                                "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                                "derivation_hash": "blake3:3741818533596b3890a682560f2691134698ddc9d7ca221e436ef923c5da9fd4"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "ambient_context": {
+            "version": "motive-sensitive-contextual-internality-rule-v1",
+            "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+            "visible_library": 15,
+            "candidate_hash": "blake3:b2f3d5bc7769bb3c450d94807262c39b3f03bd7ee128bd3fb6543471a577f759",
+            "ambient_arity": 1,
+            "hypotheses": [
+              {
+                "parameter": 1,
+                "motive": {
+                  "function": {
+                    "domain": "type",
+                    "codomain": "type"
+                  }
+                },
+                "b15_formable": true,
+                "formation_derivation_hashes": [
+                  "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb",
+                  "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb"
+                ]
+              }
+            ],
+            "every_motive_b15_formable": true,
+            "declaration_hash": "blake3:fe7427a7042c28438b8587688770bff004fc37096558e37a698736a1aac413f5"
+          },
+          "clause_evidence": [
+            {
+              "context_weakening": {
+                "version": "kernel-guarded-clause-weakening-erasure-v1",
+                "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                "visible_library": 15,
+                "base_candidate_hash": "blake3:1bc3a6a7226111980a7bb20d6299ee527a271526bbea7252f8319b21fa884a18",
+                "guarded_candidate_hash": "blake3:b2f3d5bc7769bb3c450d94807262c39b3f03bd7ee128bd3fb6543471a577f759",
+                "base_elaboration_hash": "blake3:9325dbd9cc3cfb8d838a73f9be5581507e5d446c20de4c7aacb6fbed78b6a8f7",
+                "guarded_elaboration_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                "clause_index": 0,
+                "base_outer_scope": 0,
+                "guarded_outer_scope": 1,
+                "base_expression": "Univ",
+                "guarded_expression": "Univ",
+                "weakened_expression": "Univ",
+                "erased_expression": "Univ",
+                "erase_after_weaken_expression": "Univ",
+                "weaken_after_erase_expression": "Univ",
+                "weakening_matches_guarded": {
+                  "scope_len": 1,
+                  "left_normal_form": "Univ",
+                  "right_normal_form": "Univ",
+                  "left_steps": 0,
+                  "right_steps": 0,
+                  "equal": true
+                },
+                "erasure_matches_base": {
+                  "scope_len": 0,
+                  "left_normal_form": "Univ",
+                  "right_normal_form": "Univ",
+                  "left_steps": 0,
+                  "right_steps": 0,
+                  "equal": true
+                },
+                "erasure_after_weakening": {
+                  "scope_len": 0,
+                  "left_normal_form": "Univ",
+                  "right_normal_form": "Univ",
+                  "left_steps": 0,
+                  "right_steps": 0,
+                  "equal": true
+                },
+                "weakening_after_erasure": {
+                  "scope_len": 1,
+                  "left_normal_form": "Univ",
+                  "right_normal_form": "Univ",
+                  "left_steps": 0,
+                  "right_steps": 0,
+                  "equal": true
+                },
+                "inserted_ambient_is_unused": true,
+                "both_inverse_laws_checked": true,
+                "derivation_hash": "blake3:140949c7eb53392decf2bc1821d18b596ac95efe8874007d2ab6323eb57be360"
+              }
+            },
+            {
+              "contextual": {
+                "version": "motive-sensitive-contextual-internality-rule-v1",
+                "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                "visible_library": 15,
+                "candidate_hash": "blake3:b2f3d5bc7769bb3c450d94807262c39b3f03bd7ee128bd3fb6543471a577f759",
+                "elaboration_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                "clause_index": 1,
+                "expression": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Var": 3
+                      },
+                      {
+                        "App": [
+                          {
+                            "Var": 1
+                          },
+                          {
+                            "Lib": 15
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "ambient_context": {
+                  "version": "motive-sensitive-contextual-internality-rule-v1",
+                  "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                  "visible_library": 15,
+                  "candidate_hash": "blake3:b2f3d5bc7769bb3c450d94807262c39b3f03bd7ee128bd3fb6543471a577f759",
+                  "ambient_arity": 1,
+                  "hypotheses": [
+                    {
+                      "parameter": 1,
+                      "motive": {
+                        "function": {
+                          "domain": "type",
+                          "codomain": "type"
+                        }
+                      },
+                      "b15_formable": true,
+                      "formation_derivation_hashes": [
+                        "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb",
+                        "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb"
+                      ]
+                    }
+                  ],
+                  "every_motive_b15_formable": true,
+                  "declaration_hash": "blake3:fe7427a7042c28438b8587688770bff004fc37096558e37a698736a1aac413f5"
+                },
+                "ambient_uses": [
+                  {
+                    "parameter": 1,
+                    "expression": {
+                      "Var": 1
+                    },
+                    "derivation_rule": "ambient-param-1",
+                    "declared_motive": {
+                      "function": {
+                        "domain": "type",
+                        "codomain": "type"
+                      }
+                    },
+                    "used_in_application_head": true,
+                    "motive_checked": true
+                  }
+                ],
+                "certified_prior_clauses": {
+                  "0": "blake3:140949c7eb53392decf2bc1821d18b596ac95efe8874007d2ab6323eb57be360"
+                },
+                "every_ambient_use_motive_typed": true,
+                "every_motive_b15_formable": true,
+                "every_dependency_strictly_prior": true,
+                "instantiations": [
+                  {
+                    "probe_arguments": {
+                      "1": {
+                        "Lam": "Univ"
+                      }
+                    },
+                    "probe_argument_derivation_hashes": {
+                      "1": "blake3:593acadb8cabd2762e9a488408d607c04d8fb37a54030bad5cc3dc216eb60cb1"
+                    },
+                    "instantiated_candidate": {
+                      "clauses": [
+                        {
+                          "role": "formation",
+                          "expr": "Univ"
+                        },
+                        {
+                          "role": "introduction",
+                          "expr": {
+                            "Lam": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "App": [
+                                    {
+                                      "Lam": "Univ"
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "instantiated_candidate_hash": "blake3:1bc3a6a7226111980a7bb20d6299ee527a271526bbea7252f8319b21fa884a18",
+                    "closed_after_instantiation": true,
+                    "closed_clause_evidence": {
+                      "version": "kernel-ambient-former-closure-internal-v1",
+                      "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                      "visible_library": 15,
+                      "candidate_hash": "blake3:1bc3a6a7226111980a7bb20d6299ee527a271526bbea7252f8319b21fa884a18",
+                      "elaboration_hash": "blake3:9325dbd9cc3cfb8d838a73f9be5581507e5d446c20de4c7aacb6fbed78b6a8f7",
+                      "clause_index": 1,
+                      "declared_role": "introduction",
+                      "kernel_role": "introduction",
+                      "outer_scope": 1,
+                      "expression": {
+                        "Lam": {
+                          "App": [
+                            {
+                              "Var": 2
+                            },
+                            {
+                              "App": [
+                                {
+                                  "Lam": "Univ"
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "clause_normal_form": {
+                        "Lam": {
+                          "App": [
+                            {
+                              "Var": 2
+                            },
+                            "Univ"
+                          ]
+                        }
+                      },
+                      "certified_prior_clauses": {
+                        "0": "blake3:140949c7eb53392decf2bc1821d18b596ac95efe8874007d2ab6323eb57be360"
+                      },
+                      "term_evidence": {
+                        "expression": {
+                          "Lam": {
+                            "App": [
+                              {
+                                "Var": 2
+                              },
+                              {
+                                "App": [
+                                  {
+                                    "Lam": "Univ"
+                                  },
+                                  {
+                                    "Lib": 15
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "scope_len": 1,
+                        "derivation_rule": "lam-intro",
+                        "former": "lambda_introduction",
+                        "provenance": {
+                          "transparent_former": {
+                            "former": "lambda_introduction",
+                            "premise_hashes": [
+                              "blake3:f66b6561602c60d8a855571655a0237353009a79b64efd8ad3f46a583985e478"
+                            ]
+                          }
+                        },
+                        "premises": [
+                          {
+                            "expression": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "App": [
+                                    {
+                                      "Lam": "Univ"
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "scope_len": 2,
+                            "derivation_rule": "app-stuck",
+                            "former": "application",
+                            "provenance": {
+                              "transparent_former": {
+                                "former": "application",
+                                "premise_hashes": [
+                                  "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b",
+                                  "blake3:5980ef08cdca5297f0aa2552875620b4b2cd7a804419ce6967a12e574c30df3f"
+                                ]
+                              }
+                            },
+                            "premises": [
+                              {
+                                "expression": {
+                                  "Var": 2
+                                },
+                                "scope_len": 2,
+                                "derivation_rule": "local-var-1",
+                                "former": "variable_reference",
+                                "provenance": {
+                                  "local_binder": {
+                                    "binder": 1
+                                  }
+                                },
+                                "premises": [],
+                                "certified_field_dependencies": [],
+                                "normal_form": {
+                                  "Var": 2
+                                },
+                                "normalization_steps": 0,
+                                "registered_transparent_former": true,
+                                "all_premises_internal": true,
+                                "no_candidate_fresh_head": true,
+                                "typed_result_preserved": true,
+                                "full_provenance_retained": true,
+                                "independent_demand_orbit_exported": false,
+                                "internal_term_issued": true,
+                                "marginal_nu": 0,
+                                "derivation_hash": "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b"
+                              },
+                              {
+                                "expression": {
+                                  "App": [
+                                    {
+                                      "Lam": "Univ"
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                },
+                                "scope_len": 2,
+                                "derivation_rule": "app-beta",
+                                "former": "application",
+                                "provenance": {
+                                  "transparent_former": {
+                                    "former": "application",
+                                    "premise_hashes": [
+                                      "blake3:2955f6770dd794aa5e190978f786e7c174b6f58f0972a7c91235270f75d4b917",
+                                      "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e",
+                                      "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869"
+                                    ]
+                                  }
+                                },
+                                "premises": [
+                                  {
+                                    "expression": {
+                                      "Lam": "Univ"
+                                    },
+                                    "scope_len": 2,
+                                    "derivation_rule": "lam-intro",
+                                    "former": "lambda_introduction",
+                                    "provenance": {
+                                      "transparent_former": {
+                                        "former": "lambda_introduction",
+                                        "premise_hashes": [
+                                          "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                                        ]
+                                      }
+                                    },
+                                    "premises": [
+                                      {
+                                        "expression": "Univ",
+                                        "scope_len": 3,
+                                        "derivation_rule": "univ-form",
+                                        "former": "ambient_universe",
+                                        "provenance": "ambient_universe",
+                                        "premises": [],
+                                        "certified_field_dependencies": [],
+                                        "normal_form": "Univ",
+                                        "normalization_steps": 0,
+                                        "registered_transparent_former": true,
+                                        "all_premises_internal": true,
+                                        "no_candidate_fresh_head": true,
+                                        "typed_result_preserved": true,
+                                        "full_provenance_retained": true,
+                                        "independent_demand_orbit_exported": false,
+                                        "internal_term_issued": true,
+                                        "marginal_nu": 0,
+                                        "derivation_hash": "blake3:49844a4a83356c0fd07cd72abdd51dc408aace48b7025d066e4a088dca70eefa"
+                                      }
+                                    ],
+                                    "certified_field_dependencies": [],
+                                    "normal_form": {
+                                      "Lam": "Univ"
+                                    },
+                                    "normalization_steps": 0,
+                                    "registered_transparent_former": true,
+                                    "all_premises_internal": true,
+                                    "no_candidate_fresh_head": true,
+                                    "typed_result_preserved": true,
+                                    "full_provenance_retained": true,
+                                    "independent_demand_orbit_exported": false,
+                                    "internal_term_issued": true,
+                                    "marginal_nu": 0,
+                                    "derivation_hash": "blake3:2955f6770dd794aa5e190978f786e7c174b6f58f0972a7c91235270f75d4b917"
+                                  },
+                                  {
+                                    "expression": {
+                                      "Lib": 15
+                                    },
+                                    "scope_len": 2,
+                                    "derivation_rule": "library-constant",
+                                    "former": "sealed_library_constant",
+                                    "provenance": {
+                                      "sealed_library_constant": {
+                                        "step": 15
+                                      }
+                                    },
+                                    "premises": [],
+                                    "certified_field_dependencies": [],
+                                    "normal_form": {
+                                      "Lib": 15
+                                    },
+                                    "normalization_steps": 0,
+                                    "registered_transparent_former": true,
+                                    "all_premises_internal": true,
+                                    "no_candidate_fresh_head": true,
+                                    "typed_result_preserved": true,
+                                    "full_provenance_retained": true,
+                                    "independent_demand_orbit_exported": false,
+                                    "internal_term_issued": true,
+                                    "marginal_nu": 0,
+                                    "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                                  },
+                                  {
+                                    "expression": "Univ",
+                                    "scope_len": 2,
+                                    "derivation_rule": "univ-form",
+                                    "former": "ambient_universe",
+                                    "provenance": "ambient_universe",
+                                    "premises": [],
+                                    "certified_field_dependencies": [],
+                                    "normal_form": "Univ",
+                                    "normalization_steps": 0,
+                                    "registered_transparent_former": true,
+                                    "all_premises_internal": true,
+                                    "no_candidate_fresh_head": true,
+                                    "typed_result_preserved": true,
+                                    "full_provenance_retained": true,
+                                    "independent_demand_orbit_exported": false,
+                                    "internal_term_issued": true,
+                                    "marginal_nu": 0,
+                                    "derivation_hash": "blake3:feb60a2f5a171f70921127e9b94291874d3e51b499b714bd6915307064bd2869"
+                                  }
+                                ],
+                                "certified_field_dependencies": [],
+                                "normal_form": "Univ",
+                                "normalization_steps": 1,
+                                "registered_transparent_former": true,
+                                "all_premises_internal": true,
+                                "no_candidate_fresh_head": true,
+                                "typed_result_preserved": true,
+                                "full_provenance_retained": true,
+                                "independent_demand_orbit_exported": false,
+                                "internal_term_issued": true,
+                                "marginal_nu": 0,
+                                "derivation_hash": "blake3:5980ef08cdca5297f0aa2552875620b4b2cd7a804419ce6967a12e574c30df3f"
+                              }
+                            ],
+                            "certified_field_dependencies": [],
+                            "normal_form": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                "Univ"
+                              ]
+                            },
+                            "normalization_steps": 1,
+                            "registered_transparent_former": true,
+                            "all_premises_internal": true,
+                            "no_candidate_fresh_head": true,
+                            "typed_result_preserved": true,
+                            "full_provenance_retained": true,
+                            "independent_demand_orbit_exported": false,
+                            "internal_term_issued": true,
+                            "marginal_nu": 0,
+                            "derivation_hash": "blake3:f66b6561602c60d8a855571655a0237353009a79b64efd8ad3f46a583985e478"
+                          }
+                        ],
+                        "certified_field_dependencies": [],
+                        "normal_form": {
+                          "Lam": {
+                            "App": [
+                              {
+                                "Var": 2
+                              },
+                              "Univ"
+                            ]
+                          }
+                        },
+                        "normalization_steps": 1,
+                        "registered_transparent_former": true,
+                        "all_premises_internal": true,
+                        "no_candidate_fresh_head": true,
+                        "typed_result_preserved": true,
+                        "full_provenance_retained": true,
+                        "independent_demand_orbit_exported": false,
+                        "internal_term_issued": true,
+                        "marginal_nu": 0,
+                        "derivation_hash": "blake3:e3455b25d0c16f9e4a895332d74524097c62fa71f3d4fe6787c58fe42ab1e9db"
+                      },
+                      "candidate_declared_formation_excluded": true,
+                      "charged_path_constructor_excluded": true,
+                      "every_dependency_strictly_prior": true,
+                      "every_premise_replayed_internal": true,
+                      "typed_result_preserved": true,
+                      "full_provenance_retained": true,
+                      "standing_orbit_exception_preserved": true,
+                      "closed_candidate": true,
+                      "internal_closure_issued": true,
+                      "marginal_nu": 0,
+                      "derivation_hash": "blake3:52d0df29f42021168381d992fba7b7c3b915c328ccef402ba5f40a997a6e5493"
+                    },
+                    "replayed_under_closed_rules": true,
+                    "derivation_hash": "blake3:847a557727c50338d2745badfc73d0f610a35f97e69e25140c57cee39e8cd9d2"
+                  },
+                  {
+                    "probe_arguments": {
+                      "1": {
+                        "Lam": {
+                          "Lib": 15
+                        }
+                      }
+                    },
+                    "probe_argument_derivation_hashes": {
+                      "1": "blake3:f98f949fcf92f9b21189a8dedca0fa32b61950c64bdc9d56bd4e77dacfb8b1b3"
+                    },
+                    "instantiated_candidate": {
+                      "clauses": [
+                        {
+                          "role": "formation",
+                          "expr": "Univ"
+                        },
+                        {
+                          "role": "introduction",
+                          "expr": {
+                            "Lam": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "App": [
+                                    {
+                                      "Lam": {
+                                        "Lib": 15
+                                      }
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "instantiated_candidate_hash": "blake3:90d47aa57c4e037d2f64cb81cc80177d1f916ff40c0f8a10a952e8dd42618d09",
+                    "closed_after_instantiation": true,
+                    "closed_clause_evidence": {
+                      "version": "kernel-ambient-former-closure-internal-v1",
+                      "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                      "visible_library": 15,
+                      "candidate_hash": "blake3:90d47aa57c4e037d2f64cb81cc80177d1f916ff40c0f8a10a952e8dd42618d09",
+                      "elaboration_hash": "blake3:4dbe76729ed58beeea581bc79c57b67c3ca1251fced18ab439d35d2e8e520b6b",
+                      "clause_index": 1,
+                      "declared_role": "introduction",
+                      "kernel_role": "introduction",
+                      "outer_scope": 1,
+                      "expression": {
+                        "Lam": {
+                          "App": [
+                            {
+                              "Var": 2
+                            },
+                            {
+                              "App": [
+                                {
+                                  "Lam": {
+                                    "Lib": 15
+                                  }
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "clause_normal_form": {
+                        "Lam": {
+                          "App": [
+                            {
+                              "Var": 2
+                            },
+                            {
+                              "Lib": 15
+                            }
+                          ]
+                        }
+                      },
+                      "certified_prior_clauses": {
+                        "0": "blake3:140949c7eb53392decf2bc1821d18b596ac95efe8874007d2ab6323eb57be360"
+                      },
+                      "term_evidence": {
+                        "expression": {
+                          "Lam": {
+                            "App": [
+                              {
+                                "Var": 2
+                              },
+                              {
+                                "App": [
+                                  {
+                                    "Lam": {
+                                      "Lib": 15
+                                    }
+                                  },
+                                  {
+                                    "Lib": 15
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "scope_len": 1,
+                        "derivation_rule": "lam-intro",
+                        "former": "lambda_introduction",
+                        "provenance": {
+                          "transparent_former": {
+                            "former": "lambda_introduction",
+                            "premise_hashes": [
+                              "blake3:818f1761dfb12d0d19fd8923c48f1e0507b0b27eadf47f2b70ef362e5e87ae21"
+                            ]
+                          }
+                        },
+                        "premises": [
+                          {
+                            "expression": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "App": [
+                                    {
+                                      "Lam": {
+                                        "Lib": 15
+                                      }
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "scope_len": 2,
+                            "derivation_rule": "app-stuck",
+                            "former": "application",
+                            "provenance": {
+                              "transparent_former": {
+                                "former": "application",
+                                "premise_hashes": [
+                                  "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b",
+                                  "blake3:3b42fbd24474ead14713c935d48bd66e4ea1e6d779a5edf6dab022f1046a2cb5"
+                                ]
+                              }
+                            },
+                            "premises": [
+                              {
+                                "expression": {
+                                  "Var": 2
+                                },
+                                "scope_len": 2,
+                                "derivation_rule": "local-var-1",
+                                "former": "variable_reference",
+                                "provenance": {
+                                  "local_binder": {
+                                    "binder": 1
+                                  }
+                                },
+                                "premises": [],
+                                "certified_field_dependencies": [],
+                                "normal_form": {
+                                  "Var": 2
+                                },
+                                "normalization_steps": 0,
+                                "registered_transparent_former": true,
+                                "all_premises_internal": true,
+                                "no_candidate_fresh_head": true,
+                                "typed_result_preserved": true,
+                                "full_provenance_retained": true,
+                                "independent_demand_orbit_exported": false,
+                                "internal_term_issued": true,
+                                "marginal_nu": 0,
+                                "derivation_hash": "blake3:d4fba3d56aa9cbab15f7915378351823873ef99ca269fb4ebe97f25710a7c21b"
+                              },
+                              {
+                                "expression": {
+                                  "App": [
+                                    {
+                                      "Lam": {
+                                        "Lib": 15
+                                      }
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                },
+                                "scope_len": 2,
+                                "derivation_rule": "app-beta",
+                                "former": "application",
+                                "provenance": {
+                                  "transparent_former": {
+                                    "former": "application",
+                                    "premise_hashes": [
+                                      "blake3:27cc29d261583df21a79a098aff8fcb7a86374620c39c6a61eb56719116eb8a7",
+                                      "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e",
+                                      "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                                    ]
+                                  }
+                                },
+                                "premises": [
+                                  {
+                                    "expression": {
+                                      "Lam": {
+                                        "Lib": 15
+                                      }
+                                    },
+                                    "scope_len": 2,
+                                    "derivation_rule": "lam-intro",
+                                    "former": "lambda_introduction",
+                                    "provenance": {
+                                      "transparent_former": {
+                                        "former": "lambda_introduction",
+                                        "premise_hashes": [
+                                          "blake3:469489f0c088692b4098f2b83a66c0426f6ddd8857299cb637ffef3c6b67d7d8"
+                                        ]
+                                      }
+                                    },
+                                    "premises": [
+                                      {
+                                        "expression": {
+                                          "Lib": 15
+                                        },
+                                        "scope_len": 3,
+                                        "derivation_rule": "library-constant",
+                                        "former": "sealed_library_constant",
+                                        "provenance": {
+                                          "sealed_library_constant": {
+                                            "step": 15
+                                          }
+                                        },
+                                        "premises": [],
+                                        "certified_field_dependencies": [],
+                                        "normal_form": {
+                                          "Lib": 15
+                                        },
+                                        "normalization_steps": 0,
+                                        "registered_transparent_former": true,
+                                        "all_premises_internal": true,
+                                        "no_candidate_fresh_head": true,
+                                        "typed_result_preserved": true,
+                                        "full_provenance_retained": true,
+                                        "independent_demand_orbit_exported": false,
+                                        "internal_term_issued": true,
+                                        "marginal_nu": 0,
+                                        "derivation_hash": "blake3:469489f0c088692b4098f2b83a66c0426f6ddd8857299cb637ffef3c6b67d7d8"
+                                      }
+                                    ],
+                                    "certified_field_dependencies": [],
+                                    "normal_form": {
+                                      "Lam": {
+                                        "Lib": 15
+                                      }
+                                    },
+                                    "normalization_steps": 0,
+                                    "registered_transparent_former": true,
+                                    "all_premises_internal": true,
+                                    "no_candidate_fresh_head": true,
+                                    "typed_result_preserved": true,
+                                    "full_provenance_retained": true,
+                                    "independent_demand_orbit_exported": false,
+                                    "internal_term_issued": true,
+                                    "marginal_nu": 0,
+                                    "derivation_hash": "blake3:27cc29d261583df21a79a098aff8fcb7a86374620c39c6a61eb56719116eb8a7"
+                                  },
+                                  {
+                                    "expression": {
+                                      "Lib": 15
+                                    },
+                                    "scope_len": 2,
+                                    "derivation_rule": "library-constant",
+                                    "former": "sealed_library_constant",
+                                    "provenance": {
+                                      "sealed_library_constant": {
+                                        "step": 15
+                                      }
+                                    },
+                                    "premises": [],
+                                    "certified_field_dependencies": [],
+                                    "normal_form": {
+                                      "Lib": 15
+                                    },
+                                    "normalization_steps": 0,
+                                    "registered_transparent_former": true,
+                                    "all_premises_internal": true,
+                                    "no_candidate_fresh_head": true,
+                                    "typed_result_preserved": true,
+                                    "full_provenance_retained": true,
+                                    "independent_demand_orbit_exported": false,
+                                    "internal_term_issued": true,
+                                    "marginal_nu": 0,
+                                    "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                                  },
+                                  {
+                                    "expression": {
+                                      "Lib": 15
+                                    },
+                                    "scope_len": 2,
+                                    "derivation_rule": "library-constant",
+                                    "former": "sealed_library_constant",
+                                    "provenance": {
+                                      "sealed_library_constant": {
+                                        "step": 15
+                                      }
+                                    },
+                                    "premises": [],
+                                    "certified_field_dependencies": [],
+                                    "normal_form": {
+                                      "Lib": 15
+                                    },
+                                    "normalization_steps": 0,
+                                    "registered_transparent_former": true,
+                                    "all_premises_internal": true,
+                                    "no_candidate_fresh_head": true,
+                                    "typed_result_preserved": true,
+                                    "full_provenance_retained": true,
+                                    "independent_demand_orbit_exported": false,
+                                    "internal_term_issued": true,
+                                    "marginal_nu": 0,
+                                    "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                                  }
+                                ],
+                                "certified_field_dependencies": [],
+                                "normal_form": {
+                                  "Lib": 15
+                                },
+                                "normalization_steps": 1,
+                                "registered_transparent_former": true,
+                                "all_premises_internal": true,
+                                "no_candidate_fresh_head": true,
+                                "typed_result_preserved": true,
+                                "full_provenance_retained": true,
+                                "independent_demand_orbit_exported": false,
+                                "internal_term_issued": true,
+                                "marginal_nu": 0,
+                                "derivation_hash": "blake3:3b42fbd24474ead14713c935d48bd66e4ea1e6d779a5edf6dab022f1046a2cb5"
+                              }
+                            ],
+                            "certified_field_dependencies": [],
+                            "normal_form": {
+                              "App": [
+                                {
+                                  "Var": 2
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            },
+                            "normalization_steps": 1,
+                            "registered_transparent_former": true,
+                            "all_premises_internal": true,
+                            "no_candidate_fresh_head": true,
+                            "typed_result_preserved": true,
+                            "full_provenance_retained": true,
+                            "independent_demand_orbit_exported": false,
+                            "internal_term_issued": true,
+                            "marginal_nu": 0,
+                            "derivation_hash": "blake3:818f1761dfb12d0d19fd8923c48f1e0507b0b27eadf47f2b70ef362e5e87ae21"
+                          }
+                        ],
+                        "certified_field_dependencies": [],
+                        "normal_form": {
+                          "Lam": {
+                            "App": [
+                              {
+                                "Var": 2
+                              },
+                              {
+                                "Lib": 15
+                              }
+                            ]
+                          }
+                        },
+                        "normalization_steps": 1,
+                        "registered_transparent_former": true,
+                        "all_premises_internal": true,
+                        "no_candidate_fresh_head": true,
+                        "typed_result_preserved": true,
+                        "full_provenance_retained": true,
+                        "independent_demand_orbit_exported": false,
+                        "internal_term_issued": true,
+                        "marginal_nu": 0,
+                        "derivation_hash": "blake3:793c761ddd1a9164ee705182ff50cbfe084d3661b04dbe6c394a93ab3cf2ea87"
+                      },
+                      "candidate_declared_formation_excluded": true,
+                      "charged_path_constructor_excluded": true,
+                      "every_dependency_strictly_prior": true,
+                      "every_premise_replayed_internal": true,
+                      "typed_result_preserved": true,
+                      "full_provenance_retained": true,
+                      "standing_orbit_exception_preserved": true,
+                      "closed_candidate": true,
+                      "internal_closure_issued": true,
+                      "marginal_nu": 0,
+                      "derivation_hash": "blake3:681839ba8ee38628bc6847c09b70d4589c609da35876c245886e2feb9784d86e"
+                    },
+                    "replayed_under_closed_rules": true,
+                    "derivation_hash": "blake3:15d0f554d9e695877333b2527dd3b01201ffab2e5d1cf8cff84e1e375444f022"
+                  }
+                ],
+                "instantiation_coherence_replayed": true,
+                "pathcon_remains_charged": true,
+                "standing_orbit_exception_preserved": true,
+                "no_credit_anchor_or_orbit_minted": true,
+                "live_contextual_dependency": true,
+                "internal_closure_issued": true,
+                "marginal_nu": 0,
+                "derivation_hash": "blake3:5f8f9493d68f952f50caba27415aa0cc4984b9da0cc69734fd2d521a81f91d0d"
+              }
+            }
+          ],
+          "final_internal_clause_hashes": {
+            "0": "blake3:140949c7eb53392decf2bc1821d18b596ac95efe8874007d2ab6323eb57be360",
+            "1": "blake3:5f8f9493d68f952f50caba27415aa0cc4984b9da0cc69734fd2d521a81f91d0d"
+          },
+          "every_clause_covered_exactly_once": true,
+          "live_contextual_clause_count": 1,
+          "context_weakening_clause_count": 1,
+          "every_projection_replayed": true,
+          "instantiation_coherence_replayed": true,
+          "no_credit_anchor_or_orbit_minted": true,
+          "internal_certificate_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:dd6430d94b19fe937e9ddeb5e3bae145cbef53ba6b448f2a5e78384ef866819c"
+        },
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:6160fc80644b6a5ed066ad832289fb91ff8aba34a39f22d44e73df71e7e4896f"
+      }
+    },
+    "exact_raw_catalog_member": true,
+    "inferred_ambient_arity": 1,
+    "ambient_head_derivation_rule": "ambient-param-1",
+    "local_force_derivation_rule": "local-var-1",
+    "genuine_live_ambient_use": true,
+    "explicit_contextual_derivation_replays": true,
+    "raw_telescope_has_motive_field": false,
+    "named_gap": "RAW_TELESCOPE_AMBIENT_MOTIVE_DECLARATION_MISSING",
+    "f_a5_retained": true,
+    "f_g4_retained": true,
+    "derivation_hash": "blake3:d13632312f546fd9728e502732e17bbad9471a2cd5172d495e4416541eb0ad71"
+  },
+  "unknown_survivor_count_lower_bound": 1,
+  "fail_fast_catalog_scan_terminated": true,
+  "no_unknown_survives": false,
+  "class_exhaustion_proved": false,
+  "global_e4_complete": false,
+  "five_pending_memberships_now_authorized": false,
+  "forbidden_outputs": {
+    "five_pending_membership_verdicts_issued": false,
+    "independent_family_tokens_issued": false,
+    "e2b_executed": false,
+    "historical_scores_recomputed": false,
+    "fq2_evaluated": false,
+    "agent_a_certified_totals_executed": false,
+    "e5_guard_rail_f1_executed": false,
+    "classifier_bridge_executed": false,
+    "fork_executed": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "global_e4_v8_resolves_v7_by_inverse_next_raw_context_declaration_unknown_blocks_exhaustion",
+  "permitted_conclusion": "The sealed v7 witness earns Internal at nu=0, but its Var(3) head is local-var-1 and the proof is guarded weakening/erasure. The adopted contextual rule separately replays on an explicitly declared live context. An exact raw live-context candidate remains Unknown because the raw Telescope surface has no field carrying Gamma's motive.",
+  "required_successor_action": "Continue F-A5. Introduce a versioned raw-candidate wrapper whose ambient telescope stores ordered B15-formable motives, bind enumeration and classifier replay to that wrapper, and rerun v9. Do not infer or synthesize motives from a desired verdict.",
+  "result_digest": "blake3:76ccd16c1f9318b5705650d0279d5681ead849d3d0fe05b959c39f5e56d681fd"
+}

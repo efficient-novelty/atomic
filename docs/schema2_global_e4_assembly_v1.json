@@ -1,0 +1,133 @@
+{
+  "schema": "schema2-global-e4-assembly-v1",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/agent_e_grammar_completion_plan.md",
+      "role": "phase_order_and_f_g4",
+      "byte_length": 6057,
+      "blake3": "blake3:3fff0b9d4256bed50ab84110d75dc9d2d53b58cacb11e24660b30cf6974c06ad"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "frozen_global_e4_spec",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544"
+    },
+    {
+      "path": "docs/schema2_grammar_completion_v1.json",
+      "role": "g2_g7_predecessor",
+      "byte_length": 71566,
+      "blake3": "blake3:584cc8df7d7f3dd19aec9263b98070672df51b0596137f5258cc1175eb2a5371"
+    },
+    {
+      "path": "docs/schema2_g8_total_classifier_v1.json",
+      "role": "g8_predecessor",
+      "byte_length": 5268,
+      "blake3": "blake3:86a762fcd3685f133037d3be85299008ad79b3b6dc9645f5143a39feeedb5755"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "exact_raw_catalog_membership",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-schema/src/total_classifier.rs",
+      "role": "typed_class_or_f_g4_decider",
+      "byte_length": 27342,
+      "blake3": "blake3:c5abc6f393a8b5bc2c7007df15b1f451b6786dfbc47079c6cc893e278d994193"
+    },
+    {
+      "path": "crates/pen-schema/src/e4_generator_basis.rs",
+      "role": "legal_morphism_generator_basis",
+      "byte_length": 82053,
+      "blake3": "blake3:fb19b2ed000cf23dad0b2de4a844cd2244c30613a7885607474ca4c4c7e54877"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly.rs",
+      "role": "fail_fast_global_assembly",
+      "byte_length": 23514,
+      "blake3": "blake3:399d0bea5ff6a74b8e6f030a634364e96c557faa85daedda9f0640c56f61065f"
+    }
+  ],
+  "grammar_completion_digest": "blake3:26ccc358c25ace6501e81125363064730c1642cfe775b0a931e8298bc5d60215",
+  "g8_classifier_digest": "blake3:d19d97137f6ebb8fcda38117603189beda62d70eebe5692ecb4acff8e7f308da",
+  "grammar_completion_replayed": true,
+  "g8_classifier_replayed": true,
+  "g8_authorized_global_assembly": true,
+  "generator_basis_derivation_hash": "blake3:aa37c38051d2ae09eca50fc9557a41b06e1920bfa9a32785adf98f40659e3446",
+  "generator_basis_replayed": true,
+  "legal_e1_morphism_decomposition_available": true,
+  "predecessor_basis_global_completeness_false": true,
+  "assembly_inputs_joined": true,
+  "frozen_raw_context": {
+    "library_size": 15,
+    "base_scope_size": 2,
+    "max_path_dimension": 1,
+    "include_trunc": false,
+    "include_modal": true,
+    "include_temporal": true,
+    "include_linear_exponential": false,
+    "max_expr_nodes": 6,
+    "late_family_surface": "none",
+    "package_focus_requirements_enabled": false
+  },
+  "f_g4_witness": {
+    "candidate": {
+      "clauses": [
+        {
+          "role": "formation",
+          "expr": "Univ"
+        },
+        {
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "Var": 1
+            }
+          }
+        }
+      ]
+    },
+    "candidate_kappa": 2,
+    "candidate_bit_cost": 10,
+    "raw_surface_membership": {
+      "is_member": true,
+      "rejection_reasons": []
+    },
+    "classifier_decision": {
+      "named_typed_obstruction": {
+        "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+        "telescope_class": "Unknown",
+        "elaboration_derivation_hash": "blake3:ca690e741ea0351818a3b71ffb588881eddab6e5864f44724aa33461ad1991a9",
+        "candidate_digest": "blake3:09e281cf55d61d66ec1b64dcac943fcf0ef8b138a915da508eaf7677be345f75",
+        "derivation_hash": "blake3:6ae36e4ccc03c3c2b8351224acb800ba016cd5dfaab30a28732e9eaec03307b2"
+      }
+    },
+    "exact_raw_catalog_member": true,
+    "typed_elaboration_succeeded": true,
+    "classifier_returned_unknown": true,
+    "named_obstruction": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+    "derivation_hash": "blake3:d0d50f27c29378848d3aaa9dc3d0485225377a8c9fa07383b6a23cacf5cd363c"
+  },
+  "f_g4_triggered": true,
+  "unknown_class_eliminated": false,
+  "class_exhaustion_claimed": false,
+  "global_e4_assembly_executed": true,
+  "global_e4_complete": false,
+  "five_pending_memberships_now_authorized": false,
+  "forbidden_outputs": {
+    "five_pending_membership_verdicts_issued": false,
+    "independent_family_tokens_issued": false,
+    "e2b_executed": false,
+    "historical_scores_recomputed": false,
+    "fq2_evaluated": false,
+    "agent_a_handoff_issued": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "global_e4_assembly_executed_f_g4_typed_unknown_witness_global_e4_incomplete",
+  "permitted_conclusion": "The adopted grammar, total classifier, and legal-morphism basis assemble far enough to expose a live exact raw candidate in the typed-Unknown branch. F-G4 fires, so global E-4 completeness and the five pending membership verdicts remain unavailable.",
+  "required_successor_action": "Adjudicate a versioned grammar/classifier successor for the mixed formation/introduction shape beginning with [Univ, Lam(Var(1))], then rerun global E-4 assembly from a create-new artifact.",
+  "result_digest": "blake3:edb3260ba046361b80f00d248a0fa8d5f27625a3041fcfd6532fba998e076a0e"
+}

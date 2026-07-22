@@ -5,10 +5,20 @@ edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
 
+[features]
+default = []
+boundary-audit = ["pen-type/boundary-variants"]
+
 [dependencies]
 num-rational.workspace = true
 pen-core = { path = "../pen-core" }
+pen-schema = { path = "../pen-schema" }
 pen-type = { path = "../pen-type" }
 serde.workspace = true
 serde_json.workspace = true
+sha2.workspace = true
 thiserror.workspace = true
+
+[[example]]
+name = "boundary_audit"
+required-features = ["boundary-audit"]

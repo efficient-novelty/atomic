@@ -67,21 +67,66 @@ pub fn token_rules_hash() -> String {
 /// `SealedSignature::genesis_del_h15` re-derives each hash from
 /// `Telescope::reference` and fails closed on any drift.
 const SEALED_CANDIDATE_HASHES: [(u32, &str); 15] = [
-    (1, "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7"),
-    (2, "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555"),
-    (3, "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e"),
-    (4, "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407"),
-    (5, "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"),
-    (6, "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"),
-    (7, "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"),
-    (8, "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0"),
-    (9, "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491"),
-    (10, "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e"),
-    (11, "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd"),
-    (12, "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb"),
-    (13, "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1"),
-    (14, "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c"),
-    (15, "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4"),
+    (
+        1,
+        "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+    ),
+    (
+        2,
+        "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+    ),
+    (
+        3,
+        "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+    ),
+    (
+        4,
+        "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+    ),
+    (
+        5,
+        "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+    ),
+    (
+        6,
+        "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+    ),
+    (
+        7,
+        "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+    ),
+    (
+        8,
+        "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+    ),
+    (
+        9,
+        "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+    ),
+    (
+        10,
+        "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+    ),
+    (
+        11,
+        "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+    ),
+    (
+        12,
+        "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+    ),
+    (
+        13,
+        "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+    ),
+    (
+        14,
+        "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+    ),
+    (
+        15,
+        "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+    ),
 ];
 
 /// Candidate hash exactly as the search engine computes it
@@ -153,9 +198,7 @@ impl SealedSignature {
         });
         let digest = format!(
             "blake3:{}",
-            blake3_hex(
-                &serde_json::to_vec(&digest_payload).expect("digest payload serialization"),
-            )
+            blake3_hex(&serde_json::to_vec(&digest_payload).expect("digest payload serialization"),)
         );
         Self { entries, digest }
     }
@@ -345,6 +388,12 @@ pub struct ClauseElaboration {
     pub kernel_ty: KernelTy,
     pub normal_form: Expr,
     pub beta_steps: u32,
+    /// Synthesis-time beta plus normalization steps for this clause.  This
+    /// observation is kept out of the legacy serialized derivation payload so
+    /// existing token/artifact hashes remain unchanged; the additive fuel
+    /// composition token serializes it separately.
+    #[serde(skip_serializing)]
+    pub total_fuel_observed: u32,
     pub is_beta_redex_clause: bool,
     pub stuck_applications: Vec<StuckApplication>,
     pub coarse_assumptions: u32,
@@ -387,6 +436,10 @@ impl TelescopeElaboration {
 struct ElabState {
     visible_library: u32,
     ambient: u32,
+    /// Exact classifiers for a versioned dependent ambient context.  Legacy
+    /// callers leave this absent and retain the frozen all-`Type` ambient
+    /// interpretation byte-for-byte.
+    ambient_types: Option<Vec<KernelTy>>,
     prior_roles: Vec<ClauseRole>,
     locals: Vec<KernelTy>,
     clause_index: u16,
@@ -443,10 +496,10 @@ fn required_ambient(expr: &Expr, priors: u32, locals: u32) -> u32 {
         Expr::Univ | Expr::Lib(_) | Expr::PathCon(_) => 0,
         Expr::App(function, argument) => required_ambient(function, priors, locals)
             .max(required_ambient(argument, priors, locals)),
-        Expr::Pi(domain, codomain) | Expr::Sigma(domain, codomain) => {
-            required_ambient(domain, priors, locals)
-                .max(required_ambient(codomain, priors, locals + 1))
-        }
+        Expr::Pi(domain, codomain) | Expr::Sigma(domain, codomain) => required_ambient(
+            domain, priors, locals,
+        )
+        .max(required_ambient(codomain, priors, locals + 1)),
         Expr::Lam(body) => required_ambient(body, priors, locals + 1),
         Expr::Id(ty, left, right) => required_ambient(ty, priors, locals)
             .max(required_ambient(left, priors, locals))
@@ -493,6 +546,9 @@ pub struct SingleClauseElaboration {
     pub kernel_role: ClauseRole,
     pub normal_form: Expr,
     pub beta_steps: u32,
+    /// Synthesis-time beta plus normalization steps.
+    #[serde(skip_serializing)]
+    pub total_fuel_observed: u32,
     pub coarse_assumptions: u32,
     pub stuck_applications: Vec<StuckApplication>,
 }
@@ -503,6 +559,19 @@ pub fn elaborate_single_clause(
     prior_roles: &[ClauseRole],
     visible_library: u32,
 ) -> Result<SingleClauseElaboration, ElabError> {
+    elaborate_single_clause_with_derivation(expr, ambient, prior_roles, visible_library)
+        .map(|(summary, _)| summary)
+}
+
+/// Exact single-clause elaboration in a caller-declared ambient context,
+/// retaining the kernel derivation for replayable contextual audits.  This is
+/// additive: the legacy summary API above remains byte-for-byte compatible.
+pub fn elaborate_single_clause_with_derivation(
+    expr: &Expr,
+    ambient: u32,
+    prior_roles: &[ClauseRole],
+    visible_library: u32,
+) -> Result<(SingleClauseElaboration, DerivationNode), ElabError> {
     if ambient > MAX_AMBIENT_PARAMETERS {
         return Err(ElabError::AmbientContextTooLarge {
             required: ambient,
@@ -510,10 +579,13 @@ pub fn elaborate_single_clause(
         });
     }
     let node_count = StructuralStats::from_expr(expr).node_count;
-    let fuel = node_count.saturating_mul((prior_roles.len() as u32 + 1).max(1)).max(16);
+    let fuel = node_count
+        .saturating_mul((prior_roles.len() as u32 + 1).max(1))
+        .max(16);
     let mut state = ElabState {
         visible_library,
         ambient,
+        ambient_types: None,
         prior_roles: prior_roles.to_vec(),
         locals: Vec::new(),
         clause_index: prior_roles.len() as u16,
@@ -522,20 +594,76 @@ pub fn elaborate_single_clause(
         fuel_budget: fuel,
         fuel_used: 0,
     };
-    let (kernel_ty, _derivation) = synth(&mut state, expr)?;
+    let (kernel_ty, derivation) = synth(&mut state, expr)?;
     let scope_len = ambient + prior_roles.len() as u32;
     let normalized = normalize(expr, scope_len, state.remaining_fuel())?;
     let is_beta_redex =
         matches!(expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Lam(_)));
     let kernel_role = derive_kernel_role(expr, &kernel_ty, is_beta_redex);
-    Ok(SingleClauseElaboration {
-        kernel_ty,
-        kernel_role,
-        normal_form: normalized.expr,
-        beta_steps: normalized.steps,
-        coarse_assumptions: state.coarse,
-        stuck_applications: state.stuck,
-    })
+    Ok((
+        SingleClauseElaboration {
+            kernel_ty,
+            kernel_role,
+            normal_form: normalized.expr,
+            beta_steps: normalized.steps,
+            total_fuel_observed: state.fuel_used.saturating_add(normalized.steps),
+            coarse_assumptions: state.coarse,
+            stuck_applications: state.stuck,
+        },
+        derivation,
+    ))
+}
+
+/// Exact single-clause elaboration in a caller-declared typed ambient
+/// context.  This is the versioned dependent-context entry point: unlike the
+/// legacy API it has no arity-two implementation cap, and an ambient
+/// projection synthesizes the exact classifier supplied for that hypothesis.
+/// It does not alter whole-telescope elaboration or any archived kernel run.
+pub fn elaborate_single_clause_with_typed_ambient(
+    expr: &Expr,
+    ambient_types: &[KernelTy],
+    prior_roles: &[ClauseRole],
+    visible_library: u32,
+) -> Result<(SingleClauseElaboration, DerivationNode), ElabError> {
+    let ambient =
+        u32::try_from(ambient_types.len()).map_err(|_| ElabError::AmbientContextTooLarge {
+            required: u32::MAX,
+            max: u32::MAX,
+        })?;
+    let node_count = StructuralStats::from_expr(expr).node_count;
+    let fuel = node_count
+        .saturating_mul((prior_roles.len() as u32 + 1).max(1))
+        .max(16);
+    let mut state = ElabState {
+        visible_library,
+        ambient,
+        ambient_types: Some(ambient_types.to_vec()),
+        prior_roles: prior_roles.to_vec(),
+        locals: Vec::new(),
+        clause_index: prior_roles.len() as u16,
+        stuck: Vec::new(),
+        coarse: 0,
+        fuel_budget: fuel,
+        fuel_used: 0,
+    };
+    let (kernel_ty, derivation) = synth(&mut state, expr)?;
+    let scope_len = ambient + prior_roles.len() as u32;
+    let normalized = normalize(expr, scope_len, state.remaining_fuel())?;
+    let is_beta_redex =
+        matches!(expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Lam(_)));
+    let kernel_role = derive_kernel_role(expr, &kernel_ty, is_beta_redex);
+    Ok((
+        SingleClauseElaboration {
+            kernel_ty,
+            kernel_role,
+            normal_form: normalized.expr,
+            beta_steps: normalized.steps,
+            total_fuel_observed: state.fuel_used.saturating_add(normalized.steps),
+            coarse_assumptions: state.coarse,
+            stuck_applications: state.stuck,
+        },
+        derivation,
+    ))
 }
 
 /// Elaborate a telescope against the visible prefix of the sealed
@@ -567,6 +695,7 @@ pub fn elaborate_telescope(
     let mut state = ElabState {
         visible_library,
         ambient,
+        ambient_types: None,
         prior_roles: Vec::new(),
         locals: Vec::new(),
         clause_index: 0,
@@ -592,18 +721,19 @@ pub fn elaborate_telescope(
             })?;
 
         let scope_len = state.ambient + state.prior_roles.len() as u32;
-        let normalized = normalize(&clause.expr, scope_len, state.remaining_fuel())
-            .map_err(|error| ClauseFailure {
-                clause_index,
-                error: error.into(),
+        let normalized =
+            normalize(&clause.expr, scope_len, state.remaining_fuel()).map_err(|error| {
+                ClauseFailure {
+                    clause_index,
+                    error: error.into(),
+                }
             })?;
         state.spend(normalized.steps);
 
         let clause_fuel = state.fuel_used - fuel_before;
         max_clause_fuel = max_clause_fuel.max(clause_fuel);
 
-        let is_beta_redex_clause =
-            matches!(&clause.expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Lam(_)));
+        let is_beta_redex_clause = matches!(&clause.expr, Expr::App(function, _) if matches!(function.as_ref(), Expr::Lam(_)));
         let kernel_role = derive_kernel_role(&clause.expr, &kernel_ty, is_beta_redex_clause);
 
         clauses.push(ClauseElaboration {
@@ -613,6 +743,7 @@ pub fn elaborate_telescope(
             kernel_ty,
             normal_form: normalized.expr,
             beta_steps: normalized.steps,
+            total_fuel_observed: clause_fuel,
             is_beta_redex_clause,
             stuck_applications: std::mem::take(&mut state.stuck),
             coarse_assumptions: state.coarse,
@@ -672,7 +803,12 @@ fn derive_kernel_role(expr: &Expr, kernel_ty: &KernelTy, is_beta_redex: bool) ->
     }
 }
 
-fn node(rule: &str, kernel_ty: KernelTy, coarse: bool, children: Vec<DerivationNode>) -> DerivationNode {
+fn node(
+    rule: &str,
+    kernel_ty: KernelTy,
+    coarse: bool,
+    children: Vec<DerivationNode>,
+) -> DerivationNode {
     DerivationNode {
         rule: rule.to_string(),
         kernel_ty,
@@ -695,17 +831,23 @@ fn as_type(state: &mut ElabState, ty: &KernelTy) -> bool {
 
 fn synth(state: &mut ElabState, expr: &Expr) -> Result<(KernelTy, DerivationNode), ElabError> {
     match expr {
-        Expr::Univ => Ok((KernelTy::Type, node("univ-form", KernelTy::Type, false, vec![]))),
+        Expr::Univ => Ok((
+            KernelTy::Type,
+            node("univ-form", KernelTy::Type, false, vec![]),
+        )),
         Expr::Var(level) => match state.resolve(*level) {
-            Some(ScopeRef::Ambient { parameter }) => Ok((
-                KernelTy::Type,
-                node(
-                    &format!("ambient-param-{parameter}"),
-                    KernelTy::Type,
-                    false,
-                    vec![],
-                ),
-            )),
+            Some(ScopeRef::Ambient { parameter }) => {
+                let ty = state
+                    .ambient_types
+                    .as_ref()
+                    .and_then(|types| types.get(parameter.saturating_sub(1) as usize))
+                    .cloned()
+                    .unwrap_or(KernelTy::Type);
+                Ok((
+                    ty.clone(),
+                    node(&format!("ambient-param-{parameter}"), ty, false, vec![]),
+                ))
+            }
             Some(ScopeRef::Field { clause }) => {
                 let ty = if state
                     .prior_roles
@@ -716,11 +858,17 @@ fn synth(state: &mut ElabState, expr: &Expr) -> Result<(KernelTy, DerivationNode
                 } else {
                     KernelTy::Neutral
                 };
-                Ok((ty.clone(), node(&format!("field-ref-{clause}"), ty, false, vec![])))
+                Ok((
+                    ty.clone(),
+                    node(&format!("field-ref-{clause}"), ty, false, vec![]),
+                ))
             }
             Some(ScopeRef::Local { binder }) => {
                 let ty = state.locals[(binder - 1) as usize].clone();
-                Ok((ty.clone(), node(&format!("local-var-{binder}"), ty, false, vec![])))
+                Ok((
+                    ty.clone(),
+                    node(&format!("local-var-{binder}"), ty, false, vec![]),
+                ))
             }
             None => Err(ElabError::ScopeViolation {
                 level: *level,
@@ -891,11 +1039,8 @@ fn synth_app(
                         if expected != argument_ty {
                             state.note_coarse();
                         }
-                        let instantiated = substitute_level(
-                            codomain,
-                            state.scope_len() + 1,
-                            argument,
-                        );
+                        let instantiated =
+                            substitute_level(codomain, state.scope_len() + 1, argument);
                         let ty = KernelTy::El(instantiated);
                         return Ok((
                             ty.clone(),
@@ -929,11 +1074,9 @@ fn classify_stuck_head(state: &ElabState, head: &Expr) -> StuckHead {
         Expr::Next(_) | Expr::Eventually(_) => StuckHead::TemporalFormer {
             atom: atom_name(head).to_string(),
         },
-        Expr::Flat(_) | Expr::Sharp(_) | Expr::Disc(_) | Expr::Shape(_) => {
-            StuckHead::ModalFormer {
-                atom: atom_name(head).to_string(),
-            }
-        }
+        Expr::Flat(_) | Expr::Sharp(_) | Expr::Disc(_) | Expr::Shape(_) => StuckHead::ModalFormer {
+            atom: atom_name(head).to_string(),
+        },
         Expr::Lib(step) => StuckHead::LibraryConstant { step: *step },
         Expr::Var(level) => match state.resolve(*level) {
             Some(ScopeRef::Field { clause }) => StuckHead::FieldReference { clause },
@@ -1206,10 +1349,7 @@ impl TypedLiftToken {
 #[derive(Clone, Debug, Error, Eq, PartialEq, Serialize)]
 pub enum TokenError {
     #[error("elaboration failed at clause {clause_index}: {error}")]
-    ElaborationFailed {
-        clause_index: u16,
-        error: ElabError,
-    },
+    ElaborationFailed { clause_index: u16, error: ElabError },
     #[error("no coarse-free formation clause")]
     NoFormationClause,
     #[error("no oriented beta/Kan basis")]
@@ -1233,7 +1373,9 @@ pub enum TokenError {
     },
     #[error("dominant import L{dominant_import} is never directly applied")]
     NoDominantApplications { dominant_import: u32 },
-    #[error("lift at clause {clause_index} is not typed against any exported formation of the dominant import")]
+    #[error(
+        "lift at clause {clause_index} is not typed against any exported formation of the dominant import"
+    )]
     LiftNotTypedAgainstExportedFormation {
         clause_index: u16,
         argument_normal_form: Expr,
@@ -1270,12 +1412,13 @@ pub fn issue_typed_eliminator_token(
     telescope: &Telescope,
     visible_library: u32,
 ) -> Result<TypedEliminatorToken, TokenError> {
-    let elaboration = elaborate_telescope(signature, telescope, visible_library).map_err(
-        |failure| TokenError::ElaborationFailed {
-            clause_index: failure.clause_index,
-            error: failure.error,
-        },
-    )?;
+    let elaboration =
+        elaborate_telescope(signature, telescope, visible_library).map_err(|failure| {
+            TokenError::ElaborationFailed {
+                clause_index: failure.clause_index,
+                error: failure.error,
+            }
+        })?;
 
     // (1) A real formation clause: kernel role Formation, classifier Type,
     // zero coarse subsumptions in its derivation.
@@ -1327,11 +1470,9 @@ pub fn issue_typed_eliminator_token(
             for formation in &formations {
                 let formation_scope =
                     elaboration.ambient_parameters + u32::from(formation.clause_index);
-                let Some(transported_motive) = transport_within_telescope(
-                    &formation.normal_form,
-                    formation_scope,
-                    scope_len,
-                ) else {
+                let Some(transported_motive) =
+                    transport_within_telescope(&formation.normal_form, formation_scope, scope_len)
+                else {
                     continue;
                 };
                 let witness = judgmental_equality(
@@ -1392,7 +1533,12 @@ pub fn replay_typed_eliminator_token(
     visible_library: u32,
     token: &TypedEliminatorToken,
 ) -> Result<(), TokenReplayError> {
-    check_binding(signature, telescope, &token.signature_digest, &token.subject_hash)?;
+    check_binding(
+        signature,
+        telescope,
+        &token.signature_digest,
+        &token.subject_hash,
+    )?;
     let reissued = issue_typed_eliminator_token(signature, telescope, visible_library)
         .map_err(TokenReplayError::ReissueFailed)?;
     if &reissued == token {
@@ -1409,12 +1555,13 @@ pub fn issue_naturality_token(
     visible_library: u32,
     clause_index: u16,
 ) -> Result<NaturalityToken, TokenError> {
-    let elaboration = elaborate_telescope(signature, telescope, visible_library).map_err(
-        |failure| TokenError::ElaborationFailed {
-            clause_index: failure.clause_index,
-            error: failure.error,
-        },
-    )?;
+    let elaboration =
+        elaborate_telescope(signature, telescope, visible_library).map_err(|failure| {
+            TokenError::ElaborationFailed {
+                clause_index: failure.clause_index,
+                error: failure.error,
+            }
+        })?;
     let Some(clause) = telescope.clauses.get(clause_index as usize) else {
         return Err(TokenError::NotANaturalitySquare {
             clause_index,
@@ -1430,18 +1577,16 @@ pub fn issue_naturality_token(
 
     let scope_len = elaboration.ambient_parameters + u32::from(clause_index);
     let fuel = elaboration.fuel.static_bound;
-    let domain_whnf = whnf(domain, scope_len, fuel).map_err(|error| {
-        TokenError::ElaborationFailed {
+    let domain_whnf =
+        whnf(domain, scope_len, fuel).map_err(|error| TokenError::ElaborationFailed {
             clause_index,
             error: error.into(),
-        }
-    })?;
-    let codomain_whnf = whnf(codomain, scope_len + 1, fuel).map_err(|error| {
-        TokenError::ElaborationFailed {
+        })?;
+    let codomain_whnf =
+        whnf(codomain, scope_len + 1, fuel).map_err(|error| TokenError::ElaborationFailed {
             clause_index,
             error: error.into(),
-        }
-    })?;
+        })?;
 
     let Some((outer, domain_inner)) = split_unary(&domain_whnf.expr) else {
         return Err(TokenError::NotANaturalitySquare {
@@ -1534,7 +1679,12 @@ pub fn replay_naturality_token(
     visible_library: u32,
     token: &NaturalityToken,
 ) -> Result<(), TokenReplayError> {
-    check_binding(signature, telescope, &token.signature_digest, &token.subject_hash)?;
+    check_binding(
+        signature,
+        telescope,
+        &token.signature_digest,
+        &token.subject_hash,
+    )?;
     let reissued =
         issue_naturality_token(signature, telescope, visible_library, token.clause_index)
             .map_err(TokenReplayError::ReissueFailed)?;
@@ -1565,12 +1715,13 @@ pub fn issue_typed_lift_token(
     telescope: &Telescope,
     visible_library: u32,
 ) -> Result<TypedLiftToken, TokenError> {
-    let elaboration = elaborate_telescope(signature, telescope, visible_library).map_err(
-        |failure| TokenError::ElaborationFailed {
-            clause_index: failure.clause_index,
-            error: failure.error,
-        },
-    )?;
+    let elaboration =
+        elaborate_telescope(signature, telescope, visible_library).map_err(|failure| {
+            TokenError::ElaborationFailed {
+                clause_index: failure.clause_index,
+                error: failure.error,
+            }
+        })?;
 
     let direct_imports: Vec<u32> = telescope.lib_refs().into_iter().collect();
     if direct_imports.is_empty() {
@@ -1692,7 +1843,12 @@ pub fn replay_typed_lift_token(
     visible_library: u32,
     token: &TypedLiftToken,
 ) -> Result<(), TokenReplayError> {
-    check_binding(signature, telescope, &token.signature_digest, &token.subject_hash)?;
+    check_binding(
+        signature,
+        telescope,
+        &token.signature_digest,
+        &token.subject_hash,
+    )?;
     let reissued = issue_typed_lift_token(signature, telescope, visible_library)
         .map_err(TokenReplayError::ReissueFailed)?;
     if &reissued == token {
@@ -1839,12 +1995,8 @@ mod tests {
             }
             Expr::App(left, _) if matches!(left.as_ref(), Expr::Univ) => ClauseRole::Formation,
             Expr::Var(_) | Expr::Lam(_) | Expr::Refl(_) => ClauseRole::Introduction,
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => {
-                ClauseRole::Introduction
-            }
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => {
-                ClauseRole::Elimination
-            }
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => ClauseRole::Introduction,
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => ClauseRole::Elimination,
             Expr::App(_, _) => ClauseRole::Introduction,
             Expr::PathCon(_) => ClauseRole::PathAttach,
             _ => ClauseRole::Formation,
@@ -1880,11 +2032,8 @@ mod tests {
     fn all_fifteen_sealed_entries_elaborate_and_reduce_to_frozen_normal_forms() {
         let signature = SealedSignature::genesis_del_h15();
         for entry in signature.entries() {
-            let elaboration =
-                elaborate_telescope(&signature, &entry.telescope, entry.step - 1)
-                    .unwrap_or_else(|failure| {
-                        panic!("sealed step {} failed: {failure}", entry.step)
-                    });
+            let elaboration = elaborate_telescope(&signature, &entry.telescope, entry.step - 1)
+                .unwrap_or_else(|failure| panic!("sealed step {} failed: {failure}", entry.step));
             assert!(elaboration.fuel.within_bound, "fuel at step {}", entry.step);
             assert!(
                 elaboration.ambient_parameters <= MAX_AMBIENT_PARAMETERS,
@@ -1958,16 +2107,21 @@ mod tests {
         // Clause 4 (index 3): Lam(App(Lib 10, Next(Var 1))) — library
         // constant with no exported computation clause.
         let clause_four = &elaboration.clauses[3];
-        assert!(clause_four.stuck_applications.iter().any(|stuck| matches!(
-            &stuck.head,
-            StuckHead::LibraryConstant { step: 10 }
-        )));
+        assert!(
+            clause_four
+                .stuck_applications
+                .iter()
+                .any(|stuck| matches!(&stuck.head, StuckHead::LibraryConstant { step: 10 }))
+        );
         // Every fresh-stuck verdict is a kernel verdict on the head.
         for stuck in elaboration.stuck_applications() {
-            assert!(stuck.head.is_fresh_stuck() || matches!(
-                stuck.head,
-                StuckHead::AmbientParameter { .. } | StuckHead::LocalVariable { .. }
-            ));
+            assert!(
+                stuck.head.is_fresh_stuck()
+                    || matches!(
+                        stuck.head,
+                        StuckHead::AmbientParameter { .. } | StuckHead::LocalVariable { .. }
+                    )
+            );
         }
     }
 
@@ -2008,7 +2162,10 @@ mod tests {
         let error = issue_naturality_token(&signature, &dct, 14, 4).unwrap_err();
         assert!(matches!(
             error,
-            TokenError::NaturalitySquareMismatch { clause_index: 4, .. }
+            TokenError::NaturalitySquareMismatch {
+                clause_index: 4,
+                ..
+            }
         ));
     }
 
@@ -2017,8 +2174,7 @@ mod tests {
         let signature = SealedSignature::genesis_del_h15();
         let mut dispositions = Vec::new();
         for entry in signature.entries() {
-            let result =
-                issue_typed_eliminator_token(&signature, &entry.telescope, entry.step - 1);
+            let result = issue_typed_eliminator_token(&signature, &entry.telescope, entry.step - 1);
             let label = match &result {
                 Ok(_) => "ok".to_string(),
                 Err(TokenError::NoFormationClause) => "no_formation_clause".to_string(),
@@ -2145,7 +2301,10 @@ mod tests {
         let error = issue_typed_lift_token(&signature, &single, 15).unwrap_err();
         assert!(matches!(
             error,
-            TokenError::LiftNotTypedAgainstExportedFormation { clause_index: 2, .. }
+            TokenError::LiftNotTypedAgainstExportedFormation {
+                clause_index: 2,
+                ..
+            }
         ));
 
         // A bare occurrence of L15 is an import but not a typed lift.  This
@@ -2173,14 +2332,14 @@ mod tests {
         // identifies them and mints a typed-lift token; the transport
         // discipline must reject the pairing and fail closed.
         let signature = SealedSignature::genesis_del_h15();
-        let forgery = tel(vec![
-            app(Expr::Lib(14), lam(Expr::Var(1))),
-            Expr::Var(1),
-        ]);
+        let forgery = tel(vec![app(Expr::Lib(14), lam(Expr::Var(1))), Expr::Var(1)]);
         let error = issue_typed_lift_token(&signature, &forgery, 15).unwrap_err();
         assert!(matches!(
             error,
-            TokenError::LiftNotTypedAgainstExportedFormation { clause_index: 0, .. }
+            TokenError::LiftNotTypedAgainstExportedFormation {
+                clause_index: 0,
+                ..
+            }
         ));
     }
 
@@ -2198,7 +2357,10 @@ mod tests {
         let error = issue_typed_lift_token(&signature, &nested, 15).unwrap_err();
         assert!(matches!(
             error,
-            TokenError::LiftNotTypedAgainstExportedFormation { clause_index: 2, .. }
+            TokenError::LiftNotTypedAgainstExportedFormation {
+                clause_index: 2,
+                ..
+            }
         ));
     }
 
@@ -2213,10 +2375,8 @@ mod tests {
         let baseline = elaborate_telescope(&signature, &trunc, 5).expect("baseline");
 
         let mut perturbed = trunc.clone();
-        perturbed.clauses[0] = ClauseRec::new(
-            ClauseRole::Introduction,
-            perturbed.clauses[0].expr.clone(),
-        );
+        perturbed.clauses[0] =
+            ClauseRec::new(ClauseRole::Introduction, perturbed.clauses[0].expr.clone());
         let elaborated = elaborate_telescope(&signature, &perturbed, 5).expect("perturbed");
         for (base, pert) in baseline.clauses.iter().zip(elaborated.clauses.iter()) {
             assert_eq!(base.kernel_role, pert.kernel_role);
@@ -2246,10 +2406,7 @@ mod tests {
         let mut mutated = candidate.clone();
         mutated.clauses[0] = ClauseRec::new(
             ClauseRole::Introduction,
-            app(
-                Expr::Lib(1),
-                sigma(Expr::Univ, Expr::Univ),
-            ),
+            app(Expr::Lib(1), sigma(Expr::Univ, Expr::Univ)),
         );
         let error = replay_typed_lift_token(&signature, &mutated, 1, &token).unwrap_err();
         assert!(matches!(
@@ -2272,7 +2429,10 @@ mod tests {
             app(Expr::Trunc(Box::new(Expr::Var(2))), Expr::Var(2)),
         );
         let error = replay_typed_eliminator_token(&signature, &mutated, 5, &token).unwrap_err();
-        assert!(matches!(error, TokenReplayError::SubjectHashMismatch { .. }));
+        assert!(matches!(
+            error,
+            TokenReplayError::SubjectHashMismatch { .. }
+        ));
 
         // Re-issuing on the mutated telescope fails closed on its own.
         assert!(matches!(
@@ -2290,8 +2450,7 @@ mod tests {
         // A signature with a perturbed beta/Kan surface at step 6 has a
         // different digest; the token fails replay against it.
         let mut telescopes = Telescope::all_reference_telescopes();
-        telescopes[5].1.clauses[2] =
-            ClauseRec::new(ClauseRole::PathAttach, Expr::PathCon(2));
+        telescopes[5].1.clauses[2] = ClauseRec::new(ClauseRole::PathAttach, Expr::PathCon(2));
         let forged = SealedSignature::from_telescopes(telescopes);
         assert_ne!(forged.digest(), signature.digest());
         let error = replay_typed_eliminator_token(&forged, &trunc, 5, &token).unwrap_err();
@@ -2310,7 +2469,10 @@ mod tests {
         let failure = elaborate_telescope(&signature, &overflow, 15).unwrap_err();
         assert!(matches!(
             failure.error,
-            ElabError::AmbientContextTooLarge { required: 9, max: 2 }
+            ElabError::AmbientContextTooLarge {
+                required: 9,
+                max: 2
+            }
         ));
 
         // Bare Univ as argument mirrors the checker.
@@ -2331,7 +2493,10 @@ mod tests {
         let failure = elaborate_telescope(&signature, &out_of_prefix, 14).unwrap_err();
         assert!(matches!(
             failure.error,
-            ElabError::LibOutOfSignature { step: 15, visible: 14 }
+            ElabError::LibOutOfSignature {
+                step: 15,
+                visible: 14
+            }
         ));
     }
 
@@ -2440,13 +2605,13 @@ mod tests {
                 if let Some(struct_start) = flat.find(&format!("pub struct {token} {{")) {
                     if let Some(body) = brace_block(&flat[struct_start..]) {
                         let inner = &body[body.find('{').unwrap_or(0) + 1..];
-                        assert!(
-                            !inner.contains("pub "),
-                            "{token} exposes a public field"
-                        );
+                        assert!(!inner.contains("pub "), "{token} exposes a public field");
                     }
                     let preamble = &flat[struct_start.saturating_sub(600)..struct_start];
-                    assert!(!preamble.contains("Deserialize"), "{token} derives Deserialize");
+                    assert!(
+                        !preamble.contains("Deserialize"),
+                        "{token} derives Deserialize"
+                    );
                     assert!(!preamble.contains("Default"), "{token} derives Default");
                 }
                 assert!(
@@ -2478,7 +2643,10 @@ mod tests {
                 }
             }
         }
-        assert!(violations.is_empty(), "token seal violations: {violations:?}");
+        assert!(
+            violations.is_empty(),
+            "token seal violations: {violations:?}"
+        );
     }
 
     #[test]

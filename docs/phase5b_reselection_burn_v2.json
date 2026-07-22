@@ -1,0 +1,925 @@
+{
+  "schema": "phase5b-reselection-burn-v2",
+  "date": "2026-07-21",
+  "program_schema": "phase5b-reselection-program-v2",
+  "program_digest": "blake3:add0dd1566c522cdb8d2caf005b4d59e4ce20ee79b663886f04ac8fed07bc8ae",
+  "program_source_hash": "blake3:70263b2f5558a8e478b8163f758c718909d4c7587329773ccb2d42a7fa65fc75",
+  "program_preregistered_before_burn": true,
+  "history_digest": "blake3:0f9838e4b9f2f5dca8b2df3cbc5c759d832e0d01800cb486ce17f548e477f141",
+  "burned_run": true,
+  "outcome": {
+    "kind": "halted_no_clearing_candidate",
+    "stage": 8,
+    "bar": "357/104"
+  },
+  "stages": [
+    {
+      "stage": 1,
+      "bar": "1/2",
+      "required_packages": [],
+      "demand_output_capacity": 0,
+      "cone_enumerated": 288,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:bf61b06b750bedceaa4fc4256ee180f1658a44b61bdd6d82e9dfd0f5fab67dae",
+      "scored": [
+        {
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "canonical_key": "b7b3b3c3",
+          "kappa": 2,
+          "bit_kappa": 14,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 1,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 8,
+          "live_demand_output_capacity": 0,
+          "provenance_capacity": 8,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 1,
+          "rho": "1/2",
+          "clears_bar": true,
+          "overshoot": "0/1",
+          "score_derivation_hash": "blake3:ce07127e802de4dc525880eb2256c0c64b2dec3ac3c55efa350455ec73602267"
+        }
+      ],
+      "exact_acceptance_order": [
+        "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7"
+      ],
+      "clearing_count": 1,
+      "winner": {
+        "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "canonical_key": "b7b3b3c3",
+        "kappa": 2,
+        "semantic_nu": 1,
+        "rho": "1/2",
+        "overshoot": "0/1",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": "Univ"
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "score_derivation_hash": "blake3:ce07127e802de4dc525880eb2256c0c64b2dec3ac3c55efa350455ec73602267"
+      },
+      "certified_reference_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "certified_reference_nu": 1,
+      "testimonial_sealed_nu": 1,
+      "winner_matches_certified_reference": true,
+      "score_matches_certified_governing_ledger": true,
+      "score_matches_testimonial_seal": true,
+      "derivation_hash": "blake3:1c5c0b132fee28692fb54bd95f81184aa9f5dcb06bf305ee8ae57a6d1fa89acc"
+    },
+    {
+      "stage": 2,
+      "bar": "1/2",
+      "required_packages": [],
+      "demand_output_capacity": 0,
+      "cone_enumerated": 33,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:3e5fa6b5b7071dfe16d19f056ae131220a7687987e217e508011c30b7b278ceb",
+      "scored": [
+        {
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "canonical_key": "71b84e92",
+          "kappa": 1,
+          "bit_kappa": 10,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 1,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 4,
+          "live_demand_output_capacity": 0,
+          "provenance_capacity": 4,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 1,
+          "rho": "1/1",
+          "clears_bar": true,
+          "overshoot": "1/2",
+          "score_derivation_hash": "blake3:4475b9ee43cde4a4ff7ff3b9d5d2a6161cd61626d736fc5f76a3fe3ef7587ecf"
+        }
+      ],
+      "exact_acceptance_order": [
+        "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555"
+      ],
+      "clearing_count": 1,
+      "winner": {
+        "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "canonical_key": "71b84e92",
+        "kappa": 1,
+        "semantic_nu": 1,
+        "rho": "1/1",
+        "overshoot": "1/2",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "score_derivation_hash": "blake3:4475b9ee43cde4a4ff7ff3b9d5d2a6161cd61626d736fc5f76a3fe3ef7587ecf"
+      },
+      "certified_reference_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+      "certified_reference_nu": 1,
+      "testimonial_sealed_nu": 1,
+      "winner_matches_certified_reference": true,
+      "score_matches_certified_governing_ledger": true,
+      "score_matches_testimonial_seal": true,
+      "derivation_hash": "blake3:b6669bf76307812f307455d844d940ca24755dc30e1b45f3ef46e5704788a7f9"
+    },
+    {
+      "stage": 3,
+      "bar": "4/3",
+      "required_packages": [
+        "former_eliminator"
+      ],
+      "demand_output_capacity": 210,
+      "cone_enumerated": 56,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:426177683181d4e2651011703e7a93fc5ae624814c114dfd407846fb61607565",
+      "scored": [
+        {
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "canonical_key": "8eb2e27f",
+          "kappa": 1,
+          "bit_kappa": 12,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 2,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 4,
+          "live_demand_output_capacity": 210,
+          "provenance_capacity": 214,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 2,
+          "rho": "2/1",
+          "clears_bar": true,
+          "overshoot": "2/3",
+          "score_derivation_hash": "blake3:ebe03e9a4caaf74931e840bc95e7b4e05a35c05181a851dbfd6635324bf46149"
+        }
+      ],
+      "exact_acceptance_order": [
+        "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e"
+      ],
+      "clearing_count": 1,
+      "winner": {
+        "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+        "canonical_key": "8eb2e27f",
+        "kappa": 1,
+        "semantic_nu": 2,
+        "rho": "2/1",
+        "overshoot": "2/3",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 2
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "score_derivation_hash": "blake3:ebe03e9a4caaf74931e840bc95e7b4e05a35c05181a851dbfd6635324bf46149"
+      },
+      "certified_reference_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+      "certified_reference_nu": 2,
+      "testimonial_sealed_nu": 2,
+      "winner_matches_certified_reference": true,
+      "score_matches_certified_governing_ledger": true,
+      "score_matches_testimonial_seal": true,
+      "derivation_hash": "blake3:ad0dee59524a70f8ac775798d4635733ac9d14cc1a60ab070dc693e59b6f6e18"
+    },
+    {
+      "stage": 4,
+      "bar": "3/2",
+      "required_packages": [
+        "former_eliminator"
+      ],
+      "demand_output_capacity": 100,
+      "cone_enumerated": 4,
+      "cone_admitted": 4,
+      "cone_deduped": 4,
+      "cone_digest": "blake3:7dc5a4cc13463bbdbddd0eec313e6250f3c3faba1d5eb33e863652efefc20d29",
+      "scored": [
+        {
+          "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "canonical_key": "0e9aa132",
+          "kappa": 3,
+          "bit_kappa": 49,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 5,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 12,
+          "live_demand_output_capacity": 100,
+          "provenance_capacity": 112,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 5,
+          "rho": "5/3",
+          "clears_bar": true,
+          "overshoot": "1/6",
+          "score_derivation_hash": "blake3:db79c44ca3355fd0fb8cca55ee1064d8c96f0368be77ab4c5c1f4ee158475f8f"
+        },
+        {
+          "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+          "canonical_key": "4ede818c",
+          "kappa": 3,
+          "bit_kappa": 49,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 5,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 12,
+          "live_demand_output_capacity": 100,
+          "provenance_capacity": 112,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 5,
+          "rho": "5/3",
+          "clears_bar": true,
+          "overshoot": "1/6",
+          "score_derivation_hash": "blake3:7eb19b0a0c5af17c3f10c541cfc0f127a4649f91308ec25abb808826497f3859"
+        },
+        {
+          "candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+          "canonical_key": "b516ff09",
+          "kappa": 3,
+          "bit_kappa": 50,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 5,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 12,
+          "live_demand_output_capacity": 100,
+          "provenance_capacity": 112,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 5,
+          "rho": "5/3",
+          "clears_bar": true,
+          "overshoot": "1/6",
+          "score_derivation_hash": "blake3:3dc88656aa73edba43c61f34396cfba6cbbd2c4803ef411a2a173bc3af6397c7"
+        },
+        {
+          "candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+          "canonical_key": "d860242f",
+          "kappa": 3,
+          "bit_kappa": 50,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 5,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 12,
+          "live_demand_output_capacity": 100,
+          "provenance_capacity": 112,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 5,
+          "rho": "5/3",
+          "clears_bar": true,
+          "overshoot": "1/6",
+          "score_derivation_hash": "blake3:08ec6ba697730ba3b127b8e42f78f83215855bb3bb5da3973ac23dff65644b78"
+        }
+      ],
+      "exact_acceptance_order": [
+        "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b"
+      ],
+      "clearing_count": 4,
+      "winner": {
+        "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "canonical_key": "0e9aa132",
+        "kappa": 3,
+        "semantic_nu": 5,
+        "rho": "5/3",
+        "overshoot": "1/6",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "App": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  },
+                  {
+                    "Var": 3
+                  }
+                ]
+              }
+            },
+            {
+              "role": "elimination",
+              "expr": {
+                "App": [
+                  {
+                    "Lam": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "score_derivation_hash": "blake3:db79c44ca3355fd0fb8cca55ee1064d8c96f0368be77ab4c5c1f4ee158475f8f"
+      },
+      "certified_reference_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "certified_reference_nu": 5,
+      "testimonial_sealed_nu": 5,
+      "winner_matches_certified_reference": true,
+      "score_matches_certified_governing_ledger": true,
+      "score_matches_testimonial_seal": true,
+      "derivation_hash": "blake3:f0a3511f5216403a12f6e3d18e5824cc6ebd1e412c0902374ae18f57a1ed7fe0"
+    },
+    {
+      "stage": 5,
+      "bar": "15/7",
+      "required_packages": [
+        "initial_hit"
+      ],
+      "demand_output_capacity": 360,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:9a737515e23b6fb22fd3fda13fa314bd5a103f5e6bdd44e37aeb0ba52f51c1c6",
+      "scored": [
+        {
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "canonical_key": "fc0f4087",
+          "kappa": 3,
+          "bit_kappa": 21,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 7,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 12,
+          "live_demand_output_capacity": 360,
+          "provenance_capacity": 372,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 7,
+          "rho": "7/3",
+          "clears_bar": true,
+          "overshoot": "4/21",
+          "score_derivation_hash": "blake3:caa7d162cfec4f44cc00b2e9a5703235d17986f30de96478cfe22ebd58461450"
+        }
+      ],
+      "exact_acceptance_order": [
+        "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+      ],
+      "clearing_count": 1,
+      "winner": {
+        "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "canonical_key": "fc0f4087",
+        "kappa": 3,
+        "semantic_nu": 7,
+        "rho": "7/3",
+        "overshoot": "4/21",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Var": 1
+              }
+            },
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 1
+              }
+            }
+          ]
+        },
+        "score_derivation_hash": "blake3:caa7d162cfec4f44cc00b2e9a5703235d17986f30de96478cfe22ebd58461450"
+      },
+      "certified_reference_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+      "certified_reference_nu": 7,
+      "testimonial_sealed_nu": 7,
+      "winner_matches_certified_reference": true,
+      "score_matches_certified_governing_ledger": true,
+      "score_matches_testimonial_seal": true,
+      "derivation_hash": "blake3:832a8a0fdf0d5c49bac3d892b8a3567553cb24a3e1bd10a09f7424895f7f6295"
+    },
+    {
+      "stage": 6,
+      "bar": "64/25",
+      "required_packages": [
+        "truncation_hit"
+      ],
+      "demand_output_capacity": 780,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:d5926425fecf06cea368322c0100cec25c803c33affd4d128e84007e7aad6851",
+      "scored": [
+        {
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "canonical_key": "c5484f96",
+          "kappa": 3,
+          "bit_kappa": 35,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 8,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 12,
+          "live_demand_output_capacity": 780,
+          "provenance_capacity": 792,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 8,
+          "rho": "8/3",
+          "clears_bar": true,
+          "overshoot": "8/75",
+          "score_derivation_hash": "blake3:7c86d9fc05276d0f8abcdac199dbf243b0f83bb568a7cbb9d9a422b105a88332"
+        }
+      ],
+      "exact_acceptance_order": [
+        "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+      ],
+      "clearing_count": 1,
+      "winner": {
+        "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "canonical_key": "c5484f96",
+        "kappa": 3,
+        "semantic_nu": 8,
+        "rho": "8/3",
+        "overshoot": "8/75",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Trunc": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Trunc": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            },
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 1
+              }
+            }
+          ]
+        },
+        "score_derivation_hash": "blake3:7c86d9fc05276d0f8abcdac199dbf243b0f83bb568a7cbb9d9a422b105a88332"
+      },
+      "certified_reference_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+      "certified_reference_nu": 8,
+      "testimonial_sealed_nu": 8,
+      "winner_matches_certified_reference": true,
+      "score_matches_certified_governing_ledger": true,
+      "score_matches_testimonial_seal": true,
+      "derivation_hash": "blake3:fcc89e341d7f04edb8b16cdf5bd096cbcf9c50d1c71b594fa9cce7dd6fe538fa"
+    },
+    {
+      "stage": 7,
+      "bar": "3/1",
+      "required_packages": [
+        "higher_hit"
+      ],
+      "demand_output_capacity": 780,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:e0259afcf3f9dca83478c4dc1433b6bc7221c845e7aa86b5da92fa62433acfc3",
+      "scored": [
+        {
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "canonical_key": "fd0f421a",
+          "kappa": 3,
+          "bit_kappa": 23,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 10,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": 0,
+          "local_role_capacity": 12,
+          "live_demand_output_capacity": 780,
+          "provenance_capacity": 792,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 10,
+          "rho": "10/3",
+          "clears_bar": true,
+          "overshoot": "1/3",
+          "score_derivation_hash": "blake3:154b5c37eb1f579f57e61a6db6f3cee3e724343a695422bb4b5e6803d212b753"
+        }
+      ],
+      "exact_acceptance_order": [
+        "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"
+      ],
+      "clearing_count": 1,
+      "winner": {
+        "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "canonical_key": "fd0f421a",
+        "kappa": 3,
+        "semantic_nu": 10,
+        "rho": "10/3",
+        "overshoot": "1/3",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Var": 1
+              }
+            },
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 2
+              }
+            }
+          ]
+        },
+        "score_derivation_hash": "blake3:154b5c37eb1f579f57e61a6db6f3cee3e724343a695422bb4b5e6803d212b753"
+      },
+      "certified_reference_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+      "certified_reference_nu": 10,
+      "testimonial_sealed_nu": 10,
+      "winner_matches_certified_reference": true,
+      "score_matches_certified_governing_ledger": true,
+      "score_matches_testimonial_seal": true,
+      "derivation_hash": "blake3:386ec4ff42f1faceb352cad7f2b53c90ff51777580b0348f662fe0b20df390eb"
+    },
+    {
+      "stage": 8,
+      "bar": "357/104",
+      "required_packages": [
+        "sphere_lift"
+      ],
+      "demand_output_capacity": 780,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:709352ea6f68af1a0da81435f6674dbbbcd80b1c10b359a340b03a6d6db060f4",
+      "scored": [
+        {
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "canonical_key": "7c7f677a",
+          "kappa": 5,
+          "bit_kappa": 37,
+          "identified_with_revised_history": false,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "structural_formula_total": 18,
+          "r1_package_adjustment": 0,
+          "r2_generated_instance_adjustment": -1,
+          "local_role_capacity": 20,
+          "live_demand_output_capacity": 780,
+          "provenance_capacity": 800,
+          "every_score_unit_anchor_supported": true,
+          "invalid_or_unclassified": false,
+          "semantic_nu": 17,
+          "rho": "17/5",
+          "clears_bar": false,
+          "overshoot": null,
+          "score_derivation_hash": "blake3:4fbd726643f932b7a1cb6e16241b121f3b5215f7e81bf31b18673b1bc6f7fe7a"
+        }
+      ],
+      "exact_acceptance_order": [],
+      "clearing_count": 0,
+      "winner": null,
+      "certified_reference_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+      "certified_reference_nu": 17,
+      "testimonial_sealed_nu": 18,
+      "winner_matches_certified_reference": false,
+      "score_matches_certified_governing_ledger": false,
+      "score_matches_testimonial_seal": false,
+      "derivation_hash": "blake3:b9e4d45ed544f35d3b50696566d776075ea09ea09a4eef269b4e0f5f9b0c5f30"
+    }
+  ],
+  "revised_history": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ]
+  ],
+  "certified_governing_history": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ],
+    [
+      8,
+      17,
+      5
+    ],
+    [
+      9,
+      17,
+      4
+    ],
+    [
+      10,
+      19,
+      4
+    ],
+    [
+      11,
+      26,
+      5
+    ],
+    [
+      12,
+      34,
+      6
+    ],
+    [
+      13,
+      46,
+      7
+    ],
+    [
+      14,
+      62,
+      9
+    ],
+    [
+      15,
+      103,
+      8
+    ]
+  ],
+  "testimonial_sealed_history": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ],
+    [
+      8,
+      18,
+      5
+    ],
+    [
+      9,
+      17,
+      4
+    ],
+    [
+      10,
+      19,
+      4
+    ],
+    [
+      11,
+      26,
+      5
+    ],
+    [
+      12,
+      34,
+      6
+    ],
+    [
+      13,
+      46,
+      7
+    ],
+    [
+      14,
+      62,
+      9
+    ],
+    [
+      15,
+      103,
+      8
+    ]
+  ],
+  "complete_revised_prefix_published": true,
+  "governing_history_reenacted": false,
+  "winners_reenact_certified_reference": false,
+  "first_testimonial_divergence": {
+    "stage": 8,
+    "field": "no_clearing_candidate",
+    "testimonial": "reference winner blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+    "governing_reselection": "no candidate clears 357/104",
+    "revised_prefix_published": true,
+    "suppressed_or_smoothed": false,
+    "derivation_hash": "blake3:e40cdc3e88426c4011ad45ce1dfe79f10c59d100a9077b2605b956607927bbad"
+  },
+  "winner_divergences": [],
+  "revised_bar_16": null,
+  "revised_bar_16_unreduced": null,
+  "testimonial_legacy_bar_16": "354333/39040",
+  "bar_16_matches_testimonial": false,
+  "f_k3_honored": true,
+  "e5_f1_now_authorized": false,
+  "outcome_summary": "halted_no_clearing_candidate",
+  "required_successor_action": "Consume the published reselection outcome under the adopted successor process; do not execute E-5 on a nonexistent completed prefix.",
+  "result_digest": "blake3:6a265e5497341e3363efeed7bd224eac4120d5c2603ff4a581c200bb2341e6c1"
+}

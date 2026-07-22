@@ -21949,7 +21949,11 @@ mod tests {
         let canonical_clauses = enumerate_next_clauses(canonical_context);
         let linear_clauses = enumerate_next_clauses(linear_context);
 
-        assert!(canonical_clauses.iter().any(|clause| contains_temporal_expr(&clause.expr)));
+        assert!(
+            canonical_clauses
+                .iter()
+                .any(|clause| contains_temporal_expr(&clause.expr))
+        );
         assert!(
             canonical_clauses
                 .iter()
@@ -21988,8 +21992,10 @@ mod tests {
             GrammarProfile::LinearExponentialSwap,
         );
 
-        let canonical_catalog =
-            build_clause_catalog(EnumerationContext::from_admissibility(&library, canonical), 8);
+        let canonical_catalog = build_clause_catalog(
+            EnumerationContext::from_admissibility(&library, canonical),
+            8,
+        );
         let linear_catalog = build_clause_catalog(
             EnumerationContext::from_admissibility(&library, linear_exponential),
             8,
@@ -22000,7 +22006,11 @@ mod tests {
         let linear_reference =
             ClauseRec::new(ClauseRole::Formation, Expr::Bang(Box::new(Expr::Var(1))));
 
-        assert!(canonical_catalog.clauses_at(0).contains(&temporal_reference));
+        assert!(
+            canonical_catalog
+                .clauses_at(0)
+                .contains(&temporal_reference)
+        );
         assert!(!canonical_catalog.clauses_at(0).contains(&linear_reference));
         assert!(
             linear_catalog.clauses_at(0).contains(&linear_reference),

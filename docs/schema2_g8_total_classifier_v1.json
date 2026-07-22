@@ -1,0 +1,176 @@
+{
+  "schema": "schema2-g8-total-raw-candidate-classifier-v1",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/agent_e_grammar_completion_plan.md",
+      "role": "g8_phase_order",
+      "byte_length": 6057,
+      "blake3": "blake3:3fff0b9d4256bed50ab84110d75dc9d2d53b58cacb11e24660b30cf6974c06ad"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "frozen_classifier_spec",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544"
+    },
+    {
+      "path": "docs/SEMANTIC_NORMALIZATION_PROGRAM.md",
+      "role": "frozen_surface_caps",
+      "byte_length": 24891,
+      "blake3": "blake3:8f54933d8f4d7d5f8a6d1c6dd1a37985aaf4dd3cedee1ab6565514460f622c96"
+    },
+    {
+      "path": "docs/schema2_grammar_completion_v1.json",
+      "role": "g2_g7_predecessor",
+      "byte_length": 71566,
+      "blake3": "blake3:584cc8df7d7f3dd19aec9263b98070672df51b0596137f5258cc1175eb2a5371"
+    },
+    {
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "exhaustive_telescope_class_match",
+      "byte_length": 19443,
+      "blake3": "blake3:d9831c28c380d1fdc313f757b393e26e81df1505d87ae35291d3eb8f214cf545"
+    },
+    {
+      "path": "crates/pen-core/src/expr.rs",
+      "role": "exhaustive_expression_head_match",
+      "byte_length": 10585,
+      "blake3": "blake3:38e7deed3b0d7d93092789fc4798d773a64a938c3b7b36d6b9f8e71dd1ee26b3"
+    },
+    {
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "typed_success_or_named_failure",
+      "byte_length": 100581,
+      "blake3": "blake3:cc1027fa5e53ac1417b2bf01685bbd463cf832fe36c1b37339c360b7fc75c648"
+    },
+    {
+      "path": "crates/pen-schema/src/total_classifier.rs",
+      "role": "total_classifier_implementation",
+      "byte_length": 27342,
+      "blake3": "blake3:c5abc6f393a8b5bc2c7007df15b1f451b6786dfbc47079c6cc893e278d994193"
+    },
+    {
+      "path": "agda/Schema2GrammarCompletion.agda",
+      "role": "safe_totality_mirror",
+      "byte_length": 7002,
+      "blake3": "blake3:4fb261044837f2ccc6d11a11b55083f1e8e3020f977c99890426760597a0ca6a"
+    }
+  ],
+  "prerequisite_completion_digest": "blake3:26ccc358c25ace6501e81125363064730c1642cfe775b0a931e8298bc5d60215",
+  "prerequisite_g2_g7_replayed": true,
+  "frozen_caps": {
+    "min_kappa": 2,
+    "max_kappa": 4,
+    "max_direct_support": 2,
+    "max_path_dimension": 1,
+    "max_expr_nodes": 6,
+    "allowed_imports": [
+      14,
+      15
+    ],
+    "allow_truncation": false,
+    "allow_modal": true,
+    "allow_temporal": true,
+    "allow_linear_exponential": false
+  },
+  "surface_exclusion_codes": [
+    "G8_EXCLUDE_KAPPA_CAP",
+    "G8_EXCLUDE_DIRECT_SUPPORT_CAP",
+    "G8_EXCLUDE_IMPORT_WINDOW",
+    "G8_EXCLUDE_EXPR_NODE_CAP",
+    "G8_EXCLUDE_PATH_DIMENSION",
+    "G8_EXCLUDE_TRUNCATION_DISABLED",
+    "G8_EXCLUDE_MODAL_DISABLED",
+    "G8_EXCLUDE_TEMPORAL_DISABLED",
+    "G8_EXCLUDE_LINEAR_EXPONENTIAL_DISABLED",
+    "G8_EXCLUDE_TYPED_ELABORATION_FAILURE"
+  ],
+  "exhaustive_expr_head_inventory": [
+    "app",
+    "lam",
+    "pi",
+    "sigma",
+    "univ",
+    "var",
+    "lib",
+    "id",
+    "refl",
+    "susp",
+    "trunc",
+    "path_con",
+    "flat",
+    "sharp",
+    "disc",
+    "shape",
+    "next",
+    "eventually",
+    "bang",
+    "why_not"
+  ],
+  "kernel_class_branches": [
+    {
+      "telescope_class": "Foundation",
+      "schema2_class": "foundation",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Former",
+      "schema2_class": "former",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Hit",
+      "schema2_class": "hit_v2",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Suspension",
+      "schema2_class": "hit_v2",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Map",
+      "schema2_class": "map",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Modal",
+      "schema2_class": "modal",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Axiomatic",
+      "schema2_class": "axiomatic",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Synthesis",
+      "schema2_class": "synthesis",
+      "named_obstruction": null
+    },
+    {
+      "telescope_class": "Unknown",
+      "schema2_class": null,
+      "named_obstruction": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS"
+    }
+  ],
+  "every_expr_constructor_covered": true,
+  "every_telescope_class_branch_covered": true,
+  "elaboration_success_and_failure_both_named": true,
+  "total_disjoint_sum_classifier_proved": true,
+  "unknown_rows_dropped_or_averaged": false,
+  "typed_unknown_retained_as_named_f_g4_obstruction": true,
+  "class_exhaustion_claimed_over_typed_unknown": false,
+  "global_e4_assembly_now_authorized": true,
+  "forbidden_outputs": {
+    "global_e4_membership_assembly_executed": false,
+    "pending_membership_verdicts_issued": false,
+    "e2b_executed": false,
+    "stage_count_issued": false,
+    "fq2_score_evaluated": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "g8_total_disjoint_sum_classifier_complete_global_e4_assembly_not_run",
+  "result_digest": "blake3:d19d97137f6ebb8fcda38117603189beda62d70eebe5692ecb4acff8e7f308da"
+}

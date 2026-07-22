@@ -1,0 +1,86 @@
+{
+  "schema": "phase5b-reselection-program-v2",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/phase5b_full_history_v1.json",
+      "role": "certified_governing_history",
+      "byte_length": 512055,
+      "blake3": "blake3:2c2978fbbcb4bdfe0bdb95ef48d460961da468c993b03e69958f7614d50b4b79"
+    },
+    {
+      "path": "docs/phase5b_fork_adjudication.md",
+      "role": "adopted_branch_ii_and_outcome_semantics",
+      "byte_length": 4610,
+      "blake3": "blake3:d36e8dbbac668712f045e8a5ee92e7b0b4c3cd44a0e59e54c961b2b580422a34"
+    },
+    {
+      "path": "docs/schema2_e2b_quotient_closure_v1.json",
+      "role": "completed_r1_r2_quotient",
+      "byte_length": 248709,
+      "blake3": "blake3:e3199f04138e8049fdca4833347e2557b54e044148e343a5162a8ce2d54a50de"
+    },
+    {
+      "path": "docs/schema2_global_e4_assembly_v10.json",
+      "role": "completed_semantic_basis",
+      "byte_length": 68848,
+      "blake3": "blake3:abb1683d28a2e57db473ef263459bd72f38eb90a745b072b2f51108310df5258"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "complete_guarded_cone_enumerator",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-search/src/accept.rs",
+      "role": "exact_frozen_acceptance_rank",
+      "byte_length": 13689,
+      "blake3": "blake3:3971d050281bf10ac49b584dd54e867ba0136f80b94fa26fe5bb1b6ef7756b8a"
+    },
+    {
+      "path": "crates/pen-type/src/admissibility.rs",
+      "role": "guarded_admissibility",
+      "byte_length": 130036,
+      "blake3": "blake3:f6950cdf457980fdfd2d286f71bfeba646e5f81fecb335dd8afdc1e077a3389b"
+    },
+    {
+      "path": "crates/pen-search/src/phase5b_reselection_v2.rs",
+      "role": "frozen_program_and_burn_issuer",
+      "byte_length": 38183,
+      "blake3": "blake3:70263b2f5558a8e478b8163f758c718909d4c7587329773ccb2d42a7fa65fc75"
+    }
+  ],
+  "history_schema": "phase5b-full-history-certification-v1",
+  "history_digest": "blake3:0f9838e4b9f2f5dca8b2df3cbc5c759d832e0d01800cb486ce17f548e477f141",
+  "history_replayed": true,
+  "branch_ii_replayed": true,
+  "scorer_version": "completed-basis-selective-law-scorer-v1",
+  "demand_grammar_version": "schema2-depth-two-demand-orbits-v1",
+  "window_depth": 2,
+  "starts_from_empty_prefix": true,
+  "complete_guarded_cone_enumeration": true,
+  "canonical_deduplication_before_scoring": true,
+  "kernel_typing_fail_closed": true,
+  "exact_rational_rank_reused": true,
+  "local_role_bound_per_candidate": "4*kappa",
+  "excess_credit_requires_live_exported_demand_outputs": true,
+  "uniform_instances_not_multiplied": true,
+  "r1_package_rule_applied": true,
+  "r2_generated_instance_rule_applied": true,
+  "historical_count_used_as_score_input": false,
+  "acceptance_bar_used_as_score_input": false,
+  "frozen_outcome_semantics": {
+    "completed_through_stage15": "publish all fifteen cones, exact orders, winners, revised ledger, first testimonial divergence, and revised Bar16",
+    "halted_no_clearing_candidate": "publish the complete revised prefix and the entire halted cone; no Bar16 exists",
+    "winner_divergence": "publish verbatim and continue on the revised winner when one exists",
+    "score_or_bar_divergence": "publish verbatim; never retune a rule or edit the seal",
+    "no_silent_repair": true,
+    "continue_on_winner_divergence_when_a_winner_exists": true,
+    "stop_only_when_no_candidate_clears": true
+  },
+  "first_full_run_not_executed": true,
+  "burn_now_authorized": true,
+  "outcome": "phase5b_reselection_v2_preregistered_burn_authorized_not_executed",
+  "result_digest": "blake3:add0dd1566c522cdb8d2caf005b4d59e4ce20ee79b663886f04ac8fed07bc8ae"
+}

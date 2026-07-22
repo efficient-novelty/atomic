@@ -1,0 +1,465 @@
+{
+  "schema": "schema2-e2-successor-v2",
+  "date": "2026-07-19",
+  "source_bindings": [
+    {
+      "name": "schema2_v1",
+      "path": "docs/schema2_v1.json",
+      "role": "exact_predecessor_certificate",
+      "byte_length": 27265,
+      "blake3": "blake3:7ef97df03d67c0f10b79cbd920aa9d0ab01642a9271eb826ee20123328cd4e23",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "e2_quotient_adjudications",
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "adopted_r1_r2_authority",
+      "byte_length": 6355,
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "agent_e_schema2_plan",
+      "path": "docs/agent_e_schema2_plan.md",
+      "role": "governing_strict_order_plan",
+      "byte_length": 9562,
+      "blake3": "blake3:d06d2039f1cd83e2d5509478aede30d2e09e2548f262cea9e0f88abbfe2767db",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "hist_cert_v3",
+      "path": "docs/hist_cert_v3.json",
+      "role": "registered_step8_constant_boundary_bundle",
+      "byte_length": 178331,
+      "blake3": "blake3:dee9ceed570935917a7e40130caffdb014af412080b7dd9592c2fe8a59c9b05d",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "semantic_reselection_v1",
+      "path": "docs/semantic_reselection.json",
+      "role": "burned_stage1_source_shape_diagnostic_only",
+      "byte_length": 4107,
+      "blake3": "blake3:c3dc9a3060abb68985ace5ed1cf1b465f074f86c74a41506ab991f08460ba6e7",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "hspace_enumeration",
+      "path": "docs/HSPACE_ENUMERATION.md",
+      "role": "registered_step8_interpretation_input_not_membership_proof",
+      "byte_length": 9699,
+      "blake3": "blake3:97954d23e8e8d754bf6d9cea87034ea4017bd9dcae88d61728be91e2e82c4308",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "raw_naturality_basis",
+      "path": "crates/pen-eval/src/naturality_basis.rs",
+      "role": "available_basis_scope_and_explicit_c2_gap",
+      "byte_length": 21554,
+      "blake3": "blake3:6eaf0afb85bcae4be28f6b023b6912354748abd24760203d9b4881b3f7c16ea5",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "semantic_provenance_local_roles",
+      "path": "crates/pen-eval/src/semantic_provenance.rs",
+      "role": "frozen_four_case_local_role_inventory",
+      "byte_length": 78867,
+      "blake3": "blake3:57cba7d721f42d3dfe1f8bacec805e9125db8204c0f88e975da14555a050b479",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "typed_boundary_source",
+      "path": "crates/pen-type/src/cubical/typed_boundary.rs",
+      "role": "typed_step8_constant_boundary_replay_source",
+      "byte_length": 199287,
+      "blake3": "blake3:0d3f746ddb3a3c28441980f3ab9733762a94fe46f380be5d5a174659c07e8274",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "schema2_v1_result",
+      "path": "docs/SCHEMA2_RESULT.md",
+      "role": "predecessor_scope_and_conclusion_boundary",
+      "byte_length": 7648,
+      "blake3": "blake3:a5b9b2140f691756362cfbfdbb20a2285e9828912e92644544e46d16830293e2",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "schema2_context_source",
+      "path": "crates/pen-schema/src/context.rs",
+      "role": "e1_formation_and_expression_typing_rules_used_by_e2",
+      "byte_length": 71070,
+      "blake3": "blake3:d0de2a49de234034ec60e62e7735658055bc4e9e3abedd5790c7d471de5f1904",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "reference_telescope_source",
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "actual_stage1_and_step8_reference_telescopes",
+      "byte_length": 19443,
+      "blake3": "blake3:d9831c28c380d1fdc313f757b393e26e81df1505d87ae35291d3eb8f214cf545",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "kernel_elaborator_source",
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "stage1_kernel_elaboration_and_signature_digest",
+      "byte_length": 100581,
+      "blake3": "blake3:cc1027fa5e53ac1417b2bf01685bbd463cf832fe36c1b37339c360b7fc75c648",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "schema2_ordinary_grammar_source",
+      "path": "crates/pen-schema/src/grammar.rs",
+      "role": "operational_e2_grammar",
+      "byte_length": 69162,
+      "blake3": "blake3:c86b9620c3d07cdf1512d33db1114eb108d68969c4868acf40cdbc5d67d04c8c",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "schema2_ordinary_realizer_source",
+      "path": "crates/pen-schema/src/ordinary.rs",
+      "role": "operational_e2_realizer_issuer",
+      "byte_length": 26148,
+      "blake3": "blake3:54bf0b295a86e349f0bdaf8cd0a27aaa7a5d094e0f6fcbcab7b4aedcd6f8f154",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "stage1_r1_source",
+      "path": "crates/pen-schema/src/stage1_r1.rs",
+      "role": "actual_stage1_univ_app_kernel_replay",
+      "byte_length": 9627,
+      "blake3": "blake3:677875dd0ecf02a075639f51fabbbac0367cd05d8deeb464601ee2ba97893f86",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "step8_r2_source",
+      "path": "crates/pen-schema/src/step8_r2.rs",
+      "role": "exact_step8_s3_bundle_and_signature_replay",
+      "byte_length": 11143,
+      "blake3": "blake3:834be06764a5259269391454feed6ed486685f1c15cb2e9c874866407f277fbe",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "schema2_e2_agda",
+      "path": "agda/Schema2E2.agda",
+      "role": "safe_without_k_e2_boundary_model",
+      "byte_length": 4824,
+      "blake3": "blake3:125232bed90c447feab3fcb15a83772d567e3b28855c4771c3a017e85d99ba59",
+      "exact_bytes_pinned": true,
+      "semantic_projection_replayed": true
+    }
+  ],
+  "predecessor": {
+    "schema": "schema2-phase-batch-v1",
+    "result_digest": "blake3:25aac1ac064d808875785887d379cbc6cb5102bf73090220ac65e873ed4a38eb",
+    "exact_certificate_replay_valid": true,
+    "scoped_e1_fragment_complete": true,
+    "global_c1_retired": false,
+    "predecessor_e2_status": "partial_adjudication_required",
+    "successor_does_not_overwrite_predecessor": true
+  },
+  "adjudications": [
+    {
+      "rule_id": "formation-completion-package-family-rule-v1",
+      "adjudication_state": "adopted_policy",
+      "adoption_text_exactly_pinned": true,
+      "count_blind_decision_procedure_required": true,
+      "operational_decision_state": "pending_generator_membership",
+      "operational_membership_verdict_issued": false
+    },
+    {
+      "rule_id": "derived-action-generator-membership-rule-v1",
+      "adjudication_state": "adopted_policy",
+      "adoption_text_exactly_pinned": true,
+      "count_blind_decision_procedure_required": true,
+      "operational_decision_state": "pending_generator_membership",
+      "operational_membership_verdict_issued": false
+    }
+  ],
+  "r1_stage1": {
+    "rule_id": "formation-completion-package-family-rule-v1",
+    "source_stage": 1,
+    "source_candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+    "carrier": {
+      "source_clause": 0,
+      "clause_role": "formation",
+      "constructor": "Univ",
+      "semantic_role": "package_carrier_provenance",
+      "independently_credited": false
+    },
+    "completion": {
+      "source_clause": 1,
+      "clause_role": "formation_completion",
+      "constructor": "App",
+      "head": "Univ",
+      "level_variable": 1,
+      "semantic_judgement": "App(Univ,Var(1)) : Type",
+      "canonical_package_representative": true
+    },
+    "exact_syntactic_package_shape_replayed": true,
+    "coverage_direction": "completion_covers_carrier",
+    "actual_source_elaboration_hash": "blake3:26788f87c4d7e4ebcf2a8408e61c1fb3813d26edc44bf045969484ece5550304",
+    "actual_source_signature_digest": "blake3:fcfaddfd614022b3f5b0daabd7c06751e7dbac04aee5469c49043d2423c66e20",
+    "actual_package_derivation_hash": "blake3:44bc0a1de53c72d429376a5b2d992559b0b0839c9bd753fa7d79a1456eaebd27",
+    "actual_stage1_typed_source_witness_issued": true,
+    "actual_stage1_typed_source_gap": null,
+    "pending_local_role_exception_cases": [
+      "kernel_head",
+      "adjoint_mate",
+      "support_action",
+      "coherence"
+    ],
+    "every_local_role_exception_case_pending": true,
+    "completed_package_family_issued": true,
+    "carrier_exception_membership_decided": false,
+    "carrier_exception_gap": "E4_NATURALITY_GENERATOR_MEMBERSHIP_NOT_YET_DECIDABLE",
+    "separate_carrier_family_issued": false,
+    "historical_family_handoff_issued": false,
+    "total_stage1_family_cardinality_omitted_pending_membership": true,
+    "archived_count_or_bar_used_as_rule_input": false
+  },
+  "r2_step8": {
+    "rule_id": "derived-action-generator-membership-rule-v1",
+    "source_clause_shapes": [
+      "App(Univ,Var(1))",
+      "Var(1)",
+      "PathCon(3)",
+      "Lam(Var(1))",
+      "Lam(Var(2))"
+    ],
+    "registered_interpretation_overlay_replayed": true,
+    "raw_pen_core_to_schema2_term_elaboration_proved": false,
+    "raw_elaboration_bridge_gap": "C1_STEP8_POSITIONAL_PEN_CORE_TO_REGISTERED_SCHEMA2_TERM_ELABORATION",
+    "exact_registered_signature_derivation_hash": "blake3:c1136344bccb300a0ca53e2251df2d6a099ce47b7984e4fe705b650f97a5d9ea",
+    "mu": {
+      "source_clause": 3,
+      "name": "mu",
+      "carrier": {
+        "code": "S3",
+        "element_type": "El(S3)"
+      },
+      "domain": [
+        "El(S3)",
+        "El(S3)"
+      ],
+      "codomain": "El(S3)",
+      "registered_naturality_arguments": [
+        0,
+        1
+      ],
+      "naturality_generator_proof_issued": false,
+      "grammar_realizer_derivation_hash": "blake3:0d9c29697b655dd35d55c546d8dddda74db8e4a5190239ce113c40a0e85c2d5a",
+      "typed_schema_replayed": true
+    },
+    "left_unit": {
+      "source_clause": 4,
+      "operation": "mu",
+      "left_term": "mu(base,x)",
+      "right_term": "x",
+      "equality": "Path(El(S3),mu(base,x),x)",
+      "orientation": "left",
+      "right_unit_disposition": "d1_mate_not_second_family",
+      "grammar_realizer_derivation_hash": "blake3:a30d44b0bd2428ec26b9da93cb579a9414e635b79e3b03cd1de7bd0ec1840ff5",
+      "typed_schema_replayed": true,
+      "generator_membership_decided": false
+    },
+    "cell_action": {
+      "operation_clause": 3,
+      "path_clause": 2,
+      "operation": "mu",
+      "cell_constructor": "PathCon(3)",
+      "cell_dimension": 3,
+      "registered_bundle_kind": "s3",
+      "registered_typed_boundary_derivation_hash": "blake3:5683a17d3aa6798ccc3bc310ee4b0496a036872d7bd26e2d55d79a5febcd814e",
+      "registered_boundary_bundle_derivation_hash": "blake3:86cbf5317cd99472d3f6409659838ed7dcf84b92afcaec596f98a5d6fe405711",
+      "historical_package_child_derivation_hash": "blake3:875427e0bb735f45bffc27e02eb8b31452c932b816072294a11d4716394899f8",
+      "grammar_realizer_derivation_hash": "blake3:4a16b0c2f85a2688484437fdef77d258067b01d7857f743d3b923d1998f41171",
+      "typed_schema_replayed": true,
+      "boundary_derived_by_map_cube": true,
+      "generator_membership_decided": false,
+      "independent_support_action_issued": false
+    },
+    "all_registered_signatures_replayed": true,
+    "fq1_typed_signature_failure_triggered": false,
+    "grammar_external_bundle_archive_join_proved": false,
+    "certificate_exact_bundle_digest_join_replayed": true,
+    "r2_membership_basis_available": false,
+    "ordinary_handoff_token_issued": false,
+    "archived_count_or_bar_used_as_rule_input": false
+  },
+  "ordinary_grammar": {
+    "grammar_version": "schema2-ordinary-grammar-e2-v1",
+    "realizer_version": "schema2-ordinary-realizer-e2-v1",
+    "constructor_registry_digest": "blake3:e82ba61f90b95e18661fc83f41a911b7e9b0a435ddcca10f60837a87cf6de617",
+    "finite_registry_replayed": true,
+    "every_registered_constructor_depth_at_most_two": true,
+    "count_inputs_absent": true,
+    "agda_safe_without_k_source_bound": true,
+    "agda_generator_independence_theorem_declared": false,
+    "agda_rust_operational_correspondence_proved": false,
+    "global_c1_bridge_retired": false,
+    "frozen_normal_forms_available": false,
+    "generator_completeness_proved": false,
+    "generic_quotient_judgements_complete": false,
+    "generic_uniform_instance_membership_pending": true,
+    "generic_r1_same_package_dependency_proved": false,
+    "historical_reference_support_fragment_only": true,
+    "arbitrary_sealed_support_window_grammar_proved": false,
+    "arbitrary_support_window_gap": "C2_ARBITRARY_SEALED_SUPPORT_WINDOW_GRAMMAR_NOT_YET_IMPLEMENTED",
+    "historical_ordinary_realizers_complete": false,
+    "agent_a_handoff_token_issued": false
+  },
+  "historical_regression": {
+    "source_projection_replayed": true,
+    "archived_raw_operational_totals": [
+      7,
+      8,
+      10,
+      18
+    ],
+    "archived_registered_path_typed_and_marginal_subtotals": [
+      2,
+      2,
+      5,
+      10
+    ],
+    "archived_ordinary_unresolved_totals": [
+      5,
+      6,
+      5,
+      8
+    ],
+    "count_used_as_constructor_or_membership_input": false,
+    "revised_e2_output_regression_run": false,
+    "fq2_evaluated": false,
+    "ordinary_historical_tokens_complete": false,
+    "agent_a_handoff_token_issued": false,
+    "status": "archived_projection_replayed_revised_e2_output_pending_fq4_membership"
+  },
+  "falsifiers": {
+    "fq1_triggered": false,
+    "fq2_evaluated": false,
+    "fq2_divergence_recorded": false,
+    "fq3_triggered": false,
+    "fq4": {
+      "falsifier_id": "F-Q4_E4_GENERATOR_MEMBERSHIP_UNDECIDABLE_IN_CURRENT_FRAGMENT",
+      "triggered": true,
+      "required_decider": "complete E-4 generator-membership procedure over frozen typed equality",
+      "available_basis_version": "typed-family-sort-aware-renaming-basis-v1",
+      "available_basis_scope": [
+        "sort_preserving_parameter_renamings",
+        "identity",
+        "composition",
+        "weakening_by_one_unused_coarse_parameter"
+      ],
+      "missing_basis_capabilities": [
+        "E3_frozen_typed_normalization_and_univalent_equality",
+        "typed_instance_substitution_generator_decomposition",
+        "cubical_face_map_generator_decomposition",
+        "parent_operation_naturality_closure_membership"
+      ],
+      "affected_rule_applications": [
+        "R1_clause_2_stage1_carrier_independent_local_role_exception",
+        "R2_clause_1_step8_left_unit_coherence",
+        "R2_clause_1_step8_mu_action_on_PathCon_3"
+      ],
+      "affected_rows_remain_pending": true,
+      "no_independence_verdict_inferred_from_labels_or_positions": true
+    }
+  },
+  "phases": [
+    {
+      "phase": "E-1",
+      "status": "predecessor_scoped_fragment_complete_global_c1_open",
+      "theorem_token_issued": false,
+      "blocked_by": "C1_PEN_CORE_EXPR_TO_SCHEMA2_TYPED_EXPRESSION_BRIDGE_AND_AGDA_RUST_CORRESPONDENCE"
+    },
+    {
+      "phase": "E-2",
+      "status": "partial_registered_signatures_replayed_fq4_membership_pending",
+      "theorem_token_issued": false,
+      "blocked_by": "F-Q4_E4_GENERATOR_MEMBERSHIP_UNDECIDABLE_IN_CURRENT_FRAGMENT"
+    },
+    {
+      "phase": "E-3",
+      "status": "not_executed_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "global_C1_open_and_E2_FQ4_generator_membership_dependency"
+    },
+    {
+      "phase": "E-4",
+      "status": "not_executed_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "global_C1_open_and_E2_FQ4_generator_membership_dependency"
+    },
+    {
+      "phase": "E-5",
+      "status": "not_executed_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "global_C1_open_and_E2_FQ4_generator_membership_dependency"
+    },
+    {
+      "phase": "E-6",
+      "status": "not_executed_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "global_C1_open_and_E2_FQ4_generator_membership_dependency"
+    },
+    {
+      "phase": "E-7",
+      "status": "not_executed_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "global_C1_open_and_E2_FQ4_generator_membership_dependency"
+    },
+    {
+      "phase": "E-8",
+      "status": "not_executed_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "global_C1_open_and_E2_FQ4_generator_membership_dependency"
+    }
+  ],
+  "obstructions_retired": {
+    "global_c1_arbitrary_typed_instance_sort_preservation_retired": false,
+    "c2_depth_two_schema_grammar_and_generator_completeness_retired": false,
+    "e3_frozen_normalization_and_equality_complete": false,
+    "e4_generator_basis_complete": false,
+    "e5_demand_projection_complete": false,
+    "c6_general_historical_term_level_completion_retired": false,
+    "c8_candidate_boundary_provenance_join_retired": false
+  },
+  "conclusion_boundary": {
+    "historical_scores_recomputed": false,
+    "step16_acceptance_computation_run": false,
+    "closing_inequality_computed": false,
+    "semantic_o16_decided": false,
+    "global_halt_proved": false,
+    "global_continuation_proved": false,
+    "permitted_conclusion": "R1's actual Stage-1 package and the adopted registered-overlay Step-8 signature checker replay count-blindly; F-Q1 is not triggered in that checker, while the raw pen_core overlay elaboration bridge remains open and F-Q4 leaves R1/R2 generator membership and every affected credit/handoff pending"
+  },
+  "e2_complete": false,
+  "outcome": "partial_e2_registered_signatures_replay_fq4_generator_membership_pending",
+  "remaining_obligations": [
+    "resolve the E-2/E-4 dependency without weakening strict-order or importing historical counts: supply frozen equality and a complete typed generator-membership decider",
+    "decide every R1 LocalRole exception case and the R2 coherence/cell-action membership cases with replayable E-4 tokens",
+    "only after those verdicts, issue individual historical ordinary-family and Agent A handoff tokens and run the count-as-output regression",
+    "retire the global C1 pen_core elaboration and Agda-to-Rust correspondence gaps",
+    "generalize the historical-reference anchor replay to arbitrary sealed two-step support windows before any C2 completeness claim",
+    "leave E-3 through E-8 unexecuted until their prerequisite boundary is lawfully reopened"
+  ],
+  "result_digest": "blake3:2a292d6f0f785d178269af4c9a299ba14486a43ca4bdd31a1cede25ddad5b2de"
+}

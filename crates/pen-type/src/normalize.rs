@@ -73,9 +73,12 @@ fn substitute_at_depth(body: &Expr, level: u32, value: &Expr, depth: u32) -> Exp
             Box::new(substitute_at_depth(domain, level, value, depth)),
             Box::new(substitute_at_depth(codomain, level, value, depth + 1)),
         ),
-        Expr::Lam(inner) => {
-            Expr::Lam(Box::new(substitute_at_depth(inner, level, value, depth + 1)))
-        }
+        Expr::Lam(inner) => Expr::Lam(Box::new(substitute_at_depth(
+            inner,
+            level,
+            value,
+            depth + 1,
+        ))),
         Expr::Id(ty, left, right) => Expr::Id(
             Box::new(substitute_at_depth(ty, level, value, depth)),
             Box::new(substitute_at_depth(left, level, value, depth)),
@@ -149,7 +152,9 @@ fn lift_levels(expr: &Expr, threshold: u32, offset: u32) -> Expr {
         Expr::Disc(inner) => Expr::Disc(Box::new(lift_levels(inner, threshold, offset))),
         Expr::Shape(inner) => Expr::Shape(Box::new(lift_levels(inner, threshold, offset))),
         Expr::Next(inner) => Expr::Next(Box::new(lift_levels(inner, threshold, offset))),
-        Expr::Eventually(inner) => Expr::Eventually(Box::new(lift_levels(inner, threshold, offset))),
+        Expr::Eventually(inner) => {
+            Expr::Eventually(Box::new(lift_levels(inner, threshold, offset)))
+        }
         Expr::Bang(inner) => Expr::Bang(Box::new(lift_levels(inner, threshold, offset))),
         Expr::WhyNot(inner) => Expr::WhyNot(Box::new(lift_levels(inner, threshold, offset))),
     }
@@ -196,10 +201,7 @@ pub fn whnf(expr: &Expr, scope_len: u32, fuel: u32) -> Result<Whnf, NormalizeErr
                 }
             }
             other => {
-                return Ok(Whnf {
-                    expr: other,
-                    steps,
-                });
+                return Ok(Whnf { expr: other, steps });
             }
         }
     }
@@ -247,39 +249,39 @@ pub fn normalize(expr: &Expr, scope_len: u32, fuel: u32) -> Result<Whnf, Normali
             steps = steps.saturating_add(right.steps);
             Expr::Id(Box::new(ty.expr), Box::new(left.expr), Box::new(right.expr))
         }
-        Expr::Refl(inner) => {
-            Expr::Refl(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Susp(inner) => {
-            Expr::Susp(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Trunc(inner) => {
-            Expr::Trunc(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Flat(inner) => {
-            Expr::Flat(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Sharp(inner) => {
-            Expr::Sharp(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Disc(inner) => {
-            Expr::Disc(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Shape(inner) => {
-            Expr::Shape(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Next(inner) => {
-            Expr::Next(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Eventually(inner) => {
-            Expr::Eventually(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::Bang(inner) => {
-            Expr::Bang(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
-        Expr::WhyNot(inner) => {
-            Expr::WhyNot(Box::new(normalize_unary(&inner, scope_len, remaining, &mut steps)?))
-        }
+        Expr::Refl(inner) => Expr::Refl(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Susp(inner) => Expr::Susp(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Trunc(inner) => Expr::Trunc(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Flat(inner) => Expr::Flat(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Sharp(inner) => Expr::Sharp(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Disc(inner) => Expr::Disc(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Shape(inner) => Expr::Shape(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Next(inner) => Expr::Next(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Eventually(inner) => Expr::Eventually(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::Bang(inner) => Expr::Bang(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
+        Expr::WhyNot(inner) => Expr::WhyNot(Box::new(normalize_unary(
+            &inner, scope_len, remaining, &mut steps,
+        )?)),
         leaf @ (Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_)) => leaf,
     };
     Ok(Whnf { expr, steps })
@@ -387,7 +389,10 @@ mod tests {
         let result = whnf(&expr, 0, 1);
         assert_eq!(
             result,
-            Err(NormalizeError::FuelExhausted { steps: 1, budget: 1 })
+            Err(NormalizeError::FuelExhausted {
+                steps: 1,
+                budget: 1
+            })
         );
     }
 }

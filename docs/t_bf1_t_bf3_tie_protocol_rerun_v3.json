@@ -1,0 +1,142 @@
+{
+  "schema": "t-bf1-t-bf3-tie-protocol-rerun-v3",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/tie_resolution_protocol.md",
+      "role": "adopted_quotient_confluence_adjudication_ladder",
+      "byte_length": 4040,
+      "blake3": "blake3:92b8cab2c0a87e575bb73840f047678bfd6a0ec94f5173907bb90000100f3d30"
+    },
+    {
+      "path": "crates/pen-search/src/t_bf1_prefix.rs",
+      "role": "live_t_bf1_prefix_issuer_and_replay",
+      "byte_length": 32142,
+      "blake3": "blake3:c521b1f45c119c75c90d96e09d95e5ae805401f334d58a0905a29640607c6a22"
+    },
+    {
+      "path": "crates/pen-search/src/t_bf3_enactment_equivalence.rs",
+      "role": "live_t_bf3_enactment_issuer_and_replay",
+      "byte_length": 33514,
+      "blake3": "blake3:86d6edd03f1c143d2d54e8027b98730039cb6e43e268588420630af151c06082"
+    },
+    {
+      "path": "crates/pen-search/src/naturality_orbit_transport.rs",
+      "role": "independent_r_t1_semantic_quotient",
+      "byte_length": 69382,
+      "blake3": "blake3:55fd52701ab147eb3af61bcb5a3925793fc1d5d6a78c8e02f363409fdcc06e22"
+    },
+    {
+      "path": "crates/pen-search/src/t_bf_tie_protocol_rerun.rs",
+      "role": "combined_fail_closed_evidence_join_and_replay",
+      "byte_length": 31309,
+      "blake3": "blake3:f1ed936db1bea250cf28f6bddcbb2b3382760aa276c06cfe264d29f13f2d2df4"
+    }
+  ],
+  "adopted_protocol_replayed": true,
+  "t_bf1_live_certificate_digest": "blake3:f14445c4e66ffad3f1f18dea6476983d98c252381ddf30f9623a259103428757",
+  "t_bf3_live_certificate_digest": "blake3:06e8727179d3f46b8ac829309f61d80f0bc04eb481b7b980baa5951d1728bd63",
+  "naturality_orbit_transport_live_certificate_digest": "blake3:a7665275fd102d81c12f520d62b26059c363cc503076bde5994be74ab38a3388",
+  "t_bf1_live_replay_valid": true,
+  "t_bf3_live_replay_valid": true,
+  "naturality_orbit_transport_live_replay_valid": true,
+  "stage4": {
+    "t_bf1_stop_stage": 4,
+    "t_bf3_stop_stage": 4,
+    "minimum_kappa": 3,
+    "minimum_certified_nu": 5,
+    "t_bf1_minimizer_hashes": [
+      "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4"
+    ],
+    "t_bf3_minimizer_hashes": [
+      "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4"
+    ],
+    "r_t1_package_hashes": [
+      "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4"
+    ],
+    "exact_four_way_minimizer_hash_set_agreement": true,
+    "hashes_used_only_for_extensional_evidence_join": true,
+    "hash_or_enumeration_order_used_as_selector": false,
+    "selected_candidate_hash": null,
+    "r_t1_semantic_class_count": 4,
+    "r_t1_class_members": [
+      [
+        "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407"
+      ],
+      [
+        "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308"
+      ],
+      [
+        "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b"
+      ],
+      [
+        "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4"
+      ]
+    ],
+    "r_t1_pairwise_comparison_count": 6,
+    "every_distinct_presentation_pair_semantically_inequivalent": true,
+    "r_t1_completed": true,
+    "r_t1_dissolved_tie": false,
+    "r_t2_confluence_required": true,
+    "r_t2_confluence_executed": true,
+    "r_t3_user_adjudication_opened": false,
+    "derivation_hash": "blake3:5ed9312ed49a50e49286f3841f65032d64f7c18feac195096300ba2d48cff911"
+  },
+  "r_t2": {
+    "rung_entered": true,
+    "semantic_branch_count": 4,
+    "semantic_branch_class_ids": [
+      "blake3:37c3b849575d67833e0b7f5374f660004a83d7e6f73ddcc2f53ba23eedfff61a",
+      "blake3:57ee7407cb49294946e0e3761d871e2cac47555ddd5156db044e27b16af2da9b",
+      "blake3:71c277c287e80966becb90932b1a2efa092892d2e8157ded58e97b71b48105cd",
+      "blake3:fe9b61be27791d372227946702024928c842edceb69deeacf2da388665f309b9"
+    ],
+    "historical_successor_stage": 5,
+    "historical_successor_rule": "structural_completion::InitialHit",
+    "historical_successor_pending_output": {
+      "stage": 5,
+      "clause_index": null,
+      "a3_instance_id": "blake3:0f962f6c85d2bab95e528a8f4c3628b91326ebdca23b2b9cf68894dd41af03c3",
+      "a3_scheme_id": "blake3:66d80b52d148b702d5b885047f05bf53ac88e44cd013f63a89d45c4071daf875",
+      "rule": "structural_completion::InitialHit",
+      "source_registration_name": null,
+      "source_naturality_hash": null,
+      "gap_id": "A3_STRUCTURAL_COMPLETION_TYPED_HOLE_UNDEFINED",
+      "exact_reason": "a structural snapshot proves that a completion is required, but it does not determine an intrinsically typed object-level hole; importing the later answer would be retrospective",
+      "derivation_hash": "blake3:afd4ec7f7f1249d6ecf3b40b4fb9b83909875c221645af870dbd22055d94fbd5"
+    },
+    "exact_instance_scheme_gap_evidence_present": true,
+    "intrinsically_typed_successor_output_term_exists": false,
+    "branchwise_typed_successor_obligations_constructed": false,
+    "coarse_focus_label": "initial_hit",
+    "coarse_focus_equality_used_as_semantic_confluence": false,
+    "blocked_before_semantic_branch_comparison": true,
+    "same_successor_obligation_proved": false,
+    "equivalent_sealed_futures_proved": false,
+    "confluence_proved": false,
+    "confluence_refuted": false,
+    "r_t3_opening_precondition_satisfied": false,
+    "exact_blocker": "The historical Stage-5 InitialHit occurrence supplies an exact A3 instance id and natural-scheme id, but its structural-completion output remains A3_STRUCTURAL_COMPLETION_TYPED_HOLE_UNDEFINED. Without that intrinsically typed term, the occurrence cannot be instantiated on each of the four Stage-4 semantic branches, so neither successor-orbit equality nor sealed-future equivalence is a well-formed comparison. The common coarse focus label is not semantic confluence.",
+    "derivation_hash": "blake3:ed1bf00d75a42a4fadb02a4729875d89ba0ed1fc7aa09507321ed2160971605f"
+  },
+  "outcome": "rt2_attempt_blocked_typed_successor_undefined",
+  "theorem_t_bf1_proved": false,
+  "theorem_t_bf3_proved": false,
+  "r_t3_user_adjudication_opened": false,
+  "proposal_adoption_authorized": false,
+  "bridge_authorized": false,
+  "halt_claim_issued": false,
+  "desired_history_or_downstream_score_used_as_premise": false,
+  "permitted_conclusion": "The live T-BF1 and T-BF3 attempts stop on the same four Stage-4 minimizers. R-T1 leaves four distinct semantic packages. R-T2 has now been entered, and its first count-blind obligation is the Stage-5 InitialHit successor orbit. The historical occurrence has exact instance, scheme, and gap evidence, but no intrinsically typed structural-completion output term; branch comparison is therefore blocked before confluence can be proved or refuted. No presentation is selected, R-T3 remains closed, and neither theorem is proved.",
+  "required_successor_action": "Define and kernel-type the Stage-5 InitialHit structural-completion output without importing the later historical answer. Instantiate that output independently over all four R-T1 semantic classes, then compare successor obligations and sealed futures count-blindly at R-T2. Keep R-T3 closed unless a well-formed confluence comparison refutes confluence; do not adopt the bar-free law, run the bridge, or issue a halt certificate from this artifact.",
+  "result_digest": "blake3:5a87eb2aac701fc464b2e136af763c795f0f621aa27a619519878faee9bd42f0"
+}

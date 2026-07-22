@@ -1,0 +1,257 @@
+{
+  "schema": "t-bf3-enactment-equivalence-v1",
+  "date": "2026-07-21",
+  "proposed_law": "demand-parsimony-law-v1",
+  "source_bindings": [
+    {
+      "path": "docs/bar_free_law_proposal.md",
+      "role": "threshold_free_law_and_falsifiers",
+      "byte_length": 4836,
+      "blake3": "blake3:474378ed40a74834befd490a28d064c5806a32366dcc66306040c3b00a3355cd"
+    },
+    {
+      "path": "docs/phase5b_reselection_program_v2.json",
+      "role": "preregistered_complete_prefix_cone_program",
+      "byte_length": 3738,
+      "blake3": "blake3:eeb26ca4f64b16a536e67f7469ae68d34bef74f239a05b9050ce421483cadf36"
+    },
+    {
+      "path": "docs/phase5b_reselection_burn_v2.json",
+      "role": "complete_prefix_cones_and_certified_scores",
+      "byte_length": 27512,
+      "blake3": "blake3:e18da4d5902ba2bf540473da07ab067536d64a28953730437dff8e619bc3167e"
+    },
+    {
+      "path": "docs/phase5b_reselection_program_v3.json",
+      "role": "preregistered_guarded_suffix_program",
+      "byte_length": 3707,
+      "blake3": "blake3:af1f7a0c339557ec76ca5214996a333e7238b56c1340845fcd6546fe2c6f438b"
+    },
+    {
+      "path": "docs/phase5b_reselection_burn_v3.json",
+      "role": "guarded_suffix_total_discharger_census",
+      "byte_length": 36931,
+      "blake3": "blake3:399ed3c499ecc79797ed09c89b81b3fcf963c09a391d221d657a7198d94bd643"
+    },
+    {
+      "path": "crates/pen-type/src/admissibility.rs",
+      "role": "strict_a4_cone_admission_definition",
+      "byte_length": 130036,
+      "blake3": "blake3:f6950cdf457980fdfd2d286f71bfeba646e5f81fecb335dd8afdc1e077a3389b"
+    },
+    {
+      "path": "crates/pen-search/src/t_bf3_enactment_equivalence.rs",
+      "role": "fail_closed_parsimony_selector_and_replay",
+      "byte_length": 33514,
+      "blake3": "blake3:86d6edd03f1c143d2d54e8027b98730039cb6e43e268588420630af151c06082"
+    }
+  ],
+  "frozen_v2_program_digest_valid": true,
+  "frozen_v2_burn_digest_valid": true,
+  "frozen_v3_program_digest_valid": true,
+  "frozen_v3_burn_digest_valid": true,
+  "frozen_cross_artifact_links_valid": true,
+  "frozen_surface_relative": true,
+  "live_upstream_source_replay_claimed": false,
+  "live_replay_hygiene_note": "The archived v2/v3 bytes and their internal digests/cross-links are replayed. No claim is made that later source-bound upstream prerequisites still equal their frozen issue-time sources; current development has intentionally advanced that live surface.",
+  "certified_domain": "constitutive bootstrap Stages 1--3 plus sequential comparative Stages 4--15",
+  "bootstrap_stages": [
+    1,
+    2,
+    3
+  ],
+  "comparative_stages": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "parsimony_order": "least clause kappa, then least certified semantic nu; equal pair halts",
+  "certified_nu_used_as_selector_input": true,
+  "historical_winner_used_as_selector_input": false,
+  "testimonial_or_desired_result_used_as_selector_input": false,
+  "bar_used_as_gate_or_selector": false,
+  "stage_records": [
+    {
+      "stage": 1,
+      "disposition": "constitutive_bootstrap",
+      "required_packages": [],
+      "stage3_exported_demand_wrinkle": false,
+      "candidate_evidence_origin": "v2 unique constitutive registration; no comparative selection",
+      "candidates": [
+        {
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "kappa": 2,
+          "certified_nu": 1,
+          "kernel_typed": true,
+          "total_discharger": true,
+          "evidence_hash": "blake3:ce07127e802de4dc525880eb2256c0c64b2dec3ac3c55efa350455ec73602267"
+        }
+      ],
+      "minimum_kappa": null,
+      "minimum_certified_nu_at_kappa": null,
+      "minimizer_hashes": [],
+      "minimizer_count": 0,
+      "selected_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "certified_sequence_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "selected_matches_certified_sequence": true,
+      "selector_read_certified_sequence_hash": false,
+      "selector_read_bar_or_overshoot": false,
+      "selector_read_bit_kappa_or_exact_rank": false,
+      "derivation_hash": "blake3:2c38a39e1c92febf96e3eb891180fa70cbe39daca8ac1c3bb64dfba7d4e36648"
+    },
+    {
+      "stage": 2,
+      "disposition": "constitutive_bootstrap",
+      "required_packages": [],
+      "stage3_exported_demand_wrinkle": false,
+      "candidate_evidence_origin": "v2 unique constitutive registration; no comparative selection",
+      "candidates": [
+        {
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "kappa": 1,
+          "certified_nu": 1,
+          "kernel_typed": true,
+          "total_discharger": true,
+          "evidence_hash": "blake3:4475b9ee43cde4a4ff7ff3b9d5d2a6161cd61626d736fc5f76a3fe3ef7587ecf"
+        }
+      ],
+      "minimum_kappa": null,
+      "minimum_certified_nu_at_kappa": null,
+      "minimizer_hashes": [],
+      "minimizer_count": 0,
+      "selected_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+      "certified_sequence_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+      "selected_matches_certified_sequence": true,
+      "selector_read_certified_sequence_hash": false,
+      "selector_read_bar_or_overshoot": false,
+      "selector_read_bit_kappa_or_exact_rank": false,
+      "derivation_hash": "blake3:3588aa5cd98993e5ccb6df1ece656f990505b86fc5d20dd37f8f4b132939b332"
+    },
+    {
+      "stage": 3,
+      "disposition": "constitutive_bootstrap",
+      "required_packages": [
+        "former_eliminator"
+      ],
+      "stage3_exported_demand_wrinkle": true,
+      "candidate_evidence_origin": "v2 unique constitutive registration; no comparative selection",
+      "candidates": [
+        {
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "kappa": 1,
+          "certified_nu": 2,
+          "kernel_typed": true,
+          "total_discharger": false,
+          "evidence_hash": "blake3:ebe03e9a4caaf74931e840bc95e7b4e05a35c05181a851dbfd6635324bf46149"
+        }
+      ],
+      "minimum_kappa": null,
+      "minimum_certified_nu_at_kappa": null,
+      "minimizer_hashes": [],
+      "minimizer_count": 0,
+      "selected_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+      "certified_sequence_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+      "selected_matches_certified_sequence": true,
+      "selector_read_certified_sequence_hash": false,
+      "selector_read_bar_or_overshoot": false,
+      "selector_read_bit_kappa_or_exact_rank": false,
+      "derivation_hash": "blake3:35d4e52976a5585053c05867012f74ed3c136412ca1c76de43259f9c02a145ed"
+    },
+    {
+      "stage": 4,
+      "disposition": "halted_equal_pair_parsimony_tie",
+      "required_packages": [
+        "former_eliminator"
+      ],
+      "stage3_exported_demand_wrinkle": false,
+      "candidate_evidence_origin": "v2 complete strict-admitted typed cone; bar/rank ignored",
+      "candidates": [
+        {
+          "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "kappa": 3,
+          "certified_nu": 5,
+          "kernel_typed": true,
+          "total_discharger": true,
+          "evidence_hash": "blake3:db79c44ca3355fd0fb8cca55ee1064d8c96f0368be77ab4c5c1f4ee158475f8f"
+        },
+        {
+          "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+          "kappa": 3,
+          "certified_nu": 5,
+          "kernel_typed": true,
+          "total_discharger": true,
+          "evidence_hash": "blake3:7eb19b0a0c5af17c3f10c541cfc0f127a4649f91308ec25abb808826497f3859"
+        },
+        {
+          "candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+          "kappa": 3,
+          "certified_nu": 5,
+          "kernel_typed": true,
+          "total_discharger": true,
+          "evidence_hash": "blake3:3dc88656aa73edba43c61f34396cfba6cbbd2c4803ef411a2a173bc3af6397c7"
+        },
+        {
+          "candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+          "kappa": 3,
+          "certified_nu": 5,
+          "kernel_typed": true,
+          "total_discharger": true,
+          "evidence_hash": "blake3:08ec6ba697730ba3b127b8e42f78f83215855bb3bb5da3973ac23dff65644b78"
+        }
+      ],
+      "minimum_kappa": 3,
+      "minimum_certified_nu_at_kappa": 5,
+      "minimizer_hashes": [
+        "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4"
+      ],
+      "minimizer_count": 4,
+      "selected_hash": null,
+      "certified_sequence_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "selected_matches_certified_sequence": false,
+      "selector_read_certified_sequence_hash": false,
+      "selector_read_bar_or_overshoot": false,
+      "selector_read_bit_kappa_or_exact_rank": false,
+      "derivation_hash": "blake3:68bcb6fd61edce73a6c671509fc8af0326a321dc842bc8b5cbd20b0a1a5d6a3c"
+    }
+  ],
+  "first_unresolved_stage": 4,
+  "unreached_stages_after_fail_closed_halt": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "f_bf1_equal_pair_tie_triggered": true,
+  "f_bf2_winner_divergence_triggered": false,
+  "theorem_issued": false,
+  "enactment_equivalence_proved": false,
+  "proposal_adoptable_from_t_bf3": false,
+  "outcome": {
+    "failed_equal_pair_parsimony_tie": {
+      "stage": 4,
+      "count": 4
+    }
+  },
+  "conclusion": "T-BF3 is not proved. F-BF1 fires at Stage 4: four canonically distinct typed total dischargers share (kappa, certified nu) = (3, 5).",
+  "required_successor_action": "Do not adopt demand-parsimony-law-v1. Prove an independent quotient collapsing the four minimizers or adjudicate a versioned additional selector, then rerun T-BF1 and T-BF3.",
+  "result_digest": "blake3:06e8727179d3f46b8ac829309f61d80f0bc04eb481b7b980baa5951d1728bd63"
+}

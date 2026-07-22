@@ -1,0 +1,14 @@
+[package]
+name = "pen-schema"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+pen-core = { path = "../pen-core" }
+pen-type = { path = "../pen-type" }
+serde.workspace = true
+serde_json.workspace = true
+blake3.workspace = true
+thiserror.workspace = true

@@ -1,0 +1,575 @@
+{
+  "schema": "branch-invariance-regression-certificate-v1",
+  "date": "2026-07-22",
+  "source_bindings": [
+    {
+      "path": "docs/branch_invariance_program_plan.md",
+      "role": "frozen_pre_registered_BI_brief",
+      "byte_length": 9255,
+      "blake3": "blake3:6a5d0343dfc7b2f7b82570cbf2fa48a1857659eb61a8c7c1e48922f78f9bc86b"
+    },
+    {
+      "path": "docs/r_t3_stage4_adjudication.md",
+      "role": "adopted_Option_B_cone_and_F_R3_B1",
+      "byte_length": 9169,
+      "blake3": "blake3:b46c6db7fe642822ae5b472617f0bab009be521ece0867df2249791c53bfb804"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance.rs",
+      "role": "reference_isolated_candidate_level_continuation",
+      "byte_length": 83416,
+      "blake3": "blake3:9cfcd1d981ced8cd800aa8021110b3cf54de39d618b92c93eca01580d463bcd5"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance_finale.rs",
+      "role": "branch_parametric_E5_class_finale",
+      "byte_length": 119004,
+      "blake3": "blake3:b6b968f1163fb6fb09872a8e2a36c37b74541d5157c8e7a64c11b1181c39301b"
+    },
+    {
+      "path": "crates/pen-eval/src/a3_demand_grammar.rs",
+      "role": "adopted_depth_two_A3_instance_grammar",
+      "byte_length": 86262,
+      "blake3": "blake3:290812900f8df33ee385befb474516928919db5fe001dc5f55aedf4c8565b14b"
+    },
+    {
+      "path": "crates/pen-eval/src/a3_rule_inventory_exhaustiveness.rs",
+      "role": "exact_prefix_A3_exhaustiveness",
+      "byte_length": 78348,
+      "blake3": "blake3:bfa44e9186fc108da7de5604e4f8271e6fe76325c08486c0f9658aadc08640f9"
+    },
+    {
+      "path": "crates/pen-eval/src/future_hole_hypothesis_v2.rs",
+      "role": "dependent_registration_and_realization",
+      "byte_length": 104659,
+      "blake3": "blake3:ba2a7f96787fa247e838a66811acbe4e0b071ff10464564b4e7b8093db3a413c"
+    },
+    {
+      "path": "crates/pen-search/src/naturality_orbit_transport.rs",
+      "role": "certified_Stage4_R_T1_orbit_distinctness_input",
+      "byte_length": 72344,
+      "blake3": "blake3:92baec2b7bf3d8f91b59f1b08058a9fcb02eb40d9ff27026b85af17532f6fbcb"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance_program.rs",
+      "role": "BI_create_new_replay_and_comparator_isolation",
+      "byte_length": 94866,
+      "blake3": "blake3:cfcabb1569aa493e263e3c4a1e1191425ffff6513e9b3df6674b504feeec3e8a"
+    },
+    {
+      "path": "docs/phase5b_reselection_burn_v2.json",
+      "role": "sealed_stage4_identity_and_stages1_to7_comparator_only",
+      "byte_length": 27512,
+      "blake3": "blake3:e18da4d5902ba2bf540473da07ab067536d64a28953730437dff8e619bc3167e"
+    },
+    {
+      "path": "docs/phase5b_reselection_program_v3.json",
+      "role": "frozen_v3_live_replay_diagnostic_only",
+      "byte_length": 3707,
+      "blake3": "blake3:af1f7a0c339557ec76ca5214996a333e7238b56c1340845fcd6546fe2c6f438b"
+    },
+    {
+      "path": "docs/phase5b_reselection_burn_v3.json",
+      "role": "certified_vector_winners_and_discharger_comparator_only",
+      "byte_length": 36931,
+      "blake3": "blake3:399ed3c499ecc79797ed09c89b81b3fcf963c09a391d221d657a7198d94bd643"
+    },
+    {
+      "path": "docs/schema2_e5_future_hole_finale_v2_dependent_context.json",
+      "role": "E5_dependent_context_regression_comparator_only",
+      "byte_length": 247022,
+      "blake3": "blake3:794d762b4378970ba6152547db3950d56030dfb2c1811276aba99f1cd8d3e726"
+    },
+    {
+      "path": "docs/phase5b_full_history_v1.json",
+      "role": "enacted_candidate_dependent_exact_nu_join_post_seal_only",
+      "byte_length": 512055,
+      "blake3": "blake3:2c2978fbbcb4bdfe0bdb95ef48d460961da468c993b03e69958f7614d50b4b79"
+    }
+  ],
+  "sealed_branch_certificate_digest": "blake3:194c249bfc2e8bc096928aaa48518d8e648a0dc07c1fc6738f306da6eb8bb65e",
+  "enacted_branch_root_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+  "enacted_identified_by_sealed_stage4_digest_only": true,
+  "only_authorized_preseal_historical_read_was_stage4_identity": true,
+  "branch_replayed_before_historical_outcome_comparisons": true,
+  "non_enacted_branches_issued_before_bi0": 0,
+  "bi0_is_hard_gate_before_bi1": true,
+  "v2_archive_digest_valid": true,
+  "v3_archive_digest_valid": true,
+  "e5_archive_digest_valid": true,
+  "enacted_full_history_archive_digest": "blake3:0f9838e4b9f2f5dca8b2df3cbc5c759d832e0d01800cb486ce17f548e477f141",
+  "enacted_full_history_archive_digest_valid": true,
+  "enacted_archived_candidate_hash_total_join_valid": true,
+  "enacted_archived_certified_vector_numerically_matched_post_seal": true,
+  "enacted_winner_nu_provenance_exact": false,
+  "enacted_nu_provenance_gap_count": 11,
+  "exact_nu_provenance_reserved_for_g3_not_bi0_numeric_regression": true,
+  "v3_live_replay_valid": false,
+  "v3_live_replay_errors": [
+    "prerequisite failed: program is not a valid preregistration: [\"prerequisite failed: v2 program replay failed: [\\\"prerequisite failed: full history did not authorize reselection: [\\\\\\\"prerequisite failed: Agent A v4 did not replay: [\\\\\\\\\\\\\\\"prerequisite failed: E-2b handoff did not replay: [\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"prerequisite failed: completed membership did not authorize E-2b: [\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"prerequisite failed: global E-4 v10 did not authorize membership: prerequisite failed: v9 replay failed: prerequisite failed: sealed v8 replay/invariants failed: prerequisite failed: contextual Internal replay failed: certificate differs from definition replay\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"]\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"]\\\\\\\\\\\\\\\"]\\\\\\\"]\\\"]\"]"
+  ],
+  "e5_live_replay_valid": false,
+  "e5_live_replay_errors": [
+    "prerequisite failed: stable A3 exhaustiveness certificate did not replay: certificate differs from definition replay"
+  ],
+  "frozen_archive_self_digest_comparators_are_bi0_regression_references": true,
+  "live_replay_diagnostics_are_not_bi0_acceptance_inputs": true,
+  "expected_complete_vector": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ],
+    [
+      8,
+      17,
+      5
+    ],
+    [
+      9,
+      17,
+      4
+    ],
+    [
+      10,
+      19,
+      4
+    ],
+    [
+      11,
+      26,
+      5
+    ],
+    [
+      12,
+      34,
+      6
+    ],
+    [
+      13,
+      46,
+      7
+    ],
+    [
+      14,
+      62,
+      9
+    ],
+    [
+      15,
+      103,
+      8
+    ]
+  ],
+  "observed_complete_vector": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ],
+    [
+      8,
+      17,
+      5
+    ],
+    [
+      9,
+      17,
+      4
+    ],
+    [
+      10,
+      19,
+      4
+    ],
+    [
+      11,
+      26,
+      5
+    ],
+    [
+      12,
+      34,
+      6
+    ],
+    [
+      13,
+      46,
+      7
+    ],
+    [
+      14,
+      62,
+      9
+    ],
+    [
+      15,
+      103,
+      8
+    ]
+  ],
+  "complete_vector_exact": true,
+  "expected_winner_hashes": [
+    [
+      1,
+      "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7"
+    ],
+    [
+      2,
+      "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555"
+    ],
+    [
+      3,
+      "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e"
+    ],
+    [
+      4,
+      "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407"
+    ],
+    [
+      5,
+      "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+    ],
+    [
+      6,
+      "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+    ],
+    [
+      7,
+      "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"
+    ],
+    [
+      8,
+      "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0"
+    ],
+    [
+      9,
+      "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491"
+    ],
+    [
+      10,
+      "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e"
+    ],
+    [
+      11,
+      "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd"
+    ],
+    [
+      12,
+      "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb"
+    ],
+    [
+      13,
+      "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1"
+    ],
+    [
+      14,
+      "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c"
+    ],
+    [
+      15,
+      "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4"
+    ]
+  ],
+  "observed_winner_hashes": [
+    [
+      1,
+      "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7"
+    ],
+    [
+      2,
+      "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555"
+    ],
+    [
+      3,
+      "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e"
+    ],
+    [
+      4,
+      "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407"
+    ],
+    [
+      5,
+      "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+    ],
+    [
+      6,
+      "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+    ],
+    [
+      7,
+      "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"
+    ],
+    [
+      8,
+      "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0"
+    ],
+    [
+      9,
+      "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491"
+    ],
+    [
+      10,
+      "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e"
+    ],
+    [
+      11,
+      "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd"
+    ],
+    [
+      12,
+      "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb"
+    ],
+    [
+      13,
+      "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1"
+    ],
+    [
+      14,
+      "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c"
+    ],
+    [
+      15,
+      "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4"
+    ]
+  ],
+  "winner_hashes_exact": true,
+  "expected_v3_discharger_census": [
+    [
+      8,
+      1
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      12,
+      1
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      15,
+      1
+    ]
+  ],
+  "observed_v3_discharger_census": [
+    [
+      8,
+      1
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      12,
+      1
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      15,
+      1
+    ]
+  ],
+  "v3_discharger_census_exact": true,
+  "expected_e5_projection": {
+    "historical_window_count": 16,
+    "final_a3_inventory_count": 89,
+    "final_unary_count": 17,
+    "final_direct_chronological_count": 64,
+    "final_pointwise_chronological_count": 8,
+    "final_higher_count": 0,
+    "final_structural_count": 0,
+    "structural_registration_count": 13,
+    "structural_realization_count": 13,
+    "exact_d_partition": true,
+    "derivable_instance_count": 89,
+    "underdetermined_instance_count": 0,
+    "stage3_wrinkle_reproduced": true,
+    "focus_projection_reproduces_ladder": true,
+    "semantic_o16_empty": true,
+    "f1_executed": true,
+    "f1_excluded": true,
+    "theorem12_full_instance_granularity_proved": true,
+    "e5_class_complete": true
+  },
+  "observed_e5_projection": {
+    "historical_window_count": 16,
+    "final_a3_inventory_count": 89,
+    "final_unary_count": 17,
+    "final_direct_chronological_count": 64,
+    "final_pointwise_chronological_count": 8,
+    "final_higher_count": 0,
+    "final_structural_count": 0,
+    "structural_registration_count": 13,
+    "structural_realization_count": 0,
+    "exact_d_partition": false,
+    "derivable_instance_count": 80,
+    "underdetermined_instance_count": 0,
+    "stage3_wrinkle_reproduced": false,
+    "focus_projection_reproduces_ladder": false,
+    "semantic_o16_empty": false,
+    "f1_executed": false,
+    "f1_excluded": false,
+    "theorem12_full_instance_granularity_proved": false,
+    "e5_class_complete": false
+  },
+  "e5_projection_exact": false,
+  "e5_membership_instance_ids_exact": true,
+  "enacted_finale_inventory_scope": "relative_to_adopted_full_A3_depth_two_rule_inventory",
+  "enacted_finale_absolute_semantic_exhaustiveness_claimed": false,
+  "enacted_finale_e5_class_complete": false,
+  "enacted_finale_expressivity_gaps": [
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_10::filler_stage_10::blake3:2e34e5c5bd8a3151998b2763ac5548b196773bffa367cc9abd1a22783120f807",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_11::filler_stage_11::blake3:634b7ee5a5214e7f6b4babd71d7d23b3ffdf7e39435be5da1b76af06a8785e83",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_12::filler_stage_12::blake3:9aef5cbf19b07e209e6492b58becc31a5c26764007f0914ea8b176979f7f4195",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_13::filler_stage_13::blake3:24bc929bb24e128ec740f40a76fe95e399738926a1c0d28cc9f0b89786a98e3c",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_14::filler_stage_14::blake3:db8b4a3b4ce6aef1981743ec560aac59ea2127dca16bce69f619ec57c69a40fa",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_15::filler_stage_15::blake3:205c0b51a36c300c79904005386dee57a24035c281575d44774cb9a3c326b0a8",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_3::filler_stage_4::blake3:bd4e937ab6cb79ef48ec2a2f9eab6a4a907747cb5c4c9c702cf3272b6817f710",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_4::filler_stage_4::blake3:bac9157bbfb495032514d08fd9a57a71ead67cfeb83b3ebfe541a4399fff51ee",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_5::filler_stage_5::blake3:ae2f5b35712d5c81ff84319c855a1d4a0466b56bf551b3ca132eca1e9e00ec80",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_6::filler_stage_6::blake3:ff8ab657c0c2b9258bc3b32509bf8f7c99747c30ea8d737b60e3e976cc47d9f0",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_7::filler_stage_7::blake3:c70cc8bf79e386ef0ea7c458373423727c594da1485ec1fabbb3dbf435192cf8",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_8::filler_stage_8::blake3:e4880f366e50a1e034b12df5b92c13d1373ef22438dcd935ac1e9679e6b21f2d",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_9::filler_stage_9::blake3:72c139e8cfa6794ce70e28d5eae6657917fd3e6700857ea54e56176fdd7cfea1",
+    "bi_chronological_membership_gap::blake3:b58e45291859c7302c08d8ced3bb88c61cb504cded1e946bf1db01228eca7c85::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 0); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:99605d9dd77233adc3acdd183965f5ee7f59d464df6e850ebc549e5ebdd31676::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 1); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:30b10b3f8b7d56dacfc2ef243f276b50fae7d0f4f9e80b4bfad777c834b9a87c::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 2); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 3); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:d4380b4923fe6587a830d69148b508be376c7bb5017e6560fec8f47d12721c8f::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 4); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:2828821957474eaf9840f91edb1b35523ad0e01f184d33cf75231c4a878556d6::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 5); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:6689417d503d8b44653bb8d8b305f9e4bca1c066c70f9cc94c1c8142b1f5a11e::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 6); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:e01d2d64feaf450f8e0a9d1884c5bddeebfac1790efcbb2bbaf4d3f28554397d::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 7); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }",
+    "bi_chronological_membership_gap::blake3:03df6ccb8f67b48dcd987a95aabfe52f4670160f9b7767d3fc799f83a12440c1::BI_CHRONOLOGICAL_INTERFACE_SLOT_MAP_UNDECLARED_V1: A3 ChronologicalInteraction carries no interface-to-parameter map; older=(step 14, clause 8); newest=(step 15, clause 6); newest source arity=2; parameter_sorts=[Type, Type]; canonical_normal_form=Lam(App(Eventually(Var(1)), Var(2))); renaming=RenamingMap { free_scope_len: 7, forward: [(1, 1), (2, 2)] }"
+  ],
+  "enacted_finale_final_a3_inventory_count": 89,
+  "enacted_finale_derivable_instance_count": 80,
+  "enacted_finale_underdetermined_instance_ids": [],
+  "enacted_finale_issuer_gap_instance_ids": [
+    "blake3:03df6ccb8f67b48dcd987a95aabfe52f4670160f9b7767d3fc799f83a12440c1",
+    "blake3:2828821957474eaf9840f91edb1b35523ad0e01f184d33cf75231c4a878556d6",
+    "blake3:30b10b3f8b7d56dacfc2ef243f276b50fae7d0f4f9e80b4bfad777c834b9a87c",
+    "blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571",
+    "blake3:6689417d503d8b44653bb8d8b305f9e4bca1c066c70f9cc94c1c8142b1f5a11e",
+    "blake3:99605d9dd77233adc3acdd183965f5ee7f59d464df6e850ebc549e5ebdd31676",
+    "blake3:b58e45291859c7302c08d8ced3bb88c61cb504cded1e946bf1db01228eca7c85",
+    "blake3:d4380b4923fe6587a830d69148b508be376c7bb5017e6560fec8f47d12721c8f",
+    "blake3:e01d2d64feaf450f8e0a9d1884c5bddeebfac1790efcbb2bbaf4d3f28554397d"
+  ],
+  "enacted_finale_realization_gap_ids": [
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_10::filler_stage_10::blake3:2e34e5c5bd8a3151998b2763ac5548b196773bffa367cc9abd1a22783120f807",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_11::filler_stage_11::blake3:634b7ee5a5214e7f6b4babd71d7d23b3ffdf7e39435be5da1b76af06a8785e83",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_12::filler_stage_12::blake3:9aef5cbf19b07e209e6492b58becc31a5c26764007f0914ea8b176979f7f4195",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_13::filler_stage_13::blake3:24bc929bb24e128ec740f40a76fe95e399738926a1c0d28cc9f0b89786a98e3c",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_14::filler_stage_14::blake3:db8b4a3b4ce6aef1981743ec560aac59ea2127dca16bce69f619ec57c69a40fa",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_15::filler_stage_15::blake3:205c0b51a36c300c79904005386dee57a24035c281575d44774cb9a3c326b0a8",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_3::filler_stage_4::blake3:bd4e937ab6cb79ef48ec2a2f9eab6a4a907747cb5c4c9c702cf3272b6817f710",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_4::filler_stage_4::blake3:bac9157bbfb495032514d08fd9a57a71ead67cfeb83b3ebfe541a4399fff51ee",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_5::filler_stage_5::blake3:ae2f5b35712d5c81ff84319c855a1d4a0466b56bf551b3ca132eca1e9e00ec80",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_6::filler_stage_6::blake3:ff8ab657c0c2b9258bc3b32509bf8f7c99747c30ea8d737b60e3e976cc47d9f0",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_7::filler_stage_7::blake3:c70cc8bf79e386ef0ea7c458373423727c594da1485ec1fabbb3dbf435192cf8",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_8::filler_stage_8::blake3:e4880f366e50a1e034b12df5b92c13d1373ef22438dcd935ac1e9679e6b21f2d",
+    "BI_STRUCTURAL_FILLER_ORDINARY_CHARGE_PROVENANCE_UNCERTIFIED_V1::registration_stage_9::filler_stage_9::blake3:72c139e8cfa6794ce70e28d5eae6657917fd3e6700857ea54e56176fdd7cfea1"
+  ],
+  "bi0_passed": false,
+  "f_bi5_triggered": true,
+  "historical_outcome_comparators_used_only_after_independent_branch_seal": true,
+  "mutation_falsifiers": [
+    "flip_BI0_or_any_exactness_verdict_then_replay_must_fail",
+    "flip_any_vector_count_or_winner_digest_then_replay_must_fail",
+    "flip_any_E5_projection_O16_or_F1_field_then_replay_must_fail"
+  ],
+  "result_digest": "blake3:ffd9fde973ca1d90fa16cff44bb0f419abbf5ec06dc38c9fa51d1a32d9d0221f"
+}

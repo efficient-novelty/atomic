@@ -97,9 +97,7 @@ fn expr_exhibits(expr: &Expr, former: CharacteristicFormer) -> bool {
         ) => true,
         (CharacteristicFormer::Temporal, Expr::Next(_) | Expr::Eventually(_)) => true,
         (CharacteristicFormer::Binder, Expr::Lam(_) | Expr::Pi(_, _) | Expr::Sigma(_, _)) => true,
-        (CharacteristicFormer::LibraryReference { min_step }, Expr::Lib(step)) => {
-            *step >= min_step
-        }
+        (CharacteristicFormer::LibraryReference { min_step }, Expr::Lib(step)) => *step >= min_step,
         _ => false,
     };
     if direct {
@@ -157,7 +155,11 @@ fn orbit_id(stage: u32, package: &str, disposition: &str) -> DemandOrbitId {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub enum LocalityTransition {
     /// The demand persists into the next stage's window (transport).
-    Transported { package: String, from_stage: u32, to_stage: u32 },
+    Transported {
+        package: String,
+        from_stage: u32,
+        to_stage: u32,
+    },
     /// The demand was discharged by the step accepted at `from_stage`.
     Discharged {
         package: String,
@@ -353,14 +355,15 @@ pub fn stage_inventories_for_timeline(
                 }
                 // Discharged: the accepted entry must exhibit the
                 // package's characteristic former — checked, not assumed.
-                let answering_family = step_families(closure, answer_step)
-                    .into_iter()
-                    .find(|family| {
-                        family_answers_package(
-                            package,
-                            &family.presentation.canonical_normal_form,
-                        )
-                    });
+                let answering_family =
+                    step_families(closure, answer_step)
+                        .into_iter()
+                        .find(|family| {
+                            family_answers_package(
+                                package,
+                                &family.presentation.canonical_normal_form,
+                            )
+                        });
                 let Some(answering_family) = answering_family else {
                     expiries.push(LocalityTransition::Expired {
                         package: (*package).to_string(),
@@ -507,8 +510,16 @@ mod tests {
         assert_eq!(first, second);
         assert_eq!(first.inventories.len(), 16);
         for inventory in &first.inventories {
-            assert!(inventory.extraction_completeness_assumption.is_kernel_verified());
-            assert!(inventory.derivability_completeness_assumption.is_kernel_verified());
+            assert!(
+                inventory
+                    .extraction_completeness_assumption
+                    .is_kernel_verified()
+            );
+            assert!(
+                inventory
+                    .derivability_completeness_assumption
+                    .is_kernel_verified()
+            );
             assert!(inventory.window_locality_assumption.is_kernel_verified());
         }
         assert!(first.locality_ledger.holds);
@@ -533,12 +544,17 @@ mod tests {
             .filter(|orbit| {
                 matches!(
                     orbit.resolution,
-                    OrbitResolution::Answered { discharged_by_step: 15, .. }
+                    OrbitResolution::Answered {
+                        discharged_by_step: 15,
+                        ..
+                    }
                 )
             })
             .collect();
         assert!(
-            answered.iter().any(|orbit| orbit.package == "temporal_shell"),
+            answered
+                .iter()
+                .any(|orbit| orbit.package == "temporal_shell"),
             "temporal shell discharge by the DCT must be recorded at stage 16"
         );
     }
@@ -596,8 +612,10 @@ mod tests {
         let mut answered_count = 0;
         for inventory in &extraction.inventories {
             for orbit in &inventory.orbits {
-                if let OrbitResolution::Answered { discharged_by_step, answer } =
-                    &orbit.resolution
+                if let OrbitResolution::Answered {
+                    discharged_by_step,
+                    answer,
+                } = &orbit.resolution
                 {
                     answered_count += 1;
                     assert!(answer.is_kernel_verified());
@@ -606,8 +624,7 @@ mod tests {
                         .families
                         .iter()
                         .find(|family| {
-                            family.step == *discharged_by_step
-                                && family.id.as_str() == family_id
+                            family.step == *discharged_by_step && family.id.as_str() == family_id
                         })
                         .expect("answering family exists in the closure");
                     assert!(family_answers_package(
@@ -620,7 +637,10 @@ mod tests {
         // The guard rail discharges each of the twelve packages exactly
         // once across the corpus (persistence holds), and every discharge
         // is recorded.
-        assert!(answered_count >= 10, "expected the historical discharges, got {answered_count}");
+        assert!(
+            answered_count >= 10,
+            "expected the historical discharges, got {answered_count}"
+        );
     }
 
     #[test]

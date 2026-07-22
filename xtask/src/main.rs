@@ -83,7 +83,10 @@ fn token_seal_check(root: PathBuf) -> Result<()> {
         for violation in &violations {
             eprintln!("token-seal-check violation: {violation}");
         }
-        bail!("token seal check failed with {} violation(s)", violations.len());
+        bail!(
+            "token seal check failed with {} violation(s)",
+            violations.len()
+        );
     }
 }
 
@@ -139,7 +142,9 @@ fn scan_token_seal(source: &str) -> Vec<String> {
             let preamble_start = struct_start.saturating_sub(600);
             let preamble = &flat[preamble_start..struct_start];
             if preamble.contains("Deserialize") {
-                violations.push(format!("{token} derives Deserialize (a public constructor)"));
+                violations.push(format!(
+                    "{token} derives Deserialize (a public constructor)"
+                ));
             }
             if preamble.contains("Default") {
                 violations.push(format!("{token} derives Default (a public constructor)"));
@@ -157,8 +162,7 @@ fn scan_token_seal(source: &str) -> Vec<String> {
                 let mut fn_search = 0;
                 while let Some(fn_offset) = body[fn_search..].find("pub fn ") {
                     let fn_start = fn_search + fn_offset;
-                    let signature_end =
-                        body[fn_start..].find('{').unwrap_or(body.len() - fn_start);
+                    let signature_end = body[fn_start..].find('{').unwrap_or(body.len() - fn_start);
                     let signature = &body[fn_start..fn_start + signature_end];
                     if let Some(return_position) = signature.rfind("->")
                         && signature[return_position..].contains("Self")

@@ -1,0 +1,386 @@
+{
+  "version": "schema2-e34-enlarged-sub-basis-m1-sweep-v1",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_v4.json",
+      "role": "strict_enlarged_sub_basis_predecessor",
+      "byte_length": 10377,
+      "blake3": "blake3:47c03872f02d18026c77ea9e84d493d8dd9e956c694341fb3e5cdfe902727abe"
+    },
+    {
+      "path": "docs/e2_phase_order_adjudication.md",
+      "role": "adopted_monotone_membership_authority",
+      "byte_length": 3741,
+      "blake3": "blake3:6f6eb9e071bd05ce172a113da96653ba281d7eab215a23364ee556a0992f246f"
+    },
+    {
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "adopted_step8_derived_action_rule",
+      "byte_length": 6355,
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d"
+    }
+  ],
+  "enlarged_sub_basis": {
+    "v4_predecessor_digest": "blake3:c5b598eba49f66cb7f845fdab43ab217a40b7d9ce2ec971a91989712711fcc4a",
+    "v4_strict_replay_valid": true,
+    "ordinary_naturality_count": 9,
+    "ordinary_constructor_inventory": [
+      "fresh_formation",
+      "point_or_unit_intro",
+      "path_constructor_intro",
+      "recursor",
+      "inductor",
+      "trunc_parametric_action",
+      "post_path_operation",
+      "post_path_coherence",
+      "cell_action"
+    ],
+    "every_ordinary_token_replayed": true,
+    "public_cubical_constructor_count": 8,
+    "public_cubical_constructor_inventory": [
+      "point",
+      "motive_base",
+      "path_method",
+      "path_elim",
+      "dim_lambda",
+      "dim_app",
+      "coe",
+      "hcom"
+    ],
+    "every_public_cubical_action_replayed": true,
+    "prior_m1_generated_count": 1,
+    "prior_m1_generated_subjects": [
+      "step8_cell_action"
+    ],
+    "sub_basis_digest": "blake3:3fa9fd6d77721526328be804ff859c07996313d1832400ada03a991d2cdb6af5"
+  },
+  "target": {
+    "step8_derivation_hash": "blake3:18a5766e762b29a85a458805b3a8bdafd3b6fe91584dc533c5c9c6eb2a7901f3",
+    "registered_signature_derivation_hash": "blake3:c1136344bccb300a0ca53e2251df2d6a099ce47b7984e4fe705b650f97a5d9ea",
+    "membership_rule": "derived-action-generator-membership-rule-v1",
+    "registered_type": "Pi x:El(S3). Path El(S3) (mu(base,x)) x",
+    "operation_signature_typed": true,
+    "left_unit_signature_typed": true,
+    "outer_pi_verified": true,
+    "codomain_path_verified": true,
+    "registered_left_unit_term_available": false,
+    "pending_before_sweep": true
+  },
+  "initial_reachable_sorts": [
+    "typed_step8_parent_operation",
+    "registered_step8_cell",
+    "generated_step8_cell_action",
+    "generic_ordinary_schema",
+    "generic_post_path_coherence",
+    "public_cubical_term"
+  ],
+  "rules": [
+    {
+      "rule": "ordinary_normalization_naturality:fresh_formation",
+      "evidence_derivation_hashes": [
+        "blake3:58b2c035645738e65ce33d947383faab831de6fd0cb6ed828ffbacba94e2760c"
+      ],
+      "premises": [
+        "generic_ordinary_schema"
+      ],
+      "conclusion": "generic_ordinary_schema",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:point_or_unit_intro",
+      "evidence_derivation_hashes": [
+        "blake3:ba5cc225e1bd36392af01d747eb09e6237b2c0c308920745ab6d97b0ed8f5c1c"
+      ],
+      "premises": [
+        "generic_ordinary_schema"
+      ],
+      "conclusion": "generic_ordinary_schema",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:path_constructor_intro",
+      "evidence_derivation_hashes": [
+        "blake3:f6376e2a4e1eaee01d8bf16b47045c99f4491ba66e1777cd0610cd038eb85204"
+      ],
+      "premises": [
+        "generic_ordinary_schema"
+      ],
+      "conclusion": "generic_ordinary_schema",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:recursor",
+      "evidence_derivation_hashes": [
+        "blake3:7c4d51776f036400287872600813c53b7982a65dc25aa3ea401102ef473c19dc"
+      ],
+      "premises": [
+        "generic_ordinary_schema"
+      ],
+      "conclusion": "generic_ordinary_schema",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:inductor",
+      "evidence_derivation_hashes": [
+        "blake3:740bfe7c2c83892e79d2a398684a2f970730dbd387506583c2997dc911ca3061"
+      ],
+      "premises": [
+        "generic_ordinary_schema"
+      ],
+      "conclusion": "generic_ordinary_schema",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:trunc_parametric_action",
+      "evidence_derivation_hashes": [
+        "blake3:72c90c4de2be80cbdd02e8def142c61905c730c04bb85d651fe5f7ac6fbbac17"
+      ],
+      "premises": [
+        "generic_ordinary_schema"
+      ],
+      "conclusion": "generic_ordinary_schema",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:post_path_operation",
+      "evidence_derivation_hashes": [
+        "blake3:0eb36d7142e1d662f5259d5d3022eff9b2b499fb505620ce5183a5465c40f721"
+      ],
+      "premises": [
+        "typed_step8_parent_operation"
+      ],
+      "conclusion": "typed_step8_parent_operation",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:post_path_coherence",
+      "evidence_derivation_hashes": [
+        "blake3:00064dc6c0c30eba581af3eb42178e1d0ae518fc7a8e4f0f360b1f28946ac294"
+      ],
+      "premises": [
+        "generic_post_path_coherence"
+      ],
+      "conclusion": "generic_post_path_coherence",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:cell_action",
+      "evidence_derivation_hashes": [
+        "blake3:c95de6f739e709b7fe3db01582b6db3099bd84eb692059307a9ad3cfca4946b4"
+      ],
+      "premises": [
+        "generated_step8_cell_action"
+      ],
+      "conclusion": "generated_step8_cell_action",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "ordinary_normalization_naturality:post_path_coherence:step8_specialization",
+      "evidence_derivation_hashes": [
+        "blake3:00064dc6c0c30eba581af3eb42178e1d0ae518fc7a8e4f0f360b1f28946ac294"
+      ],
+      "premises": [
+        "step8_left_unit_coherence"
+      ],
+      "conclusion": "step8_left_unit_coherence",
+      "fired": false,
+      "concludes_left_unit": true,
+      "left_unit_premise_required": true,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:point",
+      "evidence_derivation_hashes": [
+        "blake3:07ee3ceefd73facef56749128789ac8665640060e485dd0674fd9f7237671057",
+        "blake3:b2206e4e0e6a1910dfa60fb3e8246726de2e5eb07019d1c01886f1df9d62874e",
+        "blake3:05feafbd7026a016a710614c084fc2af2a9b92366a2c56ae4f57ecae8e61b19b"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:motive_base",
+      "evidence_derivation_hashes": [
+        "blake3:07ee3ceefd73facef56749128789ac8665640060e485dd0674fd9f7237671057",
+        "blake3:8dd6bd67290e86a186fafceb20aae0d989643cfc306b74b75eafecbaa643bba4"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:path_method",
+      "evidence_derivation_hashes": [
+        "blake3:07ee3ceefd73facef56749128789ac8665640060e485dd0674fd9f7237671057"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:path_elim",
+      "evidence_derivation_hashes": [
+        "blake3:07ee3ceefd73facef56749128789ac8665640060e485dd0674fd9f7237671057"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:dim_lambda",
+      "evidence_derivation_hashes": [
+        "blake3:05feafbd7026a016a710614c084fc2af2a9b92366a2c56ae4f57ecae8e61b19b"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:dim_app",
+      "evidence_derivation_hashes": [
+        "blake3:05feafbd7026a016a710614c084fc2af2a9b92366a2c56ae4f57ecae8e61b19b"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:coe",
+      "evidence_derivation_hashes": [
+        "blake3:8dd6bd67290e86a186fafceb20aae0d989643cfc306b74b75eafecbaa643bba4"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "public_cubical_dimension_action:hcom",
+      "evidence_derivation_hashes": [
+        "blake3:b2206e4e0e6a1910dfa60fb3e8246726de2e5eb07019d1c01886f1df9d62874e"
+      ],
+      "premises": [
+        "public_cubical_term"
+      ],
+      "conclusion": "public_cubical_term",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    },
+    {
+      "rule": "existing_parent_cube_map_generation",
+      "evidence_derivation_hashes": [
+        "blake3:563760a3d4326aca4fbb08130df2d13fe2c1cedddd1650fb9874ecbe8d5bbe50"
+      ],
+      "premises": [
+        "typed_step8_parent_operation",
+        "registered_step8_cell"
+      ],
+      "conclusion": "generated_step8_cell_action",
+      "fired": true,
+      "concludes_left_unit": false,
+      "left_unit_premise_required": false,
+      "noncircular_left_unit_derivation": false
+    }
+  ],
+  "fixed_point_reachable_sorts": [
+    "typed_step8_parent_operation",
+    "registered_step8_cell",
+    "generated_step8_cell_action",
+    "generic_ordinary_schema",
+    "generic_post_path_coherence",
+    "public_cubical_term"
+  ],
+  "fixed_point_iterations": 1,
+  "target_reachable": false,
+  "explicit_generating_derivation_found": false,
+  "m1_generated_verdict_issued": false,
+  "independent_verdict_issued": false,
+  "generated_count_before": 1,
+  "generated_count_after": 1,
+  "pending_count_before": 5,
+  "pending_count_after": 5,
+  "stage1_roles_still_pending": [
+    "kernel_head",
+    "adjoint_mate",
+    "support_action",
+    "coherence"
+  ],
+  "left_unit_still_pending": true,
+  "obstruction": "E34_M1_LEFT_UNIT_REQUIRES_A_NONCIRCULAR_PATH_COHERENCE_GENERATOR",
+  "forbidden_outputs": {
+    "independent_verdict_issued": false,
+    "ordinary_family_token_issued": false,
+    "stage_count_issued": false,
+    "e2b_executed": false,
+    "global_e4_claimed": false,
+    "global_halt_claimed": false
+  },
+  "outcome": "enlarged_sub_basis_sweep_clean_no_noncircular_step8_left_unit_generation_derivation",
+  "permitted_conclusion": "The v4 basis transports an already supplied PostPathCoherence and acts on already typed cubical terms, but neither operation introduces the Step-8 left-unit path coherence from mu. The only rule with the target as conclusion requires that same target as a premise, so M1 issues no new Generated verdict. This is not an Independent verdict; the pending set remains five.",
+  "result_digest": "blake3:aec9896de1fdbc665a4c231fb2365ffc93bf3d08f6829695640b4c9174904838"
+}

@@ -220,10 +220,7 @@ impl PredecessorClosure {
     }
 }
 
-fn family_id(
-    signature: &SealedSignature,
-    presentation: &CanonicalPresentation,
-) -> NaturalFamilyId {
+fn family_id(signature: &SealedSignature, presentation: &CanonicalPresentation) -> NaturalFamilyId {
     let payload = serde_json::json!({
         "binding": KERNEL_BINDING_CONVENTION,
         "equality": KERNEL_EQUALITY_PROCEDURE,
@@ -257,8 +254,7 @@ fn canonicalize(
         .collect();
     let map: BTreeMap<u32, u32> = forward.iter().copied().collect();
     let params_used = forward.len() as u32;
-    let canonical_normal_form =
-        renumber_levels(normal_form, free_scope_len, &map, params_used);
+    let canonical_normal_form = renumber_levels(normal_form, free_scope_len, &map, params_used);
     let parameters = order
         .iter()
         .map(|level| {
@@ -561,8 +557,7 @@ pub fn predecessor_closure(
             .map(|clause| clause.kernel_role)
             .collect();
         for clause in &elaboration.clauses {
-            let free_scope_len =
-                elaboration.ambient_parameters + u32::from(clause.clause_index);
+            let free_scope_len = elaboration.ambient_parameters + u32::from(clause.clause_index);
             let presentation = canonicalize(
                 &clause.normal_form,
                 free_scope_len,
@@ -570,7 +565,10 @@ pub fn predecessor_closure(
                 elaboration.ambient_parameters,
             );
             let id = family_id(signature, &presentation);
-            if families.iter().all(|existing: &ClosureFamily| existing.id != id) {
+            if families
+                .iter()
+                .all(|existing: &ClosureFamily| existing.id != id)
+            {
                 families.push(ClosureFamily {
                     step: entry.step,
                     clause_index: clause.clause_index,
@@ -910,12 +908,8 @@ mod tests {
             }
             Expr::App(left, _) if matches!(left.as_ref(), Expr::Univ) => ClauseRole::Formation,
             Expr::Var(_) | Expr::Lam(_) | Expr::Refl(_) => ClauseRole::Introduction,
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => {
-                ClauseRole::Introduction
-            }
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => {
-                ClauseRole::Elimination
-            }
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => ClauseRole::Introduction,
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => ClauseRole::Elimination,
             Expr::App(_, _) => ClauseRole::Introduction,
             Expr::PathCon(_) => ClauseRole::PathAttach,
             _ => ClauseRole::Formation,
@@ -1202,8 +1196,7 @@ mod tests {
                             bound
                                 .var_refs()
                                 .iter()
-                                .all(|level| *level
-                                    <= family.presentation.parameters.len() as u32),
+                                .all(|level| *level <= family.presentation.parameters.len() as u32),
                             "capture-incoherent substitution recorded"
                         );
                     }
@@ -1296,8 +1289,7 @@ mod tests {
             for start in 0..=(pool.len() - kappa) {
                 let clauses: Vec<Expr> = pool[start..start + kappa].to_vec();
                 let candidate = tel(clauses.clone());
-                let outcome =
-                    extract_candidate_families(&signature, &closure, &candidate, 15);
+                let outcome = extract_candidate_families(&signature, &closure, &candidate, 15);
                 let Some(extraction) = outcome.extraction() else {
                     continue;
                 };
@@ -1310,8 +1302,7 @@ mod tests {
                     .sum();
                 assert_eq!(accounted, kappa, "kappa {kappa} window {start}");
                 // Replays byte-identically.
-                let again =
-                    extract_candidate_families(&signature, &closure, &candidate, 15);
+                let again = extract_candidate_families(&signature, &closure, &candidate, 15);
                 assert_eq!(outcome, again);
             }
         }

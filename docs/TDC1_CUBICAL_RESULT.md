@@ -1,5 +1,15 @@
 # TDC cubical fragment v3: conditional Step 5--8 basis replay
 
+> **DEMAND-COMPLETE v1 successor (2026-07-19):** the coarse demand ladder
+> replays, including the stage-3 wrinkle, but the independent A3 `C(W)`
+> identification cannot be formed from the written sources. The current
+> extractor mirrors the caller/focus timeline; the historical instance
+> grammar, orbit quotient, and `D`-membership decision remain undefined.
+> Consequently this document's one-live-output versus zero-live-output
+> comparison remains conditional, and the registered `d = 4` attachment is
+> not proved demand-orphaned. See `docs/DEMAND_COMPLETENESS_RESULT.md`. The
+> original TDC v3 body below remains archival.
+
 This is a create-new, versioned follow-up to
 `tdc1-typed-d4-certificate-v1`. It also supersedes the rejected
 `tdc1-cubical-step5-8-regression-v2` draft schema: that draft's boundary

@@ -14,15 +14,15 @@
 //! a conditional theorem into an unconditional one.
 
 use crate::step16_automaton::{
-    replay_step16_certificate, run_step16_automaton, CertificateReplay as ShippedReplay,
-    Step16AutomatonCertificate, Step16Decision,
+    CertificateReplay as ShippedReplay, Step16AutomatonCertificate, Step16Decision,
+    replay_step16_certificate, run_step16_automaton,
 };
 use pen_core::hash::blake3_hex;
 use pen_core::rational::Rational;
 use pen_core::telescope::Telescope;
 use pen_eval::bar::compute_bar;
 use pen_eval::certified_novelty::{
-    derive_linear_bound, CertifiedSurfaceCaps, ClassCeilings, LinearBoundTheorem,
+    CertifiedSurfaceCaps, ClassCeilings, LinearBoundTheorem, derive_linear_bound,
 };
 use pen_eval::halting::{genesis_bar_16, genesis_history};
 use pen_eval::p5_record::{ImportDag, P5ImportAudit};
@@ -418,8 +418,8 @@ fn build_semantic_normalization_evidence() -> SemanticNormalizationEvidence {
     use pen_type::normalize::KERNEL_BINDING_CONVENTION;
 
     let signature = SealedSignature::genesis_del_h15();
-    let closure = predecessor_closure(&signature)
-        .expect("the sealed corpus yields a predecessor closure");
+    let closure =
+        predecessor_closure(&signature).expect("the sealed corpus yields a predecessor closure");
     let orbits = kernel_stage_inventories(&signature, &closure)
         .expect("the sealed timeline yields kernel orbit inventories");
     let internality = certify_guarded_step15_internality(&signature, &closure)
@@ -448,8 +448,8 @@ fn build_semantic_normalization_evidence() -> SemanticNormalizationEvidence {
         })
         .collect();
 
-    let reselection = crate::semantic_reselection::run_semantic_reselection()
-        .expect("the burned run publishes");
+    let reselection =
+        crate::semantic_reselection::run_semantic_reselection().expect("the burned run publishes");
 
     SemanticNormalizationEvidence {
         program: "docs/SEMANTIC_NORMALIZATION_PROGRAM.md".to_string(),
@@ -538,7 +538,9 @@ fn build_certificate() -> CertifiedHaltCertificate {
     let semantic_boundary = SemanticCompletenessBoundary {
         certified_calculus_class_partition_complete: true,
         finite_bound_cases_complete: finite_bounds.len() == 3
-            && finite_bounds.iter().all(|bound| bound.all_classes_enumerated),
+            && finite_bounds
+                .iter()
+                .all(|bound| bound.all_classes_enumerated),
         // Outcome (B): the burned reselection halts before a completed
         // revised history exists, so the anchored embedding cannot be
         // supplied — the flag stays false BY DATA, not by omission.
@@ -685,10 +687,12 @@ mod tests {
                 .shipped_raw_telescope_quotient_complete
         );
         assert!(!certificate.semantic_boundary.original_global_halt_proven);
-        assert!(!certificate
-            .semantic_boundary
-            .outstanding_obligations
-            .is_empty());
+        assert!(
+            !certificate
+                .semantic_boundary
+                .outstanding_obligations
+                .is_empty()
+        );
         // The evidence block carries the outcome as data.
         let evidence = &certificate.semantic_normalization;
         assert_eq!(evidence.semantic_o16_empty_if_assumptions, Some(true));
@@ -740,10 +744,7 @@ mod tests {
             assert_eq!(stratum["raw_total"].as_str(), Some(*raw));
             assert_eq!(stratum["internal"].as_str(), Some(*internal));
             assert_eq!(stratum["egp_marginal"].as_str(), Some(*egp));
-            assert_eq!(
-                stratum["invalid_named_bare_univ"].as_str(),
-                Some(*invalid)
-            );
+            assert_eq!(stratum["invalid_named_bare_univ"].as_str(), Some(*invalid));
             assert_eq!(stratum["unclassified"].as_str(), Some(*unclassified));
             assert_eq!(stratum["sums_match"].as_bool(), Some(true));
             assert_eq!(stratum["unclassified_is_zero"].as_bool(), Some(true));

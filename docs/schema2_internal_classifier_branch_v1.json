@@ -1,0 +1,169 @@
+{
+  "schema": "schema2-internal-derivability-classifier-branch-v1",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "path": "docs/internal_classifier_branch_adjudication.md",
+      "role": "adopted_internal_branch_rule",
+      "byte_length": 4771,
+      "blake3": "blake3:34b2747244089a2b61b971ab776443cf4aa5ecf6a0ba808aef88738a601c3f9a"
+    },
+    {
+      "path": "docs/SEMANTIC_NORMALIZATION_PROGRAM.md",
+      "role": "preregistered_phase4_partition",
+      "byte_length": 24891,
+      "blake3": "blake3:8f54933d8f4d7d5f8a6d1c6dd1a37985aaf4dd3cedee1ab6565514460f622c96"
+    },
+    {
+      "path": "docs/schema2_g8_total_classifier_v1.json",
+      "role": "versioned_classifier_predecessor",
+      "byte_length": 5268,
+      "blake3": "blake3:86a762fcd3685f133037d3be85299008ad79b3b6dc9645f5143a39feeedb5755"
+    },
+    {
+      "path": "crates/pen-schema/src/total_classifier.rs",
+      "role": "legacy_exclusion_and_class_branches",
+      "byte_length": 27342,
+      "blake3": "blake3:c5abc6f393a8b5bc2c7007df15b1f451b6786dfbc47079c6cc893e278d994193"
+    },
+    {
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "exact_b15_typed_derivation",
+      "byte_length": 100581,
+      "blake3": "blake3:cc1027fa5e53ac1417b2bf01685bbd463cf832fe36c1b37339c360b7fc75c648"
+    },
+    {
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "frozen_absolute_level_normalization",
+      "byte_length": 18309,
+      "blake3": "blake3:b9ad659cf60175b87090b590ee0850b3635a4968a47fda5bbd3559588d57ba7a"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch.rs",
+      "role": "certificate_backed_internal_successor",
+      "byte_length": 29392,
+      "blake3": "blake3:86181c07bdc5fb7e010d316c4e722c1c7daf9626a2248c9db6008a2bf79a3ad2"
+    }
+  ],
+  "predecessor_g8_digest": "blake3:d19d97137f6ebb8fcda38117603189beda62d70eebe5692ecb4acff8e7f308da",
+  "predecessor_g8_replayed": true,
+  "adjudication_adopted": true,
+  "classifier_priority_order": [
+    "surface_or_typed_exclusion",
+    "internal_with_replayed_derivability_certificate",
+    "adopted_schema2_class",
+    "named_f_g4_obstruction"
+  ],
+  "witness_decision": {
+    "named_typed_obstruction": {
+      "legacy_decision": {
+        "named_typed_obstruction": {
+          "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+          "telescope_class": "Unknown",
+          "elaboration_derivation_hash": "blake3:ca690e741ea0351818a3b71ffb588881eddab6e5864f44724aa33461ad1991a9",
+          "candidate_digest": "blake3:09e281cf55d61d66ec1b64dcac943fcf0ef8b138a915da508eaf7677be345f75",
+          "derivation_hash": "blake3:6ae36e4ccc03c3c2b8351224acb800ba016cd5dfaab30a28732e9eaec03307b2"
+        }
+      },
+      "internal_attempt": {
+        "candidate": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": "Univ"
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 1
+                }
+              }
+            }
+          ]
+        },
+        "candidate_digest": "blake3:9b26691576f27c9fc652d9b33b881b1ee847182ecf80c474f36d2e89ab2217fa",
+        "predecessor_context": "B15: exact sealed Genesis predecessor closure through Step 15",
+        "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+        "visible_library": 15,
+        "ambient_parameters": 0,
+        "elaboration_derivation_hash": "blake3:ca690e741ea0351818a3b71ffb588881eddab6e5864f44724aa33461ad1991a9",
+        "clauses": [
+          {
+            "clause_index": 0,
+            "expression": "Univ",
+            "normal_form": "Univ",
+            "declared_role": "formation",
+            "kernel_role": "formation",
+            "root_rule": "univ-form",
+            "leaf_rules": [
+              "univ-form"
+            ],
+            "kind": "ambient_arena_reference",
+            "candidate_local_field_dependencies": [],
+            "predecessor_library_dependencies": [],
+            "derived_over_exact_b15": true,
+            "guarded_form_applies": false,
+            "weakening_erasure_inverse_laws_checked": true,
+            "derivation_hash": "blake3:045a1199cf7b9bb67ff8ec65e0dbf19c4f87c4dc32355023ee7c66ffe01f0b14"
+          },
+          {
+            "clause_index": 1,
+            "expression": {
+              "Lam": {
+                "Var": 1
+              }
+            },
+            "normal_form": {
+              "Lam": {
+                "Var": 1
+              }
+            },
+            "declared_role": "introduction",
+            "kernel_role": "introduction",
+            "root_rule": "lam-intro",
+            "leaf_rules": [
+              "field-ref-0"
+            ],
+            "kind": "candidate_local_dependency",
+            "candidate_local_field_dependencies": [
+              0
+            ],
+            "predecessor_library_dependencies": [],
+            "derived_over_exact_b15": false,
+            "guarded_form_applies": false,
+            "weakening_erasure_inverse_laws_checked": true,
+            "derivation_hash": "blake3:fae64ebbe8d09596b20e93bac78c7ab151ed13fbd915823f36cca0ec226588f3"
+          }
+        ],
+        "every_clause_derived_over_exact_b15": false,
+        "all_applicable_weakening_erasure_inverse_laws_checked": true,
+        "internal_certificate_issued": false,
+        "failure_code": "F_I2_WITNESS_LAMBDA_DEPENDS_ON_CANDIDATE_LOCAL_FIELD_NOT_B15",
+        "derivation_hash": "blake3:4329dff9ead775e24c25bfc66f6ef568cd8200c409144181a561f38fcc877afb"
+      }
+    }
+  },
+  "witness_first_obligation_executed": true,
+  "witness_univ_earned_as_arena_reference": true,
+  "witness_lambda_resolved_to_candidate_field_zero": true,
+  "witness_lambda_resolved_to_local_binder": false,
+  "witness_internal_certificate_issued": false,
+  "f_i1_no_uncertified_internal_classification": true,
+  "f_i2_triggered": true,
+  "unknown_retained": true,
+  "correctly_levelled_identity_control_classifies_internal": true,
+  "global_e4_successor_rerun_authorized": true,
+  "forbidden_outputs": {
+    "global_e4_successor_rerun_executed": false,
+    "pending_membership_verdicts_issued": false,
+    "e2b_executed": false,
+    "stage_count_issued": false,
+    "fq2_evaluated": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "internal_branch_executed_witness_failed_exact_b15_derivability_f_i2_unknown_retained",
+  "permitted_conclusion": "Univ earns the arena-reference clause, but under the frozen absolute-level convention Lam(Var(1)) refers to candidate field 0 rather than the lambda binder. The exact witness is not derivable solely over B15 and remains Unknown under F-I2/F-G4.",
+  "required_successor_action": "Rerun global E-4 create-new with this successor decision. It must remain fail-closed on the surviving exact witness; no membership verdict or count is authorized. Any semantic intent to use the identity must adjudicate Lam(Var(2)) as a new versioned candidate rather than reinterpret Var(1).",
+  "result_digest": "blake3:bcc8f6dfdcf06d3419e1818206cbe26e336192dadfa6305831bb9f4093ff61d4"
+}

@@ -1,0 +1,368 @@
+{
+  "schema": "schema2-e5-a3-successor-gap-v1",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "crates/pen-eval/src/a3_demand_grammar.rs",
+      "role": "candidate_generator_and_explicit_fail_closed_boundary",
+      "byte_length": 78834,
+      "blake3": "blake3:4d2b3690023a76009b19c1ea6628d3c6b8278d3f71bd3c1547e7d1017968442d"
+    },
+    {
+      "path": "docs/schema2_e5_demand_projection_v1.json",
+      "role": "exact_restricted_j3_predecessor",
+      "byte_length": 230345,
+      "blake3": "blake3:6093ba19e8e3f0106b3bf54047d51a604a6d6e19ac834d5640b992e3ddf36f8b"
+    },
+    {
+      "path": "docs/agent_e_schema2_plan.md",
+      "role": "e5_acceptance_and_falsifiers",
+      "byte_length": 9562,
+      "blake3": "blake3:d06d2039f1cd83e2d5509478aede30d2e09e2548f262cea9e0f88abbfe2767db"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "operational_schema_and_output_typing_requirements",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544"
+    },
+    {
+      "path": "docs/t1_result.md",
+      "role": "theorem12_and_f1_granularity_boundary",
+      "byte_length": 22100,
+      "blake3": "blake3:0d0d7d244cf6519c763e9ee53dfd9bef466fd31eb0f869a96af7590cb31647c8"
+    },
+    {
+      "path": "crates/pen-search/src/e5_a3_successor.rs",
+      "role": "this_fail_closed_successor_audit",
+      "byte_length": 40310,
+      "blake3": "blake3:211dc2ad91f06e3b04740531a630b5cdf311ba194ebbe5cf104baa272f40f7d2"
+    }
+  ],
+  "restricted_j3": {
+    "bound_archive_loaded": true,
+    "archive_result_digest": "blake3:24b1f886d923d6fbeb793ca40b39f2414b86b8c3cbe1d6bbc0f9722051609f90",
+    "direct_instance_count": 64,
+    "natural_family_orbit_count": 8,
+    "every_instance_typed": true,
+    "every_instance_derivability_decided": true,
+    "every_orbit_derivable": true,
+    "restricted_f1_excluded": true,
+    "exact_positive_conclusion": "The 64 direct Type specializations are typed and D(B15)-derivable, and quotient to eight J3 natural-family orbits; no stronger A3 claim is inherited."
+  },
+  "stage16": {
+    "orientation": "W=(S15,S14)",
+    "typed_source_count": 17,
+    "unary_raw_seed_count": 17,
+    "unary_promoted_metadata_instance_count": 17,
+    "chronological_raw_seed_count": 72,
+    "direct_chronological_metadata_instance_count": 64,
+    "pointwise_chronological_metadata_instance_count": 8,
+    "chronological_promoted_metadata_instance_count": 72,
+    "higher_raw_seed_count": 1,
+    "higher_promoted_metadata_instance_count": 0,
+    "higher_rejection_reason": "NoTypedPathWitness",
+    "completion_metadata_instance_count": 0,
+    "total_metadata_instance_count": 89,
+    "total_candidate_orbit_count": 89,
+    "singleton_candidate_orbit_count": 89,
+    "unary_candidate_orbit_count": 17,
+    "direct_candidate_orbit_count": 64,
+    "pointwise_candidate_orbit_count": 8,
+    "distinct_newest_j3_source_count_in_direct_instances": 8,
+    "direct_predecessor_orbit_count": 8,
+    "direct_quotient_agrees_with_predecessor": false,
+    "uniform_specializations_not_multiplied": false,
+    "source_occurrence_formation_replayed": true,
+    "demand_output_terms_constructed": false,
+    "demand_output_terms_kernel_typed": false,
+    "d_membership_decided": false,
+    "derivation_hash": "blake3:36a7deea1c6da833b7e497909d79f031f0c8070bfe7f18716cad343ad88b2305"
+  },
+  "historical_projection": {
+    "window_count": 16,
+    "all_windows_finite_by_enumeration": true,
+    "raw_snapshot_completion_predicates_count_blind": true,
+    "empty_and_forged_caller_inventories_byte_identical": true,
+    "rows": [
+      {
+        "stage": 1,
+        "independently_replayed_completion_constructors": [],
+        "coarse_regression_packages": [],
+        "projected_focus": null,
+        "pre_structural_band": true,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:049f87941e4e879db8ca654781c478ed7b5dd25589e2f78fbfc626e682fdaaf8"
+      },
+      {
+        "stage": 2,
+        "independently_replayed_completion_constructors": [],
+        "coarse_regression_packages": [],
+        "projected_focus": null,
+        "pre_structural_band": true,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:e4ca8ecde93d141cde7e6fa60724e215dddaeba92109b6b8fc2f847aed7072ff"
+      },
+      {
+        "stage": 3,
+        "independently_replayed_completion_constructors": [
+          "former_eliminator"
+        ],
+        "coarse_regression_packages": [
+          "former_eliminator"
+        ],
+        "projected_focus": null,
+        "pre_structural_band": true,
+        "demand_precedes_jurisdiction": true,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:f7e4d13d0987dbbe029c4faee3d475180b7e2c35daca854b4a6d4a57e6f055d8"
+      },
+      {
+        "stage": 4,
+        "independently_replayed_completion_constructors": [
+          "former_eliminator"
+        ],
+        "coarse_regression_packages": [
+          "former_eliminator"
+        ],
+        "projected_focus": "former_eliminator",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:d82abd0682c080937f8a1a61353afc475d832e55758ccee7fc9302b4e0ab040b"
+      },
+      {
+        "stage": 5,
+        "independently_replayed_completion_constructors": [
+          "initial_hit"
+        ],
+        "coarse_regression_packages": [
+          "initial_hit"
+        ],
+        "projected_focus": "initial_hit",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:1c323f800c6b7aff096e4b8d100fb332c14531c4fee2223bc917d5c363c551a8"
+      },
+      {
+        "stage": 6,
+        "independently_replayed_completion_constructors": [
+          "truncation_hit"
+        ],
+        "coarse_regression_packages": [
+          "truncation_hit"
+        ],
+        "projected_focus": "truncation_hit",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:a18948fd7bd3a9a0d148d7575006d9ade7d585c82fc7772b5d35cf7c21e17f97"
+      },
+      {
+        "stage": 7,
+        "independently_replayed_completion_constructors": [
+          "higher_hit"
+        ],
+        "coarse_regression_packages": [
+          "higher_hit"
+        ],
+        "projected_focus": "higher_hit",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:574babac6ee56d7b1b37b0c4f014d22cf2b3a62125e09f09bdc5116bace54342"
+      },
+      {
+        "stage": 8,
+        "independently_replayed_completion_constructors": [
+          "sphere_lift"
+        ],
+        "coarse_regression_packages": [
+          "sphere_lift"
+        ],
+        "projected_focus": "sphere_lift",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:1124cb526879fe563a1fb8e6412c276661ce8431fc061fe20e3051c2b2a366c2"
+      },
+      {
+        "stage": 9,
+        "independently_replayed_completion_constructors": [
+          "axiomatic_bundle"
+        ],
+        "coarse_regression_packages": [
+          "axiomatic_bundle"
+        ],
+        "projected_focus": "axiomatic_bundle",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:e1a354833bf9d5fb293c7ceea9d4b2c034022f1486fc33d1c0cc648ca58065af"
+      },
+      {
+        "stage": 10,
+        "independently_replayed_completion_constructors": [
+          "modal_shell"
+        ],
+        "coarse_regression_packages": [
+          "modal_shell"
+        ],
+        "projected_focus": "modal_shell",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:3874f0cdb3ecddb53bdb41d0e11969cb51ee3620082c26a9dce9a8028452e367"
+      },
+      {
+        "stage": 11,
+        "independently_replayed_completion_constructors": [
+          "connection_shell"
+        ],
+        "coarse_regression_packages": [
+          "connection_shell"
+        ],
+        "projected_focus": "connection_shell",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:2b74e6af40e36c921c618928b966ee2b4566a7efaa6d06aedc763827c68a4005"
+      },
+      {
+        "stage": 12,
+        "independently_replayed_completion_constructors": [
+          "curvature_shell"
+        ],
+        "coarse_regression_packages": [
+          "curvature_shell"
+        ],
+        "projected_focus": "curvature_shell",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:ed3ff5e8a0de5a64a77bee3ccb3f41de153d78cc9deba7f33e794e8f54cb5659"
+      },
+      {
+        "stage": 13,
+        "independently_replayed_completion_constructors": [
+          "operator_bundle"
+        ],
+        "coarse_regression_packages": [
+          "operator_bundle"
+        ],
+        "projected_focus": "operator_bundle",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:f0d65cd2ff63fd4862a00ebb3758b378d1266ec9a4ac10bfecf9a1fea5e368d6"
+      },
+      {
+        "stage": 14,
+        "independently_replayed_completion_constructors": [
+          "hilbert_functional"
+        ],
+        "coarse_regression_packages": [
+          "hilbert_functional"
+        ],
+        "projected_focus": "hilbert_functional",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:98fc6e68c44e02d3abdabfdc911c3e309c6be0425438cc7ac7aaf89e46af9a85"
+      },
+      {
+        "stage": 15,
+        "independently_replayed_completion_constructors": [
+          "temporal_shell"
+        ],
+        "coarse_regression_packages": [
+          "temporal_shell"
+        ],
+        "projected_focus": "temporal_shell",
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:c446f21727efc1e0869373d8ad1a4f0e743dfc021db04e843d51515865debc43"
+      },
+      {
+        "stage": 16,
+        "independently_replayed_completion_constructors": [],
+        "coarse_regression_packages": [],
+        "projected_focus": null,
+        "pre_structural_band": false,
+        "demand_precedes_jurisdiction": false,
+        "labels_match_as_regression": true,
+        "semantic_output_orbit_joined": false,
+        "derivation_hash": "blake3:28f85804eff03a752df475a8ba1d7f2768a581df1740f20e7146b78ab93206c7"
+      }
+    ],
+    "coarse_ladder_labels_reproduced": true,
+    "stage3_wrinkle_reproduced_as_regression": true,
+    "stage3_instance_orbit_transport_proved": false,
+    "output_level_focus_projection_proved": false,
+    "weakening_stable_instance_discharge_proved": false,
+    "locality_and_expiration_complete": false,
+    "derivation_hash": "blake3:e43ff5b5e4b2bcf099f9cce20df2f5310227a47c5418dda7ea6f7ffab3848e2e"
+  },
+  "definition_boundary": {
+    "generator_candidate_replays": true,
+    "rule_constructor_inventory_closed_in_source": true,
+    "rule_constructor_inventory_exhaustiveness_proved": false,
+    "each_scheme_has_a_metadata_output_description": true,
+    "each_scheme_has_a_constructed_semantic_output_term": false,
+    "each_semantic_output_term_has_a_kernel_typing_derivation": false,
+    "source_reflexivity_accepted_as_unary_action_proof": false,
+    "motive_parametric_theorem_used_without_a_source_closure_derivation": false,
+    "full_a3_identification_proved": false,
+    "named_gaps": [
+      "A3_DEMAND_OUTPUT_TERM_AND_TYPING_JUDGMENT_UNDEFINED",
+      "A3_RULE_CONSTRUCTOR_INVENTORY_EXHAUSTIVENESS_UNPROVED",
+      "A3_DIRECT_J3_NATURAL_FAMILY_QUOTIENT_REGRESSION_64_SINGLETONS_VS_8_ORBITS",
+      "A3_OUTPUT_LEVEL_D_B15_MEMBERSHIP_NOT_EXECUTABLE",
+      "A3_STAGE3_TO_STAGE4_INSTANCE_ORBIT_TRANSPORT_UNPROVED"
+    ],
+    "derivation_hash": "blake3:21152653fd1ee39879306621b6443857c7b2449889c59c06f411e80ff5e5aa9a"
+  },
+  "f1": {
+    "full_a3_f1_executable": false,
+    "demanded_but_underdetermined_instance": null,
+    "f1_triggered": false,
+    "f1_excluded": false,
+    "semantic_o16_empty": null,
+    "theorem12_instance_granularity_proved": false,
+    "theorem12_refuted": false,
+    "t_bf2_authorized": false,
+    "bridge_authorized": false,
+    "status": "not_triggered_and_not_excluded: the candidate generator fails the direct J3 quotient regression and has no typed semantic output judgment, so full-A3 F1 is not executable",
+    "derivation_hash": "blake3:e0cc58a527457d128d9780c3a59a785a0207c0a3ccdb1fc1989248c4cf810278"
+  },
+  "e5_successor_attempted": true,
+  "e5_complete": false,
+  "semantic_o16_certificate_issued": false,
+  "t_bf2_executed": false,
+  "bridge_executed": false,
+  "bar_free_law_adopted": false,
+  "halt_claim_issued": false,
+  "outcome": "e5_a3_successor_stopped_fail_closed_on_output_typing_and_orbit_quotient_gaps",
+  "permitted_conclusion": "The count-blind candidate generator is finite and nonvacuous, and independently reproduces the coarse completion labels and Stage-3 wrinkle from raw structural premises. At Stage 16 it emits 89 metadata occurrences. The exact predecessor theorem remains 64 typed direct instances quotienting to eight D(B15)-derivable J3 families. The new generator instead makes those 64 direct cases singleton orbits and constructs no semantic demand output term for unary/higher/completion rules. Therefore it is not full A3 C(W).",
+  "required_successor_action": "Define each A3 rule as an intrinsically typed demand expression/hole with semantic interpretation; prove the rule inventory exhaustive; quotient the 64 direct specializations back to the eight established J3 natural-family orbits without multiplying uniform instances; construct a genuine Stage-3-to-4 demand-orbit transport; then rerun this successor. T-BF2 and the bridge remain queued. Separately, T-BF1/T-BF3 have already failed on the Stage-4 parsimony tie, so no bar-free adoption follows even after E-5 is repaired.",
+  "result_digest": "blake3:900c79f51137a902e01f12f6270aebb3565bf3b0a86baad992345262c06e1307"
+}

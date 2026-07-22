@@ -1,0 +1,100 @@
+{
+  "schema": "phase5b-reselection-program-v3-two-register",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/stage8_deadlock_adjudication.md",
+      "role": "adopted_option_b_two_register_rule",
+      "byte_length": 5654,
+      "blake3": "blake3:646e7594a3522a1e2adde0b4962e39adf28e7750a08da42e4175440ea58b2be8"
+    },
+    {
+      "path": "docs/phase5b_reselection_program_v2.json",
+      "role": "immutable_predecessor_program",
+      "byte_length": 3738,
+      "blake3": "blake3:eeb26ca4f64b16a536e67f7469ae68d34bef74f239a05b9050ce421483cadf36"
+    },
+    {
+      "path": "docs/phase5b_reselection_burn_v2.json",
+      "role": "certified_prefix_through_stage7_and_stage8_deadlock",
+      "byte_length": 27512,
+      "blake3": "blake3:e18da4d5902ba2bf540473da07ab067536d64a28953730437dff8e619bc3167e"
+    },
+    {
+      "path": "docs/phase5b_full_history_v1.json",
+      "role": "post_selection_reference_comparator_only",
+      "byte_length": 512055,
+      "blake3": "blake3:2c2978fbbcb4bdfe0bdb95ef48d460961da468c993b03e69958f7614d50b4b79"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "complete_cone_enumerator",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-search/src/accept.rs",
+      "role": "open_band_rank_only",
+      "byte_length": 13689,
+      "blake3": "blake3:3971d050281bf10ac49b584dd54e867ba0136f80b94fa26fe5bb1b6ef7756b8a"
+    },
+    {
+      "path": "crates/pen-type/src/admissibility.rs",
+      "role": "a4_guarded_total_discharge_engine_face",
+      "byte_length": 130036,
+      "blake3": "blake3:f6950cdf457980fdfd2d286f71bfeba646e5f81fecb335dd8afdc1e077a3389b"
+    },
+    {
+      "path": "crates/pen-search/src/phase5b_reselection_v3.rs",
+      "role": "frozen_v3_program_and_burn_issuer",
+      "byte_length": 41319,
+      "blake3": "blake3:7ac4ae8103d6a3751f98aaa2c22e29b2513e4e1982cbd1f8e43ded168369d33e"
+    }
+  ],
+  "adopted_option_b_replayed": true,
+  "imported_v2_program_digest": "blake3:add0dd1566c522cdb8d2caf005b4d59e4ce20ee79b663886f04ac8fed07bc8ae",
+  "imported_v2_burn_digest": "blake3:6a265e5497341e3363efeed7bd224eac4120d5c2603ff4a581c200bb2341e6c1",
+  "imported_prefix_stages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "imported_prefix_nu": [
+    1,
+    1,
+    2,
+    5,
+    7,
+    8,
+    10
+  ],
+  "imported_prefix_is_complete_through_stage7": true,
+  "first_recomputed_stage": 8,
+  "last_stage": 15,
+  "complete_guarded_cones": true,
+  "canonical_deduplication_before_classification": true,
+  "kernel_typing_fail_closed": true,
+  "candidate_level_typed_provenance_required": true,
+  "historical_count_used_as_score_input": false,
+  "diagnostic_bar_used_as_guarded_score_or_gate_input": false,
+  "exact_rank_restricted_to_open_band": true,
+  "two_register_rule": {
+    "guarded_domain": "O(stage) != empty",
+    "guarded_acceptance": "exactly one A4-admissible typed total discharger",
+    "guarded_bar_role": "recorded diagnostic only; never a gate or selector",
+    "guarded_zero_discharger": "stop and publish the complete cone",
+    "guarded_multiple_dischargers": "F-S8-1 stop; no pricing tie-break",
+    "open_band_acceptance": "A5 certified clearing with the existing exact rank",
+    "winner_divergence": "F-S8-3 publish verbatim and continue on the revised winner",
+    "no_improvised_guarded_tie_break": true,
+    "no_silent_repair": true
+  },
+  "first_full_run_not_executed": true,
+  "burn_now_authorized": true,
+  "outcome": "v3_preregistered_burn_authorized_not_executed",
+  "result_digest": "blake3:1b3bc90b7ab61fec7cefbe964d6441fb16894f317912f8286da9adaeef2a0da8"
+}

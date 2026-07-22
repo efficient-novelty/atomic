@@ -35,7 +35,10 @@ fn main() {
             stratum.unclassified_is_zero,
         );
     }
-    println!("every_stratum_classified: {}", exhaustion.every_stratum_classified);
+    println!(
+        "every_stratum_classified: {}",
+        exhaustion.every_stratum_classified
+    );
     println!("digest: {}", exhaustion.digest);
 
     let json = serde_json::to_string_pretty(&exhaustion).expect("serialize exhaustion");

@@ -1,0 +1,651 @@
+{
+  "schema": "schema2-global-e4-assembly-v6",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_global_e4_assembly_v5.json",
+      "role": "application_body_unknown_predecessor",
+      "byte_length": 18379,
+      "blake3": "blake3:bbcc129a692a6d2d9b374c989a0564c130c7540d0bb4e1b36ec242d3ecf01aaa"
+    },
+    {
+      "path": "docs/schema2_ambient_former_internality_v1.json",
+      "role": "transparent_former_term_level_successor",
+      "byte_length": 120145,
+      "blake3": "blake3:06e50de73046a9771e4774772c8e5a2b821571c3ac4c9d80fd822cf7372091e5"
+    },
+    {
+      "path": "docs/ambient_former_closure_adjudication.md",
+      "role": "option_a_and_f_a3_firewall",
+      "byte_length": 5705,
+      "blake3": "blake3:b745012062e17e7da625baedf7c302970549f85a2ad51b6913eab602910bf1dd"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "exact_raw_catalog_membership",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-type/src/ambient_former_internality.rs",
+      "role": "term_constructor_replay_and_fresh_head_refusal",
+      "byte_length": 36309,
+      "blake3": "blake3:c0f1a77c4e1f7dcb11f230f7c075cdc7b197931d27e453f7ed5528780e7e2347"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch_v5.rs",
+      "role": "ambient_former_internal_classifier",
+      "byte_length": 39486,
+      "blake3": "blake3:2be7567552f6122e4cc411eeb69d50593cfe3cdfd2ada3429f886985e016110f"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v5.rs",
+      "role": "predecessor_fail_fast_assembly",
+      "byte_length": 25601,
+      "blake3": "blake3:21f27c87feae40d641f8762c04bfc09bd484dbefd99740b2e3d86b25d08141e9"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v6.rs",
+      "role": "candidate_fresh_head_fail_fast_successor",
+      "byte_length": 29115,
+      "blake3": "blake3:bf9794a7e138ff95dbb3234c2c78fde89a52348313c051cc5fae3128ab4ca724"
+    }
+  ],
+  "predecessor_global_e4_v5_digest": "blake3:7519a0e7e06432b6265e268de5efd5d95059ffa12e4a952766716051bb4ffbd0",
+  "predecessor_global_e4_v5_replayed": true,
+  "ambient_former_internality_digest": "blake3:41b5451dc892b7d131230524df3ca8a5df1efe9fee49ea812c9c1de7944756c4",
+  "ambient_former_internality_replayed": true,
+  "global_e4_v6_executed": true,
+  "predecessor_application_unknown_resolved": {
+    "candidate": {
+      "clauses": [
+        {
+          "role": "formation",
+          "expr": "Univ"
+        },
+        {
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Lib": 14
+                },
+                {
+                  "Lib": 15
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "raw_surface_membership": {
+      "is_member": true,
+      "rejection_reasons": []
+    },
+    "decision": {
+      "internal_ambient_former": {
+        "certificate": {
+          "candidate": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": "Univ"
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Lib": 14
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+          "visible_library": 15,
+          "predecessor_decision": {
+            "named_typed_obstruction": {
+              "predecessor_decision": {
+                "named_typed_obstruction": {
+                  "predecessor_decision": {
+                    "named_typed_obstruction": {
+                      "legacy_decision": {
+                        "named_typed_obstruction": {
+                          "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                          "telescope_class": "Unknown",
+                          "elaboration_derivation_hash": "blake3:39a29c8b2974a321bc4af2b7f6fcb209da677415026de1936cf9ef721e05d54c",
+                          "candidate_digest": "blake3:7d350f45240ef7df777d63628ce57a205d51fe29f60231f6fe280d007cd358c7",
+                          "derivation_hash": "blake3:da59b2cf37347cefa56657b2226347bb623b2b57df93d02cc17ca15b0cc54249"
+                        }
+                      },
+                      "internal_attempt": {
+                        "candidate": {
+                          "clauses": [
+                            {
+                              "role": "formation",
+                              "expr": "Univ"
+                            },
+                            {
+                              "role": "introduction",
+                              "expr": {
+                                "Lam": {
+                                  "App": [
+                                    {
+                                      "Lib": 14
+                                    },
+                                    {
+                                      "Lib": 15
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "predecessor_attempt_hash": "blake3:31584d4631ee33539db0f6a9cf4bda727680247a37bf609868bb00623adc306a",
+                        "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                        "clauses": [
+                          {
+                            "clause_index": 0,
+                            "expression": "Univ",
+                            "root_rule": "univ-form",
+                            "leaf_rules": [
+                              "univ-form"
+                            ],
+                            "predecessor_kind": "ambient_arena_reference",
+                            "kind": "direct_ambient_arena_reference",
+                            "field_dependencies": [],
+                            "certified_internal_prefix_before": [],
+                            "dependency_certificate_hashes": [],
+                            "dependencies_are_strictly_prior": true,
+                            "every_dependency_already_internal": true,
+                            "projection_not_identity": false,
+                            "identity_not_projection": false,
+                            "guarded_inverse_laws_satisfied": true,
+                            "earned_internal": true,
+                            "derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+                          },
+                          {
+                            "clause_index": 1,
+                            "expression": {
+                              "Lam": {
+                                "App": [
+                                  {
+                                    "Lib": 14
+                                  },
+                                  {
+                                    "Lib": 15
+                                  }
+                                ]
+                              }
+                            },
+                            "root_rule": "lam-intro",
+                            "leaf_rules": [
+                              "library-constant",
+                              "library-constant"
+                            ],
+                            "predecessor_kind": "unsupported_structural_derivation",
+                            "kind": "unsupported",
+                            "field_dependencies": [],
+                            "certified_internal_prefix_before": [
+                              0
+                            ],
+                            "dependency_certificate_hashes": [],
+                            "dependencies_are_strictly_prior": true,
+                            "every_dependency_already_internal": true,
+                            "projection_not_identity": false,
+                            "identity_not_projection": false,
+                            "guarded_inverse_laws_satisfied": true,
+                            "earned_internal": false,
+                            "derivation_hash": "blake3:bddb9bb8c73a8aaf385a006623e85ca91aa5f2e775650657f60c9b29e12dfdd7"
+                          }
+                        ],
+                        "certified_internal_prefix": [
+                          0
+                        ],
+                        "every_clause_earned_internal": false,
+                        "no_forward_missing_or_cyclic_dependency": true,
+                        "projection_identity_separation_checked": true,
+                        "all_guarded_inverse_laws_satisfied": true,
+                        "internal_certificate_issued": false,
+                        "failure_code": "INDUCTIVE_TELESCOPE_INTERNALITY_NOT_PROVED_FOR_CANDIDATE",
+                        "derivation_hash": "blake3:d23ba74ee745d633939ec53143e77322c3265dcf538d01ae8624e422f980391a"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "inherited_internal_clauses": [
+            {
+              "clause_index": 0,
+              "predecessor_clause_derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+            }
+          ],
+          "constructor_evidence": [
+            {
+              "version": "kernel-ambient-former-closure-internal-v1",
+              "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+              "visible_library": 15,
+              "candidate_hash": "blake3:53bcf820a41f7f97c123462332b774d45552357f0be5f4e57d254a95ffc8433a",
+              "elaboration_hash": "blake3:39a29c8b2974a321bc4af2b7f6fcb209da677415026de1936cf9ef721e05d54c",
+              "clause_index": 1,
+              "declared_role": "introduction",
+              "kernel_role": "introduction",
+              "outer_scope": 1,
+              "expression": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 14
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "clause_normal_form": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 14
+                    },
+                    {
+                      "Lib": 15
+                    }
+                  ]
+                }
+              },
+              "certified_prior_clauses": {
+                "0": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+              },
+              "term_evidence": {
+                "expression": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Lib": 14
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "scope_len": 1,
+                "derivation_rule": "lam-intro",
+                "former": "lambda_introduction",
+                "provenance": {
+                  "transparent_former": {
+                    "former": "lambda_introduction",
+                    "premise_hashes": [
+                      "blake3:58313377a50e3b1a3a3e792ec7815fb2383da82027ab105a749c6eee757b5c41"
+                    ]
+                  }
+                },
+                "premises": [
+                  {
+                    "expression": {
+                      "App": [
+                        {
+                          "Lib": 14
+                        },
+                        {
+                          "Lib": 15
+                        }
+                      ]
+                    },
+                    "scope_len": 2,
+                    "derivation_rule": "app-stuck",
+                    "former": "application",
+                    "provenance": {
+                      "transparent_former": {
+                        "former": "application",
+                        "premise_hashes": [
+                          "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038",
+                          "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                        ]
+                      }
+                    },
+                    "premises": [
+                      {
+                        "expression": {
+                          "Lib": 14
+                        },
+                        "scope_len": 2,
+                        "derivation_rule": "library-constant",
+                        "former": "sealed_library_constant",
+                        "provenance": {
+                          "sealed_library_constant": {
+                            "step": 14
+                          }
+                        },
+                        "premises": [],
+                        "certified_field_dependencies": [],
+                        "normal_form": {
+                          "Lib": 14
+                        },
+                        "normalization_steps": 0,
+                        "registered_transparent_former": true,
+                        "all_premises_internal": true,
+                        "no_candidate_fresh_head": true,
+                        "typed_result_preserved": true,
+                        "full_provenance_retained": true,
+                        "independent_demand_orbit_exported": false,
+                        "internal_term_issued": true,
+                        "marginal_nu": 0,
+                        "derivation_hash": "blake3:30c52b1e42a4732d05f26016533f6b3d27671ec466e625ed5480291eb93bf038"
+                      },
+                      {
+                        "expression": {
+                          "Lib": 15
+                        },
+                        "scope_len": 2,
+                        "derivation_rule": "library-constant",
+                        "former": "sealed_library_constant",
+                        "provenance": {
+                          "sealed_library_constant": {
+                            "step": 15
+                          }
+                        },
+                        "premises": [],
+                        "certified_field_dependencies": [],
+                        "normal_form": {
+                          "Lib": 15
+                        },
+                        "normalization_steps": 0,
+                        "registered_transparent_former": true,
+                        "all_premises_internal": true,
+                        "no_candidate_fresh_head": true,
+                        "typed_result_preserved": true,
+                        "full_provenance_retained": true,
+                        "independent_demand_orbit_exported": false,
+                        "internal_term_issued": true,
+                        "marginal_nu": 0,
+                        "derivation_hash": "blake3:8cee216d12fddcd8ab0d9e3e66639ae3efd9bc5604f232e064125cf6668d302e"
+                      }
+                    ],
+                    "certified_field_dependencies": [],
+                    "normal_form": {
+                      "App": [
+                        {
+                          "Lib": 14
+                        },
+                        {
+                          "Lib": 15
+                        }
+                      ]
+                    },
+                    "normalization_steps": 0,
+                    "registered_transparent_former": true,
+                    "all_premises_internal": true,
+                    "no_candidate_fresh_head": true,
+                    "typed_result_preserved": true,
+                    "full_provenance_retained": true,
+                    "independent_demand_orbit_exported": false,
+                    "internal_term_issued": true,
+                    "marginal_nu": 0,
+                    "derivation_hash": "blake3:58313377a50e3b1a3a3e792ec7815fb2383da82027ab105a749c6eee757b5c41"
+                  }
+                ],
+                "certified_field_dependencies": [],
+                "normal_form": {
+                  "Lam": {
+                    "App": [
+                      {
+                        "Lib": 14
+                      },
+                      {
+                        "Lib": 15
+                      }
+                    ]
+                  }
+                },
+                "normalization_steps": 0,
+                "registered_transparent_former": true,
+                "all_premises_internal": true,
+                "no_candidate_fresh_head": true,
+                "typed_result_preserved": true,
+                "full_provenance_retained": true,
+                "independent_demand_orbit_exported": false,
+                "internal_term_issued": true,
+                "marginal_nu": 0,
+                "derivation_hash": "blake3:d5c544fdf253a553ce8d7d3f41749646bc5fe07fbe2220117d5f29c2a31cd43f"
+              },
+              "candidate_declared_formation_excluded": true,
+              "charged_path_constructor_excluded": true,
+              "every_dependency_strictly_prior": true,
+              "every_premise_replayed_internal": true,
+              "typed_result_preserved": true,
+              "full_provenance_retained": true,
+              "standing_orbit_exception_preserved": true,
+              "closed_candidate": true,
+              "internal_closure_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:632ac565396096880131b53bcd1302d7fe8f352dd0d0d9123bc9dd69c7ae0e1f"
+            }
+          ],
+          "final_certified_clause_hashes": {
+            "0": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a",
+            "1": "blake3:632ac565396096880131b53bcd1302d7fe8f352dd0d0d9123bc9dd69c7ae0e1f"
+          },
+          "every_clause_covered_exactly_once": true,
+          "ordered_prefix_discipline_replayed": true,
+          "every_constructor_projection_replayed": true,
+          "every_premise_internal": true,
+          "typed_results_preserved": true,
+          "full_provenance_retained": true,
+          "charged_and_fresh_heads_excluded": true,
+          "standing_orbit_exception_preserved": true,
+          "internal_certificate_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:15cf3a86f98788b68112874dac3b7e73b0d44062585dbee510fae518820bf599"
+        },
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:7a141adfee8365559975e927178fb3c042c3f9d6f29ab75dbce8fa8bfe0168d9"
+      }
+    },
+    "exact_raw_catalog_member": true,
+    "classified_internal": true,
+    "inherited_internal_clause_count": 1,
+    "constructor_evidence_count": 1,
+    "application_stuckness_replayed": true,
+    "every_premise_internal": true,
+    "typed_result_preserved": true,
+    "full_provenance_retained": true,
+    "marginal_nu": 0,
+    "derivation_hash": "blake3:94bbda8eb481460c3090f6be021a069c9052b82784236856829e47235c15af63"
+  },
+  "next_candidate_fresh_head_unknown": {
+    "candidate": {
+      "clauses": [
+        {
+          "role": "formation",
+          "expr": "Univ"
+        },
+        {
+          "role": "introduction",
+          "expr": {
+            "Lam": {
+              "App": [
+                {
+                  "Var": 1
+                },
+                {
+                  "Lib": 15
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "raw_surface_membership": {
+      "is_member": true,
+      "rejection_reasons": []
+    },
+    "decision": {
+      "named_typed_obstruction": {
+        "predecessor_decision": {
+          "named_typed_obstruction": {
+            "predecessor_decision": {
+              "named_typed_obstruction": {
+                "predecessor_decision": {
+                  "named_typed_obstruction": {
+                    "legacy_decision": {
+                      "named_typed_obstruction": {
+                        "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                        "telescope_class": "Unknown",
+                        "elaboration_derivation_hash": "blake3:b36d9555ded3a9ada6d8b05d6a4ccdfb3049c881eaf7a2c6468b25494aece941",
+                        "candidate_digest": "blake3:0cd0fe5a166f6dfde9abd421f1d19e0f09afcffd8983c46ca242b2c729c56e7a",
+                        "derivation_hash": "blake3:ba1db8e488aec56bab6057b979e04fcb5c781172c0ea97c5dfd964a2ed26f589"
+                      }
+                    },
+                    "internal_attempt": {
+                      "candidate": {
+                        "clauses": [
+                          {
+                            "role": "formation",
+                            "expr": "Univ"
+                          },
+                          {
+                            "role": "introduction",
+                            "expr": {
+                              "Lam": {
+                                "App": [
+                                  {
+                                    "Var": 1
+                                  },
+                                  {
+                                    "Lib": 15
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "predecessor_attempt_hash": "blake3:6fc9a6dc56fccea8d62bd96db69f202cb3a250fc6d7a6193daa8550d6c937e0d",
+                      "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                      "clauses": [
+                        {
+                          "clause_index": 0,
+                          "expression": "Univ",
+                          "root_rule": "univ-form",
+                          "leaf_rules": [
+                            "univ-form"
+                          ],
+                          "predecessor_kind": "ambient_arena_reference",
+                          "kind": "direct_ambient_arena_reference",
+                          "field_dependencies": [],
+                          "certified_internal_prefix_before": [],
+                          "dependency_certificate_hashes": [],
+                          "dependencies_are_strictly_prior": true,
+                          "every_dependency_already_internal": true,
+                          "projection_not_identity": false,
+                          "identity_not_projection": false,
+                          "guarded_inverse_laws_satisfied": true,
+                          "earned_internal": true,
+                          "derivation_hash": "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+                        },
+                        {
+                          "clause_index": 1,
+                          "expression": {
+                            "Lam": {
+                              "App": [
+                                {
+                                  "Var": 1
+                                },
+                                {
+                                  "Lib": 15
+                                }
+                              ]
+                            }
+                          },
+                          "root_rule": "lam-intro",
+                          "leaf_rules": [
+                            "field-ref-0",
+                            "library-constant"
+                          ],
+                          "predecessor_kind": "candidate_local_dependency",
+                          "kind": "unsupported",
+                          "field_dependencies": [
+                            0
+                          ],
+                          "certified_internal_prefix_before": [
+                            0
+                          ],
+                          "dependency_certificate_hashes": [
+                            "blake3:81a2988b4b47df1aa52d8afe24b77aebf9014209f04f7dd24b11288bf2d87e9a"
+                          ],
+                          "dependencies_are_strictly_prior": true,
+                          "every_dependency_already_internal": true,
+                          "projection_not_identity": false,
+                          "identity_not_projection": false,
+                          "guarded_inverse_laws_satisfied": true,
+                          "earned_internal": false,
+                          "derivation_hash": "blake3:e0b7aaeeefe770df9177d787e4592b2ee723890c1fe4355b86d0a9ba91548ccf"
+                        }
+                      ],
+                      "certified_internal_prefix": [
+                        0
+                      ],
+                      "every_clause_earned_internal": false,
+                      "no_forward_missing_or_cyclic_dependency": true,
+                      "projection_identity_separation_checked": true,
+                      "all_guarded_inverse_laws_satisfied": true,
+                      "internal_certificate_issued": false,
+                      "failure_code": "INDUCTIVE_TELESCOPE_INTERNALITY_NOT_PROVED_FOR_CANDIDATE",
+                      "derivation_hash": "blake3:cb519df74d373cdcd6dc183b759f81bbc68dc5e13283eccdbb57d994fbdd6237"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "exact_raw_catalog_member": true,
+    "ambient_parameters": 0,
+    "prior_clause_certificate_supplied": true,
+    "ambient_closure_refused": true,
+    "ambient_closure_refusal": "candidate-fresh application head is excluded",
+    "f_a3_candidate_fresh_head_firewall_replayed": true,
+    "named_internal_gap": "INDUCTIVE_TELESCOPE_INTERNALITY_NOT_PROVED_FOR_CANDIDATE",
+    "f_g4_retained": true,
+    "derivation_hash": "blake3:8c81d0ef1b5265d30639a5781d383662bb6a61b96f8a76be9f57898440f6fd22"
+  },
+  "unknown_survivor_count_lower_bound": 1,
+  "fail_fast_catalog_scan_terminated": true,
+  "no_unknown_survives": false,
+  "class_exhaustion_proved": false,
+  "global_e4_complete": false,
+  "five_pending_memberships_now_authorized": false,
+  "forbidden_outputs": {
+    "five_pending_membership_verdicts_issued": false,
+    "independent_family_tokens_issued": false,
+    "e2b_executed": false,
+    "historical_scores_recomputed": false,
+    "fq2_evaluated": false,
+    "agent_a_f_t1_discharge_executed": false,
+    "e5_guard_rail_f1_executed": false,
+    "classifier_bridge_or_fork_executed": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "global_e4_v6_resolved_application_next_candidate_fresh_head_unknown_blocks_exhaustion",
+  "permitted_conclusion": "The exact [Univ,Lam(App(Lib(14),Lib(15)))] witness now earns Internal by replayed transparent-former closure with nu=0. The exact [Univ,Lam(App(Var(1),Lib(15)))] witness remains Unknown: even with clause 0 certified Internal, F-A3 excludes a candidate-fresh application head.",
+  "required_successor_action": "Continue the F-A5 ladder honestly. Keep the adopted F-A3 exclusion intact and adjudicate candidate-field-headed application as a distinct Internal rule, or leave it Unknown; only a replayable successor may authorize another global E-4 create-new rerun.",
+  "result_digest": "blake3:2d58e39bbe6ffd4e63883181b5b08cdc836def50c7d10bb3178da261743d0aca"
+}

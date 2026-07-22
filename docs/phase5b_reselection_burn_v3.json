@@ -1,0 +1,1356 @@
+{
+  "schema": "phase5b-reselection-burn-v3-two-register",
+  "date": "2026-07-21",
+  "program_digest": "blake3:1b3bc90b7ab61fec7cefbe964d6441fb16894f317912f8286da9adaeef2a0da8",
+  "program_source_hash": "blake3:7ac4ae8103d6a3751f98aaa2c22e29b2513e4e1982cbd1f8e43ded168369d33e",
+  "program_preregistered_before_burn": true,
+  "imported_v2_burn_digest": "blake3:6a265e5497341e3363efeed7bd224eac4120d5c2603ff4a581c200bb2341e6c1",
+  "imported_prefix": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ]
+  ],
+  "stages": [
+    {
+      "stage": 8,
+      "required_packages": [
+        "sphere_lift"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "357/104",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:0d940820431d729e7e53d7a7e71f3fd900ab33d24ed6583be6fd33e2b058f384",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "canonical_key": "7c7f677a",
+          "kappa": 5,
+          "bit_kappa": 37,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 18,
+          "r2_generated_instance_adjustment": -1,
+          "semantic_nu": 17,
+          "local_role_capacity": 20,
+          "live_demand_output_capacity": 780,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "17/5",
+          "diagnostic_clears_bar": false,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:6d0ae023e1f0aff6f647aaeba741f8d08055b8234a6962799a620a11aae96738"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 0,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "canonical_key": "7c7f677a",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Var": 1
+              }
+            },
+            {
+              "role": "path_attach",
+              "expr": {
+                "PathCon": 3
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 2
+                }
+              }
+            }
+          ]
+        },
+        "kappa": 5,
+        "semantic_nu": 17,
+        "rho": "17/5",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": false,
+        "derivation_hash": "blake3:c29f370103ed3e82625700d8ba4f6eb698e44d62e7c022bd4ffc6cc0c96de5a9"
+      },
+      "reference_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+      "reference_certified_nu": 17,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:d53d3832d5b5bccde9c49cff804f52181ae11e34fa1a668a7ed6f30cebceb3b3"
+    },
+    {
+      "stage": 9,
+      "required_packages": [
+        "axiomatic_bundle"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "578/147",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:f12e33aa68b0cdc4b5b7dbedc39a6cf7953810644562a07aa506814a34236ce8",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "canonical_key": "6be2dcc7",
+          "kappa": 4,
+          "bit_kappa": 78,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 17,
+          "r2_generated_instance_adjustment": 0,
+          "semantic_nu": 17,
+          "local_role_capacity": 16,
+          "live_demand_output_capacity": 1360,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "17/4",
+          "diagnostic_clears_bar": true,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:894062f453878b1be6797d6d56a8eaf6efde258639b36293428c637dcdb61a5b"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 1,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "canonical_key": "6be2dcc7",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 8
+                  },
+                  {
+                    "Lib": 7
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 5
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 8
+                    },
+                    {
+                      "Lib": 7
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 7
+                  },
+                  {
+                    "Lib": 8
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "kappa": 4,
+        "semantic_nu": 17,
+        "rho": "17/4",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": true,
+        "derivation_hash": "blake3:489a9a351b7afa615c41c7df96de1f7c54f2f1c6181f2ecb2f90d7d8ea64fa99"
+      },
+      "reference_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+      "reference_certified_nu": 17,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:e28ec77713f1c1a991de89216fd9afc29c7c057491f96b65015943c7bbe6e96f"
+    },
+    {
+      "stage": 10,
+      "required_packages": [
+        "modal_shell"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "22/5",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:d274455e089fefb6932c355b10fdd66928faaae9d0dace9776bee1eadd58ad77",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "canonical_key": "ddadc066",
+          "kappa": 4,
+          "bit_kappa": 45,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 19,
+          "r2_generated_instance_adjustment": 0,
+          "semantic_nu": 19,
+          "local_role_capacity": 16,
+          "live_demand_output_capacity": 1710,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "19/4",
+          "diagnostic_clears_bar": true,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:9c231cfbade4b222a012574138619735f5b946043a203635b83055601720f4a6"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 1,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "canonical_key": "ddadc066",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Flat": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Sharp": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Disc": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Shape": {
+                  "Var": 1
+                }
+              }
+            }
+          ]
+        },
+        "kappa": 4,
+        "semantic_nu": 19,
+        "rho": "19/4",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": true,
+        "derivation_hash": "blake3:a0a13f7d0da81b5825471307e479824b4789e45925ec76e7ea5c566fa5e86064"
+      },
+      "reference_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+      "reference_certified_nu": 19,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:ed8590a0cead5fa83ff7c305e82a8a7232fd385929d166ee2e28edbeb13bcfdf"
+    },
+    {
+      "stage": 11,
+      "required_packages": [
+        "connection_shell"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "267/55",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:8199fe0f12e8dc25834442a4bd081699ca7835d1467cbad46169e40cd6ce69cc",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "canonical_key": "2cce7b9e",
+          "kappa": 5,
+          "bit_kappa": 79,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 26,
+          "r2_generated_instance_adjustment": 0,
+          "semantic_nu": 26,
+          "local_role_capacity": 20,
+          "live_demand_output_capacity": 1360,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "26/5",
+          "diagnostic_clears_bar": true,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:f3fb3b2ad5fca51704f14ccaf6814c27b5becfe08cb496dc8e99f545839f7bb2"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 1,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "canonical_key": "2cce7b9e",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 10
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Flat": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 10
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Var": 1
+                }
+              }
+            }
+          ]
+        },
+        "kappa": 5,
+        "semantic_nu": 26,
+        "rho": "26/5",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": true,
+        "derivation_hash": "blake3:f4b9546694b51c82b6872de929b1f6ac654b701df9da5eb53d5717c4dfbeb808"
+      },
+      "reference_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+      "reference_certified_nu": 26,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:ba2cc74e7c409c6c1a153d242b4d1956cdc3b549bb9942d4b3910507bbdb1700"
+    },
+    {
+      "stage": 12,
+      "required_packages": [
+        "curvature_shell"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "8136/1513",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:4977e84aae21a01369640b1b6eec0f91e8fd17996537b0182c8d3ca7d5d91aa3",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "canonical_key": "43c7aab2",
+          "kappa": 6,
+          "bit_kappa": 121,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 34,
+          "r2_generated_instance_adjustment": 0,
+          "semantic_nu": 34,
+          "local_role_capacity": 24,
+          "live_demand_output_capacity": 1710,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "17/3",
+          "diagnostic_clears_bar": true,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:ab8e00622368b2bf01af7fc6bc139c0bec16f147f7c2fd7c9165d75ea800044f"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 1,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "canonical_key": "43c7aab2",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 11
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "App": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "kappa": 6,
+        "semantic_nu": 34,
+        "rho": "17/3",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": true,
+        "derivation_hash": "blake3:3fbd1cdb5d9db6cb58e185b6681e4e189d36a87a62b2e5bf8eedf4473cec7c47"
+      },
+      "reference_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+      "reference_certified_nu": 34,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:01f35b733293b317de401cdf3535b82fca670b46d8327c44e14a77011fbaf2ae"
+    },
+    {
+      "stage": 13,
+      "required_packages": [
+        "operator_bundle"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "11417/1920",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:3e683bf7ea8c1dd9ea75331eb191d588874f6da2cd156619988a532379afa01e",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "canonical_key": "e89e8193",
+          "kappa": 7,
+          "bit_kappa": 138,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 46,
+          "r2_generated_instance_adjustment": 0,
+          "semantic_nu": 46,
+          "local_role_capacity": 28,
+          "live_demand_output_capacity": 2530,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "46/7",
+          "diagnostic_clears_bar": true,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:4355295f431a7a51eae4fdd38721f5e6acb59d3abee34012ef18643df052870f"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 1,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "canonical_key": "e89e8193",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  },
+                  {
+                    "Lib": 11
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Lib": 12
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "kappa": 7,
+        "semantic_nu": 46,
+        "rho": "46/7",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": true,
+        "derivation_hash": "blake3:13d70da77f8026d7c283b3b279a199f892647787b978485d24b7ba6e5a550c5e"
+      },
+      "reference_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+      "reference_certified_nu": 46,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:d8b41786872cc742e487d9e0df12801c9cf4357a276badb66ee6acec45cc59b2"
+    },
+    {
+      "stage": 14,
+      "required_packages": [
+        "hilbert_functional"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "72761/10951",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:3da445b3558f4f127c1ceaa4f5bf37ba56ae01be49d36e6d4aafb4901b02c70b",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "canonical_key": "405107e0",
+          "kappa": 9,
+          "bit_kappa": 169,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 62,
+          "r2_generated_instance_adjustment": 0,
+          "semantic_nu": 62,
+          "local_role_capacity": 36,
+          "live_demand_output_capacity": 3510,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "62/9",
+          "diagnostic_clears_bar": true,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:e69b4a5442edc05ee5583108a0af0a762c648e87fd3c2ba6076f8f72261ba33a"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 1,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "canonical_key": "405107e0",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Pi": [
+                          {
+                            "Var": 1
+                          },
+                          "Univ"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lam": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Sigma": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Sigma": [
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  },
+                  {
+                    "Pi": [
+                      {
+                        "Var": 1
+                      },
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 13
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 12
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Lib": 11
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "Pi": [
+                    {
+                      "Var": 1
+                    },
+                    "Univ"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "kappa": 9,
+        "semantic_nu": 62,
+        "rho": "62/9",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": true,
+        "derivation_hash": "blake3:2d4cc1dfda13057636a778bdfdb31570d1d48dfc0411c43f62a601225911adf5"
+      },
+      "reference_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+      "reference_certified_nu": 62,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:b2093f5a27541a00e06e8ca788fc6609df0be483551c66f00a109f3dcb0d27db"
+    },
+    {
+      "stage": 15,
+      "required_packages": [
+        "temporal_shell"
+      ],
+      "guarded": true,
+      "diagnostic_bar": "77775/10556",
+      "bar_gate_applied": false,
+      "cone_enumerated": 1,
+      "cone_admitted": 1,
+      "cone_deduped": 1,
+      "cone_digest": "blake3:3f4f0ee0b97369977961c287ef878026477a58c918e6db40b28da5f7d7769fd4",
+      "assessments": [
+        {
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "canonical_key": "98fab092",
+          "kappa": 8,
+          "bit_kappa": 229,
+          "kernel_typed": true,
+          "kernel_failure": null,
+          "identified_with_prefix": false,
+          "structural_formula_total": 103,
+          "r2_generated_instance_adjustment": 0,
+          "semantic_nu": 103,
+          "local_role_capacity": 32,
+          "live_demand_output_capacity": 5280,
+          "typed_provenance_supported": true,
+          "guarded_total_discharger": true,
+          "rho": "103/8",
+          "diagnostic_clears_bar": true,
+          "open_band_clearing_candidate": false,
+          "derivation_hash": "blake3:b23fea4765bec2cd980a6c6166e3ec117f38882f92106cb9b4cbbdb135371ca2"
+        }
+      ],
+      "discharger_hashes": [
+        "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4"
+      ],
+      "discharger_count": 1,
+      "diagnostic_bar_clearing_count": 1,
+      "open_band_acceptance_order": [],
+      "winner": {
+        "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "canonical_key": "98fab092",
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "Next": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Eventually": {
+                  "Var": 1
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Lib": 10
+                    },
+                    {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Flat": {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Next": {
+                      "Flat": {
+                        "Var": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Sharp": {
+                      "Eventually": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Eventually": {
+                      "Sharp": {
+                        "Var": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "role": "introduction",
+              "expr": {
+                "Lam": {
+                  "App": [
+                    {
+                      "Eventually": {
+                        "Var": 1
+                      }
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "Pi": [
+                  {
+                    "Next": {
+                      "Next": {
+                        "Var": 1
+                      }
+                    }
+                  },
+                  {
+                    "Next": {
+                      "Var": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "kappa": 8,
+        "semantic_nu": 103,
+        "rho": "103/8",
+        "selected_by": "unique_guarded_total_discharger",
+        "diagnostic_clears_bar": true,
+        "derivation_hash": "blake3:b3b71ed21367e7877b890efa22d089091d13bb178b87ca29f64ab4db4a21ad97"
+      },
+      "reference_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+      "reference_certified_nu": 103,
+      "winner_matches_reference": true,
+      "winner_score_matches_reference_certificate": true,
+      "derivation_hash": "blake3:6305afe0671a1564ace43ff26acaa1f269483a5e0039f083a0bbe540bb856e13"
+    }
+  ],
+  "outcome": {
+    "kind": "completed_through_stage15"
+  },
+  "complete_revised_prefix": [
+    [
+      1,
+      1,
+      2
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      5,
+      3
+    ],
+    [
+      5,
+      7,
+      3
+    ],
+    [
+      6,
+      8,
+      3
+    ],
+    [
+      7,
+      10,
+      3
+    ],
+    [
+      8,
+      17,
+      5
+    ],
+    [
+      9,
+      17,
+      4
+    ],
+    [
+      10,
+      19,
+      4
+    ],
+    [
+      11,
+      26,
+      5
+    ],
+    [
+      12,
+      34,
+      6
+    ],
+    [
+      13,
+      46,
+      7
+    ],
+    [
+      14,
+      62,
+      9
+    ],
+    [
+      15,
+      103,
+      8
+    ]
+  ],
+  "discharger_counts": [
+    [
+      8,
+      1
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      12,
+      1
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      15,
+      1
+    ]
+  ],
+  "winner_divergences": [],
+  "score_divergences": [],
+  "f_s8_1_triggered": false,
+  "f_s8_3_honored": true,
+  "every_reached_guarded_stage_unique": true,
+  "guarded_bar_never_used_as_gate_or_selector": true,
+  "completed_through_stage15": true,
+  "revised_bar_16_diagnostic": "176673/19520",
+  "revised_bar_16_unreduced": "353346/39040",
+  "e5_f1_now_authorized": true,
+  "outcome_summary": "completed_through_stage15",
+  "required_successor_action": "Execute E-5/F1 over the completed revised Step-15/14 window, then the bridge.",
+  "result_digest": "blake3:65ac7f569968666035bf88026e8f9034d51b23eaa15d793b9ca6aaf08e256870"
+}

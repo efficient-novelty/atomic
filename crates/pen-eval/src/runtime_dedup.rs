@@ -30,9 +30,9 @@
 //! and none of the types here derive `Serialize` — the Stage-2 reporting
 //! path deliberately does not exist yet (§5 of the design).
 
-use crate::nu::{structural_nu, StructuralNuResult};
+use crate::nu::{StructuralNuResult, structural_nu};
 use crate::runtime_bar::fib;
-use pen_core::canonical::{canonical_key_expr, CanonKey};
+use pen_core::canonical::{CanonKey, canonical_key_expr};
 use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
@@ -143,8 +143,8 @@ pub fn evaluate_stratum_levels(
         let mut sigma_image_clauses = Vec::new();
         let mut residual_clauses = Vec::new();
         for (index, clause) in instantiation.clauses.iter().enumerate() {
-            let is_image = r1_enabled
-                && transported_keys.contains(&canonical_key_expr(&clause.expr));
+            let is_image =
+                r1_enabled && transported_keys.contains(&canonical_key_expr(&clause.expr));
             if is_image {
                 sigma_image_clauses.push(index);
             } else {
@@ -382,9 +382,8 @@ pub(crate) fn map_expr(expr: &Expr, leaf: &dyn Fn(&Expr) -> Option<Expr>) -> Exp
 #[cfg(test)]
 mod tests {
     use super::{
-        band_export, engagement_fraction, evaluate_stratum_levels, instantiate_level,
-        ledger_demand, nu_profile, sigma_shift_expr, type_level_obligations, BandExport,
-        TypedObligations,
+        BandExport, TypedObligations, band_export, engagement_fraction, evaluate_stratum_levels,
+        instantiate_level, ledger_demand, nu_profile, sigma_shift_expr, type_level_obligations,
     };
     use crate::lambda_trigger_v2::{
         constant_stratum_crossing, frozen_structure_schema_variants_v2,

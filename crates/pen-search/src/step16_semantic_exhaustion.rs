@@ -37,8 +37,8 @@ use pen_core::clause::ClauseRole;
 use pen_core::expr::Expr;
 use pen_core::hash::blake3_hex;
 use pen_eval::typed_families::{
-    ClauseClosureDisposition, PredecessorClosure, clause_presentation,
-    closure_clause_disposition, predecessor_closure,
+    ClauseClosureDisposition, PredecessorClosure, clause_presentation, closure_clause_disposition,
+    predecessor_closure,
 };
 use pen_type::elaborate::{
     ElabError, SealedSignature, elaborate_single_clause, required_clause_ambient,
@@ -105,10 +105,18 @@ fn classify_position_exprs(
 
     for expr in &exprs {
         let shortfall = required_clause_ambient(expr, position);
-        let formation_probe =
-            elaborate_single_clause(expr, MAX_AMBIENT, &vec![ClauseRole::Formation; position as usize], 15);
+        let formation_probe = elaborate_single_clause(
+            expr,
+            MAX_AMBIENT,
+            &vec![ClauseRole::Formation; position as usize],
+            15,
+        );
         let (formation, invalid_named, unclassified) = match &formation_probe {
-            Ok(elaborated) => (elaborated.kernel_role == ClauseRole::Formation, false, false),
+            Ok(elaborated) => (
+                elaborated.kernel_role == ClauseRole::Formation,
+                false,
+                false,
+            ),
             Err(ElabError::BareUnivArgument) => (false, true, false),
             Err(_) => (false, false, true),
         };
@@ -150,16 +158,10 @@ fn classify_position_exprs(
                             roles[*field as usize] = ClauseRole::Formation;
                         }
                     }
-                    let presentation = clause_presentation(
-                        &elaborated.normal_form,
-                        free_scope,
-                        &roles,
-                        ambient,
-                    );
-                    let disposition =
-                        closure_clause_disposition(signature, closure, &presentation);
-                    marginal_by_assignment
-                        .push(disposition == ClauseClosureDisposition::Marginal);
+                    let presentation =
+                        clause_presentation(&elaborated.normal_form, free_scope, &roles, ambient);
+                    let disposition = closure_clause_disposition(signature, closure, &presentation);
+                    marginal_by_assignment.push(disposition == ClauseClosureDisposition::Marginal);
                 }
                 per_ambient.push((ambient, used_fields, marginal_by_assignment));
             }
@@ -338,7 +340,12 @@ pub fn run_step16_semantic_exhaustion(max_kappa: u16) -> Step16SemanticExhaustio
     }
     let mut strata = Vec::new();
     for kappa in 2..=max_kappa {
-        strata.push(exhaust_stratum(&signature, &closure, kappa, &position_classes));
+        strata.push(exhaust_stratum(
+            &signature,
+            &closure,
+            kappa,
+            &position_classes,
+        ));
     }
     let every_stratum_classified = strata
         .iter()
@@ -377,12 +384,8 @@ mod tests {
             }
             Expr::App(left, _) if matches!(left.as_ref(), Expr::Univ) => ClauseRole::Formation,
             Expr::Var(_) | Expr::Lam(_) | Expr::Refl(_) => ClauseRole::Introduction,
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => {
-                ClauseRole::Introduction
-            }
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => {
-                ClauseRole::Elimination
-            }
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => ClauseRole::Introduction,
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => ClauseRole::Elimination,
             Expr::App(_, _) => ClauseRole::Introduction,
             Expr::PathCon(_) => ClauseRole::PathAttach,
             _ => ClauseRole::Formation,
@@ -417,9 +420,11 @@ mod tests {
                     15,
                 );
                 let (formation, invalid_named, unclassified) = match &probe {
-                    Ok(elaborated) => {
-                        (elaborated.kernel_role == ClauseRole::Formation, false, false)
-                    }
+                    Ok(elaborated) => (
+                        elaborated.kernel_role == ClauseRole::Formation,
+                        false,
+                        false,
+                    ),
                     Err(ElabError::BareUnivArgument) => (false, true, false),
                     Err(_) => (false, false, true),
                 };
@@ -450,8 +455,7 @@ mod tests {
                         let assignments = 1usize << used_fields.len();
                         let mut marginal_by_assignment = Vec::with_capacity(assignments);
                         for assignment in 0..assignments {
-                            let mut roles =
-                                vec![ClauseRole::Introduction; position as usize];
+                            let mut roles = vec![ClauseRole::Introduction; position as usize];
                             for (bit, field) in used_fields.iter().enumerate() {
                                 if assignment & (1 << bit) != 0 {
                                     roles[*field as usize] = ClauseRole::Formation;
@@ -463,11 +467,8 @@ mod tests {
                                 &roles,
                                 ambient,
                             );
-                            let disposition = closure_clause_disposition(
-                                &signature,
-                                &closure,
-                                &presentation,
-                            );
+                            let disposition =
+                                closure_clause_disposition(&signature, &closure, &presentation);
                             marginal_by_assignment
                                 .push(disposition == ClauseClosureDisposition::Marginal);
                         }
@@ -519,9 +520,15 @@ mod tests {
             }
         }
 
-        assert_eq!(dp.raw_total, concrete_internal + concrete_marginal + concrete_invalid + concrete_unclassified);
+        assert_eq!(
+            dp.raw_total,
+            concrete_internal + concrete_marginal + concrete_invalid + concrete_unclassified
+        );
         assert_eq!(dp.internal, concrete_internal, "internal counts diverge");
-        assert_eq!(dp.egp_marginal, concrete_marginal, "marginal counts diverge");
+        assert_eq!(
+            dp.egp_marginal, concrete_marginal,
+            "marginal counts diverge"
+        );
         assert_eq!(
             dp.invalid_named_bare_univ, concrete_invalid,
             "named-invalid counts diverge"

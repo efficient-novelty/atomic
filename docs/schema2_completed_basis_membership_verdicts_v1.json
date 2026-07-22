@@ -1,0 +1,307 @@
+{
+  "schema": "schema2-completed-basis-membership-verdicts-v1",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_global_e4_assembly_v10.json",
+      "role": "completed_basis_authorization",
+      "byte_length": 68848,
+      "blake3": "blake3:abb1683d28a2e57db473ef263459bd72f38eb90a745b072b2f51108310df5258"
+    },
+    {
+      "path": "docs/schema2_grammar_completion_v1.json",
+      "role": "verdict_blind_g6_and_full_trace_grammar",
+      "byte_length": 71566,
+      "blake3": "blake3:584cc8df7d7f3dd19aec9263b98070672df51b0596137f5258cc1175eb2a5371"
+    },
+    {
+      "path": "docs/schema2_m1_sweep_v1.json",
+      "role": "precompletion_membership_surface",
+      "byte_length": 13355,
+      "blake3": "blake3:f6d04e35d192f86a66b03bd8a82a74e151548c88d1ac20f6c948bd9f80e68579"
+    },
+    {
+      "path": "docs/schema2_motive_parametric_coherence_v1.json",
+      "role": "zero_credit_internal_closure",
+      "byte_length": 75297,
+      "blake3": "blake3:c19add812d8c5b7edcee237e5fbc5db4c1945c2cea1e5d5353e8ace97cd6be1f"
+    },
+    {
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "adopted_r1_r2_rules",
+      "byte_length": 6355,
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d"
+    },
+    {
+      "path": "docs/e2_phase_order_adjudication.md",
+      "role": "adopted_p1_membership_gate",
+      "byte_length": 3741,
+      "blake3": "blake3:6f6eb9e071bd05ce172a113da96653ba281d7eab215a23364ee556a0992f246f"
+    },
+    {
+      "path": "crates/pen-schema/src/stage1_r1.rs",
+      "role": "typed_stage1_package",
+      "byte_length": 9627,
+      "blake3": "blake3:677875dd0ecf02a075639f51fabbbac0367cd05d8deeb464601ee2ba97893f86"
+    },
+    {
+      "path": "crates/pen-schema/src/step8_r2.rs",
+      "role": "typed_step8_signatures",
+      "byte_length": 11143,
+      "blake3": "blake3:834be06764a5259269391454feed6ed486685f1c15cb2e9c874866407f277fbe"
+    },
+    {
+      "path": "crates/pen-schema/src/grammar.rs",
+      "role": "typed_role_and_quotient_registry",
+      "byte_length": 69162,
+      "blake3": "blake3:c86b9620c3d07cdf1512d33db1114eb108d68969c4868acf40cdbc5d67d04c8c"
+    },
+    {
+      "path": "crates/pen-schema/src/e34_m1_sweep.rs",
+      "role": "fixed_point_generation_query",
+      "byte_length": 30004,
+      "blake3": "blake3:bfdae045560577fa5bd178cd4e4b890e2c1976cf508a3c7165a8478b6d48d21d"
+    },
+    {
+      "path": "crates/pen-schema/src/grammar_completion.rs",
+      "role": "post_m1_basis_extensions_and_g6",
+      "byte_length": 36295,
+      "blake3": "blake3:33682e6e99cc3414a6e26a36385670e8ce0dee66d403c0a044f4e3dd6e51e76d"
+    },
+    {
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "live_source_at_frozen_predecessor_replay_drift",
+      "byte_length": 17962,
+      "blake3": "blake3:8b8089f38fab15923ab92521f45c79fe16d64d6ef2c59a70ac11d74a4004ae9d"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v10.rs",
+      "role": "completed_basis_proof",
+      "byte_length": 30682,
+      "blake3": "blake3:5d0ffa8fe346f27030b78c4fda1b177e6134c9fdde759fde0b9d49b9b68743fa"
+    },
+    {
+      "path": "crates/pen-search/src/completed_basis_membership.rs",
+      "role": "five_verdict_issuer",
+      "byte_length": 43070,
+      "blake3": "blake3:acc0c6ab6dc239577ee8c1820bc03361eae59fdd189e773fd3ba86287f53edd8"
+    }
+  ],
+  "adopted_r1_r2_replayed": true,
+  "adopted_p1_replayed": true,
+  "completed_basis": {
+    "global_e4_v10_digest": "blake3:118d015f6cabe967052891d4d4dab9660b9837a1f4e3a588fe7f2108bb4d5d2b",
+    "global_e4_v10_replayed": true,
+    "global_e4_complete": true,
+    "five_memberships_authorized": true,
+    "grammar_completion_digest": "blake3:26ccc358c25ace6501e81125363064730c1642cfe775b0a931e8298bc5d60215",
+    "grammar_completion_sealed_digest_verified": true,
+    "grammar_completion_live_definition_replay_valid": false,
+    "grammar_completion_live_replay_errors": [
+      "source replay failed: G-1 replay failed: source invariant failed: archival M1 replay failed: v4 replay failed: predecessor replay failed: source binding mismatch for kernel_normalize_source: expected 18309/blake3:b9ad659cf60175b87090b590ee0850b3635a4968a47fda5bbd3559588d57ba7a, observed 17962/blake3:8b8089f38fab15923ab92521f45c79fe16d64d6ef2c59a70ac11d74a4004ae9d"
+    ],
+    "prior_m1_sweep_digest": "blake3:aec9896de1fdbc665a4c231fb2365ffc93bf3d08f6829695640b4c9174904838",
+    "prior_m1_sealed_digest_verified": true,
+    "prior_m1_live_definition_replay_valid": false,
+    "prior_m1_live_replay_errors": [
+      "v4 replay failed: predecessor replay failed: source binding mismatch for kernel_normalize_source: expected 18309/blake3:b9ad659cf60175b87090b590ee0850b3635a4968a47fda5bbd3559588d57ba7a, observed 17962/blake3:8b8089f38fab15923ab92521f45c79fe16d64d6ef2c59a70ac11d74a4004ae9d"
+    ],
+    "prior_m1_sub_basis_digest": "blake3:3fa9fd6d77721526328be804ff859c07996313d1832400ada03a991d2cdb6af5",
+    "prior_m1_target_reachable": false,
+    "motive_parametric_theorem_digest": "blake3:bc365d38580fe3f62a44e87eee76169d7429255869a6320361b19682a01c466d",
+    "motive_parametric_theorem_replayed": true,
+    "zero_credit_closure_rule_inventory": [
+      "projection",
+      "guarded",
+      "structural",
+      "ambient_former",
+      "dereference",
+      "contextual"
+    ],
+    "basis_extensions": [
+      {
+        "component": "public_endpoint_premise_actions",
+        "evidence_rows": 4,
+        "step_floor": null,
+        "step_ceiling": null,
+        "can_seed_step8_left_unit": false,
+        "reason": "each endpoint rule acts on an already supplied typed premise; premise publication carries zero credit and cannot create a left-unit witness",
+        "evidence_hash": "blake3:3b2805faacb1d021c9864884c6044608e4b8abb6e1df97e2daf835fb72ae8da3"
+      },
+      {
+        "component": "steps_9_15_trace_signature_naturality",
+        "evidence_rows": 43,
+        "step_floor": 9,
+        "step_ceiling": 15,
+        "can_seed_step8_left_unit": false,
+        "reason": "all registered signatures are anchored strictly after Step 8 and preserve predecessor direction; none concludes the Step-8 coherence",
+        "evidence_hash": "blake3:ed3a31764545867b0822223d959889a069c3cbd7846224c569e6c0b946476fd6"
+      },
+      {
+        "component": "p6_derived_closure",
+        "evidence_rows": 0,
+        "step_floor": 15,
+        "step_ceiling": 15,
+        "can_seed_step8_left_unit": false,
+        "reason": "the adopted no-extra-primitive-export rule makes P6 derived closure only",
+        "evidence_hash": "blake3:295a2f612f1dbec5c033f5cabf4cedad36be2e68d3f148ce842943b772de2466"
+      },
+      {
+        "component": "g6_unit_coherence_decision",
+        "evidence_rows": 0,
+        "step_floor": 8,
+        "step_ceiling": 8,
+        "can_seed_step8_left_unit": false,
+        "reason": "the verdict-blind trace/spec audit issued no unit-coherence generator and found no noncircular typed term rule",
+        "evidence_hash": "blake3:5cc74843e74b0d8cbc529f712fac7e8e41ad9b3cbdf600a669006e04a09d6857"
+      },
+      {
+        "component": "zero_credit_internal_closure",
+        "evidence_rows": 6,
+        "step_floor": null,
+        "step_ceiling": null,
+        "can_seed_step8_left_unit": false,
+        "reason": "projection, guarded, structural, ambient-former, dereference, and contextual closure replay existing Internal derivations and mint no family credit",
+        "evidence_hash": "blake3:e0c2019254bf4852027c8a0fabd155a30158d1ec25b85abc004dee530f4bf0f3"
+      },
+      {
+        "component": "v10_classifier_exhaustion",
+        "evidence_rows": 17,
+        "step_floor": null,
+        "step_ceiling": null,
+        "can_seed_step8_left_unit": false,
+        "reason": "the exhaustive classifier partitions derivations; its dispositions are not term or natural-family generators",
+        "evidence_hash": "blake3:d03b18aed88aa4504fdbe666a57fdddc2a35e120f40f8434c29d3bd5e3d1f99a"
+      }
+    ],
+    "every_post_m1_extension_nonseeding": true,
+    "g6_unit_coherence_generator_issued": false,
+    "no_extra_primitive_export_rule_holds": true,
+    "completed_basis_membership_decidable": true,
+    "derivation_hash": "blake3:ada7897d685406c599fd44975ddbf088bb663c1397f5ccccae71759e87bd8566"
+  },
+  "verdicts": [
+    {
+      "subject": {
+        "kind": "stage1_carrier_exception",
+        "role": "kernel_head"
+      },
+      "rule": "formation-completion-package-family-rule-v1",
+      "typed_target": "Stage1 carrier Univ as kernel_head",
+      "source_derivation_hash": "blake3:44bc0a1de53c72d429376a5b2d992559b0b0839c9bd753fa7d79a1456eaebd27",
+      "completed_basis_derivation_hash": "blake3:ada7897d685406c599fd44975ddbf088bb663c1397f5ccccae71759e87bd8566",
+      "typed_role_carried": true,
+      "noncircular_generating_derivation_found": true,
+      "completed_basis_completeness_used": true,
+      "verdict": "generated_by_completed_package",
+      "independent_membership_issued": false,
+      "separate_family_authorized": false,
+      "ordinary_family_token_issued": false,
+      "historical_count_used_as_input": false,
+      "acceptance_bar_used_as_input": false,
+      "derivation_hash": "blake3:482c9fbb4dfe94fc1455d2593fcf13971fdaf642bac8dd936d1de9373578a7f5"
+    },
+    {
+      "subject": {
+        "kind": "stage1_carrier_exception",
+        "role": "adjoint_mate"
+      },
+      "rule": "formation-completion-package-family-rule-v1",
+      "typed_target": "Stage1 carrier Univ as adjoint_mate",
+      "source_derivation_hash": "blake3:44bc0a1de53c72d429376a5b2d992559b0b0839c9bd753fa7d79a1456eaebd27",
+      "completed_basis_derivation_hash": "blake3:ada7897d685406c599fd44975ddbf088bb663c1397f5ccccae71759e87bd8566",
+      "typed_role_carried": false,
+      "noncircular_generating_derivation_found": false,
+      "completed_basis_completeness_used": true,
+      "verdict": "typed_role_not_carried",
+      "independent_membership_issued": false,
+      "separate_family_authorized": false,
+      "ordinary_family_token_issued": false,
+      "historical_count_used_as_input": false,
+      "acceptance_bar_used_as_input": false,
+      "derivation_hash": "blake3:ad601071e7a678bbef15a44398212bbb85989b321de91f8eb60145a6bf62c43e"
+    },
+    {
+      "subject": {
+        "kind": "stage1_carrier_exception",
+        "role": "support_action"
+      },
+      "rule": "formation-completion-package-family-rule-v1",
+      "typed_target": "Stage1 carrier Univ as support_action",
+      "source_derivation_hash": "blake3:44bc0a1de53c72d429376a5b2d992559b0b0839c9bd753fa7d79a1456eaebd27",
+      "completed_basis_derivation_hash": "blake3:ada7897d685406c599fd44975ddbf088bb663c1397f5ccccae71759e87bd8566",
+      "typed_role_carried": false,
+      "noncircular_generating_derivation_found": false,
+      "completed_basis_completeness_used": true,
+      "verdict": "typed_role_not_carried",
+      "independent_membership_issued": false,
+      "separate_family_authorized": false,
+      "ordinary_family_token_issued": false,
+      "historical_count_used_as_input": false,
+      "acceptance_bar_used_as_input": false,
+      "derivation_hash": "blake3:73aed0ac1be3619b6ca05023b309e16a65b132a97afd91a9c1d2aca1c46eb99b"
+    },
+    {
+      "subject": {
+        "kind": "stage1_carrier_exception",
+        "role": "coherence"
+      },
+      "rule": "formation-completion-package-family-rule-v1",
+      "typed_target": "Stage1 carrier Univ as coherence",
+      "source_derivation_hash": "blake3:44bc0a1de53c72d429376a5b2d992559b0b0839c9bd753fa7d79a1456eaebd27",
+      "completed_basis_derivation_hash": "blake3:ada7897d685406c599fd44975ddbf088bb663c1397f5ccccae71759e87bd8566",
+      "typed_role_carried": false,
+      "noncircular_generating_derivation_found": false,
+      "completed_basis_completeness_used": true,
+      "verdict": "typed_role_not_carried",
+      "independent_membership_issued": false,
+      "separate_family_authorized": false,
+      "ordinary_family_token_issued": false,
+      "historical_count_used_as_input": false,
+      "acceptance_bar_used_as_input": false,
+      "derivation_hash": "blake3:5c59fcc29f26b0ffa1e81b91048be8cfd7b34891852250d7f458b9b0324a8ade"
+    },
+    {
+      "subject": {
+        "kind": "step8_left_unit_coherence"
+      },
+      "rule": "derived-action-generator-membership-rule-v1",
+      "typed_target": "Pi x:El(S3). Path El(S3) (mu(base,x)) x",
+      "source_derivation_hash": "blake3:18a5766e762b29a85a458805b3a8bdafd3b6fe91584dc533c5c9c6eb2a7901f3",
+      "completed_basis_derivation_hash": "blake3:ada7897d685406c599fd44975ddbf088bb663c1397f5ccccae71759e87bd8566",
+      "typed_role_carried": true,
+      "noncircular_generating_derivation_found": false,
+      "completed_basis_completeness_used": true,
+      "verdict": "independent",
+      "independent_membership_issued": true,
+      "separate_family_authorized": true,
+      "ordinary_family_token_issued": false,
+      "historical_count_used_as_input": false,
+      "acceptance_bar_used_as_input": false,
+      "derivation_hash": "blake3:35d58a6917df708f0454d386e1a7fae873c6e778960267dac7a35485a3999856"
+    }
+  ],
+  "five_verdicts_executed": true,
+  "generated_by_package_count": 1,
+  "typed_role_not_carried_count": 3,
+  "independent_count": 1,
+  "pending_count_after": 0,
+  "stage1_separate_carrier_family_authorized": false,
+  "step8_left_unit_independent_family_authorized": true,
+  "e2b_now_authorized": true,
+  "downstream": {
+    "e2b_executed": false,
+    "ordinary_family_tokens_minted": false,
+    "counts_as_outputs_regression_run": false,
+    "fq2_evaluated": false,
+    "agent_a_ft1_executed": false,
+    "e5_f1_executed": false,
+    "bridge_executed": false,
+    "fork_executed": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "five_completed_basis_membership_verdicts_issued_step8_left_unit_independent",
+  "permitted_conclusion": "The Stage-1 carrier is a typed KernelHead generated by its R1 completed package and carries none of the other three LocalRoles, so no separate Stage-1 carrier family is authorized. The typed Step-8 left-unit schema has no noncircular derivation in the completed basis and is Independent under R2. All five cases are final and E-2b is now authorized; no ordinary token, historical count, F-Q2 result, or later-phase output has been issued.",
+  "required_successor_action": "Execute E-2b create-new: mint only the ordinary-family tokens justified by these final verdicts, run counts-as-outputs, and evaluate F-Q2 against the sealed record.",
+  "result_digest": "blake3:34b566d668132a1f9cc464636ea15fbe6962abd740a10c43b6d4f794ff0a59ec"
+}

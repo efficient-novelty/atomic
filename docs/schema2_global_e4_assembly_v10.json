@@ -1,0 +1,1388 @@
+{
+  "schema": "schema2-global-e4-assembly-v10",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_global_e4_assembly_v9.json",
+      "role": "sealed_wrapped_predecessor",
+      "byte_length": 104373,
+      "blake3": "blake3:9bc2ceca29a3b3b7b529e3af16e1dccafb49c2846efc0c9f00f04625130d02e4"
+    },
+    {
+      "path": "docs/schema2_motive_parametric_coherence_v1.json",
+      "role": "generic_theorem_certificate",
+      "byte_length": 75297,
+      "blake3": "blake3:c19add812d8c5b7edcee237e5fbc5db4c1945c2cea1e5d5353e8ace97cd6be1f"
+    },
+    {
+      "path": "docs/motive_parametric_coherence_adjudication.md",
+      "role": "adopted_rule_and_falsifiers",
+      "byte_length": 4195,
+      "blake3": "blake3:98feac45422e7f79ddc1e3519627df0f66dc5c935f9da242461bab79b0c9fc2e"
+    },
+    {
+      "path": "crates/pen-search/src/ambient_wrapper_domain.rs",
+      "role": "finite_wrapped_domain",
+      "byte_length": 16959,
+      "blake3": "blake3:20fff487ecc28f0394442b75308c1c937e4af7c498e8c38f2e97b3e12b184aaa"
+    },
+    {
+      "path": "crates/pen-type/src/motive_parametric_coherence.rs",
+      "role": "six_rule_substitution_induction",
+      "byte_length": 28039,
+      "blake3": "blake3:bd25ed1386bab4a30d3b3e569a2df0216a811d0b6e977fd918659f6101748b0f"
+    },
+    {
+      "path": "crates/pen-schema/src/internal_classifier_branch_v9.rs",
+      "role": "v10_total_wrapped_classifier",
+      "byte_length": 10717,
+      "blake3": "blake3:febebbc82abcc30427e17d53c91ca75299bda7758081e29b1ce6102e40a2679d"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v9.rs",
+      "role": "fail_fast_predecessor",
+      "byte_length": 33990,
+      "blake3": "blake3:ed40f5c63e9ea86cce3125a01e672f88a37b2381a7a0ec65e0354c5e767f6c16"
+    },
+    {
+      "path": "crates/pen-search/src/global_e4_assembly_v10.rs",
+      "role": "exhaustion_assembly",
+      "byte_length": 30682,
+      "blake3": "blake3:5d0ffa8fe346f27030b78c4fda1b177e6134c9fdde759fde0b9d49b9b68743fa"
+    }
+  ],
+  "predecessor_global_e4_v9_digest": "blake3:772103f0fad2c96d1f4bea479a5642283de5772e8bd4e1089469d66a62c3e9ac",
+  "predecessor_global_e4_v9_replayed": true,
+  "motive_parametric_coherence_digest": "blake3:bc365d38580fe3f62a44e87eee76169d7429255869a6320361b19682a01c466d",
+  "motive_parametric_coherence_replayed": true,
+  "global_e4_v10_executed": true,
+  "predecessor_v9_witness_resolved": {
+    "predecessor_decision": {
+      "named_typed_obstruction": {
+        "code": "WRAPPED_CONTEXTUAL_INSTANTIATION_COHERENCE_NOT_PROVED",
+        "reason": "no registered closed probes inhabit ambient motive for parameter 1",
+        "evidence": {
+          "wrapper_hash": "blake3:8c649e3968dc758693801c6b5c357f2094d7c47944a764fa335ac0ce0cbb7554",
+          "ambient_arity": 1,
+          "motive_node_counts": [
+            4
+          ],
+          "declaration": {
+            "version": "motive-sensitive-contextual-internality-rule-v1",
+            "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+            "visible_library": 15,
+            "candidate_hash": "blake3:b2f3d5bc7769bb3c450d94807262c39b3f03bd7ee128bd3fb6543471a577f759",
+            "ambient_arity": 1,
+            "hypotheses": [
+              {
+                "parameter": 1,
+                "motive": {
+                  "function": {
+                    "domain": "type",
+                    "codomain": {
+                      "element": "Univ"
+                    }
+                  }
+                },
+                "b15_formable": true,
+                "formation_derivation_hashes": [
+                  "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb",
+                  "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb"
+                ]
+              }
+            ],
+            "every_motive_b15_formable": true,
+            "declaration_hash": "blake3:bfb169fce77196477c7eb226c457ba0265079df96ef30debcd8121eb7ec9bd8c"
+          },
+          "declaration_supplied_before_classification": true,
+          "motive_inference_performed": false,
+          "motive_repair_performed": false,
+          "predecessor_decision": {
+            "named_typed_obstruction": {
+              "predecessor_decision": {
+                "named_typed_obstruction": {
+                  "predecessor_decision": {
+                    "named_typed_obstruction": {
+                      "predecessor_decision": {
+                        "named_typed_obstruction": {
+                          "predecessor_decision": {
+                            "named_typed_obstruction": {
+                              "predecessor_decision": {
+                                "named_typed_obstruction": {
+                                  "legacy_decision": {
+                                    "named_typed_obstruction": {
+                                      "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                      "telescope_class": "Unknown",
+                                      "elaboration_derivation_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                                      "candidate_digest": "blake3:dfa414d2ef8e2e571f5a4c2752e0780ec501011c31b5822eee3ac95dd495a5f5",
+                                      "derivation_hash": "blake3:82160b56f014a961a5f15b8b1c4165531a30950c0915ccf337b3ae0a5d1aebd7"
+                                    }
+                                  },
+                                  "internal_attempt": {
+                                    "candidate": {
+                                      "clauses": [
+                                        {
+                                          "role": "formation",
+                                          "expr": "Univ"
+                                        },
+                                        {
+                                          "role": "introduction",
+                                          "expr": {
+                                            "Lam": {
+                                              "App": [
+                                                {
+                                                  "Var": 3
+                                                },
+                                                {
+                                                  "App": [
+                                                    {
+                                                      "Var": 1
+                                                    },
+                                                    {
+                                                      "Lib": 15
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "predecessor_attempt_hash": "blake3:db587138bda95828b9b84df8da240ffc0d11f870b50b084d9e285401a34c2fbd",
+                                    "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                                    "clauses": [
+                                      {
+                                        "clause_index": 0,
+                                        "expression": "Univ",
+                                        "root_rule": "univ-form",
+                                        "leaf_rules": [
+                                          "univ-form"
+                                        ],
+                                        "predecessor_kind": "ambient_arena_reference",
+                                        "kind": "direct_ambient_arena_reference",
+                                        "field_dependencies": [],
+                                        "certified_internal_prefix_before": [],
+                                        "dependency_certificate_hashes": [],
+                                        "dependencies_are_strictly_prior": true,
+                                        "every_dependency_already_internal": true,
+                                        "projection_not_identity": false,
+                                        "identity_not_projection": false,
+                                        "guarded_inverse_laws_satisfied": false,
+                                        "earned_internal": false,
+                                        "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                                      },
+                                      {
+                                        "clause_index": 1,
+                                        "expression": {
+                                          "Lam": {
+                                            "App": [
+                                              {
+                                                "Var": 3
+                                              },
+                                              {
+                                                "App": [
+                                                  {
+                                                    "Var": 1
+                                                  },
+                                                  {
+                                                    "Lib": 15
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "root_rule": "lam-intro",
+                                        "leaf_rules": [
+                                          "local-var-1",
+                                          "ambient-param-1",
+                                          "library-constant"
+                                        ],
+                                        "predecessor_kind": "unsupported_structural_derivation",
+                                        "kind": "unsupported",
+                                        "field_dependencies": [],
+                                        "certified_internal_prefix_before": [],
+                                        "dependency_certificate_hashes": [],
+                                        "dependencies_are_strictly_prior": true,
+                                        "every_dependency_already_internal": true,
+                                        "projection_not_identity": false,
+                                        "identity_not_projection": false,
+                                        "guarded_inverse_laws_satisfied": false,
+                                        "earned_internal": false,
+                                        "derivation_hash": "blake3:601166e167209b9fb58c189fa571aa8a02c85489d5a040b89031e992f002379a"
+                                      }
+                                    ],
+                                    "certified_internal_prefix": [],
+                                    "every_clause_earned_internal": false,
+                                    "no_forward_missing_or_cyclic_dependency": true,
+                                    "projection_identity_separation_checked": true,
+                                    "all_guarded_inverse_laws_satisfied": false,
+                                    "internal_certificate_issued": false,
+                                    "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                                    "derivation_hash": "blake3:3741818533596b3890a682560f2691134698ddc9d7ca221e436ef923c5da9fd4"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "contextual_failure": "frozen raw Telescope carries no ambient-motive declaration"
+            }
+          },
+          "derivation_hash": "blake3:9db5e12477f29f823f89828d5783e4aef3c6d8452473e94035e10407e6172618"
+        },
+        "contextual_decision": {
+          "named_typed_obstruction": {
+            "predecessor_decision": {
+              "named_typed_obstruction": {
+                "predecessor_decision": {
+                  "named_typed_obstruction": {
+                    "predecessor_decision": {
+                      "named_typed_obstruction": {
+                        "predecessor_decision": {
+                          "named_typed_obstruction": {
+                            "predecessor_decision": {
+                              "named_typed_obstruction": {
+                                "legacy_decision": {
+                                  "named_typed_obstruction": {
+                                    "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                    "telescope_class": "Unknown",
+                                    "elaboration_derivation_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                                    "candidate_digest": "blake3:dfa414d2ef8e2e571f5a4c2752e0780ec501011c31b5822eee3ac95dd495a5f5",
+                                    "derivation_hash": "blake3:82160b56f014a961a5f15b8b1c4165531a30950c0915ccf337b3ae0a5d1aebd7"
+                                  }
+                                },
+                                "internal_attempt": {
+                                  "candidate": {
+                                    "clauses": [
+                                      {
+                                        "role": "formation",
+                                        "expr": "Univ"
+                                      },
+                                      {
+                                        "role": "introduction",
+                                        "expr": {
+                                          "Lam": {
+                                            "App": [
+                                              {
+                                                "Var": 3
+                                              },
+                                              {
+                                                "App": [
+                                                  {
+                                                    "Var": 1
+                                                  },
+                                                  {
+                                                    "Lib": 15
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "predecessor_attempt_hash": "blake3:db587138bda95828b9b84df8da240ffc0d11f870b50b084d9e285401a34c2fbd",
+                                  "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                                  "clauses": [
+                                    {
+                                      "clause_index": 0,
+                                      "expression": "Univ",
+                                      "root_rule": "univ-form",
+                                      "leaf_rules": [
+                                        "univ-form"
+                                      ],
+                                      "predecessor_kind": "ambient_arena_reference",
+                                      "kind": "direct_ambient_arena_reference",
+                                      "field_dependencies": [],
+                                      "certified_internal_prefix_before": [],
+                                      "dependency_certificate_hashes": [],
+                                      "dependencies_are_strictly_prior": true,
+                                      "every_dependency_already_internal": true,
+                                      "projection_not_identity": false,
+                                      "identity_not_projection": false,
+                                      "guarded_inverse_laws_satisfied": false,
+                                      "earned_internal": false,
+                                      "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                                    },
+                                    {
+                                      "clause_index": 1,
+                                      "expression": {
+                                        "Lam": {
+                                          "App": [
+                                            {
+                                              "Var": 3
+                                            },
+                                            {
+                                              "App": [
+                                                {
+                                                  "Var": 1
+                                                },
+                                                {
+                                                  "Lib": 15
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "root_rule": "lam-intro",
+                                      "leaf_rules": [
+                                        "local-var-1",
+                                        "ambient-param-1",
+                                        "library-constant"
+                                      ],
+                                      "predecessor_kind": "unsupported_structural_derivation",
+                                      "kind": "unsupported",
+                                      "field_dependencies": [],
+                                      "certified_internal_prefix_before": [],
+                                      "dependency_certificate_hashes": [],
+                                      "dependencies_are_strictly_prior": true,
+                                      "every_dependency_already_internal": true,
+                                      "projection_not_identity": false,
+                                      "identity_not_projection": false,
+                                      "guarded_inverse_laws_satisfied": false,
+                                      "earned_internal": false,
+                                      "derivation_hash": "blake3:601166e167209b9fb58c189fa571aa8a02c85489d5a040b89031e992f002379a"
+                                    }
+                                  ],
+                                  "certified_internal_prefix": [],
+                                  "every_clause_earned_internal": false,
+                                  "no_forward_missing_or_cyclic_dependency": true,
+                                  "projection_identity_separation_checked": true,
+                                  "all_guarded_inverse_laws_satisfied": false,
+                                  "internal_certificate_issued": false,
+                                  "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                                  "derivation_hash": "blake3:3741818533596b3890a682560f2691134698ddc9d7ca221e436ef923c5da9fd4"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "contextual_failure": "explicit contextual derivation failed its motive or specialization obligations"
+          }
+        }
+      }
+    },
+    "successor_decision": {
+      "internal_parametric_contextual": {
+        "certificate": {
+          "candidate": {
+            "version": "ambient-telescope-candidate-wrapper-v1",
+            "clauses": {
+              "clauses": [
+                {
+                  "role": "formation",
+                  "expr": "Univ"
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "Lam": {
+                      "App": [
+                        {
+                          "Var": 3
+                        },
+                        {
+                          "App": [
+                            {
+                              "Var": 1
+                            },
+                            {
+                              "Lib": 15
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "ambient": [
+              {
+                "function": {
+                  "domain": "type",
+                  "codomain": {
+                    "element": "Univ"
+                  }
+                }
+              }
+            ]
+          },
+          "predecessor_decision": {
+            "named_typed_obstruction": {
+              "code": "WRAPPED_CONTEXTUAL_INSTANTIATION_COHERENCE_NOT_PROVED",
+              "reason": "no registered closed probes inhabit ambient motive for parameter 1",
+              "evidence": {
+                "wrapper_hash": "blake3:8c649e3968dc758693801c6b5c357f2094d7c47944a764fa335ac0ce0cbb7554",
+                "ambient_arity": 1,
+                "motive_node_counts": [
+                  4
+                ],
+                "declaration": {
+                  "version": "motive-sensitive-contextual-internality-rule-v1",
+                  "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                  "visible_library": 15,
+                  "candidate_hash": "blake3:b2f3d5bc7769bb3c450d94807262c39b3f03bd7ee128bd3fb6543471a577f759",
+                  "ambient_arity": 1,
+                  "hypotheses": [
+                    {
+                      "parameter": 1,
+                      "motive": {
+                        "function": {
+                          "domain": "type",
+                          "codomain": {
+                            "element": "Univ"
+                          }
+                        }
+                      },
+                      "b15_formable": true,
+                      "formation_derivation_hashes": [
+                        "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb",
+                        "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb"
+                      ]
+                    }
+                  ],
+                  "every_motive_b15_formable": true,
+                  "declaration_hash": "blake3:bfb169fce77196477c7eb226c457ba0265079df96ef30debcd8121eb7ec9bd8c"
+                },
+                "declaration_supplied_before_classification": true,
+                "motive_inference_performed": false,
+                "motive_repair_performed": false,
+                "predecessor_decision": {
+                  "named_typed_obstruction": {
+                    "predecessor_decision": {
+                      "named_typed_obstruction": {
+                        "predecessor_decision": {
+                          "named_typed_obstruction": {
+                            "predecessor_decision": {
+                              "named_typed_obstruction": {
+                                "predecessor_decision": {
+                                  "named_typed_obstruction": {
+                                    "predecessor_decision": {
+                                      "named_typed_obstruction": {
+                                        "legacy_decision": {
+                                          "named_typed_obstruction": {
+                                            "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                            "telescope_class": "Unknown",
+                                            "elaboration_derivation_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                                            "candidate_digest": "blake3:dfa414d2ef8e2e571f5a4c2752e0780ec501011c31b5822eee3ac95dd495a5f5",
+                                            "derivation_hash": "blake3:82160b56f014a961a5f15b8b1c4165531a30950c0915ccf337b3ae0a5d1aebd7"
+                                          }
+                                        },
+                                        "internal_attempt": {
+                                          "candidate": {
+                                            "clauses": [
+                                              {
+                                                "role": "formation",
+                                                "expr": "Univ"
+                                              },
+                                              {
+                                                "role": "introduction",
+                                                "expr": {
+                                                  "Lam": {
+                                                    "App": [
+                                                      {
+                                                        "Var": 3
+                                                      },
+                                                      {
+                                                        "App": [
+                                                          {
+                                                            "Var": 1
+                                                          },
+                                                          {
+                                                            "Lib": 15
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "predecessor_attempt_hash": "blake3:db587138bda95828b9b84df8da240ffc0d11f870b50b084d9e285401a34c2fbd",
+                                          "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                                          "clauses": [
+                                            {
+                                              "clause_index": 0,
+                                              "expression": "Univ",
+                                              "root_rule": "univ-form",
+                                              "leaf_rules": [
+                                                "univ-form"
+                                              ],
+                                              "predecessor_kind": "ambient_arena_reference",
+                                              "kind": "direct_ambient_arena_reference",
+                                              "field_dependencies": [],
+                                              "certified_internal_prefix_before": [],
+                                              "dependency_certificate_hashes": [],
+                                              "dependencies_are_strictly_prior": true,
+                                              "every_dependency_already_internal": true,
+                                              "projection_not_identity": false,
+                                              "identity_not_projection": false,
+                                              "guarded_inverse_laws_satisfied": false,
+                                              "earned_internal": false,
+                                              "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                                            },
+                                            {
+                                              "clause_index": 1,
+                                              "expression": {
+                                                "Lam": {
+                                                  "App": [
+                                                    {
+                                                      "Var": 3
+                                                    },
+                                                    {
+                                                      "App": [
+                                                        {
+                                                          "Var": 1
+                                                        },
+                                                        {
+                                                          "Lib": 15
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              },
+                                              "root_rule": "lam-intro",
+                                              "leaf_rules": [
+                                                "local-var-1",
+                                                "ambient-param-1",
+                                                "library-constant"
+                                              ],
+                                              "predecessor_kind": "unsupported_structural_derivation",
+                                              "kind": "unsupported",
+                                              "field_dependencies": [],
+                                              "certified_internal_prefix_before": [],
+                                              "dependency_certificate_hashes": [],
+                                              "dependencies_are_strictly_prior": true,
+                                              "every_dependency_already_internal": true,
+                                              "projection_not_identity": false,
+                                              "identity_not_projection": false,
+                                              "guarded_inverse_laws_satisfied": false,
+                                              "earned_internal": false,
+                                              "derivation_hash": "blake3:601166e167209b9fb58c189fa571aa8a02c85489d5a040b89031e992f002379a"
+                                            }
+                                          ],
+                                          "certified_internal_prefix": [],
+                                          "every_clause_earned_internal": false,
+                                          "no_forward_missing_or_cyclic_dependency": true,
+                                          "projection_identity_separation_checked": true,
+                                          "all_guarded_inverse_laws_satisfied": false,
+                                          "internal_certificate_issued": false,
+                                          "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                                          "derivation_hash": "blake3:3741818533596b3890a682560f2691134698ddc9d7ca221e436ef923c5da9fd4"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "contextual_failure": "frozen raw Telescope carries no ambient-motive declaration"
+                  }
+                },
+                "derivation_hash": "blake3:9db5e12477f29f823f89828d5783e4aef3c6d8452473e94035e10407e6172618"
+              },
+              "contextual_decision": {
+                "named_typed_obstruction": {
+                  "predecessor_decision": {
+                    "named_typed_obstruction": {
+                      "predecessor_decision": {
+                        "named_typed_obstruction": {
+                          "predecessor_decision": {
+                            "named_typed_obstruction": {
+                              "predecessor_decision": {
+                                "named_typed_obstruction": {
+                                  "predecessor_decision": {
+                                    "named_typed_obstruction": {
+                                      "legacy_decision": {
+                                        "named_typed_obstruction": {
+                                          "code": "F_G4_TYPED_CANDIDATE_OUTSIDE_EVERY_ADOPTED_SCHEMA2_CLASS",
+                                          "telescope_class": "Unknown",
+                                          "elaboration_derivation_hash": "blake3:6a38c72998174e886a5cedf5f6dc82f7dc4ca67b7c87f83fc96c281f34b27295",
+                                          "candidate_digest": "blake3:dfa414d2ef8e2e571f5a4c2752e0780ec501011c31b5822eee3ac95dd495a5f5",
+                                          "derivation_hash": "blake3:82160b56f014a961a5f15b8b1c4165531a30950c0915ccf337b3ae0a5d1aebd7"
+                                        }
+                                      },
+                                      "internal_attempt": {
+                                        "candidate": {
+                                          "clauses": [
+                                            {
+                                              "role": "formation",
+                                              "expr": "Univ"
+                                            },
+                                            {
+                                              "role": "introduction",
+                                              "expr": {
+                                                "Lam": {
+                                                  "App": [
+                                                    {
+                                                      "Var": 3
+                                                    },
+                                                    {
+                                                      "App": [
+                                                        {
+                                                          "Var": 1
+                                                        },
+                                                        {
+                                                          "Lib": 15
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        },
+                                        "predecessor_attempt_hash": "blake3:db587138bda95828b9b84df8da240ffc0d11f870b50b084d9e285401a34c2fbd",
+                                        "predecessor_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                                        "clauses": [
+                                          {
+                                            "clause_index": 0,
+                                            "expression": "Univ",
+                                            "root_rule": "univ-form",
+                                            "leaf_rules": [
+                                              "univ-form"
+                                            ],
+                                            "predecessor_kind": "ambient_arena_reference",
+                                            "kind": "direct_ambient_arena_reference",
+                                            "field_dependencies": [],
+                                            "certified_internal_prefix_before": [],
+                                            "dependency_certificate_hashes": [],
+                                            "dependencies_are_strictly_prior": true,
+                                            "every_dependency_already_internal": true,
+                                            "projection_not_identity": false,
+                                            "identity_not_projection": false,
+                                            "guarded_inverse_laws_satisfied": false,
+                                            "earned_internal": false,
+                                            "derivation_hash": "blake3:f4e0cb84d7a31501f30abdc6d357f11b950231961c7d3e3b629dcf9d47def87e"
+                                          },
+                                          {
+                                            "clause_index": 1,
+                                            "expression": {
+                                              "Lam": {
+                                                "App": [
+                                                  {
+                                                    "Var": 3
+                                                  },
+                                                  {
+                                                    "App": [
+                                                      {
+                                                        "Var": 1
+                                                      },
+                                                      {
+                                                        "Lib": 15
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "root_rule": "lam-intro",
+                                            "leaf_rules": [
+                                              "local-var-1",
+                                              "ambient-param-1",
+                                              "library-constant"
+                                            ],
+                                            "predecessor_kind": "unsupported_structural_derivation",
+                                            "kind": "unsupported",
+                                            "field_dependencies": [],
+                                            "certified_internal_prefix_before": [],
+                                            "dependency_certificate_hashes": [],
+                                            "dependencies_are_strictly_prior": true,
+                                            "every_dependency_already_internal": true,
+                                            "projection_not_identity": false,
+                                            "identity_not_projection": false,
+                                            "guarded_inverse_laws_satisfied": false,
+                                            "earned_internal": false,
+                                            "derivation_hash": "blake3:601166e167209b9fb58c189fa571aa8a02c85489d5a040b89031e992f002379a"
+                                          }
+                                        ],
+                                        "certified_internal_prefix": [],
+                                        "every_clause_earned_internal": false,
+                                        "no_forward_missing_or_cyclic_dependency": true,
+                                        "projection_identity_separation_checked": true,
+                                        "all_guarded_inverse_laws_satisfied": false,
+                                        "internal_certificate_issued": false,
+                                        "failure_code": "INDUCTIVE_INTERNALITY_GUARDED_WEAKENING_ERASURE_INVERSE_LAWS_MISSING",
+                                        "derivation_hash": "blake3:3741818533596b3890a682560f2691134698ddc9d7ca221e436ef923c5da9fd4"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "contextual_failure": "explicit contextual derivation failed its motive or specialization obligations"
+                }
+              }
+            }
+          },
+          "contextual_clause_evidence": [
+            {
+              "version": "motive-parametric-instantiation-coherence-v1",
+              "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+              "visible_library": 15,
+              "candidate": {
+                "clauses": [
+                  {
+                    "role": "formation",
+                    "expr": "Univ"
+                  },
+                  {
+                    "role": "introduction",
+                    "expr": {
+                      "Lam": {
+                        "App": [
+                          {
+                            "Var": 3
+                          },
+                          {
+                            "App": [
+                              {
+                                "Var": 1
+                              },
+                              {
+                                "Lib": 15
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "clause_index": 1,
+              "ambient_context": {
+                "version": "motive-sensitive-contextual-internality-rule-v1",
+                "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+                "visible_library": 15,
+                "candidate_hash": "blake3:b2f3d5bc7769bb3c450d94807262c39b3f03bd7ee128bd3fb6543471a577f759",
+                "ambient_arity": 1,
+                "hypotheses": [
+                  {
+                    "parameter": 1,
+                    "motive": {
+                      "function": {
+                        "domain": "type",
+                        "codomain": {
+                          "element": "Univ"
+                        }
+                      }
+                    },
+                    "b15_formable": true,
+                    "formation_derivation_hashes": [
+                      "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb",
+                      "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb"
+                    ]
+                  }
+                ],
+                "every_motive_b15_formable": true,
+                "declaration_hash": "blake3:bfb169fce77196477c7eb226c457ba0265079df96ef30debcd8121eb7ec9bd8c"
+              },
+              "certified_prior_clauses": {
+                "0": "inherited-nonlive-internal-clause-0"
+              },
+              "precheck": {
+                "no_registered_probe_after_typed_structural_audit": {
+                  "parameter": 1
+                }
+              },
+              "typed_structure_audit_passed": true,
+              "generic_theorem": {
+                "version": "motive-parametric-instantiation-coherence-v1",
+                "closure_rule_inventory": [
+                  "projection",
+                  "guarded",
+                  "structural",
+                  "ambient_former",
+                  "dereference",
+                  "contextual"
+                ],
+                "expression_constructor_inventory": [
+                  "App",
+                  "Lam",
+                  "Pi",
+                  "Sigma",
+                  "Univ",
+                  "Var",
+                  "Lib",
+                  "Id",
+                  "Refl",
+                  "Susp",
+                  "Trunc",
+                  "PathCon",
+                  "Flat",
+                  "Sharp",
+                  "Disc",
+                  "Shape",
+                  "Next",
+                  "Eventually",
+                  "Bang",
+                  "WhyNot"
+                ],
+                "rule_cases": [
+                  {
+                    "rule": "projection",
+                    "source_derivation": {
+                      "rule": "projection",
+                      "expression": {
+                        "Var": 1
+                      },
+                      "premises": [],
+                      "rule_evidence_hash": "blake3:5c5b502d49e6dfd2bbd45fcceb949647d5243c96b63ad3ed2e222b6d06104a25"
+                    },
+                    "substitution_derivation_hash": "blake3:b23373a33d6d7644521e86f91a6b462a9da0e09ba18e25094efc9e185bb8351d",
+                    "specialized_derivation": {
+                      "rule": "projection",
+                      "source_expression": {
+                        "Var": 1
+                      },
+                      "specialized_expression": "Univ",
+                      "specialized_premises": [],
+                      "rule_preserved": true,
+                      "every_premise_specialized": true,
+                      "derivation_hash": "blake3:3a812b34aaf82d9d2db6b97ff9320833b1ff881f369bf6296f34db84c5db2c7f"
+                    },
+                    "structural_recursion_used": true,
+                    "rule_preserved": true,
+                    "derivation_hash": "blake3:d31a75e3039c3ea191296a0ab96ae989d4eb30d262f850959079a5ede07bd921"
+                  },
+                  {
+                    "rule": "guarded",
+                    "source_derivation": {
+                      "rule": "guarded",
+                      "expression": {
+                        "Lam": {
+                          "Var": 1
+                        }
+                      },
+                      "premises": [
+                        {
+                          "rule": "projection",
+                          "expression": {
+                            "Var": 1
+                          },
+                          "premises": [],
+                          "rule_evidence_hash": "blake3:9001d5cab481187f850ae9afb6e475ec6dc39098db31cb8eecd796bf6fc69ddd"
+                        }
+                      ],
+                      "rule_evidence_hash": "blake3:8e23b240f2a72ec8c3b4e559c782a2bc275801921656b97fa8f8f494bbf615fa"
+                    },
+                    "substitution_derivation_hash": "blake3:f9cf80c87f578f4d7450e2453d46d7ea693b3438b3790d61143f70a889b95ca8",
+                    "specialized_derivation": {
+                      "rule": "guarded",
+                      "source_expression": {
+                        "Lam": {
+                          "Var": 1
+                        }
+                      },
+                      "specialized_expression": {
+                        "Lam": "Univ"
+                      },
+                      "specialized_premises": [
+                        {
+                          "rule": "projection",
+                          "source_expression": {
+                            "Var": 1
+                          },
+                          "specialized_expression": "Univ",
+                          "specialized_premises": [],
+                          "rule_preserved": true,
+                          "every_premise_specialized": true,
+                          "derivation_hash": "blake3:3a812b34aaf82d9d2db6b97ff9320833b1ff881f369bf6296f34db84c5db2c7f"
+                        }
+                      ],
+                      "rule_preserved": true,
+                      "every_premise_specialized": true,
+                      "derivation_hash": "blake3:d8d32fe8ba7aae4e44cf6f163921744d4b76bcc6e27d87968b462fb9f6759bb1"
+                    },
+                    "structural_recursion_used": true,
+                    "rule_preserved": true,
+                    "derivation_hash": "blake3:258f31727be9d8a77cadee51f3cdca1ca7a831a4c31257297afa8d669ada0c33"
+                  },
+                  {
+                    "rule": "structural",
+                    "source_derivation": {
+                      "rule": "structural",
+                      "expression": {
+                        "Lam": {
+                          "App": [
+                            {
+                              "Var": 1
+                            },
+                            {
+                              "Lib": 15
+                            }
+                          ]
+                        }
+                      },
+                      "premises": [
+                        {
+                          "rule": "projection",
+                          "expression": {
+                            "Var": 1
+                          },
+                          "premises": [],
+                          "rule_evidence_hash": "blake3:d8a3bef8c27d64b9fc252c866884d0332d95774b19e5f80a79a08df22bf2cf51"
+                        }
+                      ],
+                      "rule_evidence_hash": "blake3:fa2be61f20732af06e90ef6d0574c2ecb29d653aaced8ae8dd8e9bb914f0a19a"
+                    },
+                    "substitution_derivation_hash": "blake3:249209a40bb314a395723460558453e04f0a8c9e34847cf24a87211703bb8fce",
+                    "specialized_derivation": {
+                      "rule": "structural",
+                      "source_expression": {
+                        "Lam": {
+                          "App": [
+                            {
+                              "Var": 1
+                            },
+                            {
+                              "Lib": 15
+                            }
+                          ]
+                        }
+                      },
+                      "specialized_expression": {
+                        "Lam": {
+                          "App": [
+                            "Univ",
+                            {
+                              "Lib": 15
+                            }
+                          ]
+                        }
+                      },
+                      "specialized_premises": [
+                        {
+                          "rule": "projection",
+                          "source_expression": {
+                            "Var": 1
+                          },
+                          "specialized_expression": "Univ",
+                          "specialized_premises": [],
+                          "rule_preserved": true,
+                          "every_premise_specialized": true,
+                          "derivation_hash": "blake3:3a812b34aaf82d9d2db6b97ff9320833b1ff881f369bf6296f34db84c5db2c7f"
+                        }
+                      ],
+                      "rule_preserved": true,
+                      "every_premise_specialized": true,
+                      "derivation_hash": "blake3:60147a848974459c33d983bc55d34f85389355a1590daccf8388c151068845f0"
+                    },
+                    "structural_recursion_used": true,
+                    "rule_preserved": true,
+                    "derivation_hash": "blake3:96c3a80c5bab1e3107ef08ea5dfa2602e8b88303c759726db3b4e73a4c236170"
+                  },
+                  {
+                    "rule": "ambient_former",
+                    "source_derivation": {
+                      "rule": "ambient_former",
+                      "expression": {
+                        "Flat": {
+                          "Var": 1
+                        }
+                      },
+                      "premises": [
+                        {
+                          "rule": "projection",
+                          "expression": {
+                            "Var": 1
+                          },
+                          "premises": [],
+                          "rule_evidence_hash": "blake3:7e749d02c9b055bf6f40c1e59971ecfff9fdc242bd4dd4bee1fbcc21cc2734ae"
+                        }
+                      ],
+                      "rule_evidence_hash": "blake3:a9ee76b24159335ffda88004d88961f24dac50d0e2640de50678800c32d59829"
+                    },
+                    "substitution_derivation_hash": "blake3:90b9c039455055d347af1895b7c682307301c20e52fb7e96f76d5a12b6047294",
+                    "specialized_derivation": {
+                      "rule": "ambient_former",
+                      "source_expression": {
+                        "Flat": {
+                          "Var": 1
+                        }
+                      },
+                      "specialized_expression": {
+                        "Flat": "Univ"
+                      },
+                      "specialized_premises": [
+                        {
+                          "rule": "projection",
+                          "source_expression": {
+                            "Var": 1
+                          },
+                          "specialized_expression": "Univ",
+                          "specialized_premises": [],
+                          "rule_preserved": true,
+                          "every_premise_specialized": true,
+                          "derivation_hash": "blake3:3a812b34aaf82d9d2db6b97ff9320833b1ff881f369bf6296f34db84c5db2c7f"
+                        }
+                      ],
+                      "rule_preserved": true,
+                      "every_premise_specialized": true,
+                      "derivation_hash": "blake3:485e9c58841776c05de7ef7cd039fb9a35835373f0bb9d12bb2134fc0cdae0ba"
+                    },
+                    "structural_recursion_used": true,
+                    "rule_preserved": true,
+                    "derivation_hash": "blake3:5e7eeb9dd1fd233694f8db9258fd2f8f8dc6ba5b1afcf4d1bee266d7b68085ed"
+                  },
+                  {
+                    "rule": "dereference",
+                    "source_derivation": {
+                      "rule": "dereference",
+                      "expression": {
+                        "App": [
+                          {
+                            "Lib": 15
+                          },
+                          {
+                            "Var": 1
+                          }
+                        ]
+                      },
+                      "premises": [
+                        {
+                          "rule": "projection",
+                          "expression": {
+                            "Var": 1
+                          },
+                          "premises": [],
+                          "rule_evidence_hash": "blake3:47f3a35c8e27d46acbe2956483adfb389b2212255d9d287add0950485751ce72"
+                        }
+                      ],
+                      "rule_evidence_hash": "blake3:c6ea801cd9b8bf51998098203c26d25733b0c99b7414b1c0683adbf331c3e4ca"
+                    },
+                    "substitution_derivation_hash": "blake3:316d3f979ee2a30fbe4845b48e42ffe58ca07fc25c7448b252c2848b62d174d1",
+                    "specialized_derivation": {
+                      "rule": "dereference",
+                      "source_expression": {
+                        "App": [
+                          {
+                            "Lib": 15
+                          },
+                          {
+                            "Var": 1
+                          }
+                        ]
+                      },
+                      "specialized_expression": {
+                        "App": [
+                          {
+                            "Lib": 15
+                          },
+                          "Univ"
+                        ]
+                      },
+                      "specialized_premises": [
+                        {
+                          "rule": "projection",
+                          "source_expression": {
+                            "Var": 1
+                          },
+                          "specialized_expression": "Univ",
+                          "specialized_premises": [],
+                          "rule_preserved": true,
+                          "every_premise_specialized": true,
+                          "derivation_hash": "blake3:3a812b34aaf82d9d2db6b97ff9320833b1ff881f369bf6296f34db84c5db2c7f"
+                        }
+                      ],
+                      "rule_preserved": true,
+                      "every_premise_specialized": true,
+                      "derivation_hash": "blake3:5ce1c0ecb6c36d5f43902ec06bf427c724d7984f091a2376a59dec3613a1847f"
+                    },
+                    "structural_recursion_used": true,
+                    "rule_preserved": true,
+                    "derivation_hash": "blake3:507538031a5f0a8f2016e8074725a031cec377395d0f5de3cfc7a6de0d35f026"
+                  },
+                  {
+                    "rule": "contextual",
+                    "source_derivation": {
+                      "rule": "contextual",
+                      "expression": {
+                        "App": [
+                          {
+                            "Var": 1
+                          },
+                          {
+                            "App": [
+                              {
+                                "Lib": 15
+                              },
+                              "Univ"
+                            ]
+                          }
+                        ]
+                      },
+                      "premises": [
+                        {
+                          "rule": "projection",
+                          "expression": {
+                            "Var": 1
+                          },
+                          "premises": [],
+                          "rule_evidence_hash": "blake3:e8fc86f0e367b43a62d0a30248ee4250903a64a280df842020ece303351e2c6d"
+                        }
+                      ],
+                      "rule_evidence_hash": "blake3:08b51df8789a7dc41bc00c77d933db0893f11c475ef934fc106dcbe4fe45a6eb"
+                    },
+                    "substitution_derivation_hash": "blake3:ec5a37adf64c2fcd74220c31d7502d21cd2dabbbf3f5026bf7cf414fd597a984",
+                    "specialized_derivation": {
+                      "rule": "contextual",
+                      "source_expression": {
+                        "App": [
+                          {
+                            "Var": 1
+                          },
+                          {
+                            "App": [
+                              {
+                                "Lib": 15
+                              },
+                              "Univ"
+                            ]
+                          }
+                        ]
+                      },
+                      "specialized_expression": {
+                        "App": [
+                          "Univ",
+                          {
+                            "App": [
+                              {
+                                "Lib": 15
+                              },
+                              "Univ"
+                            ]
+                          }
+                        ]
+                      },
+                      "specialized_premises": [
+                        {
+                          "rule": "projection",
+                          "source_expression": {
+                            "Var": 1
+                          },
+                          "specialized_expression": "Univ",
+                          "specialized_premises": [],
+                          "rule_preserved": true,
+                          "every_premise_specialized": true,
+                          "derivation_hash": "blake3:3a812b34aaf82d9d2db6b97ff9320833b1ff881f369bf6296f34db84c5db2c7f"
+                        }
+                      ],
+                      "rule_preserved": true,
+                      "every_premise_specialized": true,
+                      "derivation_hash": "blake3:030ad88f7b9e047f6e151e5b61d056c8a6cef8c36af117f24462100dfa0e98ba"
+                    },
+                    "structural_recursion_used": true,
+                    "rule_preserved": true,
+                    "derivation_hash": "blake3:7c8bb94ac532e63bd96ef3b7b01f96109e0ed35466be3d849be242bdeb50115b"
+                  }
+                ],
+                "every_rule_covered_exactly_once": true,
+                "structural_induction_total": true,
+                "generic_over_contexts": true,
+                "generic_over_motives": true,
+                "generic_over_motive_typed_closed_assignments": true,
+                "empty_assignment_case_included": true,
+                "uninhabited_motive_case_vacuous": true,
+                "registered_probes_used_as_evidence": false,
+                "motive_grammar_restriction_applied": false,
+                "marginal_nu": 0,
+                "theorem_hash": "blake3:e0c2019254bf4852027c8a0fabd155a30158d1ec25b85abc004dee530f4bf0f3"
+              },
+              "generic_theorem_replayed": true,
+              "probes_demoted_to_regression": true,
+              "universal_assignment_quantification": true,
+              "vacuous_uninhabited_case_preserved": true,
+              "no_motive_filter": true,
+              "no_credit_anchor_or_orbit_minted": true,
+              "internal_closure_issued": true,
+              "marginal_nu": 0,
+              "derivation_hash": "blake3:8224b14a79ce51fc0f1d33e4468c2ff3d9a8b120bf387024e089a31f4cf7e28f"
+            }
+          ],
+          "nonlive_clause_indices": [
+            0
+          ],
+          "every_live_contextual_clause_covered": true,
+          "generic_theorem_replayed_per_live_clause": true,
+          "probes_are_regression_only": true,
+          "motive_grammar_restricted": false,
+          "no_credit_anchor_or_orbit_minted": true,
+          "internal_certificate_issued": true,
+          "marginal_nu": 0,
+          "derivation_hash": "blake3:43794a144bd9ebf0bdae3b7cac483ece3da1a6cf2c37020a1c7c5948251809cb"
+        },
+        "marginal_nu": 0,
+        "derivation_hash": "blake3:282346a3cebd5796a041399d8be65782d628c66005696ede77318648cca96a50"
+      }
+    },
+    "exact_v9_motive": {
+      "function": {
+        "domain": "type",
+        "codomain": {
+          "element": "Univ"
+        }
+      }
+    },
+    "predecessor_unknown": true,
+    "successor_internal": true,
+    "theorem_replayed": true,
+    "motive_grammar_restricted": false,
+    "marginal_nu": 0,
+    "derivation_hash": "blake3:395b4790e373307850432f31c04532e3c413e1028aef5230a0f8091185fc9362"
+  },
+  "wrapped_domain_exhaustion": {
+    "wrapper_version": "ambient-telescope-candidate-wrapper-v1",
+    "motive_node_cap": 6,
+    "syntactic_motive_count_upper_bound": 914612,
+    "domain_finite": true,
+    "silent_truncation": false,
+    "declaration_independent": true,
+    "pi_coverage_replayed": true,
+    "closed_fiber_agreement_replayed": true,
+    "six_closure_rule_induction_total": true,
+    "generic_over_all_motives": true,
+    "probes_used_as_evidence": false,
+    "contextual_error_dispositions": [
+      {
+        "error_kind": "elaboration",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "declaration_candidate_mismatch",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "declaration_arity",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "declaration_order",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "motive_not_formable",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "clause_out_of_range",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "undeclared_ambient_parameter",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "ill_typed_ambient_use",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "uncertified_candidate_field",
+        "disposition": "prior_closure_rule",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "charged_path_constructor",
+        "disposition": "adopted_charged_class",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "outside_frozen_grammar",
+        "disposition": "named_typed_exclusion",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "derivation_shape",
+        "disposition": "prior_closure_rule",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "no_live_ambient_use",
+        "disposition": "prior_closure_rule",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "no_registered_probe",
+        "disposition": "generic_parametric_theorem",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "probe_failure",
+        "disposition": "generic_parametric_theorem",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "instantiation_replay",
+        "disposition": "generic_parametric_theorem",
+        "can_survive_as_unknown": false
+      },
+      {
+        "error_kind": "replay_mismatch",
+        "disposition": "replay_invariant",
+        "can_survive_as_unknown": false
+      }
+    ],
+    "contextual_error_inventory_complete": true,
+    "every_contextual_obstruction_has_non_unknown_disposition": true,
+    "all_pre_v9_unknown_mechanisms_sealed_by_predecessor_chain": true,
+    "wrapped_classifier_partition_total": true,
+    "unknown_survivor_count": 0,
+    "f_a5_found_survivor": false,
+    "derivation_hash": "blake3:d03b18aed88aa4504fdbe666a57fdddc2a35e120f40f8434c29d3bd5e3d1f99a"
+  },
+  "no_unknown_survives": true,
+  "class_exhaustion_proved": true,
+  "global_e4_complete": true,
+  "five_pending_memberships_now_authorized": true,
+  "downstream_sequence": {
+    "five_membership_verdicts_executed": false,
+    "e2b_count_regression_executed": false,
+    "fq2_executed": false,
+    "agent_a_certified_totals_executed": false,
+    "e5_f1_executed": false,
+    "classifier_bridge_executed": false,
+    "fork_executed": false,
+    "halt_or_continuation_claimed": false
+  },
+  "outcome": "global_e4_v10_complete_wrapped_domain_exhausted_no_unknown_survives",
+  "permitted_conclusion": "The motive-parametric substitution induction resolves the v9 witness and all probe-availability coherence cases without restricting the 914,612-member syntactic motive upper bound. Every predecessor contextual error kind has an explicit exclusion, prior-closure, charged-class, theorem, or replay-invariant disposition. F-A5 finds no surviving Unknown; wrapped-domain class exhaustion and global E-4 are proved.",
+  "required_successor_action": "Execute the adopted downstream sequence in order, beginning with the five membership verdicts against the completed basis; do not skip directly to a halt claim.",
+  "result_digest": "blake3:118d015f6cabe967052891d4d4dab9660b9837a1f4e3a588fe7f2108bb4d5d2b"
+}

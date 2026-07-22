@@ -45,8 +45,9 @@ use pen_eval::egp::classify_candidate;
 use pen_eval::typed_families::{
     CandidateExtractionOutcome, extract_candidate_families, predecessor_closure,
 };
-use pen_type::admissibility::{AdmissibilityMode, passes_strict_admissibility,
-    strict_admissibility_for_mode};
+use pen_type::admissibility::{
+    AdmissibilityMode, passes_strict_admissibility, strict_admissibility_for_mode,
+};
 use pen_type::elaborate::{SealedSignature, candidate_hash};
 use pen_type::obligations::summarize_structural_debt;
 use serde::Serialize;
@@ -325,8 +326,7 @@ pub fn run_semantic_reselection() -> Result<SemanticReselectionCertificate, Rese
                 identified_count += 1;
                 revised_nu = 0;
             } else {
-                match extract_candidate_families(&signature, &closure, telescope, visible_library)
-                {
+                match extract_candidate_families(&signature, &closure, telescope, visible_library) {
                     CandidateExtractionOutcome::Extracted(extraction) => {
                         match classify_candidate(&extraction, &orbits, stage, kappa) {
                             Ok(disposition) => {
@@ -348,8 +348,8 @@ pub fn run_semantic_reselection() -> Result<SemanticReselectionCertificate, Rese
             let rho = Rational::new(i64::from(revised_nu), i64::from(kappa.max(1)));
             let clears = !identified && rho >= bar;
             if clears {
-                let bit_kappa = u16::try_from(telescope_bit_cost(telescope))
-                    .expect("bit cost fits u16");
+                let bit_kappa =
+                    u16::try_from(telescope_bit_cost(telescope)).expect("bit cost fits u16");
                 if let Some(rank) = acceptance_rank_for_telescope(
                     bar,
                     telescope,
@@ -509,8 +509,7 @@ pub fn run_semantic_reselection() -> Result<SemanticReselectionCertificate, Rese
         .iter()
         .map(|record| (record.step_index, record.nu, record.kappa))
         .collect();
-    let winners_reenact =
-        completed && stages.iter().all(|stage| stage.winner_matches_legacy);
+    let winners_reenact = completed && stages.iter().all(|stage| stage.winner_matches_legacy);
     let semantic_reenactment = winners_reenact
         && stages
             .iter()
@@ -527,8 +526,7 @@ pub fn run_semantic_reselection() -> Result<SemanticReselectionCertificate, Rese
         semantic_reenactment,
         winners_reenact,
         first_divergence,
-        bar_16_matches: revised_bar_16.as_deref()
-            == Some(rational_string(legacy_bar_16).as_str()),
+        bar_16_matches: revised_bar_16.as_deref() == Some(rational_string(legacy_bar_16).as_str()),
         revised_bar_16,
         legacy_bar_16: rational_string(legacy_bar_16),
         lawful_continuations: [
@@ -610,7 +608,12 @@ mod tests {
         assert_eq!(stage_two.clearing, 0);
         assert!(stage_two.winner.is_none());
         assert_eq!(stage_two.cone_deduped, 1);
-        assert!(stage_two.scored.iter().all(|candidate| !candidate.clears_bar));
+        assert!(
+            stage_two
+                .scored
+                .iter()
+                .all(|candidate| !candidate.clears_bar)
+        );
 
         // No reenactment, no revised Bar16, and the legacy Bar16 is not
         // reused in its place.

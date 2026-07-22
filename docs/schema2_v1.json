@@ -1,0 +1,683 @@
+{
+  "schema": "schema2-phase-batch-v1",
+  "date": "2026-07-19",
+  "source_bindings": [
+    {
+      "name": "agent_e_schema2_plan",
+      "path": "docs/agent_e_schema2_plan.md",
+      "byte_length": 9562,
+      "blake3": "blake3:d06d2039f1cd83e2d5509478aede30d2e09e2548f262cea9e0f88abbfe2767db",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": false,
+      "role": "governing_execution_plan"
+    },
+    {
+      "name": "step_15_completion_open_problem",
+      "path": "docs/step_15_completion_open_problem.md",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": false,
+      "role": "frozen_requirements_document"
+    },
+    {
+      "name": "semantic_normalization_program",
+      "path": "docs/SEMANTIC_NORMALIZATION_PROGRAM.md",
+      "byte_length": 24891,
+      "blake3": "blake3:8f54933d8f4d7d5f8a6d1c6dd1a37985aaf4dd3cedee1ab6565514460f622c96",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": false,
+      "role": "frozen_family_instance_definitions"
+    },
+    {
+      "name": "sh1_t4_blind_valuation_spec",
+      "path": "docs/SH1_T4_BLIND_VALUATION_SPEC.md",
+      "byte_length": 9340,
+      "blake3": "blake3:bc10291c85342904bee92c22c2b38d92cea93e5d8bcfe3926ed2d6f21805654b",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": false,
+      "role": "frozen_path_family_rule"
+    },
+    {
+      "name": "semantic_reselection_v1",
+      "path": "docs/semantic_reselection.json",
+      "byte_length": 4107,
+      "blake3": "blake3:c3dc9a3060abb68985ace5ed1cf1b465f074f86c74a41506ab991f08460ba6e7",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": true,
+      "role": "burned_stage1_diagnostic"
+    },
+    {
+      "name": "hist_cert_v3",
+      "path": "docs/hist_cert_v3.json",
+      "byte_length": 178331,
+      "blake3": "blake3:dee9ceed570935917a7e40130caffdb014af412080b7dd9592c2fe8a59c9b05d",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": true,
+      "role": "archived_historical_regression"
+    },
+    {
+      "name": "trunc_endpoint_realizer_v1",
+      "path": "docs/trunc_endpoint_realizer_v1.json",
+      "byte_length": 21372,
+      "blake3": "blake3:f878c10711a29d3f34ee279cdee8ada56d7aac32a9317452c6f4d60fef7c01ee",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": true,
+      "role": "archived_endpoint_realizer"
+    },
+    {
+      "name": "kernel_bridge_agda",
+      "path": "agda/KernelBridge.agda",
+      "byte_length": 11224,
+      "blake3": "blake3:4c6f0c215837d0b81fbd472d4119357a41c86d20989b5d91575de614c37a2095",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": false,
+      "role": "read_only_agda_base"
+    },
+    {
+      "name": "schema2_agda",
+      "path": "agda/Schema2.agda",
+      "byte_length": 25002,
+      "blake3": "blake3:06531792b49eb1bba506247bea96e00c1422ca42dabd8726f206d531833f6a30",
+      "exact_bytes_pinned": true,
+      "certificate_projection_replayed": false,
+      "role": "e1_agda_proof_source"
+    }
+  ],
+  "phases": [
+    {
+      "phase": "E-1",
+      "status": "scoped_operational_fragment_complete_global_c1_open",
+      "theorem_token_issued": true,
+      "blocked_by": null
+    },
+    {
+      "phase": "E-2",
+      "status": "partial_adjudication_required",
+      "theorem_token_issued": false,
+      "blocked_by": null
+    },
+    {
+      "phase": "E-3",
+      "status": "not_started_blocked_by_e1_global_gap_and_e2_adjudication_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "E-1,E-2"
+    },
+    {
+      "phase": "E-4",
+      "status": "not_started_blocked_by_e1_global_gap_and_e2_adjudication_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "E-1,E-2"
+    },
+    {
+      "phase": "E-5",
+      "status": "not_started_blocked_by_e1_global_gap_and_e2_adjudication_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "E-1,E-2"
+    },
+    {
+      "phase": "E-6",
+      "status": "not_started_blocked_by_e1_global_gap_and_e2_adjudication_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "E-1,E-2"
+    },
+    {
+      "phase": "E-7",
+      "status": "not_started_blocked_by_e1_global_gap_and_e2_adjudication_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "E-1,E-2"
+    },
+    {
+      "phase": "E-8",
+      "status": "not_started_blocked_by_e1_global_gap_and_e2_adjudication_strict_order",
+      "theorem_token_issued": false,
+      "blocked_by": "E-1,E-2"
+    }
+  ],
+  "e1": {
+    "context_fragment_version": "schema2-context-substitution-e1-v1",
+    "five_context_entry_kinds_formed": true,
+    "formed_context_derivation_hash": "blake3:e7a731bd78fc505fce99dd3492aba4ea6c385178f94092ea7cd72c0d3a89cd36",
+    "identity_replayed": true,
+    "identity_derivation_hash": "blake3:8fdc6926a9c02873ce2ba331b4cf7fe249c6c4c6cffa4b8807c13635c33cbcd5",
+    "genuine_dependent_expression_image_replayed": true,
+    "genuine_expression_image_count": 1,
+    "genuine_instance_derivation_hash": "blake3:df21a428c1628291dc44c61d3d39bd3ff4305068b2a067f8209dbf3e3ad34f4f",
+    "expression_typing_preservation_replayed": true,
+    "preservation_witness_count": 5,
+    "substitution_support_replayed": true,
+    "support_witness_count": 6,
+    "identity_support_exact": true,
+    "genuine_target_support_within_image_bound": true,
+    "support_token_inventory_digest": "blake3:e663e54bd80b41413fa0413242c31ee42b552bbab4c0fc90feb4b655374cf2c8",
+    "composition_replayed": true,
+    "composition_sequential_images_equal": true,
+    "composition_token_digest": "blake3:a19bb59025ac6362f676cdc568a1b50e442436bada0517028068a10bfa201fd6",
+    "weakening_replayed": true,
+    "weakening_derivation_hash": "blake3:5e14594253bdafa78ffbfc0e7e1315933a057545709e8c6598029eb743a23bfe",
+    "legal_adjacent_exchange_replayed": true,
+    "exchange_inverse_on_declarations": true,
+    "exchange_token_digest": "blake3:0aaa377ff7c623b5d9e0392e0f44e430f995bf4e6de406cbfa8df18b1ad4a94b",
+    "trunc_endpoint_maps_rederived": true,
+    "trunc_endpoint_exact_four_map_join": true,
+    "trunc_endpoint_maps": [
+      {
+        "kind": "identity",
+        "zero_target_binder": 2,
+        "one_target_binder": 3,
+        "dependent_images_checked": 2,
+        "genuine_expression_images": 0,
+        "substitution_derivation_hash": "blake3:7f7b0c09b823ce101510284f4b87a5130be5f8ea4801866f24b2e8c9cd56043e"
+      },
+      {
+        "kind": "swap",
+        "zero_target_binder": 3,
+        "one_target_binder": 2,
+        "dependent_images_checked": 2,
+        "genuine_expression_images": 0,
+        "substitution_derivation_hash": "blake3:bbb85700ae654ae215fd9d1ac9534dd49c14966860955edf0068b2dba12c0322"
+      },
+      {
+        "kind": "collapse_to_x",
+        "zero_target_binder": 2,
+        "one_target_binder": 2,
+        "dependent_images_checked": 2,
+        "genuine_expression_images": 0,
+        "substitution_derivation_hash": "blake3:ad39c8bf7ec1ff1c3950df43b87c893b4f6e6585e93ff2f019b4a4ba4aa622b4"
+      },
+      {
+        "kind": "collapse_to_y",
+        "zero_target_binder": 3,
+        "one_target_binder": 3,
+        "dependent_images_checked": 2,
+        "genuine_expression_images": 0,
+        "substitution_derivation_hash": "blake3:679ea1b3f47ad1b6fc004a1676ded1a4004632d4ea6d96e0e4cdb0a0504b5cdd"
+      }
+    ],
+    "trunc_regression_token_digest": "blake3:61b5692b5558425717048f8c2fbd0dfa291253bb9bccd13f901d4b5e19c71571",
+    "agda_sources_declare_safe_without_k": true,
+    "agda_sources_contain_no_postulate_declaration": true,
+    "agda_compiler_check_is_external_acceptance_grader": true,
+    "agda_to_rust_issuer_soundness_proved": false,
+    "all_pen_core_expr_to_typed_e1_elaboration_proved": false,
+    "rust_graders_replayed": true,
+    "scoped_e1_fragment_proved": true,
+    "global_c1_retired": false,
+    "theorem_token_digest": "blake3:0f1a32dde2eb848decd00b7d25b8ef6b1297d26dbdb882f0379b241eebe043f6"
+  },
+  "e2": {
+    "status": "partial_adjudication_required",
+    "preflight_only_while_global_e1_remains_open": true,
+    "historical_projection": {
+      "raw_operational_totals": [
+        7,
+        8,
+        10,
+        18
+      ],
+      "registered_path_typed_and_marginal_subtotals": [
+        2,
+        2,
+        5,
+        10
+      ],
+      "ordinary_unresolved_counts_derived_from_rows": [
+        5,
+        6,
+        5,
+        8
+      ],
+      "ordinary_steps": [
+        {
+          "step": 5,
+          "rows": [
+            {
+              "legacy_kind": "formation",
+              "legacy_role": null,
+              "semantic_kind": "fresh_formation",
+              "source_clauses": [
+                0
+              ],
+              "required_opaque_token_kind": "opaque_formation_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "point_introduction",
+              "legacy_role": null,
+              "semantic_kind": "point_or_unit_intro",
+              "source_clauses": [
+                1
+              ],
+              "required_opaque_token_kind": "opaque_point_or_unit_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "path_introduction",
+              "legacy_role": null,
+              "semantic_kind": "path_constructor_intro",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_path_constructor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "recursor",
+              "legacy_role": null,
+              "semantic_kind": "recursor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_recursor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "inductor",
+              "legacy_role": null,
+              "semantic_kind": "inductor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_inductor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            }
+          ],
+          "derived_row_count": 5,
+          "path_constructor_intro_preserved": true,
+          "typed_realizer_inventory_complete": false
+        },
+        {
+          "step": 6,
+          "rows": [
+            {
+              "legacy_kind": "formation",
+              "legacy_role": null,
+              "semantic_kind": "fresh_formation",
+              "source_clauses": [
+                0
+              ],
+              "required_opaque_token_kind": "opaque_formation_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "point_introduction",
+              "legacy_role": null,
+              "semantic_kind": "point_or_unit_intro",
+              "source_clauses": [
+                1
+              ],
+              "required_opaque_token_kind": "opaque_point_or_unit_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "path_introduction",
+              "legacy_role": null,
+              "semantic_kind": "path_constructor_intro",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_path_constructor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "recursor",
+              "legacy_role": null,
+              "semantic_kind": "recursor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_recursor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "inductor",
+              "legacy_role": null,
+              "semantic_kind": "inductor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_inductor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "parametric_action",
+              "legacy_role": null,
+              "semantic_kind": "trunc_parametric_action",
+              "source_clauses": [
+                0
+              ],
+              "required_opaque_token_kind": "opaque_trunc_action_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            }
+          ],
+          "derived_row_count": 6,
+          "path_constructor_intro_preserved": true,
+          "typed_realizer_inventory_complete": false
+        },
+        {
+          "step": 7,
+          "rows": [
+            {
+              "legacy_kind": "formation",
+              "legacy_role": null,
+              "semantic_kind": "fresh_formation",
+              "source_clauses": [
+                0
+              ],
+              "required_opaque_token_kind": "opaque_formation_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "point_introduction",
+              "legacy_role": null,
+              "semantic_kind": "point_or_unit_intro",
+              "source_clauses": [
+                1
+              ],
+              "required_opaque_token_kind": "opaque_point_or_unit_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "path_introduction",
+              "legacy_role": null,
+              "semantic_kind": "path_constructor_intro",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_path_constructor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "recursor",
+              "legacy_role": null,
+              "semantic_kind": "recursor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_recursor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "inductor",
+              "legacy_role": null,
+              "semantic_kind": "inductor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_inductor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            }
+          ],
+          "derived_row_count": 5,
+          "path_constructor_intro_preserved": true,
+          "typed_realizer_inventory_complete": false
+        },
+        {
+          "step": 8,
+          "rows": [
+            {
+              "legacy_kind": "formation",
+              "legacy_role": null,
+              "semantic_kind": "fresh_formation",
+              "source_clauses": [
+                0
+              ],
+              "required_opaque_token_kind": "opaque_formation_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "point_introduction",
+              "legacy_role": null,
+              "semantic_kind": "point_or_unit_intro",
+              "source_clauses": [
+                1
+              ],
+              "required_opaque_token_kind": "opaque_point_or_unit_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "path_introduction",
+              "legacy_role": null,
+              "semantic_kind": "path_constructor_intro",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_path_constructor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "recursor",
+              "legacy_role": null,
+              "semantic_kind": "recursor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_recursor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "inductor",
+              "legacy_role": null,
+              "semantic_kind": "inductor",
+              "source_clauses": [
+                2
+              ],
+              "required_opaque_token_kind": "opaque_inductor_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "post_path_forward",
+              "legacy_role": "operation_forward",
+              "semantic_kind": "post_path_operation",
+              "source_clauses": [
+                3
+              ],
+              "required_opaque_token_kind": "opaque_post_path_operation_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "post_path_forward",
+              "legacy_role": "coherence_forward",
+              "semantic_kind": "post_path_coherence",
+              "source_clauses": [
+                4
+              ],
+              "required_opaque_token_kind": "opaque_post_path_operation_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            },
+            {
+              "legacy_kind": "cell_action",
+              "legacy_role": null,
+              "semantic_kind": "post_path_cell_action",
+              "source_clauses": [
+                3,
+                2
+              ],
+              "required_opaque_token_kind": "opaque_post_path_operation_natural_family_token",
+              "archived_natural_family_proved": false,
+              "archived_full_predecessor_sweep_proved": false,
+              "typed_realizer_issued": false,
+              "typed_realizer_token": null
+            }
+          ],
+          "derived_row_count": 8,
+          "path_constructor_intro_preserved": true,
+          "typed_realizer_inventory_complete": false
+        }
+      ],
+      "archive_regression_signature_replayed": true,
+      "ordinary_counts_match_archived_unresolved_projection": true,
+      "count_used_as_constructor_input": false,
+      "ordinary_typed_realizers_complete": false,
+      "full_historical_totals_certified": false
+    },
+    "stage1_universe_diagnostic": {
+      "stage": 1,
+      "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "clause_forms": [
+        "Univ",
+        "App(Univ,Var(1))"
+      ],
+      "burned_extractor_family_units": 2,
+      "sealed_record_family_units": 1,
+      "family_unit_mismatch_reproduced": true,
+      "diagnosis": "the burned clause-family extractor treated the nullary Univ formation and dependent App(Univ,m) formation as two marginal families; the sealed trace records one family unit, but the frozen record does not say whether the package is an arena-plus-family, a formation/completion pair, or two families",
+      "frozen_record_decides_package_boundary": false,
+      "count_used_to_choose_package_boundary": false,
+      "adjudication_id": "ADJUDICATION_REQUIRED_STAGE1_UNIVERSE_PACKAGE_BOUNDARY"
+    },
+    "adjudications": [
+      {
+        "id": "ADJUDICATION_REQUIRED_STAGE1_UNIVERSE_PACKAGE_BOUNDARY",
+        "phase": "E-2",
+        "constructor_scope": "ordinary formation at the stage-1 Univ/App(Univ,m) package",
+        "issue": "the frozen record does not define the natural-family boundary inside the two-clause Universe package",
+        "frozen_record_decides": false,
+        "options": [
+          {
+            "option_id": "A",
+            "interpretation": "only App(Univ,m) is the exported family; Univ is arena/formation infrastructure and is excluded as a separate family"
+          },
+          {
+            "option_id": "B",
+            "interpretation": "Univ and App(Univ,m) form one formation/completion natural-family package"
+          },
+          {
+            "option_id": "C",
+            "interpretation": "Univ and App(Univ,m) are two distinct natural families"
+          }
+        ],
+        "unresolved_questions": [
+          "which operational package-boundary rule is adopted independently of the recorded family-unit count?"
+        ],
+        "selected_option": null,
+        "typed_realizer_token": null,
+        "status": "adjudication_required"
+      },
+      {
+        "id": "ADJUDICATION_REQUIRED_STEP8_POST_PATH_TYPED_SEMANTICS",
+        "phase": "E-2",
+        "constructor_scope": "Step-8 post-path operation, coherence, and cell-action rows",
+        "issue": "the archive names three post-path rows but does not supply their typed natural-family semantics or instance quotient",
+        "frozen_record_decides": false,
+        "options": [],
+        "unresolved_questions": [
+          "what is the typed natural-family signature for the clause-3 mu operation?",
+          "what is the orientation and typed equality content of the clause-4 unit-coherence row?",
+          "what typed constructor realizes the clause-3 by clause-2 cell action?",
+          "which of these exported rows is an independent family and which is an instance of an existing family?"
+        ],
+        "selected_option": null,
+        "typed_realizer_token": null,
+        "status": "adjudication_required"
+      }
+    ],
+    "every_adjudication_unselected": true,
+    "every_blocked_constructor_has_no_typed_realizer_token": true,
+    "grammar_complete": false,
+    "ordinary_family_realizers_complete": false,
+    "historical_ordinary_remainder_closed": false
+  },
+  "obstructions_retired": {
+    "c1_global_arbitrary_typed_instance_sort_preservation": false,
+    "c2_depth_two_schema_grammar_and_generator_completeness": false,
+    "c6_general_historical_term_level_completion": false,
+    "d4_cw_instance_grammar_orbit_quotient_membership": false,
+    "c8_candidate_boundary_provenance_join": false,
+    "domain_wide_c3_candidate_extraction_bridge": false
+  },
+  "guard_rails": {
+    "f1_executable": false,
+    "f1_triggered": false,
+    "f1_excluded": false,
+    "f5_executable": false,
+    "f5_triggered": false,
+    "f5_excluded": false,
+    "semantic_o16_empty": null
+  },
+  "conclusion_boundary": {
+    "later_acceptance_computation_run": false,
+    "closing_inequality_computed": false,
+    "global_halt_proved": false,
+    "global_continuation_proved": false,
+    "permitted_conclusion": "the E-1 operational fragment replays, but global C1 remains open; the E-2 preflight also requires explicit adjudication before strict-order work may continue"
+  },
+  "outcome": "partial_e1_scoped_fragment_e2_adjudication_required",
+  "remaining_obligations": [
+    "prove an Agda-to-Rust issuer soundness bridge for every E-1 token and elaborate every relevant pen_core::Expr into the typed E-1 syntax before retiring global C1",
+    "ADJUDICATION_REQUIRED_STAGE1_UNIVERSE_PACKAGE_BOUNDARY",
+    "ADJUDICATION_REQUIRED_STEP8_POST_PATH_TYPED_SEMANTICS",
+    "after adjudication, finish E-2 typed ordinary-family realizers and rerun the 5-8 regression as grammar outputs",
+    "execute E-3 through E-8 in the prescribed strict order"
+  ],
+  "result_digest": "blake3:25aac1ac064d808875785887d379cbc6cb5102bf73090220ac65e873ed4a38eb"
+}

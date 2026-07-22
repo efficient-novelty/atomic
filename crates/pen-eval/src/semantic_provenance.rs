@@ -13,7 +13,7 @@
 //! reports the J2/J3 bridge as incomplete.  That distinction is intentional:
 //! a preserved score is not yet a proved provenance correspondence.
 
-use crate::debt_guard::{directive_debt_timeline, DirectiveDebtRecord};
+use crate::debt_guard::{DirectiveDebtRecord, directive_debt_timeline};
 use crate::nu::structural_nu;
 use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
@@ -1843,11 +1843,13 @@ mod tests {
                     == RevisedAuditStatus::IncompleteTypedFamilyAndOrbitExtraction
                 && !step.all_credited_families_provenanced
         }));
-        assert!(report
-            .steps
-            .iter()
-            .flat_map(|step| &step.amplification_claims)
-            .all(|claim| !claim.orbit_correspondence_available));
+        assert!(
+            report
+                .steps
+                .iter()
+                .flat_map(|step| &step.amplification_claims)
+                .all(|claim| !claim.orbit_correspondence_available)
+        );
         let mechanisms = report
             .steps
             .iter()

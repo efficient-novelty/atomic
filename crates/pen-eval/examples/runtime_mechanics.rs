@@ -13,7 +13,7 @@
 
 use pen_eval::lambda_trigger_v2::frozen_structure_schema_variants_v2;
 use pen_eval::runtime_dedup::nu_profile;
-use pen_eval::runtime_field::{field_nu_profile, genesis_reference_context, FieldPolicy};
+use pen_eval::runtime_field::{FieldPolicy, field_nu_profile, genesis_reference_context};
 use serde_json::json;
 use std::env;
 use std::fs;
@@ -63,7 +63,9 @@ fn main() {
                             // policy (order reduces to a tie-break).
                             u64::MAX
                         } else {
-                            budget.parse().expect("budgets must be integers or 'exhaustive'")
+                            budget
+                                .parse()
+                                .expect("budgets must be integers or 'exhaustive'")
                         }
                     })
                     .collect();

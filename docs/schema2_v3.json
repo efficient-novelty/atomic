@@ -1,0 +1,507 @@
+{
+  "schema": "schema2-e3-e4-successor-v3",
+  "date": "2026-07-20",
+  "source_bindings": [
+    {
+      "name": "schema2_v2",
+      "path": "docs/schema2_v2.json",
+      "role": "exact_e2_predecessor",
+      "byte_length": 18978,
+      "blake3": "blake3:3785da4e01a06f278edbb7671d9021672b016a0659614a8accbb5b7809294718",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "p1_adjudication",
+      "path": "docs/e2_phase_order_adjudication.md",
+      "role": "adopted_phase_order_and_m1_authority",
+      "byte_length": 3741,
+      "blake3": "blake3:6f6eb9e071bd05ce172a113da96653ba281d7eab215a23364ee556a0992f246f",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "e2_quotient_adjudications",
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "unchanged_r1_r2_authority",
+      "byte_length": 6355,
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "agent_e_plan",
+      "path": "docs/agent_e_schema2_plan.md",
+      "role": "governing_execution_plan",
+      "byte_length": 9562,
+      "blake3": "blake3:d06d2039f1cd83e2d5509478aede30d2e09e2548f262cea9e0f88abbfe2767db",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "schema2_open_problem",
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "frozen_schema2_specification",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "e2_certificate_source",
+      "path": "crates/pen-schema/src/e2_certificate.rs",
+      "role": "predecessor_replay_issuer",
+      "byte_length": 72006,
+      "blake3": "blake3:cb0bf146848d5f89c37b00193e15beaa794686a9c2452e9bb9e6ad882e96e94f",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "e3_normalization_source",
+      "path": "crates/pen-schema/src/e3_normalization.rs",
+      "role": "e3_fragment_issuer",
+      "byte_length": 106145,
+      "blake3": "blake3:8de05189efeda3ba291bcbf0b46d7c84222a5d7d6590a6bed4d9e3e0a84d72bb",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "e4_generator_basis_source",
+      "path": "crates/pen-schema/src/e4_generator_basis.rs",
+      "role": "e4_development_issuer",
+      "byte_length": 82053,
+      "blake3": "blake3:fb19b2ed000cf23dad0b2de4a844cd2244c30613a7885607474ca4c4c7e54877",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "context_source",
+      "path": "crates/pen-schema/src/context.rs",
+      "role": "e1_typed_context_dependency",
+      "byte_length": 71070,
+      "blake3": "blake3:d0de2a49de234034ec60e62e7735658055bc4e9e3abedd5790c7d471de5f1904",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "grammar_source",
+      "path": "crates/pen-schema/src/grammar.rs",
+      "role": "e2_typed_schema_dependency",
+      "byte_length": 69162,
+      "blake3": "blake3:c86b9620c3d07cdf1512d33db1114eb108d68969c4868acf40cdbc5d67d04c8c",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "ordinary_source",
+      "path": "crates/pen-schema/src/ordinary.rs",
+      "role": "e2_ordinary_registry_dependency",
+      "byte_length": 26148,
+      "blake3": "blake3:54bf0b295a86e349f0bdaf8cd0a27aaa7a5d094e0f6fcbcab7b4aedcd6f8f154",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "stage1_r1_source",
+      "path": "crates/pen-schema/src/stage1_r1.rs",
+      "role": "r1_pending_row_dependency",
+      "byte_length": 9627,
+      "blake3": "blake3:677875dd0ecf02a075639f51fabbbac0367cd05d8deeb464601ee2ba97893f86",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "step8_r2_source",
+      "path": "crates/pen-schema/src/step8_r2.rs",
+      "role": "m1_step8_subject_dependency",
+      "byte_length": 11143,
+      "blake3": "blake3:834be06764a5259269391454feed6ed486685f1c15cb2e9c874866407f277fbe",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "kernel_equality_source",
+      "path": "crates/pen-type/src/equality.rs",
+      "role": "kernel_equality_dependency",
+      "byte_length": 4757,
+      "blake3": "blake3:7c1ed7386c35aa7e5196e044b194f63e61204e431c3837018305977fbcee6c31",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "kernel_normalize_source",
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "kernel_normalization_dependency",
+      "byte_length": 18309,
+      "blake3": "blake3:b9ad659cf60175b87090b590ee0850b3635a4968a47fda5bbd3559588d57ba7a",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "kernel_cubical_source",
+      "path": "crates/pen-type/src/cubical.rs",
+      "role": "e1_cubical_context_dependency",
+      "byte_length": 170387,
+      "blake3": "blake3:28b9394dd92513202b9998bd4ea7d41d89699de618ff4a7514d7d903fb95bb46",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "telescope_source",
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "historical_telescope_dependency",
+      "byte_length": 19443,
+      "blake3": "blake3:d9831c28c380d1fdc313f757b393e26e81df1505d87ae35291d3eb8f214cf545",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "elaborator_source",
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "historical_elaboration_dependency",
+      "byte_length": 100581,
+      "blake3": "blake3:cc1027fa5e53ac1417b2bf01685bbd463cf832fe36c1b37339c360b7fc75c648",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "typed_boundary_source",
+      "path": "crates/pen-type/src/cubical/typed_boundary.rs",
+      "role": "step8_boundary_dependency",
+      "byte_length": 199287,
+      "blake3": "blake3:0d3f746ddb3a3c28441980f3ab9733762a94fe46f380be5d5a174659c07e8274",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "schema2_agda",
+      "path": "agda/Schema2.agda",
+      "role": "agda_e1_e2_base",
+      "byte_length": 25002,
+      "blake3": "blake3:06531792b49eb1bba506247bea96e00c1422ca42dabd8726f206d531833f6a30",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "schema2_e2_agda",
+      "path": "agda/Schema2E2.agda",
+      "role": "agda_step8_typing_boundary",
+      "byte_length": 4824,
+      "blake3": "blake3:125232bed90c447feab3fcb15a83772d567e3b28855c4771c3a017e85d99ba59",
+      "semantic_projection_replayed": false
+    },
+    {
+      "name": "schema2_e34_agda",
+      "path": "agda/Schema2E3E4.agda",
+      "role": "agda_e3_e4_fragment",
+      "byte_length": 34396,
+      "blake3": "blake3:6204ba46861cd4889c4899c9dfb211e25108bc5496dc37a6602f1a3e5b5e9cff",
+      "semantic_projection_replayed": true
+    },
+    {
+      "name": "kernel_bridge_agda",
+      "path": "agda/KernelBridge.agda",
+      "role": "agda_schema2_transitive_import",
+      "byte_length": 11224,
+      "blake3": "blake3:4c6f0c215837d0b81fbd472d4119357a41c86d20989b5d91575de614c37a2095",
+      "semantic_projection_replayed": false
+    }
+  ],
+  "predecessor": {
+    "path": "docs/schema2_v2.json",
+    "schema": "schema2-e2-successor-v2",
+    "result_digest": "blake3:2a292d6f0f785d178269af4c9a299ba14486a43ca4bdd31a1cede25ddad5b2de",
+    "exact_source_binding_replayed": true,
+    "strict_certificate_replay_valid": true,
+    "predecessor_e2_complete": false,
+    "predecessor_fq4_triggered": true,
+    "predecessor_handoff_issued": false,
+    "predecessor_halt_claimed": false
+  },
+  "p1_adoption": {
+    "adjudication_id": "procedural-adjudication-p1-e2a-e3-e4-e2b-order",
+    "membership_rule_id": "procedural-adjudication-p1-monotone-membership-m1",
+    "exact_document_bound": true,
+    "adoption_block_replayed_verbatim": true,
+    "adopter": "Halvor Lande",
+    "adoption_date": "2026-07-20",
+    "adopted_phase_order": [
+      "E-1",
+      "E-2a",
+      "E-3",
+      "E-4",
+      "E-2b",
+      "E-5",
+      "E-6",
+      "E-7",
+      "E-8"
+    ],
+    "counts_pinned_exclusively_to_e2b": true,
+    "generated_verdicts_monotone_and_final": true,
+    "independent_verdicts_require_complete_e4": true,
+    "amendment_is_versioned_successor": true
+  },
+  "e2a": {
+    "declared_complete_by_adopted_p1": true,
+    "predecessor_stage1_completed_package_issued": true,
+    "predecessor_step8_registered_signatures_replayed": true,
+    "predecessor_ordinary_registry_typed": true,
+    "typing_milestone_complete": true,
+    "quotient_membership_decided": false,
+    "count_or_handoff_issued": false
+  },
+  "e3": {
+    "version": "schema2-e3-frozen-fragment-v1",
+    "audit_derivation_hash": "blake3:b8cfc5cd6233b966967bca412f2b8c409918f2732b5b321c9fff122f166004b3",
+    "audit_issued_and_replayed": true,
+    "fragment_milestone_complete": true,
+    "typed_beta_normalization_replayed": true,
+    "positive_and_negative_frozen_equality_replayed": true,
+    "weakening_congruence_replayed": true,
+    "genuine_substitution_congruence_replayed": true,
+    "provenance_retained": true,
+    "global_e3_complete": false,
+    "total_schema2_normalization_proved": false,
+    "general_univalent_equality_proved": false,
+    "general_c6_complete": false,
+    "gaps": [
+      "E3_TOTAL_NORMALIZATION_FOR_ALL_WELL_TYPED_SCHEMA2_TERMS_NOT_PROVED",
+      "E3_UNIVALENT_EQUALITY_BEYOND_SCOPED_BETA_NORMAL_EQUALITY_NOT_PROVED",
+      "C6_V3_GENERAL_HISTORICAL_TERM_LEVEL_COMPLETION_NOT_PROVED_BY_E3_FRAGMENT",
+      "E3_REGISTERED_BOUNDARY_BUNDLE_PROVENANCE_TRANSPORT_UNDER_SUBSTITUTION_NOT_PROVED",
+      "E3_ARBITRARY_ALPHA_EQUIVALENT_CONTEXT_PRESENTATION_QUOTIENT_NOT_PROVED",
+      "E4_GENERATOR_MEMBERSHIP_AND_INDEPENDENCE_ARE_OUTSIDE_THIS_MODULE"
+    ]
+  },
+  "e4": {
+    "version": "schema2-e4-generator-basis-v1",
+    "audit_derivation_hash": "blake3:f7f55b35a353abdc0e1de1b6127d3ad707bf778dcc509dde82417fd6950df909",
+    "audit_issued_and_replayed": true,
+    "current_e1_context_morphism_decomposition_complete": true,
+    "per_class": [
+      {
+        "class": "foundation",
+        "complete": false,
+        "named_gaps": [
+          "E4_FOUNDATION_GENERATOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      },
+      {
+        "class": "former",
+        "complete": false,
+        "named_gaps": [
+          "E4_FORMER_GENERATOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      },
+      {
+        "class": "map",
+        "complete": false,
+        "named_gaps": [
+          "E4_MAP_GENERATOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      },
+      {
+        "class": "axiomatic",
+        "complete": false,
+        "named_gaps": [
+          "E4_AXIOMATIC_GENERATOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      },
+      {
+        "class": "modal",
+        "complete": false,
+        "named_gaps": [
+          "E4_MODAL_GENERATOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      },
+      {
+        "class": "hit_v2",
+        "complete": false,
+        "named_gaps": [
+          "E4_HIT_V2_GENERATOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      },
+      {
+        "class": "synthesis",
+        "complete": false,
+        "named_gaps": [
+          "E4_SYNTHESIS_GENERATOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      },
+      {
+        "class": "unknown",
+        "complete": false,
+        "named_gaps": [
+          "E4_UNKNOWN_CLASS_NOT_ELIMINATED_BY_TYPED_CLASSIFICATION",
+          "E4_CLASS_INDEXED_SCHEMA2_CONSTRUCTOR_EXHAUSTIVENESS_NOT_PROVED",
+          "E4_GENERATORS_NOT_YET_BOUND_TO_E3_NORMALIZATION_NATURALITY_FOR_ALL_SCHEMA_TERMS",
+          "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED"
+        ]
+      }
+    ],
+    "development_partial": true,
+    "global_e4_complete": false,
+    "independent_membership_issuance_enabled": false,
+    "global_gap": "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS",
+    "m1_generated": [
+      {
+        "rule": "procedural-adjudication-p1-monotone-membership-m1",
+        "membership_rule": "derived-action-generator-membership-rule-v1",
+        "subject": "step8_cell_action",
+        "sub_basis_digest": "blake3:4cf508362f9c4c8b4642a338b084723fb215ca61fc92bce022df8d76a949b1ea",
+        "membership_derivation_hash": "blake3:563760a3d4326aca4fbb08130df2d13fe2c1cedddd1650fb9874ecbe8d5bbe50",
+        "explicit_parent_cube_action_generated_judgment_replayed": true,
+        "canonical_map_cube_candidate_matched": true,
+        "typed_face_equation_count": 6,
+        "every_face_equation_bound_to_face_map": true,
+        "frozen_equality_used": false,
+        "final_by_basis_monotonicity": true,
+        "full_e4_completeness_used": false,
+        "independent_verdict": false,
+        "ordinary_family_credit_issued": false,
+        "stage_count_issued": false
+      }
+    ],
+    "m1_pending": [
+      {
+        "subject": "stage1_carrier_exception.kernel_head",
+        "obstruction": "E4_NATURALITY_GENERATOR_MEMBERSHIP_NOT_YET_DECIDABLE",
+        "independent_verdict_withheld": true
+      },
+      {
+        "subject": "stage1_carrier_exception.adjoint_mate",
+        "obstruction": "E4_NATURALITY_GENERATOR_MEMBERSHIP_NOT_YET_DECIDABLE",
+        "independent_verdict_withheld": true
+      },
+      {
+        "subject": "stage1_carrier_exception.support_action",
+        "obstruction": "E4_NATURALITY_GENERATOR_MEMBERSHIP_NOT_YET_DECIDABLE",
+        "independent_verdict_withheld": true
+      },
+      {
+        "subject": "stage1_carrier_exception.coherence",
+        "obstruction": "E4_NATURALITY_GENERATOR_MEMBERSHIP_NOT_YET_DECIDABLE",
+        "independent_verdict_withheld": true
+      },
+      {
+        "subject": "step8_left_unit_coherence",
+        "obstruction": "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS",
+        "independent_verdict_withheld": true
+      }
+    ],
+    "exact_one_generated_step8_cell_action": true,
+    "exact_five_pending_membership_cases": true
+  },
+  "agda": {
+    "source_bound": true,
+    "safe_without_k_declared": true,
+    "postulates_absent": true,
+    "normalization_and_frozen_equality_fragment_declared": true,
+    "checked_substitution_decomposition_declared": true,
+    "m1_monotonicity_declared": true,
+    "arbitrary_view_completeness_inhabitant_issued": false,
+    "agda_rust_operational_correspondence_proved": false
+  },
+  "forbidden_outputs": {
+    "independent_verdict_issued": false,
+    "ordinary_family_token_issued": false,
+    "historical_stage_count_issued": false,
+    "revised_count_regression_run": false,
+    "fq2_evaluated": false,
+    "agent_a_handoff_issued": false,
+    "e2b_quotient_closure_executed": false,
+    "historical_scores_recomputed": false,
+    "step16_acceptance_computation_run": false,
+    "closing_inequality_computed": false,
+    "global_halt_proved": false,
+    "global_continuation_proved": false
+  },
+  "falsifiers": {
+    "fp1_triggered": false,
+    "fp2_evaluated": false,
+    "fp2_triggered": false,
+    "fp3_evaluated": false,
+    "fp3_triggered": false,
+    "count_blind": true
+  },
+  "phases": [
+    {
+      "phase": "E-1",
+      "status": "predecessor_scoped_fragment_complete_global_c1_open",
+      "scoped_token_issued": false,
+      "global_phase_complete": false,
+      "blocked_by": "GLOBAL_C1_AND_AGDA_RUST_CORRESPONDENCE_OPEN"
+    },
+    {
+      "phase": "E-2a",
+      "status": "complete_by_adopted_p1_predecessor_typing_milestone",
+      "scoped_token_issued": true,
+      "global_phase_complete": true,
+      "blocked_by": null
+    },
+    {
+      "phase": "E-3",
+      "status": "fragment_complete_global_e3_false",
+      "scoped_token_issued": true,
+      "global_phase_complete": false,
+      "blocked_by": "E3_TOTAL_NORMALIZATION_FOR_ALL_WELL_TYPED_SCHEMA2_TERMS_NOT_PROVED"
+    },
+    {
+      "phase": "E-4",
+      "status": "development_partial_one_m1_generated_five_memberships_pending",
+      "scoped_token_issued": true,
+      "global_phase_complete": false,
+      "blocked_by": "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS"
+    },
+    {
+      "phase": "E-2b",
+      "status": "not_executed_requires_complete_e4_membership",
+      "scoped_token_issued": false,
+      "global_phase_complete": false,
+      "blocked_by": "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS"
+    },
+    {
+      "phase": "E-5",
+      "status": "not_executed_phase_order",
+      "scoped_token_issued": false,
+      "global_phase_complete": false,
+      "blocked_by": "E2B_NOT_COMPLETE"
+    },
+    {
+      "phase": "E-6",
+      "status": "not_executed_phase_order",
+      "scoped_token_issued": false,
+      "global_phase_complete": false,
+      "blocked_by": "E2B_NOT_COMPLETE"
+    },
+    {
+      "phase": "E-7",
+      "status": "not_executed_phase_order",
+      "scoped_token_issued": false,
+      "global_phase_complete": false,
+      "blocked_by": "E2B_NOT_COMPLETE"
+    },
+    {
+      "phase": "E-8",
+      "status": "not_executed_phase_order",
+      "scoped_token_issued": false,
+      "global_phase_complete": false,
+      "blocked_by": "E2B_NOT_COMPLETE"
+    }
+  ],
+  "e2b_executed": false,
+  "e3_global_complete": false,
+  "e4_global_complete": false,
+  "e34_global_complete": false,
+  "outcome": "partial_e3_fragment_and_e4_development_one_m1_generated_five_membership_cases_pending",
+  "permitted_conclusion": "P1 makes the sealed E-2 typing milestone E-2a complete; the scoped E-3 fragment replays and E-4 proves one final M1-generated Step-8 cell-action verdict, while global E-3/E-4, five membership cases, E-2b, every count/handoff output, E-5 through E-8, and every halt conclusion remain open",
+  "remaining_obligations": [
+    "extend typed normalization and frozen univalent equality from the audited expression fragment to every well-typed intended Schema2(W) constructor",
+    "prove class-indexed E-4 generator completeness, including normalization naturality and dependent cubical schema actions",
+    "after complete E-4, decide the five pending R1/R2 membership cases without revising the final M1-generated Step-8 cell-action verdict",
+    "only then execute E-2b, mint justified individual ordinary-family tokens, run the revised Steps 5-8 output regression, evaluate F-Q2, and issue any lawful Agent A handoff",
+    "leave E-5 through E-8 and all acceptance or halt computations unexecuted until E-2b completes"
+  ],
+  "result_digest": "blake3:ced5aabffbc592100f09251f8eb4bfdfacbfe6e94b94a6dbc82736d9e00487fe"
+}

@@ -316,7 +316,11 @@ fn temporal_shell_right_body(expr: &Expr, include_linear_exponential: bool) -> O
     }
 }
 
-fn matches_temporal_shell_left_var(expr: &Expr, index: u32, include_linear_exponential: bool) -> bool {
+fn matches_temporal_shell_left_var(
+    expr: &Expr,
+    index: u32,
+    include_linear_exponential: bool,
+) -> bool {
     temporal_shell_left_body(expr, include_linear_exponential)
         .is_some_and(|body| matches!(body, Expr::Var(found) if *found == index))
 }
@@ -340,103 +344,103 @@ fn matches_temporal_cohesive_shell(telescope: &Telescope, library: &Library) -> 
 
     [false, true].into_iter().any(|include_linear_exponential| {
         telescope.path_dimensions().is_empty()
-        && telescope.clauses.len() == 8
-        && matches_temporal_shell_left_var(
-            &telescope.clauses[0].expr,
-            1,
-            include_linear_exponential,
-        )
-        && matches_temporal_shell_right_var(
-            &telescope.clauses[1].expr,
-            1,
-            include_linear_exponential,
-        )
-        && matches!(
-            &telescope.clauses[2].expr,
-            Expr::Pi(domain, codomain)
-                if matches_temporal_shell_left_var(
-                    domain.as_ref(),
-                    1,
-                    include_linear_exponential,
-                ) && matches_temporal_shell_right_var(
-                    codomain.as_ref(),
-                    1,
-                    include_linear_exponential,
-                )
-        )
-        && matches!(
-            &telescope.clauses[3].expr,
-            Expr::Lam(body)
-                if matches!(
-                    body.as_ref(),
-                    Expr::App(function, argument)
-                        if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
-                            && matches_temporal_shell_left_var(
-                                argument.as_ref(),
-                                1,
-                                include_linear_exponential,
-                            )
-                )
-        )
-        && matches!(
-            &telescope.clauses[4].expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Flat(body)
-                        if matches_temporal_shell_left_var(
-                            body.as_ref(),
-                            1,
-                            include_linear_exponential,
-                        )
-                ) && temporal_shell_left_body(codomain.as_ref(), include_linear_exponential)
-                    .is_some_and(|body| {
-                    matches!(body, Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1)))
-                })
-        )
-        && matches!(
-            &telescope.clauses[5].expr,
-            Expr::Pi(domain, codomain)
-                if matches!(
-                    domain.as_ref(),
-                    Expr::Sharp(body)
-                        if matches_temporal_shell_right_var(
-                            body.as_ref(),
-                            1,
-                            include_linear_exponential,
-                        )
-                ) && temporal_shell_right_body(codomain.as_ref(), include_linear_exponential)
-                    .is_some_and(|body| {
-                    matches!(body, Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1)))
-                })
-        )
-        && matches!(
-            &telescope.clauses[6].expr,
-            Expr::Lam(body)
-                if matches!(
-                    body.as_ref(),
-                    Expr::App(function, argument)
-                        if matches_temporal_shell_right_var(
-                            function.as_ref(),
-                            1,
-                            include_linear_exponential,
-                        )
-                            && matches!(argument.as_ref(), Expr::Var(2))
-                )
-        )
-        && matches!(
-            &telescope.clauses[7].expr,
-            Expr::Pi(domain, codomain)
-                if temporal_shell_left_body(domain.as_ref(), include_linear_exponential)
-                    .is_some_and(|body| {
-                        matches_temporal_shell_left_var(body, 1, include_linear_exponential)
-                    })
-                    && matches_temporal_shell_left_var(
+            && telescope.clauses.len() == 8
+            && matches_temporal_shell_left_var(
+                &telescope.clauses[0].expr,
+                1,
+                include_linear_exponential,
+            )
+            && matches_temporal_shell_right_var(
+                &telescope.clauses[1].expr,
+                1,
+                include_linear_exponential,
+            )
+            && matches!(
+                &telescope.clauses[2].expr,
+                Expr::Pi(domain, codomain)
+                    if matches_temporal_shell_left_var(
+                        domain.as_ref(),
+                        1,
+                        include_linear_exponential,
+                    ) && matches_temporal_shell_right_var(
                         codomain.as_ref(),
                         1,
                         include_linear_exponential,
                     )
-        )
+            )
+            && matches!(
+                &telescope.clauses[3].expr,
+                Expr::Lam(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::App(function, argument)
+                            if matches!(function.as_ref(), Expr::Lib(index) if *index == anchor)
+                                && matches_temporal_shell_left_var(
+                                    argument.as_ref(),
+                                    1,
+                                    include_linear_exponential,
+                                )
+                    )
+            )
+            && matches!(
+                &telescope.clauses[4].expr,
+                Expr::Pi(domain, codomain)
+                    if matches!(
+                        domain.as_ref(),
+                        Expr::Flat(body)
+                            if matches_temporal_shell_left_var(
+                                body.as_ref(),
+                                1,
+                                include_linear_exponential,
+                            )
+                    ) && temporal_shell_left_body(codomain.as_ref(), include_linear_exponential)
+                        .is_some_and(|body| {
+                        matches!(body, Expr::Flat(inner) if matches!(inner.as_ref(), Expr::Var(1)))
+                    })
+            )
+            && matches!(
+                &telescope.clauses[5].expr,
+                Expr::Pi(domain, codomain)
+                    if matches!(
+                        domain.as_ref(),
+                        Expr::Sharp(body)
+                            if matches_temporal_shell_right_var(
+                                body.as_ref(),
+                                1,
+                                include_linear_exponential,
+                            )
+                    ) && temporal_shell_right_body(codomain.as_ref(), include_linear_exponential)
+                        .is_some_and(|body| {
+                        matches!(body, Expr::Sharp(inner) if matches!(inner.as_ref(), Expr::Var(1)))
+                    })
+            )
+            && matches!(
+                &telescope.clauses[6].expr,
+                Expr::Lam(body)
+                    if matches!(
+                        body.as_ref(),
+                        Expr::App(function, argument)
+                            if matches_temporal_shell_right_var(
+                                function.as_ref(),
+                                1,
+                                include_linear_exponential,
+                            )
+                                && matches!(argument.as_ref(), Expr::Var(2))
+                    )
+            )
+            && matches!(
+                &telescope.clauses[7].expr,
+                Expr::Pi(domain, codomain)
+                    if temporal_shell_left_body(domain.as_ref(), include_linear_exponential)
+                        .is_some_and(|body| {
+                            matches_temporal_shell_left_var(body, 1, include_linear_exponential)
+                        })
+                        && matches_temporal_shell_left_var(
+                            codomain.as_ref(),
+                            1,
+                            include_linear_exponential,
+                        )
+            )
     })
 }
 

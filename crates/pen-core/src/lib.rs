@@ -2,6 +2,7 @@ pub mod atom;
 pub mod canonical;
 pub mod capability;
 pub mod clause;
+pub mod declaration;
 pub mod encode;
 pub mod expr;
 pub mod hash;

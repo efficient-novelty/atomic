@@ -97,7 +97,11 @@ fn contains_path_constructor(expr: &Expr) -> bool {
 
 fn contains_modal_or_temporal(expr: &Expr) -> bool {
     match expr {
-        Expr::Flat(_) | Expr::Sharp(_) | Expr::Disc(_) | Expr::Shape(_) | Expr::Next(_)
+        Expr::Flat(_)
+        | Expr::Sharp(_)
+        | Expr::Disc(_)
+        | Expr::Shape(_)
+        | Expr::Next(_)
         | Expr::Eventually(_) => true,
         Expr::App(a, b) | Expr::Pi(a, b) | Expr::Sigma(a, b) => {
             contains_modal_or_temporal(a) || contains_modal_or_temporal(b)
@@ -107,8 +111,12 @@ fn contains_modal_or_temporal(expr: &Expr) -> bool {
                 || contains_modal_or_temporal(b)
                 || contains_modal_or_temporal(c)
         }
-        Expr::Lam(inner) | Expr::Refl(inner) | Expr::Susp(inner) | Expr::Trunc(inner)
-        | Expr::Bang(inner) | Expr::WhyNot(inner) => contains_modal_or_temporal(inner),
+        Expr::Lam(inner)
+        | Expr::Refl(inner)
+        | Expr::Susp(inner)
+        | Expr::Trunc(inner)
+        | Expr::Bang(inner)
+        | Expr::WhyNot(inner) => contains_modal_or_temporal(inner),
         Expr::Univ | Expr::Var(_) | Expr::Lib(_) | Expr::PathCon(_) => false,
     }
 }
@@ -250,8 +258,7 @@ pub fn classify_candidate(
         ),
     };
 
-    let bound =
-        derive_conditional_at_most(&submission).map_err(EgpBridgeError::Classifier)?;
+    let bound = derive_conditional_at_most(&submission).map_err(EgpBridgeError::Classifier)?;
     let payload = serde_json::json!({
         "subject": extraction.subject_hash,
         "stage": candidate_stage,
@@ -304,12 +311,8 @@ mod tests {
             }
             Expr::App(left, _) if matches!(left.as_ref(), Expr::Univ) => ClauseRole::Formation,
             Expr::Var(_) | Expr::Lam(_) | Expr::Refl(_) => ClauseRole::Introduction,
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => {
-                ClauseRole::Introduction
-            }
-            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => {
-                ClauseRole::Elimination
-            }
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lib(_)) => ClauseRole::Introduction,
+            Expr::App(left, _) if matches!(left.as_ref(), Expr::Lam(_)) => ClauseRole::Elimination,
             Expr::App(_, _) => ClauseRole::Introduction,
             Expr::PathCon(_) => ClauseRole::PathAttach,
             _ => ClauseRole::Formation,
@@ -354,8 +357,7 @@ mod tests {
         ]);
         let extraction = extract_candidate_families(&signature, &closure, &temporal, 15);
         let extraction = extraction.extraction().expect("extracts").clone();
-        let disposition =
-            classify_candidate(&extraction, &orbits, 16, 2).expect("classifies");
+        let disposition = classify_candidate(&extraction, &orbits, 16, 2).expect("classifies");
         assert_eq!(disposition.bound.marginal_nu, 0);
         assert!(disposition.bound.debt_free_if_inventory_exhaustive);
         assert!(disposition.bound.conditional_debt_free_linear_bound_holds);
@@ -370,8 +372,7 @@ mod tests {
         ]);
         let extraction = extract_candidate_families(&signature, &closure, &single, 15);
         let extraction = extraction.extraction().expect("extracts").clone();
-        let disposition =
-            classify_candidate(&extraction, &orbits, 16, 3).expect("classifies");
+        let disposition = classify_candidate(&extraction, &orbits, 16, 3).expect("classifies");
         assert_eq!(disposition.bound.marginal_nu, 3);
         assert!(disposition.bound.debt_free_if_inventory_exhaustive);
         assert!(disposition.bound.conditional_debt_free_linear_bound_holds);
@@ -401,8 +402,7 @@ mod tests {
         ]);
         let extraction = extract_candidate_families(&signature, &closure, &inheritance, 15);
         let extraction = extraction.extraction().expect("extracts").clone();
-        let disposition =
-            classify_candidate(&extraction, &orbits, 16, 3).expect("classifies");
+        let disposition = classify_candidate(&extraction, &orbits, 16, 3).expect("classifies");
         assert_eq!(disposition.bound.marginal_nu, 3);
         assert!(disposition.bound.marginal_nu <= 4 * 3);
     }
@@ -440,8 +440,14 @@ mod tests {
             assignments,
             vec![
                 ("IntrinsicKernel".to_string(), "KernelHead".to_string()),
-                ("P5InheritedSurface".to_string(), "SupportAction".to_string()),
-                ("P5InheritedSurface".to_string(), "SupportAction".to_string()),
+                (
+                    "P5InheritedSurface".to_string(),
+                    "SupportAction".to_string()
+                ),
+                (
+                    "P5InheritedSurface".to_string(),
+                    "SupportAction".to_string()
+                ),
             ]
         );
         // The gate itself fails closed on a contradicting assignment.

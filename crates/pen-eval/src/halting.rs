@@ -30,10 +30,10 @@
 //! so the internal case is verified for the identification the lane
 //! actually uses.
 
-use crate::bar::{clears_bar, compute_bar, compute_rho, DiscoveryRecord};
+use crate::bar::{DiscoveryRecord, clears_bar, compute_bar, compute_rho};
 use crate::lambda_trigger::rational_string;
 use crate::nu::structural_nu;
-use pen_core::canonical::{canonical_key_telescope, CanonKey};
+use pen_core::canonical::{CanonKey, canonical_key_telescope};
 use pen_core::clause::{ClauseRec, ClauseRole};
 use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
@@ -216,7 +216,10 @@ pub fn assess_step16_stream(
 
 /// Constructed internal-class exemplars: presentations of already-accepted
 /// structure that the engine must not charge.
-pub fn internal_case_exemplars(library: &Library, history_pairs: &[(u32, u32)]) -> Vec<InternalExemplar> {
+pub fn internal_case_exemplars(
+    library: &Library,
+    history_pairs: &[(u32, u32)],
+) -> Vec<InternalExemplar> {
     let accepted_keys = accepted_canonical_keys();
     let mut exemplars = Vec::new();
 
@@ -251,10 +254,7 @@ pub fn internal_case_exemplars(library: &Library, history_pairs: &[(u32, u32)]) 
     });
 
     // (3) Bare variable presentation: no new structure at all.
-    let bare = Telescope::new(vec![ClauseRec::new(
-        ClauseRole::Introduction,
-        Expr::Var(1),
-    )]);
+    let bare = Telescope::new(vec![ClauseRec::new(ClauseRole::Introduction, Expr::Var(1))]);
     exemplars.push(InternalExemplar {
         description: "bare variable presentation".to_owned(),
         mechanism: "trivially derivable".to_owned(),

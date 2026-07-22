@@ -26,6 +26,7 @@ const SUPPORT_MODULES: &[&str] = &[
     "CountingLemmas.agda",
     "ProvenanceBound.agda",
     "P5RecordBoundary.agda",
+    "KernelBridge.agda",
     "CertifiedHalt.agda",
     "ProvenanceWitness16.agda",
     "StepWitness.agda",
@@ -309,6 +310,7 @@ mod tests {
         assert!(output_dir.join("StepWitness.agda").exists());
         assert!(output_dir.join("ProvenanceBound.agda").exists());
         assert!(output_dir.join("P5RecordBoundary.agda").exists());
+        assert!(output_dir.join("KernelBridge.agda").exists());
         assert!(output_dir.join("CertifiedHalt.agda").exists());
         assert!(output_dir.join("Step01.agda").exists());
         assert!(output_dir.join("Payload01.agda").exists());

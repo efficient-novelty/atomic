@@ -17,13 +17,13 @@
 //! classification derivation hashes, and rebuilding it from the sealed
 //! signature reproduces it byte for byte.
 
+use pen_core::expr::Expr;
 use pen_core::telescope::Telescope;
 use pen_eval::demand_orbits::KernelOrbitExtraction;
 use pen_eval::egp::{assign_mechanism, classify_candidate};
 use pen_eval::typed_families::{
     CandidateExtractionOutcome, PredecessorClosure, extract_candidate_families,
 };
-use pen_core::expr::Expr;
 use pen_type::elaborate::{
     SealedSignature, TokenError, issue_naturality_token, issue_typed_eliminator_token,
     issue_typed_lift_token,

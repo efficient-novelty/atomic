@@ -43,8 +43,8 @@
 
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::Telescope;
-use pen_type::admissibility::{strict_admissibility_for_mode, AdmissibilityMode};
-use pen_type::obligations::{summarize_structural_debt, StructuralDebt};
+use pen_type::admissibility::{AdmissibilityMode, strict_admissibility_for_mode};
+use pen_type::obligations::{StructuralDebt, summarize_structural_debt};
 use serde::Serialize;
 
 pub const O16_CHECK_DATE: &str = "2026-07-06";
@@ -150,8 +150,12 @@ pub fn directive_debt_timeline() -> Vec<DirectiveDebtRecord> {
     for stage in 1..=16_u32 {
         // Library sealed through stage − 1.
         let debt = summarize_structural_debt(&library, WINDOW_DEPTH);
-        let admissibility =
-            strict_admissibility_for_mode(stage, WINDOW_DEPTH, &library, AdmissibilityMode::Guarded);
+        let admissibility = strict_admissibility_for_mode(
+            stage,
+            WINDOW_DEPTH,
+            &library,
+            AdmissibilityMode::Guarded,
+        );
         let required = required_packages(debt);
         timeline.push(DirectiveDebtRecord {
             stage,
@@ -204,9 +208,7 @@ pub fn o16_emptiness_report() -> O16EmptinessReport {
             .filter(|record| record.required_packages.contains(&package))
             .map(|record| record.stage)
             .collect();
-        let contiguous = demanded
-            .windows(2)
-            .all(|window| window[1] == window[0] + 1);
+        let contiguous = demanded.windows(2).all(|window| window[1] == window[0] + 1);
         if !contiguous {
             persistence_violations.push(package);
         }

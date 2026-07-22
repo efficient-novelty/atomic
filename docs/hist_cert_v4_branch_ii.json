@@ -1,0 +1,183 @@
+{
+  "schema": "hist-cert-historical-hit-v4-branch-ii",
+  "date": "2026-07-21",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_e2b_quotient_closure_v1.json",
+      "role": "ordinary_family_and_generated_instance_handoff",
+      "byte_length": 248709,
+      "blake3": "blake3:e3199f04138e8049fdca4833347e2557b54e044148e343a5162a8ce2d54a50de"
+    },
+    {
+      "path": "docs/hist_cert_v3.json",
+      "role": "typed_marginal_historical_path_families",
+      "byte_length": 178331,
+      "blake3": "blake3:dee9ceed570935917a7e40130caffdb014af412080b7dd9592c2fe8a59c9b05d"
+    },
+    {
+      "path": "docs/phase5b_fork_adjudication.md",
+      "role": "adopted_branch_ii_ft1_semantics",
+      "byte_length": 4610,
+      "blake3": "blake3:d36e8dbbac668712f045e8a5ee92e7b0b4c3cd44a0e59e54c961b2b580422a34"
+    },
+    {
+      "path": "docs/agent_a_hist_cert_plan.md",
+      "role": "archival_agent_a_scope_and_falsifier",
+      "byte_length": 4097,
+      "blake3": "blake3:2382baab1ebeb51a8dd9cb2c76c8e1c571e1209ef70dc21739c77fbd7023e878"
+    },
+    {
+      "path": "crates/pen-search/src/e2b_quotient_closure.rs",
+      "role": "e2b_handoff_issuer",
+      "byte_length": 57169,
+      "blake3": "blake3:0432adf16f83ab60e7df6ffa55f773ca81e59bc70bc05f6f8e6410f33f4d5e4b"
+    },
+    {
+      "path": "crates/pen-eval/src/tdc1_hist_cert_v3.rs",
+      "role": "path_certificate_issuer",
+      "byte_length": 58561,
+      "blake3": "blake3:c86ea80fc6d4b5dfd154265e94c352048485cf37e3a8cab6ad22d0ab5c6eb455"
+    },
+    {
+      "path": "crates/pen-search/src/agent_a_hist_cert_v4.rs",
+      "role": "this_successor_issuer",
+      "byte_length": 20912,
+      "blake3": "blake3:134abe85a9745e5455a7144fb9150826c52fa5d4335d3ca8a9bd183d5a9576e6"
+    }
+  ],
+  "branch_ii_adoption_replayed": true,
+  "e2b_schema": "schema2-e2b-quotient-closure-v1",
+  "e2b_digest": "blake3:9f27c97eac4ea96b329ccf6988a82c4ccb5eda5dd77fbafd28fca24ae898a0b4",
+  "e2b_replayed": true,
+  "hist_v3_schema": "hist-cert-historical-hit-v3",
+  "hist_v3_digest": "blake3:1984ef55c1687749c0eff8f7109aaca316755251a36d78686a7299c8572877f3",
+  "hist_v3_replayed": true,
+  "e2b_handoff_consumed_exactly_once": true,
+  "packages": [
+    {
+      "step": 5,
+      "label": "S1",
+      "sealed_operational_total": 7,
+      "certified_path_family_count": 2,
+      "certified_independent_ordinary_family_count": 5,
+      "certified_generated_instance_count": 0,
+      "certified_semantic_total": 7,
+      "operational_row_coverage_total": 7,
+      "operational_inventory_fully_covered": true,
+      "semantic_total_matches_seal": true,
+      "signed_divergence": 0,
+      "divergence_cause": null,
+      "every_path_family_typed_and_marginal": true,
+      "every_ordinary_row_typed_normalized_natural_and_resolved": true,
+      "generated_instance_not_multiplied": true,
+      "full_certified_total_issued": true,
+      "derivation_hash": "blake3:bfed52dc258c449521772da0939499371a1ca8d7d3caac5ee748dc333c319e7b"
+    },
+    {
+      "step": 6,
+      "label": "Trunc",
+      "sealed_operational_total": 8,
+      "certified_path_family_count": 2,
+      "certified_independent_ordinary_family_count": 6,
+      "certified_generated_instance_count": 0,
+      "certified_semantic_total": 8,
+      "operational_row_coverage_total": 8,
+      "operational_inventory_fully_covered": true,
+      "semantic_total_matches_seal": true,
+      "signed_divergence": 0,
+      "divergence_cause": null,
+      "every_path_family_typed_and_marginal": true,
+      "every_ordinary_row_typed_normalized_natural_and_resolved": true,
+      "generated_instance_not_multiplied": true,
+      "full_certified_total_issued": true,
+      "derivation_hash": "blake3:3c43cf45c56f8bf41aef6781005473020822c053e95ce31a38fc34ccf12698e7"
+    },
+    {
+      "step": 7,
+      "label": "S2",
+      "sealed_operational_total": 10,
+      "certified_path_family_count": 5,
+      "certified_independent_ordinary_family_count": 5,
+      "certified_generated_instance_count": 0,
+      "certified_semantic_total": 10,
+      "operational_row_coverage_total": 10,
+      "operational_inventory_fully_covered": true,
+      "semantic_total_matches_seal": true,
+      "signed_divergence": 0,
+      "divergence_cause": null,
+      "every_path_family_typed_and_marginal": true,
+      "every_ordinary_row_typed_normalized_natural_and_resolved": true,
+      "generated_instance_not_multiplied": true,
+      "full_certified_total_issued": true,
+      "derivation_hash": "blake3:162821ebf34cc9877a8dac0e217472d030adcd236aad2fbec1baa2c3eb6e0e65"
+    },
+    {
+      "step": 8,
+      "label": "S3",
+      "sealed_operational_total": 18,
+      "certified_path_family_count": 10,
+      "certified_independent_ordinary_family_count": 7,
+      "certified_generated_instance_count": 1,
+      "certified_semantic_total": 17,
+      "operational_row_coverage_total": 18,
+      "operational_inventory_fully_covered": true,
+      "semantic_total_matches_seal": false,
+      "signed_divergence": -1,
+      "divergence_cause": "step8_cell_action_is_a_generated_instance_of_the_parent_operation_and_does_not_mint_an_independent_ordinary_family",
+      "every_path_family_typed_and_marginal": true,
+      "every_ordinary_row_typed_normalized_natural_and_resolved": true,
+      "generated_instance_not_multiplied": true,
+      "full_certified_total_issued": true,
+      "derivation_hash": "blake3:7844ab117d8c8d5b86ed6c4436811c2bcc4a169643e76b7f5cd48353cb8d52db"
+    }
+  ],
+  "f_t1": {
+    "falsifier": "F-T1",
+    "branch_semantics": "certified semantic totals plus certified divergence records; the seal remains testimonial",
+    "certified_steps": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "certified_semantic_totals": [
+      7,
+      8,
+      10,
+      17
+    ],
+    "sealed_testimonial_totals": [
+      7,
+      8,
+      10,
+      18
+    ],
+    "certified_divergence_steps": [
+      8
+    ],
+    "all_registered_path_families_certified": true,
+    "all_ordinary_rows_quotient_resolved": true,
+    "every_difference_has_exact_divergence_record": true,
+    "blind_reproduction_of_seal_required": false,
+    "f_t1_discharged": true,
+    "derivation_hash": "blake3:3ff3f53ea15eb64e1494a1bb20646745dc6fabc95553bdb596cf54d485246a94"
+  },
+  "full_certified_totals": [
+    7,
+    8,
+    10,
+    17
+  ],
+  "f_t1_discharged": true,
+  "downstream": {
+    "remaining_history_certification_executed": false,
+    "reselection_executed": false,
+    "e5_f1_executed": false,
+    "bridge_executed": false,
+    "final_certificate_executed": false
+  },
+  "outcome": "agent_a_branch_ii_full_hit_totals_certified_f_t1_discharged",
+  "permitted_conclusion": "The historical HIT packages have full semantic totals 7/8/10/17. Step 8 retains an exact -1 Generated-instance divergence from the sealed operational 18; F-T1 is discharged under adopted Branch-(ii) semantics.",
+  "required_successor_action": "Certify Steps 2-4 and 9-15 with the same completed-basis and divergence-record discipline before preregistering the reselection burn.",
+  "result_digest": "blake3:49e036c30e29199c23f691e118f787051341fea64d4635271e8e413cfea412b0"
+}

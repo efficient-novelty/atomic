@@ -27,8 +27,7 @@ fn main() {
 
     let signature = SealedSignature::genesis_del_h15();
     let closure = predecessor_closure(&signature).expect("predecessor closure");
-    let orbits =
-        kernel_stage_inventories(&signature, &closure).expect("kernel orbit inventories");
+    let orbits = kernel_stage_inventories(&signature, &closure).expect("kernel orbit inventories");
     let kernel_internality =
         certify_guarded_step15_internality(&signature, &closure).expect("internality");
 

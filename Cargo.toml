@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "crates/pen-core",
+    "crates/pen-schema",
     "crates/pen-type",
     "crates/pen-eval",
     "crates/pen-store",
