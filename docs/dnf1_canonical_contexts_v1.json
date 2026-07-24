@@ -1,0 +1,182 @@
+{
+  "schema": "dnf1-canonical-dependent-contexts-v1",
+  "date": "2026-07-24",
+  "source_bindings": [
+    {
+      "path": "docs/dnfq_theorem_layer_plan.md",
+      "role": "frozen DNF-Q construction brief and falsifiers",
+      "register": "law",
+      "byte_length": 5706,
+      "blake3": "blake3:cdcd9a35412bfe59f470b83d624aa5f67fab856b9bc44a1df90706797ab01cb8"
+    },
+    {
+      "path": "docs/schema2_operational_domain_adjudication.md",
+      "role": "frozen operational bounds; read-only in DNF-Q",
+      "register": "frozen_bound",
+      "byte_length": 8316,
+      "blake3": "blake3:3789e69507d3aa9dcfb52cc136a2f1a5bdd237ffbb6b641a908016af0d79b0d7"
+    },
+    {
+      "path": "docs/dependent_context_adjudication.md",
+      "role": "adopted dependent ambient context rules",
+      "register": "law",
+      "byte_length": 8126,
+      "blake3": "blake3:acc0f44597cbcb039086d49bd36a848793c98b6dc9b949e62a7fa4130aef86e6"
+    },
+    {
+      "path": "docs/support_comprehension_adjudication.md",
+      "role": "adopted canonical dependency analysis and acyclicity",
+      "register": "law",
+      "byte_length": 6353,
+      "blake3": "blake3:78ce58282285ae0ac1f569f46d2564fe1da68e30c71d160039337ae13c6b821d"
+    },
+    {
+      "path": "crates/pen-type/src/dependent_context.rs",
+      "role": "sequential dependent context implementation",
+      "register": "constructed_content",
+      "byte_length": 40441,
+      "blake3": "blake3:57526f2437feb59f313c1cec2fe9fe83eb0fb35a4d72fb70dbdb0b92a174b2fc"
+    },
+    {
+      "path": "crates/pen-schema/src/context.rs",
+      "role": "typed schema and cubical context/substitution calculus",
+      "register": "constructed_content",
+      "byte_length": 71070,
+      "blake3": "blake3:d0de2a49de234034ec60e62e7735658055bc4e9e3abedd5790c7d471de5f1904"
+    },
+    {
+      "path": "crates/pen-search/src/support_comprehension_hardening_v6.rs",
+      "role": "closed-instance support-comprehension canonicity theorem",
+      "register": "constructed_content",
+      "byte_length": 35275,
+      "blake3": "blake3:f022cf5b43bc99c5d433d5fe79e54bdf94df6342b571a962024a0566e1208f2d"
+    },
+    {
+      "path": "docs/t_d2_1_operational_domain_v2.json",
+      "role": "frozen operational bounds and current context gap",
+      "register": "frozen_bound",
+      "byte_length": 29137,
+      "blake3": "blake3:8df8d344ec2877464107ca0001beef013ab3a813d9eedd94b878e012cde51975"
+    }
+  ],
+  "frozen_bound_snapshot_digest": "blake3:eb4c4484cfb1d3d2cf8ed451320e948e525c9fc9d03f7885c42b4bd2e0821745",
+  "frozen_public_entry_count": 15,
+  "frozen_public_clause_count": 64,
+  "frozen_context_arity_bound": 9,
+  "frozen_binder_bound": 2,
+  "frozen_dimension_bound": 3,
+  "frozen_semantic_depth_bound": 2,
+  "bounds_replayed_unchanged": true,
+  "canonicalization_probe": {
+    "first_presentation": {
+      "entries": [
+        {
+          "display_name": "A",
+          "classifier": {
+            "classifier": "type"
+          }
+        },
+        {
+          "display_name": "x",
+          "classifier": {
+            "classifier": "element",
+            "type_expression": {
+              "Var": 1
+            }
+          }
+        }
+      ]
+    },
+    "second_presentation": {
+      "entries": [
+        {
+          "display_name": "RenamedCarrier",
+          "classifier": {
+            "classifier": "type"
+          }
+        },
+        {
+          "display_name": "renamedPoint",
+          "classifier": {
+            "classifier": "element",
+            "type_expression": {
+              "Var": 1
+            }
+          }
+        }
+      ]
+    },
+    "first_canonical": {
+      "hypotheses": [
+        {
+          "classifier": "type"
+        },
+        {
+          "classifier": "element",
+          "type_expression": {
+            "Var": 1
+          }
+        }
+      ]
+    },
+    "second_canonical": {
+      "hypotheses": [
+        {
+          "classifier": "type"
+        },
+        {
+          "classifier": "element",
+          "type_expression": {
+            "Var": 1
+          }
+        }
+      ]
+    },
+    "display_names_erased": true,
+    "canonical_forms_equal": true,
+    "dependent_prefix_typed": true,
+    "classifier_normalization_idempotent": true,
+    "replayed_without_domain_membership_proxy": true,
+    "derivation_hash": "blake3:be38d2168aa1974391189a83ebce56d26f5a0afa1b3b072e7dc6013e45303f94"
+  },
+  "type_and_element_fragment_canonicalized": true,
+  "function_interval_cofibration_and_opaque_resident_fragment_canonicalized": false,
+  "full_context_grammar_finitely_enumerated": false,
+  "schema_and_kernel_context_calculi_identified": false,
+  "universal_canonicity_proved": false,
+  "hash_count_label_or_verdict_used_as_context_content": false,
+  "bounds_modified_or_parameterized": false,
+  "named_gaps": [
+    {
+      "gap_id": "DNF1_FULL_CONTEXT_GRAMMAR_ENUMERATOR_GAP",
+      "exact_obstruction": "The common context API canonicalizes Type and earlier-prefix Element declarations, but it has no single finite rank/unrank grammar covering function declarations, opaque residents, intervals, cofibrations, and their recursively bounded motives.",
+      "no_proxy_accepted": true,
+      "zero_charge": true,
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "derivation_hash": "blake3:a24289616571b65524e27423a9647dfa95427620fb7c39a00b161f65498ce821"
+    },
+    {
+      "gap_id": "DNF1_CONTEXT_CALCULUS_IDENTIFICATION_GAP",
+      "exact_obstruction": "The kernel dependent-context calculus and the Schema2/cubical context calculus each replay their own judgments, but no theorem identifies their declarations, substitutions, and equality on one common context object.",
+      "no_proxy_accepted": true,
+      "zero_charge": true,
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "derivation_hash": "blake3:1be45b72f8953725541c4dba4a96fb1a8de35bfacdb9aa5adb5ac5f76c942cef"
+    },
+    {
+      "gap_id": "DNF1_UNIVERSAL_CANONICITY_INDUCTION_GAP",
+      "exact_obstruction": "Two nontrivial dependent presentations normalize to one context in the implemented fragment, but no constructor induction proves that result for every context admitted by the full adopted grammar.",
+      "no_proxy_accepted": true,
+      "zero_charge": true,
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "derivation_hash": "blake3:ff6099e3de1d179d37dce9e01cb1c376d03f7229827120f58b4ac834fa8620ba"
+    }
+  ],
+  "status": "stopped_named_gaps",
+  "t_d2_2_reopened": false,
+  "m4_authorized": false,
+  "result_digest": "blake3:56c4fb575c6d851071c8333ff0f1cb5aec1086f829f8811a3c5999e92777b451"
+}

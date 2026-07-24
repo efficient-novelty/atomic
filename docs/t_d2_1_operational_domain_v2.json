@@ -1,0 +1,587 @@
+{
+  "schema": "t-d2-1-operational-domain-build-v2",
+  "date": "2026-07-24",
+  "source_bindings": [
+    {
+      "path": "docs/schema2_operational_domain_adjudication.md",
+      "role": "adopted operational bound authority",
+      "byte_length": 8316,
+      "blake3": "blake3:3789e69507d3aa9dcfb52cc136a2f1a5bdd237ffbb6b641a908016af0d79b0d7",
+      "sha256": "bec3df54b782371f496dc9912f491c8f8ab5cf796ace59a5e1c852aaa998b77d",
+      "register": "bound_citation"
+    },
+    {
+      "path": "docs/depth_two_domain_adjudication.md",
+      "role": "adopted independent-domain and quotient target",
+      "byte_length": 6825,
+      "blake3": "blake3:2fe49271403603bb57ce1e312b4b1d1048b4a358dec6c3eee942f37a64374645",
+      "sha256": "fffd48c0eb5f89b6728842aa6f9de5aa43013ab867278d6b8ec6b2737ed92151",
+      "register": "definition_input"
+    },
+    {
+      "path": "docs/ambient_former_closure_adjudication.md",
+      "role": "adopted closed transparent-former inventory",
+      "byte_length": 5705,
+      "blake3": "blake3:b745012062e17e7da625baedf7c302970549f85a2ad51b6913eab602910bf1dd",
+      "sha256": "ca53cac5330999620b03863abc00378e1a2da556989d57414262278f47473fc2",
+      "register": "bound_citation"
+    },
+    {
+      "path": "docs/dependent_context_adjudication.md",
+      "role": "adopted dependent-context declaration discipline",
+      "byte_length": 8126,
+      "blake3": "blake3:acc0f44597cbcb039086d49bd36a848793c98b6dc9b949e62a7fa4130aef86e6",
+      "sha256": "62d7f33b2504591b52de6897f06ae4699b237dcf91b02b3aee979ed3d16ab523",
+      "register": "bound_citation"
+    },
+    {
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "adopted natural-family versus instance quotient",
+      "byte_length": 6355,
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d",
+      "sha256": "ba9b57379e4b53c9f1ef54982e7c4551754ad82262d11805dc6e7c752f66b897",
+      "register": "definition_input"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "typed Schema2 obligations and proxy prohibition",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544",
+      "sha256": "fe3b2eb8f17f12563596d7a937d39d2618625503cf4ba1af8bba33e224309c82",
+      "register": "definition_input"
+    },
+    {
+      "path": "crates/pen-core/src/expr.rs",
+      "role": "closed kernel expression alphabet",
+      "byte_length": 10207,
+      "blake3": "blake3:37d3bb9f392e5da1339e61369dcf8194b9cd6e9efb17030b7973d1f7927a96fd",
+      "sha256": "f4da000f35a343fe6ad749c36e12d56330c8787efc73bb9c01a0289f65ea2531",
+      "register": "definition_input"
+    },
+    {
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "sealed signature and frozen typed elaborator",
+      "byte_length": 102010,
+      "blake3": "blake3:3069feaa5d134d65a3d529da046041f70a348ef32a1771075fc6fca7a1edfd51",
+      "sha256": "6b713bb5286648a1c7a22c55a2446af8eca58223343ce2cd716c49748e447719",
+      "register": "bound_citation"
+    },
+    {
+      "path": "crates/pen-type/src/ambient_former_internality.rs",
+      "role": "executable transparent-former registry",
+      "byte_length": 36309,
+      "blake3": "blake3:c0f1a77c4e1f7dcb11f230f7c075cdc7b197931d27e453f7ed5528780e7e2347",
+      "sha256": "ec151b8d46e42fe691acb6db065411fcae344e29283cdd7dd8f72e2e0889ef08",
+      "register": "bound_citation"
+    },
+    {
+      "path": "crates/pen-schema/src/context.rs",
+      "role": "typed dependent context constructor surface",
+      "byte_length": 71070,
+      "blake3": "blake3:d0de2a49de234034ec60e62e7735658055bc4e9e3abedd5790c7d471de5f1904",
+      "sha256": "a89a1b5007222d046d43f4df97d2a5411facea5f4bc0d709d7dca12dacf9c260",
+      "register": "bound_citation"
+    },
+    {
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "frozen terminating beta normalizer",
+      "byte_length": 17962,
+      "blake3": "blake3:8b8089f38fab15923ab92521f45c79fe16d64d6ef2c59a70ac11d74a4004ae9d",
+      "sha256": "7d3398b60708bf1ac132609e0bf84d6a26383f9dcc90f11f99d5803ed9da73f2",
+      "register": "definition_input"
+    },
+    {
+      "path": "crates/pen-type/src/equality.rs",
+      "role": "frozen univalent equality decision procedure",
+      "byte_length": 4757,
+      "blake3": "blake3:7c1ed7386c35aa7e5196e044b194f63e61204e431c3837018305977fbcee6c31",
+      "sha256": "3aa5fd8d4e9667c1534f39fc0c76ef956e6372301b767f2442c918c6b85c3401",
+      "register": "definition_input"
+    },
+    {
+      "path": "docs/t_bi_nu1_semantic_provenance_v6.json",
+      "role": "post-seal 61-family regression observer",
+      "byte_length": 1394797,
+      "blake3": "blake3:ca1847929a5979f1235115b06585d21fbad8c439ecb1ebbedaa96cfb56c50e52",
+      "sha256": "51419e53f9dcd0f9c61ddb21c0c116ab92de05d5b5e142792535eeda45136a18",
+      "register": "structural_testimony"
+    },
+    {
+      "path": "docs/a3_rule_inventory_exhaustiveness_v2.json",
+      "role": "post-seal exact A3 occurrence/source regression observer",
+      "byte_length": 1045834,
+      "blake3": "blake3:f587323b2e56aaa526d5106e40966d30eb9de1f49c5e5b3b4ea3b6652c9068af",
+      "sha256": "73d5d25cf9a91ab82100f14bb1e1cfe424c97ab0ac2503664278df4268ac5337",
+      "register": "structural_testimony"
+    },
+    {
+      "path": "docs/schema2_e5_future_hole_finale_v2_dependent_context.json",
+      "role": "post-seal 89-row typed membership regression observer",
+      "byte_length": 247022,
+      "blake3": "blake3:794d762b4378970ba6152547db3950d56030dfb2c1811276aba99f1cd8d3e726",
+      "sha256": "c60a28c82370e88829dfd6457ae52814d4523fcf2b2012378814a4cf0dd32be5",
+      "register": "structural_testimony"
+    }
+  ],
+  "history_signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+  "bound_snapshot_digest": "blake3:eb4c4484cfb1d3d2cf8ed451320e948e525c9fc9d03f7885c42b4bd2e0821745",
+  "pre_corpus_carrier_seal": "blake3:7fa237cdc7cdd3cdae0fc5162beab3cfd41b4a3c3b591b8ae25cec4e9d90d3d1",
+  "carrier_definition_digest": "blake3:83a4da986e79cd2c5d129caa3dd1e6ecea90a413d85928a0e82f17e00cb564d7",
+  "bound_snapshot": {
+    "public_entry_count": 15,
+    "public_clause_count": 64,
+    "maximum_ambient_parameter_count": 2,
+    "maximum_free_scope_length": 9,
+    "maximum_binder_nesting": 2,
+    "maximum_path_dimension": 3,
+    "semantic_former_depth": 2,
+    "transparent_former_count": 17,
+    "citations": [
+      {
+        "bound_name": "public_entry_count",
+        "value": 15,
+        "exact_source": "SealedSignature::genesis_del_h15 entry enumeration",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:0c2306d552a66a63a89d78d71553d3666f3ba283252be367b2592880e3a1097e"
+      },
+      {
+        "bound_name": "public_clause_count",
+        "value": 64,
+        "exact_source": "typed replay of every SealedSignature::genesis_del_h15 telescope",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:a9b4e7aa35016304cad2ebdb812f4db79e177ef096cb4d9446c584767af6a574"
+      },
+      {
+        "bound_name": "maximum_ambient_parameter_count",
+        "value": 2,
+        "exact_source": "typed replay of sealed telescope declaration contexts",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:58d4c7639a6e14021ea4ce21473e86b89572e85a4e304ac9214d8e2a58025ae8"
+      },
+      {
+        "bound_name": "closed_public_alphabet",
+        "value": 17,
+        "exact_source": "ambient-former closure adoption plus registered_transparent_formers()",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:3d363dfaa79125ac56c3c4be4fd2cc68f073199e95f0e40375142c4a07605acc"
+      },
+      {
+        "bound_name": "semantic_former_depth",
+        "value": 2,
+        "exact_source": "schema2-operational-domain-v1 clause 2",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:c653142fd981b3552b3b3106585ac97745891dd71a0a8269854ed38d1a850bd0"
+      },
+      {
+        "bound_name": "maximum_context_arity",
+        "value": 9,
+        "exact_source": "SealedSignature::genesis_del_h15 plus dependent-context adoption",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:fa95e921c4a5fb19e862e5a7f394b9ed11b92e40613a4b41f0ad0009e520b72a"
+      },
+      {
+        "bound_name": "maximum_binder_nesting",
+        "value": 2,
+        "exact_source": "recursive binder dereference over sealed elaborated normal forms",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:e6bb6331412378fa82865daa4272f6283c57c47a9bf98c4bad29baeaeab802d2"
+      },
+      {
+        "bound_name": "maximum_path_dimension",
+        "value": 3,
+        "exact_source": "recursive PathCon dereference over sealed public normal forms",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:6349fe0e56888b66d281790fad8174de0122ad1992562dd8b57b5c0284b2ca61"
+      }
+    ],
+    "all_citations_resolved_before_corpus_access": true,
+    "derivation_hash": "blake3:eb4c4484cfb1d3d2cf8ed451320e948e525c9fc9d03f7885c42b4bd2e0821745"
+  },
+  "context_finiteness": {
+    "display_names_erased": true,
+    "library_symbols_replaced_by_resident_coordinates": true,
+    "declaration_width_bounded": true,
+    "cofibration_conjunction_width_bounded": true,
+    "cofibration_disjunction_width_bounded": true,
+    "recursive_context_depth_bounded_by_semantic_depth": true,
+    "no_raw_ast_or_node_cap_used": true,
+    "structural_membership_decidable": false,
+    "finite_inductive_grammar_proved": false,
+    "derivation_hash": "blake3:49ee038a8443ee5694147c2b815cfad5359367f3755d07982a076bb70ed58e62"
+  },
+  "normalization_proof": {
+    "induction_measure": "Implemented concrete recursion is lexicographic in the operational constructor subtree with the exact binder prefix carried to each child. The required universal induction over dependent contexts and nested resident content is not yet proved; no regression sample is promoted to that theorem.",
+    "every_recursive_call_strictly_decreases": true,
+    "resident_normal_forms_replayed": true,
+    "every_enumerated_representative_typed": false,
+    "every_enumerated_representative_normalized": false,
+    "total_on_bounded_carrier": false,
+    "derivation_hash": "blake3:547ccb99c8a0a4e0044d68f59d84c8a9148af237e83649830040b4d7b0f98046"
+  },
+  "quotient_proof": {
+    "equality_procedure": "kernel-v1-beta-normal-equality",
+    "canonical_parameter_renaming_total": false,
+    "uniform_specializations_not_multiplied": false,
+    "structural_equality_decidable": false,
+    "every_carrier_row_has_one_quotient_key": false,
+    "quotient_key_collisions_replayed_by_equality": false,
+    "quotient_decidable": false,
+    "quotient_finitely_enumerable": false,
+    "derivation_hash": "blake3:e73f76967f6004bae4baefe6031de67882e0016f636de1d3fdaa7e0e08808742"
+  },
+  "symbolic_carrier_grammar": {
+    "resident_clause_keys": [
+      "blake3:1e3a646590c6cf6017a1f6f8a2dde9f9fb8fdd98208a37a7e7e6ad88093d452e",
+      "blake3:f26dd9fca2bc9db4e1a6abca61f2f72cfca90b85cc95c9bb5c45def03eb15fb4",
+      "blake3:1f219704069e1c1b840e0d11f56c56363f574f56d957aabe81283961b4ed460f",
+      "blake3:f0e6f4bca8f1c6fec9d54a9f3cb871c466ad90854b32e39b91dd94ec853d7bc0",
+      "blake3:03a0747937f80cd9c4ddb4d5c54f779616a6f9b3047a15ac44c308c4d79a9698",
+      "blake3:cfc549b75635ccdcc80c87f641ab6da12fb1f32892434abc7c7443feefb74139",
+      "blake3:2afb28085b402b995f5344bd282488c460abe15e320bf52291b1c59a7f4995fb",
+      "blake3:56dfbb480aa1b84959cb07c1e51a12ff6c51585405fad342568350459433d2c9",
+      "blake3:0c89cc01a07d1418f767ea35df61d3c734cc2230b31842c52763c854b5fbef5a",
+      "blake3:a063bc55645e76c71153aa53a4b7dd7c199dba98bb60b2ca25a2408a0e2cf16f",
+      "blake3:eb0ae0a6dc63be347723cdc33d7161e6982257487e657859067fae09a8246d1c",
+      "blake3:50da7cb3f236b37ede3d208b93881728ef9441f42cfe91c52eace94af9d355e9",
+      "blake3:1beb6151ad38049a2f8edd289abede2c2633cbe074144a3754ae286cae24ad0b",
+      "blake3:028d5e89e1cc56879bb1f167f6bbabed272af7e9fb7dd2b7e8143f79e48fbe9e",
+      "blake3:4c35ef6e85ae174d9df4d01501bd05675158eea90e75bf5ef450d6733693b145",
+      "blake3:1be9cef96ae0f90ff08eb8d167cadfdf2400861fbfe980209f7181f44810fd43",
+      "blake3:151495294e933b57cc84912f74d1f5fd820d66f6ca86c72fb36ce34e0f6169fd",
+      "blake3:2f1c0f61cbad75e2121161cec14ad674a6f5e1a0ed7b597d51c3c1be883d5666",
+      "blake3:1dc4fda838ed273f5d24bd099e88ac23b1171de8f008f30099709503003a086e",
+      "blake3:e3afc0bbebfbfd178f5e718727754df5a0696714a5058006079425dc639d342b",
+      "blake3:59891928e11d88e40f0cff61957c8130eb26cdce87540825d25fc1d4f271e74f",
+      "blake3:ff4a112be6eec3fab5b9a49ab8fae74788934d15b19588550ef75ed6c757317d",
+      "blake3:ce9f8de610ee51fe47c7e5b118fb4efba7849de7d89df1e78cd5abba389b036c",
+      "blake3:d63531fccfbb4e74db6d079993301dc7bbc3a59999729cd71337a2de6c11fb5e",
+      "blake3:02525ccf49ae0e09cc8d8a6413109b12169b7a3c43a4be9af82cc662f616fc8c",
+      "blake3:9b20b81cc495fa74553f6cecffd9ac471367692932da35cd22aa12f9c46e0a6f",
+      "blake3:db8e0a8e261aebcd2cd334e34fb3b89d381f609403dd41426ad8753c39ecaa53",
+      "blake3:820d9da6d5e5971d620773d830a6e17d2754bfafe3d83d5477beba386cba5ad5",
+      "blake3:8727b8e1f871b11d8441e01a4e7eca1ca2700832adb8e21ca85b1b702765f59e",
+      "blake3:d157107d1850a1bd3cd234ff87b940481d94f71c975153b3bf34cffe74377b64",
+      "blake3:c8003909efbf0e88533bc6681cbcdfcb4485a6d719deb6db8236d8b7290b8d4d",
+      "blake3:4c451ba9c6662b2f71ef1008849c84bd079adfd309214720632e2019ab65555e",
+      "blake3:c0b1f64d4da933a9fb07160809f9d1407e5ef061d07372a51d5d6a4512e86d7b",
+      "blake3:c1b69a338879794205b6729c19d9145edf0b638462dbd0c2ddc3597984c2eda3",
+      "blake3:d7e888a66670ca4d7696acf956516b0a93cf72effc4f2d029d0beff72838009d",
+      "blake3:f9f8969f0d262ee669ae60adf27043299cae9e0427376ca0abd5b0a51180d40d",
+      "blake3:df4511f0cdc6a80557f3dcbaaab694a781edeb47b8ecff1634dec24f30153703",
+      "blake3:a2330b56525b08c3c67856d3271446e27341a76eb4796ff7bf3763133b86fe46",
+      "blake3:132f4f9e5663701cd15ccc6e77fde291ae8aa9a6879ea6bfbb92842c9a39790e",
+      "blake3:987f7501cc399eaf8786e9161dad4acd860f12f3c5d71e4bda39f0dec219be31",
+      "blake3:17b5365da190b6cff66fa86d6669459d3cbc6d62cfa3fe49689f1b0b3b400ae9",
+      "blake3:ac944614262057d027239400be54571a842d928b43c12cdad2ab6a1b9c373bbb",
+      "blake3:ab331a5debf49a0ff27cb21c2c5025e6bd26634754d3a58ae9ce03f7d9257e81",
+      "blake3:73ff3f001467d38aca5eb330fd8e0b63c6b90d1a71eaac739c818b37af84aa8d",
+      "blake3:3f81db123f6ab42635c9b044f933c28b481c7fe9e5386ec29ecbfef9f115e31b",
+      "blake3:bc1c3f4ebf456fe044436168bf9426bf751b08df870eb128a668275aff50294b",
+      "blake3:b63225cdde8fd2aa4ca9967f36bf15c670aeaf050dd596e2f09b7c32e20cbb52",
+      "blake3:4ed92a4976880f0d3364c23f287e80bd0e00e0f2872793c64c9c8bd0a38ca062",
+      "blake3:9036d49d0e6ddbde545c91d86ac7cdfec20eeebf36677a6b292b8c1359d13a64",
+      "blake3:d613958e0deeef7057425a55c376bbe57e9b9cb4a3896d008e0a032c3b15fd54",
+      "blake3:f940bffeb3a2abe7165b245ee5ce951594713e7996c92fcdde81d811b995c761",
+      "blake3:68a0ca5d8a5dde0b2d2928d468e8e609e3517eba182ca8630af87ae9d34789b5",
+      "blake3:1eca490df6a48db55b7d1469657b30ea5677d84f99ba2b059071a286b1a5af1f",
+      "blake3:632f5f26db30e4ca469eecfb02f4e23abc17a3ae662742825900f3744183a053",
+      "blake3:ed25a5fb5f533700095af855e09c99cb70aa2739bdfa7b3beb0eef1c49acbc22",
+      "blake3:bf0fb1b9f72e30445a8333564a5158ca20331ccafb3fc993c2f50a389f5a160f",
+      "blake3:7d5e43fe26c879eb28984ef9d36c49e36f80f37de4543a3bc553ccfa1e551e50",
+      "blake3:0a5067395577112be9fb9cb7db87832a67b881c38f8f3e0591a0f8fabddc54cc",
+      "blake3:3ec44695c7dda81690cbc55d724fb19eebae46f6b7ee9ed24ec68ed9bcdf7d3a",
+      "blake3:2824931181c1e9c8b2b7c2d7763692a063b40049ada34d6fd801ec625ed29147",
+      "blake3:212bbfb00c38db25904fc94e035be263a0b96a63d455e1f6ccff48ac07872dc9",
+      "blake3:5dada432b5546615fa2e941d2082573d88cd3188d8e38ccbcf71fc2ced040d0a",
+      "blake3:dfba2414b926dddf55eb510bfbcfbe33a891faa9e6506fb1a3f697b7f75f2eed",
+      "blake3:b9068b1accae3c06aeb44b78c002b4628f67d028013dd41bea70b51e2f35164f"
+    ],
+    "context_variable_range_inclusive": [
+      1,
+      9
+    ],
+    "bound_variable_range_inclusive": [
+      1,
+      2
+    ],
+    "former_rules": [
+      {
+        "former": "ambient_universe",
+        "arity": 0,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": true,
+        "derivation_hash": "blake3:bcc81928e2170a563fcf522a5f8c18ead74bc47f7aa1d1930c3df0c8834b0db4"
+      },
+      {
+        "former": "lambda_introduction",
+        "arity": 1,
+        "binder_argument_positions": [
+          0
+        ],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:f260e85c2529ad36b0995a33f21f0c639936d22445195ed17ac7028289d7a771"
+      },
+      {
+        "former": "application",
+        "arity": 2,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:bcbef7ff1b152a72ed65a43fcfcc0e51cabbfae3bfa291a4a657b4b3ae408ade"
+      },
+      {
+        "former": "pi_formation",
+        "arity": 2,
+        "binder_argument_positions": [
+          1
+        ],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:22112a0159147343767851eaef5cfc98d9058f773428656f74dc18d16c5ca48c"
+      },
+      {
+        "former": "sigma_formation",
+        "arity": 2,
+        "binder_argument_positions": [
+          1
+        ],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:fe2be85a09298c621d27d72e01e373de5bcc0caf8fd11d3e9f882ca7db9a5561"
+      },
+      {
+        "former": "identity_formation",
+        "arity": 3,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:f3cc4009a28e66a71d68931bb15e243d7aa390607551a25c34cd1bcaf074428d"
+      },
+      {
+        "former": "reflexivity_introduction",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:367e52dfde59d58df9d833b660e2ff705ec2b7b7c4e0e8674aac1a31baaacec7"
+      },
+      {
+        "former": "suspension_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:f7452583079967a09e032cecb1d86e05d85ad78313e2b9694bcb03a10dda0a7b"
+      },
+      {
+        "former": "truncation_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:843e347210ef28c9d2ee59770c2fcf2f91ffef8c00b329c56792cfb31b0c6215"
+      },
+      {
+        "former": "flat_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:3fa2853e13ae58d4912444dfc3d297e6a8146b4f1278209991375e72591d0f5c"
+      },
+      {
+        "former": "sharp_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:5ca855a52a383c72b22a197e934e7f6c51bfbbb45ae780d0a571860c5464eb93"
+      },
+      {
+        "former": "discrete_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:e02a8330dfaef1e28307199f1b711c164fd8967c6b9aee85a2fc967f60444ac5"
+      },
+      {
+        "former": "shape_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:497557a98c3ce31543547fed902f71c07572868295331c4820f33ffe41a2b0ce"
+      },
+      {
+        "former": "next_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:e871ebc03ed45a669ebd5891a47a27a3d59bc1fd5c4974402c22dfa58edc44da"
+      },
+      {
+        "former": "eventually_formation",
+        "arity": 1,
+        "binder_argument_positions": [],
+        "dimension_required": false,
+        "zero_arity_former_is_semantic_depth_zero": false,
+        "derivation_hash": "blake3:f19e12efe1634ce217bf4dc4454c2c9c047c09c447edc077225c0b6187a8e2b5"
+      },
+      {
+        "former": "path_constructor",
+        "arity": 0,
+        "binder_argument_positions": [],
+        "dimension_required": true,
+        "zero_arity_former_is_semantic_depth_zero": true,
+        "derivation_hash": "blake3:1f55be73059dbe5139e35136937c2ae487dd9f7ef4d33a1443346ad3cac7dd70"
+      }
+    ],
+    "maximum_semantic_depth": 2,
+    "maximum_context_arity": 9,
+    "maximum_binder_nesting": 2,
+    "maximum_path_dimension": 3,
+    "legacy_node_shape_recurrence_diagnostic_decimal": "120422071310924279",
+    "every_member_has_exactly_one_root_rule": true,
+    "child_semantic_depth_strictly_smaller": true,
+    "membership_elimination_total": false,
+    "finite_enumerator_constructed": false,
+    "quotient_key_decision_total_after_typed_normalization": false,
+    "derivation_hash": "blake3:624c29652e88aed6f51a9780a50dbf1b43fa7df3a8129943222533adc015d0df"
+  },
+  "symbolic_carrier_induction": {
+    "every_member_has_operational_node": false,
+    "cases_exactly_resident_context_bound_or_former": true,
+    "former_arguments_are_members_at_strictly_lower_semantic_depth": true,
+    "recursion_well_founded": true,
+    "quotient_respects_constructor_congruence": false,
+    "induction_total": false,
+    "derivation_hash": "blake3:8c1d3cac65667e479220c32f71d0915176cedb119aa8e1f3e9e547f8d75ce358"
+  },
+  "independence_firewall": {
+    "definition_inputs": [
+      "docs/schema2_operational_domain_adjudication.md",
+      "docs/depth_two_domain_adjudication.md",
+      "docs/ambient_former_closure_adjudication.md",
+      "docs/dependent_context_adjudication.md",
+      "docs/e2_quotient_adjudications.md",
+      "docs/step_15_completion_open_problem.md",
+      "crates/pen-core/src/expr.rs",
+      "crates/pen-type/src/elaborate.rs",
+      "crates/pen-type/src/ambient_former_internality.rs",
+      "crates/pen-schema/src/context.rs",
+      "crates/pen-type/src/normalize.rs",
+      "crates/pen-type/src/equality.rs"
+    ],
+    "observer_inputs": [
+      "docs/t_bi_nu1_semantic_provenance_v6.json",
+      "docs/a3_rule_inventory_exhaustiveness_v2.json",
+      "docs/schema2_e5_future_hole_finale_v2_dependent_context.json"
+    ],
+    "bounds_frozen_before_corpus_access": true,
+    "carrier_sealed_before_corpus_access": true,
+    "family_corpus_reaches_carrier_definition": false,
+    "a3_corpus_reaches_carrier_definition": false,
+    "raw_ast_height_cap_used": false,
+    "generator_inventory_used_as_carrier": false,
+    "dataflow_disjoint": true,
+    "derivation_hash": "blake3:c3b648350609349fda4689cd9d3e5d5cddb2084dbb70702650813131f11cb6cf"
+  },
+  "quotient_representatives": [],
+  "quotient_representatives_extensionally_complete": false,
+  "carrier_representative_count": 0,
+  "quotient_representative_count": 0,
+  "regression": {
+    "corpus_opened_after_pre_corpus_carrier_seal": true,
+    "family_corpus_authenticated": true,
+    "expected_family_count": 61,
+    "observed_family_count": 61,
+    "recognized_family_count": 0,
+    "every_family_recognized": false,
+    "membership_row_corpus_authenticated": true,
+    "expected_membership_row_count": 89,
+    "observed_membership_row_count": 89,
+    "recognized_membership_row_count": 0,
+    "every_membership_row_recognized": false,
+    "corpus_rows_seeded_or_bounded_carrier": false,
+    "derivation_hash": "blake3:dc2ff510560580e563d302a956532c55306f7495582e04f564b067a8c98ac56c"
+  },
+  "open_gaps": [
+    {
+      "id": "TD21_V2_61_FAMILY_REGRESSION_DIVERGENCE",
+      "phase": "post_seal_regression",
+      "exact_obstruction": "Recognized 0/61 observed proved families; expected 61/61. Each successor family row must export its exact t_d2_1_parameter_telescope, t_d2_1_operational_node, canonical weakening/renaming derivation, naturality derivation, and univalent-equality witness family; the authenticated archive currently exports only family/shape identifiers and aggregate proof hashes.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:d43a3dfb438d8eef9ce0c6deb04e2615b7ee019a1b8b03f63e85849b50745cce"
+    },
+    {
+      "id": "TD21_V2_89_MEMBERSHIP_REGRESSION_DIVERGENCE",
+      "phase": "post_seal_regression",
+      "exact_obstruction": "Recognized 0/89 typed membership rows; expected 89/89. Each successor row must export its exact t_d2_1_parameter_telescope, t_d2_1_operational_node, exact instance-substitution derivation, and output-presentation digest linked to the family quotient; generic unary/chronological shape labels are not presentations.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:f0030c7749b542aac2408f7338dacb92c92e05127ec6306eb44017f7cbe11b58"
+    },
+    {
+      "id": "TD21_V2_DEPENDENT_CONTEXT_ENUMERATOR_GAP",
+      "phase": "context_finiteness",
+      "exact_obstruction": "The symbolic node grammar does not enumerate exact sequential dependent parameter telescopes. The contextual API checks Type and earlier-prefix Element classifiers, but the frozen public kernel lacks a declaration checker for Function, PathDeclaration, and Neutral hypotheses; therefore the full adopted context fragment is not finitely enumerated.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:962a89a61e63fd39e19108d8d066e186ed6952dcfe2c07d3ad95f7936ff2cd73"
+    },
+    {
+      "id": "TD21_V2_CONSTRUCTOR_NORMALIZATION_INDUCTION_GAP",
+      "phase": "typed_normalization",
+      "exact_obstruction": "Concrete nonresident contextual judgments now carry recursive constructor derivations, and binder children replay under their active binder prefixes. No universal per-constructor theorem covers the entire symbolic carrier: the sealed resident record lacks its exact original dependent telescope and weakening/erasure transport, and a resident nested below a former also has no exact clause-level Expr/kernel embedding. The non-extensional regression basis is not used to infer totality.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:201c774b27005ce6373c6ca4b3f3440c19bd093b18dd4490b1556a9fd4097ca4"
+    },
+    {
+      "id": "TD21_V2_ADOPTED_NATURAL_FAMILY_QUOTIENT_GAP",
+      "phase": "quotient",
+      "exact_obstruction": "No replayable theorem currently supplies the adopted quotient's parameter telescope, checked weakening and canonical renaming maps, naturality derivation, and frozen univalent-equality witness family for every contextual judgment. Normal-form and kernel-type hashes are explicitly not accepted as quotient evidence.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:06bacc7c3fe7cd004dc7948095913b13d444290aeb93c248b13e461b982b367f"
+    },
+    {
+      "id": "TD21_V2_QUOTIENT_THEOREM_OBLIGATION_FAILED",
+      "phase": "quotient",
+      "exact_obstruction": "Universal typed normalization and the adopted quotient decision are unproved, and no finite enumerator for contextual quotient judgments has been constructed.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:9ad8c1f38ea17907fdd57c4813c6a143a9b0782ff002ab1eb361fccb58cd7308"
+    }
+  ],
+  "fixed_fragment_operationally_defined": false,
+  "membership_decidable": false,
+  "typed_normalization_total": false,
+  "quotient_decidable": false,
+  "quotient_finitely_enumerable": false,
+  "family_regression_passed": false,
+  "membership_row_regression_passed": false,
+  "t_d2_2_prerequisite_satisfied": false,
+  "m4_authorized": false,
+  "status": "stopped_named_gaps",
+  "result_digest": "blake3:c8efdb7a4fdbded4ae86488234f3bb0c6e0aa3044f5a173dd0b2c99754778bb1"
+}

@@ -1,0 +1,1393 @@
+{
+ "artifact": "xf0_physics_column_v1",
+ "campaign": "XF-1",
+ "item": "XF-0 zero-worth/degrees-of-freedom census - Column P (blind fill)",
+ "date": "2026-07-24",
+ "correspondence_rule_file": "docs/xf0_correspondence_rule_v1.md",
+ "correspondence_rule_blake3": "blake3:fd20618c86d5e5c532bc84f5fcbf0218e970473fbb322cc543964179e595814a",
+ "blinding": {
+  "protocol": "Each row was filled by an isolated analyst context receiving only the frozen correspondence rule and its own row input; audited by two isolated adversarial verifier contexts (independence, completeness) under the same blinding; disputes resolved by an isolated adjudicator context, same blinding. No context received the certified semantic register (Column S), the campaign brief, the theory document, any repository file, or any other row's output. The certified targets entered only the mechanical join performed after every row was final.",
+  "provenance": "workflow run wf_586ade88-ef0, 48 agents (15 analysts, 30 verifiers, adjudicators on dispute), 0 errors; prompts recorded in the session workflow journal contain no register values beyond the three calibration anchors frozen in the campaign brief",
+  "calibration_disclosure": "rows 8, 9, 12 are calibration rows: their anchor values are disclosed inside the frozen rule (Section 5) per the campaign brief and are excluded from the blind tally"
+ },
+ "rows": [
+  {
+   "stratum": 1,
+   "name": "Universe U0",
+   "enumeration": [
+    {
+     "datum": "Universe carrier U0 — the formation datum: U0 is a type (a closed type constant; the first typed carrier for admissible formation).",
+     "class": "N",
+     "justification": "ADJUDICATED FINAL (undisputed by both audits; upheld). At n=1 the prior ladder is empty, so no class-D construction is available; the datum is a structure, not a law (not P); nothing prior or counted implies its existence (not C); it is not a discrete invariant, clutching class, or gauge choice (not T). Under the Section 4 boundary clause, even granting uniqueness up to canonical isomorphism once postulated, the existence is not implied by prior or counted content, so the existence is the minted content: class N. The contrast with the Stage 8 anchor (carrier class D there) is positional, not a conflict: that carrier is constructible from prior strata; here there are none.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (first edition, 2013), Section 1.3 'Universes and families'; Per Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), universes section (book-level)."
+    },
+    {
+     "datum": "Elementhood/decoding — the structural datum interpreting each element a : U0 as an admissible formation candidate: Russell-style rule (from A : U0 infer A type) or, equivalently, the Tarski-style decoding family a : U0 |- El(a) type.",
+     "class": "N",
+     "justification": "ADJUDICATED FINAL (classification undisputed; citation locator amended per completeness audit). Not D: the empty prior ladder supplies no construction of a distinguished family of types over U0. Not C: neither the existence nor the identity of El is implied by the bare carrier or anything prior — a bare type carries no canonical interpretation of its elements as types. Not P: this is generative structure (a dependent family / formation-conferring rule producing new typehood judgments), not a propositional law or coherence condition. Not T: it assigns formation content pointwise; it is no discrete invariant or gauge choice. The analyst's stated doubt (merge with the carrier into one 'type of types' idea) is resolved to two data by the frozen Stage 8 granularity anchor (carrier and operation are separate data) and by the boundary clause (each datum's existence is independently unimplied): class N.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (first edition, 2013), Section 1.3 'Universes and families' (Russell-style elementhood) and Notes to Chapter 1 (first-edition p. 55; Russell-style vs Tarski-style universes in the terminology of [ML84], with the explicit coercion El); Per Martin-Löf, 'An Intuitionistic Theory of Types: Predicative Part', in H. E. Rose and J. C. Shepherdson (eds.), Logic Colloquium '73, Studies in Logic 80 (North-Holland, 1975), pp. 73-118 (introduces the universe with its reflection/decoding)."
+    },
+    {
+     "datum": "Decoding congruence — the coherence law that elementhood/decoding respects judgmental equality: from a = b : U0 infer El(a) = El(b) (Russell-style: equal elements of U0 are equal types).",
+     "class": "P",
+     "justification": "ADJUDICATED FINAL (undisputed by both audits; upheld). A mere coherence condition on already-counted structure (the decoding of datum 2): it asserts a law about existing data and mints no new existence content — squarely class P under Section 4 ('coherence conditions ... contribute 0'). Not N: nothing exists in virtue of this rule; it constrains rather than introduces.",
+     "citation": "Per Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), equality-preservation rules accompanying each former (book-level); Univalent Foundations Program, Homotopy Type Theory (first edition, 2013), Appendix A (congruence/judgmental-equality rules of the formal presentation)."
+    }
+   ],
+   "d_count": 2,
+   "notes": "Adjudicated final row. Positional exclusions carried forward as correct under the frozen rule (endorsed by the completeness audit): (1) universe closure/introduction data (codes for 1, Pi, Sigma with decoding equations) are defining data of the full standard presentations but are barred at n=1 — the prior ladder is empty and nothing later may be consulted, so there are no formers to close under; such codes are minted, if at all, at the strata of the corresponding formers. (2) The universe hierarchy and cumulativity (U0 : U1, lifting) are outside this row's reading ('Universe U0', the first carrier) and reference later content; the single-universe presentation (Martin-Löf 1975) needs no U1. (3) Ambient judgmental scaffolding (judgment forms, contexts, hypothetical judgment) is a logical-framework presupposition, not a structure under Section 3's unit of counting. (4) Predicativity (absence of U0 : U0) is a non-rule, not a datum. Presentation-invariance: Russell-style (carrier + elementhood rule + congruence) and Tarski-style (carrier + El family + congruence) each yield exactly two structural data and one coherence law; D(1)=2 is presentation-invariant. Doubt log: the single substantive doubt (carrier and elementhood as one merged 'type of types' idea) was stated per discipline and resolved to two data by the Stage 8 granularity anchor and the boundary clause. Citation amendment applied in adjudication: HoTT Book locator for the Tarski-style El discussion corrected from 'Section 1.3 (same section)' to 'Notes to Chapter 1 (first-edition p. 55)'; verified by web check against a mirror of the HoTT Book Chapter 1 notes (https://planetmath.org/chapter1notes), which confirms the Russell-vs-Tarski discussion in the [ML84] terminology sits in the chapter notes, and Section 1.3 'Universes and families' is the Russell-style introduction. Martin-Löf 1975 bibliographic details (Logic Colloquium '73, Rose & Shepherdson eds., Studies in Logic 80, North-Holland, pp. 73-118) adopted as verified by the completeness audit.",
+   "citations": [
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (first edition, 2013), Section 1.3 'Universes and families'; Per Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), universes section (book-level).",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (first edition, 2013), Section 1.3 'Universes and families' (Russell-style elementhood) and Notes to Chapter 1 (first-edition p. 55; Russell-style vs Tarski-style universes in the terminology of [ML84], with the explicit coercion El); Per Martin-Löf, 'An Intuitionistic Theory of Types: Predicative Part', in H. E. Rose and J. C. Shepherdson (eds.), Logic Colloquium '73, Studies in Logic 80 (North-Holland, 1975), pp. 73-118 (introduces the universe with its reflection/decoding).",
+    "Per Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), equality-preservation rules accompanying each former (book-level); Univalent Foundations Program, Homotopy Type Theory (first edition, 2013), Appendix A (congruence/judgmental-equality rules of the formal presentation)."
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "dispute",
+     "citations_ok": true,
+     "disputes": [
+      {
+       "datum": "Elementhood/decoding (datum 2) — citation component: 'Univalent Foundations Program, HoTT (2013), Section 1.3 (Russell-style elementhood; Tarski-style El discussed in the same section)'",
+       "current_class": "N",
+       "proposed_class": "N",
+       "argument": "Citation-locator error, verified against the first-edition text (HoTT Book PDF, book pp. 24-25 and 54-55). Section 1.3 'Universes and families' (title verified correct) introduces universes, the U0:U1:U2 hierarchy, cumulativity, typical ambiguity, and type families, but contains NO mention of Tarski-style universes or the El decoding. That discussion is in the Notes to Chapter 1 (book p. 55), which states the book uses 'Russell-style universes' rather than 'Tarski-style universes' in the terminology of [ML84], and describes the explicit coercion El(A) there. The parenthetical 'discussed in the same section' is therefore false; the correct locator is 'HoTT Book, Notes to Chapter 1 (p. 55)'. This is an intra-work mislocation, not a fabricated or wrong-work citation: the content is real, the claim is true, and the datum is independently supported by the analyst's second citation (Martin-Löf 1975, bibliographic details verified exactly: Logic Colloquium '73, ed. Rose & Shepherdson, Studies in Logic 80, North-Holland, 1975, pp. 73-118, the paper that introduced the universe). Classification (N) and D(1)=2 are unaffected; the adjudicator should amend the locator only. All completeness checks otherwise pass: the three enumerated data exhaust the defining data of the bare-universe standard presentation in both Russell and Tarski styles; the positional exclusions (closure codes barred at n=1 with empty prior ladder, hierarchy/cumulativity outside the row reading, judgmental scaffolding as framework presupposition, predicativity as a non-rule) are correct under the frozen rule; no defining datum is missing and no enumerated datum is extraneous."
+      }
+     ]
+    }
+   },
+   "adjudication": {
+    "resolution": "One dispute total, from the completeness audit; the independence audit agreed with the entire enumeration. Dispute: the datum-2 citation parenthetical claimed the HoTT Book discusses Tarski-style El 'in the same section' as Section 1.3; the auditor showed (and my independent web verification of the Chapter 1 notes confirms) that Section 1.3 'Universes and families' contains the Russell-style introduction only, while the Russell-vs-Tarski distinction and the El coercion appear in the Notes to Chapter 1 (first-edition p. 55). Ruling: this is an intra-work mislocation, not a fabricated or wrong-work citation; the underlying claim is true and the datum is independently supported by the verified Martin-Löf 1975 citation. The frozen rule's Section 4 citation requirement (author, title, chapter/section) is satisfied by amending the locator, which I have done; no classification turns on the locator. Both proposed classes in the dispute were N, so there is nothing to split: datum 2 remains class N under the boundary clause (existence of the decoding is not implied by the bare carrier or the empty prior ladder; its identity-up-to-canonical-isomorphism once postulated does not demote it, because the existence is the minted content). I additionally reviewed the two undisputed classifications against the rule and uphold them: the carrier is N (empty prior ladder at n=1 blocks D; boundary clause governs), and the congruence law is P (pure coherence condition, contributes 0). Final: three defining data, classes N/N/P, D(1) = 2."
+   },
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 2,
+   "name": "Unit type 1",
+   "enumeration": [
+    {
+     "datum": "The unit type former itself: a distinguished admissible type 1 in the universe (formation rule, 1 : U0)",
+     "class": "N",
+     "justification": "Prior content is exactly stratum 1: the universe U0, a typed carrier for admissible formation. A bare carrier of candidates contains no distinguished candidate and supplies no type-forming constructions, so the existence of a first concrete type is not implied by prior content (not D, not C) and the type is a carrier, not classification data or a law (not T, not P). Given existence, a terminal inhabited type is unique up to canonical equivalence, so its identity is canonical; but its existence is not implied. By the Section 4 boundary clause, unique-up-to-canonical-isomorphism given existence with existence not implied is class N: the existence of the first admissible type is the minted content of this stratum.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (unit type introduced as the nullary product) and Appendix A.2 (unit type rules); Per Martin-Lof, Intuitionistic Type Theory (Bibliopolis, 1984), book-level (finite types)."
+    },
+    {
+     "datum": "Inhabitance specification: the clause 'inhabited' in the reading, i.e., the proposition that 1 has an element",
+     "class": "P",
+     "justification": "Doubt stated: an inhabitant, taken as structure, would be class N since prior content (U0 alone) does not imply the existence of any element. However, on the frozen ladder the explicit term-level realization of inhabitance is verbatim the established reading of stratum 3, one rung later; enumerating the witness as a structural datum of row 2 would mint a later rung's defining datum inside this row and double-count it across the ladder. The datum that belongs to stratum 2's own reading ('terminal inhabited type') is the proof-irrelevant specification that the type is inhabited: a mere propositional clause of the specification. Section 4 places mere properties in class P regardless of whether their truth is implied (compare 'completeness as a property' in the class-P definition). Resolved: P; the structural witness is stratum-3 content, outside this row.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (the canonical inhabitant of 1 in the standard presentation)."
+    },
+    {
+     "datum": "Terminality / uniqueness principle (eta): every element of 1 is equal to the canonical one; equivalently, for every admissible type A there is exactly one map A -> 1 (1 is terminal, i.e., contractible once pointed)",
+     "class": "P",
+     "justification": "This is a uniqueness clause / universal property: it constrains the type and its maps but mints no new carrier or operation. Section 4 lists 'uniqueness clauses' explicitly under class P. At this ladder position it is stated judgmentally (maps as terms-in-context over the universe's candidates), not via internal function types (which arrive at stratum 4); either formulation is a propositional law. Contributes 0.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (uniqueness for the unit) and Section 3.11 (contractibility, where 1 is shown contractible); Steve Awodey, Category Theory (Oxford University Press, 2nd ed.), Chapter 2 (terminal objects)."
+    },
+    {
+     "datum": "Unit eliminator: the induction principle ind_1 (for a family C over 1, from c : C at the canonical point conclude C(x) for every x : 1) - the 'zero branching burden' case analysis",
+     "class": "C",
+     "justification": "Doubt stated: eliminators are operations and could be suspected N. Resolved by the boundary clause in the C direction: given the data already enumerated in this row - inhabitance (datum 2) plus terminality/uniqueness (datum 3), jointly contractibility - both the existence and the identity of the eliminator are implied: mapping out of a terminal pointed type into any family is canonically determined by the value at the canonical point, since every element equals that point. This is semantic determination by counted content, the same pattern as the frozen stage-12 anchor (R determined by the connection is class C). The signature note 'zero branching burden' confirms no branching structure is added. A secondary doubt - that the standard statement of ind_1 references the stratum-3 witness - does not change the class: on either reading the datum mints nothing and is class C, not N.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (induction principle for 1) and Appendix A.2 (elimination rule for the unit type)."
+    },
+    {
+     "datum": "Computation rule (beta): ind_1(C, c, star) is definitionally equal to c",
+     "class": "P",
+     "justification": "A definitional/propositional law fixing the behavior of the eliminator at the canonical point: a coherence condition on already-enumerated data, not a new structure. Section 4 places propositional laws and coherence conditions in class P. Contributes 0.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 and Appendix A.2 (computation rule for the unit type)."
+    },
+    {
+     "datum": "Null-payload baseline: the canonical constructor shape carries zero arguments (nullary arity; 1 as the nullary product / the one-constructor, zero-payload finite type)",
+     "class": "T",
+     "justification": "Doubt stated: this could be folded into datum 1 (part of the former) or read as a property (P). Resolved as T: an arity is discrete classification data - the selection of a constructor shape (payload count zero, branch count one) from a discrete family of presentations (compare Martin-Lof's finite types N_k) - with no local content, analogous to the clutching-class datum of the frozen stage-9 anchor. It is a discrete invariant of the presentation, not a law and not new local structure. On any of the three readings it contributes 0; T is the most precise.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (1 as nullary product); Per Martin-Lof, Intuitionistic Type Theory (Bibliopolis, 1984), book-level (finite types)."
+    }
+   ],
+   "d_count": 1,
+   "notes": "Blinding respected: no local files, repository content, or prior conversations were consulted; the enumeration is from the frozen rule, the row input, and standard references known to the analyst (HoTT Book Section 1.5 is cited with confidence; appendix and chapter citations are kept at appendix/chapter level where the exact subsection number was not certain, per the no-fabrication clause). Ladder handling, stated explicitly: the frozen Section 2 table assigns the explicit term-level witness (star : 1) to stratum 3 as its own established reading, so this row enumerates inhabitance as a specification-level property (class P) rather than minting the witness structure here; the single minted idea of stratum 2 is the type 1 itself (formation), class N by the boundary clause (canonical identity given existence, existence not implied by the bare universe U0). The non-dependent recursor rec_1 is the special case of datum 4 and is not enumerated separately (it is determined by ind_1, class C, adding nothing). The 'baseline' role of 1 as unit for pairing (A x 1 equivalent to A) is not enumerable at ladder position 2 because products/Sigma arrive at stratum 4; if enumerated there it would be a property (P) and would not change this row. No structural-register quantity (Sigma-nu, Bar, epsilon, nu decomposition, telescopic totals) was used anywhere in this row (F-XF1 compliant). Resulting D(2) = 1: the sole class-N datum is the existence of the unit type itself.",
+   "citations": [
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (unit type introduced as the nullary product) and Appendix A.2 (unit type rules); Per Martin-Lof, Intuitionistic Type Theory (Bibliopolis, 1984), book-level (finite types).",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (the canonical inhabitant of 1 in the standard presentation).",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (uniqueness for the unit) and Section 3.11 (contractibility, where 1 is shown contractible); Steve Awodey, Category Theory (Oxford University Press, 2nd ed.), Chapter 2 (terminal objects).",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (induction principle for 1) and Appendix A.2 (elimination rule for the unit type).",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 and Appendix A.2 (computation rule for the unit type).",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), Section 1.5 (1 as nullary product); Per Martin-Lof, Intuitionistic Type Theory (Bibliopolis, 1984), book-level (finite types)."
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 3,
+   "name": "Witness * : 1",
+   "enumeration": [
+    {
+     "datum": "Carrier type 1 (the unit type, the type over which the witness is asserted)",
+     "class": "D",
+     "justification": "The carrier is exactly stratum 2's formal contribution ('terminal inhabited type and null payload baseline') and is available unchanged at ladder position 3; nothing about the carrier is constructed at this stratum. This mirrors the frozen stage-9 calibration anchor, where the bundle's carrier is class (D) because it is supplied by prior ladder content. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 (Product types; the unit type as nullary case)"
+    },
+    {
+     "datum": "Witness/constructor ⋆ : 1 — the introduction rule of the unit type, an explicit closed term realizing inhabitance",
+     "class": "N",
+     "justification": "In the standard presentation the introduction rule is an independent primitive: the formation rule of 1 alone yields no term (the empty type has a formation rule of identical shape and no inhabitant), so existence of a witness is not implied by the type former. Given existence, the witness is unique up to canonical identification (any two inhabitants of the null-payload terminal type are canonically equal by stratum 2's uniqueness interface), so the N-vs-C boundary clause governs. Doubt, stated per discipline: stratum 2's verbatim reading contains the descriptor 'inhabited'; if that descriptor were taken as formally realized prior content, the witness's existence would be implied and this datum would be class (C), with d_count 0 for the row. Resolution by the boundary clause and the frozen ladder's own partition of formal contributions: the table assigns 'explicit term-level realization of inhabitance' to stratum 3 as its formal contribution, so the term-level witness cannot simultaneously be stratum 2's realized content (the ladder assigns each contribution to exactly one stratum); stratum 2's 'inhabited' is an interface-level capacity descriptor whose term-level realization is minted here. Note also that no truncation mechanism exists at this ladder position (propositional truncation is stratum 6), so there is no prior device by which 'mere inhabitance' could be held without a witness — confirming that the witness itself is the minted content. Uniqueness-given-existence with existence not implied is class (N): the existence is the minted content. Contributes 1.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 and Appendix A.2 (formal presentation; unit-type rules); Per Martin-Löf, Intuitionistic Type Theory, Bibliopolis, 1984 (book-level: unit/one-element type with its introduction rule)"
+    },
+    {
+     "datum": "Induction principle for 1 (eliminator ind_1: from C : 1 -> U and c : C(⋆), a dependent section ind_1(C,c) : for all x : 1, C(x))",
+     "class": "C",
+     "justification": "Doubt, stated: proof-theoretically the eliminator is an independent rule of the formal system, not derivable from formation plus introduction alone, which could suggest (N). Resolution: its content — that 1 contains nothing beyond ⋆ and that eliminating from 1 carries a single null-payload case — is exactly stratum 2's prior interface ('null payload baseline', 'zero branching burden', and the uniqueness half of terminality, i.e. all inhabitants canonically equal, a property statable without any witness). Given that prior property plus the counted witness ⋆ (datum 2), the carrier is contractible with center ⋆, and a dependent assignment over a contractible carrier is canonically determined by its value at the center: existence and identity of the eliminator are both implied by prior plus counted content. Semantically, over a terminal object the type C(⋆) is literally the type of sections of C. Existence and identity both implied is class (C). Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 (induction principle for the unit type) and Section 2.8 (The unit type)"
+    },
+    {
+     "datum": "Computation rule: ind_1(C, c, ⋆) ≡ c",
+     "class": "P",
+     "justification": "A definitional equation governing already-enumerated data (the eliminator applied to the counted witness); a coherence law contributing no independent structure. Parallel to the stage-8 calibration anchor, where the operation's coherence pattern is class (P). Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 and Appendix A.2 (formal presentation; unit-type computation rule)"
+    },
+    {
+     "datum": "Uniqueness principle for 1: every x : 1 is identified with ⋆",
+     "class": "P",
+     "justification": "A propositional law (a uniqueness clause, explicitly listed among class-P examples in the counting discipline). In the standard presentation it is a derived lemma, proved by unit induction (taking C(x) := (x = ⋆) with c := refl), and it is the term-level reflection of stratum 2's terminality interface; it mints no structure. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 2.8 (The unit type: characterization of its identity types) and Section 1.5"
+    }
+   ],
+   "d_count": 1,
+   "notes": "Row filled blind from the frozen rule and row input only; no local files, repository content, or prior conversations consulted. Citations verified by web search against the HoTT book table of contents (Section 1.5 'Product types' in Chapter 1; Section 2.8 'The unit type' in Chapter 2); the appendix is cited at the A.2 level because the exact subsection number for the unit-type rules could not be verified, per the no-fabrication clause. The row's single substantive judgment is the class of the witness ⋆ itself: stratum 2's verbatim descriptor 'inhabited' creates a genuine N-vs-C doubt, recorded inside the datum-2 justification and resolved by the boundary clause together with the ladder's one-stratum-per-contribution partition (the frozen table assigns the term-level realization of inhabitance to stratum 3, so it cannot be prior content at row 3; formation alone implies no inhabitant; identity given existence is canonical; therefore N — the existence is the minted content). Under the rejected alternative reading (stratum 2's 'inhabited' taken as fully realized prior content) datum 2 would be (C) and d_count would be 0; that reading was rejected because it renders stratum 3's frozen formal contribution empty and double-assigns the same contribution to two strata. Granularity is calibrated against the stage-8 anchor: carrier (D), the single minted structural datum (N), laws/coherences (P). No structural-register quantity was used (F-XF1 respected). D(3) = 1.",
+   "citations": [
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 (Product types; the unit type as nullary case)",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 and Appendix A.2 (formal presentation; unit-type rules); Per Martin-Löf, Intuitionistic Type Theory, Bibliopolis, 1984 (book-level: unit/one-element type with its introduction rule)",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 (induction principle for the unit type) and Section 2.8 (The unit type)",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 1.5 and Appendix A.2 (formal presentation; unit-type computation rule)",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Section 2.8 (The unit type: characterization of its identity types) and Section 1.5"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 4,
+   "name": "Pi/Sigma shell",
+   "enumeration": [
+    {
+     "datum": "Term-indexed type families: the hypothetical formation judgment x:A ⊢ B(x) type (contexts, variables, context extension) supplying the family inputs to Π/Σ formation",
+     "class": "D",
+     "justification": "Doubt stated: one could argue term-dependency is first exercised at this stratum. Resolved against N: the context/hypothetical-judgment apparatus is part of the structural framework already required and exercised by the standard presentations of strata 1..3 (universe formation rules are stated in an arbitrary context; the induction principle of the unit type quantifies over a family indexed by its terms). No new judgment form or operation is minted at stratum 4; the family apparatus is prior framework content available by constructions already at hand, so its appearance here is a derived carrier, not minted structure.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Appendix A.2 (structural rules and contexts); Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), sections on hypothetical judgements (book-level)."
+    },
+    {
+     "datum": "Π-formation: the dependent product former taking A and a family x:A ⊢ B(x) to Π_{x:A} B(x) in U₀ (dependent abstraction as a type-forming structure)",
+     "class": "N",
+     "justification": "A genuinely new structural primitive: nothing in strata 1..3 (U₀, 1, ⋆) implies the existence of dependent products. As standardly presented the former is defined by its meaning (its canonical elements are λ-abstractions; categorically, right adjoint to context extension), and such a structure is unique up to canonical isomorphism whenever it exists while its existence is NOT implied by prior or counted content. By the boundary clause the existence is the minted content: class N. Granularity per Section 3 and the Stage-8 anchor: one N for the minted operation, not one per rule component.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), cartesian product of a family of types (book-level)."
+    },
+    {
+     "datum": "λ-abstraction (Π-introduction): from x:A ⊢ b(x) : B(x) form λx.b(x) : Π_{x:A} B(x)",
+     "class": "C",
+     "justification": "Doubt stated: a bare uninterpreted former would not imply an introduction rule. Resolved by the boundary clause against the counted datum as standardly defined: the Π-former is defined by prescribing its canonical elements, which are exactly the λ-abstractions (Martin-Löf's meaning explanation; equivalently the unit of the adjoint characterization). Given the counted former, both existence and identity of the abstraction operation are implied — it is constitutive of what the counted type is, not extra structure on it (contrast the Stage-8 anchor, where multiplication is extra structure on a prior carrier). Class C.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level)."
+    },
+    {
+     "datum": "Application (Π-elimination): from f : Π_{x:A} B(x) and a : A form f(a) : B(a)",
+     "class": "C",
+     "justification": "In the standard presentation application is the non-canonical operation justified by evaluation against canonical elements: its identity is fixed by the β-law on λ-forms and its existence is implied by the counted former's definition (every element of the dependent product is, by the meaning of the type, applicable; categorically it is the counit of the counted adjoint structure). Existence and identity both implied by counted content: class C, per the boundary clause's second half.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level)."
+    },
+    {
+     "datum": "Π computation rule (β): (λx.b(x))(a) ≡ b(a)",
+     "class": "P",
+     "justification": "A judgmental equational law relating already-counted/determined operations (intro and elim). It asserts no new structure; it is the coherence condition governing application against canonical forms, exactly parallel to the coherence pattern classed P in the Stage-8 anchor. Class P.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level)."
+    },
+    {
+     "datum": "Π uniqueness rule (η): f ≡ λx.f(x) for f : Π_{x:A} B(x)",
+     "class": "P",
+     "justification": "An explicit uniqueness clause — a propositional/judgmental law with no structural content, named verbatim in the Section-4 P-class examples (\"uniqueness clauses\"). Class P.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2 (the presentation includes the judgmental uniqueness principle for dependent functions)."
+    },
+    {
+     "datum": "Σ-formation: the dependent sum former taking A and a family x:A ⊢ B(x) to Σ_{x:A} B(x) in U₀ (dependent pairing as a type-forming structure)",
+     "class": "N",
+     "justification": "A second independent minted structure. Doubt stated and resolved: Σ is not derivable from strata 1..3 nor from the counted Π-former — the impredicative Church-style encoding is unavailable over a predicative U₀ (it lands in a higher universe and fails to yield the dependent eliminator), so existence is not implied by prior or counted content. Unique up to canonical isomorphism whenever it exists (its canonical elements are the dependent pairs; categorically the left-adjoint characterization), existence not implied: boundary clause gives N. One N for the minted operation per the frozen granularity.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.6 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), disjoint union of a family of types (book-level)."
+    },
+    {
+     "datum": "Pairing (Σ-introduction): from a : A and b : B(a) form (a, b) : Σ_{x:A} B(x)",
+     "class": "C",
+     "justification": "Constitutive canonical-element specification of the counted Σ-former: the standard presentation defines Σ_{x:A} B(x) by prescribing its canonical elements as the pairs (a, b). Given the counted former, existence and identity of the pairing operation are implied, not separately minted. Class C by the boundary clause's second half.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.6 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level)."
+    },
+    {
+     "datum": "Σ-elimination: the induction principle ind_Σ (split), with the projections pr₁, pr₂ as derived instances",
+     "class": "C",
+     "justification": "The non-canonical operation justified by computation on canonical pairs: its identity is fixed by the β-law on pair-forms and its existence is implied by the counted former's definition (elements of the dependent sum are, by the meaning of the type, exhaustively the canonical pairs, which the eliminator consumes). The projections are then defined instances of the eliminator. Existence and identity both implied by counted content: class C.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.6 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level)."
+    },
+    {
+     "datum": "Σ computation rule (β): ind_Σ(C, g, (a, b)) ≡ g(a)(b)",
+     "class": "P",
+     "justification": "Judgmental equational law governing the eliminator against canonical pairs; a coherence condition on already-enumerated data, contributing no structure. Class P.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.6 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level)."
+    },
+    {
+     "datum": "Non-dependent specializations: function type A → B and product type A × B as constant-family instances of Π and Σ",
+     "class": "C",
+     "justification": "Definitional abbreviations: A → B :≡ Π_{x:A} B and A × B :≡ Σ_{x:A} B for constant B. Existence and identity are both implied by the counted formers applied to constant families. Class C.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), §1.2, §1.4, §1.5, §1.6."
+    },
+    {
+     "datum": "Interface transport over terms: substitution of a term into a family, (x:A ⊢ B(x), a : A) ↦ B(a), moving typed interfaces along terms",
+     "class": "C",
+     "justification": "Doubt stated: the row reading names this as a third item, inviting an N reading. Resolved by the boundary clause: substitution is the admissible meta-operation of the prior judgmental framework (datum 1), defined by structural recursion on expressions; both its existence and its identity are implied by that framework and by the counted formers whose rules invoke it. It is a quantity computed from already-available data, the paradigm C case, not minted structure.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), Appendix A.2 (structural/substitution rules); Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), on substitution in hypothetical judgements (book-level)."
+    }
+   ],
+   "d_count": 2,
+   "notes": "Standard presentation taken as Martin-Lof type theory's Pi- and Sigma-rules (formation/introduction/elimination/computation, plus the eta uniqueness rule for Pi where the presentation includes it), per the HoTT book Chapter 1 and Appendix A.2 and Martin-Lof 1984. Prior content at this ladder point: U0 (stratum 1), unit type (stratum 2), witness (stratum 3), including the context/hypothetical-judgment framework those strata's own standard presentations already exercise. Granularity decision, aligned with the Section 3 unit and the Stage-8 calibration anchor: the minted idea is the operation/former, not its rule components. Each former is counted once as N because it is unique up to canonical isomorphism whenever it exists while its existence is unimplied (boundary clause: the existence is the minted content); its intro/elim rules are constitutive of the counted former's standard definition (canonical elements / adjoint characterization), hence C given the former, and its beta/eta laws are P. The two class-N data are the Pi-former (dependent abstraction) and the Sigma-former (dependent pairing); Sigma is independently minted since predicative encodings from Pi and U0 fail to deliver it. All stated doubts (families D-vs-N, intro/elim C-vs-N, transport C-vs-N, Sigma N-vs-C) were resolved by the boundary clause as recorded per datum. d_count = 2. Blinding honored: no local files, repository content, or prior-session material consulted; citations are standard references from analyst knowledge, section numbers given only where certain (HoTT book Chapter 1 sections and Appendix A.2; Martin-Lof 1984 cited book-level).",
+   "citations": [
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Appendix A.2 (structural rules and contexts); Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), sections on hypothetical judgements (book-level).",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), cartesian product of a family of types (book-level).",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level).",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), §1.4 and Appendix A.2 (the presentation includes the judgmental uniqueness principle for dependent functions).",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), §1.6 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), disjoint union of a family of types (book-level).",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), §1.6 and Appendix A.2; Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984) (book-level).",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), §1.2, §1.4, §1.5, §1.6.",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), Appendix A.2 (structural/substitution rules); Martin-Löf, Intuitionistic Type Theory (Bibliopolis, 1984), on substitution in hypothetical judgements (book-level)."
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindDualTarget"
+  },
+  {
+   "stratum": 5,
+   "name": "Circle S1",
+   "enumeration": [
+    {
+     "datum": "Ambient identity-type context: the family x =_{S1} y in which the path constructor's type is stated (specifically base = base)",
+     "class": "D",
+     "justification": "Not minted at this stratum: the identity/path former and its transport apparatus are prior content — stratum 4's 'interface transport over terms' presupposes and supplies identity types with transport. Stratum 5 only instantiates this prior former at the new type; no new path-type former is introduced. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Ch. 1, Sec. 1.12 (Identity types)"
+    },
+    {
+     "datum": "Formation rule: the type S1 (in the universe U0)",
+     "class": "C",
+     "justification": "Doubt stated: the existence of a type with a nontrivial generating loop is NOT implied by strata 1-4 (a boundary-clause trigger). Resolution: that unimplied existence is exactly the minted content of the generating path constructor (datum 'loop', counted N below); the carrier is the type generated by the counted constructors, so GIVEN the counted generator datum plus the inductive-generation pattern already instantiated at strata 2-3 (point-generated type with eliminator), the carrier's existence and identity are implied, identity up to canonical equivalence by the universal property. The package {formation, base, loop} contains exactly one independent unimplied existence; counting it both here and at loop would double-count one minted idea, violating the Section 3 independence requirement. The row reading fixes the mint's location at the path constructor ('first nontrivial path constructor'), so formation is class C. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Secs. 6.1-6.2 and 6.4 (Circles and spheres); Ch. 5 (initial-algebra characterization of inductive types, book-level)"
+    },
+    {
+     "datum": "Point constructor: base : S1",
+     "class": "D",
+     "justification": "The point-constructor pattern is prior content: stratum 3 mints term-level witnesses (star : 1), and the sub-presentation generated by base alone — the free type on one point constructor — is canonically the unit type (1, star) of strata 2-3. base introduces no new structural kind; it is the prior point-generation pattern reused inside the new specification. Doubt noted between D and C (as part of the generated package its identity is also implied by the specification); both are zero classes, and D is chosen because the underlying object (the pointed 0-skeleton) is constructible verbatim from strata 2-3 content. Not N in either case. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 1, Sec. 1.5 (Product types / unit type) and Ch. 6, Sec. 6.4"
+    },
+    {
+     "datum": "Path constructor: loop : base =_{S1} base (the generating loop)",
+     "class": "N",
+     "justification": "The single minted idea of the stratum. A constructor targeting an identity type of the type being generated is a new structural kind with no precedent in strata 1-4: the prior ladder (U0, 1, star, Pi/Sigma with transport) supplies only reflexivity paths and no mechanism to adjoin a generating non-trivial loop; adjoining loop changes the generated carrier from (the unit type) to the circle. Boundary clause applied: the generated package is unique up to canonical equivalence whenever it exists, but its existence is not implied by prior or previously counted content — the existence is the minted content, hence N. This datum is verbatim the row's established reading ('first nontrivial path constructor and topological generator'). Contributes 1.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Secs. 6.1 and 6.4 (the circle as the higher inductive type generated by base and loop)"
+    },
+    {
+     "datum": "Induction principle (dependent eliminator): for P : S1 -> U, given b : P(base) and a dependent path l : b =^P_{loop} b, a section f : Pi(x:S1) P(x)",
+     "class": "P",
+     "justification": "Doubt stated between N and P; resolved as P, not by convenience but by the standard mathematical content: the induction principle (with propositional computation rules) is equivalent to homotopy-initiality of the algebra (S1, base, loop), and homotopy-initiality is a mere proposition — a universal property, not independently variable structure. It is the propositional unfolding of the already-counted generator datum: a 'generating' loop without its universal property is not a generator, so induction cannot be varied independently of the counted mint. This matches the Section 5 stage-8 anchor pattern (one operation N, its coherence/discipline P). The statement's dependent-path apparatus (apd, transport) is prior stratum-4 content. Caveat recorded in notes: the propositionality theorem uses function extensionality. Contributes 0.",
+     "citation": "K. Sojakova, 'Higher Inductive Types as Homotopy-Initial Algebras', POPL 2015; S. Awodey, N. Gambino, K. Sojakova, 'Inductive Types in Homotopy Type Theory', LICS 2012; Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Sec. 6.2"
+    },
+    {
+     "datum": "Recursion principle (simple eliminator): for a type A with a : A and p : a = a, a map f : S1 -> A with f(base) = a and ap_f(loop) = p",
+     "class": "C",
+     "justification": "Existence and identity are both implied by counted/enumerated content: recursion is the specialization of the induction principle to constant families (dependent paths over constant families reduce to ordinary paths via prior stratum-4 transport). A quantity mechanically derived from data already enumerated — the paradigm C case. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Secs. 6.2 and 6.4 (recursion derived from induction via constant families)"
+    },
+    {
+     "datum": "Computation rule for base: f(base) == b (judgmental beta-rule of the eliminator at the point constructor)",
+     "class": "P",
+     "justification": "A propositional/equational law: a coherence condition tying the eliminator's value at the point generator to the supplied datum. It is a demanded equation on already-enumerated operations, exactly the 'coherence condition / law' case of class P (compare the stage-8 anchor, where the H-space coherence pattern is P). Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Sec. 6.2 (computation rules for higher inductive types)"
+    },
+    {
+     "datum": "Computation rule for loop: apd_f(loop) = l (propositional beta-rule of the eliminator at the path constructor)",
+     "class": "P",
+     "justification": "A propositional equation (explicitly propositional, not judgmental, in the standard presentation): the coherence law tying the eliminator to the path generator, stated with the apd/dependent-path apparatus derived from stratum-4 transport. A law on already-enumerated operations; class P. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Sec. 6.2 (dependent paths and the propositional computation rule for loop)"
+    }
+   ],
+   "d_count": 1,
+   "notes": "Standard presentation used: the circle as the higher inductive type generated by one point constructor and one path constructor, with induction and computation rules (HoTT Book, Ch. 6). Prior-content assumptions relied on: identity types with transport and dependent-path (apd) machinery are stratum-4 content per that row's 'interface transport over terms'; the point-generation pattern with eliminator is strata 2-3 content. Single-mint placement: the package {formation, base, loop} carries exactly one unimplied existence; per Section 3 independence and the row's own reading ('first nontrivial path constructor'), it is located at loop and counted once — an auditor relocating it to the formation rule leaves d_count unchanged at 1. Induction-as-P caveat: the theorem that induction with propositional computation rules is equivalent to homotopy-initiality (a mere proposition) is proved in type theory assuming function extensionality (Sojakova, POPL 2015, covering W-suspensions including the circle); funext is not explicitly listed in strata 1-4, so if the eventual adjudicator rejects the initiality reading, the fallback classification for the induction principle is C (form mechanically determined by the constructor signature under the generation scheme, existence bundled with the counted generation act) — also a zero class, leaving d_count = 1 in either case. The classification that WOULD change the count is treating induction as an independent N (d_count 2); this was considered and rejected because a generating constructor and its universal property are not independently variable primitives, matching the stage-8 anchor's bundling of an operation with its coherence pattern. Not enumerated (theorems/consequences, not defining data): nontriviality loop != refl (requires univalence, a model-level fact), pi_1(S1) = Z, S1 = free infinity-groupoid on one automorphism, equivalence with suspension presentations. Calibration consistency: carrier/point data zero-classed as in the stage-9 anchor (carrier D), determined derivates zero-classed as in stage 12 (C), single operation minted as in stage 8 (N with coherence P). d_count = 1.",
+   "citations": [
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (2013), Ch. 1, Sec. 1.12 (Identity types)",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Secs. 6.1-6.2 and 6.4 (Circles and spheres); Ch. 5 (initial-algebra characterization of inductive types, book-level)",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 1, Sec. 1.5 (Product types / unit type) and Ch. 6, Sec. 6.4",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Secs. 6.1 and 6.4 (the circle as the higher inductive type generated by base and loop)",
+    "K. Sojakova, 'Higher Inductive Types as Homotopy-Initial Algebras', POPL 2015; S. Awodey, N. Gambino, K. Sojakova, 'Inductive Types in Homotopy Type Theory', LICS 2012; Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Sec. 6.2",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Secs. 6.2 and 6.4 (recursion derived from induction via constant families)",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Sec. 6.2 (computation rules for higher inductive types)",
+    "Univalent Foundations Program, Homotopy Type Theory (2013), Ch. 6, Sec. 6.2 (dependent paths and the propositional computation rule for loop)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 6,
+   "name": "Propositional truncation",
+   "enumeration": [
+    {
+     "datum": "Truncation type former (formation rule): for each type A, the type ‖A‖ — the reflection of A into mere propositions",
+     "class": "N",
+     "justification": "The stratum's single minted primitive: proof-irrelevant compression as a type former. Existence is NOT implied by prior content (U0, 1, star, Pi/Sigma, S1): the ladder below contains no quotient-like or general higher-inductive machinery — stratum 5 mints one specific type with one specific loop constructor, not a HIT scheme, and the known reductions of propositional truncation to other colimits (hub-and-spoke, iterated joins via pushouts) use higher inductive types not on the ladder; the impredicative encoding Pi(P:Prop).(A->P)->P raises universe level and only yields the truncation under propositional resizing, which is not prior content. Given the other enumerated data (unit, prop-ness, universal property), ‖A‖ is determined up to canonical equivalence whenever it exists; by the Section 4 boundary clause the unimplied existence is exactly the minted content: class N.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation) and §6.9 (Truncations)"
+    },
+    {
+     "datum": "Point constructor (unit map): |–| : A → ‖A‖",
+     "class": "C",
+     "justification": "Existence and identity are both implied by counted content. Existence: datum 1 is counted as the reflection of A into mere propositions, whose specification includes its unit map — the mint of the (former, unit) package is charged exactly once, at datum 1. Identity: since ‖A‖ is a mere proposition (squash datum), any two maps A → ‖A‖ are pointwise propositionally equal, so the unit admits no independent choice — it is canonically determined. Doubt stated: on a bare-HIT reading the point constructor is co-postulated with the formation rule and could look like separate structure; but co-postulation inside a single inference package is precisely 'existence implied by other counted data', and the boundary clause therefore sends it to C, not N. Counting it N as well would double-count one minted idea, contrary to the Section 3 granularity fixed by the stage-8 anchor (one operation, one mint).",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation); canonical identity of maps into a mere proposition per §3.3 (Mere propositions)"
+    },
+    {
+     "datum": "Path constructor (squash / proof irrelevance): for all x, y : ‖A‖, x = y — i.e., is-prop(‖A‖)",
+     "class": "P",
+     "justification": "A propositional law about the counted carrier: is-prop(X) is itself a mere proposition, so this datum is a mere property / coherence condition, the exact pattern the rule assigns to class P and the stage-8 anchor assigns to the H-space coherence. The predicate itself is expressible from prior content (Pi over the ambient identity types that stratum 5 already presupposes). Its existence-content — that a former with this property exists at all — is not carried here: that is the mint already charged at datum 1. Class P, contributes 0.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation); §3.3 (Mere propositions: being a mere proposition is itself a mere proposition)"
+    },
+    {
+     "datum": "Recursion principle (universal property): for every mere proposition B, every f : A → B extends along |–| to g : ‖A‖ → B — equivalently, precomposition (‖A‖ → B) → (A → B) is an equivalence",
+     "class": "P",
+     "justification": "A universal characterization, which the rule classes with 'uniqueness clauses' and 'completeness as a property'. Because B is a mere proposition, the type of extensions of f along |–| is itself a mere proposition (any two extensions are pointwise equal), and 'precomposition is an equivalence' is a mere proposition; so this datum is a propositional law characterizing datum 1, not new structure. Doubt stated: an eliminator can be read as a structural rule; but its content over propositional targets is propositional, and its existence-content is exactly what the boundary clause consumed at datum 1 (uniqueness-given-existence there, existence minted there) — charging it again here would double-count. Class P.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation) and §6.9 (Truncations)"
+    },
+    {
+     "datum": "Computation rule: rec(f)(|a|) ≡ f(a)",
+     "class": "P",
+     "justification": "A coherence equation attached to the recursion principle. Propositionally it is automatic: both sides inhabit the mere proposition B and are therefore equal; as a judgmental clause it is a law governing already-enumerated data, not an independent structural primitive. Class P (coherence condition), contributes 0.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation) and §6.9 (Truncations)"
+    },
+    {
+     "datum": "Dependent induction principle: for B : ‖A‖ → U with each B(x) a mere proposition, (Π(a:A) B(|a|)) → Π(x:‖A‖) B(x)",
+     "class": "C",
+     "justification": "Existence and identity are both implied by other counted data: it is derivable from the recursion principle together with the squash path constructor (the standard derivation of truncation induction for families of mere propositions), and its value is unique because each fiber B(x) is a mere proposition. Enumerated for completeness of the standard presentation; class C, contributes 0.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §6.9 (Truncations)"
+    }
+   ],
+   "d_count": 1,
+   "notes": "Blind row fill for stratum 6 (Propositional truncation) from the frozen rule and row input only; no local files, repositories, or prior conversations consulted. One web search was used solely to verify standard-reference section numbers (HoTT Book §3.7, §6.9, §3.3 confirmed via homotopytypetheory.org/book and the book's HTML rendering). Prior content taken as strata 1..5: U0, unit type 1, witness star, Pi/Sigma shell, circle S1 (with the ambient identity-type apparatus that a path constructor presupposes). Standard presentation enumerated: the HoTT Book higher-inductive presentation (formation, point constructor, squash path constructor, recursion principle, computation rule) plus the derived dependent induction principle. Principal doubt, stated and resolved in-row: whether the point constructor |–| is a second independent mint alongside the type former. Resolution by the boundary clause and the stage-8 anchor granularity: the (former, unit) pair is one reflection package whose existence is the single minted idea — the unit's existence is implied by the counted reflection datum and its identity is canonically forced (all maps into a mere proposition are equal), so it is class C, not N. The squash constructor is a genuine mere property (is-prop is itself a mere proposition), hence P rather than a second mint; the universal property and computation rule are propositional laws (P); the dependent eliminator is derivable (C). Result: exactly one class-N datum — the existence of the proof-irrelevant reflection ‖–‖ — so D(6) = 1.",
+   "citations": [
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation) and §6.9 (Truncations)",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation); canonical identity of maps into a mere proposition per §3.3 (Mere propositions)",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §3.7 (Propositional truncation); §3.3 (Mere propositions: being a mere proposition is itself a mere proposition)",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics (IAS, 2013), §6.9 (Truncations)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 7,
+   "name": "Sphere S2",
+   "enumeration": [
+    {
+     "datum": "Carrier type S² : U (type formation of the sphere as a homotopy type)",
+     "class": "C",
+     "justification": "The carrier is not constructible from strata 1..6 by available constructions (the prior ladder has Π/Σ, the circle's 1-dimensional generator, and truncation, but no suspension/pushout/HIT-former machinery), so it is not (D). Doubt stated: one could read the carrier as (N). Resolved by the boundary clause: the carrier's existence and identity are both implied by the datum counted as (N) below — the free attachment of a 2-cell — since the freely generated type is determined up to canonical equivalence by its generation data via its universal property, and the existence assertion lives entirely in that counted generator. Existence and identity both implied by counted content = (C). Counting the carrier as well would double-count the single minted idea, violating the minted-idea granularity (Section 3) and the stage-8 anchor pattern in which the carrier is a zero class while the stratum's one new structure carries the count.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6 (Higher inductive types), Section 6.4 (Circles and spheres)"
+    },
+    {
+     "datum": "Point constructor base : S² (basepoint / unique 0-cell)",
+     "class": "D",
+     "justification": "The pointedness datum reproduces prior-ladder content at minted-idea granularity: stratum 3 mints the term-level witness idea (⋆ : 1, explicit realization of inhabitance) and stratum 5's presentation already contains a point constructor for a generated carrier. The basepoint of S² adds no structural idea not already present below; it is the zero-dimensional component of the presentation, and Section 3 forbids counting components. Doubt stated: literally, base is a generator of a new type, not a term built from prior strata; but the (D)/(N) question is decided at minted-idea granularity, and the idea 'distinguished witness point of a carrier' is fully prior. In CW terms this is the single 0-cell, a copy of the terminal cell already available from stratum 2/3 content.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Section 6.4; Allen Hatcher, Algebraic Topology, Chapter 0 (Some Underlying Geometric Notions), CW-complex description of Sⁿ with one 0-cell and one n-cell"
+    },
+    {
+     "datum": "Two-dimensional generator surf : refl_base = refl_base (the free 2-cell; classically, the single 2-cell of the CW structure e⁰ ∪ e²)",
+     "class": "N",
+     "justification": "This is the stratum's minted idea: the first generator living in an iterated identity type — free attachment of a two-dimensional cell. Its existence is not implied by strata 1..6: the prior ladder contains exactly one nontrivial path generator (loop, dimension 1, stratum 5) and the truncation squash (stratum 6, which compresses rather than generates), and no suspension, pushout, or general cell-attachment former from which a 2-cell could be built. Boundary clause applied: given existence, the type freely generated by base and surf is unique up to canonical equivalence (universal property), but that existence is exactly what is minted here — unique-up-to-canonical-iso GIVEN existence with existence not implied is (N). This single datum carries the 'surface coherence' capacity of the row input.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Section 6.4 (Circles and spheres)"
+    },
+    {
+     "datum": "Boundary specification of the 2-cell: source and target of surf are both refl_base (classically, the attaching map S¹ → {e⁰} is the constant map)",
+     "class": "C",
+     "justification": "The 2-cell is attached along the canonical trivial boundary: refl_base is canonically determined by prior identity-type content, and the constant attaching map to a point is the unique such map (terminal choice). Existence and identity are both implied by prior and counted content, so (C). Doubt stated: attaching data are classification-flavored and stage 9's clutching datum is anchored as (T); but here there is no discrete classification being chosen among alternatives — the boundary is forced, not selected — so the (C) clause (existence and identity both implied) applies rather than (T).",
+     "citation": "Allen Hatcher, Algebraic Topology, Chapter 0 (Some Underlying Geometric Notions); The Univalent Foundations Program, Homotopy Type Theory, Section 6.4"
+    },
+    {
+     "datum": "Induction principle of S² (dependent eliminator: for P : S² → U, from b : P(base) and a dependent 2-path over surf, a section of P)",
+     "class": "C",
+     "justification": "Given the counted free-generation datum, the eliminator's existence and identity are implied: it is the canonical unpacking of the universal property of free generation by the declared constructors, following the elimination pattern already minted at stratum 5 (circle induction) and transported by the dependent-function machinery of stratum 4 (dependent 2-paths, apd², are definable from prior Π/identity content). It is a structure, not a mere law, so (P) is wrong; but both its existence and its identity ride on the counted (N) datum, so it is (C), not a second mint.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Sections 6.2 (Induction principles and dependent paths) and 6.4"
+    },
+    {
+     "datum": "Computation rules for the eliminator (β-rule on base, judgmental; β-rule on surf, propositional at the 2-path level)",
+     "class": "P",
+     "justification": "These are laws governing the already-classified eliminator — coherence/computation conditions stating that the eliminator restores the supplied generation data. They assert equations, mint no structure, and are the standard propositional/judgmental law package attached to any HIT presentation. Class (P), contributing 0.",
+     "citation": "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Sections 6.2 and 6.4"
+    }
+   ],
+   "d_count": 1,
+   "notes": "Blind row fill for stratum 7 (Sphere S²) under XF-0 Correspondence Rule v1; no local files, register values, or other rows consulted. Presentation chosen: the standard direct presentation of S² as the higher inductive type generated by base : S² and surf : refl_base = refl_base (HoTT Book Section 6.4), which is the presentation matching the row's established reading 'two-dimensional homotopy carrier'; the suspension presentation ΣS¹ was rejected as non-standard at this ladder point because suspension/pushout machinery is not prior content at position 7. The classical CW presentation (one 0-cell, one 2-cell, constant attaching map; Hatcher Ch. 0) enumerates identically and yields the same count. Derived invariants (π₂(S²) ≅ ℤ, Hopf-invariant phenomena, obstruction-theoretic consequences) are theorems about the stratum, not defining data, and are excluded. Key doubt and resolution, recorded per Section 4: the carrier and the 2-cell generator cannot both be (N) without double-counting one minted idea — the carrier without surf is trivial, and the existence of the freely generated type is exactly the content of the 2-cell datum; by the boundary clause the mint is located in surf (N) and the carrier is (C) relative to it. The basepoint is (D) at minted-idea granularity (witness idea prior at strata 3/5). Resulting count: exactly one class-(N) datum — the free two-dimensional cell. D(7) = 1.",
+   "citations": [
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6 (Higher inductive types), Section 6.4 (Circles and spheres)",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Section 6.4; Allen Hatcher, Algebraic Topology, Chapter 0 (Some Underlying Geometric Notions), CW-complex description of Sⁿ with one 0-cell and one n-cell",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Section 6.4 (Circles and spheres)",
+    "Allen Hatcher, Algebraic Topology, Chapter 0 (Some Underlying Geometric Notions); The Univalent Foundations Program, Homotopy Type Theory, Section 6.4",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Sections 6.2 (Induction principles and dependent paths) and 6.4",
+    "The Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Chapter 6, Sections 6.2 and 6.4"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 8,
+   "name": "H-space S3",
+   "enumeration": [
+    {
+     "datum": "Carrier: the space/type S3, the underlying object of the H-space",
+     "class": "D",
+     "justification": "Constructible from prior ladder content by constructions already exercised below stratum 8: stratum 7 supplies S2, and the higher-inductive/suspension formation pattern already instantiated at strata 5 (S1) and 7 (S2) yields S3 as the suspension of S2 (equivalently the join S1 * S1 from stratum 5 content). No new formation principle is minted by the carrier. Matches the frozen Section 5 anchor ('the carrier is class (D)'). Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 6.5 (Suspensions; the n-spheres as iterated suspensions)."
+    },
+    {
+     "datum": "Unit element e : S3 (the basepoint serving as the H-space identity)",
+     "class": "C",
+     "justification": "Existence is implied by the counted carrier: the suspension/HIT presentation of S3 comes with a distinguished point constructor, so no new existence is minted. Identity is implied by the standard presentation, which fixes the unit to be the basepoint of the pointed carrier (and on a connected homotopy-associative H-space the unit is determined up to homotopy by the multiplication). Doubt stated: this datum could alternatively be folded into the carrier as (D); either way it contributes 0. Resolved as (C) by the boundary clause because existence AND identity are both implied by prior/counted content — nothing is minted.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (The Hopf fibration; definition of an H-space as a pointed type with a multiplication satisfying unit laws)."
+    },
+    {
+     "datum": "Multiplication mu : S3 x S3 -> S3 (the H-space operation; classically quaternionic multiplication restricted to unit quaternions, type-theoretically one Cayley-Dickson step)",
+     "class": "N",
+     "justification": "Existence is not implied by strata 1..7 (which mint no multiplicative structure on any carrier: S1 is only a path constructor, truncation only compresses witnesses, S2 is only a 2-dimensional carrier) nor by any other datum of this row. The existence of an H-space multiplication on a sphere is a genuinely rigid, non-generic fact (classically only S0, S1, S3, S7 admit one), realized on S3 by quaternionic multiplication. The boundary clause applies a fortiori: the existence is the minted content, and here the multiplication is not even unique up to canonical isomorphism (S3 carries multiple homotopy classes of H-space multiplications), so (N) holds without needing the uniqueness half. This is the single minted idea of the stratum, matching the Section 5 anchor ('the multiplication is class (N)'). Contributes 1.",
+     "citation": "Hatcher, Algebraic Topology (Cambridge University Press), Section 3.C (H-Spaces and Hopf Algebras: S0, S1, S3, S7 as H-spaces via the division algebras); Buchholtz and Rijke, 'The Cayley-Dickson construction in homotopy type theory' (paper-level)."
+    },
+    {
+     "datum": "Left and right unit laws: homotopies/paths mu(e,x) = x and mu(x,e) = x",
+     "class": "P",
+     "justification": "Coherence conditions on already-counted data (e and mu); they constrain the operation but mint no carrier and no operation. The rule's class (P) explicitly covers propositional laws and coherence conditions; this is part of the anchor's 'its coherence pattern is class (P)'. Contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (H-space definition: unit laws as the defining equalities)."
+    },
+    {
+     "datum": "Homotopy associativity: mu(mu(x,y),z) = mu(x,mu(y,z)) up to homotopy (the 'associative multiplication pattern' of the established reading), together with its higher (A-infinity style) coherences",
+     "class": "P",
+     "justification": "Associativity as a law is the rule's own canonical example of class (P): a coherence condition on the counted multiplication that mints no new structural primitive. Its tower of higher coherences is likewise a pattern of laws over the same counted operation. Part of the anchor's coherence pattern. Contributes 0.",
+     "citation": "Hatcher, Algebraic Topology, Section 3.C (homotopy-associative H-spaces); Stasheff, 'Homotopy Associativity of H-Spaces I', Transactions of the American Mathematical Society (paper-level)."
+    },
+    {
+     "datum": "Action object: the left-translation action x |-> mu(x,-) of S3 on itself (the 'action object' / 'internal symmetry action' of the row's signature note)",
+     "class": "C",
+     "justification": "Existence and identity are both implied by counted data: the action is literally the curry of the counted multiplication mu, canonically determined with no further choice — a repackaging of mu as an internal symmetry action, which is what downstream bundle constructions consume. By clause (C) (a quantity computed by a formula from counted data), it contributes 0.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (the Hopf construction consumes exactly the curried H-space multiplication as a family of maps)."
+    },
+    {
+     "datum": "Group-likeness of translations: for each x, the maps mu(x,-) and mu(-,x) are homotopy equivalences",
+     "class": "P",
+     "justification": "A mere property, derivable rather than minted: on a connected H-space every left and right translation is automatically an equivalence, so its truth is implied by the counted multiplication together with the connectivity of the (D)-classified carrier. It is a proposition about counted data, minting nothing. Contributes 0. (Consequently homotopy inverses are also derivable and are not a separate datum of the standard H-space presentation, which contains no inversion structure.)",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (lemma: on a connected H-space all translations are equivalences)."
+    }
+   ],
+   "d_count": 1,
+   "notes": "Calibration row: Section 5 of the frozen rule discloses Stage 8 = 1 to every analyst, so this row is calibration, not blind. The enumeration was nevertheless performed mechanically under Section 4 and agrees with the disclosed anchor decomposition (carrier D, multiplication N, coherence pattern P), with three additional zero-class housekeeping data enumerated for the published record: the unit element (C — existence from the carrier's point constructor, identity fixed as the basepoint; doubt between folding into D-carrier vs separate C noted and resolved by the boundary clause, contribution 0 either way), the action object (C — the curried multiplication, canonically determined), and translation group-likeness (P — automatic on a connected H-space). Inversion is not enumerated because the standard H-space presentation (Hatcher 3.C; HoTT Book 8.5) contains no inversion datum; on the connected carrier homotopy inverses are derivable from translation equivalences and would in any case be zero-class, leaving d_count unaffected. The unit of counting was kept at minted-idea granularity per the Section 5 anchors: no component, dimension, or solution-space counts were used. Prior content consulted: strata 1-7 as listed in Section 2 only; no local files, repository content, register values, or later ladder content were consulted. d_count = 1 (the multiplication is the single class-N datum).",
+   "citations": [
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 6.5 (Suspensions; the n-spheres as iterated suspensions).",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (The Hopf fibration; definition of an H-space as a pointed type with a multiplication satisfying unit laws).",
+    "Hatcher, Algebraic Topology (Cambridge University Press), Section 3.C (H-Spaces and Hopf Algebras: S0, S1, S3, S7 as H-spaces via the division algebras); Buchholtz and Rijke, 'The Cayley-Dickson construction in homotopy type theory' (paper-level).",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (H-space definition: unit laws as the defining equalities).",
+    "Hatcher, Algebraic Topology, Section 3.C (homotopy-associative H-spaces); Stasheff, 'Homotopy Associativity of H-Spaces I', Transactions of the American Mathematical Society (paper-level).",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (the Hopf construction consumes exactly the curried H-space multiplication as a family of maps).",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, Section 8.5 (lemma: on a connected H-space all translations are equivalences)."
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "Calibration"
+  },
+  {
+   "stratum": 9,
+   "name": "Hopf fibration",
+   "enumeration": [
+    {
+     "datum": "Base carrier S²",
+     "class": "D",
+     "justification": "The base space of the fibration is exactly the stratum-7 carrier; it is prior content verbatim, no new construction. Derived carrier, contributes 0. Undisputed by both audits.",
+     "citation": "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles; Hopf bundle examples)"
+    },
+    {
+     "datum": "Fiber carrier S¹",
+     "class": "D",
+     "justification": "The fiber is exactly the stratum-5 carrier; prior content verbatim. Derived carrier, contributes 0. Undisputed by both audits.",
+     "citation": "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles); Univalent Foundations Program, Homotopy Type Theory, §6.4 (Circles and spheres)"
+    },
+    {
+     "datum": "Total-space carrier S³",
+     "class": "D",
+     "justification": "The total space is the stratum-8 carrier, already on the ladder; it is also independently constructible at this ladder position as the join S¹ * S¹ from prior content. The Section 5 Stage-9 anchor fixes this classification: the carrier is class (D). Undisputed by both audits.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, §8.5 (The Hopf fibration; join construction)"
+    },
+    {
+     "datum": "Fiberwise structure-group multiplication on S¹ (the U(1)/H-space structure on the fiber used as structure group)",
+     "class": "D",
+     "justification": "Analyst doubt was resolved by the Section 4 boundary clause and both audits concur: unlike the stratum-8 multiplication on S³ (whose existence is not implied by prior content and was minted there), the multiplication on S¹ is explicitly constructible from prior content — circle recursion/induction (stratum 5) with dependent abstraction (stratum 4) yields the H-space structure on S¹ (HoTT Book §8.5); classically it is complex-unit multiplication. Existence IS implied by prior content, so this is a zero class: a constructible operation-object, class D.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory, §8.5 (H-space structure on the circle)"
+    },
+    {
+     "datum": "Two-hemisphere decomposition of the base with equatorial S¹ (two contractible charts glued along the equator)",
+     "class": "C",
+     "justification": "S² enters the ladder as the suspension of S¹ (strata 5 and 7 content), so the two-cone cover and its equatorial S¹ exist and are identified canonically by the prior presentation; both existence and identity are implied by prior content. Class C. Citation corrected by adjudication from Part II, §19 to Part II, §18 (verified table of contents).",
+     "citation": "Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere; two-cell cover)"
+    },
+    {
+     "datum": "Clutching function (degree-1 characteristic map from the equatorial S¹ to the structure group S¹ ≃ U(1))",
+     "class": "T",
+     "justification": "Anchor-fixed (Section 5, Stage 9): the clutching datum is class (T). Independently justified: the bundle depends on the clutching map only through its homotopy class, an element of π₁(U(1)) ≅ ℤ — a discrete classification datum with no local content; the choice of representative within the class is pure gauge. Citation corrected by adjudication from Part II, §19 to Part II, §18 (the characteristic-map classification, Steenrod Theorem 18.5).",
+     "citation": "Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere; characteristic map, Theorem 18.5); Hatcher, Vector Bundles and K-Theory, Ch. 1 (clutching functions)"
+    },
+    {
+     "datum": "Assembled total space of the clutched bundle (gluing of the two trivial pieces D² × S¹ along the equator via the clutching function)",
+     "class": "C",
+     "justification": "Existence and identity are determined, up to canonical isomorphism, by data already enumerated (fiber, structure multiplication, hemisphere cover, clutching function) via the standard clutching construction, which is available technology given the prior carriers (suspension/pushout formation already used to present strata 5, 7, 8). Nothing new is minted. Class C. Undisputed by both audits; part-level citation retained as accurate.",
+     "citation": "Steenrod, The Topology of Fibre Bundles, Part I (construction of a bundle from coordinate transformations; part-level citation)"
+    },
+    {
+     "datum": "Bundle projection p : S³ → S² (the base/fiber interface map; classically h(z₀,z₁) = [z₀ : z₁])",
+     "class": "C",
+     "justification": "The projection is the canonical first-projection of the clutched assembly: its existence and identity are implied by the enumerated assembly datum. It is computed from counted data, not minted. Class C. Steenrod citation corrected by adjudication from Part II, §19 to Part II, §18.",
+     "citation": "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles; Hopf map); Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere)"
+    },
+    {
+     "datum": "Identification of the clutched total space with S³ (equivalently the equivalence S¹ * S¹ ≃ S³)",
+     "class": "C",
+     "justification": "Analyst doubt was resolved by the Section 4 boundary clause and both audits concur: the existence of this equivalence is a theorem provable from prior content (the join/clutching computation), and the standard construction fixes it up to canonical homotopy. Since existence AND identity are both implied, the datum is class C, not N.",
+     "citation": "Univalent Foundations Program, Homotopy Type Theory, §8.5 (join S¹ * S¹ ≃ S³)"
+    },
+    {
+     "datum": "Fiber inclusion S¹ ↪ S³ over the basepoint",
+     "class": "C",
+     "justification": "Determined canonically by the enumerated projection and the basepoint of the base (prior content): the fiber over the basepoint and its inclusion exist and are identified by pullback of counted data. Class C. Undisputed by both audits.",
+     "citation": "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles)"
+    },
+    {
+     "datum": "Principal S¹-action on the total space (fiberwise action; classically z · (z₀, z₁) = (z z₀, z z₁))",
+     "class": "D",
+     "justification": "Constructible from enumerated and prior content: the join presentation S³ ≃ S¹ * S¹ carries the action induced factorwise by the fiber multiplication (itself class D); classically it is the restriction of the stratum-8 quaternionic multiplication along the constructible inclusion of unit complexes. No unimplied existence. Class D. Undisputed by both audits; part-level citation retained as accurate.",
+     "citation": "Steenrod, The Topology of Fibre Bundles, Part I (principal bundles; part-level citation)"
+    },
+    {
+     "datum": "Local triviality of p (each point of the base has a neighborhood over which p is a product)",
+     "class": "P",
+     "justification": "A propositional condition on the enumerated map p, holding by construction of the clutched assembly; a mere property/coherence condition, not structure. Class P. Undisputed by both audits.",
+     "citation": "Steenrod, The Topology of Fibre Bundles, Part I (definition of fibre bundle; part-level citation)"
+    },
+    {
+     "datum": "Freeness and fiberwise transitivity of the S¹-action (principality laws)",
+     "class": "P",
+     "justification": "Propositional laws satisfied by the enumerated action; they add no structural datum. Class P. Undisputed by both audits.",
+     "citation": "Steenrod, The Topology of Fibre Bundles, Part I (principal bundles; part-level citation)"
+    },
+    {
+     "datum": "Nontriviality of the bundle (the fibration is not the product S² × S¹; equivalently the clutching class generates π₁(U(1)) ≅ ℤ, equivalently Hopf invariant 1, equivalently no global section)",
+     "class": "P",
+     "justification": "A mere proposition about the enumerated data (the value of the discrete clutching class and its consequences); the 'nontrivial' in the established reading is a property of the (T)-classified clutching datum, not an independent structure. Class P. Steenrod citation corrected by adjudication from Part II, §19 to Part II, §18.",
+     "citation": "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles; Hopf bundles); Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere)"
+    }
+   ],
+   "d_count": 0,
+   "notes": "FINAL adjudicated enumeration for stratum 9 (calibration row; Section 5 anchor Stage 9 = 0, disclosed in the rule, so not blind). D(9) = 0: every defining datum of the standard clutching presentation of the Hopf fibration is derived (D), canonically determined (C), topological/discrete rigidity (T), or propositional (P); no class-(N) datum. This mechanically reproduces the frozen anchor's classifications (carrier D, clutching datum T) and total. The two analyst N-vs-zero doubts were resolved under the Section 4 boundary clause toward zero classes because existence is implied by prior content: (a) the S¹ fiber multiplication is constructible by circle recursion plus the Π/Σ shell (contrast the stratum-8 S³ multiplication, minted at stratum 8); (b) S¹ * S¹ ≃ S³ is a provable equivalence with canonical identity, hence C not N. Both audits affirmed all fourteen classifications; the sole dispute was citation validity, resolved by correcting the Steenrod Part II attribution from §19 to §18 on four items. Adjudicator verification via web search against the book's table of contents (dokumen.pub full-text TOC; JSTOR and De Gruyter chapter listings for PMS-14) confirms: §17 'The homotopy sequence of a bundle', §18 'The classification of bundles over the n-sphere' (characteristic/clutching map, Theorem 18.5), §19 'Universal bundles and the classification theorem'. Sources: https://dokumen.pub/the-topology-of-fibre-bundles.html ; https://www.jstor.org/stable/j.ctt1bpm9t5 ; https://www.degruyterbrill.com/document/doi/10.1515/9781400883875/html . All other citations (Hatcher AT §4.2; Hatcher VBKT Ch. 1; HoTT Book §6.4 and §8.5; Steenrod Part I part-level) verified accurate by the completeness audit and retained. Enumeration completeness confirmed: no defining datum of the standard presentation missing, none extraneous. No local files, repository content, or register values consulted; only this prompt and the citation-verification web search. No structural-register quantity was used (F-XF1 compliant).",
+   "citations": [
+    "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles; Hopf bundle examples)",
+    "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles); Univalent Foundations Program, Homotopy Type Theory, §6.4 (Circles and spheres)",
+    "Univalent Foundations Program, Homotopy Type Theory: Univalent Foundations of Mathematics, §8.5 (The Hopf fibration; join construction)",
+    "Univalent Foundations Program, Homotopy Type Theory, §8.5 (H-space structure on the circle)",
+    "Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere; two-cell cover)",
+    "Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere; characteristic map, Theorem 18.5); Hatcher, Vector Bundles and K-Theory, Ch. 1 (clutching functions)",
+    "Steenrod, The Topology of Fibre Bundles, Part I (construction of a bundle from coordinate transformations; part-level citation)",
+    "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles; Hopf map); Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere)",
+    "Univalent Foundations Program, Homotopy Type Theory, §8.5 (join S¹ * S¹ ≃ S³)",
+    "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles)",
+    "Steenrod, The Topology of Fibre Bundles, Part I (principal bundles; part-level citation)",
+    "Steenrod, The Topology of Fibre Bundles, Part I (definition of fibre bundle; part-level citation)",
+    "Hatcher, Algebraic Topology, §4.2 (Fiber Bundles; Hopf bundles); Steenrod, The Topology of Fibre Bundles, Part II, §18 (The classification of bundles over the n-sphere)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "dispute",
+     "citations_ok": false,
+     "disputes": [
+      {
+       "datum": "Steenrod Part II section attribution in items 'Two-hemisphere decomposition of the base with equatorial S¹', 'Clutching function (degree-1 characteristic map)', and 'Bundle projection p : S³ → S²' (citation only; no classification change)",
+       "argument": "The enumeration cites 'Steenrod, The Topology of Fibre Bundles, Part II, §19 (The classification of bundles over the n-sphere)' in three data items, and the notes claim a web search confirmed §19 while attributing 'The homotopy sequence of a bundle' to §18. Independent verification (JSTOR/De Gruyter/dokumen.pub tables of contents; Bruner-Catanzaro-May's citation of the classification theorem) shows both attributions are off by one: §17 is 'The homotopy sequence of a bundle' and §18 is 'The classification of bundles over the n-sphere' (the clutching/characteristic-map classification is Steenrod Theorem 18.5). The analyst's admitted initial recollection of §18 was correct and the claimed web-search 'correction' to §19 inverted it. Because the rule requires a valid chapter/section citation per row and forbids re-citation after the join, the §19 attribution must be corrected to §18 before the row is finalized. All fourteen classifications themselves survive the two-direction independence attack: the carriers are prior ladder content (D, anchor-fixed for S³), the clutching datum is the rule's own T exemplar (anchor-fixed), the S¹ fiber multiplication's existence is provably implied by circle induction plus the Π/Σ shell (HoTT §8.5, Lemma 8.5.8) unlike the minted stage-8 S³ multiplication, the assembly/projection/identification/inclusion are implied by the clutching-join construction (C), the action is canonically induced (D), and local triviality, principality laws, and nontriviality are propositions about already-enumerated data (P). D(9) = 0 stands and matches the frozen Stage-9 anchor; the dispute is confined to the citation."
+      }
+     ]
+    },
+    "completeness_audit": {
+     "verdict": "dispute",
+     "citations_ok": false,
+     "disputes": [
+      {
+       "datum": "Steenrod Part II section-number citations on four items: 'Two-hemisphere decomposition of the base' (item 5), 'Clutching function' (item 6), 'Bundle projection p : S³ → S²' (item 8), and 'Nontriviality of the bundle' (item 14), all citing 'Steenrod, The Topology of Fibre Bundles, Part II, §19 (The classification of bundles over the n-sphere)'",
+       "argument": "The section number is wrong. In Steenrod's The Topology of Fibre Bundles (Princeton, PMS-14), Part II runs: §17 'The homotopy sequence of a bundle', §18 'The classification of bundles over the n-sphere', §19 'Universal bundles and the classification theorem'. The two-cell cover, characteristic/clutching map, and classification-over-S^n material the enumeration relies on is §18, not §19; §19 is the universal-bundle classification theorem, which is not the material cited. This was verified by web search against the book's table of contents (exact-phrase matches for '17. The homotopy sequence of a bundle', '18. The classification of bundles over the n-sphere', and '19. Universal bundles and the classification theorem'). The error is aggravated rather than excused by the analyst's notes, which claim a web search 'confirmed' §19 and 'corrected an initial recollection of §18' — the correction went the wrong direction (the initial §18 recollection was right), and the notes also misattribute the title 'The homotopy sequence of a bundle' to §18 when it is §17. The classifications themselves (C, T, C, P) and the D(9)=0 total are unaffected — the cited material exists one section over and supports exactly the claims made — so no class change is proposed; the required remedy is correcting §19 to §18 on these four items. No other objection: the enumeration is complete (no defining datum of the standard clutching presentation is missing, none listed is extraneous), and all remaining citations (Hatcher AT §4.2 Fiber Bundles subsection with Hopf bundle examples; Hatcher VBKT Ch. 1 clutching functions; HoTT Book §6.4 and §8.5; part-level Steenrod Part I citations for the coordinate-transformation construction and principal bundles) are accurate and appropriate."
+      }
+     ]
+    }
+   },
+   "adjudication": {
+    "resolution": "Both audits returned verdict 'dispute' on citation validity only; neither attacked any classification, and all fourteen classifications survive both the independence attack (both directions) and the completeness check. Dispute resolution: (1) Steenrod section attribution — the analyst cited 'Part II, §19 (The classification of bundles over the n-sphere)' on four items (two-hemisphere decomposition, clutching function, bundle projection, nontriviality) and claimed in notes that a web search confirmed §19 while attributing 'The homotopy sequence of a bundle' to §18. Both auditors independently found this off by one, and my own web verification of the PMS-14 table of contents (dokumen.pub, JSTOR, De Gruyter) confirms them: §17 is 'The homotopy sequence of a bundle', §18 is 'The classification of bundles over the n-sphere' (the two-cell cover and characteristic-map material, Theorem 18.5), §19 is 'Universal bundles and the classification theorem'. The analyst's initial recollection of §18 was correct and the claimed 'correction' to §19 inverted it. Ruled: all four items re-cited to Part II, §18 with the correct section title; this is decided by verification, not compromise. (2) The completeness auditor's fourth affected item (nontriviality, item 14), which the independence auditor did not list, is included in the correction — the same defect, same remedy. (3) No classification changes: the carriers are prior ladder content (D; S³ anchor-fixed), the clutching datum is the rule's own (T) exemplar (anchor-fixed), the assembly/projection/join-identification/fiber-inclusion have existence and identity implied by prior or enumerated content (C, per the Section 4 boundary clause's second sentence), the S¹ multiplication and principal action are constructible from prior content (D), and local triviality, principality laws, and nontriviality are propositions over enumerated data (P). d_count = 0, agreeing with the frozen Stage-9 calibration anchor. This enumeration is final for v1; per Section 7 no re-fill, re-classification, or re-citation after the join."
+   },
+   "row_kind": "Calibration"
+  },
+  {
+   "stratum": 10,
+   "name": "Cohesion/modal shell",
+   "enumeration": [
+    {
+     "datum": "Cohesive carrier: the ambient types of the ladder (universe, Pi/Sigma types, HITs of strata 1..9) re-read as the universe of cohesive types on which the modal package acts",
+     "class": "D",
+     "justification": "The standard presentation matching the ladder's internal (type-theoretic) register is cohesive homotopy type theory: the SAME type theory of strata 1..9 is extended with modal operators. No new ambient object is minted; the objects the shell acts on are exactly prior ladder content. The external cohesive infinity-topos H is a semantic model of this presentation, not a datum of it, so no new carrier is introduced at this ladder position. Contributes 0.",
+     "citation": "U. Schreiber and M. Shulman, Quantum gauge field theory in cohesive homotopy type theory, EPTCS 158 (2014), paper-level; M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level"
+    },
+    {
+     "datum": "Flat modality FLAT (discrete coreflection): idempotent comonadic modal operator A |-> FLAT A with counit FLAT A -> A, presented type-theoretically via the crisp-context discipline; externally FLAT = Disc o Gamma",
+     "class": "N",
+     "justification": "A genuinely new operator: nothing in strata 1..9 (plain HoTT with specific HITs and truncation) implies the existence of a discrete/cohesive dichotomy or any nontrivial coreflection onto discrete types. Stated doubt: externally one can argue FLAT = Disc o Gamma exists canonically for any infinity-topos over the base, suggesting C; but that argument presupposes the ambient is an infinity-topos equipped with a base of discrete objects, which is exactly the content this stratum mints and is not prior content -- internally to strata 1..9 there is no such base. Resolved by the boundary clause: the existence of the discreteness structure is the minted content. Contributes 1.",
+     "citation": "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level (crisp type theory and the flat modality); F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level"
+    },
+    {
+     "datum": "Sharp modality SHARP (codiscrete reflection): idempotent monadic modal operator A |-> SHARP A with unit A -> SHARP A; externally SHARP = coDisc o Gamma",
+     "class": "N",
+     "justification": "New operator whose existence is independent of prior strata and of the other counted modalities. It is unique up to canonical isomorphism whenever it exists (as a right adjoint in the string), but its existence is a separate axiom: external witness of independence -- locally connected but non-local toposes (e.g. sheaves on the real line) have Disc and Gamma, hence FLAT, but no coDisc, hence no SHARP (locality is an independent condition on geometric morphisms). By the boundary clause, unique-given-existence with unimplied existence is N; the existence is the minted content. Contributes 1.",
+     "citation": "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level; independence: P. T. Johnstone, Sketches of an Elephant: A Topos Theory Compendium, Part C3 (classes of geometric morphisms), book-level"
+    },
+    {
+     "datum": "Shape modality SHAPE (Pi_infinity, fundamental infinity-groupoid): idempotent monadic modal operator A |-> SHAPE A with unit A -> SHAPE A, reflecting a cohesive type onto a discrete type; externally SHAPE = Disc o Pi_infinity",
+     "class": "N",
+     "justification": "New operator. Stated doubt: given FLAT one may argue SHAPE is 'the left adjoint of FLAT', unique up to canonical isomorphism, suggesting C; but existence of that left adjoint is not implied by FLAT or SHARP -- external witness: local but not locally infinity-connected toposes have FLAT and SHARP but no SHAPE (local infinity-connectedness is an independent condition on geometric morphisms). This is precisely the boundary-clause case: unique up to canonical isomorphism whenever it exists, existence not implied, hence N -- the existence is the minted content. (In real-cohesion SHAPE is constructed as nullification at the reals, but the reals are later/physical content, not prior ladder content; the abstract package postulates SHAPE.) Contributes 1.",
+     "citation": "U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level (definition of cohesive infinity-topos); M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level; independence: P. T. Johnstone, Sketches of an Elephant, Part C3, book-level"
+    },
+    {
+     "datum": "Discrete subuniverse and its inclusion Disc: the class of discrete types (those A with FLAT A -> A an equivalence) and its embedding into all types",
+     "class": "C",
+     "justification": "Existence and identity are both implied by the counted datum FLAT: the discrete types are definitionally the FLAT-comodal fixed points, and the inclusion is the subuniverse embedding, determined up to canonical equivalence. No choice remains once FLAT is counted. Contributes 0.",
+     "citation": "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level; U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level"
+    },
+    {
+     "datum": "Codiscrete subuniverse and its inclusion coDisc: the class of codiscrete types (those A with A -> SHARP A an equivalence) and its embedding",
+     "class": "C",
+     "justification": "Existence and identity implied by the counted datum SHARP: codiscrete types are the SHARP-modal fixed points; the inclusion is canonically determined. Contributes 0.",
+     "citation": "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level"
+    },
+    {
+     "datum": "Underlying-points functor Gamma (global sections): the factorization FLAT = Disc o Gamma and SHARP = coDisc o Gamma through the base",
+     "class": "C",
+     "justification": "Not a separate operator of the internal presentation (internally it is implicit in FLAT and SHARP). Externally it is the direct image of the essentially unique geometric morphism from the ambient infinity-topos to the base infinity-groupoids (the base is terminal among infinity-toposes), so given the counted package its existence and identity are both implied up to canonical equivalence. Contributes 0.",
+     "citation": "J. Lurie, Higher Topos Theory, Chapter 6, book-level (infinity-groupoids terminal among infinity-toposes); U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level"
+    },
+    {
+     "datum": "Modality structure laws: idempotency of SHAPE, FLAT, SHARP; monad laws for SHAPE and SHARP; comonad laws for FLAT; equivalently full faithfulness of Disc and coDisc (units/counits are equivalences on (co)modal types); functoriality/naturality coherences",
+     "class": "P",
+     "justification": "With each operator and its unit/counit counted as components of the three N data (Section 3: components are not independent primitives), these are propositional laws and coherence conditions on already-counted structure, exactly parallel to the coherence pattern classed P in the Stage-8 anchor. Contributes 0.",
+     "citation": "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level; U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level"
+    },
+    {
+     "datum": "Adjoint-string relations: SHAPE -| FLAT -| SHARP (equivalently Pi_infinity -| Disc -| Gamma -| coDisc), including that SHAPE and FLAT share the discrete types as their common image",
+     "class": "P",
+     "justification": "Given the three operators with their units/counits already counted, adjointness is a system of natural equivalence conditions (e.g. maps FLAT A -> B into discrete B correspond to A -> ... ) constructed from counted structure and required to be equivalences: a propositional condition relating counted data, not new structure. The string itself mints nothing beyond the three operators whose existence it constrains. Contributes 0.",
+     "citation": "U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level; F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level"
+    },
+    {
+     "datum": "Cohesion axiom: SHAPE (Pi_infinity) preserves finite products",
+     "class": "P",
+     "justification": "A mere property of the counted operator SHAPE (a condition that certain canonical comparison maps are equivalences). It constrains but does not add structure. Contributes 0.",
+     "citation": "F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level; U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level"
+    },
+    {
+     "datum": "Optional strengthening axioms: 'pieces have points' (the canonical comparison Gamma -> Pi_infinity is surjective/epi), punctual cohesion",
+     "class": "P",
+     "justification": "Present in Lawvere's axiomatics and in some presentations of cohesive infinity-toposes, absent in others; either way it is a propositional condition (epimorphy of a canonical map built from counted data), hence a property. Enumerated for completeness of the standard presentation. Contributes 0.",
+     "citation": "F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level"
+    },
+    {
+     "datum": "Crisp-context discipline: the judgmental apparatus (crisp variable declarations and crisp contexts) used to present FLAT type-theoretically",
+     "class": "C",
+     "justification": "Stated doubt: this is proof-theoretic presentation machinery rather than a mathematical structure; its entire mathematical content is the comonad FLAT already counted as N. It is the mode theory canonically associated with presenting an idempotent comonadic modality in type theory -- existence and identity are implied by the counted datum FLAT and by the prior type-theoretic apparatus of strata 1..4. Resolved as C (determined by counted content), not N. Contributes 0.",
+     "citation": "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level (crisp type theory)"
+    }
+   ],
+   "d_count": 3,
+   "notes": "Presentation choice: since the ladder's strata 1..9 are internal type-theoretic content (universe, unit, witness, Pi/Sigma, S1, truncation, S2, S3 H-space, Hopf), the stratum's standard presentation is taken to be axiomatic cohesive homotopy type theory (Schreiber-Shulman; Shulman's crisp modal type theory), with the external cohesive infinity-topos quadruple Pi_infinity -| Disc -| Gamma -| coDisc (Lawvere; Schreiber) used as the semantic counterpart in justifications. Under this reading the package mints exactly three independent structural primitives: the operators FLAT, SHARP, SHAPE. Their independence is witnessed semantically: FLAT alone (any topos over a base has Disc, Gamma), SHARP requires locality (fails e.g. for sheaves on the real line), SHAPE requires local infinity-connectedness (fails for local but non-locally-connected toposes) -- three separate existence axioms. All adjoint relations, idempotency/(co)monad laws, full-faithfulness, and product preservation are classed P; the discrete/codiscrete subuniverses, the Gamma factorization, and the crisp-context apparatus are classed C. The carrier is classed D (the prior type theory itself; no new ambient object is minted internally). Key boundary-clause resolutions recorded inside the entries: SHAPE and SHARP are each unique up to canonical isomorphism as adjoints GIVEN existence, but their existence is not implied by prior or counted content, so each is N (the existence is the mint); the external canonicity argument for FLAT presupposes the base-of-discretes structure that this stratum itself introduces, so FLAT is N. Granularity cross-checked against the Stage-8 anchor (carrier D, operation N, coherence P): here carrier D, three operators N, laws P. No datum of class T arises. Citations are given at paper/book level where section numbers could not be asserted with certainty (per the no-fabrication rule); no local files were read and no Column-S or register content was consulted. d_count = 3 (FLAT, SHARP, SHAPE).",
+   "citations": [
+    "U. Schreiber and M. Shulman, Quantum gauge field theory in cohesive homotopy type theory, EPTCS 158 (2014), paper-level; M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level",
+    "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level (crisp type theory and the flat modality); F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level",
+    "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level; independence: P. T. Johnstone, Sketches of an Elephant: A Topos Theory Compendium, Part C3 (classes of geometric morphisms), book-level",
+    "U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level (definition of cohesive infinity-topos); M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level; independence: P. T. Johnstone, Sketches of an Elephant, Part C3, book-level",
+    "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level; U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level",
+    "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level",
+    "J. Lurie, Higher Topos Theory, Chapter 6, book-level (infinity-groupoids terminal among infinity-toposes); U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level",
+    "U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level; F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level",
+    "F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level; U. Schreiber, Differential cohomology in a cohesive infinity-topos, arXiv:1310.7930, book-level",
+    "F. W. Lawvere, Axiomatic cohesion, Theory and Applications of Categories 19 (2007), No. 3, paper-level",
+    "M. Shulman, Brouwer's fixed-point theorem in real-cohesive homotopy type theory, Mathematical Structures in Computer Science 28(6) (2018), paper-level (crisp type theory)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 11,
+   "name": "Connection shell",
+   "enumeration": [
+    {
+     "datum": "Carrier: the cohesive family/fibration pi: E -> M (principal or associated bundle with cohesive fibers) on which transport is to act",
+     "class": "D",
+     "justification": "The underlying family is constructible from prior ladder content: dependent families and their interface transport over terms (stratum 4, Pi/Sigma shell), concrete bundle instances (stratum 9, Hopf fibration), and cohesive structure on families (stratum 10, modal shell). No new carrier is minted at this stratum. This matches the frozen stage-9 anchor, which classes the bundle carrier itself as (D).",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. I, Sec. 5 (Fibre bundles)"
+    },
+    {
+     "datum": "Vertical subbundle V = ker(d pi) of TE (the tangent-to-the-fiber distribution)",
+     "class": "C",
+     "justification": "Existence and identity are both implied by the carrier: the vertical subspace at each point is canonically the kernel of the differential of the projection (equivalently, the tangent space of the fiber through that point). Nothing is chosen; it is computed from counted/prior data. Class (C) by the boundary clause since both existence and identity are implied.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. II, Sec. 1 (Connections in a principal fibre bundle)"
+    },
+    {
+     "datum": "Domain of comparison: the smooth path groupoid P1(M) (paths up to thin homotopy / reparametrization) over which fibers are compared",
+     "class": "D",
+     "justification": "Constructible from prior ladder content: path/loop structure is available from stratum 5 (path constructor) and the cohesive shape infrastructure of stratum 10; classically it is built from the manifold carrier by standard constructions available below this rung. It is the stage on which transport acts, not a minted structure of this stratum.",
+     "citation": "Schreiber & Waldorf, Parallel Transport and Functors, Journal of Homotopy and Related Structures 4 (2009) (article-level; section uncertain)"
+    },
+    {
+     "datum": "The connection nabla itself: a G-equivariant horizontal distribution H in TE complementary to V, equivalently the g-valued connection 1-form omega, equivalently the covariant derivative operator on sections, equivalently the smooth transport functor on P1(M) — one structural primitive presented four equivalent ways",
+     "class": "N",
+     "justification": "This is the single minted idea of the stratum. Doubt stated and resolved: existence of SOME connection on a bundle over a paracompact base is a theorem (K&N Ch. II Sec. 2), so one might attempt (C); but class (C) requires existence AND identity to be implied, and identity is not — the set of connections is a nonempty affine space modeled on ad-bundle-valued 1-forms with no canonical point, and distinct connections are observably distinct structures (they induce different fiber comparisons). Not (T): the choice is not pure gauge and has local content. Not (P): it is a structure, not a law. Not (D): no construction from strata 1..10 produces a distinguished nabla on a general cohesive family; stratum 10's flat modality distinguishes only the flat/discrete comparison, against which a general nabla is precisely the non-implied datum. By the boundary clause the existence/choice is the minted content: class (N). Granularity per Section 3 and the stage-8 anchor: horizontal distribution, connection form, covariant derivative, and transport functor are canonically equivalent presentations of one primitive and are counted once, exactly as the H-space anchor counts one operation.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. II, Secs. 1-2 (Connections in a principal fibre bundle; Existence and extension of connections)"
+    },
+    {
+     "datum": "Connection laws: reproduction omega(A*) = A and equivariance R_a* omega = Ad(a^{-1}) omega of the connection form; equivalently G-invariance and smoothness of H; equivalently additivity, C-infinity-linearity in the direction argument, and the Leibniz rule for the covariant derivative",
+     "class": "P",
+     "justification": "These are propositional laws/coherence conditions imposed on the already-counted datum nabla, not new structure: they cut out which candidate distributions/forms/operators qualify as connections. Mere properties contribute 0, mirroring the stage-8 anchor where the coherence pattern of the counted operation is class (P).",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. II, Sec. 1 (Connections in a principal fibre bundle)"
+    },
+    {
+     "datum": "Parallel transport P_gamma: E_{gamma(0)} -> E_{gamma(1)} along paths — the comparison of cohesive fibers named in the established reading",
+     "class": "C",
+     "justification": "Given the counted datum nabla, horizontal lifts of paths exist and are unique (standard existence/uniqueness for the horizontal-lift equation), so the fiber-comparison maps exist and are canonically determined by nabla; both existence and identity are implied by counted content, hence (C), not (N). This is the same determination pattern the stage-12 anchor freezes for curvature relative to nabla. The reading's 'parallel transport and comparison of cohesive fibers' therefore carries no independent count beyond the connection itself.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. II, Sec. 3 (Parallelism)"
+    },
+    {
+     "datum": "Transport coherence: functoriality under path composition and reversal, invariance under reparametrization/thin homotopy, and smooth dependence on the path (the smooth-functor condition)",
+     "class": "P",
+     "justification": "These are coherence laws satisfied by the determined transport (equivalently, the axioms making the transport presentation a smooth functor); they are properties of already-counted data and mint no structure. Under the equivalence of presentations they correspond to the connection laws already classed (P) and are listed separately only for completeness of the transport-side presentation.",
+     "citation": "Schreiber & Waldorf, Parallel Transport and Functors, Journal of Homotopy and Related Structures 4 (2009) (article-level; section uncertain)"
+    },
+    {
+     "datum": "Flat/discrete comparison object: the flat-modality counterpart of the family (flat coefficient / de Rham-style comparison object built from the stratum-10 adjunction), against which nabla is read as 'acting on cohesive families'",
+     "class": "C",
+     "justification": "In the cohesive presentation, the flat comparison object is constructed canonically by applying the stratum-10 modal adjunction (Pi-infinity -| Disc -| flat -| sharp) to prior carriers: existence and identity are both implied by prior strata, with no choice. It supplies the ambient notion of trivial/flat transport; the non-implied deviation from it is exactly the datum already counted as (N).",
+     "citation": "Schreiber, Differential Cohomology in a Cohesive Infinity-Topos, arXiv:1310.7930 (document-level; section uncertain)"
+    }
+   ],
+   "d_count": 1,
+   "notes": "Blinding respected: no local files, repository content, or prior conversations consulted; one web search used solely to verify the Kobayashi-Nomizu Vol. I Ch. II section titles (confirmed: Sec. 1 Connections in a principal fibre bundle, Sec. 2 Existence and extension of connections, Sec. 3 Parallelism). Presentation chosen: the standard Ehresmann/Kobayashi-Nomizu principal-bundle presentation, supplemented by the transport-functor presentation (Schreiber-Waldorf) and the cohesive framing (Schreiber) demanded by the row's 'cohesive families' language; these are canonically equivalent, and per Section 3 granularity the horizontal distribution / connection form / covariant derivative / transport functor are counted as ONE primitive. The single class-N datum is the connection nabla itself; the decisive boundary-clause application is recorded inside that datum: an existence theorem for SOME connection does not imply identity (nonempty affine space of choices, no canonical point, choices not pure gauge since transports differ observably), so the choice is the minted content. Parallel transport given nabla is class (C) (unique horizontal lifts), matching the determination pattern of the frozen stage-12 anchor; the enumeration's D/N/P profile (carrier D, operation N, laws P) matches the granularity of the frozen stage-8 anchor. Holonomy groups and curvature are deliberately excluded as defining data here: holonomy is derived (not defining) and loop-defect measurement is stratum-12 content, which may not be consulted or double-counted at this rung. D(11) = 1.",
+   "citations": [
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. I, Sec. 5 (Fibre bundles)",
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. II, Sec. 1 (Connections in a principal fibre bundle)",
+    "Schreiber & Waldorf, Parallel Transport and Functors, Journal of Homotopy and Related Structures 4 (2009) (article-level; section uncertain)",
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. II, Secs. 1-2 (Connections in a principal fibre bundle; Existence and extension of connections)",
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Ch. II, Sec. 3 (Parallelism)",
+    "Schreiber, Differential Cohomology in a Cohesive Infinity-Topos, arXiv:1310.7930 (document-level; section uncertain)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 12,
+   "name": "Curvature shell",
+   "enumeration": [
+    {
+     "datum": "Carrier space of curvature: bundle-valued 2-forms Omega^2(M; End(E)) (equivalently ad(P)-valued 2-forms on a principal bundle)",
+     "class": "D",
+     "justification": "The space in which R_nabla lives is assembled entirely from prior-ladder content: dependent/pair formers and interface transport (stratum 4) give the endomorphism/associated-bundle construction, the cohesive/modal shell (stratum 10) supplies the infinitesimal-form apparatus, and the connection shell (stratum 11) supplies the bundle-with-transport it is built over. No new carrier is minted at stratum 12; the object is constructible at ladder position 11.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 5 (Curvature form and structure equation)"
+    },
+    {
+     "datum": "Exterior covariant derivative d^nabla extending nabla to bundle-valued forms (the operator whose square, or whose structure-equation combination, is the curvature)",
+     "class": "C",
+     "justification": "Doubt stated: this is an operation, so one must ask whether it is a minted structural primitive. Resolution by the boundary clause: given nabla (stratum 11) and the graded wedge/differential structure on forms (prior content), d^nabla is the unique extension satisfying the graded Leibniz rule d^nabla(omega tensor s) = d omega tensor s + (-1)^k omega wedge nabla s. Both its existence and its identity are implied by prior and previously-counted content, with no free choice; hence class C, not N.",
+     "citation": "Milnor & Stasheff, Characteristic Classes, Appendix C (Connections, Curvature, and Characteristic Classes)"
+    },
+    {
+     "datum": "The curvature form itself, R_nabla = d nabla + nabla wedge nabla (equivalently F = dA + A wedge A, the second structure equation; equivalently R_nabla = (d^nabla)^2; equivalently R(X,Y) = nabla_X nabla_Y - nabla_Y nabla_X - nabla_[X,Y])",
+     "class": "C",
+     "justification": "The headline datum of the stratum. Its existence AND identity are both implied: R_nabla is computed by a closed formula from the connection nabla counted at stratum 11 and from prior differential/wedge structure. It is exactly the rule's paradigm case of 'a quantity computed by a formula from counted data'. No independent existence is minted -- every connection has a curvature, automatically and canonically. Class C. This agrees with the disclosed Stage-12 calibration anchor, but the classification here is derived independently from the boundary clause: existence is implied, so the N-boundary clause does not fire.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 5 (Curvature form and structure equation)"
+    },
+    {
+     "datum": "Tensoriality of curvature: R_nabla is C-infinity-bilinear in its vector-field arguments, i.e. a genuine 2-form with values in End(E), despite being built from differential operators",
+     "class": "P",
+     "justification": "A propositional fact about the already-determined object R_nabla (first-order derivative terms cancel). It adds no structure; it is a property verified of datum 3. Class P.",
+     "citation": "Tu, Differential Geometry: Connections, Curvature, and Characteristic Classes (Springer GTM 275), chapters on connections and curvature (book-level; exact section numbering not certified)"
+    },
+    {
+     "datum": "The (second) Bianchi identity: d^nabla R_nabla = 0 (equivalently dF + [A, F] = 0)",
+     "class": "P",
+     "justification": "A coherence law automatically satisfied by the curvature of any connection; it is a proposition proved from data already enumerated (data 2 and 3), minting nothing. Class P.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 5 (Curvature form and structure equation)"
+    },
+    {
+     "datum": "Gauge naturality of curvature: under a gauge transformation g the curvature transforms equivariantly, F mapsto Ad_{g^{-1}} F (tensorially), in contrast to the affine transformation law of the connection",
+     "class": "P",
+     "justification": "A naturality/equivariance law -- a propositional square commuting for the already-determined assignment nabla mapsto R_nabla. Properties and naturality squares are explicitly zero-class under Section 4. Class P.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 6 (Mappings of connections) and Section 5 (book-level fallback for the transformation law)"
+    },
+    {
+     "datum": "Loop-defect reading: curvature measures the infinitesimal holonomy defect of parallel transport around small loops; transport around the boundary of a small parallelogram deviates from the identity at second order exactly by R_nabla, and the holonomy Lie algebra is generated by curvature values (Ambrose-Singer)",
+     "class": "P",
+     "justification": "This is the stratum's established reading ('loop-defect measurement for connection transport'), and it is a theorem ABOUT the pair (nabla, R_nabla), not an additional structural datum: it identifies the already-counted formula-object of datum 3 with the loop defect of the stratum-11 transport. A theorem relating counted data to prior content is propositional. Class P.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 8 (Holonomy theorem; Ambrose-Singer)"
+    },
+    {
+     "datum": "Flatness as the distinguished vanishing condition: R_nabla = 0 if and only if parallel transport is locally path-independent (local triviality of transport)",
+     "class": "P",
+     "justification": "A mere condition on the determined object R_nabla together with an equivalence theorem; it selects a subclass of stratum-11 connections and mints no new structure. Class P.",
+     "citation": "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 9 (Flat connections)"
+    }
+   ],
+   "d_count": 0,
+   "notes": "Calibration row (anchor disclosed in Section 5 of the frozen rule: Stage 12 = 0). The enumeration above was nevertheless performed mechanically from the standard presentation and independently reproduces d_count = 0: every datum of the curvature shell is either a derived carrier (the 2-form space), canonically determined by the stratum-11 connection via a closed formula (d^nabla and R_nabla = d nabla + nabla wedge nabla), or a propositional law about those determined objects (tensoriality, Bianchi, gauge equivariance, the loop-defect/Ambrose-Singer reading, flatness). The only genuine N-vs-C doubt points were d^nabla and R_nabla itself; both resolve to C by the boundary clause, since existence is implied for every connection (nothing merely 'unique when it exists' -- it always exists). Prior-content assumptions used: connection/parallel transport from stratum 11; infinitesimal/differential-form apparatus from the cohesive shell (stratum 10); bundle and endomorphism formation from the Pi/Sigma shell (stratum 4). No structural-register quantity was consulted; no local files were read (blinding respected). Citations are section-level where confident (Kobayashi-Nomizu Vol. I, Ch. II, Sections 5, 6, 8, 9; Milnor-Stasheff Appendix C) and book-level where section numbering was not certain (Tu, GTM 275).",
+   "citations": [
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 5 (Curvature form and structure equation)",
+    "Milnor & Stasheff, Characteristic Classes, Appendix C (Connections, Curvature, and Characteristic Classes)",
+    "Tu, Differential Geometry: Connections, Curvature, and Characteristic Classes (Springer GTM 275), chapters on connections and curvature (book-level; exact section numbering not certified)",
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 6 (Mappings of connections) and Section 5 (book-level fallback for the transformation law)",
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 8 (Holonomy theorem; Ambrose-Singer)",
+    "Kobayashi & Nomizu, Foundations of Differential Geometry, Vol. I, Chapter II (Theory of Connections), Section 9 (Flat connections)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "Calibration"
+  },
+  {
+   "stratum": 13,
+   "name": "Metric/operator bundle",
+   "enumeration": [
+    {
+     "datum": "Underlying smooth/cohesive carrier M",
+     "class": "D",
+     "justification": "The carrier space is prior content: strata 10-12 (cohesion, connection, curvature) already operate on it, and the standard presentation of Riemannian geometry begins 'let M be a smooth manifold' with the manifold given. Nothing about the carrier is minted at stratum 13; it is constructible from (indeed identical to) ladder content 1..12.",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 0 (Differentiable Manifolds)"
+    },
+    {
+     "datum": "Tangent bundle TM (equivalently the de Rham cotangent/forms carrier on which g will live)",
+     "class": "D",
+     "justification": "TM is a canonical functorial construction from the smooth carrier, with no choice content; moreover differential forms and the exterior derivative d are already in play at stratum 12 (its signature R_nabla = d nabla + nabla wedge nabla uses d and wedge), so the (co)tangent apparatus is available prior content. Existence and identity are both implied by the carrier, and it is an underlying object, so it is a derived carrier (D) rather than (C)-classed computed data; either way it contributes 0.",
+     "citation": "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 1 (Manifolds)"
+    },
+    {
+     "datum": "Riemannian metric g (smooth family of inner products on the fibers of TM)",
+     "class": "N",
+     "justification": "The single minted idea of the stratum. Nothing in strata 1..12 implies a metric: a cohesive carrier with connection and curvature machinery carries no preferred fiberwise inner product. Doubt stated and resolved: (i) on a paracompact manifold metrics always exist by partitions of unity, but that existence is a theorem about an auxiliary choice, not existence implied by prior or counted ladder content, and (ii) a metric is radically non-unique with no canonical identity, so class (C) fails on both prongs. It is structure with genuine local content (not a law, not discrete, not a mere carrier), hence (N) under the boundary clause.",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 1 (Riemannian Metrics); also S. Kobayashi and K. Nomizu, Foundations of Differential Geometry, Vol. I, Chapter IV"
+    },
+    {
+     "datum": "Symmetry axiom for g (g(X,Y) = g(Y,X))",
+     "class": "P",
+     "justification": "A propositional law constraining the counted tensor g, exactly parallel to the Stage 8 anchor where the H-space coherence pattern is class (P). Contributes no structure.",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 1 (Riemannian Metrics)"
+    },
+    {
+     "datum": "Positive-definiteness / non-degeneracy axiom for g",
+     "class": "P",
+     "justification": "A mere property (an open condition) on the counted datum g, not an independent structure. The discrete choice of signature, if enumerated separately, would be class (T); it is folded into this axiom clause and contributes 0 either way.",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 1 (Riemannian Metrics)"
+    },
+    {
+     "datum": "Frame bundle Fr(M) (principal GL(n)-bundle of linear frames)",
+     "class": "D",
+     "justification": "Canonically constructed from TM as the bundle of fiberwise linear isomorphisms R^n -> T_xM, using bundle machinery already prior at strata 10-11 (cohesive families, connection shell). No choice is made; it is a derived carrier. Listed in the signature but mints nothing.",
+     "citation": "S. Kobayashi and K. Nomizu, Foundations of Differential Geometry, Vol. I, Chapter I (fibre bundles; the bundle of linear frames)"
+    },
+    {
+     "datum": "Orthonormal frame reduction O(M) of Fr(M) to the orthogonal group",
+     "class": "C",
+     "justification": "Given the counted metric g, the reduction of the structure group GL(n) to O(n) exists and is canonically determined (the orthonormal frames are exactly the g-isometric frames). Existence and identity both implied by counted content, hence (C).",
+     "citation": "S. Kobayashi and K. Nomizu, Foundations of Differential Geometry, Vol. I, Chapter IV"
+    },
+    {
+     "datum": "Orientation of M",
+     "class": "T",
+     "justification": "A discrete two-valued choice per component (existing iff a Z/2-valued topological obstruction, w_1, vanishes) with no local content. This matches the Stage 9 anchor pattern: discrete classification/clutching-type data are class (T). Needed as input to the Hodge star; contributes 0.",
+     "citation": "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 4 (Integration on Manifolds)"
+    },
+    {
+     "datum": "Riemannian volume form vol_g",
+     "class": "C",
+     "justification": "Computed by an explicit local formula (sqrt(det g) dx^1 ... dx^n in oriented coordinates) from the counted data g and the enumerated orientation. Existence and identity both implied; class (C).",
+     "citation": "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 4 (Integration on Manifolds)"
+    },
+    {
+     "datum": "Musical isomorphisms (flat/sharp) and the induced metrics on tensor and form bundles",
+     "class": "C",
+     "justification": "The isomorphisms TM = T*M and the inner products on all associated tensor bundles are determined pointwise by the non-degenerate g via explicit formulas. Existence and identity implied by counted content.",
+     "citation": "A. Besse, Einstein Manifolds, Chapter 1 (Basic Material)"
+    },
+    {
+     "datum": "Hodge star operator (star: Omega^k -> Omega^{n-k})",
+     "class": "C",
+     "justification": "Determined pointwise by the counted g (via the induced inner product on Lambda^k) and the enumerated orientation (via vol_g) by the defining identity alpha wedge (star beta) = <alpha,beta> vol_g. Named in the signature, but its existence and identity are fully implied by counted data, so it mints nothing, in the same way the Stage 12 anchor classes R_nabla as (C).",
+     "citation": "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 6 (The Hodge Theorem)"
+    },
+    {
+     "datum": "Codifferential delta (formal adjoint of d)",
+     "class": "C",
+     "justification": "Given by the sign-adjusted formula delta = +/- star d star from the counted star and the exterior derivative d, which is prior content (it appears in the stratum-12 signature). Existence and identity implied.",
+     "citation": "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 6 (The Hodge Theorem)"
+    },
+    {
+     "datum": "Levi-Civita connection of g",
+     "class": "C",
+     "justification": "Doubt stated: as a connection it might look like new structure. Resolved by the boundary clause: the fundamental theorem of Riemannian geometry gives BOTH existence and uniqueness, with the Koszul formula computing the connection outright from g; the notion of connection itself is prior content (stratum 11). Since existence and identity are implied by counted plus prior content, this is (C), not (N).",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 2 (Affine Connections; Riemannian Connections)"
+    },
+    {
+     "datum": "Metric-compatibility condition (nabla g = 0)",
+     "class": "P",
+     "justification": "A propositional condition (a law relating counted data g and the determined connection) used to pin the Levi-Civita choice; a uniqueness-clause ingredient, hence (P).",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 2 (Affine Connections; Riemannian Connections)"
+    },
+    {
+     "datum": "Torsion-freeness condition on the connection",
+     "class": "P",
+     "justification": "A propositional condition (vanishing of the torsion tensor) forming the second uniqueness clause of the fundamental theorem; a mere property, hence (P).",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 2 (Affine Connections; Riemannian Connections)"
+    },
+    {
+     "datum": "Riemann curvature tensor R of the Levi-Civita connection",
+     "class": "C",
+     "justification": "Determined by the (C)-classed Levi-Civita connection exactly as in the frozen Stage 12 calibration anchor: curvature exists and is determined by its connection. Existence and identity implied.",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 4 (Curvature)"
+    },
+    {
+     "datum": "Ricci tensor Ric",
+     "class": "C",
+     "justification": "Computed by a formula from already-classed data: the trace/contraction Ric(X,Y) = tr(Z -> R(Z,X)Y) of the Riemann tensor. Named in the signature but existence and identity are implied by counted content; class (C).",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 4 (Curvature); also A. Besse, Einstein Manifolds, Chapter 1 (Basic Material)"
+    },
+    {
+     "datum": "Scalar curvature",
+     "class": "C",
+     "justification": "The g-trace of Ric, computed by formula from counted data. Existence and identity implied; (C).",
+     "citation": "M. do Carmo, Riemannian Geometry, Chapter 4 (Curvature)"
+    },
+    {
+     "datum": "Laplacian Delta (Hodge Laplacian Delta = d delta + delta d; Laplace-Beltrami on functions as its degree-0 case)",
+     "class": "C",
+     "justification": "Given by an explicit formula from the (C)-classed delta and the prior d; equivalently trace_g of the second covariant derivative via the (C)-classed Levi-Civita connection. Named in the signature but fully determined; existence and identity implied, hence (C).",
+     "citation": "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 6 (The Hodge Theorem)"
+    },
+    {
+     "datum": "Ricci comparison content (comparison statements such as Myers and Bishop-Gromov attached to the 'Ricci comparison package' reading)",
+     "class": "P",
+     "justification": "Comparison geometry consists of theorems, i.e. propositional consequences of bounds on the (C)-classed Ric; no new structure is introduced. Mere properties, hence (P).",
+     "citation": "J. Cheeger and D. Ebin, Comparison Theorems in Riemannian Geometry (book-level)"
+    }
+   ],
+   "d_count": 1,
+   "notes": "Blind fill for stratum 13 under XF-0 rule v1, from the row input alone; no local files or registers consulted. The standard presentation used is Riemannian geometry on a smooth carrier (do Carmo; Kobayashi-Nomizu Vol. I; Warner; Besse). Verdict structure: of the signature quintuple (g, Fr(M), star, Delta, Ric), only g is minted. Fr(M) is a canonical derived carrier (D) of the tangent bundle; star, Delta, and Ric are all determined by explicit formulas from g together with prior content (d and wedge are already in the stratum-12 signature), and are classed (C) in exact parallel with the Stage 12 anchor (curvature determined by connection). Orientation, the one auxiliary choice feeding the Hodge star, is a discrete no-local-content choice classed (T) in parallel with the Stage 9 anchor. The Levi-Civita connection is the one genuinely debated item: the boundary clause resolves it to (C) because the fundamental theorem supplies existence via the Koszul formula, not merely uniqueness, so both prongs of (C) are met. Doubt on g itself (paracompact existence of some metric) is resolved to (N): the ladder does not imply the existence of the chosen metric structure and there is no canonical identity, so the choice of g is the minted content. Citations are given at chapter level where the chapter identity is standard and certain; Cheeger-Ebin is cited book-level to avoid fabricating a section. d_count = 1.",
+   "citations": [
+    "M. do Carmo, Riemannian Geometry, Chapter 0 (Differentiable Manifolds)",
+    "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 1 (Manifolds)",
+    "M. do Carmo, Riemannian Geometry, Chapter 1 (Riemannian Metrics); also S. Kobayashi and K. Nomizu, Foundations of Differential Geometry, Vol. I, Chapter IV",
+    "M. do Carmo, Riemannian Geometry, Chapter 1 (Riemannian Metrics)",
+    "S. Kobayashi and K. Nomizu, Foundations of Differential Geometry, Vol. I, Chapter I (fibre bundles; the bundle of linear frames)",
+    "S. Kobayashi and K. Nomizu, Foundations of Differential Geometry, Vol. I, Chapter IV",
+    "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 4 (Integration on Manifolds)",
+    "A. Besse, Einstein Manifolds, Chapter 1 (Basic Material)",
+    "F. Warner, Foundations of Differentiable Manifolds and Lie Groups, Chapter 6 (The Hodge Theorem)",
+    "M. do Carmo, Riemannian Geometry, Chapter 2 (Affine Connections; Riemannian Connections)",
+    "M. do Carmo, Riemannian Geometry, Chapter 4 (Curvature)",
+    "M. do Carmo, Riemannian Geometry, Chapter 4 (Curvature); also A. Besse, Einstein Manifolds, Chapter 1 (Basic Material)",
+    "J. Cheeger and D. Ebin, Comparison Theorems in Riemannian Geometry (book-level)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 14,
+   "name": "Hilbert-functional shell",
+   "enumeration": [
+    {
+     "datum": "Scalar field C of complex numbers, with conjugation",
+     "class": "D",
+     "justification": "The real line is prior content (the stratum-10 cohesive shell and the stratum-13 metric package (g, Fr(M), star, Delta, Ric) presuppose R-valued geometry); C = R x R with its canonical field structure and involution is constructible from prior content by pairing/Sigma-type constructions already available at stratum 4, with identity canonically determined. Underlying object constructible from strata 1..13 content, so class D.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. I (Preliminaries)"
+    },
+    {
+     "datum": "Underlying carrier of H: a complex vector space (vectors with addition and scalar multiplication)",
+     "class": "D",
+     "justification": "Function/section spaces into C are constructible from prior content (Pi-formation from stratum 4 over geometric types available by stratum 13), and the linear operations are induced pointwise from C. Parallel to the stage-8 anchor where the H-space carrier is class D: the carrier contributes nothing; the minted content of this stratum lives in the operation on it.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. II (Hilbert Spaces)"
+    },
+    {
+     "datum": "Inner product <.,.> : H x H -> C on the state space",
+     "class": "N",
+     "justification": "The single minted operation of the shell, exactly analogous to the stage-8 anchor's multiplication. Doubt stated: one could argue an L2-type pairing is canonically induced by stratum-13 data (integral of alpha wedge star-beta), making it class C. Resolved by the boundary clause: prior content supplies only fiberwise metrics on finite-rank bundles and no distinguished global pairing on a new infinite-dimensional state space (the required integration/measure datum is not prior or counted content, and the abstract presentation posits <.,.> freely, with no uniqueness even up to canonical isomorphism). Existence is not implied by prior or counted content, so the existence is the minted content: class N.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. II (Hilbert Spaces); J. von Neumann, Mathematical Foundations of Quantum Mechanics, Ch. II (Abstract Hilbert Space)"
+    },
+    {
+     "datum": "Inner-product axioms: sesquilinearity, conjugate symmetry, positive definiteness",
+     "class": "P",
+     "justification": "Mere propositional laws imposed on the counted operation, parallel to the stage-8 anchor where the coherence pattern of the multiplication is class P. No new structure.",
+     "citation": "J. B. Conway, A Course in Functional Analysis, Ch. I (Hilbert Spaces)"
+    },
+    {
+     "datum": "Induced norm ||x|| = sqrt(<x,x>), and the induced metric and topology on H",
+     "class": "C",
+     "justification": "Computed by formula from the counted inner product; existence and identity both implied by counted data. Parallel to the stage-12 anchor (a quantity determined by counted structure is class C).",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. II (Hilbert Spaces)"
+    },
+    {
+     "datum": "Completeness of H with respect to the induced norm",
+     "class": "P",
+     "justification": "Section 4 of the frozen rule explicitly lists 'completeness as a property' among the class-P examples; it is a propositional condition (every Cauchy sequence converges) on the counted carrier-plus-inner-product, not a new structural primitive. Note: even if read as selecting the completed object, the completion is a canonical construction from the inner-product space, which would give class C, still contributing 0; the frozen text decides for P.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. II (Hilbert Spaces)"
+    },
+    {
+     "datum": "Separability of H (where included, e.g., in the original state-space axiomatics)",
+     "class": "P",
+     "justification": "A mere cardinality/density property of the counted space; optional in modern presentations (Reed-Simon and Conway do not require it). Enumerated for completeness of the published record; class P.",
+     "citation": "J. von Neumann, Mathematical Foundations of Quantum Mechanics, Ch. II (Abstract Hilbert Space)"
+    },
+    {
+     "datum": "Carrier B(H): the set of bounded linear operators H -> H",
+     "class": "D",
+     "justification": "Constructible from the counted object H by function-space formation already available at stratum 4 (Pi-types), cut out by the propositional conditions of linearity and boundedness (which use only counted data). Derived carrier, class D.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators)"
+    },
+    {
+     "datum": "Algebra structure on B(H): pointwise addition, scalar multiplication, composition product, identity operator",
+     "class": "C",
+     "justification": "All operations are determined: addition and scalar multiplication pointwise from H's counted linear structure, the product as function composition (available since stratum 4), the unit as the identity map. Existence and identity both implied by prior and counted content, class C.",
+     "citation": "J. B. Conway, A Course in Functional Analysis, Ch. II (Operators on Hilbert Space)"
+    },
+    {
+     "datum": "Operator norm on B(H)",
+     "class": "C",
+     "justification": "Computed by the formula ||T|| = sup over the unit ball of ||Tx||, from the counted induced norm; existence and identity implied. Class C.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators)"
+    },
+    {
+     "datum": "Adjoint involution T -> T* on B(H)",
+     "class": "C",
+     "justification": "Doubt stated: an involution on an abstract algebra would be new structure. Resolved: in the concrete presentation over H, T* is the unique operator with <Tx,y> = <x,T*y>; existence follows from the Riesz representation theorem (provable from counted completeness plus inner product) and identity from nondegeneracy. Existence and identity both implied by counted content, so class C by the boundary clause, not N.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators); J. B. Conway, A Course in Functional Analysis, Ch. II (Operators on Hilbert Space)"
+    },
+    {
+     "datum": "Norm and involution laws of B(H): submultiplicativity, the C*-identity ||T*T|| = ||T||^2, involution anti-multiplicativity",
+     "class": "P",
+     "justification": "Propositional laws that are theorems of the concrete presentation (derived from counted data), not posited structure. Class P.",
+     "citation": "J. B. Conway, A Course in Functional Analysis, Ch. II (Operators on Hilbert Space)"
+    },
+    {
+     "datum": "Distinguished operator classes: self-adjointness (T = T*), normality, unitarity, projections",
+     "class": "P",
+     "justification": "Mere predicates on elements of B(H), defined via the counted adjoint and product; no new structural primitive. Class P.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators)"
+    },
+    {
+     "datum": "Spectrum Spec(T) = sigma(T), the set of lambda for which T - lambda is not invertible",
+     "class": "C",
+     "justification": "Defined by formula from B(H) and its counted algebra structure; existence and identity both implied. Its nonemptiness/compactness are theorems (properties). Class C.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators); J. B. Conway, A Course in Functional Analysis, Ch. VII (Banach Algebras and Spectral Theory)"
+    },
+    {
+     "datum": "Spectral measure: the projection-valued measure E_T with T = integral of lambda dE_T(lambda) for self-adjoint (normal) T",
+     "class": "C",
+     "justification": "Doubt stated and resolved by the boundary clause: E_T is unique given existence, and its existence IS implied - the spectral theorem is provable from the counted content alone (inner product plus completeness) with no additional posited structure. Since existence and identity are both implied by counted content, the boundary clause assigns class C (the N branch requires existence NOT implied, which fails here). Parallel to the stage-12 anchor: R determined by the connection is C; E_T determined by T is C.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VII (The Spectral Theorem); J. B. Conway, A Course in Functional Analysis, Ch. IX (Normal Operators on Hilbert Space)"
+    },
+    {
+     "datum": "Functional/operator calculus: f(T) = integral of f(lambda) dE_T(lambda) (continuous and bounded-measurable calculus)",
+     "class": "C",
+     "justification": "Determined by formula from the counted spectral measure (equivalently, the unique *-homomorphism extending polynomial evaluation, unique by continuity from counted norms); existence and identity both implied by counted content. Class C.",
+     "citation": "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VII (The Spectral Theorem)"
+    }
+   ],
+   "d_count": 1,
+   "notes": "Blinding respected: no local files or repository content consulted; web search used only to verify chapter-level citations (Reed-Simon I chapter titles II/VI/VII and Conway Ch. IX confirmed via ScienceDirect and ProofWiki tables of contents). Prior content taken as strata 1-13 exactly as listed, nothing later; no structural-register quantity used. The enumeration follows the frozen stage-8 calibration pattern: carrier D, single minted operation N, coherence P. The one class-N datum is the inner product on the state space. Two boundary-clause doubts were material and are recorded in the row: (1) whether the inner product could be class C as an L2 pairing induced by stratum-13 (g, star) data - resolved N because the required global integration/measure datum on a new infinite-dimensional state space is neither prior nor counted content and the abstract presentation posits the pairing freely without even canonical-isomorphism uniqueness; (2) whether the spectral measure of the spectral theorem is N under the uniqueness-given-existence clause - resolved C because its existence is a theorem from counted content, so both existence and identity are implied. Unbounded-operator calculus (Reed-Simon Ch. VIII) was not enumerated as separate data: the frozen signature is (H, B(H), Spec), and the unbounded extension introduces only predicates (dense domain, essential self-adjointness - properties) and the same canonically determined spectral objects; including it would not change d_count. Section-level numbers were deliberately avoided where unverified; all citations are at verified chapter level. d_count = 1.",
+   "citations": [
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. I (Preliminaries)",
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. II (Hilbert Spaces)",
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. II (Hilbert Spaces); J. von Neumann, Mathematical Foundations of Quantum Mechanics, Ch. II (Abstract Hilbert Space)",
+    "J. B. Conway, A Course in Functional Analysis, Ch. I (Hilbert Spaces)",
+    "J. von Neumann, Mathematical Foundations of Quantum Mechanics, Ch. II (Abstract Hilbert Space)",
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators)",
+    "J. B. Conway, A Course in Functional Analysis, Ch. II (Operators on Hilbert Space)",
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators); J. B. Conway, A Course in Functional Analysis, Ch. II (Operators on Hilbert Space)",
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VI (Bounded Operators); J. B. Conway, A Course in Functional Analysis, Ch. VII (Banach Algebras and Spectral Theory)",
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VII (The Spectral Theorem); J. B. Conway, A Course in Functional Analysis, Ch. IX (Normal Operators on Hilbert Space)",
+    "M. Reed and B. Simon, Methods of Modern Mathematical Physics I: Functional Analysis, Ch. VII (The Spectral Theorem)"
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": null,
+   "row_kind": "BlindSingleTarget"
+  },
+  {
+   "stratum": 15,
+   "name": "Temporal-cohesive shell",
+   "enumeration": [
+    {
+     "datum": "Time index / clock (the discrete linear time order indexing the temporal shell's models)",
+     "class": "T",
+     "justification": "REFILED BY ADJUDICATOR (was D; disputed). The analyst's D-justification (omega extractable from stratum-13/14 numeric infrastructure) is rejected: the Section 2 cumulativity clause fixes prior content to the listed formal contributions of strata 1..14, none of which mints a natural-numbers object or any eliminator for one; presupposed classical meta-theory is not content. The auditor's N-horn is also rejected: no standard presentation of the single-clock guarded shell mints an internal clock, and an unrecursed clock would not imply the modalities anyway. Under the fixed synthetic presentation (see resolution) the clock is model-side only: the internal calculus (Clouston et al.) contains no clock object, and the choice of indexing order is pure presentational gauge with no internal or local content — class T. It supplies no internal eliminator and is therefore not an implication source for any C-test on later data. Contributes 0 in every candidate reading; d_count is insensitive to this datum.",
+     "citation": "L. Birkedal, R. E. Mogelberg, J. Schwinghammer, K. Stovring, \"First steps in synthetic guarded domain theory: step-indexing in the topos of trees\", Logical Methods in Computer Science 8(4), 2012 (model-side presentation); R. Clouston, A. Bizjak, H. B. Grathwohl, L. Birkedal, \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016 (clock-free internal syntax)."
+    },
+    {
+     "datum": "Temporal-cohesive carrier: the ambient universe of types of the prior cohesive ladder, on which the temporal modalities act",
+     "class": "D",
+     "justification": "REFILED BY ADJUDICATOR (class D upheld; justification corrected to cure the inconsistency the independence audit identified). Under the stratum's standard presentation — the synthetic/internal one mandated by the frozen reading 'guarded temporal modalities' and matching the ladder's synthetic character (stratum 10 mints its modal package on the ambient type theory, not as a presheaf construction) — the modalities are endo-structure on the ambient universe supplied by stratum 1 with the cohesive structure of stratum 10. No new carrier is minted; this is the anchor-9/anchor-8 carrier pattern (class D). The topos of trees is a model of the presentation, not the presentation; the previous filing's presheaf-construction description is withdrawn, which removes the premise of the auditor's C-cascade.",
+     "citation": "R. Clouston, A. Bizjak, H. B. Grathwohl, L. Birkedal, \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016 (internal presentation; article-level); L. Birkedal et al., LMCS 8(4), 2012 (topos of trees as its model)."
+    },
+    {
+     "datum": "Next/later modality: the type operation Next : U -> U with its unit next : A -> Next A and its applicative/functorial action Next(A->B) -> Next A -> Next B, as a single modality package",
+     "class": "N",
+     "justification": "DISPUTED (audit proposed C); N UPHELD. The C-argument required the shift formula (Next A)(0)=1, (Next A)(n+1)=A(n) on a derived presheaf carrier; that derivation is unlawful at this ladder point: it needs an internal clock with universe-valued recursion over it, and no stratum of 1..14 minted a natural-numbers object, its eliminator, or large recursion (the refiled data 1-2 no longer assert otherwise). No prior stratum implies a delay endomodality: stratum-6 truncation and the stratum-10 quadruple are idempotent (co)monadic modalities, structurally disjoint from the non-idempotent Next (Next A is not Next Next A). In the standard models the package is unique up to canonical equivalence whenever it exists, but existence is not implied by prior or counted content: by the Section 4 boundary clause the existence is the minted content, class N. Granularity per anchor 8: one minted idea = operator + unit + action (modality-as-package); its laws are filed separately as P. Contributes 1.",
+     "citation": "H. Nakano, \"A modality for recursion\", Proc. LICS 2000; R. Clouston et al., \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016; modality-as-package convention: E. Rijke, M. Shulman, B. Spitters, \"Modalities in homotopy type theory\", LMCS 16(1), 2020."
+    },
+    {
+     "datum": "Applicative/functorial coherence laws for Next (identity and composition laws for the action, next-homomorphism law)",
+     "class": "P",
+     "justification": "Undisputed; upheld. Mere equational laws / coherence conditions on the counted Next package; they constrain but do not mint structure. Class P by the rule's explicit list.",
+     "citation": "R. Clouston, A. Bizjak, H. B. Grathwohl, L. Birkedal, \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016."
+    },
+    {
+     "datum": "Guarded fixpoint operator fix : (Next A -> A) -> A (Loeb principle / guarded recursion)",
+     "class": "N",
+     "justification": "DISPUTED (audit proposed C); N UPHELD. The C-argument was the step-indexed construction of fix by omega-induction; unlawful for the same reason as datum 3: it requires an internal well-founded index with dependent recursion into arbitrary types, which is neither prior content (Section 2 clause) nor counted content (the refiled datum 1 is an external gauge choice supplying no eliminator). Within the presentation, the counted Next package does not imply fix: pointed applicative delay modalities without Loeb exist (Loeb encodes precisely the well-foundedness of the intended models, i.e., genuinely additional content), so existence is not implied. Identity is the uniqueness of guarded fixed points (datum 6): unique whenever it exists, existence unimplied — boundary clause verbatim, class N. Term-level primitives are structural on this ladder (cf. stratum 3, witness as its own stratum). Contributes 1.",
+     "citation": "H. Nakano, \"A modality for recursion\", Proc. LICS 2000; L. Birkedal et al., \"First steps in synthetic guarded domain theory\", LMCS 8(4), 2012; R. Clouston et al., LMCS 12(3), 2016."
+    },
+    {
+     "datum": "Unfolding and uniqueness laws for fix (fix f = f(next(fix f)); uniqueness of guarded fixed points)",
+     "class": "P",
+     "justification": "Undisputed; upheld. Equational unfolding law plus a uniqueness clause on the counted fix operator; uniqueness clauses and propositional laws are class P by the rule's definition.",
+     "citation": "R. Clouston et al., \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016; L. Birkedal et al., LMCS 8(4), 2012."
+    },
+    {
+     "datum": "Eventually modality: the operator Eventually : U -> U with its unit A -> Eventually A (temporal liveness modality)",
+     "class": "N",
+     "justification": "DISPUTED (audit posed a C-or-delete dilemma); N UPHELD. Horn 1 (Jeffrey-style Sigma over future indices) is the model reading: internally, types are not families over a time index at this ladder point, and even the type-level fixpoint route to Ev A = A + Next(Ev A) is unavailable — binary coproducts were never minted on the ladder, and the counted fix is term-level (no type-level fix at U0 is typeable with only the stratum-1 universe). Horn 2 ('nothing lawful to enumerate') would delete a frozen signature item: the row input lists Eventually verbatim, so the shell's standard presentation mints it as a primitive. Atkey-McBride non-derivability of genuine liveness in the guarded fragment is the strongest form of 'existence not implied by prior or counted content' — under the rule that is grounds for class N, not omission. Identity is canonically determined by its characterization laws whenever it exists; existence unimplied — boundary clause, class N. Contributes 1.",
+     "citation": "A. Pnueli, \"The Temporal Logic of Programs\", Proc. FOCS 1977; A. Jeffrey, \"LTL types FRP\", Proc. PLPV 2012; non-derivability of liveness in pure guarded settings: R. Atkey, C. McBride, \"Productive coprogramming with guarded recursion\", Proc. ICFP 2013."
+    },
+    {
+     "datum": "Characterization laws for Eventually (unfolding Ev A = A or Next(Ev A), and the least-solution/induction clause)",
+     "class": "P",
+     "justification": "Undisputed; upheld. Propositional characterization and minimality/induction clause constraining the counted Eventually operator; class P.",
+     "citation": "A. Pnueli, \"The Temporal Logic of Programs\", Proc. FOCS 1977; A. Jeffrey, \"LTL types FRP\", Proc. PLPV 2012."
+    },
+    {
+     "datum": "Cohesive exchange laws: commutation of Next/Eventually with the stratum-10 cohesive quadruple (shape -| Disc -| flat -| sharp) — the canonical comparison maps are equivalences",
+     "class": "P",
+     "justification": "Undisputed; upheld. The comparison morphisms exist canonically from the stratum-10 units/counits together with the counted temporal modalities; the exchange content is the propositional assertion that these canonical maps are invertible — a coherence condition, class P. The mode-theoretic alternative (exchange 2-cells as mode-theory data, which would press toward N) is noted and rejected under the boundary clause: in the cohesive-axiomatic presentation no map is minted beyond what counted and prior data imply; only a property of implied maps is asserted, consistent with the frozen signature's own wording ('exchange laws', 'guarded coherence').",
+     "citation": "M. Shulman, \"Brouwer's fixed-point theorem in real-cohesive homotopy type theory\", Mathematical Structures in Computer Science 28(6), 2018; alternative noted: D. Gratzer, G. A. Kavvos, A. Nuyts, L. Birkedal, \"Multimodal Dependent Type Theory\", LMCS 17(3), 2021."
+    }
+   ],
+   "d_count": 3,
+   "notes": "Adjudication under blinding: no local files, repository content, or prior conversations consulted; inputs were the frozen rule, the frozen row input, the analyst enumeration, and the two audit reports. Both audits marked citations_ok; all cited works are standard, correctly identified publications. Class-N data: Next modality package (datum 3), guarded fixpoint fix (datum 5), Eventually modality (datum 7); D(15) = 3. The final pattern matches anchor 8 exactly: carrier D, minted operations N, coherence P. Granularity: modality = one minted idea (operator + unit + action); laws filed separately as P. Omissions bound by the frozen signature: Always/box, Until, and clock quantifiers are not signature items and were not enumerated. No structural-register quantity (Sigma-nu, Bar, epsilon, nu=103, telescopic totals) was consulted or used (F-XF1). Two data were refiled by the adjudicator with classes T and D (both zero classes; d_count unaffected by either refiling in any candidate reading).",
+   "citations": [
+    "L. Birkedal, R. E. Mogelberg, J. Schwinghammer, K. Stovring, \"First steps in synthetic guarded domain theory: step-indexing in the topos of trees\", Logical Methods in Computer Science 8(4), 2012 (model-side presentation); R. Clouston, A. Bizjak, H. B. Grathwohl, L. Birkedal, \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016 (clock-free internal syntax).",
+    "R. Clouston, A. Bizjak, H. B. Grathwohl, L. Birkedal, \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016 (internal presentation; article-level); L. Birkedal et al., LMCS 8(4), 2012 (topos of trees as its model).",
+    "H. Nakano, \"A modality for recursion\", Proc. LICS 2000; R. Clouston et al., \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016; modality-as-package convention: E. Rijke, M. Shulman, B. Spitters, \"Modalities in homotopy type theory\", LMCS 16(1), 2020.",
+    "R. Clouston, A. Bizjak, H. B. Grathwohl, L. Birkedal, \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016.",
+    "H. Nakano, \"A modality for recursion\", Proc. LICS 2000; L. Birkedal et al., \"First steps in synthetic guarded domain theory\", LMCS 8(4), 2012; R. Clouston et al., LMCS 12(3), 2016.",
+    "R. Clouston et al., \"The Guarded Lambda-Calculus\", LMCS 12(3), 2016; L. Birkedal et al., LMCS 8(4), 2012.",
+    "A. Pnueli, \"The Temporal Logic of Programs\", Proc. FOCS 1977; A. Jeffrey, \"LTL types FRP\", Proc. PLPV 2012; non-derivability of liveness in pure guarded settings: R. Atkey, C. McBride, \"Productive coprogramming with guarded recursion\", Proc. ICFP 2013.",
+    "A. Pnueli, \"The Temporal Logic of Programs\", Proc. FOCS 1977; A. Jeffrey, \"LTL types FRP\", Proc. PLPV 2012.",
+    "M. Shulman, \"Brouwer's fixed-point theorem in real-cohesive homotopy type theory\", Mathematical Structures in Computer Science 28(6), 2018; alternative noted: D. Gratzer, G. A. Kavvos, A. Nuyts, L. Birkedal, \"Multimodal Dependent Type Theory\", LMCS 17(3), 2021."
+   ],
+   "verifier_disputes": {
+    "internal_inconsistency": false,
+    "independence_audit": {
+     "verdict": "dispute",
+     "citations_ok": true,
+     "disputes": [
+      {
+       "datum": "Next/later modality package (Next : U -> U with unit next and applicative action)",
+       "current_class": "N",
+       "proposed_class": "C",
+       "argument": "The N-justification ('no prior stratum implies the existence of a temporal endomodality') is contradicted by the analyst's own datum 2, which classes the carrier as the topos-of-trees construction 'formed from strata 1..14 content by constructions already available there' (class D). On that filed carrier — families over the D-classed clock omega with restriction maps, built by stratum-4 Pi/Sigma over the stratum-1 universe — the later modality is computed by the canonical shift formula: (Next A)(0) = 1, (Next A)(n+1) = A(n), with the unit next given by the restriction maps and the applicative action defined pointwise. This is exactly how the analyst's own primary citation (Birkedal et al., LMCS 8(4), 2012) introduces the modality in the topos of trees: by definition on the derived carrier, not as an axiom. Existence AND identity are therefore implied by prior strata plus already-enumerated data — the anchor-12 pattern verbatim ('a quantity computed by a formula from counted data'), class C. The anchor-8 escape (derived carrier, N operation) is unavailable: at stage 8 no multiplication is derivable from strata 1-7, whereas here derivability of the entire apparatus is asserted by the analyst's own data 1-2 justifications (omega with its induction extractable from stratum-13/14 numeric infrastructure, which is needed to even state those packages and therefore includes classical N-induction, sufficient to define the shift by omega-recursion). The only rescue is the synthetic-axiomatic reading (Nakano/Clouston: a primitive modality on the ambient universe, non-conservative over strata 1-14, hence genuinely N) — but that reading contradicts datum 2 as filed, which states the modalities act on the derived presheaf carrier. The enumeration cannot hold both readings simultaneously; as filed, the C-clause applies."
+      },
+      {
+       "datum": "Guarded fixpoint operator fix : (Next A -> A) -> A (Loeb principle)",
+       "current_class": "N",
+       "proposed_class": "C",
+       "argument": "Same internal inconsistency, applied to fix. On the carrier as filed in datum 2 (topos of trees over the D-classed clock), fix is definable by omega-induction: fix(f) at stage 0 is f applied to the trivial approximation, and at stage n+1 is f applied to the shifted stage-n value — precisely the step-indexing construction named in the title of the analyst's own citation ('step-indexing in the topos of trees'), where the guarded fixed-point combinator and the validity of the Loeb rule are theorems constructed from the presheaf structure, not postulates. The analyst's independence argument — 'pointed applicative endomodalities without a Loeb rule exist, so nothing prior or counted forces fix' — establishes only that the abstract Next package does not force fix. But the frozen C-test is 'existence and identity are implied by prior strata or by other data already counted', and the already-enumerated datum 2 carrier does imply it (given the omega-eliminator that datum 1's own D-justification must supply, since classical stratum-13/14 mathematics includes N-induction). Identity is conceded by the analyst in datum 6 (uniqueness of guarded fixed points). Existence and identity both implied: class C under the boundary clause as written. As with Next, fix is N only under the synthetic-ambient-universe presentation, which the filed datum 2 excludes."
+      },
+      {
+       "datum": "Eventually modality (Eventually : U -> U with unit)",
+       "current_class": "N",
+       "proposed_class": "C",
+       "argument": "The N-classification fails on a dilemma between the analyst's own cited presentations. Horn 1: under the presentation actually cited as standard for this datum (Jeffrey, 'LTL types FRP', PLPV 2012), temporal types are families over the time index and Eventually is a Sigma-construction over future indices — a formula built from stratum-4 Sigma over the D-classed clock, with its unit the evident inclusion at the current index. Existence and identity are both implied by prior/counted content: class C (or D), not N; in Jeffrey's system the LTL modalities are defined, never minted. Horn 2: under the guarded/step-indexed carrier actually filed as datum 2 (topos of trees), the analyst's own argument (via Atkey-McBride) shows the genuine liveness modality is NOT available without clock-quantifier/constant-type machinery, which the analyst explicitly excludes as outside the frozen signature — so on the filed carrier there is no lawful independent Eventually to enumerate at all, and its N-classification tacitly switches to a third presentation (synthetic temporal type theory on the ambient universe) inconsistent with datum 2 as filed. On either horn the filed class-N assignment with its stated justification does not survive; on the reading consistent with the analyst's own carrier and citations, the datum is C."
+      },
+      {
+       "datum": "Time index / clock object omega (datum 1)",
+       "current_class": "D",
+       "argument": "Counter-direction audit result, recorded because this classification is load-bearing for the whole row rather than harmlessly zero. If the D-justification is upheld — omega extractable from stratum-13/14 numeric infrastructure — then that infrastructure is classical and necessarily carries N-induction (one cannot have the (H, B(H), Spec) package as established content without the numeric tower and its recursion), which supplies the omega-eliminator and triggers the C-cascade of the three disputes above, driving the row toward D(15) = 0. If instead the extraction claim is rejected on the ground that the frozen prior content is only the listed formal contributions of strata 1-14 — which presuppose but do not contain a natural-numbers object with its eliminator, no stratum ever having minted one — then omega is itself an unimplied new independent structure (class N, the minted time order), and Next/fix/Eventually become C relative to it, giving D(15) = 1. The filed d_count = 3 is reachable only under a third resolution: the synthetic-axiomatic reading in which the modalities are primitive structure on the ambient universe — a reading arguably matching the row signature's package style, but one that requires refiling datum 2, whose current description ('the carrier on which the temporal modalities act is formed from strata 1..14 content') contradicts it. In no resolution does the enumeration as filed stand with all of its own justifications intact; the adjudicator must fix the standard presentation first and refile the affected classifications consistently."
+      }
+     ]
+    },
+    "completeness_audit": {
+     "verdict": "agree",
+     "citations_ok": true,
+     "disputes": []
+    }
+   },
+   "adjudication": {
+    "resolution": "Root resolution — presentation fix: Section 4 counts the defining data of the stratum's standard presentation of the frozen reading, and the reading is 'guarded temporal modalities and cohesive exchange laws' (signature: Next, Eventually, cohesive exchange, guarded coherence). Its standard presentation is the synthetic/internal one (Nakano; Clouston et al., whose syntax has later/next/applicative-action/fix as primitives and no clock object), consistent with the ladder's own synthetic character (stratum 10 mints its modal quadruple axiomatically on the ambient type theory). The topos of trees is the model of the presentation, not the presentation. The independence audit correctly identified that the analyst's datum 2, as filed in model-theoretic language, contradicted the N-classifications; the rule-dictated cure is to refile datum 2 (carrier = ambient cohesive universe, class D preserved), not to flip the modalities to C on the strength of a mis-filed carrier description. Second, the audit's C-cascade fails even on its own model reading: the shift formula for Next, step-indexed fix, and Sigma-over-future-indices Eventually all require an internal clock plus universe-valued (large) recursion over it, and the Section 2 cumulativity clause fixes prior content to the listed formal contributions of strata 1..14 — no stratum minted a natural-numbers object, an eliminator, coproducts, or large recursion. The audit's extraction of N-induction from the stratum-13/14 analytic packages reads presupposed classical meta-theory as content; under that collapse-reading arbitrary classical constructions become 'available at that ladder point' and the counting discipline voids at every analytic stratum, so it is rejected: presupposition is not content. Dispute 1 (Next, N->C): C rejected, N upheld — existence not implied by prior strata (stratum-6/10 modalities are idempotent, Next is not) nor by counted data (refiled clock supplies no eliminator); unique-when-exists; boundary clause mints the existence. Dispute 2 (fix, N->C): C rejected, N upheld — step-indexing derivation unlawful as above; pointed applicative delay without Loeb exists (Loeb encodes the models' well-foundedness, genuinely additional content), so the counted Next package does not imply fix; identity half is datum 6's uniqueness; boundary clause verbatim. Dispute 3 (Eventually, N->C-or-delete): both horns rejected — horn 1 is the unavailable model reading (and the internal fixpoint route lacks coproducts and type-level fix); horn 2 would delete a frozen signature item, which the adjudicator cannot do; Atkey-McBride non-derivability of liveness in the guarded fragment is the strongest form of 'existence not implied', which the rule classes N, not grounds for omission. Dispute 4 (clock, load-bearing D): the analyst's extraction-based D-justification is rejected with the audit; the audit's alternative N-horn is also rejected (no standard presentation mints an internal clock, and an unrecursed clock would imply nothing); refiled as T — a model-side, pure-gauge indexing choice with no internal content and no eliminator, hence not an implication source; contributes 0 in every reading. Undisputed data 4, 6, 8, 9 upheld as P. Final: D(15) = 3."
+   },
+   "row_kind": "BlindSingleTarget"
+  }
+ ]
+}

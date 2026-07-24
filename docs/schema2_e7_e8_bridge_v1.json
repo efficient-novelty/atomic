@@ -1,0 +1,889 @@
+{
+  "schema": "mainline-m3-e7-e8-bridge-v1",
+  "date": "2026-07-23",
+  "syntax_identifier_policy": "Numeric substrings in dates, artifact versions, theorem IDs, stage labels, and obligation labels are identifiers rather than quantitative evidence.",
+  "syntax_identifier_register": "syntax_identifier",
+  "source_bindings": [
+    {
+      "path": "docs/mainline_completion_plan.md",
+      "role": "frozen M-3 mission, ordering, and stop semantics",
+      "byte_length": {
+        "value": 5658,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:8d86a0acedeee12ee0cf646587bb29a13877d3ec7b30dcd3dd513b4598342351",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "rewritten E-7/E-8 theorem and complete bridge-condition specification",
+      "byte_length": {
+        "value": 15507,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/agent_e_schema2_plan.md",
+      "role": "adopted E-7 one-way fallback and E-8 phase contract",
+      "byte_length": {
+        "value": 9562,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:d06d2039f1cd83e2d5509478aede30d2e09e2548f262cea9e0f88abbfe2767db",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/nu_register_adjudication.md",
+      "role": "semantic-authority versus structural-testimony register law",
+      "byte_length": {
+        "value": 8085,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:bd59a0e10cdf9fe25e2b36b8e9c19427af21c1b07e577fdc11385a90f207de7d",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/SCHEMA2_RESULT.md",
+      "role": "archived aggregate-parent-row obstruction testimony",
+      "byte_length": {
+        "value": 7648,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:a5b9b2140f691756362cfbfdbb20a2285e9828912e92644544e46d16830293e2",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "adopted separation of aggregate parent-row refinement",
+      "byte_length": {
+        "value": 6355,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/BI4_CONE_V2_CERTIFICATE.json",
+      "role": "sealed cone disposition and four-branch authority",
+      "byte_length": {
+        "value": 103957,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:59d7a67e641d3cc297bd99cc161e4be1c8f46cef0e08df6bf05e3d745f30bba8",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/schema2_e5_future_hole_finale_v2_dependent_context.json",
+      "role": "frozen enacted E-5 regression testimony",
+      "byte_length": {
+        "value": 247022,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:794d762b4378970ba6152547db3950d56030dfb2c1811276aba99f1cd8d3e726",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/BI2_BRANCH_2016726758f3_V2_CERTIFICATE.json",
+      "role": "sealed enacted BI-2 semantic projection",
+      "byte_length": {
+        "value": 227473,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:956141e49a85c21f33404ff5c84a3483f750a7e3b01089327cb3206e494f9be2",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/BI2_FOUR_BRANCH_FINALES_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 cone index authenticated transitively by BI-4 replay",
+      "byte_length": {
+        "value": 9082,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:d3b590a5261201adb52730788a0706cc346d385197d098eefd94b501fadd4aef",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/BI2_BRANCH_43a0ed707770_V2_CERTIFICATE.json",
+      "role": "sealed alternate BI-2 branch input",
+      "byte_length": {
+        "value": 227210,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:7a7707b0ce4961674d670164d1091b7b4a99a3e3e7c070e74201b81131280679",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/BI2_BRANCH_4b2211ecae25_V2_CERTIFICATE.json",
+      "role": "sealed alternate BI-2 branch input",
+      "byte_length": {
+        "value": 227213,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:1f439de4cbcfe2785e04fd6222a85051d894ee3ad1d32f6f0d778bd39d730784",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/BI2_BRANCH_b4f821d9bb28_V2_CERTIFICATE.json",
+      "role": "sealed alternate BI-2 branch input",
+      "byte_length": {
+        "value": 227464,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:cfed76b34bc97b8d250b1f20097bafea46937031441292f8e1eb0169e1cbf52c",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/ip1_candidate_verdict_join_v3.json",
+      "role": "exact archived schema-3 aggregate candidate surface",
+      "byte_length": {
+        "value": 168692,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:1246df1a74283d9f19790ab0723c7be925303b080db863fa3300b76ec09932e7",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/ip1_candidate_verdict_join_v4.json",
+      "role": "schema-4 structural join and open semantic obligations",
+      "byte_length": {
+        "value": 535972,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:bcfab6da6925611e2dcc2aa76a413a5db2ba2a69100d1329a3b64752a336275d",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/ip1_candidate_verdict_join_v5_element_overlay.json",
+      "role": "schema-5 conservative element overlay",
+      "byte_length": {
+        "value": 484717,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:ee7cc2eac850283768cb4bdbf46cd1f85c6630a24859c28640db8549ea6e1ffe",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-search/src/e5_future_hole_finale_v2.rs",
+      "role": "native E-5 replay implementation whose drift is disclosed",
+      "byte_length": {
+        "value": 115685,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:fd9196cd02972ea9e665d6dedf76314c5d955b307cfe22b46fb820573ffc959d",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-search/src/bi4_cone_assembly_v2.rs",
+      "role": "public BI-4 replay implementation",
+      "byte_length": {
+        "value": 101697,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:1ad0051ced958d937becbef528d302d9a64336ce4b51fae7ad0822d6a3db957c",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-search/src/m3_e7_e8_bridge_v1.rs",
+      "role": "M-3 fail-closed issuer and replay implementation",
+      "byte_length": {
+        "value": 66363,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:cce6befcadf6de435c358e965b7c22bd77b7298b4f679c2d3f0870199b5c60c1",
+      "register": "artifact_metadata"
+    }
+  ],
+  "cone": {
+    "bi4_result_digest": "blake3:75a9dcc023e8a7e7b00d9e20ced5516cb0d08f8b88ffd80f93d45e2f746191b1",
+    "public_replay_valid": true,
+    "public_replay_errors": [],
+    "exact_four_distinct_branch_roots": true,
+    "branch_root_count": {
+      "value": 4,
+      "register": "artifact_metadata"
+    },
+    "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+    "disposition_row_count": {
+      "value": 13,
+      "register": "artifact_metadata"
+    },
+    "quantified_statement_count": {
+      "value": 35,
+      "register": "artifact_metadata"
+    },
+    "every_disposition_mirrored_with_exact_quantifier": true,
+    "structural_testimony_used_for_law_level_content": false,
+    "claims": [
+      {
+        "claim": "G2_obligation_profile_and_one-demand-per-stage_O_ladder_from_Stage5_through_halt",
+        "component": "whole_claim",
+        "quantifier": "cone_level_all_four_branches",
+        "branch_root": null,
+        "register": "semantic_demand_instance_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 promoted claim component `whole_claim`; universally quantified over all exact sealed branch roots",
+        "derivation_hash": "blake3:6f458437feaa24028e75eef2ae88b3cbf74d4051e5fce282ad3e6bf8f60e0835"
+      },
+      {
+        "claim": "G3a_per_stage_kappa_and_semantic_nu_vector_Stage5_through15",
+        "component": "semantic_nu_vector",
+        "quantifier": "cone_level_all_four_branches",
+        "branch_root": null,
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 promoted claim component `semantic_nu_vector`; universally quantified over all exact sealed branch roots",
+        "derivation_hash": "blake3:45a8f5f877042dbd0fb0289f9e629c9c42f0c76b528bf67331dbb42184eed5e1"
+      },
+      {
+        "claim": "G3a_per_stage_kappa_and_semantic_nu_vector_Stage5_through15",
+        "component": "kappa_vector",
+        "quantifier": "cone_level_all_four_branches",
+        "branch_root": null,
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 promoted claim component `kappa_vector`; universally quantified over all exact sealed branch roots",
+        "derivation_hash": "blake3:a931b2b90f977b3acb8cdbe6962b0fcf64d2484f800f38edd55454ac7530ece6"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "derivation_hash": "blake3:9ad25bcd10bdf661d26b8b2b5455b0557332d242d804b555ddeb2952bbbb2149"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "derivation_hash": "blake3:82748156fc3bb657c4f5a91b940e0eecb1a0439b8fcc818e4f9fcd6ad91554d1"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "derivation_hash": "blake3:c664c9805dc39fc80d11e15873ccbaa52cc458c08039fdf5a13594827987025f"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "derivation_hash": "blake3:945e981110d71c627b73c928d6772397c0d418c7aff7c2658bb4383e9411adcf"
+      },
+      {
+        "claim": "diagnostic_bar_trajectory_and_WB1_cumulative_tables",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "derivation_hash": "blake3:b2e8f7593f8fb8a3d08e147758e5117fac3bd1bba2e91d875492d5cb72e36ffd"
+      },
+      {
+        "claim": "diagnostic_bar_trajectory_and_WB1_cumulative_tables",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "derivation_hash": "blake3:326da98a24bbec2a21e28ac0842548053e9b87dc7cd9ee4fd3285a5063da70dc"
+      },
+      {
+        "claim": "diagnostic_bar_trajectory_and_WB1_cumulative_tables",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "derivation_hash": "blake3:75e6e9b9b5a3187c143cb407710d9c3abe3ed100af69ab2e95a62f900e2defa0"
+      },
+      {
+        "claim": "diagnostic_bar_trajectory_and_WB1_cumulative_tables",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "derivation_hash": "blake3:00fcd41a27703c8236e01bb68788e57d3eab2fe0a93a7a43d64b00d1b36bf0bb"
+      },
+      {
+        "claim": "G4_debt_free_halt_at_15",
+        "component": "whole_claim",
+        "quantifier": "cone_level_all_four_branches",
+        "branch_root": null,
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 promoted claim component `whole_claim`; universally quantified over all exact sealed branch roots",
+        "derivation_hash": "blake3:2c4e79900f2270ec8141eaf9f394d28bfdf67c2b9d5ed5e5a2bb6b984f489861"
+      },
+      {
+        "claim": "semantic_O16_empty_at_full_instance_granularity",
+        "component": "whole_claim",
+        "quantifier": "cone_level_all_four_branches",
+        "branch_root": null,
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 promoted claim component `whole_claim`; universally quantified over all exact sealed branch roots",
+        "derivation_hash": "blake3:9a612c5f5b820a1669450d40b870d9cb6b9e2c05000fa2115c8811518321d708"
+      },
+      {
+        "claim": "Guard_Rail_F1_excluded",
+        "component": "whole_claim",
+        "quantifier": "cone_level_all_four_branches",
+        "branch_root": null,
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 promoted claim component `whole_claim`; universally quantified over all exact sealed branch roots",
+        "derivation_hash": "blake3:5a6ff44aa827bada471fab803e6cdc374a102561b2c3fdc4af71aec605b79f27"
+      },
+      {
+        "claim": "Theorem12_full_instance_granularity_relative_to_adopted_A3",
+        "component": "whole_claim",
+        "quantifier": "cone_level_all_four_branches",
+        "branch_root": null,
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 promoted claim component `whole_claim`; universally quantified over all exact sealed branch roots",
+        "derivation_hash": "blake3:0ca29480f847ae9e368dfe2dccf71086a3bc7fe21cd9af3183d476c0f9c02e0d"
+      },
+      {
+        "claim": "Stage4_root_act_identity_and_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "derivation_hash": "blake3:df8e72ac88f011dd067dc900780fc8b7c42147ee4342616a72718463aefa5d6f"
+      },
+      {
+        "claim": "Stage4_root_act_identity_and_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "derivation_hash": "blake3:71c2a1b5e7b8d264b9add51c652bea4a64e1037f200cea801b92c1af32bc2ba8"
+      },
+      {
+        "claim": "Stage4_root_act_identity_and_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "derivation_hash": "blake3:0000eab74bfa64d304c95ea859ec07dd2a6043fb218386fbdb4d2b7c38228bc5"
+      },
+      {
+        "claim": "Stage4_root_act_identity_and_semantic_nu",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "derivation_hash": "blake3:e0a70012e7c189da7185112358f85f705ce3bb28a7e4e6958912c368d05c36c6"
+      },
+      {
+        "claim": "G1_Stage5_successor_scheme_sets_and_exact_derivations",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "derivation_hash": "blake3:e5ce09134d11252772870353fe990e745212a723511e15570620106474d07ab5"
+      },
+      {
+        "claim": "G1_Stage5_successor_scheme_sets_and_exact_derivations",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "derivation_hash": "blake3:be322f79efaf0bb630dd676c2d591ca44b256314ede010b92b4917fdd9a50d60"
+      },
+      {
+        "claim": "G1_Stage5_successor_scheme_sets_and_exact_derivations",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "derivation_hash": "blake3:1f1046c7e909085d695d0f5466b4b3146ae89c13dbaa3c00966eabab26c1712f"
+      },
+      {
+        "claim": "G1_Stage5_successor_scheme_sets_and_exact_derivations",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "register": "semantic_family_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "derivation_hash": "blake3:714a5e049bf8ec1d05f171d637eb64d5a13c2cfd47f082a7f7c808a9b794069a"
+      },
+      {
+        "claim": "branch_specific_candidate_winner_and_act_local_provenance_identities",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "derivation_hash": "blake3:592c902698ed1fd2d7203f4c1f6f1a697a957ddd84cfd5da9cdb1297c3cb0f35"
+      },
+      {
+        "claim": "branch_specific_candidate_winner_and_act_local_provenance_identities",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "derivation_hash": "blake3:180a4fa6b0e119bb876d6448e4aec7bdb8df50b33e58ff409e0ce2426e128756"
+      },
+      {
+        "claim": "branch_specific_candidate_winner_and_act_local_provenance_identities",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "derivation_hash": "blake3:e3eaa3ed1da00798900408970ec10aa172ec37f02442d32d140ddd4fb668f8b8"
+      },
+      {
+        "claim": "branch_specific_candidate_winner_and_act_local_provenance_identities",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "register": "semantic_register_authority",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "derivation_hash": "blake3:45f7718d6193223eba745cb6aa26051d3732c628a13b2bf867db17402c293e93"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_kappa",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "derivation_hash": "blake3:cebb27d3bca6627c6ab6d0df16f4efd0f5d3f58c1a5651f9958c3239a2ee7e92"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_kappa",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "derivation_hash": "blake3:342bb4de5757ff1e97cffa6bc6ff3ca80ce4ea1120eba8142baabb28ddd6f1e6"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_kappa",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "derivation_hash": "blake3:06961a2ae3808076cf2712fe83b9873859f27deeed4c236c5e8d98c9bab539f1"
+      },
+      {
+        "claim": "complete_Stage1_through15_Sigma_kappa",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "derivation_hash": "blake3:ca377fd92b445208e9784f13012c00eb8ad44de52eea502bea9b36a27fee2670"
+      },
+      {
+        "claim": "complete_cumulative_Delta_Phi_Omega_interface_trajectories",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "derivation_hash": "blake3:d07f42f26a4610bc4dcb5ce78b398715e15642bbd2fd4799b0fc3518745b42d8"
+      },
+      {
+        "claim": "complete_cumulative_Delta_Phi_Omega_interface_trajectories",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "derivation_hash": "blake3:e2dd43c1dac6a06491b46432b575ce036f0fb7a875935ccdae2b5a36fd06dd2d"
+      },
+      {
+        "claim": "complete_cumulative_Delta_Phi_Omega_interface_trajectories",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "derivation_hash": "blake3:15211637bc9f8b4b50eb3a903e6dd9ce6f95c4fe112bb0fabfff3dc9fa544e03"
+      },
+      {
+        "claim": "complete_cumulative_Delta_Phi_Omega_interface_trajectories",
+        "component": "whole_claim",
+        "quantifier": "branch_indexed_exact_root",
+        "branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "register": "structural_testimony",
+        "status": "certified",
+        "exact_scope": "BI-4 branch-indexed claim component `whole_claim`; asserted only for exact branch root blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "derivation_hash": "blake3:b14f26dfc619648bdabf9a30ec9f19d68a366ebc1bf303c2d49ca4af2ac296ac"
+      }
+    ],
+    "derivation_hash": "blake3:be56279afe7d14540d706b883195d4199ede285ed3506a1f0d2f398f4d7b4f0a"
+  },
+  "enacted_regression": {
+    "quantifier": "frozen_enacted_regression",
+    "e5_frozen_result_digest": "blake3:91e53887f3244160360d8b9fcc1ea05bbb56b06783a0938a78d971834c4713d4",
+    "e5_frozen_self_digest_valid": true,
+    "e5_native_replay_valid": false,
+    "e5_native_replay_errors": [
+      "prerequisite failed: stable A3 exhaustiveness certificate did not replay: certificate differs from definition replay"
+    ],
+    "frozen_testimony_fallback_used": true,
+    "fallback_limited_to_exact_digest_bound_frozen_e5": true,
+    "drift_repaired_inside_m3": false,
+    "drift_concealed_inside_m3": false,
+    "enacted_bi2_result_digest": "blake3:2b1c578445838932139bec04a223150b07c7832cb29cb31ac190c0dd84a730b4",
+    "enacted_bi2_self_digest_valid": true,
+    "enacted_bi2_root_exactly_joins_bi4": true,
+    "e5_projection": {
+      "exact_a3_inventory": {
+        "value": 89,
+        "register": "semantic_demand_instance_authority"
+      },
+      "unary_families": {
+        "value": 17,
+        "register": "semantic_family_authority"
+      },
+      "direct_chronological_instances": {
+        "value": 64,
+        "register": "structural_testimony"
+      },
+      "pointwise_chronological_families": {
+        "value": 8,
+        "register": "semantic_family_authority"
+      },
+      "higher_families": {
+        "value": 0,
+        "register": "semantic_family_authority"
+      },
+      "final_window_structural_instances": {
+        "value": 0,
+        "register": "structural_testimony"
+      },
+      "historical_structural_registrations": {
+        "value": 13,
+        "register": "structural_testimony"
+      },
+      "historical_structural_realizations": {
+        "value": 13,
+        "register": "structural_testimony"
+      },
+      "membership_pair_count": {
+        "value": 89,
+        "register": "semantic_demand_instance_authority"
+      },
+      "membership_pair_digest": "blake3:3d53f33a67742c80ea478eec25b0f4cf203b3c1b6a542f9644c4e20b623aa744",
+      "exact_d_partition": true,
+      "semantic_o16_empty": true,
+      "f1_executed": true,
+      "f1_excluded": true,
+      "theorem12_full_instance_granularity": true,
+      "focus_projection_reproduces_ladder": true,
+      "stage_three_wrinkle_reproduced": true,
+      "e5_complete": true,
+      "derivation_hash": "blake3:0a4cce713ae353855fb5aeac1dea1460796c42d0e11e40a2d924a7e01402df9a"
+    },
+    "bi2_projection": {
+      "exact_a3_inventory": {
+        "value": 89,
+        "register": "semantic_demand_instance_authority"
+      },
+      "unary_families": {
+        "value": 17,
+        "register": "semantic_family_authority"
+      },
+      "direct_chronological_instances": {
+        "value": 64,
+        "register": "structural_testimony"
+      },
+      "pointwise_chronological_families": {
+        "value": 8,
+        "register": "semantic_family_authority"
+      },
+      "higher_families": {
+        "value": 0,
+        "register": "semantic_family_authority"
+      },
+      "final_window_structural_instances": {
+        "value": 0,
+        "register": "structural_testimony"
+      },
+      "historical_structural_registrations": {
+        "value": 13,
+        "register": "structural_testimony"
+      },
+      "historical_structural_realizations": {
+        "value": 13,
+        "register": "structural_testimony"
+      },
+      "membership_pair_count": {
+        "value": 89,
+        "register": "semantic_demand_instance_authority"
+      },
+      "membership_pair_digest": "blake3:3d53f33a67742c80ea478eec25b0f4cf203b3c1b6a542f9644c4e20b623aa744",
+      "exact_d_partition": true,
+      "semantic_o16_empty": true,
+      "f1_executed": true,
+      "f1_excluded": true,
+      "theorem12_full_instance_granularity": true,
+      "focus_projection_reproduces_ladder": true,
+      "stage_three_wrinkle_reproduced": true,
+      "e5_complete": true,
+      "derivation_hash": "blake3:0a4cce713ae353855fb5aeac1dea1460796c42d0e11e40a2d924a7e01402df9a"
+    },
+    "projections_exactly_equal": true,
+    "cross_branch_statements_issued_only_after_regression": true,
+    "derivation_hash": "blake3:3fd668c78b32c2e09c3f78b2bc898fe5bb8886072855da66e8ee0b9cf73fae43"
+  },
+  "e7": {
+    "quantifier": "frozen_wrapped_surface",
+    "register": "semantic_register_authority",
+    "slnf_defined_independently": false,
+    "classify_w_total": false,
+    "faithfulness_proved": false,
+    "realization_claimed": false,
+    "inverse_laws_proved": false,
+    "one_way_injection_declared_and_proved": false,
+    "class_by_class_generator_completeness_proved": false,
+    "c2_closed": false,
+    "named_gap": "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS",
+    "no_support_local_code_pruned_from_failed_realization": true,
+    "derivation_hash": "blake3:8b6602e6ab6bcae151a6adac9e88f6d74cb58d0f4e7d41902a17b10f94402064"
+  },
+  "e8": {
+    "quantifier": "frozen_wrapped_surface",
+    "register": "semantic_register_authority",
+    "schema3_strata": {
+      "value": 3,
+      "register": "artifact_metadata"
+    },
+    "schema3_aggregate_rows": {
+      "value": 213,
+      "register": "artifact_metadata"
+    },
+    "every_schema3_row_is_aggregate_bucket": true,
+    "minimum_parent_candidate_multiplicity": {
+      "value": 1044,
+      "register": "structural_testimony"
+    },
+    "schema4_all_rows_structurally_joined": true,
+    "schema5_public_replay_valid": true,
+    "schema5_public_replay_errors": [],
+    "schema5_no_row_promoted": true,
+    "bridge_conditions": [
+      {
+        "ordinal": {
+          "value": 1,
+          "register": "syntax_identifier"
+        },
+        "condition": "bind the exact archived schema-3 bytes and digest",
+        "proved": true,
+        "named_gap": null,
+        "derivation_hash": "blake3:c8d876a17165b161dafa6f9580203b36b3653aa4fdbb4f45dd4e3e93ee91df25"
+      },
+      {
+        "ordinal": {
+          "value": 2,
+          "register": "syntax_identifier"
+        },
+        "condition": "use only the approved schema-3 projection",
+        "proved": true,
+        "named_gap": null,
+        "derivation_hash": "blake3:7f2da92abd6836701dca787ba58756619b53b68fc3bb858517e2c8027515e58a"
+      },
+      {
+        "ordinal": {
+          "value": 3,
+          "register": "syntax_identifier"
+        },
+        "condition": "elaborate every complete candidate telescope with composed fuel",
+        "proved": false,
+        "named_gap": "E8_SCHEMA3_AGGREGATE_PARENT_ROW_REFINEMENT_OR_UNIVERSAL_THEOREM_NOT_PROVED",
+        "derivation_hash": "blake3:893eba8eca132cabeeffb304fbf7e602f0cb9a8f33f9680cdbf2cce1e6ad7b26"
+      },
+      {
+        "ordinal": {
+          "value": 4,
+          "register": "syntax_identifier"
+        },
+        "condition": "extract every natural family and semantic demand orbit",
+        "proved": false,
+        "named_gap": "C8_CANDIDATE_BOUNDARY_PROVENANCE_JOIN",
+        "derivation_hash": "blake3:1d4c93972d2dfbe00aedc3ac0a6aa82c1c1c4b785ad2b574dc04ba887157e4ce"
+      },
+      {
+        "ordinal": {
+          "value": 5,
+          "register": "syntax_identifier"
+        },
+        "condition": "decide marginality and candidate-local provenance for every family",
+        "proved": false,
+        "named_gap": "C8_CANDIDATE_BOUNDARY_PROVENANCE_JOIN",
+        "derivation_hash": "blake3:59436eb5cc99aaca513a89987c2786a37015e9366aa008ff87a34ea3f07e3264"
+      },
+      {
+        "ordinal": {
+          "value": 6,
+          "register": "syntax_identifier"
+        },
+        "condition": "attach the E-7 classifier derivation",
+        "proved": false,
+        "named_gap": "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS",
+        "derivation_hash": "blake3:aaeccb7d05a502eb1407d98d29d61eb477b7bc5f9f7c79e24dcfd8258447d8ba"
+      },
+      {
+        "ordinal": {
+          "value": 7,
+          "register": "syntax_identifier"
+        },
+        "condition": "attach registered V2 reference-only boundary provenance where relevant",
+        "proved": true,
+        "named_gap": null,
+        "derivation_hash": "blake3:6eeb5d7f2f91d2892d1df6f953f988ffa8ac1c4b4ed40ef0d28644c5e5901229"
+      },
+      {
+        "ordinal": {
+          "value": 8,
+          "register": "syntax_identifier"
+        },
+        "condition": "reject every missing duplicate or unjoined family and orbit",
+        "proved": false,
+        "named_gap": "E8_SCHEMA3_AGGREGATE_PARENT_ROW_REFINEMENT_OR_UNIVERSAL_THEOREM_NOT_PROVED",
+        "derivation_hash": "blake3:ac18deb7175386135758e028e0c810fa845f4fdb9d6e95f30ec4427b90dde033"
+      },
+      {
+        "ordinal": {
+          "value": 9,
+          "register": "syntax_identifier"
+        },
+        "condition": "keep every row with a named theorem gap unpromoted",
+        "proved": true,
+        "named_gap": null,
+        "derivation_hash": "blake3:3a0fa1659d93c52028079403aff3da2ecc72b13e521287dabb4d7b2c398b3647"
+      }
+    ],
+    "bridge_condition_count": {
+      "value": 9,
+      "register": "artifact_metadata"
+    },
+    "proved_bridge_condition_count": {
+      "value": 4,
+      "register": "artifact_metadata"
+    },
+    "all_nine_conditions_proved": false,
+    "candidate_level_join_proved": false,
+    "c8_closed": false,
+    "domain_wide_c3_closed": false,
+    "named_gaps": [
+      "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS",
+      "C8_CANDIDATE_BOUNDARY_PROVENANCE_JOIN",
+      "E8_SCHEMA3_AGGREGATE_PARENT_ROW_REFINEMENT_OR_UNIVERSAL_THEOREM_NOT_PROVED"
+    ],
+    "derivation_hash": "blake3:d9faeff582651277cd08dfb71b4a9e8a485aa35a3a31998cf567bdc902cd8b63"
+  },
+  "open_gaps": [
+    {
+      "id": "C2_DEPTH_TWO_SCHEMA_GRAMMAR_AND_GENERATOR_COMPLETENESS",
+      "phase": "E-7",
+      "quantifier": "frozen_wrapped_surface",
+      "register": "semantic_register_authority",
+      "exact_obstruction": "No independently defined support-local semantic normal-form type, total classifier, faithfulness theorem, exact realization/inverse laws, or explicitly declared-and-proved one-way injection exists on the intended depth-two semantic domain.",
+      "keeps_rows_unpromoted": true,
+      "derivation_hash": "blake3:d3fad2bd44aef3a081c23932d2277861b2d98181da29159561a9c0a4e95a933a"
+    },
+    {
+      "id": "C8_CANDIDATE_BOUNDARY_PROVENANCE_JOIN",
+      "phase": "E-8",
+      "quantifier": "frozen_wrapped_surface",
+      "register": "semantic_register_authority",
+      "exact_obstruction": "The conservative schema-4/schema-5 lineage joins the complete bound aggregate-row surface structurally but exports no total candidate-to-telescope-to-Marg2 provenance join satisfying every bridge condition.",
+      "keeps_rows_unpromoted": true,
+      "derivation_hash": "blake3:c644102eb1b647d97b2d005fd7e12186152176ed60b8fe9c42b454f430e022c6"
+    },
+    {
+      "id": "E8_SCHEMA3_AGGREGATE_PARENT_ROW_REFINEMENT_OR_UNIVERSAL_THEOREM_NOT_PROVED",
+      "phase": "E-8 prerequisite",
+      "quantifier": "frozen_wrapped_surface",
+      "register": "semantic_register_authority",
+      "exact_obstruction": "Each schema-3 row is an aggregate bucket with non-singleton multiplicity; no theorem refines every parent candidate or proves a universal candidate-level result for the bucket.",
+      "keeps_rows_unpromoted": true,
+      "derivation_hash": "blake3:7763808fc07f997d043c10ffc841ce7cc5b23d3086aab4b582f0f43b3e532925"
+    }
+  ],
+  "open_gap_count": {
+    "value": 3,
+    "register": "artifact_metadata"
+  },
+  "zero_promotions_made": true,
+  "promoted_row_count": {
+    "value": 0,
+    "register": "artifact_metadata"
+  },
+  "uc1_cited_or_anticipated": false,
+  "bridge_claim_issued": false,
+  "m3_status": "stopped_named_gaps",
+  "m4_authorized": false,
+  "mutation_falsifiers": [
+    "change_any_bound_input_byte_or_digest_then_replay_must_fail",
+    "flip_any_BI4_claim_quantifier_or_branch_root_then_replay_must_fail",
+    "retag_any_semantic_or_structural_quantity_then_replay_must_fail",
+    "conceal_repair_or_expand_the_native_E5_drift_fallback_then_replay_must_fail",
+    "change_any_enacted_projection_value_or_membership_pair_then_replay_must_fail",
+    "remove_or_rename_any_E7_E8_or_parent_row_gap_then_replay_must_fail",
+    "promote_any_schema_row_or_claim_E7_E8_domain_wide_C3_or_bridge_then_replay_must_fail",
+    "cite_UC1_or_authorize_M4_while_M3_is_stopped_then_replay_must_fail",
+    "add_any_unknown_JSON_field_then_replay_must_fail"
+  ],
+  "permitted_conclusion": "The exact BI-4 cone and enacted E-5/BI-2 semantic projection are authenticated, including semantic O(16) = empty and F1 excluded at the quantifiers BI-4 permits. M-3 does not prove the intended depth-two semantic classifier or the total candidate-level bridge. It stops with the complete named-gap list and makes no promotions.",
+  "required_successor_action": "Define and prove E-7 (or explicitly declare and prove its one-way injection fallback), refine each schema-3 aggregate bucket to all parent candidates or prove a universal parent-row theorem, implement every E-8 join condition, and rerun M-3 create-new. M-4 remains unauthorized until that replay passes.",
+  "result_digest": "blake3:a61fe8093ef9ce61a05aebfe859b0723a88a766a712ea6a2312e0f22ca386ba8"
+}

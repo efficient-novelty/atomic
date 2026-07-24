@@ -1,0 +1,365 @@
+{
+  "schema": "t-d2-1-operational-domain-build-v3-dnfq",
+  "date": "2026-07-24",
+  "source_bindings": [
+    {
+      "path": "docs/dnfq_theorem_layer_plan.md",
+      "role": "frozen DNF-Q theorem program and DNF-5 gate",
+      "byte_length": 5706,
+      "blake3": "blake3:cdcd9a35412bfe59f470b83d624aa5f67fab856b9bc44a1df90706797ab01cb8"
+    },
+    {
+      "path": "docs/schema2_operational_domain_adjudication.md",
+      "role": "frozen operational-domain bounds",
+      "byte_length": 8316,
+      "blake3": "blake3:3789e69507d3aa9dcfb52cc136a2f1a5bdd237ffbb6b641a908016af0d79b0d7"
+    },
+    {
+      "path": "docs/t_d2_1_operational_domain_v2.json",
+      "role": "predecessor bound snapshot, citations, and unchanged theorem obligations",
+      "byte_length": 29137,
+      "blake3": "blake3:8df8d344ec2877464107ca0001beef013ab3a813d9eedd94b878e012cde51975"
+    }
+  ],
+  "predecessor_v2_result_digest": "blake3:c8efdb7a4fdbded4ae86488234f3bb0c6e0aa3044f5a173dd0b2c99754778bb1",
+  "predecessor_v2_replay_valid": true,
+  "predecessor_v2_status": "stopped_named_gaps",
+  "frozen_bound_snapshot_digest": "blake3:eb4c4484cfb1d3d2cf8ed451320e948e525c9fc9d03f7885c42b4bd2e0821745",
+  "frozen_bound_snapshot": {
+    "public_entry_count": 15,
+    "public_clause_count": 64,
+    "maximum_ambient_parameter_count": 2,
+    "maximum_free_scope_length": 9,
+    "maximum_binder_nesting": 2,
+    "maximum_path_dimension": 3,
+    "semantic_former_depth": 2,
+    "transparent_former_count": 17,
+    "citations": [
+      {
+        "bound_name": "public_entry_count",
+        "value": 15,
+        "exact_source": "SealedSignature::genesis_del_h15 entry enumeration",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:0c2306d552a66a63a89d78d71553d3666f3ba283252be367b2592880e3a1097e"
+      },
+      {
+        "bound_name": "public_clause_count",
+        "value": 64,
+        "exact_source": "typed replay of every SealedSignature::genesis_del_h15 telescope",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:a9b4e7aa35016304cad2ebdb812f4db79e177ef096cb4d9446c584767af6a574"
+      },
+      {
+        "bound_name": "maximum_ambient_parameter_count",
+        "value": 2,
+        "exact_source": "typed replay of sealed telescope declaration contexts",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:58d4c7639a6e14021ea4ce21473e86b89572e85a4e304ac9214d8e2a58025ae8"
+      },
+      {
+        "bound_name": "closed_public_alphabet",
+        "value": 17,
+        "exact_source": "ambient-former closure adoption plus registered_transparent_formers()",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:3d363dfaa79125ac56c3c4be4fd2cc68f073199e95f0e40375142c4a07605acc"
+      },
+      {
+        "bound_name": "semantic_former_depth",
+        "value": 2,
+        "exact_source": "schema2-operational-domain-v1 clause 2",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:c653142fd981b3552b3b3106585ac97745891dd71a0a8269854ed38d1a850bd0"
+      },
+      {
+        "bound_name": "maximum_context_arity",
+        "value": 9,
+        "exact_source": "SealedSignature::genesis_del_h15 plus dependent-context adoption",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:fa95e921c4a5fb19e862e5a7f394b9ed11b92e40613a4b41f0ad0009e520b72a"
+      },
+      {
+        "bound_name": "maximum_binder_nesting",
+        "value": 2,
+        "exact_source": "recursive binder dereference over sealed elaborated normal forms",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:e6bb6331412378fa82865daa4272f6283c57c47a9bf98c4bad29baeaeab802d2"
+      },
+      {
+        "bound_name": "maximum_path_dimension",
+        "value": 3,
+        "exact_source": "recursive PathCon dereference over sealed public normal forms",
+        "replayed_before_corpus_access": true,
+        "resolved": true,
+        "derivation_hash": "blake3:6349fe0e56888b66d281790fad8174de0122ad1992562dd8b57b5c0284b2ca61"
+      }
+    ],
+    "all_citations_resolved_before_corpus_access": true,
+    "derivation_hash": "blake3:eb4c4484cfb1d3d2cf8ed451320e948e525c9fc9d03f7885c42b4bd2e0821745"
+  },
+  "frozen_bound_citations": [
+    {
+      "bound_name": "public_entry_count",
+      "value": 15,
+      "exact_source": "SealedSignature::genesis_del_h15 entry enumeration",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:0c2306d552a66a63a89d78d71553d3666f3ba283252be367b2592880e3a1097e"
+    },
+    {
+      "bound_name": "public_clause_count",
+      "value": 64,
+      "exact_source": "typed replay of every SealedSignature::genesis_del_h15 telescope",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:a9b4e7aa35016304cad2ebdb812f4db79e177ef096cb4d9446c584767af6a574"
+    },
+    {
+      "bound_name": "maximum_ambient_parameter_count",
+      "value": 2,
+      "exact_source": "typed replay of sealed telescope declaration contexts",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:58d4c7639a6e14021ea4ce21473e86b89572e85a4e304ac9214d8e2a58025ae8"
+    },
+    {
+      "bound_name": "closed_public_alphabet",
+      "value": 17,
+      "exact_source": "ambient-former closure adoption plus registered_transparent_formers()",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:3d363dfaa79125ac56c3c4be4fd2cc68f073199e95f0e40375142c4a07605acc"
+    },
+    {
+      "bound_name": "semantic_former_depth",
+      "value": 2,
+      "exact_source": "schema2-operational-domain-v1 clause 2",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:c653142fd981b3552b3b3106585ac97745891dd71a0a8269854ed38d1a850bd0"
+    },
+    {
+      "bound_name": "maximum_context_arity",
+      "value": 9,
+      "exact_source": "SealedSignature::genesis_del_h15 plus dependent-context adoption",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:fa95e921c4a5fb19e862e5a7f394b9ed11b92e40613a4b41f0ad0009e520b72a"
+    },
+    {
+      "bound_name": "maximum_binder_nesting",
+      "value": 2,
+      "exact_source": "recursive binder dereference over sealed elaborated normal forms",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:e6bb6331412378fa82865daa4272f6283c57c47a9bf98c4bad29baeaeab802d2"
+    },
+    {
+      "bound_name": "maximum_path_dimension",
+      "value": 3,
+      "exact_source": "recursive PathCon dereference over sealed public normal forms",
+      "replayed_before_corpus_access": true,
+      "resolved": true,
+      "derivation_hash": "blake3:6349fe0e56888b66d281790fad8174de0122ad1992562dd8b57b5c0284b2ca61"
+    }
+  ],
+  "predecessor_v2_source_bindings": [
+    {
+      "path": "docs/schema2_operational_domain_adjudication.md",
+      "role": "adopted operational bound authority",
+      "byte_length": 8316,
+      "blake3": "blake3:3789e69507d3aa9dcfb52cc136a2f1a5bdd237ffbb6b641a908016af0d79b0d7",
+      "sha256": "bec3df54b782371f496dc9912f491c8f8ab5cf796ace59a5e1c852aaa998b77d",
+      "register": "bound_citation"
+    },
+    {
+      "path": "docs/depth_two_domain_adjudication.md",
+      "role": "adopted independent-domain and quotient target",
+      "byte_length": 6825,
+      "blake3": "blake3:2fe49271403603bb57ce1e312b4b1d1048b4a358dec6c3eee942f37a64374645",
+      "sha256": "fffd48c0eb5f89b6728842aa6f9de5aa43013ab867278d6b8ec6b2737ed92151",
+      "register": "definition_input"
+    },
+    {
+      "path": "docs/ambient_former_closure_adjudication.md",
+      "role": "adopted closed transparent-former inventory",
+      "byte_length": 5705,
+      "blake3": "blake3:b745012062e17e7da625baedf7c302970549f85a2ad51b6913eab602910bf1dd",
+      "sha256": "ca53cac5330999620b03863abc00378e1a2da556989d57414262278f47473fc2",
+      "register": "bound_citation"
+    },
+    {
+      "path": "docs/dependent_context_adjudication.md",
+      "role": "adopted dependent-context declaration discipline",
+      "byte_length": 8126,
+      "blake3": "blake3:acc0f44597cbcb039086d49bd36a848793c98b6dc9b949e62a7fa4130aef86e6",
+      "sha256": "62d7f33b2504591b52de6897f06ae4699b237dcf91b02b3aee979ed3d16ab523",
+      "register": "bound_citation"
+    },
+    {
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "adopted natural-family versus instance quotient",
+      "byte_length": 6355,
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d",
+      "sha256": "ba9b57379e4b53c9f1ef54982e7c4551754ad82262d11805dc6e7c752f66b897",
+      "register": "definition_input"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "typed Schema2 obligations and proxy prohibition",
+      "byte_length": 15507,
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544",
+      "sha256": "fe3b2eb8f17f12563596d7a937d39d2618625503cf4ba1af8bba33e224309c82",
+      "register": "definition_input"
+    },
+    {
+      "path": "crates/pen-core/src/expr.rs",
+      "role": "closed kernel expression alphabet",
+      "byte_length": 10207,
+      "blake3": "blake3:37d3bb9f392e5da1339e61369dcf8194b9cd6e9efb17030b7973d1f7927a96fd",
+      "sha256": "f4da000f35a343fe6ad749c36e12d56330c8787efc73bb9c01a0289f65ea2531",
+      "register": "definition_input"
+    },
+    {
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "sealed signature and frozen typed elaborator",
+      "byte_length": 102010,
+      "blake3": "blake3:3069feaa5d134d65a3d529da046041f70a348ef32a1771075fc6fca7a1edfd51",
+      "sha256": "6b713bb5286648a1c7a22c55a2446af8eca58223343ce2cd716c49748e447719",
+      "register": "bound_citation"
+    },
+    {
+      "path": "crates/pen-type/src/ambient_former_internality.rs",
+      "role": "executable transparent-former registry",
+      "byte_length": 36309,
+      "blake3": "blake3:c0f1a77c4e1f7dcb11f230f7c075cdc7b197931d27e453f7ed5528780e7e2347",
+      "sha256": "ec151b8d46e42fe691acb6db065411fcae344e29283cdd7dd8f72e2e0889ef08",
+      "register": "bound_citation"
+    },
+    {
+      "path": "crates/pen-schema/src/context.rs",
+      "role": "typed dependent context constructor surface",
+      "byte_length": 71070,
+      "blake3": "blake3:d0de2a49de234034ec60e62e7735658055bc4e9e3abedd5790c7d471de5f1904",
+      "sha256": "a89a1b5007222d046d43f4df97d2a5411facea5f4bc0d709d7dca12dacf9c260",
+      "register": "bound_citation"
+    },
+    {
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "frozen terminating beta normalizer",
+      "byte_length": 17962,
+      "blake3": "blake3:8b8089f38fab15923ab92521f45c79fe16d64d6ef2c59a70ac11d74a4004ae9d",
+      "sha256": "7d3398b60708bf1ac132609e0bf84d6a26383f9dcc90f11f99d5803ed9da73f2",
+      "register": "definition_input"
+    },
+    {
+      "path": "crates/pen-type/src/equality.rs",
+      "role": "frozen univalent equality decision procedure",
+      "byte_length": 4757,
+      "blake3": "blake3:7c1ed7386c35aa7e5196e044b194f63e61204e431c3837018305977fbcee6c31",
+      "sha256": "3aa5fd8d4e9667c1534f39fc0c76ef956e6372301b767f2442c918c6b85c3401",
+      "register": "definition_input"
+    },
+    {
+      "path": "docs/t_bi_nu1_semantic_provenance_v6.json",
+      "role": "post-seal 61-family regression observer",
+      "byte_length": 1394797,
+      "blake3": "blake3:ca1847929a5979f1235115b06585d21fbad8c439ecb1ebbedaa96cfb56c50e52",
+      "sha256": "51419e53f9dcd0f9c61ddb21c0c116ab92de05d5b5e142792535eeda45136a18",
+      "register": "structural_testimony"
+    },
+    {
+      "path": "docs/a3_rule_inventory_exhaustiveness_v2.json",
+      "role": "post-seal exact A3 occurrence/source regression observer",
+      "byte_length": 1045834,
+      "blake3": "blake3:f587323b2e56aaa526d5106e40966d30eb9de1f49c5e5b3b4ea3b6652c9068af",
+      "sha256": "73d5d25cf9a91ab82100f14bb1e1cfe424c97ab0ac2503664278df4268ac5337",
+      "register": "structural_testimony"
+    },
+    {
+      "path": "docs/schema2_e5_future_hole_finale_v2_dependent_context.json",
+      "role": "post-seal 89-row typed membership regression observer",
+      "byte_length": 247022,
+      "blake3": "blake3:794d762b4378970ba6152547db3950d56030dfb2c1811276aba99f1cd8d3e726",
+      "sha256": "c60a28c82370e88829dfd6457ae52814d4523fcf2b2012378814a4cf0dd32be5",
+      "register": "structural_testimony"
+    }
+  ],
+  "frozen_bounds_unchanged": true,
+  "frozen_citations_unchanged": true,
+  "dnf1_result_digest": "blake3:56c4fb575c6d851071c8333ff0f1cb5aec1086f829f8811a3c5999e92777b451",
+  "dnf2_result_digest": "blake3:b743483ddd36f2b489f353e37cbaed0a4a0aa4379189edd603ea2470607d7f21",
+  "dnf3_result_digest": "blake3:dbe4d2b73f1b98563cdc30e5bc2325eaf1db4f788a2624b0e597aa2434c36787",
+  "dnf4_result_digest": "blake3:324d0e9f6f49f4e87fa5d66d777c4670f5efe57986ffcff3b359b7733792266f",
+  "all_dnf_certificates_replay": true,
+  "dnf1_status": "stopped_named_gaps",
+  "dnf2_status": "stopped_named_gaps",
+  "dnf3_status": "stopped_named_gaps",
+  "dnf4_status": "stopped_named_gaps",
+  "context_finiteness": {
+    "theorem_id": "T-D2-1-CONTEXT-FINITENESS-v3",
+    "statement": "The frozen bounded dependent-context grammar has a finite canonical enumeration.",
+    "satisfied": false,
+    "exact_obstruction": "DNF-1 canonicalizes the local Type/Element fragment but publishes gaps for the full constructor grammar, the kernel/Schema2 context bridge, and universal canonicity.",
+    "evidence_digests": [
+      "blake3:56c4fb575c6d851071c8333ff0f1cb5aec1086f829f8811a3c5999e92777b451"
+    ],
+    "derivation_hash": "blake3:7be2dc00dab1caccc41c6c550fc75fe86d7ab3f2d19914fef049b4fe7a1015ca"
+  },
+  "typed_normalization": {
+    "theorem_id": "T-D2-1-TYPED-NORMALIZATION-v3",
+    "statement": "Typed normalization is total on every judgment in the frozen bounded carrier.",
+    "satisfied": false,
+    "exact_obstruction": "DNF-2 retains every source payload but does not identify all four surfaces as full dependent judgments; DNF-3 lacks the all-substitution constructor induction.",
+    "evidence_digests": [
+      "blake3:b743483ddd36f2b489f353e37cbaed0a4a0aa4379189edd603ea2470607d7f21",
+      "blake3:dbe4d2b73f1b98563cdc30e5bc2325eaf1db4f788a2624b0e597aa2434c36787"
+    ],
+    "derivation_hash": "blake3:cd196462886e19ea3991a3fc0c22dff2201bec479f274aa40528f43ddde9d723"
+  },
+  "natural_family_quotient": {
+    "theorem_id": "T-D2-1-NATURAL-FAMILY-QUOTIENT-v3",
+    "statement": "The adopted natural-family quotient is decidable and finitely enumerable.",
+    "satisfied": false,
+    "exact_obstruction": "DNF-3 reconstructs 72 concrete commuting squares but proves no universal quotient congruence; DNF-4 consequently classifies all 150 rows as named gaps.",
+    "evidence_digests": [
+      "blake3:dbe4d2b73f1b98563cdc30e5bc2325eaf1db4f788a2624b0e597aa2434c36787",
+      "blake3:324d0e9f6f49f4e87fa5d66d777c4670f5efe57986ffcff3b359b7733792266f"
+    ],
+    "derivation_hash": "blake3:32b927fe97af666a30d41addfc71059c43f951c5c75d8890eb9c36616ed28207"
+  },
+  "regression": {
+    "expected_family_count": 61,
+    "observed_family_count": 61,
+    "recognized_family_count": 0,
+    "every_family_recognized": false,
+    "expected_membership_row_count": 89,
+    "observed_membership_row_count": 89,
+    "recognized_membership_row_count": 0,
+    "every_membership_row_recognized": false,
+    "recognition_uses_only_dnf4_projected_dispositions": true,
+    "named_gap_rows_receive_no_partial_credit": true,
+    "derivation_hash": "blake3:239b18db311ab0a91077bd7769374abe256babc8cee37cc01f715a5992515332"
+  },
+  "fixed_fragment_operationally_defined": false,
+  "membership_decidable": false,
+  "typed_normalization_total": false,
+  "quotient_decidable": false,
+  "quotient_finitely_enumerable": false,
+  "family_regression_passed": false,
+  "membership_row_regression_passed": false,
+  "t_d2_2_prerequisite_satisfied": false,
+  "bc1_opened": false,
+  "bridge_431_gap_rerun_executed": false,
+  "m3_v1_remains_authoritative": true,
+  "m4_authorized": false,
+  "status": "stopped_dnf_named_gaps",
+  "permitted_conclusion": "T-D2-1 v3 replayed its original bounds and obligations unchanged, but DNF named gaps leave exact recognition incomplete. T-D2-2, BC1, the 431-gap bridge rerun, and M-4 remain closed.",
+  "result_digest": "blake3:b3ce75edaf8674845aaa81c4b0871408126a7dab618e8f53ec8ea230f3ace1bc"
+}

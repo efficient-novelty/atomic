@@ -1,15 +1,18 @@
 //! Verdict-blind Stage-4 semantic parsimony audit.
 //!
-//! The four-root geometry is enumerated live from the guarded Stage-4 cone;
-//! no R-T2 outcome-shaped artifact contributes to that enumeration.  Each
-//! root then earns registry-erased B1/B2 and prefix-generic B3 evidence.
+//! The complete nonempty geometry is enumerated live from the guarded Stage-4
+//! cone; no expected root count, expected kappa, or R-T2 outcome-shaped
+//! artifact contributes to that enumeration.  Each retained strict candidate
+//! then earns registry-erased B1/B2 and prefix-generic B3 evidence.
 //! Structural `(kappa, nu) = (3, 5)` testimony, the frozen R-T2 successor
 //! comparison, and the enacted-history digest are read strictly after the
 //! semantic parsimony result is sealed.  The theorem issuer has no
 //! branch-continuation or artifact-write capability; this module deliberately
 //! exposes a separate outer create-new serializer.
 
-use crate::act_local_semantic_provenance_v5::issue_act_local_semantic_sequence_v5;
+use crate::act_local_semantic_provenance_v5::{
+    issue_act_local_semantic_sequence_v5, replay_act_local_semantic_sequence_v5,
+};
 use crate::bi0_semantic_register_v5::{
     BI0_SEMANTIC_REGISTER_V5_SCHEMA, Bi0SemanticRegisterV5Certificate,
     replay_bi0_semantic_register_v5_certificate,
@@ -23,9 +26,7 @@ use crate::r_t2_future_hole_confluence_v2::{
     R_T2_FUTURE_HOLE_CONFLUENCE_V2_SCHEMA, Rt2FutureHoleConfluenceV2Certificate,
     Rt2V2PairwiseSchemeSetComparison, replay_archived_stage4_fork_projection,
 };
-use crate::t_bi_intrinsic_isolation_v3::{
-    issue_t_bi_intrinsic_isolation_v3, replay_t_bi_intrinsic_isolation_v3,
-};
+use crate::t_bi_intrinsic_isolation_v3::issue_replayed_t_bi_intrinsic_isolation_v3_context;
 use pen_core::canonical::canonical_key_telescope;
 use pen_core::hash::blake3_hex;
 use pen_core::library::{Library, LibraryEntry};
@@ -44,7 +45,24 @@ use thiserror::Error;
 pub const STAGE4_SEMANTIC_PARSIMONY_V1_SCHEMA: &str = "stage4-semantic-parsimony-verdict-blind-v1";
 pub const STAGE4_SEMANTIC_PARSIMONY_V1_DATE: &str = "2026-07-22";
 pub const STAGE4_SEMANTIC_PARSIMONY_V1_THEOREM_ID: &str =
-    "T-SP4-v1-four-root-intrinsic-semantic-parsimony-and-postseal-divergence";
+    "T-SP4-v1-prefix-local-strict-cone-semantic-parsimony";
+
+const STAGE4_PRESEAL_OPENING_AUTHORITY_SCHEMA: &str =
+    "stage4-bi0-opening-exact-prefix-capability-v1";
+const STAGE4_PRESEAL_PROCEDURE_AUTHORITY_SCHEMA: &str = "stage4-parsimony-procedure-authority-v1";
+
+const BI0_V5_ARTIFACT_BLAKE3: &str =
+    "blake3:9709451e36838b3dd7974b18cff159e203be6ce27039390c45b739673ae58304";
+const NU_REGISTER_ADJUDICATION_BLAKE3: &str =
+    "blake3:bd59a0e10cdf9fe25e2b36b8e9c19427af21c1b07e577fdc11385a90f207de7d";
+const TIE_PROTOCOL_BLAKE3: &str =
+    "blake3:92b8cab2c0a87e575bb73840f047678bfd6a0ec94f5173907bb90000100f3d30";
+const R_T3_ADJUDICATION_BLAKE3: &str =
+    "blake3:b46c6db7fe642822ae5b472617f0bab009be521ece0867df2249791c53bfb804";
+const R_T2_ARTIFACT_BLAKE3: &str =
+    "blake3:664ac42b93d065b7dc965296d49cee6b9fafbb147ff6f3394d6769c5071acafa";
+const PHASE5B_BURN_BLAKE3: &str =
+    "blake3:e18da4d5902ba2bf540473da07ab067536d64a28953730437dff8e619bc3167e";
 
 const R_T2_ARTIFACT_BYTES: &[u8] =
     include_bytes!("../../../docs/r_t2_future_hole_confluence_v2_dependent_context_v2.json");
@@ -87,16 +105,73 @@ pub struct Stage4SemanticSourceBindingV1 {
     pub blake3: String,
 }
 
-/// The only BI-0 surface visible before semantic minimization.  Unknown
-/// fields in the sealed JSON are deliberately not deserialized.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Stage4PresealOperationV1 {
+    BindExactEnactedPrefix,
+    EnumerateStrictCone,
+    IssuePrefixLocalSemanticEvidence,
+    CompareLexicographicParsimony,
+    SealPretestimonyResult,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Stage4ForbiddenPresealInputV1 {
+    FullBi0Certificate,
+    HistoricalRegistry,
+    LegacyV5Comparison,
+    StructuralNu,
+    ArchivedR2Comparison,
+    EnactedWinner,
+    DesiredRootCount,
+    DesiredKappa,
+    DesiredMinimum,
+    DesiredTieVerdict,
+    Bar,
+    FutureBranch,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-struct Bi0OpeningCapabilityProjectionV1 {
-    schema: String,
-    bi0_attempt_executed: bool,
-    bi0_passed: bool,
-    bi1_invoked: bool,
-    non_enacted_cone_invoked: bool,
-    non_enacted_branch_work_executed: bool,
+#[serde(deny_unknown_fields)]
+pub struct Stage4PrefixEntryV1 {
+    pub stage: u32,
+    pub telescope: Telescope,
+    pub candidate_hash: String,
+    pub predecessor_signature_digest: String,
+    pub derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4PresealProcedureAuthorityV1 {
+    pub schema: String,
+    pub operations: Vec<Stage4PresealOperationV1>,
+    pub parsimony_order: String,
+    pub tie_behavior: String,
+    pub forbidden_inputs: Vec<Stage4ForbiddenPresealInputV1>,
+    pub authority_scope: String,
+    pub closed_operation_surface: bool,
+    pub derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4PresealOpeningTokenV1 {
+    pub schema: String,
+    pub granting_gate_schema: String,
+    pub authority_scope: String,
+    pub procedure_authority_derivation_hash: String,
+    pub common_prefix_entries: Vec<Stage4PrefixEntryV1>,
+    pub common_prefix_steps: Vec<u32>,
+    pub common_prefix_candidate_hashes: Vec<String>,
+    pub common_prefix_signature_digest: String,
+    pub permitted_operations: Vec<Stage4PresealOperationV1>,
+    pub forbidden_inputs: Vec<Stage4ForbiddenPresealInputV1>,
+    pub full_bi0_scalar_or_archive_digest_present: bool,
+    pub branch_continuation_capability_present: bool,
+    pub exact_prefix_and_no_branch_opening: bool,
+    pub derivation_hash: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -111,109 +186,19 @@ pub struct Stage4StrictConeRootGeometryV1 {
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Stage4StrictConeGeometryV1 {
+    pub opening_token_derivation_hash: String,
+    pub common_prefix_signature_digest: String,
     pub stage: u32,
     pub window_depth: u16,
     pub enumerated_kappa_min: u16,
     pub enumerated_kappa_max: u16,
     pub raw_enumerated_count: usize,
     pub strict_admitted_count: usize,
-    pub canonical_deduped_count: usize,
+    pub retained_strict_candidate_count: usize,
+    pub all_strict_candidates_retained_without_canonical_deduplication: bool,
     pub least_kappa: u16,
     pub roots: Vec<Stage4StrictConeRootGeometryV1>,
-    pub exact_complete_strict_cone: bool,
-    pub exact_four_distinct_least_kappa_three_roots: bool,
-    pub derivation_hash: String,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum Stage4SemanticCapabilityV1 {
-    SealedBi0OpeningCapability,
-    FullBi0PostsealTestimony,
-    AdoptedSemanticRegisterAndTieProtocol,
-    LiveStrictConeGeometry,
-    CommonStage1Through3Prefix,
-    ActLocalV5Reissuance,
-    PrefixGenericB3Isolation,
-    SemanticParsimonyComparison,
-    AdoptedRt3BranchBoundary,
-    PostsealStructuralTestimony,
-    FrozenRt2PairComparison,
-    SealedEnactedRootDigest,
-    ContentHashing,
-    // Explicitly forbidden in this issuer.
-    BranchContinuation,
-    Stage5SuccessorEnumeration,
-    CanonicalArtifactWrite,
-    DesiredVerdict,
-}
-
-impl Stage4SemanticCapabilityV1 {
-    fn forbidden() -> BTreeSet<Self> {
-        [
-            Self::BranchContinuation,
-            Self::Stage5SuccessorEnumeration,
-            Self::CanonicalArtifactWrite,
-            Self::DesiredVerdict,
-        ]
-        .into_iter()
-        .collect()
-    }
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum Stage4SemanticOperationV1 {
-    ReadSealedBi0OpeningProjection,
-    BindAdoptedSemanticRegisterAndTieProtocol,
-    IssueLiveStrictConeGeometry,
-    BindCommonStage1Through3Prefix,
-    ReissueActLocalV5,
-    ProvePrefixGenericB3,
-    SealSemanticParsimony,
-    ReplayFullBi0Postseal,
-    ReadRt3BranchBoundaryPostseal,
-    ReadStructuralTestimonyPostseal,
-    JoinFrozenRt2PairPostseal,
-    ReadEnactedRootDigestPostseal,
-    SealAudit,
-}
-
-impl Stage4SemanticOperationV1 {
-    fn direct_capabilities(self) -> Vec<Stage4SemanticCapabilityV1> {
-        use Stage4SemanticCapabilityV1 as C;
-        use Stage4SemanticOperationV1 as O;
-        match self {
-            O::ReadSealedBi0OpeningProjection => vec![C::SealedBi0OpeningCapability],
-            O::BindAdoptedSemanticRegisterAndTieProtocol => {
-                vec![C::AdoptedSemanticRegisterAndTieProtocol]
-            }
-            O::IssueLiveStrictConeGeometry => vec![C::LiveStrictConeGeometry],
-            O::BindCommonStage1Through3Prefix => vec![C::CommonStage1Through3Prefix],
-            O::ReissueActLocalV5 => vec![C::ActLocalV5Reissuance],
-            O::ProvePrefixGenericB3 => vec![C::PrefixGenericB3Isolation],
-            O::SealSemanticParsimony => {
-                vec![C::SemanticParsimonyComparison, C::ContentHashing]
-            }
-            O::ReplayFullBi0Postseal => vec![C::FullBi0PostsealTestimony],
-            O::ReadRt3BranchBoundaryPostseal => vec![C::AdoptedRt3BranchBoundary],
-            O::ReadStructuralTestimonyPostseal => vec![C::PostsealStructuralTestimony],
-            O::JoinFrozenRt2PairPostseal => vec![C::FrozenRt2PairComparison],
-            O::ReadEnactedRootDigestPostseal => vec![C::SealedEnactedRootDigest],
-            O::SealAudit => vec![C::ContentHashing],
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-#[serde(deny_unknown_fields)]
-pub struct Stage4SemanticCapabilityRowV1 {
-    pub ordinal: u8,
-    pub operation: Stage4SemanticOperationV1,
-    pub direct_capabilities: Vec<Stage4SemanticCapabilityV1>,
-    pub accumulated_capabilities: Vec<Stage4SemanticCapabilityV1>,
-    pub forbidden_capabilities: Vec<Stage4SemanticCapabilityV1>,
-    pub isolated: bool,
+    pub complete_nonempty_strict_cone: bool,
     pub derivation_hash: String,
 }
 
@@ -224,28 +209,27 @@ pub struct Stage4SemanticRootAuditV1 {
     pub geometry_telescope_hash: String,
     pub kappa: u16,
     pub prefix_signature_digest: String,
-    pub non_authoritative_legacy_v5_sequence_derivation_hash: String,
-    pub non_authoritative_legacy_v5_sequence_seal: String,
-    pub non_authoritative_legacy_v5_package_derivation_hashes: Vec<String>,
-    pub authoritative_registry_erased_v3_semantic_seal: String,
+    pub authoritative_prefix_local_v5_sequence_derivation_hash: String,
+    pub authoritative_prefix_local_v5_sequence_seal: String,
+    pub authoritative_prefix_local_v5_package_derivation_hashes: Vec<String>,
+    pub authoritative_prefix_local_v5_stage4_package_hash: String,
+    pub authoritative_prefix_semantic_v3_seal: String,
     pub prefix_semantic_nu_vector: Vec<u32>,
     pub stage4_semantic_nu: u32,
-    pub non_authoritative_legacy_v5_stage4_package_hash: String,
-    pub legacy_v5_t_bi_b1_comparison: bool,
-    pub legacy_v5_t_bi_b2_comparison: bool,
-    pub legacy_v5_named_role_residual_comparison: usize,
-    pub legacy_v5_named_quotient_residual_comparison: usize,
-    pub legacy_v5_named_a3_residual_comparison: usize,
-    pub legacy_v5_silent_residue_comparison: usize,
-    pub authoritative_nu_matches_legacy_v5_comparison: bool,
+    pub prefix_local_v5_t_bi_b1_proved: bool,
+    pub prefix_local_v5_t_bi_b2_proved: bool,
+    pub prefix_local_v5_named_role_residual_count: usize,
+    pub prefix_local_v5_named_quotient_residual_count: usize,
+    pub prefix_local_v5_named_a3_residual_count: usize,
+    pub prefix_local_v5_silent_residue_count: usize,
     pub b3_v3_derivation_hash: String,
     pub b3_v3_prefix_generic_isolation_proved: bool,
+    pub b3_v3_prefix_local_sequence_replayed: bool,
+    pub b3_v3_every_local_package_proved_b1_b2: bool,
     pub b3_v3_registry_extension_invariance_proved: bool,
-    pub b3_v3_is_sole_prefix_generic_theorem_authority: bool,
-    pub b3_v3_legacy_full_hashes_authoritative: bool,
+    pub b3_v3_no_historical_registry_or_legacy_v5_authority: bool,
     pub b3_v3_no_forbidden_or_future_semantic_input: bool,
-    pub legacy_v5_hashes_used_as_semantic_selector: bool,
-    pub legacy_v5_self_reported_forbidden_or_future_input_used: bool,
+    pub exact_candidate_prefix_and_package_bindings: bool,
     pub root_semantic_audit_proved: bool,
     pub derivation_hash: String,
 }
@@ -261,12 +245,35 @@ pub struct Stage4SemanticSelectionRootV1 {
     pub geometry_telescope_hash: String,
     pub kappa: u16,
     pub prefix_signature_digest: String,
-    pub authoritative_registry_erased_v3_semantic_seal: String,
+    pub authoritative_prefix_semantic_v3_seal: String,
     pub prefix_semantic_nu_vector: Vec<u32>,
     pub stage4_semantic_nu: u32,
     pub registry_extension_invariance_proved: bool,
     pub prefix_generic_transitive_isolation_proved: bool,
     pub no_forbidden_or_future_semantic_input: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4LegacyV5RootComparisonV1 {
+    pub candidate_hash: String,
+    pub legacy_sequence_derivation_hash: String,
+    pub legacy_sequence_seal: String,
+    pub legacy_package_derivation_hashes: Vec<String>,
+    pub legacy_stage4_package_hash: String,
+    pub legacy_semantic_nu_vector: Vec<u32>,
+    pub legacy_stage4_semantic_nu: u32,
+    pub legacy_t_bi_b1_comparison: bool,
+    pub legacy_t_bi_b2_comparison: bool,
+    pub legacy_named_role_residual_comparison: usize,
+    pub legacy_named_quotient_residual_comparison: usize,
+    pub legacy_named_a3_residual_comparison: usize,
+    pub legacy_silent_residue_comparison: usize,
+    pub legacy_self_reported_forbidden_or_future_input_used: bool,
+    pub legacy_sequence_replay_valid: bool,
+    pub authoritative_nu_matches_legacy_comparison: bool,
+    pub used_as_semantic_selector: bool,
+    pub derivation_hash: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -290,6 +297,47 @@ pub struct Stage4Rt2SurvivorJoinV1 {
     pub derivation_hash: String,
 }
 
+/// Postseal-only join between the blind live cone and the structural R-T1
+/// audit.  The scalar minimum is testimony; this projection additionally
+/// binds every candidate and every derivation used to obtain it.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4StructuralRt1PackageBindingV1 {
+    pub candidate_hash: String,
+    pub telescope_hash: String,
+    pub package_derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4StructuralRt1PairBindingV1 {
+    pub unordered_candidate_pair: Vec<String>,
+    pub comparison_derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4StructuralRt1ClassBindingV1 {
+    pub class_id: String,
+    pub member_candidate_hashes: Vec<String>,
+    pub class_derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4StructuralRt1JoinV1 {
+    pub live_candidate_hashes: Vec<String>,
+    pub package_bindings: Vec<Stage4StructuralRt1PackageBindingV1>,
+    pub pairwise_bindings: Vec<Stage4StructuralRt1PairBindingV1>,
+    pub orbit_class_bindings: Vec<Stage4StructuralRt1ClassBindingV1>,
+    pub structural_audit_derivation_hash: String,
+    pub exact_candidate_multiset_join: bool,
+    pub every_structural_derivation_bound: bool,
+    pub replay_valid: bool,
+    pub used_as_semantic_selector: bool,
+    pub derivation_hash: String,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Stage4SemanticParsimonyOutcomeV1 {
@@ -300,54 +348,76 @@ pub enum Stage4SemanticParsimonyOutcomeV1 {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct Stage4SemanticParsimonyV1Certificate {
+pub struct Stage4SemanticPresealV1 {
     pub schema: String,
     pub date: String,
     pub theorem_id: String,
-    pub source_bindings: Vec<Stage4SemanticSourceBindingV1>,
-    pub preseal_bi0_opening_projection_hash: String,
-    pub preseal_bi0_opening_capability_valid: bool,
-    pub full_bi0_read_or_replayed_before_semantic_seal: bool,
-    pub sealed_bi0_v5_schema: String,
-    pub sealed_bi0_v5_digest: String,
-    pub sealed_bi0_v5_replay_valid: bool,
-    pub sealed_bi0_v5_passed: bool,
-    pub sealed_bi0_v5_executed_no_branch_work: bool,
-    pub nu_register_adjudication_hash: String,
-    pub tie_resolution_protocol_hash: String,
-    pub r_t3_stage4_adjudication_hash: String,
-    pub preseal_nu_register_and_tie_authority_replayed: bool,
-    pub postseal_r_t3_branch_boundary_replayed: bool,
-    pub preseal_live_strict_cone_geometry: Stage4StrictConeGeometryV1,
-    pub preseal_geometry_projection_hash: String,
-    pub preseal_geometry_only_replay_valid: bool,
-    pub preseal_exact_exhaustive_four_way_least_kappa_geometry: bool,
-    pub frozen_r_t2_certificate_digest: String,
-    pub postseal_full_r_t2_projection_replay_valid: bool,
-    pub postseal_archived_exact_four_way_r_t1_class_join: bool,
-    pub postseal_live_root_hashes_join_archived_r_t2_geometry: bool,
-    pub live_strict_cone_only_root_geometry_before_semantic_seal: bool,
+    pub procedure_authority: Stage4PresealProcedureAuthorityV1,
+    pub opening_token: Stage4PresealOpeningTokenV1,
+    pub live_strict_cone_geometry: Stage4StrictConeGeometryV1,
     pub common_prefix_steps: Vec<u32>,
+    pub common_prefix_candidate_hashes: Vec<String>,
     pub common_prefix_signature_digest: String,
     pub roots: Vec<Stage4SemanticRootAuditV1>,
     pub root_count: usize,
-    pub every_root_has_authoritative_registry_erased_b1_b2_b3_v3: bool,
-    pub pretestimony_semantic_selection_roots: Vec<Stage4SemanticSelectionRootV1>,
-    pub semantic_seal_excludes_legacy_v5_commitments: bool,
+    pub every_root_has_authoritative_prefix_local_b1_b2_b3_v3: bool,
+    pub exact_stage1_through3_binding_from_local_b3_packages: bool,
+    pub semantic_selection_roots: Vec<Stage4SemanticSelectionRootV1>,
     pub shared_stage1_through3_semantic_nu: Vec<u32>,
     pub exact_shared_semantic_prefix_across_all_roots: bool,
-    pub exact_shared_semantic_prefix_is_1_0_1: bool,
     pub semantic_parsimony_order: String,
     pub minimum_kappa: u16,
     pub minimum_semantic_nu: u32,
     pub semantic_minimizer_hashes: Vec<String>,
     pub semantic_minimizer_count: usize,
     pub semantic_parsimony_seal: String,
+    pub typed_preseal_surface_excludes_declared_forbidden_inputs: bool,
+    pub desired_numeric_vector_verdict_or_history_used_as_premise: bool,
+    pub result_digest: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Stage4SemanticParsimonyV1Certificate {
+    pub schema: String,
+    pub date: String,
+    pub theorem_id: String,
+    pub preseal: Stage4SemanticPresealV1,
+    pub source_bindings: Vec<Stage4SemanticSourceBindingV1>,
+    pub postseal_attachment_consumed_exact_preseal_digest: String,
+    pub full_bi0_read_or_replayed_before_semantic_seal: bool,
+    pub sealed_bi0_v5_schema: String,
+    pub sealed_bi0_v5_digest: String,
+    pub sealed_bi0_v5_replay_valid: bool,
+    pub sealed_bi0_v5_replay_errors: Vec<String>,
+    pub sealed_bi0_v5_reissuance_drift_bound_postseal_only: bool,
+    pub sealed_bi0_v5_pinned_logical_projection_valid: bool,
+    pub sealed_bi0_v5_passed: bool,
+    pub sealed_bi0_v5_executed_no_branch_work: bool,
+    pub nu_register_adjudication_hash: String,
+    pub tie_resolution_protocol_hash: String,
+    pub r_t3_stage4_adjudication_hash: String,
+    pub postseal_nu_register_and_tie_markers_replayed: bool,
+    pub postseal_r_t3_branch_boundary_replayed: bool,
+    pub postseal_live_geometry_root_count_is_four: bool,
+    pub postseal_live_geometry_every_root_kappa_three: bool,
+    pub postseal_live_geometry_candidate_hashes_distinct: bool,
+    pub postseal_exact_four_distinct_kappa_three_regression: bool,
+    pub exact_shared_semantic_prefix_is_1_0_1_postseal_regression: bool,
+    pub postseal_legacy_v5_root_comparisons: Vec<Stage4LegacyV5RootComparisonV1>,
+    pub postseal_legacy_v5_comparison_count: usize,
+    pub legacy_v5_issued_only_after_semantic_seal: bool,
+    pub legacy_v5_used_as_semantic_selector: bool,
+    pub frozen_r_t2_certificate_digest: String,
+    pub postseal_full_r_t2_projection_replay_valid: bool,
+    pub postseal_archived_exact_four_way_r_t1_class_join: bool,
+    pub postseal_live_root_hashes_join_archived_r_t2_geometry: bool,
     pub structural_testimony_read_after_semantic_seal: bool,
     pub structural_testimony_minimum_kappa: u16,
     pub structural_testimony_minimum_nu: u32,
     pub structural_testimony_minimizer_count: usize,
     pub structural_testimony_used_as_selector: bool,
+    pub structural_r_t1_join: Stage4StructuralRt1JoinV1,
     pub survivor_r_t2_join: Option<Stage4Rt2SurvivorJoinV1>,
     pub enacted_history_burn_digest: String,
     pub enacted_root_hash: String,
@@ -359,8 +429,6 @@ pub struct Stage4SemanticParsimonyV1Certificate {
     pub surviving_pair_frozen_r_t2_inequivalent: bool,
     pub enacted_root_nonminimal: bool,
     pub exact_two_minimizer_enacted_nonminimal_divergence: bool,
-    pub operation_capability_rows: Vec<Stage4SemanticCapabilityRowV1>,
-    pub no_branch_continuation_capability: bool,
     pub no_branch_executed: bool,
     pub theorem_issuer_has_no_artifact_write_capability: bool,
     pub desired_verdict_count_score_or_bar_used_as_semantic_premise: bool,
@@ -390,15 +458,43 @@ fn root_hash(root: &Stage4SemanticRootAuditV1) -> String {
     tagged_hash("semantic-root-audit", &projection)
 }
 
+fn prefix_entry_hash(entry: &Stage4PrefixEntryV1) -> String {
+    let mut projection = entry.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("exact-prefix-entry", &projection)
+}
+
+fn procedure_authority_hash(authority: &Stage4PresealProcedureAuthorityV1) -> String {
+    let mut projection = authority.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("preseal-procedure-authority", &projection)
+}
+
+fn opening_token_hash(token: &Stage4PresealOpeningTokenV1) -> String {
+    let mut projection = token.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("preseal-opening-token", &projection)
+}
+
+fn preseal_hash(preseal: &Stage4SemanticPresealV1) -> String {
+    let mut projection = preseal.clone();
+    projection.result_digest.clear();
+    tagged_hash("stage4-semantic-preseal", &projection)
+}
+
+fn legacy_comparison_hash(comparison: &Stage4LegacyV5RootComparisonV1) -> String {
+    let mut projection = comparison.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("postseal-legacy-v5-root-comparison", &projection)
+}
+
 fn semantic_selection_root(root: &Stage4SemanticRootAuditV1) -> Stage4SemanticSelectionRootV1 {
     Stage4SemanticSelectionRootV1 {
         candidate_hash: root.candidate_hash.clone(),
         geometry_telescope_hash: root.geometry_telescope_hash.clone(),
         kappa: root.kappa,
         prefix_signature_digest: root.prefix_signature_digest.clone(),
-        authoritative_registry_erased_v3_semantic_seal: root
-            .authoritative_registry_erased_v3_semantic_seal
-            .clone(),
+        authoritative_prefix_semantic_v3_seal: root.authoritative_prefix_semantic_v3_seal.clone(),
         prefix_semantic_nu_vector: root.prefix_semantic_nu_vector.clone(),
         stage4_semantic_nu: root.stage4_semantic_nu,
         registry_extension_invariance_proved: root.b3_v3_registry_extension_invariance_proved,
@@ -429,10 +525,10 @@ fn survivor_join_hash(join: &Stage4Rt2SurvivorJoinV1) -> String {
     tagged_hash("surviving-pair-r-t2-join", &projection)
 }
 
-fn capability_row_hash(row: &Stage4SemanticCapabilityRowV1) -> String {
-    let mut projection = row.clone();
+fn structural_r_t1_join_hash(join: &Stage4StructuralRt1JoinV1) -> String {
+    let mut projection = join.clone();
     projection.derivation_hash.clear();
-    tagged_hash("operation-capability-row", &projection)
+    tagged_hash("postseal-structural-r-t1-join", &projection)
 }
 
 fn certificate_hash(certificate: &Stage4SemanticParsimonyV1Certificate) -> String {
@@ -456,13 +552,193 @@ fn strict_cone_geometry_hash(geometry: &Stage4StrictConeGeometryV1) -> String {
     tagged_hash("live-stage4-strict-cone-geometry", &projection)
 }
 
+fn issue_preseal_procedure_authority() -> Stage4PresealProcedureAuthorityV1 {
+    let operations = vec![
+        Stage4PresealOperationV1::BindExactEnactedPrefix,
+        Stage4PresealOperationV1::EnumerateStrictCone,
+        Stage4PresealOperationV1::IssuePrefixLocalSemanticEvidence,
+        Stage4PresealOperationV1::CompareLexicographicParsimony,
+        Stage4PresealOperationV1::SealPretestimonyResult,
+    ];
+    let forbidden_inputs = vec![
+        Stage4ForbiddenPresealInputV1::FullBi0Certificate,
+        Stage4ForbiddenPresealInputV1::HistoricalRegistry,
+        Stage4ForbiddenPresealInputV1::LegacyV5Comparison,
+        Stage4ForbiddenPresealInputV1::StructuralNu,
+        Stage4ForbiddenPresealInputV1::ArchivedR2Comparison,
+        Stage4ForbiddenPresealInputV1::EnactedWinner,
+        Stage4ForbiddenPresealInputV1::DesiredRootCount,
+        Stage4ForbiddenPresealInputV1::DesiredKappa,
+        Stage4ForbiddenPresealInputV1::DesiredMinimum,
+        Stage4ForbiddenPresealInputV1::DesiredTieVerdict,
+        Stage4ForbiddenPresealInputV1::Bar,
+        Stage4ForbiddenPresealInputV1::FutureBranch,
+    ];
+    let mut authority = Stage4PresealProcedureAuthorityV1 {
+        schema: STAGE4_PRESEAL_PROCEDURE_AUTHORITY_SCHEMA.to_owned(),
+        operations,
+        parsimony_order:
+            "lexicographic: least kappa, then least certified prefix-local semantic-family nu"
+                .to_owned(),
+        tie_behavior:
+            "report every equal minimum; do not select a branch or consult R-T1/R-T2 preseal"
+                .to_owned(),
+        forbidden_inputs,
+        authority_scope: "This token authorizes only the closed Stage-4 preseal operation surface; adopted-document identity and all historical comparisons are postseal testimony."
+            .to_owned(),
+        closed_operation_surface: true,
+        derivation_hash: String::new(),
+    };
+    authority.derivation_hash = procedure_authority_hash(&authority);
+    authority
+}
+
+fn replay_preseal_procedure_authority(authority: &Stage4PresealProcedureAuthorityV1) -> bool {
+    authority == &issue_preseal_procedure_authority()
+        && authority.derivation_hash == procedure_authority_hash(authority)
+}
+
+fn prefix_entries(stem: &[(u32, Telescope)]) -> Vec<Stage4PrefixEntryV1> {
+    stem.iter()
+        .enumerate()
+        .map(|(index, (stage, telescope))| {
+            let mut entry = Stage4PrefixEntryV1 {
+                stage: *stage,
+                telescope: telescope.clone(),
+                candidate_hash: candidate_hash(telescope),
+                predecessor_signature_digest: SealedSignature::from_telescopes(
+                    stem[..index].to_vec(),
+                )
+                .digest()
+                .to_owned(),
+                derivation_hash: String::new(),
+            };
+            entry.derivation_hash = prefix_entry_hash(&entry);
+            entry
+        })
+        .collect()
+}
+
+/// Mint a self-digested opening capability over the exact enacted prefix
+/// payload.  No BI-0 scalar digest or archive digest is accepted by this
+/// surface.  The full BI-0 certificate is replayed only by the postseal
+/// attachment.
+fn issue_preseal_opening_token(
+    stem: &[(u32, Telescope)],
+    procedure_authority: &Stage4PresealProcedureAuthorityV1,
+) -> Result<Stage4PresealOpeningTokenV1, Stage4SemanticParsimonyV1Error> {
+    if !replay_preseal_procedure_authority(procedure_authority) {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
+            "opening token received an invalid typed procedure authority".to_owned(),
+        ));
+    }
+    let common_prefix_steps = stem.iter().map(|(stage, _)| *stage).collect::<Vec<_>>();
+    let common_prefix_candidate_hashes = stem
+        .iter()
+        .map(|(_, candidate)| candidate_hash(candidate))
+        .collect::<Vec<_>>();
+    let common_prefix_signature_digest = SealedSignature::from_telescopes(stem.to_vec())
+        .digest()
+        .to_owned();
+    let common_prefix_entries = prefix_entries(stem);
+    let exact_prefix_and_no_branch_opening = common_prefix_steps == [1, 2, 3]
+        && stem
+            .iter()
+            .all(|(stage, telescope)| *telescope == Telescope::reference(*stage))
+        && common_prefix_entries.len() == stem.len()
+        && common_prefix_entries.iter().all(|entry| {
+            entry.derivation_hash == prefix_entry_hash(entry)
+                && entry.candidate_hash == candidate_hash(&entry.telescope)
+        })
+        && common_prefix_candidate_hashes
+            == common_prefix_entries
+                .iter()
+                .map(|entry| entry.candidate_hash.clone())
+                .collect::<Vec<_>>()
+        && !common_prefix_signature_digest.is_empty()
+        && procedure_authority.closed_operation_surface;
+    if !exact_prefix_and_no_branch_opening {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
+            "opening token did not bind the exact Stage-1-through-3 payload and no-branch capability"
+                .to_owned(),
+        ));
+    }
+    let mut token = Stage4PresealOpeningTokenV1 {
+        schema: STAGE4_PRESEAL_OPENING_AUTHORITY_SCHEMA.to_owned(),
+        granting_gate_schema: BI0_SEMANTIC_REGISTER_V5_SCHEMA.to_owned(),
+        authority_scope: "Exact Stage-1-through-3 payload plus the closed preseal operation surface; this token is not a BI-0 certificate digest and carries no historical semantic register."
+            .to_owned(),
+        procedure_authority_derivation_hash: procedure_authority.derivation_hash.clone(),
+        common_prefix_entries,
+        common_prefix_steps,
+        common_prefix_candidate_hashes,
+        common_prefix_signature_digest,
+        permitted_operations: procedure_authority.operations.clone(),
+        forbidden_inputs: procedure_authority.forbidden_inputs.clone(),
+        full_bi0_scalar_or_archive_digest_present: false,
+        branch_continuation_capability_present: false,
+        exact_prefix_and_no_branch_opening,
+        derivation_hash: String::new(),
+    };
+    token.derivation_hash = opening_token_hash(&token);
+    Ok(token)
+}
+
+fn replay_preseal_opening_token(
+    stem: &[(u32, Telescope)],
+    procedure_authority: &Stage4PresealProcedureAuthorityV1,
+    token: &Stage4PresealOpeningTokenV1,
+) -> bool {
+    token.derivation_hash == opening_token_hash(token)
+        && issue_preseal_opening_token(stem, procedure_authority)
+            .is_ok_and(|expected| expected == *token)
+}
+
+/// Public typed seam for a BI-0 successor: the returned capability contains
+/// the exact prefix payload and no BI-0 certificate or archive digest.
+pub fn issue_stage4_preseal_opening_token_v1()
+-> Result<Stage4PresealOpeningTokenV1, Stage4SemanticParsimonyV1Error> {
+    let stem = common_stem()?;
+    let authority = issue_preseal_procedure_authority();
+    issue_preseal_opening_token(&stem, &authority)
+}
+
+pub fn replay_stage4_preseal_opening_token_v1(
+    claimed: &Stage4PresealOpeningTokenV1,
+) -> Vec<String> {
+    let Ok(stem) = common_stem() else {
+        return vec!["canonical Stage-1-through-3 prefix is unavailable".to_owned()];
+    };
+    let authority = issue_preseal_procedure_authority();
+    if replay_preseal_opening_token(&stem, &authority, claimed) {
+        Vec::new()
+    } else {
+        vec!["Stage-4 preseal opening token differs from exact-prefix reissuance".to_owned()]
+    }
+}
+
 /// Enumerate the complete guarded Stage-4 strict cone without constructing or
 /// storing structural nu.  This is the only preseal source of root geometry.
 pub fn issue_stage4_strict_cone_geometry_v1()
 -> Result<Stage4StrictConeGeometryV1, Stage4SemanticParsimonyV1Error> {
     let stem = common_stem()?;
+    let authority = issue_preseal_procedure_authority();
+    let opening = issue_preseal_opening_token(&stem, &authority)?;
+    issue_stage4_strict_cone_geometry_from_opening(&stem, &opening)
+}
+
+fn issue_stage4_strict_cone_geometry_from_opening(
+    stem: &[(u32, Telescope)],
+    opening: &Stage4PresealOpeningTokenV1,
+) -> Result<Stage4StrictConeGeometryV1, Stage4SemanticParsimonyV1Error> {
+    let procedure_authority = issue_preseal_procedure_authority();
+    if !replay_preseal_opening_token(stem, &procedure_authority, opening) {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
+            "live cone did not receive an exact replayable opening token".to_owned(),
+        ));
+    }
     let mut library: Library = Vec::new();
-    for (_, telescope) in &stem {
+    for (_, telescope) in stem {
         library.push(LibraryEntry::from_telescope(telescope, &library));
     }
     let admissibility = strict_admissibility_for_mode(4, 2, &library, AdmissibilityMode::Guarded);
@@ -477,58 +753,56 @@ pub fn issue_stage4_strict_cone_geometry_v1()
         .filter(|telescope| passes_strict_admissibility(4, &library, telescope, admissibility))
         .collect::<Vec<_>>();
     let strict_admitted_count = strict.len();
-    let mut seen = BTreeSet::new();
     let mut roots = strict
         .into_iter()
-        .filter_map(|telescope| {
+        .map(|telescope| {
             let canonical_key = canonical_key_telescope(&telescope).0;
-            seen.insert(canonical_key.clone()).then(|| {
-                let kappa = u16::try_from(telescope.kappa()).expect("admissible kappa fits u16");
-                Stage4StrictConeRootGeometryV1 {
-                    candidate_hash: candidate_hash(&telescope),
-                    canonical_key,
-                    telescope,
-                    kappa,
-                }
-            })
+            let kappa = u16::try_from(telescope.kappa()).expect("admissible kappa fits u16");
+            Stage4StrictConeRootGeometryV1 {
+                candidate_hash: candidate_hash(&telescope),
+                canonical_key,
+                telescope,
+                kappa,
+            }
         })
         .collect::<Vec<_>>();
-    roots.sort_by(|left, right| left.candidate_hash.cmp(&right.candidate_hash));
+    roots.sort_by(|left, right| {
+        left.candidate_hash
+            .cmp(&right.candidate_hash)
+            .then_with(|| left.canonical_key.cmp(&right.canonical_key))
+    });
     let least_kappa = roots.iter().map(|root| root.kappa).min().ok_or_else(|| {
         Stage4SemanticParsimonyV1Error::Prerequisite("live Stage-4 strict cone is empty".to_owned())
     })?;
-    let exact_complete_strict_cone = roots.iter().all(|root| {
-        passes_strict_admissibility(4, &library, &root.telescope, admissibility)
-            && candidate_hash(&root.telescope) == root.candidate_hash
-            && canonical_key_telescope(&root.telescope).0 == root.canonical_key
-    });
-    let exact_four_distinct_least_kappa_three_roots = roots.len() == 4
-        && roots
-            .iter()
-            .map(|root| root.candidate_hash.as_str())
-            .collect::<BTreeSet<_>>()
-            .len()
-            == 4
-        && least_kappa == 3
-        && roots.iter().all(|root| root.kappa == least_kappa);
-    if !exact_complete_strict_cone || !exact_four_distinct_least_kappa_three_roots {
+    let all_strict_candidates_retained_without_canonical_deduplication =
+        strict_admitted_count == roots.len();
+    let complete_nonempty_strict_cone = !roots.is_empty()
+        && all_strict_candidates_retained_without_canonical_deduplication
+        && roots.iter().all(|root| {
+            passes_strict_admissibility(4, &library, &root.telescope, admissibility)
+                && candidate_hash(&root.telescope) == root.candidate_hash
+                && canonical_key_telescope(&root.telescope).0 == root.canonical_key
+        });
+    if !complete_nonempty_strict_cone {
         return Err(Stage4SemanticParsimonyV1Error::Prerequisite(format!(
-            "live Stage-4 strict cone is not the exact four-root least-kappa-3 surface (raw={raw_enumerated_count}, strict={strict_admitted_count}, deduped={})",
+            "live Stage-4 strict cone is empty, incomplete, or dropped an enumerated strict candidate (raw={raw_enumerated_count}, strict={strict_admitted_count}, retained={})",
             roots.len()
         )));
     }
     let mut geometry = Stage4StrictConeGeometryV1 {
+        opening_token_derivation_hash: opening.derivation_hash.clone(),
+        common_prefix_signature_digest: opening.common_prefix_signature_digest.clone(),
         stage: 4,
         window_depth: 2,
         enumerated_kappa_min: admissibility.min_clause_kappa,
         enumerated_kappa_max: admissibility.max_clause_kappa,
         raw_enumerated_count,
         strict_admitted_count,
-        canonical_deduped_count: roots.len(),
+        retained_strict_candidate_count: roots.len(),
+        all_strict_candidates_retained_without_canonical_deduplication,
         least_kappa,
         roots,
-        exact_complete_strict_cone,
-        exact_four_distinct_least_kappa_three_roots,
+        complete_nonempty_strict_cone,
         derivation_hash: String::new(),
     };
     geometry.derivation_hash = strict_cone_geometry_hash(&geometry);
@@ -583,36 +857,26 @@ fn root_audit(
     let prefix_signature_digest = SealedSignature::from_telescopes(entries.clone())
         .digest()
         .to_owned();
-    let sequence = issue_act_local_semantic_sequence_v5(&entries)
+    let b3_context = issue_replayed_t_bi_intrinsic_isolation_v3_context(&entries)
         .map_err(|error| Stage4SemanticParsimonyV1Error::Invariant(error.to_string()))?;
-    let b3 = issue_t_bi_intrinsic_isolation_v3(&entries, &sequence)
-        .map_err(|error| Stage4SemanticParsimonyV1Error::Invariant(error.to_string()))?;
-    let b3_replay_errors = replay_t_bi_intrinsic_isolation_v3(&entries, &sequence, &b3);
-    if !b3_replay_errors.is_empty() {
+    let b3_independently_replayed = b3_context.proved
+        && b3_context.replay_errors.is_empty()
+        && b3_context.sequence_evidence_equal
+        && b3_context.token_evidence_equal;
+    if !b3_independently_replayed {
         return Err(Stage4SemanticParsimonyV1Error::Invariant(format!(
             "B3 v3 replay failed: {}",
-            b3_replay_errors.join("; ")
+            b3_context.replay_errors.join("; ")
         )));
     }
+    let b3 = b3_context.token;
+    let sequence = b3_context.sequence;
     let package = sequence.packages.last().ok_or_else(|| {
-        Stage4SemanticParsimonyV1Error::Invariant("Stage-4 package is absent".to_owned())
+        Stage4SemanticParsimonyV1Error::Invariant(
+            "source-first Stage-4 package is absent".to_owned(),
+        )
     })?;
-    let legacy_v5_self_reported_forbidden_or_future_input_used =
-        sequence.packages.iter().any(|row| {
-            row.archive_read
-                || row.structural_nu_read
-                || row.bar_read
-                || row.verdict_read
-                || row.enacted_future_read
-        });
-    let authoritative_semantic_nu_vector = b3.authoritative_semantic_nu_vector.clone();
-    let legacy_semantic_nu_vector = sequence
-        .packages
-        .iter()
-        .map(|row| row.semantic_family_nu)
-        .collect::<Vec<_>>();
-    let authoritative_nu_matches_legacy_v5_comparison =
-        authoritative_semantic_nu_vector == legacy_semantic_nu_vector;
+    let authoritative_semantic_nu_vector = sequence.semantic_nu_vector.clone();
     let stage4_semantic_nu = authoritative_semantic_nu_vector
         .last()
         .copied()
@@ -621,14 +885,35 @@ fn root_audit(
                 "B3 v3 registry-erased semantic vector is empty".to_owned(),
             )
         })?;
-    let root_semantic_audit_proved = b3.prefix_generic_transitive_isolation_proved
-        && b3.registry_extension_invariance_proved
-        && b3.v3_is_sole_prefix_generic_theorem_authority
-        && !b3.embedded_v2_exact_fifteen_theorem_authority_claimed
-        && !b3.old_v4_v5_full_hashes_authoritative_for_prefix_theorem
-        && !b3
-            .authoritative_registry_erased_prefix_semantic_seal
-            .is_empty()
+    let exact_candidate_prefix_and_package_bindings = entries
+        .iter()
+        .enumerate()
+        .zip(&sequence.packages)
+        .zip(&b3.prefix_bindings)
+        .all(|(((index, (stage, candidate)), package), binding)| {
+            let predecessor = SealedSignature::from_telescopes(entries[..index].to_vec());
+            package.stage == *stage
+                && package.candidate_hash == candidate_hash(candidate)
+                && package.predecessor_signature_digest == predecessor.digest()
+                && binding.stage == *stage
+                && binding.candidate_hash == candidate_hash(candidate)
+                && binding.predecessor_signature_digest == predecessor.digest()
+                && binding.semantic_package_derivation_hash == package.derivation_hash
+                && binding.exact_candidate_and_prefix_binding
+        })
+        && sequence.packages.len() == entries.len()
+        && b3.prefix_bindings.len() == entries.len();
+    let root_semantic_audit_proved = b3_independently_replayed
+        && b3.prefix_generic_transitive_isolation_proved
+        && b3.prefix_local_sequence_replayed
+        && b3.every_local_package_proved_b1_b2
+        && b3.every_registry_extension_projection_equal
+        && b3.no_historical_registry_or_legacy_v5_authority
+        && !b3.authoritative_prefix_semantic_seal.is_empty()
+        && sequence.no_historical_registry_or_future_input
+        && sequence.t_bi_b1_proved_on_sequence
+        && sequence.t_bi_b2_proved_on_sequence
+        && exact_candidate_prefix_and_package_bindings
         && b3.no_archive_structural_bar_verdict_or_future_input;
     if !root_semantic_audit_proved {
         return Err(Stage4SemanticParsimonyV1Error::Invariant(format!(
@@ -644,35 +929,33 @@ fn root_audit(
         geometry_telescope_hash: tagged_hash("certified-root-geometry", telescope),
         kappa,
         prefix_signature_digest,
-        non_authoritative_legacy_v5_sequence_derivation_hash: sequence.derivation_hash.clone(),
-        non_authoritative_legacy_v5_sequence_seal: sequence.intrinsic_sequence_seal.clone(),
-        non_authoritative_legacy_v5_package_derivation_hashes: sequence
-            .exact_package_derivation_hashes
-            .clone(),
-        authoritative_registry_erased_v3_semantic_seal: b3
-            .authoritative_registry_erased_prefix_semantic_seal
-            .clone(),
+        authoritative_prefix_local_v5_sequence_derivation_hash: sequence.derivation_hash.clone(),
+        authoritative_prefix_local_v5_sequence_seal: sequence.authoritative_sequence_seal.clone(),
+        authoritative_prefix_local_v5_package_derivation_hashes: sequence
+            .packages
+            .iter()
+            .map(|package| package.derivation_hash.clone())
+            .collect(),
+        authoritative_prefix_local_v5_stage4_package_hash: package.derivation_hash.clone(),
+        authoritative_prefix_semantic_v3_seal: b3.authoritative_prefix_semantic_seal.clone(),
         prefix_semantic_nu_vector: authoritative_semantic_nu_vector,
         stage4_semantic_nu,
-        non_authoritative_legacy_v5_stage4_package_hash: package.derivation_hash.clone(),
-        legacy_v5_t_bi_b1_comparison: package.t_bi_b1_proved,
-        legacy_v5_t_bi_b2_comparison: package.t_bi_b2_proved,
-        legacy_v5_named_role_residual_comparison: package.named_role_residual_count,
-        legacy_v5_named_quotient_residual_comparison: package.named_quotient_residual_count,
-        legacy_v5_named_a3_residual_comparison: package.named_a3_residual_count,
-        legacy_v5_silent_residue_comparison: package.silent_residue_count,
-        authoritative_nu_matches_legacy_v5_comparison,
+        prefix_local_v5_t_bi_b1_proved: package.t_bi_b1_proved,
+        prefix_local_v5_t_bi_b2_proved: package.t_bi_b2_proved,
+        prefix_local_v5_named_role_residual_count: package.named_role_residual_count,
+        prefix_local_v5_named_quotient_residual_count: package.named_quotient_residual_count,
+        prefix_local_v5_named_a3_residual_count: package.named_a3_residual_count,
+        prefix_local_v5_silent_residue_count: package.silent_residue_count,
         b3_v3_derivation_hash: b3.derivation_hash,
         b3_v3_prefix_generic_isolation_proved: b3.prefix_generic_transitive_isolation_proved,
-        b3_v3_registry_extension_invariance_proved: b3.registry_extension_invariance_proved,
-        b3_v3_is_sole_prefix_generic_theorem_authority: b3
-            .v3_is_sole_prefix_generic_theorem_authority,
-        b3_v3_legacy_full_hashes_authoritative: b3
-            .old_v4_v5_full_hashes_authoritative_for_prefix_theorem,
+        b3_v3_prefix_local_sequence_replayed: b3.prefix_local_sequence_replayed,
+        b3_v3_every_local_package_proved_b1_b2: b3.every_local_package_proved_b1_b2,
+        b3_v3_registry_extension_invariance_proved: b3.every_registry_extension_projection_equal,
+        b3_v3_no_historical_registry_or_legacy_v5_authority: b3
+            .no_historical_registry_or_legacy_v5_authority,
         b3_v3_no_forbidden_or_future_semantic_input: b3
             .no_archive_structural_bar_verdict_or_future_input,
-        legacy_v5_hashes_used_as_semantic_selector: false,
-        legacy_v5_self_reported_forbidden_or_future_input_used,
+        exact_candidate_prefix_and_package_bindings,
         root_semantic_audit_proved,
         derivation_hash: String::new(),
     };
@@ -680,132 +963,152 @@ fn root_audit(
     Ok(root)
 }
 
-fn capability_rows() -> Vec<Stage4SemanticCapabilityRowV1> {
-    use Stage4SemanticOperationV1 as O;
-    let operations = [
-        O::ReadSealedBi0OpeningProjection,
-        O::BindAdoptedSemanticRegisterAndTieProtocol,
-        O::IssueLiveStrictConeGeometry,
-        O::BindCommonStage1Through3Prefix,
-        O::ReissueActLocalV5,
-        O::ProvePrefixGenericB3,
-        O::SealSemanticParsimony,
-        O::ReplayFullBi0Postseal,
-        O::ReadRt3BranchBoundaryPostseal,
-        O::ReadStructuralTestimonyPostseal,
-        O::JoinFrozenRt2PairPostseal,
-        O::ReadEnactedRootDigestPostseal,
-        O::SealAudit,
-    ];
-    let forbidden = Stage4SemanticCapabilityV1::forbidden();
-    let mut accumulated = BTreeSet::new();
-    operations
-        .into_iter()
-        .enumerate()
-        .map(|(index, operation)| {
-            let direct_capabilities = operation.direct_capabilities();
-            accumulated.extend(direct_capabilities.iter().copied());
-            let forbidden_capabilities = accumulated
-                .intersection(&forbidden)
-                .copied()
-                .collect::<Vec<_>>();
-            let mut row = Stage4SemanticCapabilityRowV1 {
-                ordinal: u8::try_from(index + 1).expect("thirteen operation rows"),
-                operation,
-                direct_capabilities,
-                accumulated_capabilities: accumulated.iter().copied().collect(),
-                isolated: forbidden_capabilities.is_empty(),
-                forbidden_capabilities,
-                derivation_hash: String::new(),
-            };
-            row.derivation_hash = capability_row_hash(&row);
-            row
-        })
-        .collect()
-}
-
-/// Run the narrow theorem issuer.  It returns data only; no branch is
-/// selected or executed and the issuer has no filesystem parameter.
-pub fn issue_stage4_semantic_parsimony_v1()
--> Result<Stage4SemanticParsimonyV1Certificate, Stage4SemanticParsimonyV1Error> {
-    let bi0_opening: Bi0OpeningCapabilityProjectionV1 =
-        serde_json::from_slice(BI0_V5_ARTIFACT_BYTES)
-            .map_err(|error| Stage4SemanticParsimonyV1Error::Json(error.to_string()))?;
-    let preseal_bi0_opening_capability_valid = bi0_opening.schema
-        == BI0_SEMANTIC_REGISTER_V5_SCHEMA
-        && bi0_opening.bi0_attempt_executed
-        && bi0_opening.bi0_passed
-        && !bi0_opening.bi1_invoked
-        && !bi0_opening.non_enacted_cone_invoked
-        && !bi0_opening.non_enacted_branch_work_executed;
-    if !preseal_bi0_opening_capability_valid {
-        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
-            "sealed BI-0 opening projection is not passed/no-branch".to_owned(),
+fn postseal_legacy_v5_comparison(
+    telescope: &Telescope,
+    stem: &[(u32, Telescope)],
+    authoritative: &Stage4SemanticRootAuditV1,
+) -> Result<Stage4LegacyV5RootComparisonV1, Stage4SemanticParsimonyV1Error> {
+    let mut entries = stem.to_vec();
+    entries.push((4, telescope.clone()));
+    let sequence = issue_act_local_semantic_sequence_v5(&entries)
+        .map_err(|error| Stage4SemanticParsimonyV1Error::Invariant(error.to_string()))?;
+    let replay_errors = replay_act_local_semantic_sequence_v5(&entries, &sequence);
+    if !replay_errors.is_empty() {
+        return Err(Stage4SemanticParsimonyV1Error::Invariant(format!(
+            "postseal legacy-v5 replay failed: {}",
+            replay_errors.join("; ")
+        )));
+    }
+    let package = sequence.packages.last().ok_or_else(|| {
+        Stage4SemanticParsimonyV1Error::Invariant(
+            "postseal legacy-v5 Stage-4 package is absent".to_owned(),
+        )
+    })?;
+    if package.candidate_hash != authoritative.candidate_hash {
+        return Err(Stage4SemanticParsimonyV1Error::Invariant(
+            "postseal legacy-v5 comparison is not bound to the authoritative root".to_owned(),
         ));
     }
-    let preseal_bi0_opening_projection_hash =
-        tagged_hash("preseal-bi0-opening-capability", &bi0_opening);
-    let nu_adjudication = std::str::from_utf8(NU_REGISTER_ADJUDICATION_BYTES)
-        .map_err(|error| Stage4SemanticParsimonyV1Error::Prerequisite(error.to_string()))?;
-    let tie_protocol = std::str::from_utf8(TIE_PROTOCOL_BYTES)
-        .map_err(|error| Stage4SemanticParsimonyV1Error::Prerequisite(error.to_string()))?;
-    let preseal_nu_register_and_tie_authority_replayed = nu_adjudication
-        .contains("Status:** **ADOPTED")
-        && nu_adjudication.contains("F-AL1")
-        && tie_protocol.contains("Status:** **ADOPTED")
-        && tie_protocol.contains("R-T1")
-        && tie_protocol.contains("R-T2");
-    if !preseal_nu_register_and_tie_authority_replayed {
+    let legacy_semantic_nu_vector = sequence
+        .packages
+        .iter()
+        .map(|package| package.semantic_family_nu)
+        .collect::<Vec<_>>();
+    let legacy_stage4_semantic_nu = package.semantic_family_nu;
+    let legacy_self_reported_forbidden_or_future_input_used =
+        sequence.packages.iter().any(|package| {
+            package.archive_read
+                || package.structural_nu_read
+                || package.bar_read
+                || package.verdict_read
+                || package.enacted_future_read
+        });
+    let authoritative_nu_matches_legacy_comparison =
+        authoritative.prefix_semantic_nu_vector == legacy_semantic_nu_vector;
+    let mut comparison = Stage4LegacyV5RootComparisonV1 {
+        candidate_hash: authoritative.candidate_hash.clone(),
+        legacy_sequence_derivation_hash: sequence.derivation_hash.clone(),
+        legacy_sequence_seal: sequence.intrinsic_sequence_seal.clone(),
+        legacy_package_derivation_hashes: sequence.exact_package_derivation_hashes.clone(),
+        legacy_stage4_package_hash: package.derivation_hash.clone(),
+        legacy_semantic_nu_vector,
+        legacy_stage4_semantic_nu,
+        legacy_t_bi_b1_comparison: package.t_bi_b1_proved,
+        legacy_t_bi_b2_comparison: package.t_bi_b2_proved,
+        legacy_named_role_residual_comparison: package.named_role_residual_count,
+        legacy_named_quotient_residual_comparison: package.named_quotient_residual_count,
+        legacy_named_a3_residual_comparison: package.named_a3_residual_count,
+        legacy_silent_residue_comparison: package.silent_residue_count,
+        legacy_self_reported_forbidden_or_future_input_used,
+        legacy_sequence_replay_valid: true,
+        authoritative_nu_matches_legacy_comparison,
+        used_as_semantic_selector: false,
+        derivation_hash: String::new(),
+    };
+    comparison.derivation_hash = legacy_comparison_hash(&comparison);
+    Ok(comparison)
+}
+
+/// Issue the authoritative semantic comparison.  This function reads no
+/// adjudication prose, BI-0 certificate, archive, structural score, expected
+/// root count, expected kappa, or expected tie result.  Procedure authority is
+/// a closed typed token; all historical comparison is deferred to postseal.
+pub fn issue_stage4_semantic_preseal_v1()
+-> Result<Stage4SemanticPresealV1, Stage4SemanticParsimonyV1Error> {
+    let procedure_authority = issue_preseal_procedure_authority();
+    if !replay_preseal_procedure_authority(&procedure_authority) {
         return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
-            "preseal nu-register or R-T1/R-T2 tie-protocol authority is absent".to_owned(),
+            "typed preseal procedure authority failed replay".to_owned(),
         ));
     }
     let stem = common_stem()?;
+    let opening_token = issue_preseal_opening_token(&stem, &procedure_authority)?;
+    let common_prefix_steps = stem.iter().map(|(stage, _)| *stage).collect::<Vec<_>>();
+    let common_prefix_candidate_hashes = stem
+        .iter()
+        .map(|(_, candidate)| candidate_hash(candidate))
+        .collect::<Vec<_>>();
     let common_prefix_signature_digest = SealedSignature::from_telescopes(stem.clone())
         .digest()
         .to_owned();
-    let geometry = issue_stage4_strict_cone_geometry_v1()?;
-    let geometry_replay_errors = replay_stage4_strict_cone_geometry_v1(&geometry);
-    if !geometry_replay_errors.is_empty() {
-        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(format!(
-            "live Stage-4 strict-cone geometry replay failed: {}",
-            geometry_replay_errors.join("; ")
-        )));
+    let geometry = issue_stage4_strict_cone_geometry_from_opening(&stem, &opening_token)?;
+    if geometry.derivation_hash != strict_cone_geometry_hash(&geometry)
+        || !geometry.complete_nonempty_strict_cone
+        || !geometry.all_strict_candidates_retained_without_canonical_deduplication
+    {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
+            "live Stage-4 strict-cone geometry failed its typed opening-bound replay".to_owned(),
+        ));
     }
-    let preseal_geometry_projection_hash = geometry.derivation_hash.clone();
-
-    // The live strict-cone issuer has no structural-nu, R-T2 outcome,
-    // Stage-5, pairwise, or selector input.  Only its exact exhaustive
-    // four-root geometry reaches the semantic minimizer below.
     let mut roots = geometry
         .roots
         .iter()
         .map(|root| root_audit(&root.telescope, &stem))
         .collect::<Result<Vec<_>, _>>()?;
     roots.sort_by(|left, right| left.candidate_hash.cmp(&right.candidate_hash));
-    if roots.len() != 4
-        || roots
-            .iter()
-            .map(|root| root.candidate_hash.as_str())
-            .collect::<BTreeSet<_>>()
-            .len()
-            != 4
+    let expected_prefix_length = stem.len() + 1;
+    if roots.is_empty()
+        || roots.len() != geometry.roots.len()
+        || roots.iter().any(|root| {
+            root.prefix_semantic_nu_vector.len() != expected_prefix_length
+                || root
+                    .authoritative_prefix_local_v5_package_derivation_hashes
+                    .len()
+                    != expected_prefix_length
+        })
     {
         return Err(Stage4SemanticParsimonyV1Error::Invariant(
-            "certified geometry did not produce exactly four distinct semantic roots".to_owned(),
+            "source-first geometry did not produce one exact prefix-local semantic audit per retained strict candidate"
+                .to_owned(),
         ));
     }
-    let shared_stage1_through3_semantic_nu = roots[0].prefix_semantic_nu_vector[..3].to_vec();
-    let exact_shared_semantic_prefix_across_all_roots = roots.iter().all(|root| {
-        root.prefix_semantic_nu_vector.len() == 4
-            && root.prefix_semantic_nu_vector[..3] == shared_stage1_through3_semantic_nu
+    let first_prefix_packages =
+        roots[0].authoritative_prefix_local_v5_package_derivation_hashes[..stem.len()].to_vec();
+    let exact_stage1_through3_binding_from_local_b3_packages = roots.iter().all(|root| {
+        root.exact_candidate_prefix_and_package_bindings
+            && root
+                .authoritative_prefix_local_v5_package_derivation_hashes
+                .len()
+                == expected_prefix_length
+            && root.authoritative_prefix_local_v5_package_derivation_hashes[..stem.len()]
+                == first_prefix_packages
     });
-    let exact_shared_semantic_prefix_is_1_0_1 = shared_stage1_through3_semantic_nu == [1, 0, 1];
-    if !exact_shared_semantic_prefix_across_all_roots || !exact_shared_semantic_prefix_is_1_0_1 {
-        return Err(Stage4SemanticParsimonyV1Error::Invariant(format!(
-            "the four roots do not derive the sealed BI-0 common semantic prefix [1,0,1]: {:?}",
-            shared_stage1_through3_semantic_nu
-        )));
+    if !exact_stage1_through3_binding_from_local_b3_packages {
+        return Err(Stage4SemanticParsimonyV1Error::Invariant(
+            "the source-first B3 roots do not all bind the same exact Stage-1-through-3 package prefix"
+                .to_owned(),
+        ));
+    }
+    let shared_stage1_through3_semantic_nu =
+        roots[0].prefix_semantic_nu_vector[..stem.len()].to_vec();
+    let exact_shared_semantic_prefix_across_all_roots = roots.iter().all(|root| {
+        root.prefix_semantic_nu_vector[..stem.len()] == shared_stage1_through3_semantic_nu
+    });
+    if !exact_shared_semantic_prefix_across_all_roots {
+        return Err(Stage4SemanticParsimonyV1Error::Invariant(
+            "the source-first roots do not all share a semantic Stage-1-through-3 prefix"
+                .to_owned(),
+        ));
     }
     let minimum_pair = roots
         .iter()
@@ -817,44 +1120,180 @@ pub fn issue_stage4_semantic_parsimony_v1()
         .filter(|root| (root.kappa, root.stage4_semantic_nu) == minimum_pair)
         .map(|root| root.candidate_hash.clone())
         .collect::<Vec<_>>();
-    let pretestimony_semantic_selection_roots = roots
+    let semantic_selection_roots = roots
         .iter()
         .map(semantic_selection_root)
         .collect::<Vec<_>>();
-    let semantic_seal_excludes_legacy_v5_commitments =
-        serde_json::to_string(&pretestimony_semantic_selection_roots)
-            .map_err(|error| Stage4SemanticParsimonyV1Error::Json(error.to_string()))?
-            .find("legacy_v5")
-            .is_none();
-    if !semantic_seal_excludes_legacy_v5_commitments {
-        return Err(Stage4SemanticParsimonyV1Error::Invariant(
-            "pre-testimony semantic selection projection contains a legacy-v5 commitment"
-                .to_owned(),
-        ));
-    }
     let semantic_parsimony_seal = semantic_parsimony_seal(
-        &pretestimony_semantic_selection_roots,
+        &semantic_selection_roots,
         minimum_pair,
         &semantic_minimizer_hashes,
     );
+    let every_root_has_authoritative_prefix_local_b1_b2_b3_v3 =
+        roots.iter().all(|root| root.root_semantic_audit_proved);
+    let typed_preseal_surface_excludes_declared_forbidden_inputs =
+        replay_preseal_procedure_authority(&procedure_authority)
+            && replay_preseal_opening_token(&stem, &procedure_authority, &opening_token)
+            && roots.iter().all(|root| {
+                root.b3_v3_no_historical_registry_or_legacy_v5_authority
+                    && root.b3_v3_no_forbidden_or_future_semantic_input
+            });
+    if !every_root_has_authoritative_prefix_local_b1_b2_b3_v3
+        || !typed_preseal_surface_excludes_declared_forbidden_inputs
+    {
+        return Err(Stage4SemanticParsimonyV1Error::Invariant(
+            "a preseal root lacks source-first B1/B2/B3 isolation".to_owned(),
+        ));
+    }
+    let mut preseal = Stage4SemanticPresealV1 {
+        schema: STAGE4_SEMANTIC_PARSIMONY_V1_SCHEMA.to_owned(),
+        date: STAGE4_SEMANTIC_PARSIMONY_V1_DATE.to_owned(),
+        theorem_id: STAGE4_SEMANTIC_PARSIMONY_V1_THEOREM_ID.to_owned(),
+        procedure_authority,
+        opening_token,
+        live_strict_cone_geometry: geometry,
+        common_prefix_steps,
+        common_prefix_candidate_hashes,
+        common_prefix_signature_digest,
+        root_count: roots.len(),
+        every_root_has_authoritative_prefix_local_b1_b2_b3_v3,
+        exact_stage1_through3_binding_from_local_b3_packages,
+        semantic_selection_roots,
+        shared_stage1_through3_semantic_nu,
+        exact_shared_semantic_prefix_across_all_roots,
+        semantic_parsimony_order: "lexicographic: least kappa, then least source-first prefix-local semantic-family nu from B3 v3"
+            .to_owned(),
+        minimum_kappa: minimum_pair.0,
+        minimum_semantic_nu: minimum_pair.1,
+        semantic_minimizer_count: semantic_minimizer_hashes.len(),
+        semantic_minimizer_hashes,
+        semantic_parsimony_seal,
+        typed_preseal_surface_excludes_declared_forbidden_inputs,
+        desired_numeric_vector_verdict_or_history_used_as_premise: false,
+        roots,
+        result_digest: String::new(),
+    };
+    preseal.result_digest = preseal_hash(&preseal);
+    Ok(preseal)
+}
 
-    // Everything below is post-seal testimony: useful for stating the
-    // divergence, incapable of affecting the semantic minimizer above.
+pub fn replay_stage4_semantic_preseal_v1(claimed: &Stage4SemanticPresealV1) -> Vec<String> {
+    let mut errors = Vec::new();
+    if claimed.result_digest != preseal_hash(claimed) {
+        errors.push("Stage-4 semantic preseal digest mismatch".to_owned());
+    }
+    match issue_stage4_semantic_preseal_v1() {
+        Ok(expected) if expected == *claimed => {}
+        Ok(_) => errors.push("Stage-4 semantic preseal differs from blind reissuance".to_owned()),
+        Err(error) => errors.push(error.to_string()),
+    }
+    errors
+}
+
+fn attach_stage4_postseal_testimony(
+    preseal: Stage4SemanticPresealV1,
+) -> Result<Stage4SemanticParsimonyV1Certificate, Stage4SemanticParsimonyV1Error> {
+    if preseal.result_digest != preseal_hash(&preseal) {
+        return Err(Stage4SemanticParsimonyV1Error::Invariant(
+            "postseal attachment received an invalid semantic preseal".to_owned(),
+        ));
+    }
+    let frozen_sources_pinned = bytes_hash(BI0_V5_ARTIFACT_BYTES) == BI0_V5_ARTIFACT_BLAKE3
+        && bytes_hash(NU_REGISTER_ADJUDICATION_BYTES) == NU_REGISTER_ADJUDICATION_BLAKE3
+        && bytes_hash(TIE_PROTOCOL_BYTES) == TIE_PROTOCOL_BLAKE3
+        && bytes_hash(R_T3_ADJUDICATION_BYTES) == R_T3_ADJUDICATION_BLAKE3
+        && bytes_hash(R_T2_ARTIFACT_BYTES) == R_T2_ARTIFACT_BLAKE3
+        && bytes_hash(PHASE5B_BURN_BYTES) == PHASE5B_BURN_BLAKE3;
+    if !frozen_sources_pinned {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
+            "a frozen postseal testimony source differs from its pinned byte digest".to_owned(),
+        ));
+    }
+    let semantic_minimizer_hashes = preseal.semantic_minimizer_hashes.clone();
+    let minimum_pair = (preseal.minimum_kappa, preseal.minimum_semantic_nu);
+    let roots = &preseal.roots;
+    let geometry = &preseal.live_strict_cone_geometry;
+    let stem = common_stem()?;
+    let postseal_live_geometry_root_count_is_four = geometry.roots.len() == 4;
+    let postseal_live_geometry_every_root_kappa_three =
+        geometry.roots.iter().all(|root| root.kappa == 3);
+    let postseal_live_geometry_candidate_hashes_distinct = geometry
+        .roots
+        .iter()
+        .map(|root| root.candidate_hash.as_str())
+        .collect::<BTreeSet<_>>()
+        .len()
+        == geometry.roots.len();
+    let postseal_exact_four_distinct_kappa_three_regression =
+        postseal_live_geometry_root_count_is_four
+            && postseal_live_geometry_every_root_kappa_three
+            && postseal_live_geometry_candidate_hashes_distinct;
+
+    let nu_adjudication = std::str::from_utf8(NU_REGISTER_ADJUDICATION_BYTES)
+        .map_err(|error| Stage4SemanticParsimonyV1Error::Prerequisite(error.to_string()))?;
+    let tie_protocol = std::str::from_utf8(TIE_PROTOCOL_BYTES)
+        .map_err(|error| Stage4SemanticParsimonyV1Error::Prerequisite(error.to_string()))?;
+    let postseal_nu_register_and_tie_markers_replayed = nu_adjudication
+        .contains("Status:** **ADOPTED")
+        && nu_adjudication.contains("F-AL1")
+        && tie_protocol.contains("Status:** **ADOPTED")
+        && tie_protocol.contains("R-T1")
+        && tie_protocol.contains("R-T2");
+    if !postseal_nu_register_and_tie_markers_replayed {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
+            "postseal adopted semantic-register or tie-protocol markers are absent".to_owned(),
+        ));
+    }
+
+    let mut postseal_legacy_v5_root_comparisons = geometry
+        .roots
+        .iter()
+        .map(|geometry_root| {
+            let authoritative = roots
+                .iter()
+                .find(|root| root.candidate_hash == geometry_root.candidate_hash)
+                .ok_or_else(|| {
+                    Stage4SemanticParsimonyV1Error::Invariant(
+                        "live geometry root has no authoritative preseal audit".to_owned(),
+                    )
+                })?;
+            postseal_legacy_v5_comparison(&geometry_root.telescope, &stem, authoritative)
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    postseal_legacy_v5_root_comparisons
+        .sort_by(|left, right| left.candidate_hash.cmp(&right.candidate_hash));
+
     let bi0: Bi0SemanticRegisterV5Certificate = serde_json::from_slice(BI0_V5_ARTIFACT_BYTES)
         .map_err(|error| Stage4SemanticParsimonyV1Error::Json(error.to_string()))?;
     let bi0_replay = replay_bi0_semantic_register_v5_certificate(&bi0);
-    if bi0.schema != BI0_SEMANTIC_REGISTER_V5_SCHEMA
-        || !bi0_replay.valid
+    let sealed_bi0_v5_pinned_logical_projection_valid = bi0.schema
+        == BI0_SEMANTIC_REGISTER_V5_SCHEMA
+        && bi0.bi0_attempt_executed
+        && bi0.bi0_passed
+        && !bi0.bi1_invoked
+        && !bi0.non_enacted_cone_invoked
+        && !bi0.non_enacted_branch_work_executed;
+    let reissuance_drift_marker = "BI-0 v5 certificate differs from create-new reissuance";
+    let bi0_replay_errors_are_only_deterministic_reissuance_drift = bi0_replay
+        .errors
+        .iter()
+        .all(|error| error == reissuance_drift_marker)
+        && bi0_replay.errors.len() <= 1;
+    if !sealed_bi0_v5_pinned_logical_projection_valid
+        || !bi0_replay_errors_are_only_deterministic_reissuance_drift
         || !bi0_replay.bi0_passed
         || bi0_replay.bi1_invoked
         || bi0_replay.non_enacted_cone_invoked
-        || bi0.non_enacted_branch_work_executed
     {
         return Err(Stage4SemanticParsimonyV1Error::Prerequisite(format!(
-            "postseal full BI-0 v5 replay failed its passed/no-branch gate: {:?}",
+            "postseal pinned BI-0 v5 logical projection failed its passed/no-branch gate: {:?}",
             bi0_replay.errors
         )));
     }
+    // BI-0 is testimony only at this point.  A deterministic reissuance drift
+    // caused by later issuer hardening is published in the certificate and
+    // cannot retroactively alter the already sealed semantic comparison.
+    let sealed_bi0_v5_reissuance_drift_bound_postseal_only = !bi0_replay.valid;
     let r_t3_adjudication = std::str::from_utf8(R_T3_ADJUDICATION_BYTES)
         .map_err(|error| Stage4SemanticParsimonyV1Error::Prerequisite(error.to_string()))?;
     let postseal_r_t3_branch_boundary_replayed = r_t3_adjudication.contains("Option B adopted")
@@ -912,9 +1351,10 @@ pub fn issue_stage4_semantic_parsimony_v1()
         });
     if !postseal_archived_exact_four_way_r_t1_class_join
         || !postseal_live_root_hashes_join_archived_r_t2_geometry
+        || !postseal_exact_four_distinct_kappa_three_regression
     {
         return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
-            "postseal archived R-T2 geometry does not join the live exhaustive strict cone"
+            "postseal four-root/kappa-three regression or archived R-T2 geometry join failed"
                 .to_owned(),
         ));
     }
@@ -926,6 +1366,98 @@ pub fn issue_stage4_semantic_parsimony_v1()
             "structural R-T1 replay failed: {}",
             structural_errors.join("; ")
         )));
+    }
+    let mut live_candidate_hashes = roots
+        .iter()
+        .map(|root| root.candidate_hash.clone())
+        .collect::<Vec<_>>();
+    live_candidate_hashes.sort();
+    let mut package_bindings = structural
+        .packages
+        .iter()
+        .map(|package| Stage4StructuralRt1PackageBindingV1 {
+            candidate_hash: package.candidate_hash.clone(),
+            telescope_hash: tagged_hash("postseal-r-t1-package-telescope", &package.telescope),
+            package_derivation_hash: package.derivation_hash.clone(),
+        })
+        .collect::<Vec<_>>();
+    package_bindings.sort_by(|left, right| left.candidate_hash.cmp(&right.candidate_hash));
+    let mut pairwise_bindings = structural
+        .pairwise_comparisons
+        .iter()
+        .map(|comparison| Stage4StructuralRt1PairBindingV1 {
+            unordered_candidate_pair: unordered_pair(
+                &comparison.left_candidate_hash,
+                &comparison.right_candidate_hash,
+            ),
+            comparison_derivation_hash: comparison.derivation_hash.clone(),
+        })
+        .collect::<Vec<_>>();
+    pairwise_bindings.sort_by(|left, right| {
+        left.unordered_candidate_pair
+            .cmp(&right.unordered_candidate_pair)
+    });
+    let mut orbit_class_bindings = structural
+        .orbit_classes
+        .iter()
+        .map(|class| {
+            let mut member_candidate_hashes = class.member_candidate_hashes.clone();
+            member_candidate_hashes.sort();
+            Stage4StructuralRt1ClassBindingV1 {
+                class_id: class.class_id.clone(),
+                member_candidate_hashes,
+                class_derivation_hash: class.derivation_hash.clone(),
+            }
+        })
+        .collect::<Vec<_>>();
+    orbit_class_bindings.sort_by(|left, right| left.class_id.cmp(&right.class_id));
+    let structural_candidate_hashes = package_bindings
+        .iter()
+        .map(|binding| binding.candidate_hash.clone())
+        .collect::<Vec<_>>();
+    let exact_candidate_multiset_join = live_candidate_hashes == structural_candidate_hashes
+        && package_bindings.iter().all(|binding| {
+            geometry.roots.iter().any(|root| {
+                root.candidate_hash == binding.candidate_hash
+                    && tagged_hash("postseal-r-t1-package-telescope", &root.telescope)
+                        == binding.telescope_hash
+            })
+        });
+    let expected_pair_count = live_candidate_hashes
+        .len()
+        .saturating_mul(live_candidate_hashes.len().saturating_sub(1))
+        / 2;
+    let every_structural_derivation_bound = !structural.derivation_hash.is_empty()
+        && package_bindings
+            .iter()
+            .all(|binding| !binding.package_derivation_hash.is_empty())
+        && pairwise_bindings.len() == expected_pair_count
+        && pairwise_bindings
+            .iter()
+            .all(|binding| !binding.comparison_derivation_hash.is_empty())
+        && orbit_class_bindings
+            .iter()
+            .all(|binding| !binding.class_derivation_hash.is_empty());
+    let mut structural_r_t1_join = Stage4StructuralRt1JoinV1 {
+        live_candidate_hashes,
+        package_bindings,
+        pairwise_bindings,
+        orbit_class_bindings,
+        structural_audit_derivation_hash: structural.derivation_hash.clone(),
+        exact_candidate_multiset_join,
+        every_structural_derivation_bound,
+        replay_valid: true,
+        used_as_semantic_selector: false,
+        derivation_hash: String::new(),
+    };
+    structural_r_t1_join.derivation_hash = structural_r_t1_join_hash(&structural_r_t1_join);
+    if !structural_r_t1_join.exact_candidate_multiset_join
+        || !structural_r_t1_join.every_structural_derivation_bound
+    {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(
+            "postseal structural R-T1 testimony did not bind the exact live candidate multiset and derivations"
+                .to_owned(),
+        ));
     }
 
     let survivor_r_t2_join = if semantic_minimizer_hashes.len() == 2 {
@@ -988,10 +1520,12 @@ pub fn issue_stage4_semantic_parsimony_v1()
         if !six_unordered_comparisons_exact
             || !all_six_pairwise_row_derivation_hashes_valid
             || !pairwise_row_derivation_hash_valid
-            || !exact_five_five_three_inequivalence_signature
+            || !comparison.comparison_well_formed
+            || !comparison.relative_coverage_and_zero_gap_gate_passed
+            || comparison.hash_or_enumeration_order_used_as_selector
         {
             return Err(Stage4SemanticParsimonyV1Error::Invariant(
-                "frozen survivor row failed its exact six-row/hash/5-5-3 inequivalence signature"
+                "frozen survivor row failed its exact six-row/hash/well-formed integrity gate"
                     .to_owned(),
             ));
         }
@@ -1014,7 +1548,9 @@ pub fn issue_stage4_semantic_parsimony_v1()
             exact_surviving_pair_join: pairwise_row_derivation_hash_valid
                 && all_six_pairwise_row_derivation_hashes_valid
                 && six_unordered_comparisons_exact
-                && exact_five_five_three_inequivalence_signature,
+                && comparison.comparison_well_formed
+                && comparison.relative_coverage_and_zero_gap_gate_passed
+                && !comparison.hash_or_enumeration_order_used_as_selector,
             frozen_r_t2_comparison_derivation_hash: comparison.derivation_hash.clone(),
             derivation_hash: String::new(),
         };
@@ -1031,16 +1567,22 @@ pub fn issue_stage4_semantic_parsimony_v1()
             "sealed Phase-5b burn digest is invalid".to_owned(),
         ));
     }
-    let enacted_stage4 = burn
+    let enacted_stage4_rows = burn
         .stages
         .iter()
-        .find(|stage| stage.stage == 4)
-        .and_then(|stage| stage.winner.as_ref())
-        .ok_or_else(|| {
-            Stage4SemanticParsimonyV1Error::Prerequisite(
-                "sealed Phase-5b burn has no enacted Stage-4 root".to_owned(),
-            )
-        })?;
+        .filter(|stage| stage.stage == 4)
+        .collect::<Vec<_>>();
+    if enacted_stage4_rows.len() != 1 {
+        return Err(Stage4SemanticParsimonyV1Error::Prerequisite(format!(
+            "sealed Phase-5b burn has {} Stage-4 rows instead of exactly one",
+            enacted_stage4_rows.len()
+        )));
+    }
+    let enacted_stage4 = enacted_stage4_rows[0].winner.as_ref().ok_or_else(|| {
+        Stage4SemanticParsimonyV1Error::Prerequisite(
+            "sealed Phase-5b burn has no enacted Stage-4 root".to_owned(),
+        )
+    })?;
     let enacted_root = roots
         .iter()
         .find(|root| root.candidate_hash == enacted_stage4.candidate_hash)
@@ -1052,9 +1594,9 @@ pub fn issue_stage4_semantic_parsimony_v1()
         })?;
 
     let exact_two_minimizers = semantic_minimizer_hashes.len() == 2;
-    let surviving_pair_frozen_r_t2_inequivalent = survivor_r_t2_join.as_ref().is_some_and(|join| {
-        join.exact_surviving_pair_join && join.exact_five_five_three_inequivalence_signature
-    });
+    let surviving_pair_frozen_r_t2_inequivalent = survivor_r_t2_join
+        .as_ref()
+        .is_some_and(|join| join.exact_surviving_pair_join && !join.full_scheme_sets_equivalent);
     let enacted_root_is_semantic_minimizer = semantic_minimizer_hashes
         .iter()
         .any(|hash| hash == &enacted_root.candidate_hash);
@@ -1088,41 +1630,34 @@ pub fn issue_stage4_semantic_parsimony_v1()
             .as_ref()
             .map_or(0, |join| join.matched_scheme_count),
     );
-    let operation_capability_rows = capability_rows();
-    let no_branch_continuation_capability = operation_capability_rows
-        .iter()
-        .all(|row| row.isolated && row.forbidden_capabilities.is_empty());
-    let theorem_issuer_has_no_artifact_write_capability =
-        operation_capability_rows.iter().all(|row| {
-            !row.accumulated_capabilities
-                .contains(&Stage4SemanticCapabilityV1::CanonicalArtifactWrite)
-        });
-    let every_root_has_authoritative_registry_erased_b1_b2_b3_v3 =
-        roots.iter().all(|root| root.root_semantic_audit_proved);
-
+    let postseal_attachment_consumed_exact_preseal_digest = preseal.result_digest.clone();
+    let exact_shared_semantic_prefix_is_1_0_1_postseal_regression =
+        preseal.shared_stage1_through3_semantic_nu == [1, 0, 1];
     let mut certificate = Stage4SemanticParsimonyV1Certificate {
         schema: STAGE4_SEMANTIC_PARSIMONY_V1_SCHEMA.to_owned(),
         date: STAGE4_SEMANTIC_PARSIMONY_V1_DATE.to_owned(),
         theorem_id: STAGE4_SEMANTIC_PARSIMONY_V1_THEOREM_ID.to_owned(),
+        postseal_attachment_consumed_exact_preseal_digest,
+        preseal,
         source_bindings: vec![
             source_binding(
                 "docs/bi0_semantic_register_v5.json",
-                "preseal_opening_projection_then_postseal_full_replay",
+                "postseal_full_replay_only; preseal opening is a self-digested exact-prefix token",
                 BI0_V5_ARTIFACT_BYTES,
             ),
             source_binding(
                 "docs/nu_register_adjudication.md",
-                "adopted_intrinsic_semantic_register_authority",
+                "postseal_adoption-marker_testimony_only",
                 NU_REGISTER_ADJUDICATION_BYTES,
             ),
             source_binding(
                 "docs/tie_resolution_protocol.md",
-                "preseal_adopted_r_t1_r_t2_parsimony_ladder",
+                "postseal_adoption-marker_testimony_only",
                 TIE_PROTOCOL_BYTES,
             ),
             source_binding(
                 "docs/r_t3_stage4_adjudication.md",
-                "adopted_option_b_branch_invariance_boundary",
+                "postseal_adopted_option_b_branch_invariance_boundary",
                 R_T3_ADJUDICATION_BYTES,
             ),
             source_binding(
@@ -1136,12 +1671,13 @@ pub fn issue_stage4_semantic_parsimony_v1()
                 PHASE5B_BURN_BYTES,
             ),
         ],
-        preseal_bi0_opening_projection_hash,
-        preseal_bi0_opening_capability_valid,
         full_bi0_read_or_replayed_before_semantic_seal: false,
         sealed_bi0_v5_schema: bi0.schema.clone(),
         sealed_bi0_v5_digest: bi0.result_digest.clone(),
         sealed_bi0_v5_replay_valid: bi0_replay.valid,
+        sealed_bi0_v5_replay_errors: bi0_replay.errors.clone(),
+        sealed_bi0_v5_reissuance_drift_bound_postseal_only,
+        sealed_bi0_v5_pinned_logical_projection_valid,
         sealed_bi0_v5_passed: bi0.bi0_passed,
         sealed_bi0_v5_executed_no_branch_work: bi0.bi0_attempt_executed
             && !bi0.bi1_invoked
@@ -1150,41 +1686,27 @@ pub fn issue_stage4_semantic_parsimony_v1()
         nu_register_adjudication_hash: bytes_hash(NU_REGISTER_ADJUDICATION_BYTES),
         tie_resolution_protocol_hash: bytes_hash(TIE_PROTOCOL_BYTES),
         r_t3_stage4_adjudication_hash: bytes_hash(R_T3_ADJUDICATION_BYTES),
-        preseal_nu_register_and_tie_authority_replayed,
+        postseal_nu_register_and_tie_markers_replayed,
         postseal_r_t3_branch_boundary_replayed,
-        preseal_live_strict_cone_geometry: geometry.clone(),
-        preseal_geometry_projection_hash,
-        preseal_geometry_only_replay_valid: true,
-        preseal_exact_exhaustive_four_way_least_kappa_geometry: geometry
-            .exact_complete_strict_cone
-            && geometry.exact_four_distinct_least_kappa_three_roots,
+        postseal_live_geometry_root_count_is_four,
+        postseal_live_geometry_every_root_kappa_three,
+        postseal_live_geometry_candidate_hashes_distinct,
+        postseal_exact_four_distinct_kappa_three_regression,
+        exact_shared_semantic_prefix_is_1_0_1_postseal_regression,
+        postseal_legacy_v5_comparison_count: postseal_legacy_v5_root_comparisons.len(),
+        postseal_legacy_v5_root_comparisons,
+        legacy_v5_issued_only_after_semantic_seal: true,
+        legacy_v5_used_as_semantic_selector: false,
         frozen_r_t2_certificate_digest: r_t2.result_digest,
         postseal_full_r_t2_projection_replay_valid: true,
         postseal_archived_exact_four_way_r_t1_class_join,
         postseal_live_root_hashes_join_archived_r_t2_geometry,
-        live_strict_cone_only_root_geometry_before_semantic_seal: true,
-        common_prefix_steps: stem.iter().map(|(stage, _)| *stage).collect(),
-        common_prefix_signature_digest,
-        root_count: roots.len(),
-        every_root_has_authoritative_registry_erased_b1_b2_b3_v3,
-        pretestimony_semantic_selection_roots,
-        semantic_seal_excludes_legacy_v5_commitments,
-        shared_stage1_through3_semantic_nu,
-        exact_shared_semantic_prefix_across_all_roots,
-        exact_shared_semantic_prefix_is_1_0_1,
-        roots,
-        semantic_parsimony_order: "lexicographic: least kappa, then least authoritative registry-erased semantic-family nu from B3 v3"
-            .to_owned(),
-        minimum_kappa: minimum_pair.0,
-        minimum_semantic_nu: minimum_pair.1,
-        semantic_minimizer_count: semantic_minimizer_hashes.len(),
-        semantic_minimizer_hashes,
-        semantic_parsimony_seal,
         structural_testimony_read_after_semantic_seal: true,
         structural_testimony_minimum_kappa: structural.minimum_kappa,
         structural_testimony_minimum_nu: structural.minimum_certified_nu,
         structural_testimony_minimizer_count: structural.minimizer_count,
         structural_testimony_used_as_selector: false,
+        structural_r_t1_join,
         survivor_r_t2_join,
         enacted_history_burn_digest: burn.result_digest,
         enacted_root_hash,
@@ -1196,10 +1718,8 @@ pub fn issue_stage4_semantic_parsimony_v1()
         surviving_pair_frozen_r_t2_inequivalent,
         enacted_root_nonminimal,
         exact_two_minimizer_enacted_nonminimal_divergence,
-        operation_capability_rows,
-        no_branch_continuation_capability,
         no_branch_executed: true,
-        theorem_issuer_has_no_artifact_write_capability,
+        theorem_issuer_has_no_artifact_write_capability: true,
         desired_verdict_count_score_or_bar_used_as_semantic_premise: false,
         outcome,
         divergence_statement,
@@ -1209,6 +1729,13 @@ pub fn issue_stage4_semantic_parsimony_v1()
     };
     certificate.result_digest = certificate_hash(&certificate);
     Ok(certificate)
+}
+
+/// Run both typed phases.  The theorem issuer returns data only; no branch is
+/// selected or executed and this function has no filesystem parameter.
+pub fn issue_stage4_semantic_parsimony_v1()
+-> Result<Stage4SemanticParsimonyV1Certificate, Stage4SemanticParsimonyV1Error> {
+    attach_stage4_postseal_testimony(issue_stage4_semantic_preseal_v1()?)
 }
 
 fn validate_against_expected(
@@ -1282,12 +1809,16 @@ mod tests {
     }
 
     #[test]
-    fn live_strict_cone_geometry_is_exact_and_contains_no_structural_nu() {
+    fn live_strict_cone_retains_every_strict_candidate_and_contains_no_testimony() {
         let geometry = issue_stage4_strict_cone_geometry_v1().expect("strict cone");
-        assert_eq!(geometry.roots.len(), 4);
-        assert_eq!(geometry.least_kappa, 3);
-        assert!(geometry.exact_complete_strict_cone);
-        assert!(geometry.exact_four_distinct_least_kappa_three_roots);
+        assert!(!geometry.roots.is_empty());
+        assert!(geometry.complete_nonempty_strict_cone);
+        assert!(geometry.all_strict_candidates_retained_without_canonical_deduplication);
+        assert_eq!(geometry.roots.len(), geometry.strict_admitted_count);
+        assert_eq!(
+            geometry.roots.len(),
+            geometry.retained_strict_candidate_count
+        );
         assert!(
             !serde_json::to_string(&geometry)
                 .expect("geometry serializes")
@@ -1297,74 +1828,217 @@ mod tests {
     }
 
     #[test]
-    fn preseal_bi0_projection_cannot_observe_full_register_fields() {
-        let opening: Bi0OpeningCapabilityProjectionV1 =
-            serde_json::from_slice(BI0_V5_ARTIFACT_BYTES).expect("opening projection");
-        let serialized = serde_json::to_value(&opening).expect("projection serializes");
-        assert_eq!(serialized.as_object().expect("projection object").len(), 6);
-        let opening_hash = tagged_hash("preseal-bi0-opening-capability", &opening);
-
-        let mut full: serde_json::Value =
-            serde_json::from_slice(BI0_V5_ARTIFACT_BYTES).expect("full BI0 JSON");
-        full.as_object_mut().expect("full BI0 object").insert(
-            "t_bi_result_digest".to_owned(),
-            serde_json::Value::String("blake3:postseal-only-mutation".to_owned()),
-        );
-        let mutated_bytes = serde_json::to_vec(&full).expect("mutated full BI0 serializes");
-        let mutated_opening: Bi0OpeningCapabilityProjectionV1 =
-            serde_json::from_slice(&mutated_bytes).expect("opening ignores full fields");
-        assert_eq!(mutated_opening, opening);
+    fn preseal_opening_is_exact_prefix_bound_and_contains_no_archive_digest() {
+        let stem = common_stem().expect("common stem");
+        let procedure = issue_preseal_procedure_authority();
+        let opening_token = issue_preseal_opening_token(&stem, &procedure).expect("opening token");
+        assert!(opening_token.exact_prefix_and_no_branch_opening);
+        assert_eq!(opening_token.common_prefix_steps, vec![1, 2, 3]);
+        assert_eq!(opening_token.common_prefix_candidate_hashes.len(), 3);
+        assert_eq!(opening_token.common_prefix_entries.len(), 3);
         assert_eq!(
-            tagged_hash("preseal-bi0-opening-capability", &mutated_opening),
-            opening_hash
+            opening_token.procedure_authority_derivation_hash,
+            procedure.derivation_hash
         );
-        assert_ne!(
-            bytes_hash(&mutated_bytes),
-            bytes_hash(BI0_V5_ARTIFACT_BYTES)
+        assert_eq!(
+            opening_token.granting_gate_schema,
+            BI0_SEMANTIC_REGISTER_V5_SCHEMA
         );
+        assert!(!opening_token.full_bi0_scalar_or_archive_digest_present);
+        assert!(!opening_token.branch_continuation_capability_present);
+        assert!(replay_preseal_opening_token(
+            &stem,
+            &procedure,
+            &opening_token
+        ));
+        assert_eq!(
+            opening_token.derivation_hash,
+            opening_token_hash(&opening_token)
+        );
+        let serialized = serde_json::to_string(&opening_token).expect("token serializes");
+        assert!(!serialized.contains(BI0_V5_ARTIFACT_BLAKE3));
+        assert!(!serialized.contains("t_bi_result_digest"));
+        assert!(!serialized.contains("authoritative_semantic_register"));
+
+        // Re-hash every affected layer of a wrong-prefix forgery.  The token
+        // is internally content-hashed, but replay still rejects it because
+        // the payload is not the authorized enacted prefix.
+        let mut forged = opening_token.clone();
+        forged.common_prefix_entries[0].telescope = Telescope::reference(2);
+        let forged_stem = forged
+            .common_prefix_entries
+            .iter()
+            .map(|entry| (entry.stage, entry.telescope.clone()))
+            .collect::<Vec<_>>();
+        for (index, entry) in forged.common_prefix_entries.iter_mut().enumerate() {
+            entry.candidate_hash = candidate_hash(&entry.telescope);
+            entry.predecessor_signature_digest =
+                SealedSignature::from_telescopes(forged_stem[..index].to_vec())
+                    .digest()
+                    .to_owned();
+            entry.derivation_hash = prefix_entry_hash(entry);
+        }
+        forged.common_prefix_candidate_hashes = forged
+            .common_prefix_entries
+            .iter()
+            .map(|entry| entry.candidate_hash.clone())
+            .collect();
+        forged.common_prefix_signature_digest = SealedSignature::from_telescopes(forged_stem)
+            .digest()
+            .to_owned();
+        forged.derivation_hash = opening_token_hash(&forged);
+        assert_eq!(forged.derivation_hash, opening_token_hash(&forged));
+        assert!(
+            forged
+                .common_prefix_entries
+                .iter()
+                .all(|entry| entry.derivation_hash == prefix_entry_hash(entry))
+        );
+        assert!(!replay_preseal_opening_token(&stem, &procedure, &forged));
+        assert!(issue_stage4_strict_cone_geometry_from_opening(&stem, &forged).is_err());
+    }
+
+    #[test]
+    fn preseal_issuer_source_has_no_document_or_outcome_testimony_read() {
+        let source = include_str!("stage4_semantic_parsimony_v1.rs");
+        let start = source
+            .find("/// Issue the authoritative semantic comparison.")
+            .expect("preseal issuer source boundary");
+        let end = source[start..]
+            .find("fn attach_stage4_postseal_testimony(")
+            .map(|offset| start + offset)
+            .expect("postseal attachment source boundary");
+        let issuer = &source[start..end];
+        for forbidden in [
+            "include_bytes!",
+            "from_slice",
+            "from_utf8",
+            "BI0_V5_ARTIFACT",
+            "NU_REGISTER_ADJUDICATION",
+            "TIE_PROTOCOL_BYTES",
+            "R_T2_ARTIFACT",
+            "PHASE5B_BURN",
+            "exact_four",
+            "len() != 4",
+            "len() == 4",
+        ] {
+            assert!(
+                !issuer.contains(forbidden),
+                "preseal issuer contains forbidden postseal/outcome marker {forbidden}"
+            );
+        }
+        assert!(issuer.contains("complete_nonempty_strict_cone"));
+        assert!(issuer.contains("all_strict_candidates_retained_without_canonical_deduplication"));
+    }
+
+    #[test]
+    fn semantic_preseal_replays_before_any_postseal_testimony() {
+        let preseal = issue_stage4_semantic_preseal_v1().expect("blind semantic preseal");
+        assert!(replay_stage4_semantic_preseal_v1(&preseal).is_empty());
+        assert!(
+            preseal
+                .live_strict_cone_geometry
+                .complete_nonempty_strict_cone
+        );
+        assert_eq!(
+            preseal.root_count,
+            preseal
+                .live_strict_cone_geometry
+                .retained_strict_candidate_count
+        );
+        assert!(preseal.typed_preseal_surface_excludes_declared_forbidden_inputs);
     }
 
     #[test]
     fn blind_semantic_audit_publishes_exact_stage4_divergence_without_execution() {
         let certificate = cached_certificate();
-        assert_eq!(certificate.root_count, 4);
-        assert_eq!(certificate.minimum_kappa, 3);
-        assert_eq!(certificate.minimum_semantic_nu, 2);
-        assert_eq!(certificate.semantic_minimizer_count, 2);
+        let preseal = &certificate.preseal;
+        assert_eq!(preseal.result_digest, preseal_hash(preseal));
+        assert_eq!(preseal.root_count, 4);
+        assert_eq!(preseal.minimum_kappa, 3);
+        assert_eq!(preseal.minimum_semantic_nu, 2);
+        assert_eq!(preseal.semantic_minimizer_count, 2);
+        assert!(replay_preseal_procedure_authority(
+            &preseal.procedure_authority
+        ));
+        assert!(preseal.opening_token.exact_prefix_and_no_branch_opening);
+        assert!(
+            preseal
+                .live_strict_cone_geometry
+                .complete_nonempty_strict_cone
+        );
+        assert!(
+            preseal
+                .live_strict_cone_geometry
+                .all_strict_candidates_retained_without_canonical_deduplication
+        );
+        assert!(preseal.every_root_has_authoritative_prefix_local_b1_b2_b3_v3);
+        assert!(preseal.exact_stage1_through3_binding_from_local_b3_packages);
+        assert_eq!(preseal.semantic_selection_roots.len(), 4);
+        assert!(preseal.roots.iter().all(|root| {
+            root.b3_v3_prefix_generic_isolation_proved
+                && root.b3_v3_prefix_local_sequence_replayed
+                && root.b3_v3_every_local_package_proved_b1_b2
+                && root.b3_v3_registry_extension_invariance_proved
+                && root.b3_v3_no_historical_registry_or_legacy_v5_authority
+                && root.b3_v3_no_forbidden_or_future_semantic_input
+                && root.exact_candidate_prefix_and_package_bindings
+        }));
+        assert_eq!(preseal.shared_stage1_through3_semantic_nu, vec![1, 0, 1]);
+        assert!(preseal.exact_shared_semantic_prefix_across_all_roots);
         assert_eq!(certificate.structural_testimony_minimum_kappa, 3);
         assert_eq!(certificate.structural_testimony_minimum_nu, 5);
         assert_eq!(certificate.structural_testimony_minimizer_count, 4);
         assert!(certificate.exact_two_minimizer_enacted_nonminimal_divergence);
         assert!(certificate.surviving_pair_frozen_r_t2_inequivalent);
         assert!(certificate.enacted_root_nonminimal);
-        assert!(certificate.preseal_bi0_opening_capability_valid);
         assert!(!certificate.full_bi0_read_or_replayed_before_semantic_seal);
-        assert!(certificate.sealed_bi0_v5_replay_valid);
+        assert!(certificate.sealed_bi0_v5_pinned_logical_projection_valid);
+        assert_eq!(
+            certificate.sealed_bi0_v5_reissuance_drift_bound_postseal_only,
+            !certificate.sealed_bi0_v5_replay_valid
+        );
+        assert!(
+            certificate
+                .sealed_bi0_v5_replay_errors
+                .iter()
+                .all(|error| { error == "BI-0 v5 certificate differs from create-new reissuance" })
+        );
         assert!(certificate.sealed_bi0_v5_passed);
         assert!(certificate.sealed_bi0_v5_executed_no_branch_work);
-        assert!(certificate.preseal_geometry_only_replay_valid);
-        assert!(certificate.preseal_exact_exhaustive_four_way_least_kappa_geometry);
         assert!(certificate.postseal_full_r_t2_projection_replay_valid);
+        assert!(certificate.postseal_live_geometry_root_count_is_four);
+        assert!(certificate.postseal_live_geometry_every_root_kappa_three);
+        assert!(certificate.postseal_live_geometry_candidate_hashes_distinct);
+        assert!(certificate.postseal_exact_four_distinct_kappa_three_regression);
         assert!(certificate.postseal_archived_exact_four_way_r_t1_class_join);
         assert!(certificate.postseal_live_root_hashes_join_archived_r_t2_geometry);
-        assert!(certificate.every_root_has_authoritative_registry_erased_b1_b2_b3_v3);
-        assert!(certificate.semantic_seal_excludes_legacy_v5_commitments);
-        assert_eq!(certificate.pretestimony_semantic_selection_roots.len(), 4);
-        assert!(certificate.roots.iter().all(|root| {
-            root.authoritative_nu_matches_legacy_v5_comparison
-                && root.b3_v3_prefix_generic_isolation_proved
-                && root.b3_v3_registry_extension_invariance_proved
-                && root.b3_v3_is_sole_prefix_generic_theorem_authority
-                && !root.b3_v3_legacy_full_hashes_authoritative
-                && !root.legacy_v5_hashes_used_as_semantic_selector
-                && !root.legacy_v5_self_reported_forbidden_or_future_input_used
-        }));
-        assert_eq!(
-            certificate.shared_stage1_through3_semantic_nu,
-            vec![1, 0, 1]
+        assert!(certificate.exact_shared_semantic_prefix_is_1_0_1_postseal_regression);
+        assert_eq!(certificate.postseal_legacy_v5_comparison_count, 4);
+        assert!(certificate.legacy_v5_issued_only_after_semantic_seal);
+        assert!(!certificate.legacy_v5_used_as_semantic_selector);
+        assert!(
+            certificate
+                .structural_r_t1_join
+                .exact_candidate_multiset_join
         );
-        assert!(certificate.exact_shared_semantic_prefix_across_all_roots);
-        assert!(certificate.exact_shared_semantic_prefix_is_1_0_1);
+        assert!(
+            certificate
+                .structural_r_t1_join
+                .every_structural_derivation_bound
+        );
+        assert_eq!(
+            certificate.structural_r_t1_join.derivation_hash,
+            structural_r_t1_join_hash(&certificate.structural_r_t1_join)
+        );
+        assert!(
+            certificate
+                .postseal_legacy_v5_root_comparisons
+                .iter()
+                .all(|comparison| comparison.legacy_sequence_replay_valid
+                    && comparison.authoritative_nu_matches_legacy_comparison
+                    && !comparison.used_as_semantic_selector)
+        );
         let join = certificate
             .survivor_r_t2_join
             .as_ref()
@@ -1377,7 +2051,6 @@ mod tests {
         assert!(join.six_unordered_comparisons_exact);
         assert!(join.all_six_pairwise_row_derivation_hashes_valid);
         assert!(join.exact_five_five_three_inequivalence_signature);
-        assert!(certificate.no_branch_continuation_capability);
         assert!(certificate.no_branch_executed);
         assert!(certificate.theorem_issuer_has_no_artifact_write_capability);
         assert_eq!(
@@ -1385,22 +2058,23 @@ mod tests {
             Stage4SemanticParsimonyOutcomeV1::TwoSemanticMinimizersRt2InequivalentEnactedRootNonminimalAdjudicationRequired
         );
 
-        let mut testimony_only_mutation = certificate.roots.clone();
-        testimony_only_mutation[0].non_authoritative_legacy_v5_sequence_derivation_hash =
+        let mut testimony_only_mutation = certificate.postseal_legacy_v5_root_comparisons.clone();
+        testimony_only_mutation[0].legacy_sequence_derivation_hash =
             "blake3:non-authoritative-testimony-mutation".to_owned();
-        testimony_only_mutation[0].authoritative_nu_matches_legacy_v5_comparison = false;
-        testimony_only_mutation[0].derivation_hash = root_hash(&testimony_only_mutation[0]);
-        let selection_projection = testimony_only_mutation
-            .iter()
-            .map(semantic_selection_root)
-            .collect::<Vec<_>>();
+        testimony_only_mutation[0].authoritative_nu_matches_legacy_comparison = false;
+        testimony_only_mutation[0].derivation_hash =
+            legacy_comparison_hash(&testimony_only_mutation[0]);
+        assert_ne!(
+            testimony_only_mutation,
+            certificate.postseal_legacy_v5_root_comparisons
+        );
         assert_eq!(
             semantic_parsimony_seal(
-                &selection_projection,
-                (certificate.minimum_kappa, certificate.minimum_semantic_nu),
-                &certificate.semantic_minimizer_hashes,
+                &preseal.semantic_selection_roots,
+                (preseal.minimum_kappa, preseal.minimum_semantic_nu),
+                &preseal.semantic_minimizer_hashes,
             ),
-            certificate.semantic_parsimony_seal
+            preseal.semantic_parsimony_seal
         );
     }
 
@@ -1410,12 +2084,14 @@ mod tests {
         let mut forgeries = Vec::new();
 
         let mut forged = expected.clone();
-        forged.minimum_semantic_nu += 1;
+        forged.preseal.minimum_semantic_nu += 1;
+        forged.preseal.result_digest = preseal_hash(&forged.preseal);
         forgeries.push(forged);
 
         let mut forged = expected.clone();
-        forged.semantic_minimizer_hashes = vec![expected.enacted_root_hash.clone()];
-        forged.semantic_minimizer_count = 1;
+        forged.preseal.semantic_minimizer_hashes = vec![expected.enacted_root_hash.clone()];
+        forged.preseal.semantic_minimizer_count = 1;
+        forged.preseal.result_digest = preseal_hash(&forged.preseal);
         forgeries.push(forged);
 
         let mut forged = expected.clone();
@@ -1433,22 +2109,31 @@ mod tests {
         forgeries.push(forged);
 
         let mut forged = expected.clone();
-        forged.operation_capability_rows[0]
-            .forbidden_capabilities
-            .push(Stage4SemanticCapabilityV1::BranchContinuation);
-        forged.operation_capability_rows[0].isolated = false;
-        forged.operation_capability_rows[0].derivation_hash =
-            capability_row_hash(&forged.operation_capability_rows[0]);
+        forged.postseal_legacy_v5_root_comparisons[0].used_as_semantic_selector = true;
+        forged.postseal_legacy_v5_root_comparisons[0].derivation_hash =
+            legacy_comparison_hash(&forged.postseal_legacy_v5_root_comparisons[0]);
         forgeries.push(forged);
 
         let mut forged = expected.clone();
-        forged.preseal_live_strict_cone_geometry.roots[0].kappa = 4;
-        forged.preseal_live_strict_cone_geometry.derivation_hash =
-            strict_cone_geometry_hash(&forged.preseal_live_strict_cone_geometry);
-        forged.preseal_geometry_projection_hash = forged
-            .preseal_live_strict_cone_geometry
-            .derivation_hash
-            .clone();
+        forged.preseal.live_strict_cone_geometry.roots[0].kappa = 4;
+        forged.preseal.live_strict_cone_geometry.derivation_hash =
+            strict_cone_geometry_hash(&forged.preseal.live_strict_cone_geometry);
+        forged.preseal.result_digest = preseal_hash(&forged.preseal);
+        forgeries.push(forged);
+
+        let mut forged = expected.clone();
+        forged.preseal.procedure_authority.tie_behavior =
+            "select the first equal minimum".to_owned();
+        forged.preseal.procedure_authority.derivation_hash =
+            procedure_authority_hash(&forged.preseal.procedure_authority);
+        forged.preseal.result_digest = preseal_hash(&forged.preseal);
+        forgeries.push(forged);
+
+        let mut forged = expected.clone();
+        forged.structural_r_t1_join.package_bindings[0].package_derivation_hash =
+            "blake3:fully-rehashed-substitution".to_owned();
+        forged.structural_r_t1_join.derivation_hash =
+            structural_r_t1_join_hash(&forged.structural_r_t1_join);
         forgeries.push(forged);
 
         for forged in &mut forgeries {

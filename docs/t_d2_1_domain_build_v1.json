@@ -1,0 +1,720 @@
+{
+  "schema": "t-d2-1-independent-depth-two-domain-build-v1",
+  "date": "2026-07-23",
+  "syntax_identifier_policy": "Digits in T-D2-1, NfSch2, M-3/M-4, E3, A3, stage labels, dates, versions, and gap IDs are syntax identifiers. Quantitative evidence is carried only by tagged numbers.",
+  "syntax_identifier_register": "syntax_identifier",
+  "source_bindings": [
+    {
+      "path": "docs/depth_two_domain_adjudication.md",
+      "role": "adopted independent-domain and boundedness authority",
+      "byte_length": {
+        "value": 6825,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:2fe49271403603bb57ce1e312b4b1d1048b4a358dec6c3eee942f37a64374645",
+      "sha256": "fffd48c0eb5f89b6728842aa6f9de5aa43013ab867278d6b8ec6b2737ed92151",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/schema2_e7_e8_bridge_v1.json",
+      "role": "sealed authoritative M-3 v1 baseline",
+      "byte_length": {
+        "value": 42654,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:18b4b6349160a814e9400849a49c170bd239a88cadfd8f76c7b029e781ba52d6",
+      "sha256": "22cc8450829a403081c1d4db7125523c198c7e902f9f730f415be2fc0f305aa0",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/bc1_depth_two_completeness_v1.json",
+      "role": "sealed BC-1 stop that T-D2-1 must not silently promote",
+      "byte_length": {
+        "value": 109495,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:c078911f555982361c97fd41d763b2cddb8cf351df670a4f4d1cc20f8185df69",
+      "sha256": "0a6930ec9a1db06952cca78fcf2c9eaa4371b39b4b51762331101b827d036c2b",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "semantic Schema2 target and raw-height-proxy prohibition",
+      "byte_length": {
+        "value": 15507,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:2026c9a017f3723cadcadc70890dcc416ef37ea4f051af06d29ceeffe6c8b544",
+      "sha256": "fe3b2eb8f17f12563596d7a937d39d2618625503cf4ba1af8bba33e224309c82",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/e2_quotient_adjudications.md",
+      "role": "adopted natural-family and instance quotient law",
+      "byte_length": {
+        "value": 6355,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:6078f8e1f7209a7ba1fe082e44ae4dc491ea5e142e806f1c1b518c221d96a45d",
+      "sha256": "ba9b57379e4b53c9f1ef54982e7c4551754ad82262d11805dc6e7c752f66b897",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-core/src/expr.rs",
+      "role": "frozen recursive kernel expression constructors",
+      "byte_length": {
+        "value": 10207,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:37d3bb9f392e5da1339e61369dcf8194b9cd6e9efb17030b7973d1f7927a96fd",
+      "sha256": "f4da000f35a343fe6ad749c36e12d56330c8787efc73bb9c01a0289f65ea2531",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-type/src/check.rs",
+      "role": "secondary conservative scope checker",
+      "byte_length": {
+        "value": 10711,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:4d99ad5bad66456b36df2ed618793fef0ca873c1f193e52be9204f9caf32e4b7",
+      "sha256": "7d91b139a0c5942ac446362cd8ef1bf97a5596fac7fbcff8197ec7a146d3e884",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "frozen sealed-signature kernel typing relation",
+      "byte_length": {
+        "value": 102010,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:3069feaa5d134d65a3d529da046041f70a348ef32a1771075fc6fca7a1edfd51",
+      "sha256": "6b713bb5286648a1c7a22c55a2446af8eca58223343ce2cd716c49748e447719",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "frozen terminating beta normalizer",
+      "byte_length": {
+        "value": 17962,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:8b8089f38fab15923ab92521f45c79fe16d64d6ef2c59a70ac11d74a4004ae9d",
+      "sha256": "7d3398b60708bf1ac132609e0bf84d6a26383f9dcc90f11f99d5803ed9da73f2",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-type/src/equality.rs",
+      "role": "frozen adopted equality implementation",
+      "byte_length": {
+        "value": 4757,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:7c1ed7386c35aa7e5196e044b194f63e61204e431c3837018305977fbcee6c31",
+      "sha256": "3aa5fd8d4e9667c1534f39fc0c76ef956e6372301b767f2442c918c6b85c3401",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-schema/src/context.rs",
+      "role": "recursive typed schema-context surface testimony",
+      "byte_length": {
+        "value": 71070,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:d0de2a49de234034ec60e62e7735658055bc4e9e3abedd5790c7d471de5f1904",
+      "sha256": "a89a1b5007222d046d43f4df97d2a5411facea5f4bc0d709d7dca12dacf9c260",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-schema/src/grammar.rs",
+      "role": "recursive schema grammar and family quotient implementation",
+      "byte_length": {
+        "value": 69162,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:c86b9620c3d07cdf1512d33db1114eb108d68969c4868acf40cdbc5d67d04c8c",
+      "sha256": "4b8f314403e8ba0e0e186ed781fe348cc26dd04663f8ab12f43b3f351c8e1b44",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-schema/src/e3_normalization.rs",
+      "role": "scoped normalization/equality audit with explicit totality limits",
+      "byte_length": {
+        "value": 106145,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:8de05189efeda3ba291bcbf0b46d7c84222a5d7d6590a6bed4d9e3e0a84d72bb",
+      "sha256": "6ca0e18b890613abc97dc79c658ecbd56c5b04542c219c70261ec03d00d0d4ef",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/t_bi_nu1_semantic_provenance_v6.json",
+      "role": "post-definition family regression observer only",
+      "byte_length": {
+        "value": 1394797,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:ca1847929a5979f1235115b06585d21fbad8c439ecb1ebbedaa96cfb56c50e52",
+      "sha256": "51419e53f9dcd0f9c61ddb21c0c116ab92de05d5b5e142792535eeda45136a18",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "docs/a3_rule_inventory_exhaustiveness_v2.json",
+      "role": "post-definition membership-row regression observer only",
+      "byte_length": {
+        "value": 1045834,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:f587323b2e56aaa526d5106e40966d30eb9de1f49c5e5b3b4ea3b6652c9068af",
+      "sha256": "73d5d25cf9a91ab82100f14bb1e1cfe424c97ab0ac2503664278df4268ac5337",
+      "register": "artifact_metadata"
+    },
+    {
+      "path": "crates/pen-search/src/t_d2_1_domain_build_v1.rs",
+      "role": "replay implementation and structural induction argument",
+      "byte_length": {
+        "value": 67179,
+        "register": "artifact_metadata"
+      },
+      "blake3": "blake3:b5904b3954377d3e742cc6749993e64df8b005ff677eb7dabb5bf24ab67dc7ac",
+      "sha256": "b00bf929e44d762b75a1d6fbf883fc822f6567c9c062d883519a2cb726afe3b0",
+      "register": "artifact_metadata"
+    }
+  ],
+  "m3_v1_baseline": {
+    "result_digest": "blake3:a61fe8093ef9ce61a05aebfe859b0723a88a766a712ea6a2312e0f22ca386ba8",
+    "public_replay_valid": true,
+    "public_replay_errors": [],
+    "status": "stopped_named_gaps",
+    "exact_enacted_regression_reproduced": true,
+    "proved_bridge_condition_count": {
+      "value": 4,
+      "register": "structural_testimony"
+    },
+    "bridge_condition_count": {
+      "value": 9,
+      "register": "structural_testimony"
+    },
+    "c2_open": true,
+    "expected_c2_gap_present": true,
+    "zero_promotions_made": true,
+    "promoted_row_count": {
+      "value": 0,
+      "register": "artifact_metadata"
+    },
+    "bridge_claim_issued": false,
+    "m4_authorized": false,
+    "baseline_shift_detected": false,
+    "derivation_hash": "blake3:d1e7d541a47052b6b5b813f3cc104ea53ab1f5c059ac9bcc68c848a0401d1112"
+  },
+  "independence_firewall": {
+    "definition_inputs": [
+      "docs/depth_two_domain_adjudication.md",
+      "docs/step_15_completion_open_problem.md",
+      "docs/e2_quotient_adjudications.md",
+      "crates/pen-core/src/expr.rs",
+      "crates/pen-type/src/check.rs",
+      "crates/pen-type/src/elaborate.rs",
+      "crates/pen-type/src/normalize.rs",
+      "crates/pen-type/src/equality.rs",
+      "crates/pen-schema/src/context.rs",
+      "crates/pen-schema/src/grammar.rs",
+      "crates/pen-schema/src/e3_normalization.rs"
+    ],
+    "observer_inputs": [
+      "docs/t_bi_nu1_semantic_provenance_v6.json",
+      "docs/a3_rule_inventory_exhaustiveness_v2.json"
+    ],
+    "definition_input_digest": "blake3:4ba05f6721532a856ba7c76ac9a7ce620d5ccc6fede27e8d0b2ea2d4848966aa",
+    "observer_input_digest": "blake3:056df3493379743d89565b8acf12ed9c3461ce81bf1ce2c9c477cbd7ec4b477f",
+    "generator_inventory_reaches_domain_definition": false,
+    "a3_inventory_reaches_membership": false,
+    "bridge_rows_reach_enumeration": false,
+    "historical_corpora_seed_carrier": false,
+    "raw_ast_height_cap_used_as_depth_two_definition": false,
+    "definition_and_observer_dataflow_disjoint": true,
+    "f_d2_1_circularity_fired": false,
+    "f_d2_3_proxy_reentry_fired": false,
+    "derivation_hash": "blake3:79180f2efc1fdc024ef9a5780ba8a84bcca1cf1f7089f9e43a71dfe5898cb57a"
+  },
+  "infinite_kernel_surface_witness": {
+    "families": [
+      "n |-> Susp^n(Univ)",
+      "n |-> Trunc^n(Univ)"
+    ],
+    "replayed_prefix_depth": {
+      "value": 8,
+      "register": "structural_testimony"
+    },
+    "prefix_rows": [
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 0,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:adff2d57eb2c62682eb9683295d2f3f273d9cd8286af974713c0cf0a68e2ea3c",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:359058f06c4ce86c8fd0507aa08be15737705fc7d068ed4ff7bb7eca9960450e",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 1,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:7eefb9af43d3749b3ff65d21e28d9e7ff550640bfb03ff88ce067198041dd31a",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:1c2c4ae4694c7e92f33ae7bac69884bc375ce094b653bb162e670722e16fb5d1",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:4ca4b69c09d08359ed77b12b11a26c0eeccb537959652e99651250321b1bc03a",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 2,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:3f54c6a4e5486d9a57808642d63542b3d72a4db061c66ce73aadfb5cbb747576",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:21916b7c681ae82a2fd084938a1daf555fd0e3917031fe71361312dd9582958b",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:fb66b7c366ad704dbbb882a1d3417378243585825be35ba549678b1bd7594624",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 3,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:a0229f78a486b16a0ad81055e4e403c9d8276672f491003af2a5c85162186bdc",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:f12422fe78916148e12ef1f3d5a11e1492e72ab0ce5db16ba1323e695a3d82dc",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:5edc1c3f3112c802ab4f258e751033a014452f735cfa090572a393d7ae12b2dd",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 4,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:af43b36a81a51ca2de661c32f1f0a77954fb6db42607956778ba11392826168a",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:cffa669b1b4410f3346a56c3e2a615a22ea6c5153bf9f70e3862951e71514a1d",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:2f6e5a3eda9c9d65c984737950a2d8eff8f79e64ae6dbb216049d8f5f8413a41",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 5,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:1dd377e3205ade01d363f247c27207fd19b0529fad6eb6f48be395d833ffb4bf",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:7ca8683b7a4de920cf38ffbca0d6e88eb21cbfd213700925517e97273c780d2d",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:4c49904c33f83a7b995d54cbb361fdf4885f5c24347e151b89d10d108e636690",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 6,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:d083ee4713cc84223696454b06e2fdbc94ad58e7d0fa754e7f206341bb12724a",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:74f50308b43733d23b64f0a52cd3624c61f0f6c26291736f4e5ee84c0170e880",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:2b6e5352b3fac555ad76e81f7bbeb693c5117c5b929b0459b356bc5d0c88f293",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 7,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:3e6d751708e340cf09fd902fb6e4f93f7c6b229347b0374592e5fd93e0976ff3",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:66e14c2ef6ff0383de541ff8571d8b41d1969219eacfeee7d77dbd96261fe5cd",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:e8b3fca91734b8ca710b25bf62466f02b3960321f553c231c28ee46a464c9c7e",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "suspension",
+        "depth": {
+          "value": 8,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:480b74d14e675e5ea110faa139c62fc9e5cfa18caa4224e9712d49a547d4dab9",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:5a485a99adb34191537ffb7e66d5c8e47ab3badab48912f28b37c7997f5061df",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:0f28fc186f69f7252c256a794e914ab397fa49a28809deb1471a4409df1f7ca7",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 0,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:adff2d57eb2c62682eb9683295d2f3f273d9cd8286af974713c0cf0a68e2ea3c",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:359058f06c4ce86c8fd0507aa08be15737705fc7d068ed4ff7bb7eca9960450e",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:aae373d4c9283511156b51ae18868be62ed7756662fb83bdd9f66e07ae9d4ceb",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 1,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:3f11e6edb779232cd0148cd2759708978563a17ee6e61686c938f20558059c64",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:b1de8aad8969a3dd437eff4c26c9339a0848ee239147dfb6d0fff3ffc33fa938",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:bcf7944e7b2415d3f14a19311f7118a6bd06bdc788a3086b692b47d5b905625b",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 2,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:82255e83b1062e0f7274112bf6e146614b53dc71fb59c67b6599301932e999d8",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:8903778163bc49463b1190008ccba18c643799471107b29248765c221c79d07c",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:3411c840f45977333192ac377f9eee7064303d71f18f8f57d4f3f2ad4a31cb81",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 3,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:d21ca1a204a19c4baed6a1a20a74ab180cd5fd3652f69ed26fc07b7574099c02",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:1b9f0d2fa271df826695d2f5583e6b7be9367b0ffcd959a619ab092cf26a466f",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:145b0bdc0dc0876247616dc56208ccb31d9430dc52a68d668b5ba5431d92c1f2",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 4,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:82d13b20fff0a2c2652d9744f669ebd7d6560ba109821f13b25817534ea8e388",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:2003ae7d4040c8801d9e91c9b533f6da15e92c60602ced31fa8718e00f751e4d",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:dd336e2566cdc149d9aa7a4b4f0115f67759276bd76a93da61ef351d969484d8",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 5,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:5a15efa62cb39cd18fec73b401107b931c9f6fc74e33e78bc26fd0e6c136379f",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:123508007a4fb6e59475094b81e48ba4aa359a7c95f7a4dc08e8b473b1a7fe13",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:5281e45b6d1ab5f5e574aef3134f367ce7fce6d08d093efe0820d8ec8634fe06",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 6,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:fe4d4db2a321b65673037f9ac764ba3f9bcaa1b4a5534e20fd5decefe471da7c",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:5a00f61be19c0ef48ad91e67a0600feb86ddb085919a5e2971e0770e66b39239",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:bdebc33f23e1d547732a6479b9e43410cdb4884130bbab46dc6e637e23e30c4b",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 7,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:be534096444cb8ed307067b298b27e9e72455c1f56800638e0fcf72bad6d3060",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:8db58fbed89d1a190900d835ae1c78f013552fae45ca687e964c8b51da25239b",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:67d721aaf79c2910cb11e11db3cb6e55c2085f824001b0a6adfcdc58129b9eac",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      },
+      {
+        "former": "truncation",
+        "depth": {
+          "value": 8,
+          "register": "structural_testimony"
+        },
+        "expression_hash": "blake3:4b32935108d5230700e6674729bd9a9d5a79c9f41cbc70cba7cdc0ea50862f68",
+        "conservative_kernel_check_accepted": true,
+        "sealed_signature_elaboration_accepted": true,
+        "elaborated_kernel_type_json": "\"Type\"",
+        "elaborated_normal_form_hash": "blake3:df4bd2980bf41b5f5a8e8864533eb1b6baddc53622154ee76b2d2a3ce2b20105",
+        "elaborated_normal_form_identical": true,
+        "elaboration_derivation_hash": "blake3:2b0da1470036844b9f5226a5424584db1e181c1d8131a3767a2cdb40963fed8b",
+        "normalizer_returned_identical_expression": true,
+        "beta_normal": true
+      }
+    ],
+    "every_prefix_row_kernel_accepted_and_normal": true,
+    "every_prefix_row_elaborated_and_normal": true,
+    "base_case": "At depth zero both tower maps return Univ; elaboration against SealedSignature::genesis_del_h15() synthesizes its kernel classifier and normalize(Univ) = Univ.",
+    "normality_successor_case": "If T_n is beta-normal, normalize.rs maps Susp(T_n) to Susp(normalize(T_n)) and Trunc(T_n) to Trunc(normalize(T_n)); neither constructor has a head-reduction clause. Therefore both successors are beta-normal.",
+    "typing_successor_case": "If the closed inner term elaborates, elaborate.rs::synth_unary_former recursively synthesizes it and returns KernelTy::Type for Susp or Trunc; hence each finite successor elaborates against the same sealed signature. This is structural induction over n, not a bounded enumeration. check.rs is retained only as secondary conservative scope testimony.",
+    "distinctness_successor_case": "Expr derives structural Eq. Susp and Trunc are distinct enum variants and each Box payload constructor is injective. equality.rs defines both judgmental and frozen univalent equality as syntactic equality of beta normal forms. The replayed left inverse tower_depth maps the nth tower to n, so equality of same-former towers implies equal depths for arbitrary natural n; therefore the frozen equality quotient contains infinitely many classes.",
+    "quantified_proof_mechanization_scope": "The all-depth claim is a transparent source-level structural induction over the recursive `tower` and `tower_depth` definitions, source-bound into this certificate. Rust replay executes its equations on the published finite prefix and authenticates the defining kernel/elaborator/normalizer/equality source; it is not an exhaustive search over natural numbers and is not presented as a proof-assistant theorem.",
+    "induction_quantifies_over_all_natural_depths": true,
+    "theorem_is_structural_induction_not_finite_search": true,
+    "suspension_tower_pairwise_distinct": true,
+    "truncation_tower_pairwise_distinct": true,
+    "positive_depth_towers_constructor_disjoint": true,
+    "adopted_equality_is_beta_normal_form_equality": true,
+    "finite_prefix_adopted_equality_regression_passed": true,
+    "literal_frozen_kernel_normal_surface_infinite": true,
+    "literal_frozen_kernel_equality_quotient_infinite": true,
+    "finite_prefix_used_only_as_replay_regression": true,
+    "derivation_hash": "blake3:9a3100eb2bfb4e76ba06f2c375ceea64f1fde0085039f531785988e8596edff5"
+  },
+  "scoped_machinery_probe": {
+    "frozen_checker_accepts_recursive_unary_formers": true,
+    "frozen_sealed_signature_elaborator_types_recursive_unary_formers": true,
+    "frozen_normalizer_preserves_recursive_unary_formers": true,
+    "adopted_equality_source_authenticated": true,
+    "family_instance_quotient_adjudication_authenticated": true,
+    "typed_normalizer_total_over_all_intended_schema2_terms": false,
+    "general_univalent_equality_proved": false,
+    "arbitrary_context_presentation_quotient_proved": false,
+    "probe_is_negative_scope_testimony_only": true,
+    "general_limit_flags_are_source_bound_audit_not_new_theorem_replay": true,
+    "probe_reaches_domain_membership": false,
+    "derivation_hash": "blake3:95144c7f8b2bebde17537d17ea000646ecae8cacf7e6042b437c91029b8abeca"
+  },
+  "domain_attempt": {
+    "intended_name": "NfSch2(H)",
+    "independent_definition_attempted_before_corpus_observation": true,
+    "fixed_depth_two_constructor_closure_operationally_presented": false,
+    "context_bound_operationally_presented": false,
+    "binder_bound_operationally_presented": false,
+    "public_symbol_bound_operationally_presented": false,
+    "cubical_dimension_bound_operationally_presented": false,
+    "literal_kernel_surface_is_candidate_domain": false,
+    "literal_kernel_surface_rejected_by_finiteness_obligation": true,
+    "generator_derived_surrogate_used": false,
+    "raw_ast_height_surrogate_used": false,
+    "nf_sch2_domain_operational": false,
+    "membership_decidable": false,
+    "typed_normalization_total_on_domain": false,
+    "adopted_family_quotient_decidable_on_domain": false,
+    "quotient_finite_proved": false,
+    "finite_enumerator_constructed": false,
+    "lawful_stop_taken": true,
+    "derivation_hash": "blake3:10985db0a8c6b34b26e6bc5bb7dcfb65a87d9f7b132991dbe8a3fdccdc701063"
+  },
+  "corpus_observer": {
+    "status": "blocked_by_domain_gaps",
+    "opened_only_after_domain_attempt": true,
+    "family_corpus_authenticated": true,
+    "family_corpus_result_digest": "blake3:d51d0543c32542200fff6e5cfd234da1bb2ffc12c058c805ac7974385727c8b4",
+    "promised_family_count": {
+      "value": 61,
+      "register": "semantic_family_authority"
+    },
+    "a3_corpus_authenticated": true,
+    "a3_corpus_result_digest": "blake3:bd3f33ed7a15b6f50c421d2e42ed7aaea710fbcab750d0a98a990a1dad3b30db",
+    "promised_membership_row_count": {
+      "value": 89,
+      "register": "semantic_family_authority"
+    },
+    "a3_relative_exhaustiveness_proved": true,
+    "a3_absolute_semantic_exhaustiveness_claimed": false,
+    "corpus_used_to_define_domain": false,
+    "corpus_used_to_seed_membership": false,
+    "corpus_used_to_seed_enumeration": false,
+    "membership_query_formable": false,
+    "regression_executed": false,
+    "every_promised_family_recognized": false,
+    "every_promised_row_recognized": false,
+    "regression_failure_claimed": false,
+    "exact_blocker": "NfSch2(H) membership is not formable until the fixed depth-two closure fragment and its total typed normalization/equality quotient are operationally specified. Therefore neither corpus is queried; this is regression-not-run, not a regression failure.",
+    "derivation_hash": "blake3:59d69b8edad5a899b1d325286e45e4923b35d0e7982f5c41b35494d6130c15b5"
+  },
+  "open_gaps": [
+    {
+      "id": "T_D2_1_FIXED_DEPTH_TWO_FRAGMENT_NOT_OPERATIONALLY_DEFINED",
+      "phase": "independent carrier definition",
+      "exact_obstruction": "The adopted text names a fixed depth-two closure fragment but no generator-independent constructor closure, context/binder bound, public-symbol bound, or cubical-dimension bound operationally presents it. Raw AST height is expressly not the intended semantic Schema2 domain.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:b6eab484d20c7a161de96ec12e915ea28764147c075774a797aad198c9e4292a"
+    },
+    {
+      "id": "TD21_NFSCH2_MEMBERSHIP_DECISION_NOT_TOTAL",
+      "phase": "membership",
+      "exact_obstruction": "Without an operational fragment predicate there is no total yes/no judgment for membership in NfSch2(H). The conservative checker decides only its broader raw expression surface.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:728ab9093a4b8a59d528feb1d448c0cb570fa43534555a2b0efb41291de8f7c8"
+    },
+    {
+      "id": "TD21_TOTAL_TYPED_NORMALIZATION_NOT_PROVED",
+      "phase": "typed normalization",
+      "exact_obstruction": "The frozen beta normalizer terminates on raw Expr inputs, but the registered E3 audit does not prove total typed normalization over every intended depth-two semantic schema, context presentation, or family reclassification.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:d5920978f9eeee94491d51d646200da19dc0fcd7f42637c402787541b27c1ea8"
+    },
+    {
+      "id": "TD21_GENERAL_UNIVALENT_FAMILY_QUOTIENT_NOT_DECIDABLE",
+      "phase": "adopted equality and family quotient",
+      "exact_obstruction": "Scoped frozen equality and family-instance decisions exist, but general univalent equality, arbitrary context-presentation quotienting, and total family reclassification over the intended domain are not proved decidable.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:aac703bac1debc219aa8412983b66b2b88a51ea9cba7f3dc7f37af3c5a2ba8cd"
+    },
+    {
+      "id": "T_D2_1_LITERAL_KERNEL_ACCEPTED_QUOTIENT_INFINITE",
+      "phase": "boundedness",
+      "exact_obstruction": "The literal kernel-accepted quotient is infinite: the constructor-inductive Susp^n(Univ) and Trunc^n(Univ) families elaborate, are beta-normal, and remain pairwise distinct under the frozen equality, which is syntactic equality of beta normal forms. No independent depth-two restriction makes the intended quotient finite.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:8943b62ab5dc7ef1c2ba7b3843be6fb64ebeb1b2f26df8561ca2d9aad108a14c"
+    },
+    {
+      "id": "TD21_CORPUS_REGRESSION_BLOCKED_UNTIL_DOMAIN_EXISTS",
+      "phase": "post-definition regression",
+      "exact_obstruction": "The sealed family and A3 corpora authenticate the promised regression population, but membership queries are unformable. The regression is not run and the corpora are never used to repair the definition.",
+      "keeps_t_d2_2_closed": true,
+      "keeps_m4_unauthorized": true,
+      "zero_charge": true,
+      "derivation_hash": "blake3:15c0b8ed50771f3dc651c6a56de542733be6499f6eab7afe6d3e996170f1c1ec"
+    }
+  ],
+  "open_gap_count": {
+    "value": 6,
+    "register": "artifact_metadata"
+  },
+  "status": "stopped_named_gaps",
+  "fixed_fragment_operationally_defined": false,
+  "nf_sch2_domain_operational": false,
+  "membership_decidable": false,
+  "quotient_finite_proved": false,
+  "quotient_finitely_enumerable": false,
+  "no_charge_minted": true,
+  "kappa_charge_minted": {
+    "value": 0,
+    "register": "semantic_family_authority"
+  },
+  "nu_charge_minted": {
+    "value": 0,
+    "register": "semantic_family_authority"
+  },
+  "anchor_charge_minted": {
+    "value": 0,
+    "register": "semantic_family_authority"
+  },
+  "t_d2_1_status": "stopped_named_gaps",
+  "t_d2_2_prerequisite_satisfied": false,
+  "m3_v1_remains_authoritative": true,
+  "m4_authorized": false,
+  "mutation_falsifiers": [
+    "change_any_sealed_input_or_M3_v1_baseline_then_replay_must_fail",
+    "allow_any_generator_A3_or_bridge_row_dataflow_into_definition_membership_or_enumeration_then_replay_must_fail",
+    "replace_the_semantic_fragment_with_a_raw_AST_height_cap_then_replay_must_fail",
+    "claim_the_finite_prefix_search_proves_the_all_depth_tower_theorem_then_replay_must_fail",
+    "remove_the_structural_induction_or_tower_depth_left_inverse_then_replay_must_fail",
+    "claim_membership_total_or_the_quotient_finite_without_the_missing_fragment_then_replay_must_fail",
+    "run_or_pass_the_corpus_regression_when_membership_is_unformable_then_replay_must_fail",
+    "remove_or_rename_any_registered_gap_then_replay_must_fail",
+    "mint_any_kappa_nu_or_anchor_charge_then_replay_must_fail",
+    "authorize_T_D2_2_or_M4_then_replay_must_fail",
+    "add_any_unknown_JSON_field_then_replay_must_fail"
+  ],
+  "permitted_conclusion": "The adopted definition is independent in intent but not yet operative. The frozen raw kernel surface is not a finite substitute: structural induction yields infinitely many accepted beta-normal suspension and truncation towers. No generator-derived or raw-height proxy is introduced. The promised family and membership corpora are authenticated only after the failed definition attempt, and their regression is not run because membership is unformable. T-D2-1 stops with named gaps, zero charge, M-3 v1 authoritative, and M-4 unauthorized.",
+  "required_successor_action": "Provide a versioned, generator-independent operational presentation of the intended depth-two closure fragment, including constructor and context/binder/symbol/dimension bounds. Then prove total typed normalization and decidable adopted equality/family quotient on that carrier, prove finite enumeration, and only afterward rerun the authenticated family/row regression create-new.",
+  "result_digest": "blake3:0811bf4686f42ead69f1d642ab47682933eeecaaa34d788da7a8e27b49214790"
+}

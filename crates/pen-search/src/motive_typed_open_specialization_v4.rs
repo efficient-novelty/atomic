@@ -9,7 +9,8 @@
 
 use crate::t_sm1a_contextual_formation_v4::{
     ChronologicalImageInternalProjectionV4, issue_chronological_image_internal_v4,
-    replay_chronological_image_internal_v4,
+    issue_exact_public_family_v4, replay_chronological_image_internal_v4,
+    replay_exact_public_family_v4,
 };
 use pen_core::clause::{ClauseRec, ClauseRole};
 use pen_core::expr::Expr;
@@ -1406,6 +1407,7 @@ fn first_image(
 
 fn source_internal_for(
     signature: &SealedSignature,
+    visible_library: u32,
     newest: &A3TypedClauseSource,
 ) -> Result<OpenInternalDerivationV4, OpenSpecializationV4Error> {
     let body = Telescope::new(vec![ClauseRec::new(
@@ -1417,7 +1419,7 @@ fn source_internal_for(
             pen_type::contextual_internality::issue_explicit_ambient_context_declaration_token(
                 signature,
                 &body,
-                15,
+                visible_library,
                 vec![ContextualMotive::Type],
             )
             .map_err(|error| OpenSpecializationV4Error::FrozenInternal(error.to_string()))?;
@@ -1430,7 +1432,7 @@ fn source_internal_for(
     let declaration = issue_dependent_ambient_context_declaration(
         signature,
         &body,
-        15,
+        visible_library,
         vec![
             DependentContextMotive::Independent {
                 motive: ContextualMotive::Type,
@@ -1509,11 +1511,12 @@ fn internal_for_image(
 
 fn prove_corpus_case(
     signature: &SealedSignature,
+    visible_library: u32,
     scheme: &A3TypedDemandScheme,
     older: &A3TypedClauseSource,
     newest: &A3TypedClauseSource,
 ) -> Result<MotiveTypedOpenSpecializationTokenV4, OpenSpecializationV4Error> {
-    let source = source_internal_for(signature, newest)?;
+    let source = source_internal_for(signature, visible_library, newest)?;
     let first = first_image(scheme, older)?;
     let target_motives = target_motives_for(newest, older, &first);
     let context_probe = Telescope::new(vec![ClauseRec::new(
@@ -1523,7 +1526,7 @@ fn prove_corpus_case(
     let target_context = issue_dependent_ambient_context_declaration(
         signature,
         &context_probe,
-        15,
+        visible_library,
         target_motives.clone(),
     )
     .map_err(|error| OpenSpecializationV4Error::Dependent(error.to_string()))?
@@ -1537,7 +1540,7 @@ fn prove_corpus_case(
     };
     let first_internal = issue_chronological_image_internal_v4(
         signature,
-        15,
+        visible_library,
         older,
         interface_mode.clone(),
         target_context,
@@ -1565,12 +1568,97 @@ fn prove_corpus_case(
                     derivation: first_internal.projection().clone(),
                 }
             } else {
-                internal_for_image(signature, 15, &target_motives, term.clone())?
+                internal_for_image(signature, visible_library, &target_motives, term.clone())?
             };
             Ok((term, internal))
         })
         .collect::<Result<Vec<_>, OpenSpecializationV4Error>>()?;
     issue_motive_typed_open_specialization_v4(signature, source, target_motives, terms)
+}
+
+/// Issue the adopted open/contextual chronological specialization for one
+/// exact live A3 row.
+///
+/// This entry point is signature-parametric and reads no archived corpus or
+/// enacted outcome. The instance/scheme/source join is checked before the
+/// theorem is instantiated, so callers cannot transplant a positive
+/// specialization between rows.
+pub fn issue_chronological_open_specialization_for_instance_v4(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+) -> Result<MotiveTypedOpenSpecializationTokenV4, OpenSpecializationV4Error> {
+    if scheme.rule_constructor != A3RuleConstructor::ChronologicalComparison
+        || instance.scheme_id != scheme.scheme_id
+        || instance.source_anchor_ids != vec![older.anchor_id.clone(), newest.anchor_id.clone()]
+        || instance.source_family_keys
+            != vec![
+                older.canonical_family_key.clone(),
+                newest.canonical_family_key.clone(),
+            ]
+        || older.step >= newest.step
+        || !older.exported_public_clause
+        || !newest.exported_public_clause
+        || newest.kernel_type == KernelTy::Type
+    {
+        return Err(OpenSpecializationV4Error::ChronologicalShape);
+    }
+    let A3DemandOutputType::ChronologicalInteraction {
+        older_family,
+        older_type,
+        newest_family,
+        newest_type,
+        ..
+    } = &scheme.required_output
+    else {
+        return Err(OpenSpecializationV4Error::ChronologicalShape);
+    };
+    if older_family != &older.canonical_family_key
+        || older_type != &older.kernel_type
+        || newest_family != &newest.canonical_family_key
+        || newest_type != &newest.kernel_type
+    {
+        return Err(OpenSpecializationV4Error::ChronologicalShape);
+    }
+    let older_public = issue_exact_public_family_v4(signature, visible_library, older)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
+    replay_exact_public_family_v4(signature, &older_public)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
+    let newest_public = issue_exact_public_family_v4(signature, visible_library, newest)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
+    replay_exact_public_family_v4(signature, &newest_public)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
+    prove_corpus_case(signature, visible_library, scheme, older, newest)
+}
+
+/// Reissue the exact live-row specialization and compare its complete
+/// projection. No digest-only shortcut is accepted.
+pub fn replay_chronological_open_specialization_for_instance_v4(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+    claimed: &MotiveTypedOpenSpecializationProjectionV4,
+) -> Result<(), OpenSpecializationV4Error> {
+    replay_motive_typed_open_specialization_v4(signature, claimed)?;
+    let reissued = issue_chronological_open_specialization_for_instance_v4(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+    )?;
+    if reissued.projection() == claimed {
+        Ok(())
+    } else {
+        Err(OpenSpecializationV4Error::ReplayMismatch)
+    }
 }
 
 fn blocker_name(error: &OpenSpecializationV4Error) -> &'static str {
@@ -1586,41 +1674,81 @@ fn blocker_name(error: &OpenSpecializationV4Error) -> &'static str {
     }
 }
 
-pub fn issue_exact_open_dependency_cycle_blocker_v4()
--> Result<ExactOpenDependencyCycleBlockerV4, OpenSpecializationV4Error> {
-    let signature = SealedSignature::genesis_del_h15();
-    let window = generate_a3_window_for_exact_prefix_unbounded(&signature, 16)
+fn issue_exact_open_dependency_cycle_blocker_for_row_inner_v4(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+) -> Result<ExactOpenDependencyCycleBlockerV4, OpenSpecializationV4Error> {
+    let live_window = generate_a3_window_for_exact_prefix_unbounded(signature, visible_library + 1)
         .map_err(|error| OpenSpecializationV4Error::Chronological(error.to_string()))?;
-    let mut matches = Vec::new();
-    for (instance, scheme, older, newest) in live_t_sm1b_surface(&window)? {
-        if newest.canonical_presentation.parameters.len() != 2 {
-            continue;
-        }
-        let first = first_image(scheme, older)?;
-        let target_arity = older
-            .canonical_presentation
-            .parameters
-            .len()
-            .max(newest.canonical_presentation.parameters.len()) as u32;
-        let dependencies = first
-            .var_refs()
-            .into_iter()
-            .filter(|parameter| *parameter <= target_arity)
-            .collect::<Vec<_>>();
-        // The second source motive is Element(Eventually(p1)); after the
-        // exact p1 image it is formable before target parameter 2 only when
-        // that image mentions strict predecessors alone.
-        if dependencies.iter().any(|parameter| *parameter >= 2) {
-            matches.push((instance, scheme, older, newest, first, dependencies));
-        }
+    let live_instance = live_window
+        .instances
+        .iter()
+        .find(|live| live.instance_id == instance.instance_id)
+        .ok_or(OpenSpecializationV4Error::ChronologicalShape)?;
+    let live_scheme = live_window
+        .schemes
+        .iter()
+        .find(|live| live.scheme_id == scheme.scheme_id)
+        .ok_or(OpenSpecializationV4Error::ChronologicalShape)?;
+    let live_older = live_window
+        .typed_sources
+        .iter()
+        .find(|live| live.anchor_id == older.anchor_id)
+        .ok_or(OpenSpecializationV4Error::ChronologicalShape)?;
+    let live_newest = live_window
+        .typed_sources
+        .iter()
+        .find(|live| live.anchor_id == newest.anchor_id)
+        .ok_or(OpenSpecializationV4Error::ChronologicalShape)?;
+    if live_instance != instance
+        || live_scheme != scheme
+        || live_older != older
+        || live_newest != newest
+    {
+        return Err(OpenSpecializationV4Error::ChronologicalShape);
     }
-    if matches.len() != 1 {
-        return Err(OpenSpecializationV4Error::CycleSurfaceCardinality {
-            found: matches.len(),
-        });
+    if scheme.rule_constructor != A3RuleConstructor::ChronologicalComparison
+        || instance.scheme_id != scheme.scheme_id
+        || instance.source_anchor_ids != vec![older.anchor_id.clone(), newest.anchor_id.clone()]
+        || instance.source_family_keys
+            != vec![
+                older.canonical_family_key.clone(),
+                newest.canonical_family_key.clone(),
+            ]
+        || older.step >= newest.step
+        || !older.exported_public_clause
+        || !newest.exported_public_clause
+        || newest.kernel_type == KernelTy::Type
+        || newest.canonical_presentation.parameters.len() != 2
+    {
+        return Err(OpenSpecializationV4Error::ChronologicalShape);
     }
-    let (instance, scheme, older, newest, first, dependencies) = matches[0].clone();
+    let first = first_image(scheme, older)?;
+    let target_arity = older
+        .canonical_presentation
+        .parameters
+        .len()
+        .max(newest.canonical_presentation.parameters.len()) as u32;
+    let dependencies = first
+        .var_refs()
+        .into_iter()
+        .filter(|parameter| *parameter <= target_arity)
+        .collect::<Vec<_>>();
+    // This is the live canonical graph precondition, evaluated before any
+    // attempted specialization: the classifier of target p2 contains target
+    // p2 through the exact first realizer.
+    if !dependencies.contains(&2) {
+        return Err(OpenSpecializationV4Error::CycleSurfaceCardinality { found: 0 });
+    }
     let A3DemandOutputType::ChronologicalInteraction {
+        older_family,
+        older_type,
+        newest_family,
+        newest_type,
         interface_mode,
         interface_slot_map,
         ..
@@ -1628,6 +1756,21 @@ pub fn issue_exact_open_dependency_cycle_blocker_v4()
     else {
         return Err(OpenSpecializationV4Error::ChronologicalShape);
     };
+    if older_family != &older.canonical_family_key
+        || older_type != &older.kernel_type
+        || newest_family != &newest.canonical_family_key
+        || newest_type != &newest.kernel_type
+    {
+        return Err(OpenSpecializationV4Error::ChronologicalShape);
+    }
+    let older_public = issue_exact_public_family_v4(signature, visible_library, older)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
+    replay_exact_public_family_v4(signature, &older_public)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
+    let newest_public = issue_exact_public_family_v4(signature, visible_library, newest)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
+    replay_exact_public_family_v4(signature, &newest_public)
+        .map_err(|error| OpenSpecializationV4Error::FormationInternal(error.to_string()))?;
     replay_chronological_interface_slot_map(interface_slot_map, interface_slot_map.declared_arity)
         .map_err(|error| OpenSpecializationV4Error::Chronological(error.to_string()))?;
     let interface_assignments = interface_slot_map
@@ -1679,9 +1822,9 @@ pub fn issue_exact_open_dependency_cycle_blocker_v4()
         substitution.result().clone(),
     )]);
     let exact_error = issue_dependent_ambient_context_declaration(
-        &signature,
+        signature,
         &specialized_body,
-        15,
+        visible_library,
         vec![
             DependentContextMotive::Independent {
                 motive: ContextualMotive::Type,
@@ -1722,7 +1865,7 @@ pub fn issue_exact_open_dependency_cycle_blocker_v4()
         &pointwise_term,
         &[KernelTy::Type, KernelTy::Type],
         &[],
-        15,
+        visible_library,
     )
     .map_err(|error| OpenSpecializationV4Error::KernelRule(error.to_string()))?;
     let pointwise_preserves_instance =
@@ -1759,9 +1902,9 @@ pub fn issue_exact_open_dependency_cycle_blocker_v4()
     let appended_probe =
         Telescope::new(vec![ClauseRec::new(ClauseRole::Introduction, Expr::Var(2))]);
     let appended = issue_dependent_ambient_context_declaration(
-        &signature,
+        signature,
         &appended_probe,
-        15,
+        visible_library,
         appended_motives,
     )
     .map_err(|error| OpenSpecializationV4Error::Dependent(error.to_string()))?;
@@ -1791,9 +1934,9 @@ pub fn issue_exact_open_dependency_cycle_blocker_v4()
     // p2 -> Var(2), but its classifier still mentions p2 through first_image
     // and is rejected before any later prerequisite can be declared.
     let inserted_result = issue_dependent_ambient_context_declaration(
-        &signature,
+        signature,
         &specialized_body,
-        15,
+        visible_library,
         vec![
             DependentContextMotive::Independent {
                 motive: ContextualMotive::Type,
@@ -1844,8 +1987,8 @@ pub fn issue_exact_open_dependency_cycle_blocker_v4()
     let source_second_motive = DependentContextMotive::ElementOfApplicationHead {
         head: Expr::Eventually(Box::new(Expr::Var(1))),
     };
-    let source_internal = source_internal_for(&signature, newest)?;
-    replay_open_internal(&signature, &source_internal)?;
+    let source_internal = source_internal_for(signature, visible_library, newest)?;
+    replay_open_internal(signature, &source_internal)?;
     let (source_second_motive_declaration_replayed, source_internal_derivation_hash) =
         match &source_internal {
             OpenInternalDerivationV4::DependentContextual { derivation } => (
@@ -1915,6 +2058,91 @@ pub fn issue_exact_open_dependency_cycle_blocker_v4()
     Ok(projection)
 }
 
+/// Prove the exact dependency inversion for one supplied live chronological
+/// row.
+///
+/// The row is admitted only when its own canonical dependency graph contains
+/// the forbidden `p2 -> p2` edge (equivalently, the exact first realizer
+/// contains target `Var(2)`).  This issuer does not enumerate a corpus, read an
+/// archive, inspect a historical verdict, or select a row by trying a
+/// specialization.
+pub fn issue_exact_open_dependency_cycle_blocker_for_row_v4(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+) -> Result<ExactOpenDependencyCycleBlockerV4, OpenSpecializationV4Error> {
+    issue_exact_open_dependency_cycle_blocker_for_row_inner_v4(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+    )
+}
+
+/// Reissue an exact-row dependency-cycle proof under the supplied signature
+/// and compare the complete projection.
+pub fn replay_exact_open_dependency_cycle_blocker_for_row_v4(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+    projection: &ExactOpenDependencyCycleBlockerV4,
+) -> Result<(), OpenSpecializationV4Error> {
+    let reissued = issue_exact_open_dependency_cycle_blocker_for_row_v4(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+    )?;
+    if reissued == *projection {
+        Ok(())
+    } else {
+        Err(OpenSpecializationV4Error::ReplayMismatch)
+    }
+}
+
+/// Preserve the historical no-argument Genesis issuer by first locating the
+/// unique row from the live A3 surface, then invoking the exact-row theorem.
+pub fn issue_exact_open_dependency_cycle_blocker_v4()
+-> Result<ExactOpenDependencyCycleBlockerV4, OpenSpecializationV4Error> {
+    let signature = SealedSignature::genesis_del_h15();
+    let window = generate_a3_window_for_exact_prefix_unbounded(&signature, 16)
+        .map_err(|error| OpenSpecializationV4Error::Chronological(error.to_string()))?;
+    let mut matches = Vec::new();
+    for (instance, scheme, older, newest) in live_t_sm1b_surface(&window)? {
+        if newest.canonical_presentation.parameters.len() != 2 {
+            continue;
+        }
+        let first = first_image(scheme, older)?;
+        if first.var_refs().contains(&2) {
+            matches.push((
+                instance.clone(),
+                scheme.clone(),
+                older.clone(),
+                newest.clone(),
+            ));
+        }
+    }
+    if matches.len() != 1 {
+        return Err(OpenSpecializationV4Error::CycleSurfaceCardinality {
+            found: matches.len(),
+        });
+    }
+    let (instance, scheme, older, newest) = matches.remove(0);
+    issue_exact_open_dependency_cycle_blocker_for_row_v4(
+        &signature, 15, &instance, &scheme, &older, &newest,
+    )
+}
+
 pub fn replay_exact_open_dependency_cycle_blocker_v4(
     projection: &ExactOpenDependencyCycleBlockerV4,
 ) -> Result<(), OpenSpecializationV4Error> {
@@ -1959,7 +2187,7 @@ pub fn issue_t_sm1b_corpus_audit_v4() -> Result<TSm1bCorpusAuditV4, OpenSpeciali
     let mut cases = Vec::new();
     let mut blocker_counts = BTreeMap::new();
     for (instance, scheme, older, newest) in structural {
-        let disposition = match prove_corpus_case(&signature, scheme, older, newest) {
+        let disposition = match prove_corpus_case(&signature, 15, scheme, older, newest) {
             Ok(token) => {
                 replay_motive_typed_open_specialization_v4(&signature, token.projection())?;
                 TSm1bCaseDispositionV4::Derived {
@@ -2235,6 +2463,57 @@ mod tests {
         assert_eq!(
             replay_exact_open_dependency_cycle_blocker_v4(&acceptance_mutation),
             Err(OpenSpecializationV4Error::ReplayMismatch)
+        );
+    }
+
+    #[test]
+    fn exact_row_cycle_blocker_matches_genesis_and_rejects_forged_row() {
+        let signature = SealedSignature::genesis_del_h15();
+        let legacy = issue_exact_open_dependency_cycle_blocker_v4().expect("legacy blocker");
+        let window =
+            generate_a3_window_for_exact_prefix_unbounded(&signature, 16).expect("live A3 window");
+        let instance = window
+            .instances
+            .iter()
+            .find(|instance| instance.instance_id == legacy.instance_id)
+            .expect("exact instance");
+        let scheme = window
+            .schemes
+            .iter()
+            .find(|scheme| scheme.scheme_id == instance.scheme_id)
+            .expect("exact scheme");
+        let older = window
+            .typed_sources
+            .iter()
+            .find(|source| source.anchor_id == instance.source_anchor_ids[0])
+            .expect("older source");
+        let newest = window
+            .typed_sources
+            .iter()
+            .find(|source| source.anchor_id == instance.source_anchor_ids[1])
+            .expect("newest source");
+        let generic = issue_exact_open_dependency_cycle_blocker_for_row_v4(
+            &signature, 15, instance, scheme, older, newest,
+        )
+        .expect("generic blocker");
+        assert_eq!(generic, legacy);
+        replay_exact_open_dependency_cycle_blocker_for_row_v4(
+            &signature, 15, instance, scheme, older, newest, &generic,
+        )
+        .expect("generic blocker replay");
+
+        let mut forged_instance = instance.clone();
+        forged_instance.typing_derivation_hash.push_str("-forged");
+        assert!(
+            issue_exact_open_dependency_cycle_blocker_for_row_v4(
+                &signature,
+                15,
+                &forged_instance,
+                scheme,
+                older,
+                newest,
+            )
+            .is_err()
         );
     }
 

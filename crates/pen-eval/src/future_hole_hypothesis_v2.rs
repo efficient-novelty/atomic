@@ -49,6 +49,10 @@ use thiserror::Error;
 pub const FUTURE_HOLE_HYPOTHESIS_V2_SCHEMA: &str = "future-hole-body-motive-registration-v2";
 pub const GUARDED_PROVIDER_REGISTRY_V2: &str =
     "pen-type-guarded-strict-admissibility-provider-registry-v1";
+pub const PREFIX_LOCAL_FUTURE_HOLE_RULE_V3: &str =
+    "future-hole-prefix-local-typed-rule-authority-v3";
+pub const PREFIX_LOCAL_GUARDED_PROVIDER_REGISTRY_V3: &str =
+    "guarded-provider-closed-constructor-registry-v3";
 
 const ADJUDICATION_BYTES: &[u8] =
     include_bytes!("../../../docs/future_hole_definition_adjudication.md");
@@ -62,6 +66,85 @@ fn tagged_hash<T: Serialize + ?Sized>(domain: &str, value: &T) -> String {
 
 fn bytes_hash(bytes: &[u8]) -> String {
     format!("blake3:{}", blake3_hex(bytes))
+}
+
+/// Minimal, outcome-free authority used by source-first semantic issuance.
+/// Unlike the historical v2 compatibility path, this token neither embeds
+/// nor hashes an adjudication document or a Rust source file.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct PrefixLocalFutureHoleRuleAuthorityV3 {
+    pub schema: String,
+    pub definition_rule: String,
+    pub provider_registry_version: String,
+    pub constructor_provider_rows: Vec<(A3DemandConstructor, StructuralFamily)>,
+    pub body_and_motives_declared_at_registration: bool,
+    pub dependent_totality_required: bool,
+    pub structural_hypotheses_zero_charge: bool,
+    pub provider_selected_by_constructor_relation: bool,
+    pub outcome_document_read: bool,
+    pub provider_source_file_read: bool,
+    pub definition_rule_hash: String,
+    pub provider_registry_hash: String,
+    pub derivation_hash: String,
+}
+
+fn prefix_local_future_hole_authority_hash(
+    authority: &PrefixLocalFutureHoleRuleAuthorityV3,
+) -> String {
+    let mut projection = authority.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("prefix-local-future-hole-rule-authority", &projection)
+}
+
+pub fn issue_prefix_local_future_hole_rule_authority_v3() -> PrefixLocalFutureHoleRuleAuthorityV3 {
+    let constructor_provider_rows = A3DemandConstructor::ALL
+        .into_iter()
+        .map(|constructor| (constructor, constructor_family(constructor)))
+        .collect::<Vec<_>>();
+    let definition_rule = PREFIX_LOCAL_FUTURE_HOLE_RULE_V3.to_owned();
+    let provider_registry_version = PREFIX_LOCAL_GUARDED_PROVIDER_REGISTRY_V3.to_owned();
+    let definition_rule_hash = tagged_hash(
+        "prefix-local-future-hole-definition-rule",
+        &(
+            definition_rule.as_str(),
+            true, // body and motives declared at registration
+            true, // dependent totality required
+            true, // structural hypotheses are zero charge
+        ),
+    );
+    let provider_registry_hash = tagged_hash(
+        "prefix-local-guarded-provider-registry",
+        &(
+            provider_registry_version.as_str(),
+            &constructor_provider_rows,
+            AdmissibilityMode::Guarded,
+            PackagePolicy::Require,
+        ),
+    );
+    let mut authority = PrefixLocalFutureHoleRuleAuthorityV3 {
+        schema: PREFIX_LOCAL_FUTURE_HOLE_RULE_V3.to_owned(),
+        definition_rule,
+        provider_registry_version,
+        constructor_provider_rows,
+        body_and_motives_declared_at_registration: true,
+        dependent_totality_required: true,
+        structural_hypotheses_zero_charge: true,
+        provider_selected_by_constructor_relation: true,
+        outcome_document_read: false,
+        provider_source_file_read: false,
+        definition_rule_hash,
+        provider_registry_hash,
+        derivation_hash: String::new(),
+    };
+    authority.derivation_hash = prefix_local_future_hole_authority_hash(&authority);
+    authority
+}
+
+pub fn replay_prefix_local_future_hole_rule_authority_v3(
+    claimed: &PrefixLocalFutureHoleRuleAuthorityV3,
+) -> bool {
+    claimed.derivation_hash == prefix_local_future_hole_authority_hash(claimed)
+        && issue_prefix_local_future_hole_rule_authority_v3() == *claimed
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
@@ -807,6 +890,7 @@ fn registered_or_gap(
     expected_kernel_type: KernelTy,
     output_contract: FutureHoleOutputContractV2,
     every_hole_live: bool,
+    definition_adoption_hash: String,
 ) -> FutureHoleRegistrationDispositionV2 {
     let visible_library = window.stage.saturating_sub(1);
     let registration_prefix = match exact_signature_prefix_through(signature, visible_library) {
@@ -977,7 +1061,7 @@ fn registered_or_gap(
     }
     let mut registered = RegisteredFutureHoleV2 {
         schema: FUTURE_HOLE_HYPOTHESIS_V2_SCHEMA.to_owned(),
-        definition_adoption_hash: bytes_hash(ADJUDICATION_BYTES),
+        definition_adoption_hash,
         a3_scheme_id: scheme.scheme_id.clone(),
         a3_instance_id: instance.instance_id.clone(),
         source_anchor_ids: instance.source_anchor_ids.clone(),
@@ -1312,6 +1396,7 @@ pub fn register_unary_action_v2(
         source.kernel_type.clone(),
         output_contract,
         every_hole_live,
+        bytes_hash(ADJUDICATION_BYTES),
     ))
 }
 
@@ -1323,6 +1408,55 @@ pub fn register_structural_future_hole_v2(
     window: &A3HistoricalWindow,
     scheme: &A3TypedDemandScheme,
     instance: &A3TypedDemandInstance,
+) -> Result<FutureHoleRegistrationDispositionV2, FutureHoleV2Error> {
+    register_structural_future_hole_under(
+        signature,
+        window,
+        scheme,
+        instance,
+        bytes_hash(ADJUDICATION_BYTES),
+        GUARDED_PROVIDER_REGISTRY_V2.to_owned(),
+        bytes_hash(ADMISSIBILITY_SOURCE_BYTES),
+    )
+}
+
+/// Source-first structural registration.  The rule and provider identities
+/// are normalized typed tokens; no prose document or implementation source
+/// file participates in this issuance path.
+pub fn register_structural_future_hole_prefix_local_v3(
+    signature: &SealedSignature,
+    window: &A3HistoricalWindow,
+    scheme: &A3TypedDemandScheme,
+    instance: &A3TypedDemandInstance,
+) -> Result<FutureHoleRegistrationDispositionV2, FutureHoleV2Error> {
+    let authority = issue_prefix_local_future_hole_rule_authority_v3();
+    if !replay_prefix_local_future_hole_rule_authority_v3(&authority)
+        || authority.outcome_document_read
+        || authority.provider_source_file_read
+    {
+        return Err(FutureHoleV2Error::ReplayMismatch(
+            "prefix-local future-hole rule authority did not replay".to_owned(),
+        ));
+    }
+    register_structural_future_hole_under(
+        signature,
+        window,
+        scheme,
+        instance,
+        authority.definition_rule_hash,
+        authority.provider_registry_version,
+        authority.provider_registry_hash,
+    )
+}
+
+fn register_structural_future_hole_under(
+    signature: &SealedSignature,
+    window: &A3HistoricalWindow,
+    scheme: &A3TypedDemandScheme,
+    instance: &A3TypedDemandInstance,
+    definition_adoption_hash: String,
+    provider_registry_version: String,
+    provider_registry_source_hash: String,
 ) -> Result<FutureHoleRegistrationDispositionV2, FutureHoleV2Error> {
     check_scheme_instance(scheme, instance)?;
     if scheme.rule_constructor != A3RuleConstructor::StructuralCompletionHole {
@@ -1437,8 +1571,8 @@ pub fn register_structural_future_hole_v2(
         provider_family,
         mode: AdmissibilityMode::Guarded,
         required_policy: PackagePolicy::Require,
-        provider_registry_version: GUARDED_PROVIDER_REGISTRY_V2.to_owned(),
-        provider_registry_source_hash: bytes_hash(ADMISSIBILITY_SOURCE_BYTES),
+        provider_registry_version,
+        provider_registry_source_hash,
         jurisdiction,
         guarded_profile,
         live_constructor_evidence_hash: constructor_evidence_hash.clone(),
@@ -1493,6 +1627,7 @@ pub fn register_structural_future_hole_v2(
         KernelTy::Type,
         output_contract,
         true,
+        definition_adoption_hash,
     ))
 }
 
@@ -1645,6 +1780,67 @@ pub fn replay_future_hole_registration_v2(
     let claimed_digest = disposition_digest(claimed);
     if &expected != claimed {
         errors.push("registration differs from deterministic reissuance".to_owned());
+    }
+    FutureHoleReplayV2 {
+        valid: errors.is_empty(),
+        expected_digest,
+        claimed_digest,
+        errors,
+    }
+}
+
+pub fn replay_structural_future_hole_registration_prefix_local_v3(
+    signature: &SealedSignature,
+    window: &A3HistoricalWindow,
+    scheme: &A3TypedDemandScheme,
+    instance: &A3TypedDemandInstance,
+    claimed: &FutureHoleRegistrationDispositionV2,
+) -> FutureHoleReplayV2 {
+    let mut errors = Vec::new();
+    match claimed {
+        FutureHoleRegistrationDispositionV2::Registered(value) => {
+            if value.formation_hash != registration_expected_hash(value) {
+                errors.push("registration formation hash mismatch".to_owned());
+            }
+            if !value.hole_marginal_charge.replays_as_zero() {
+                errors.push("hole marginal charge is not replayable zero".to_owned());
+            }
+        }
+        FutureHoleRegistrationDispositionV2::Gap(gap) => {
+            if !gap.replays() {
+                errors.push("named registration gap hash mismatch".to_owned());
+            }
+        }
+    }
+    let mut expected = match register_structural_future_hole_prefix_local_v3(
+        signature, window, scheme, instance,
+    ) {
+        Ok(value) => value,
+        Err(error) => {
+            errors.push(error.to_string());
+            return FutureHoleReplayV2 {
+                valid: false,
+                expected_digest: String::new(),
+                claimed_digest: disposition_digest(claimed),
+                errors,
+            };
+        }
+    };
+    if let (
+        FutureHoleRegistrationDispositionV2::Registered(claimed_registration),
+        FutureHoleRegistrationDispositionV2::Registered(expected_registration),
+    ) = (claimed, &mut expected)
+        && let Some(hash) = &claimed_registration.external_exhaustiveness_evidence_hash
+    {
+        match attach_external_exhaustiveness_evidence_v2(expected_registration, hash.clone()) {
+            Ok(joined) => *expected_registration = joined,
+            Err(error) => errors.push(error.to_string()),
+        }
+    }
+    let expected_digest = disposition_digest(&expected);
+    let claimed_digest = disposition_digest(claimed);
+    if &expected != claimed {
+        errors.push("registration differs from deterministic prefix-local reissuance".to_owned());
     }
     FutureHoleReplayV2 {
         valid: errors.is_empty(),
@@ -2366,6 +2562,72 @@ mod tests {
                 "later signature entries leaked into Stage-{stage} registration"
             );
         }
+    }
+
+    #[test]
+    fn prefix_local_structural_registration_uses_only_typed_rule_authority() {
+        let authority = issue_prefix_local_future_hole_rule_authority_v3();
+        assert!(replay_prefix_local_future_hole_rule_authority_v3(
+            &authority
+        ));
+        assert!(!authority.outcome_document_read);
+        assert!(!authority.provider_source_file_read);
+        assert_eq!(
+            authority.constructor_provider_rows.len(),
+            A3DemandConstructor::ALL.len()
+        );
+        assert_ne!(
+            authority.definition_rule_hash,
+            bytes_hash(ADJUDICATION_BYTES)
+        );
+        assert_ne!(
+            authority.provider_registry_hash,
+            bytes_hash(ADMISSIBILITY_SOURCE_BYTES)
+        );
+
+        let signature = SealedSignature::genesis_del_h15();
+        let grammar = issue_historical_a3_demand_grammar(&signature).expect("A3 grammar");
+        let window = grammar
+            .windows
+            .iter()
+            .find(|window| window.stage == 3)
+            .expect("Stage-3 window");
+        let scheme = window
+            .schemes
+            .iter()
+            .find(|scheme| scheme.rule_constructor == A3RuleConstructor::StructuralCompletionHole)
+            .expect("Stage-3 structural scheme");
+        let instance = window
+            .instances
+            .iter()
+            .find(|instance| instance.scheme_id == scheme.scheme_id)
+            .expect("Stage-3 structural instance");
+        let claimed =
+            register_structural_future_hole_prefix_local_v3(&signature, window, scheme, instance)
+                .expect("prefix-local structural registration");
+        assert!(
+            replay_structural_future_hole_registration_prefix_local_v3(
+                &signature, window, scheme, instance, &claimed,
+            )
+            .valid
+        );
+        let registered = claimed.registered().expect("registered structural hole");
+        assert_eq!(
+            registered.definition_adoption_hash,
+            authority.definition_rule_hash
+        );
+        let FutureHoleOutputContractV2::StructuralProvides(contract) = &registered.output_contract
+        else {
+            panic!("structural contract");
+        };
+        assert_eq!(
+            contract.provider_registry_version,
+            PREFIX_LOCAL_GUARDED_PROVIDER_REGISTRY_V3
+        );
+        assert_eq!(
+            contract.provider_registry_source_hash,
+            authority.provider_registry_hash
+        );
     }
 
     #[test]

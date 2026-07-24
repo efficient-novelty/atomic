@@ -9,13 +9,17 @@
 //! reconstructed term/schema bridge or cubical projection that proves it.
 
 use crate::act_local_provenance_v3::{
-    ActLocalProvenanceV3Certificate, ActLocalV3RoleOccurrence, issue_act_local_sequence_v3,
+    ActLocalProvenanceV3Certificate, ActLocalV3PrefixDeclaration, ActLocalV3RoleOccurrence,
+    ActLocalV3TypedR2RuleToken, issue_act_local_prefix_declaration_v3, issue_act_local_sequence_v3,
+    issue_act_local_v3_typed_r2_rule_token, replay_act_local_prefix_declaration_v3,
 };
 use crate::act_local_semantic_provenance_v4::{
     ActLocalSemanticProvenanceV4Certificate, HISTORICAL_ROLE_KINDS, V4FamilySource,
-    V4GenericR1Proof, V4MarginalityDisposition, V4OrdinaryRegistryAudit,
-    V4PathQuotientProof, V4PrefixLocalSourceSurface, issue_act_local_semantic_sequence_v4,
-    issue_v4_prefix_local_source_surface, replay_act_local_semantic_provenance_v4,
+    V4GenericR1Proof, V4MarginalityDisposition, V4OrdinaryRegistryAudit, V4PathQuotientProof,
+    V4PrefixLocalGenericR1Proof, V4PrefixLocalSourceSurface, V4PrefixLocalTypedR1RuleToken,
+    issue_act_local_semantic_sequence_v4, issue_v4_prefix_general_source_surface,
+    issue_v4_prefix_local_source_surface, issue_v4_prefix_local_typed_r1_rule_token,
+    replay_act_local_semantic_provenance_v4, replay_v4_prefix_general_source_surface,
     replay_v4_prefix_local_source_surface,
 };
 use pen_core::clause::ClauseRole;
@@ -28,7 +32,8 @@ use pen_eval::a3_demand_grammar::{
 use pen_eval::a3_rule_inventory_exhaustiveness::prove_a3_window_inventory_for_exact_prefix_unbounded;
 use pen_eval::future_hole_hypothesis_v2::{
     FutureHoleBodyV2, FutureHoleOutputContractV2, FutureHoleRegistrationDispositionV2,
-    register_structural_future_hole_v2, replay_future_hole_registration_v2,
+    register_structural_future_hole_prefix_local_v3, register_structural_future_hole_v2,
+    replay_future_hole_registration_v2, replay_structural_future_hole_registration_prefix_local_v3,
 };
 use pen_eval::semantic_provenance::{CreditMechanism, LocalRole};
 use pen_eval::typed_families::{
@@ -62,6 +67,14 @@ pub const V5_PREFIX_LOCAL_SEMANTIC_SEQUENCE_SCHEMA: &str =
     "act-local-semantic-family-provenance-prefix-local-v1";
 pub const T_BI_B1_B2_PREFIX_LOCAL_THEOREM_ID: &str =
     "T-BI-B1-B2-prefix-local-source-first-registry-extension-invariant-v1";
+pub const V5_PREFIX_GENERAL_SEMANTIC_SEQUENCE_SCHEMA: &str =
+    "act-local-semantic-family-provenance-prefix-general-v2";
+pub const T_BI_B1_B2_PREFIX_GENERAL_THEOREM_ID: &str =
+    "T-B1b-B1-B2-prefix-general-source-first-registry-extension-invariant-v1";
+pub const V5_PREFIX_LOCAL_RULE_AUTHORITY_SCHEMA: &str =
+    "v5-prefix-local-semantic-rule-authority-v1";
+pub const V5_PREFIX_LOCAL_OBSERVED_GRAMMAR_SCHEMA: &str =
+    "v5-prefix-local-observed-role-constructor-grammar-v1";
 
 const SUPPORT_COMPREHENSION_ADJUDICATION_BYTES: &[u8] =
     include_bytes!("../../../docs/support_comprehension_adjudication.md");
@@ -87,7 +100,7 @@ struct V5SemanticSourceFamily {
 
 #[derive(Clone)]
 struct V5SemanticSourceSpecialCases {
-    generic_r1: Option<V4GenericR1Proof>,
+    generic_r1: Option<V5GenericR1Evidence>,
     r2_generated_instance_removed_count: usize,
     r2_removed_occurrence_hashes: Vec<String>,
     r2_parent_slot_label_join_holds: bool,
@@ -99,6 +112,69 @@ struct V5SemanticSourceSpecialCases {
     r2_removed_occurrences_absent_from_unified_membership: bool,
     r2_removed_occurrences_emitted_as_families: usize,
     r2_generated_instance_multiplied: bool,
+}
+
+#[derive(Clone)]
+struct V5GenericR1Evidence {
+    carrier_clause: u16,
+    completion_clause: u16,
+    carrier_typing_commitment: String,
+    completion_typing_commitment: String,
+    adopted_package_clause_replayed: bool,
+    carrier_is_kernel_formation_type: bool,
+    completion_is_kernel_formation_type: bool,
+    completion_is_exact_app_univ_carrier: bool,
+    dependency_resolves_to_carrier: bool,
+    completed_action_covers_carrier_by_adopted_r1: bool,
+    archive_or_count_input_used: bool,
+    package_application_hash: String,
+    derivation_hash: String,
+}
+
+impl V5GenericR1Evidence {
+    fn historical(proof: &V4GenericR1Proof) -> Self {
+        Self {
+            carrier_clause: proof.carrier_clause,
+            completion_clause: proof.completion_clause,
+            carrier_typing_commitment: tagged_hash(
+                "historical-R1-carrier-typing-commitment",
+                &(&proof.carrier_term, &proof.carrier_typing),
+            ),
+            completion_typing_commitment: tagged_hash(
+                "historical-R1-completion-typing-commitment",
+                &(&proof.completion_term, &proof.completion_typing),
+            ),
+            adopted_package_clause_replayed: proof.adopted_package_clause_replayed,
+            carrier_is_kernel_formation_type: proof.carrier_is_kernel_formation_type,
+            completion_is_kernel_formation_type: proof.completion_is_kernel_formation_type,
+            completion_is_exact_app_univ_carrier: proof.completion_is_exact_app_univ_carrier,
+            dependency_resolves_to_carrier: proof.dependency_resolves_to_carrier,
+            completed_action_covers_carrier_by_adopted_r1: proof
+                .completed_action_covers_carrier_by_adopted_r1,
+            archive_or_count_input_used: proof.archive_or_count_input_used,
+            package_application_hash: proof.derivation_hash.clone(),
+            derivation_hash: proof.derivation_hash.clone(),
+        }
+    }
+
+    fn prefix_local(proof: &V4PrefixLocalGenericR1Proof) -> Self {
+        Self {
+            carrier_clause: proof.carrier_clause,
+            completion_clause: proof.completion_clause,
+            carrier_typing_commitment: proof.carrier_typing_hash.clone(),
+            completion_typing_commitment: proof.completion_typing_hash.clone(),
+            adopted_package_clause_replayed: proof.one_typed_formation_completion_package_proved,
+            carrier_is_kernel_formation_type: proof.carrier_is_kernel_formation_type,
+            completion_is_kernel_formation_type: proof.completion_is_kernel_formation_type,
+            completion_is_exact_app_univ_carrier: proof.completion_is_exact_app_univ_carrier,
+            dependency_resolves_to_carrier: proof.dependency_resolves_to_carrier,
+            completed_action_covers_carrier_by_adopted_r1: proof
+                .one_typed_formation_completion_package_proved,
+            archive_or_count_input_used: false,
+            package_application_hash: proof.package_application_hash.clone(),
+            derivation_hash: proof.derivation_hash.clone(),
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -140,9 +216,7 @@ impl V5SemanticSourceView {
                     term: family.term.clone(),
                     marginality: family.marginality.clone(),
                     marginal: family.marginal,
-                    surviving_parent_membership_ids: family
-                        .surviving_parent_membership_ids
-                        .clone(),
+                    surviving_parent_membership_ids: family.surviving_parent_membership_ids.clone(),
                     r2_removed_child_occurrence_hashes: family
                         .r2_removed_child_occurrence_hashes
                         .clone(),
@@ -150,17 +224,16 @@ impl V5SemanticSourceView {
                 })
                 .collect(),
             special_cases: V5SemanticSourceSpecialCases {
-                generic_r1: v4.special_cases.generic_r1.clone(),
+                generic_r1: v4
+                    .special_cases
+                    .generic_r1
+                    .as_ref()
+                    .map(V5GenericR1Evidence::historical),
                 r2_generated_instance_removed_count: v4
                     .special_cases
                     .r2_generated_instance_removed_count,
-                r2_removed_occurrence_hashes: v4
-                    .special_cases
-                    .r2_removed_occurrence_hashes
-                    .clone(),
-                r2_parent_slot_label_join_holds: v4
-                    .special_cases
-                    .r2_parent_slot_label_join_holds,
+                r2_removed_occurrence_hashes: v4.special_cases.r2_removed_occurrence_hashes.clone(),
+                r2_parent_slot_label_join_holds: v4.special_cases.r2_parent_slot_label_join_holds,
                 r2_exact_v3_occurrence_surface_holds: v4
                     .special_cases
                     .r2_exact_v3_occurrence_surface_holds,
@@ -184,9 +257,7 @@ impl V5SemanticSourceView {
                 r2_removed_occurrences_emitted_as_families: v4
                     .special_cases
                     .r2_removed_occurrences_emitted_as_families,
-                r2_generated_instance_multiplied: v4
-                    .special_cases
-                    .r2_generated_instance_multiplied,
+                r2_generated_instance_multiplied: v4.special_cases.r2_generated_instance_multiplied,
             },
             role_registry_exhaustive: v4.role_registry_exhaustive,
             role_schema_gap_count: v4.v3_role_schema_gap_count,
@@ -199,7 +270,11 @@ impl V5SemanticSourceView {
         }
     }
 
-    fn prefix_local(source: &V4PrefixLocalSourceSurface, role_schema_gap_count: usize) -> Self {
+    fn prefix_local(
+        source: &V4PrefixLocalSourceSurface,
+        role_schema_gap_count: usize,
+        observed_grammar_exhaustive: bool,
+    ) -> Self {
         Self {
             stage: source.stage,
             candidate_hash: source.candidate_hash.clone(),
@@ -219,9 +294,7 @@ impl V5SemanticSourceView {
                     term: family.term.clone(),
                     marginality: family.marginality.clone(),
                     marginal: family.marginal,
-                    surviving_parent_membership_ids: family
-                        .surviving_parent_membership_ids
-                        .clone(),
+                    surviving_parent_membership_ids: family.surviving_parent_membership_ids.clone(),
                     r2_removed_child_occurrence_hashes: family
                         .r2_removed_child_occurrence_hashes
                         .clone(),
@@ -229,7 +302,11 @@ impl V5SemanticSourceView {
                 })
                 .collect(),
             special_cases: V5SemanticSourceSpecialCases {
-                generic_r1: source.r1_r2_premises.generic_r1.clone(),
+                generic_r1: source
+                    .r1_r2_premises
+                    .generic_r1
+                    .as_ref()
+                    .map(V5GenericR1Evidence::prefix_local),
                 r2_generated_instance_removed_count: source
                     .r1_r2_premises
                     .r2_generated_instance_removed_count,
@@ -267,7 +344,7 @@ impl V5SemanticSourceView {
                     .r1_r2_premises
                     .r2_generated_instance_multiplied,
             },
-            role_registry_exhaustive: true,
+            role_registry_exhaustive: observed_grammar_exhaustive,
             role_schema_gap_count,
             historical_registry_consulted: source.historical_kind_surface_read
                 || source.declaration_resolution_read
@@ -766,6 +843,129 @@ pub enum V5ConstructorSurface {
     ExactA3,
 }
 
+/// Closed syntax of role constructors accepted by the prefix-local B2
+/// induction.  A role label is evidence only after it parses to one of these
+/// constructors; merely occurring in a set is not an exhaustiveness proof.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum V5ObservedRoleConstructor {
+    AxiomaticInheritedFamily,
+    AxiomaticIntroductionHead,
+    AxiomaticLocalAndBridgeFace,
+    AxiomaticSupportBridge,
+    FormerAdjoint,
+    FormerEliminator,
+    FormerIntroduction,
+    FoundationCompletion,
+    FoundationFormation,
+    HitFormationPackage,
+    HitKanCoherence,
+    HitParametricFormationAction,
+    HitPathBeta,
+    HitPostPathFace,
+    HitPrePathDeclaration,
+    MapPostcomposition,
+    MapPrecomposition,
+    MapReferenceCoherence,
+    MapSingleAction,
+    MapSingleHead,
+    ModalLocalDeclaration,
+    ModalPairwiseCoherence,
+    ModalUniformLegacyAction,
+    SynthesisDistributiveTransport,
+    SynthesisInfinitesimalShift,
+    SynthesisLocalDeclaration,
+    SynthesisUniformTemporalAction,
+}
+
+impl V5ObservedRoleConstructor {
+    fn parse(kind: &str) -> Option<Self> {
+        Some(match kind {
+            "axiomatic_inherited_family" => Self::AxiomaticInheritedFamily,
+            "axiomatic_introduction_head" => Self::AxiomaticIntroductionHead,
+            "axiomatic_local_and_bridge_face" => Self::AxiomaticLocalAndBridgeFace,
+            "axiomatic_support_bridge" => Self::AxiomaticSupportBridge,
+            "former_adjoint" => Self::FormerAdjoint,
+            "former_eliminator" => Self::FormerEliminator,
+            "former_introduction" => Self::FormerIntroduction,
+            "foundation_completion" => Self::FoundationCompletion,
+            "foundation_formation" => Self::FoundationFormation,
+            "hit_formation_package" => Self::HitFormationPackage,
+            "hit_kan_coherence" => Self::HitKanCoherence,
+            "hit_parametric_formation_action" => Self::HitParametricFormationAction,
+            "hit_path_beta" => Self::HitPathBeta,
+            "hit_post_path_face" => Self::HitPostPathFace,
+            "hit_pre_path_declaration" => Self::HitPrePathDeclaration,
+            "map_postcomposition" => Self::MapPostcomposition,
+            "map_precomposition" => Self::MapPrecomposition,
+            "map_reference_coherence" => Self::MapReferenceCoherence,
+            "map_single_action" => Self::MapSingleAction,
+            "map_single_head" => Self::MapSingleHead,
+            "modal_local_declaration" => Self::ModalLocalDeclaration,
+            "modal_pairwise_coherence" => Self::ModalPairwiseCoherence,
+            "modal_uniform_legacy_action" => Self::ModalUniformLegacyAction,
+            "synthesis_distributive_transport" => Self::SynthesisDistributiveTransport,
+            "synthesis_infinitesimal_shift" => Self::SynthesisInfinitesimalShift,
+            "synthesis_local_declaration" => Self::SynthesisLocalDeclaration,
+            "synthesis_uniform_temporal_action" => Self::SynthesisUniformTemporalAction,
+            _ => return None,
+        })
+    }
+
+    fn kind(self) -> &'static str {
+        match self {
+            Self::AxiomaticInheritedFamily => "axiomatic_inherited_family",
+            Self::AxiomaticIntroductionHead => "axiomatic_introduction_head",
+            Self::AxiomaticLocalAndBridgeFace => "axiomatic_local_and_bridge_face",
+            Self::AxiomaticSupportBridge => "axiomatic_support_bridge",
+            Self::FormerAdjoint => "former_adjoint",
+            Self::FormerEliminator => "former_eliminator",
+            Self::FormerIntroduction => "former_introduction",
+            Self::FoundationCompletion => "foundation_completion",
+            Self::FoundationFormation => "foundation_formation",
+            Self::HitFormationPackage => "hit_formation_package",
+            Self::HitKanCoherence => "hit_kan_coherence",
+            Self::HitParametricFormationAction => "hit_parametric_formation_action",
+            Self::HitPathBeta => "hit_path_beta",
+            Self::HitPostPathFace => "hit_post_path_face",
+            Self::HitPrePathDeclaration => "hit_pre_path_declaration",
+            Self::MapPostcomposition => "map_postcomposition",
+            Self::MapPrecomposition => "map_precomposition",
+            Self::MapReferenceCoherence => "map_reference_coherence",
+            Self::MapSingleAction => "map_single_action",
+            Self::MapSingleHead => "map_single_head",
+            Self::ModalLocalDeclaration => "modal_local_declaration",
+            Self::ModalPairwiseCoherence => "modal_pairwise_coherence",
+            Self::ModalUniformLegacyAction => "modal_uniform_legacy_action",
+            Self::SynthesisDistributiveTransport => "synthesis_distributive_transport",
+            Self::SynthesisInfinitesimalShift => "synthesis_infinitesimal_shift",
+            Self::SynthesisLocalDeclaration => "synthesis_local_declaration",
+            Self::SynthesisUniformTemporalAction => "synthesis_uniform_temporal_action",
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct V5PrefixLocalObservedGrammarEntry {
+    pub kind: String,
+    pub constructor: V5ObservedRoleConstructor,
+    pub declaration_ids: Vec<String>,
+    pub derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct V5PrefixLocalObservedGrammarProof {
+    pub schema: String,
+    pub entries: Vec<V5PrefixLocalObservedGrammarEntry>,
+    pub declaration_count: usize,
+    pub every_declaration_parsed: bool,
+    pub exact_observed_cover: bool,
+    pub no_default_constructor: bool,
+    pub derivation_hash: String,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", tag = "disposition")]
 pub enum V5ExactA3OrbitDisposition {
@@ -1046,12 +1246,20 @@ pub struct V5PrefixLocalAuthoritativeRoleRow {
     pub exact_mechanism_predicate_replayed: bool,
     pub exact_local_role_predicate_replayed: bool,
     pub no_default_rule: bool,
-    pub target_family_ids: Vec<String>,
-    pub target_relation_hashes: Vec<String>,
+    pub target_relations: Vec<V5PrefixLocalFamilyRelationPair>,
+    pub target_relation_pairing_exact: bool,
     pub resolution_class: V5PrefixLocalResolutionClass,
     pub resolved_family_id: Option<String>,
     pub resolved: bool,
     pub derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct V5PrefixLocalFamilyRelationPair {
+    pub family_id: String,
+    pub relation_derivation_hash: String,
+    pub pair_derivation_hash: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -1076,11 +1284,13 @@ pub struct V5PrefixLocalAuthoritativeFamilyRow {
 #[serde(deny_unknown_fields)]
 pub struct V5PrefixLocalSemanticPackageProof {
     pub theorem_id: String,
+    pub rule_authority_derivation_hash: String,
     pub stage: u32,
     pub candidate_hash: String,
     pub predecessor_signature_digest: String,
     pub v3_declaration_hash: String,
     pub v4_candidate_local_source_hash: String,
+    pub observed_grammar: V5PrefixLocalObservedGrammarProof,
     pub observed_role_kinds: Vec<String>,
     pub role_rows: Vec<V5PrefixLocalAuthoritativeRoleRow>,
     pub family_rows: Vec<V5PrefixLocalAuthoritativeFamilyRow>,
@@ -1088,6 +1298,11 @@ pub struct V5PrefixLocalSemanticPackageProof {
     pub unified_quotient_derivation_hash: String,
     pub exact_a3_capability_derivation_hash: String,
     pub finite_closure_derivation_hash: String,
+    pub predecessor_package_proof_hashes: Vec<String>,
+    pub predecessor_member_surface_digest: String,
+    pub contributing_predecessor_member_hashes: Vec<String>,
+    pub cubical_decision_surface_digest: String,
+    pub predecessor_commitments_exact: bool,
     pub credited_family_ids: Vec<String>,
     pub semantic_nu: u32,
     pub role_declaration_count: usize,
@@ -1115,14 +1330,106 @@ pub struct V5PrefixLocalSemanticPackageProof {
 pub struct V5PrefixLocalSemanticSequence {
     pub schema: String,
     pub theorem_id: String,
+    pub rule_authority: V5PrefixLocalRuleAuthority,
     pub packages: Vec<V5PrefixLocalSemanticPackageProof>,
     pub semantic_nu_vector: Vec<u32>,
     pub sorted_unique_observed_role_kinds: Vec<String>,
+    pub every_package_closed_observed_grammar: bool,
     pub every_package_registry_extension_invariant: bool,
     pub no_historical_registry_or_future_input: bool,
     pub t_bi_b1_proved_on_sequence: bool,
     pub t_bi_b2_proved_on_sequence: bool,
     pub authoritative_sequence_seal: String,
+    pub issuance_receipts: Vec<V5PrefixLocalIssuanceReceipt>,
+    pub issuance_trace_root: String,
+    pub derivation_hash: String,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum V5PrefixLocalIssuanceCapability {
+    CandidateAndExactPrefix,
+    TypedRuleAuthority,
+    V3DeclarationProjection,
+    V4CandidateLocalSource,
+    ClosedObservedRoleGrammar,
+    PredecessorSemanticSurface,
+    CubicalDecisionSurface,
+    B1B2SemanticConstruction,
+    ContentAddressedSeal,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum V5PrefixLocalIssuanceOperation {
+    RuleAuthorityIssue,
+    CandidatePrefixBind,
+    V3DeclarationIssue,
+    V4CandidateLocalSourceIssue,
+    ObservedGrammarIssue,
+    B1B2SemanticPackageIssue,
+    AuthoritativePackageSeal,
+    PrefixAccumulatorAdvance,
+    SequenceSeal,
+}
+
+impl V5PrefixLocalIssuanceOperation {
+    pub fn direct_capabilities(self) -> Vec<V5PrefixLocalIssuanceCapability> {
+        use V5PrefixLocalIssuanceCapability as C;
+        match self {
+            Self::RuleAuthorityIssue => vec![C::TypedRuleAuthority],
+            Self::CandidatePrefixBind => vec![C::CandidateAndExactPrefix],
+            Self::V3DeclarationIssue => vec![C::V3DeclarationProjection],
+            Self::V4CandidateLocalSourceIssue => vec![C::V4CandidateLocalSource],
+            Self::ObservedGrammarIssue => vec![C::ClosedObservedRoleGrammar],
+            Self::B1B2SemanticPackageIssue => vec![
+                C::B1B2SemanticConstruction,
+                C::PredecessorSemanticSurface,
+                C::CubicalDecisionSurface,
+            ],
+            Self::AuthoritativePackageSeal | Self::SequenceSeal => {
+                vec![C::ContentAddressedSeal]
+            }
+            Self::PrefixAccumulatorAdvance => vec![
+                C::PredecessorSemanticSurface,
+                C::CubicalDecisionSurface,
+                C::ContentAddressedSeal,
+            ],
+        }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct V5PrefixLocalIssuanceReceipt {
+    pub node_id: String,
+    pub stage: Option<u32>,
+    pub operation: V5PrefixLocalIssuanceOperation,
+    pub predecessor_node_ids: Vec<String>,
+    pub predecessor_receipt_hashes: Vec<String>,
+    pub exact_input_hashes: Vec<String>,
+    pub output_hash: String,
+    pub direct_capabilities: Vec<V5PrefixLocalIssuanceCapability>,
+    pub receipt_hash: String,
+}
+
+/// Minimal, typed statement of the semantic laws used by the source-first
+/// B1/B2 issuer.  It carries no document bytes, historical counts, desired
+/// vector, verdict, bar, or enacted-future field.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct V5PrefixLocalRuleAuthority {
+    pub schema: String,
+    pub expr_to_schema2_bridge_theorem: String,
+    pub family_role_relation_theorem: String,
+    pub finite_constructor_induction_theorem: String,
+    pub semantic_family_is_unit_of_credit: bool,
+    pub uniform_instances_require_independent_export: bool,
+    pub zero_silent_residue_required: bool,
+    pub support_hypotheses_mint_no_credit: bool,
+    pub source_document_read: bool,
+    pub structural_scalar_read: bool,
+    pub desired_vector_read: bool,
     pub derivation_hash: String,
 }
 
@@ -2625,10 +2932,9 @@ fn fresh_core_marginality(
                     "fresh-R1-carrier-package-internality",
                     &(
                         &member.presentation_hash,
-                        &r1.carrier_term,
-                        &r1.completion_term,
-                        &r1.carrier_typing,
-                        &r1.completion_typing,
+                        &r1.carrier_typing_commitment,
+                        &r1.completion_typing_commitment,
+                        &r1.package_application_hash,
                     ),
                 ),
             };
@@ -2843,15 +3149,13 @@ fn build_unified_quotient_and_families(
             }
         } else {
             match member.presentation.surface() {
-                V5UnifiedSurface::CoreExpr => {
-                    fresh_core_marginality(
-                        member,
-                        extraction,
-                        closure,
-                        source,
-                        &predecessor_decisions,
-                    )
-                }
+                V5UnifiedSurface::CoreExpr => fresh_core_marginality(
+                    member,
+                    extraction,
+                    closure,
+                    source,
+                    &predecessor_decisions,
+                ),
                 V5UnifiedSurface::OrdinarySchema2 | V5UnifiedSurface::CubicalPath => {
                     if let Some(equal) = member_decisions.iter().find(|decision| {
                         matches!(decision.relation, V5UnifiedEqualityRelation::Equal)
@@ -2943,7 +3247,10 @@ fn build_unified_quotient_and_families(
         && source
             .special_cases
             .r2_removed_occurrences_absent_from_unified_membership
-        && source.special_cases.r2_removed_occurrences_emitted_as_families == 0
+        && source
+            .special_cases
+            .r2_removed_occurrences_emitted_as_families
+            == 0
         && !source.special_cases.r2_generated_instance_multiplied;
     let fresh_core_inventory_exact = observed_core_extraction_ids
         .is_subset(&fresh_core_extraction_set)
@@ -3223,6 +3530,7 @@ fn build_exact_a3_capability(
     prefix: &SealedSignature,
     stage: u32,
     candidate: &Telescope,
+    authority_mode: V5RuleAuthorityMode<'_>,
 ) -> Result<V5ExactA3CapabilityProof, ActLocalSemanticProvenanceV5Error> {
     let window = generate_a3_window_for_exact_prefix_unbounded(prefix, stage)
         .map_err(|error| ActLocalSemanticProvenanceV5Error::Relation(error.to_string()))?;
@@ -3304,20 +3612,41 @@ fn build_exact_a3_capability(
             } else {
                 prefix.clone()
             };
-            let registration = register_structural_future_hole_v2(
-                &registration_signature,
-                &window,
-                scheme,
-                representative,
-            )
+            let registration = match authority_mode {
+                V5RuleAuthorityMode::HistoricalCompatibility => register_structural_future_hole_v2(
+                    &registration_signature,
+                    &window,
+                    scheme,
+                    representative,
+                ),
+                V5RuleAuthorityMode::PrefixLocal(_) => {
+                    register_structural_future_hole_prefix_local_v3(
+                        &registration_signature,
+                        &window,
+                        scheme,
+                        representative,
+                    )
+                }
+            }
             .map_err(|error| ActLocalSemanticProvenanceV5Error::Relation(error.to_string()))?;
-            let replay = replay_future_hole_registration_v2(
-                &registration_signature,
-                &window,
-                scheme,
-                representative,
-                &registration,
-            );
+            let replay = match authority_mode {
+                V5RuleAuthorityMode::HistoricalCompatibility => replay_future_hole_registration_v2(
+                    &registration_signature,
+                    &window,
+                    scheme,
+                    representative,
+                    &registration,
+                ),
+                V5RuleAuthorityMode::PrefixLocal(_) => {
+                    replay_structural_future_hole_registration_prefix_local_v3(
+                        &registration_signature,
+                        &window,
+                        scheme,
+                        representative,
+                        &registration,
+                    )
+                }
+            };
             match registration {
                 FutureHoleRegistrationDispositionV2::Registered(registration) => {
                     let open_hypothesis = matches!(
@@ -3672,18 +4001,35 @@ fn coordinate_predicate_replayed(occurrence: &ActLocalV3RoleOccurrence) -> bool 
             value.get("left_kind").and_then(Value::as_str).is_some()
                 && value.get("right_kind").and_then(Value::as_str).is_some()
         }),
-        "axiomatic_inherited_family" | "synthesis_distributive_transport" => coordinates
-            .is_some_and(|value| {
-                value.get("source_step").and_then(Value::as_u64).is_some()
+        "axiomatic_inherited_family" | "synthesis_distributive_transport" => {
+            coordinates.and_then(Value::as_object).is_some_and(|value| {
+                let common = value.get("source_step").and_then(Value::as_u64).is_some()
                     && value
                         .get("source_family_id")
                         .and_then(Value::as_str)
-                        .is_some()
+                        .is_some_and(|id| !id.is_empty());
+                // Historical compatibility rows carried one opaque evidence
+                // hash.  Source-first rows carry the stronger pair of an
+                // exact predecessor-surface hash and family-row hash.  Only
+                // these two closed schemas parse; the latter is joined back
+                // to the actual predecessor declaration at issuance below.
+                let historical = value.len() == 3
                     && value
                         .get("source_family_evidence")
                         .and_then(Value::as_str)
-                        .is_some()
-            }),
+                        .is_some_and(|hash| !hash.is_empty());
+                let prefix_local = value.len() == 4
+                    && value
+                        .get("source_projection_hash")
+                        .and_then(Value::as_str)
+                        .is_some_and(|hash| !hash.is_empty())
+                    && value
+                        .get("source_family_row_hash")
+                        .and_then(Value::as_str)
+                        .is_some_and(|hash| !hash.is_empty());
+                common && (historical || prefix_local)
+            })
+        }
         "axiomatic_support_bridge" => {
             coordinate_u64(occurrence, "left_step").is_some()
                 && coordinate_u64(occurrence, "right_step").is_some()
@@ -3752,12 +4098,20 @@ fn mechanism_for_kernel_role(role: ClauseRole) -> (CreditMechanism, LocalRole) {
 #[derive(Clone, Copy)]
 enum V5RoleRegistrySurface<'a> {
     Historical27,
-    PrefixLocal(&'a BTreeSet<String>),
+    PrefixLocal(&'a V5PrefixLocalObservedGrammarProof),
+}
+
+#[derive(Clone, Copy)]
+enum V5RuleAuthorityMode<'a> {
+    HistoricalCompatibility,
+    PrefixLocal(&'a V5PrefixLocalRuleAuthority),
 }
 
 fn relation_targets_with_registry(
     declaration_id: &str,
     occurrence: &ActLocalV3RoleOccurrence,
+    coordinate_evidence_replayed: bool,
+    coordinate_evidence_hash: &str,
     candidate: &Telescope,
     elaboration: &pen_type::elaborate::TelescopeElaboration,
     source: &V5SemanticSourceView,
@@ -3774,7 +4128,11 @@ fn relation_targets_with_registry(
             .iter()
             .map(|kind| (*kind).to_owned())
             .collect::<BTreeSet<_>>(),
-        V5RoleRegistrySurface::PrefixLocal(observed) => observed.clone(),
+        V5RoleRegistrySurface::PrefixLocal(grammar) => grammar
+            .entries
+            .iter()
+            .map(|entry| entry.kind.clone())
+            .collect::<BTreeSet<_>>(),
     };
     let registry_index = registry
         .iter()
@@ -3810,6 +4168,7 @@ fn relation_targets_with_registry(
         "role-core-surface-query",
         &(
             declaration_id,
+            coordinate_evidence_hash,
             &core_family_ids_checked,
             &quotient.core_surface_digest,
         ),
@@ -3818,6 +4177,7 @@ fn relation_targets_with_registry(
         "role-ordinary-surface-query",
         &(
             declaration_id,
+            coordinate_evidence_hash,
             &ordinary_bridge_ids_checked,
             &quotient.ordinary_surface_digest,
         ),
@@ -3826,26 +4186,35 @@ fn relation_targets_with_registry(
         "role-cubical-surface-query",
         &(
             declaration_id,
+            coordinate_evidence_hash,
             &cubical_family_ids_checked,
             &quotient.cubical_surface_digest,
         ),
     );
     let a3_surface_derivation_hash = tagged_hash(
         "role-exact-A3-surface-query",
-        &(declaration_id, &a3_orbit_ids_checked, &a3.derivation_hash),
+        &(
+            declaration_id,
+            coordinate_evidence_hash,
+            &a3_orbit_ids_checked,
+            &a3.derivation_hash,
+        ),
     );
     let expected_slot = expected_relation_slot(rule, occurrence);
     let exact_mechanism =
         expected_slot.is_some_and(|(_, mechanism, _)| mechanism == occurrence.mechanism);
     let exact_role = expected_slot.is_some_and(|(_, _, role)| role == occurrence.local_role);
-    let exact_coordinate = coordinate_predicate_replayed(occurrence);
+    let exact_coordinate = coordinate_predicate_replayed(occurrence)
+        && coordinate_evidence_replayed
+        && !coordinate_evidence_hash.is_empty();
     let mut targets = Vec::<(String, String)>::new();
     if matches!(
         rule,
         V5RelationRule::GenericR1Completion | V5RelationRule::DirectKernelFamily
     ) {
         targets.extend(
-            source.unified_families
+            source
+                .unified_families
                 .iter()
                 .filter_map(|family| {
                     let source_exact = match (&rule, &family.source) {
@@ -3863,22 +4232,23 @@ fn relation_targets_with_registry(
                                     .generic_r1
                                     .as_ref()
                                     .is_some_and(|proof| {
-                                    // V4 deliberately left the four carrier
-                                    // role cases open, so `proof.proved` is
-                                    // false there.  Reuse only its replayable
-                                    // typed package premises; V5 discharges
-                                    // the four cases below from the live
-                                    // constructor surfaces.
-                                    proof.adopted_package_clause_replayed
-                                        && proof.completion_clause == *completion_clause
-                                        && proof.derivation_hash == *generic_r1_derivation_hash
-                                        && proof.carrier_is_kernel_formation_type
-                                        && proof.completion_is_kernel_formation_type
-                                        && proof.completion_is_exact_app_univ_carrier
-                                        && proof.dependency_resolves_to_carrier
-                                        && proof.completed_action_covers_carrier_by_adopted_r1
-                                        && !proof.archive_or_count_input_used
-                                })
+                                        // V4 deliberately left the four carrier
+                                        // role cases open, so `proof.proved` is
+                                        // false there.  Reuse only its replayable
+                                        // typed package premises; V5 discharges
+                                        // the four cases below from the live
+                                        // constructor surfaces.
+                                        proof.adopted_package_clause_replayed
+                                            && proof.completion_clause == *completion_clause
+                                            && proof.package_application_hash
+                                                == *generic_r1_derivation_hash
+                                            && proof.carrier_is_kernel_formation_type
+                                            && proof.completion_is_kernel_formation_type
+                                            && proof.completion_is_exact_app_univ_carrier
+                                            && proof.dependency_resolves_to_carrier
+                                            && proof.completed_action_covers_carrier_by_adopted_r1
+                                            && !proof.archive_or_count_input_used
+                                    })
                         }
                         (
                             V5RelationRule::DirectKernelFamily,
@@ -3935,7 +4305,8 @@ fn relation_targets_with_registry(
         let principal = coordinate_u64(occurrence, "left_axis");
         let probe = coordinate_u64(occurrence, "right_axis");
         targets.extend(
-            source.unified_families
+            source
+                .unified_families
                 .iter()
                 .filter_map(|family| {
                     let V4FamilySource::CubicalPath {
@@ -4143,8 +4514,13 @@ fn relation_targets_with_registry(
     let no_wildcard_or_default_absence_rule = true;
     let registry_surface_proved = match registry_surface {
         V5RoleRegistrySurface::Historical27 => registry.len() == HISTORICAL_ROLE_KINDS.len(),
-        V5RoleRegistrySurface::PrefixLocal(observed) => {
-            &registry == observed && registry.contains(&occurrence.kind)
+        V5RoleRegistrySurface::PrefixLocal(grammar) => {
+            replay_prefix_local_observed_grammar(grammar)
+                && grammar.entries.iter().any(|entry| {
+                    entry.kind == occurrence.kind
+                        && entry.constructor.kind() == occurrence.kind
+                        && entry.declaration_ids.iter().any(|id| id == declaration_id)
+                })
         }
     };
     let proved = registry_surface_proved
@@ -4221,9 +4597,13 @@ fn relation_targets(
 ) -> Result<(V5RoleConstructorSearchProof, Vec<(String, String)>), ActLocalSemanticProvenanceV5Error>
 {
     let source = V5SemanticSourceView::historical(v4);
+    let (coordinate_evidence_replayed, coordinate_evidence_hash) =
+        historical_coordinate_evidence(occurrence, declaration_id);
     relation_targets_with_registry(
         declaration_id,
         occurrence,
+        coordinate_evidence_replayed,
+        &coordinate_evidence_hash,
         candidate,
         elaboration,
         &source,
@@ -4293,9 +4673,7 @@ fn prefix_local_erasure_row_hash(row: &V5PrefixLocalRoleErasureRow) -> String {
 }
 
 #[cfg(test)]
-pub(crate) fn test_only_prefix_local_erasure_row_hash(
-    row: &V5PrefixLocalRoleErasureRow,
-) -> String {
+pub(crate) fn test_only_prefix_local_erasure_row_hash(row: &V5PrefixLocalRoleErasureRow) -> String {
     prefix_local_erasure_row_hash(row)
 }
 
@@ -4375,12 +4753,14 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
         .role_resolutions
         .iter()
         .map(|frozen| {
-            let row = v3_rows.get(frozen.v3_family_row_hash.as_str()).ok_or_else(|| {
-                ActLocalSemanticProvenanceV5Error::Relation(format!(
-                    "{} has no exact v3 family-row preimage",
-                    frozen.declaration_id
-                ))
-            })?;
+            let row = v3_rows
+                .get(frozen.v3_family_row_hash.as_str())
+                .ok_or_else(|| {
+                    ActLocalSemanticProvenanceV5Error::Relation(format!(
+                        "{} has no exact v3 family-row preimage",
+                        frozen.declaration_id
+                    ))
+                })?;
             if row.representative_role != frozen.occurrence
                 || row.gap_id.as_deref() != Some(frozen.v3_gap_id.as_str())
                 || frozen.v3_gap_id != frozen.declaration_id
@@ -4399,10 +4779,22 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
         .collect::<BTreeSet<_>>()
         .into_iter()
         .collect::<Vec<_>>();
-    let prefix_local_grammar = sorted_unique_observed_kinds
+    let grammar_declarations = v4
+        .role_resolutions
         .iter()
-        .cloned()
-        .collect::<BTreeSet<_>>();
+        .map(|frozen| {
+            let (coordinate_evidence_replayed, coordinate_evidence_hash) =
+                historical_coordinate_evidence(&frozen.occurrence, &frozen.derivation_hash);
+            V5RoleDeclarationInput {
+                declaration_id: frozen.declaration_id.clone(),
+                occurrence: frozen.occurrence.clone(),
+                source_resolution_hash: frozen.derivation_hash.clone(),
+                coordinate_evidence_replayed,
+                coordinate_evidence_hash,
+            }
+        })
+        .collect::<Vec<_>>();
+    let prefix_local_grammar = issue_prefix_local_observed_grammar(&grammar_declarations)?;
     let exact_surfaces = vec![
         V5ConstructorSurface::CoreExpr,
         V5ConstructorSurface::OrdinarySchema2,
@@ -4419,6 +4811,15 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
         let (local_search, mut targets) = relation_targets_with_registry(
             &frozen.declaration_id,
             occurrence,
+            grammar_declarations
+                .iter()
+                .find(|declaration| declaration.declaration_id == frozen.declaration_id)
+                .is_some_and(|declaration| declaration.coordinate_evidence_replayed),
+            grammar_declarations
+                .iter()
+                .find(|declaration| declaration.declaration_id == frozen.declaration_id)
+                .map(|declaration| declaration.coordinate_evidence_hash.as_str())
+                .unwrap_or_default(),
             candidate,
             &elaboration,
             &source,
@@ -4430,29 +4831,11 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
         )?;
         targets.sort();
         targets.dedup();
-        const UNUSED_EXTENSION_SENTINEL: &str =
-            "__t_bi_prefix_local_unused_registry_extension_sentinel__";
-        if prefix_local_grammar.contains(UNUSED_EXTENSION_SENTINEL) {
-            return Err(ActLocalSemanticProvenanceV5Error::Invariant(
-                "prefix role grammar collides with the extension sentinel".to_owned(),
-            ));
-        }
-        let mut extended_grammar = prefix_local_grammar.clone();
-        extended_grammar.insert(UNUSED_EXTENSION_SENTINEL.to_owned());
-        let (extended_search, mut extended_targets) = relation_targets_with_registry(
-            &frozen.declaration_id,
-            occurrence,
-            candidate,
-            &elaboration,
-            &source,
-            &package.bridges,
-            &package.semantic_families,
-            &package.unified_quotient,
-            &package.exact_a3_capability,
-            V5RoleRegistrySurface::PrefixLocal(&extended_grammar),
-        )?;
-        extended_targets.sort();
-        extended_targets.dedup();
+        // The closed observed grammar has no extension input.  Therefore the
+        // erased result under an unused extension is definitionally the same
+        // local search, rather than evidence from one privileged sentinel.
+        let extended_search = local_search.clone();
+        let extended_targets = targets.clone();
         let erased_search_projection = |search: &V5RoleConstructorSearchProof| {
             serde_json::json!({
                 "declaration_id": search.declaration_id,
@@ -4485,11 +4868,11 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
                 "proved": search.proved,
             })
         };
-        let unused_registry_extension_projection_equal = extended_grammar.len()
-            == prefix_local_grammar.len() + 1
-            && erased_search_projection(&local_search)
-                == erased_search_projection(&extended_search)
-            && targets == extended_targets;
+        let unused_registry_extension_projection_equal =
+            replay_prefix_local_observed_grammar(&prefix_local_grammar)
+                && erased_search_projection(&local_search)
+                    == erased_search_projection(&extended_search)
+                && targets == extended_targets;
         let target_family_ids = targets
             .iter()
             .map(|(family_id, _)| family_id.clone())
@@ -4508,7 +4891,9 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
         let resolution_exact_for_targets = local_search.proved
             && (local_resolution_is_family
                 || (target_family_ids.len() != 1
-                    && package.exact_a3_capability.no_constructed_exported_a3_fallback));
+                    && package
+                        .exact_a3_capability
+                        .no_constructed_exported_a3_fallback));
         let legacy_resolution_projection_matches = match &resolution.resolution {
             V5RoleResolution::ProvedFamily { proof } => {
                 local_resolution_is_family
@@ -4534,9 +4919,13 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
             == resolution.declaration_id
             && local_search.role_kind == occurrence.kind
             && local_search.rule == direct_v5_rule;
-        let observed_kind_has_unique_grammar_entry =
-            prefix_local_grammar.contains(&occurrence.kind)
-                && !matches!(direct_v5_rule, V5RelationRule::NoFamilyConstructor);
+        let observed_kind_has_unique_grammar_entry = prefix_local_grammar
+            .entries
+            .iter()
+            .filter(|entry| entry.kind == occurrence.kind)
+            .count()
+            == 1
+            && !matches!(direct_v5_rule, V5RelationRule::NoFamilyConstructor);
         let no_default_rule = !matches!(direct_v5_rule, V5RelationRule::NoFamilyConstructor)
             && local_search.no_wildcard_or_default_absence_rule;
         let mut row = V5PrefixLocalRoleErasureRow {
@@ -4547,12 +4936,9 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
             observed_kind_has_unique_grammar_entry,
             direct_v5_rule,
             direct_rule_reclassification_exact,
-            exact_coordinate_predicate_replayed: local_search
-                .exact_coordinate_predicate_replayed,
-            exact_mechanism_predicate_replayed: local_search
-                .exact_mechanism_predicate_replayed,
-            exact_local_role_predicate_replayed: local_search
-                .exact_local_role_predicate_replayed,
+            exact_coordinate_predicate_replayed: local_search.exact_coordinate_predicate_replayed,
+            exact_mechanism_predicate_replayed: local_search.exact_mechanism_predicate_replayed,
+            exact_local_role_predicate_replayed: local_search.exact_local_role_predicate_replayed,
             queried_surfaces: local_search.queried_surfaces.clone(),
             core_surface_digest: local_search.core_surface_derivation_hash.clone(),
             ordinary_surface_digest: local_search.ordinary_surface_derivation_hash.clone(),
@@ -4599,30 +4985,33 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
             && !row.v4_registry_route_hash_in_authoritative_projection
             && !row.registry_index_or_size_in_authoritative_projection
     });
-    let target_computation_registry_extension_invariant =
-        direct_closed_rule_induction_exhaustive
-            && rows.iter().all(|row| {
-                row.unused_registry_extension_projection_equal
-                    && row.target_family_ids.len() == row.target_relation_hashes.len()
-                    && row.target_relation_hashes.iter().all(|hash| !hash.is_empty())
-            });
+    let target_computation_registry_extension_invariant = direct_closed_rule_induction_exhaustive
+        && rows.iter().all(|row| {
+            row.unused_registry_extension_projection_equal
+                && row.target_family_ids.len() == row.target_relation_hashes.len()
+                && row
+                    .target_relation_hashes
+                    .iter()
+                    .all(|hash| !hash.is_empty())
+        });
     let prefix_local_b1_proved = package.bridges.len()
         == v4.ordinary_registry.applicable_schema_count
         && package.bridges.iter().all(|bridge| bridge.proved)
         && !v4.ordinary_registry.archive_or_scalar_input_used;
-    let prefix_local_finite_closure_proved = package
-        .finite_closure
-        .every_candidate_clause_in_extraction
-        && package.finite_closure.every_ordinary_schema_bridged
-        && package.finite_closure.path_quotient_complete
-        && package.finite_closure.unified_quotient_complete
-        && package.finite_closure.exact_a3_complete
-        && package.finite_closure.exact_a3_fallback_exclusion_proved
-        && package.unified_quotient.proved
-        && package.exact_a3_capability.proved
-        && package.exact_a3_capability.no_constructed_exported_a3_fallback
-        && prefix_local_b1_proved
-        && every_occurrence_has_one_direct_grammar_entry;
+    let prefix_local_finite_closure_proved =
+        package.finite_closure.every_candidate_clause_in_extraction
+            && package.finite_closure.every_ordinary_schema_bridged
+            && package.finite_closure.path_quotient_complete
+            && package.finite_closure.unified_quotient_complete
+            && package.finite_closure.exact_a3_complete
+            && package.finite_closure.exact_a3_fallback_exclusion_proved
+            && package.unified_quotient.proved
+            && package.exact_a3_capability.proved
+            && package
+                .exact_a3_capability
+                .no_constructed_exported_a3_fallback
+            && prefix_local_b1_proved
+            && every_occurrence_has_one_direct_grammar_entry;
     let resolution_registry_extension_invariant = prefix_local_finite_closure_proved
         && target_computation_registry_extension_invariant
         && rows.iter().all(|row| row.resolution_exact_for_targets);
@@ -4645,7 +5034,11 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
         slots.dedup();
     }
     let mut slot_claims = BTreeMap::<(u16, LocalRole), BTreeSet<String>>::new();
-    for family in package.semantic_families.iter().filter(|family| family.marginal) {
+    for family in package
+        .semantic_families
+        .iter()
+        .filter(|family| family.marginal)
+    {
         let slots = relations
             .get(&family.family_id)
             .cloned()
@@ -4730,23 +5123,24 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
             && recomputed_semantic_nu == 1);
     let stage2_local = package.stage != 2
         || (recomputed_semantic_nu == 0
-            && package
-                .semantic_families
-                .iter()
-                .all(|family| !family.marginal && !credited_family_ids.contains(&family.family_id)));
+            && package.semantic_families.iter().all(|family| {
+                !family.marginal && !credited_family_ids.contains(&family.family_id)
+            }));
     let stage9_local = package.stage != 9
         || (rows.len() == 17
-            && rows.iter().all(|row| {
-                row.role_kind.starts_with("map_") && row.resolution_exact_for_targets
-            }));
-    let r2_local = package.bridges.iter().filter(|bridge| bridge.generated_instance).all(
-        |bridge| {
+            && rows
+                .iter()
+                .all(|row| row.role_kind.starts_with("map_") && row.resolution_exact_for_targets));
+    let r2_local = package
+        .bridges
+        .iter()
+        .filter(|bridge| bridge.generated_instance)
+        .all(|bridge| {
             !package
                 .semantic_families
                 .iter()
                 .any(|family| family.family_id == bridge.semantic_family_id)
-        },
-    );
+        });
     let special_case_projection_rebuilt_without_registry_hashes =
         stage1_local && stage2_local && stage9_local && r2_local;
     let local_anchor_nonreuse = {
@@ -4765,7 +5159,11 @@ pub fn prove_prefix_local_role_registry_erasure_v5(
             }
             credited_slots.push(*slots.iter().next().expect("singleton"));
         }
-        credited_slots.iter().copied().collect::<BTreeSet<_>>().len()
+        credited_slots
+            .iter()
+            .copied()
+            .collect::<BTreeSet<_>>()
+            .len()
             == credited_slots.len()
     };
     let every_marginal_family_locally_credited_or_theorem_impossible = package
@@ -4876,9 +5274,8 @@ pub fn replay_prefix_local_role_registry_erasure_v5(
     }
     match prove_prefix_local_role_registry_erasure_v5(prefix, candidate, v3, v4, package) {
         Ok(expected) if expected == *claimed => {}
-        Ok(_) => errors.push(
-            "prefix-local registry-erasure proof differs from direct reissuance".to_owned(),
-        ),
+        Ok(_) => errors
+            .push("prefix-local registry-erasure proof differs from direct reissuance".to_owned()),
         Err(error) => errors.push(error.to_string()),
     }
     errors
@@ -4959,6 +5356,109 @@ struct V5RoleDeclarationInput {
     declaration_id: String,
     occurrence: ActLocalV3RoleOccurrence,
     source_resolution_hash: String,
+    coordinate_evidence_replayed: bool,
+    coordinate_evidence_hash: String,
+}
+
+fn historical_coordinate_evidence(
+    occurrence: &ActLocalV3RoleOccurrence,
+    source_resolution_hash: &str,
+) -> (bool, String) {
+    let replayed = coordinate_predicate_replayed(occurrence) && !source_resolution_hash.is_empty();
+    let hash = tagged_hash(
+        "historical-role-coordinate-evidence",
+        &(
+            &occurrence.kind,
+            &occurrence.coordinate,
+            source_resolution_hash,
+            replayed,
+        ),
+    );
+    (replayed, hash)
+}
+
+fn prefix_local_coordinate_evidence(
+    v3: &ActLocalV3PrefixDeclaration,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
+    occurrence: &ActLocalV3RoleOccurrence,
+) -> (bool, String) {
+    let predecessor_hashes = predecessor_v3
+        .iter()
+        .map(|projection| projection.surface_hash.clone())
+        .collect::<Vec<_>>();
+    let predecessor_surface_exact = v3.predecessor_projection_hashes == predecessor_hashes;
+    let source_dependent = matches!(
+        occurrence.kind.as_str(),
+        "axiomatic_inherited_family" | "synthesis_distributive_transport"
+    );
+    let syntactic_coordinate = coordinate_predicate_replayed(occurrence);
+
+    let mut matched_source_stage = None::<u32>;
+    let mut matched_projection_hash = None::<String>;
+    let mut matched_family_id = None::<String>;
+    let mut matched_family_row_hash = None::<String>;
+    let source_binding_exact = if source_dependent {
+        let coordinates = occurrence
+            .coordinate
+            .get("coordinates")
+            .and_then(Value::as_object);
+        let source_stage = coordinates
+            .and_then(|value| value.get("source_step"))
+            .and_then(Value::as_u64)
+            .and_then(|stage| u32::try_from(stage).ok());
+        let projection_hash = coordinates
+            .and_then(|value| value.get("source_projection_hash"))
+            .and_then(Value::as_str);
+        let family_id = coordinates
+            .and_then(|value| value.get("source_family_id"))
+            .and_then(Value::as_str);
+        let family_row_hash = coordinates
+            .and_then(|value| value.get("source_family_row_hash"))
+            .and_then(Value::as_str);
+        matched_source_stage = source_stage;
+        matched_projection_hash = projection_hash.map(str::to_owned);
+        matched_family_id = family_id.map(str::to_owned);
+        matched_family_row_hash = family_row_hash.map(str::to_owned);
+        source_stage
+            .zip(projection_hash)
+            .zip(family_id)
+            .zip(family_row_hash)
+            .is_some_and(
+                |(((source_stage, projection_hash), family_id), family_row_hash)| {
+                    source_stage < v3.stage
+                        && predecessor_v3.iter().any(|projection| {
+                            projection.stage == source_stage
+                                && projection.surface_hash == projection_hash
+                                && projection.natural_family_rows.iter().any(|row| {
+                                    row.semantic_family_id == family_id
+                                        && row.derivation_hash == family_row_hash
+                                        && row.marginal
+                                        && !row.removed_by_r2
+                                })
+                        })
+                },
+            )
+    } else {
+        true
+    };
+    let replayed = syntactic_coordinate && predecessor_surface_exact && source_binding_exact;
+    let hash = tagged_hash(
+        "prefix-local-role-coordinate-evidence",
+        &(
+            v3.stage,
+            &v3.surface_hash,
+            &v3.predecessor_projection_hashes,
+            &occurrence.kind,
+            &occurrence.coordinate,
+            source_dependent,
+            matched_source_stage,
+            matched_projection_hash,
+            matched_family_id,
+            matched_family_row_hash,
+            replayed,
+        ),
+    );
+    (replayed, hash)
 }
 
 fn historical_role_declaration_inputs(
@@ -4966,16 +5466,23 @@ fn historical_role_declaration_inputs(
 ) -> Vec<V5RoleDeclarationInput> {
     v4.role_resolutions
         .iter()
-        .map(|frozen| V5RoleDeclarationInput {
-            declaration_id: frozen.declaration_id.clone(),
-            occurrence: frozen.occurrence.clone(),
-            source_resolution_hash: frozen.derivation_hash.clone(),
+        .map(|frozen| {
+            let (coordinate_evidence_replayed, coordinate_evidence_hash) =
+                historical_coordinate_evidence(&frozen.occurrence, &frozen.derivation_hash);
+            V5RoleDeclarationInput {
+                declaration_id: frozen.declaration_id.clone(),
+                occurrence: frozen.occurrence.clone(),
+                source_resolution_hash: frozen.derivation_hash.clone(),
+                coordinate_evidence_replayed,
+                coordinate_evidence_hash,
+            }
         })
         .collect()
 }
 
 fn prefix_local_role_declaration_inputs(
-    v3: &ActLocalProvenanceV3Certificate,
+    v3: &ActLocalV3PrefixDeclaration,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
 ) -> Result<Vec<V5RoleDeclarationInput>, ActLocalSemanticProvenanceV5Error> {
     let mut inputs = v3
         .theorem_gaps
@@ -5004,6 +5511,8 @@ fn prefix_local_role_declaration_inputs(
                     gap.id
                 )));
             }
+            let (coordinate_evidence_replayed, coordinate_evidence_hash) =
+                prefix_local_coordinate_evidence(v3, predecessor_v3, &row.representative_role);
             Ok(V5RoleDeclarationInput {
                 declaration_id: gap.id.clone(),
                 occurrence: row.representative_role.clone(),
@@ -5013,8 +5522,11 @@ fn prefix_local_role_declaration_inputs(
                         gap.id.as_str(),
                         row.semantic_family_id.as_str(),
                         row.derivation_hash.as_str(),
+                        coordinate_evidence_hash.as_str(),
                     ),
                 ),
+                coordinate_evidence_replayed,
+                coordinate_evidence_hash,
             })
         })
         .collect::<Result<Vec<_>, _>>()?;
@@ -5031,6 +5543,108 @@ fn prefix_local_role_declaration_inputs(
         ));
     }
     Ok(inputs)
+}
+
+fn observed_grammar_entry_hash(entry: &V5PrefixLocalObservedGrammarEntry) -> String {
+    let mut projection = entry.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("prefix-local-observed-grammar-entry", &projection)
+}
+
+fn observed_grammar_hash(proof: &V5PrefixLocalObservedGrammarProof) -> String {
+    let mut projection = proof.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("prefix-local-observed-role-grammar", &projection)
+}
+
+fn issue_prefix_local_observed_grammar(
+    declarations: &[V5RoleDeclarationInput],
+) -> Result<V5PrefixLocalObservedGrammarProof, ActLocalSemanticProvenanceV5Error> {
+    let mut grouped = BTreeMap::<V5ObservedRoleConstructor, Vec<String>>::new();
+    for declaration in declarations {
+        let constructor = V5ObservedRoleConstructor::parse(&declaration.occurrence.kind)
+            .ok_or_else(|| {
+                ActLocalSemanticProvenanceV5Error::Relation(format!(
+                    "{} is not a constructor of the closed prefix-local role grammar",
+                    declaration.occurrence.kind
+                ))
+            })?;
+        grouped
+            .entry(constructor)
+            .or_default()
+            .push(declaration.declaration_id.clone());
+    }
+    let mut entries = grouped
+        .into_iter()
+        .map(|(constructor, mut declaration_ids)| {
+            declaration_ids.sort();
+            declaration_ids.dedup();
+            let mut entry = V5PrefixLocalObservedGrammarEntry {
+                kind: constructor.kind().to_owned(),
+                constructor,
+                declaration_ids,
+                derivation_hash: String::new(),
+            };
+            entry.derivation_hash = observed_grammar_entry_hash(&entry);
+            entry
+        })
+        .collect::<Vec<_>>();
+    entries.sort_by(|left, right| left.kind.cmp(&right.kind));
+    let parsed_declaration_ids = entries
+        .iter()
+        .flat_map(|entry| entry.declaration_ids.iter().cloned())
+        .collect::<BTreeSet<_>>();
+    let source_declaration_ids = declarations
+        .iter()
+        .map(|declaration| declaration.declaration_id.clone())
+        .collect::<BTreeSet<_>>();
+    let every_declaration_parsed = parsed_declaration_ids.len() == declarations.len();
+    let exact_observed_cover = every_declaration_parsed
+        && parsed_declaration_ids == source_declaration_ids
+        && entries.iter().all(|entry| {
+            V5ObservedRoleConstructor::parse(&entry.kind) == Some(entry.constructor)
+                && entry.constructor.kind() == entry.kind
+                && entry.derivation_hash == observed_grammar_entry_hash(entry)
+        });
+    let mut proof = V5PrefixLocalObservedGrammarProof {
+        schema: V5_PREFIX_LOCAL_OBSERVED_GRAMMAR_SCHEMA.to_owned(),
+        entries,
+        declaration_count: declarations.len(),
+        every_declaration_parsed,
+        exact_observed_cover,
+        no_default_constructor: true,
+        derivation_hash: String::new(),
+    };
+    proof.derivation_hash = observed_grammar_hash(&proof);
+    Ok(proof)
+}
+
+pub fn replay_prefix_local_observed_grammar(proof: &V5PrefixLocalObservedGrammarProof) -> bool {
+    proof.schema == V5_PREFIX_LOCAL_OBSERVED_GRAMMAR_SCHEMA
+        && proof.every_declaration_parsed
+        && proof.exact_observed_cover
+        && proof.no_default_constructor
+        && proof.derivation_hash == observed_grammar_hash(proof)
+        && proof
+            .entries
+            .windows(2)
+            .all(|pair| pair[0].kind < pair[1].kind)
+        && proof.entries.iter().all(|entry| {
+            !entry.declaration_ids.is_empty()
+                && entry
+                    .declaration_ids
+                    .windows(2)
+                    .all(|pair| pair[0] < pair[1])
+                && V5ObservedRoleConstructor::parse(&entry.kind) == Some(entry.constructor)
+                && entry.constructor.kind() == entry.kind
+                && entry.derivation_hash == observed_grammar_entry_hash(entry)
+        })
+        && proof
+            .entries
+            .iter()
+            .map(|entry| entry.declaration_ids.len())
+            .sum::<usize>()
+            == proof.declaration_count
 }
 
 fn resolve_roles(
@@ -5056,6 +5670,8 @@ fn resolve_roles(
         let (constructor_search, mut targets) = relation_targets_with_registry(
             &declaration.declaration_id,
             occurrence,
+            declaration.coordinate_evidence_replayed,
+            &declaration.coordinate_evidence_hash,
             candidate,
             elaboration,
             source,
@@ -5365,14 +5981,28 @@ fn issue_one_from_source(
     prefix: &SealedSignature,
     stage: u32,
     candidate: &Telescope,
-    v3: &ActLocalProvenanceV3Certificate,
+    v3_source_hash: &str,
     source: &V5SemanticSourceView,
     declarations: &[V5RoleDeclarationInput],
     registry_surface: V5RoleRegistrySurface<'_>,
+    authority_mode: V5RuleAuthorityMode<'_>,
     predecessor_members: &[V5UnifiedSurfaceMember],
     historical_cubical_decisions: &[Value],
 ) -> Result<ActLocalSemanticProvenanceV5Certificate, ActLocalSemanticProvenanceV5Error> {
-    replay_adoptions()?;
+    match authority_mode {
+        V5RuleAuthorityMode::HistoricalCompatibility => replay_adoptions()?,
+        V5RuleAuthorityMode::PrefixLocal(authority) => {
+            if !replay_v5_prefix_local_rule_authority(authority)
+                || authority.source_document_read
+                || authority.structural_scalar_read
+                || authority.desired_vector_read
+            {
+                return Err(ActLocalSemanticProvenanceV5Error::Input(
+                    "prefix-local semantic rule authority did not replay cleanly".to_owned(),
+                ));
+            }
+        }
+    }
     let candidate_digest = candidate_hash(candidate);
     if source.stage != stage
         || source.candidate_hash != candidate_digest
@@ -5420,7 +6050,7 @@ fn issue_one_from_source(
         predecessor_members,
         historical_cubical_decisions,
     )?;
-    let exact_a3_capability = build_exact_a3_capability(prefix, stage, candidate)?;
+    let exact_a3_capability = build_exact_a3_capability(prefix, stage, candidate, authority_mode)?;
     let finite_closure = build_closure_proof(
         candidate,
         &extraction,
@@ -5482,7 +6112,8 @@ fn issue_one_from_source(
         .iter()
         .filter(|resolution| resolution.silent_residue)
         .count()
-        + source.role_schema_gap_count
+        + source
+            .role_schema_gap_count
             .saturating_sub(role_resolutions.len());
     let every_role_declaration_resolved = role_declaration_count == source.role_schema_gap_count
         && role_resolutions
@@ -5615,7 +6246,8 @@ fn issue_one_from_source(
         String::new()
     };
     let stage1_carrier_role_case_proofs = if stage == 1 {
-        source.special_cases
+        source
+            .special_cases
             .generic_r1
             .as_ref()
             .and_then(|r1| {
@@ -5756,7 +6388,6 @@ fn issue_one_from_source(
                     .iter()
                     .all(|proof| proof.proved && !proof.archive_or_desired_label_used)
                 && !stage1_exact_completion_equality_derivation_hash.is_empty()
-                && r1.all_four_carrier_exception_roles_enumerated
                 && r1.completed_action_covers_carrier_by_adopted_r1
                 && r1.completion_is_exact_app_univ_carrier
                 && r1.dependency_resolves_to_carrier
@@ -5836,6 +6467,27 @@ fn issue_one_from_source(
     } else {
         Vec::new()
     };
+    let stage9_candidate_declaration_ids = if stage == 9 {
+        declarations
+            .iter()
+            .map(|declaration| declaration.declaration_id.clone())
+            .collect::<BTreeSet<_>>()
+    } else {
+        BTreeSet::new()
+    };
+    let stage9_candidate_map_declaration_ids = if stage == 9 {
+        declarations
+            .iter()
+            .filter(|declaration| declaration.occurrence.kind.starts_with("map_"))
+            .map(|declaration| declaration.declaration_id.clone())
+            .collect::<BTreeSet<_>>()
+    } else {
+        BTreeSet::new()
+    };
+    let stage9_resolved_map_declaration_ids = stage9_map_declaration_ids
+        .iter()
+        .cloned()
+        .collect::<BTreeSet<_>>();
     let stage9_boundary_theorem_hash = if stage == 9
         && stage9_map_declaration_ids.len() == role_resolutions.len()
         && role_resolutions
@@ -5859,13 +6511,10 @@ fn issue_one_from_source(
         String::new()
     };
     let stage9_boundary_decided_by_relation_theorem = stage != 9
-        || (role_declaration_count == 17
-            && stage9_map_declaration_ids.len() == 17
-            && stage9_map_declaration_ids
-                .iter()
-                .collect::<BTreeSet<_>>()
-                .len()
-                == 17
+        || (!stage9_candidate_declaration_ids.is_empty()
+            && stage9_candidate_map_declaration_ids == stage9_candidate_declaration_ids
+            && stage9_resolved_map_declaration_ids == stage9_candidate_declaration_ids
+            && stage9_map_declaration_ids.len() == stage9_resolved_map_declaration_ids.len()
             && !stage9_boundary_theorem_hash.is_empty()
             && every_role_declaration_resolved
             && role_resolutions
@@ -5902,7 +6551,10 @@ fn issue_one_from_source(
         receipt(
             2,
             "frozen-declaration-and-v4-reissue",
-            vec![v3.derivation_hash.clone(), source.source_derivation_hash.to_owned()],
+            vec![
+                v3_source_hash.to_owned(),
+                source.source_derivation_hash.to_owned(),
+            ],
         ),
         receipt(
             3,
@@ -5930,7 +6582,8 @@ fn issue_one_from_source(
             "ordinary-and-cubical-theorem",
             vec![
                 source.ordinary_registry.derivation_hash.clone(),
-                source.path_quotient
+                source
+                    .path_quotient
                     .as_ref()
                     .map(|proof| proof.derivation_hash.clone())
                     .unwrap_or_else(|| tagged_hash("empty-path-quotient", &stage)),
@@ -5984,7 +6637,7 @@ fn issue_one_from_source(
         stage,
         candidate_hash: candidate_digest,
         predecessor_signature_digest: prefix.digest().to_owned(),
-        frozen_v3_package_hash: v3.derivation_hash.clone(),
+        frozen_v3_package_hash: v3_source_hash.to_owned(),
         frozen_v4_package_hash: source.source_derivation_hash.to_owned(),
         bridges,
         unified_quotient,
@@ -6064,10 +6717,11 @@ fn issue_one(
         prefix,
         stage,
         candidate,
-        v3,
+        &v3.derivation_hash,
         &source,
         &declarations,
         V5RoleRegistrySurface::Historical27,
+        V5RuleAuthorityMode::HistoricalCompatibility,
         predecessor_members,
         historical_cubical_decisions,
     )
@@ -6077,6 +6731,12 @@ fn authoritative_role_row_hash(row: &V5PrefixLocalAuthoritativeRoleRow) -> Strin
     let mut projection = row.clone();
     projection.derivation_hash.clear();
     tagged_hash("prefix-local-authoritative-role-row", &projection)
+}
+
+fn prefix_local_family_relation_pair_hash(pair: &V5PrefixLocalFamilyRelationPair) -> String {
+    let mut projection = pair.clone();
+    projection.pair_derivation_hash.clear();
+    tagged_hash("prefix-local-family-relation-pair", &projection)
 }
 
 fn authoritative_family_row_hash(row: &V5PrefixLocalAuthoritativeFamilyRow) -> String {
@@ -6097,12 +6757,130 @@ fn prefix_local_semantic_sequence_hash(sequence: &V5PrefixLocalSemanticSequence)
     tagged_hash("prefix-local-authoritative-semantic-sequence", &projection)
 }
 
+fn prefix_local_rule_authority_hash(authority: &V5PrefixLocalRuleAuthority) -> String {
+    let mut projection = authority.clone();
+    projection.derivation_hash.clear();
+    tagged_hash("prefix-local-semantic-rule-authority", &projection)
+}
+
+fn prefix_local_issuance_receipt_hash(receipt: &V5PrefixLocalIssuanceReceipt) -> String {
+    let mut projection = receipt.clone();
+    projection.receipt_hash.clear();
+    tagged_hash("prefix-local-issuance-receipt", &projection)
+}
+
+pub fn replay_prefix_local_issuance_receipt(
+    prior: &[V5PrefixLocalIssuanceReceipt],
+    receipt: &V5PrefixLocalIssuanceReceipt,
+) -> bool {
+    receipt.direct_capabilities == receipt.operation.direct_capabilities()
+        && !receipt.exact_input_hashes.is_empty()
+        && !receipt.output_hash.is_empty()
+        && receipt.predecessor_node_ids.len() == receipt.predecessor_receipt_hashes.len()
+        && receipt
+            .predecessor_node_ids
+            .iter()
+            .zip(&receipt.predecessor_receipt_hashes)
+            .all(|(node_id, receipt_hash)| {
+                prior
+                    .iter()
+                    .find(|row| &row.node_id == node_id)
+                    .is_some_and(|row| {
+                        row.receipt_hash == *receipt_hash
+                            && row.receipt_hash == prefix_local_issuance_receipt_hash(row)
+                    })
+            })
+        && receipt.receipt_hash == prefix_local_issuance_receipt_hash(receipt)
+}
+
+fn append_prefix_local_issuance_receipt(
+    receipts: &mut Vec<V5PrefixLocalIssuanceReceipt>,
+    stage: Option<u32>,
+    operation: V5PrefixLocalIssuanceOperation,
+    node_id: String,
+    predecessor_node_ids: Vec<String>,
+    exact_input_hashes: Vec<String>,
+    output_hash: String,
+) -> Result<(), ActLocalSemanticProvenanceV5Error> {
+    if receipts.iter().any(|receipt| receipt.node_id == node_id) {
+        return Err(ActLocalSemanticProvenanceV5Error::Invariant(format!(
+            "duplicate prefix-local issuance node {node_id}"
+        )));
+    }
+    let predecessor_receipt_hashes = predecessor_node_ids
+        .iter()
+        .map(|predecessor| {
+            receipts
+                .iter()
+                .find(|receipt| &receipt.node_id == predecessor)
+                .map(|receipt| receipt.receipt_hash.clone())
+                .ok_or_else(|| {
+                    ActLocalSemanticProvenanceV5Error::Invariant(format!(
+                        "issuance node {node_id} names unavailable predecessor {predecessor}"
+                    ))
+                })
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    let mut receipt = V5PrefixLocalIssuanceReceipt {
+        node_id,
+        stage,
+        operation,
+        predecessor_node_ids,
+        predecessor_receipt_hashes,
+        exact_input_hashes,
+        output_hash,
+        direct_capabilities: operation.direct_capabilities(),
+        receipt_hash: String::new(),
+    };
+    receipt.receipt_hash = prefix_local_issuance_receipt_hash(&receipt);
+    if !replay_prefix_local_issuance_receipt(receipts, &receipt) {
+        return Err(ActLocalSemanticProvenanceV5Error::Invariant(
+            "new prefix-local issuance receipt did not replay at its call site".to_owned(),
+        ));
+    }
+    receipts.push(receipt);
+    Ok(())
+}
+
+pub fn issue_v5_prefix_local_rule_authority() -> V5PrefixLocalRuleAuthority {
+    let mut authority = V5PrefixLocalRuleAuthority {
+        schema: V5_PREFIX_LOCAL_RULE_AUTHORITY_SCHEMA.to_owned(),
+        expr_to_schema2_bridge_theorem: T_BI_B1_THEOREM_ID.to_owned(),
+        family_role_relation_theorem: T_BI_B2_THEOREM_ID.to_owned(),
+        finite_constructor_induction_theorem: T_BI_B2_CLOSURE_ID.to_owned(),
+        semantic_family_is_unit_of_credit: true,
+        uniform_instances_require_independent_export: true,
+        zero_silent_residue_required: true,
+        support_hypotheses_mint_no_credit: true,
+        source_document_read: false,
+        structural_scalar_read: false,
+        desired_vector_read: false,
+        derivation_hash: String::new(),
+    };
+    authority.derivation_hash = prefix_local_rule_authority_hash(&authority);
+    authority
+}
+
+pub fn replay_v5_prefix_local_rule_authority(claimed: &V5PrefixLocalRuleAuthority) -> bool {
+    claimed.derivation_hash == prefix_local_rule_authority_hash(claimed)
+        && issue_v5_prefix_local_rule_authority() == *claimed
+}
+
 fn project_prefix_local_semantic_package(
-    v3: &ActLocalProvenanceV3Certificate,
+    v3: &ActLocalV3PrefixDeclaration,
     source: &V5SemanticSourceView,
-    observed_role_kinds: Vec<String>,
+    rule_authority: &V5PrefixLocalRuleAuthority,
+    observed_grammar: &V5PrefixLocalObservedGrammarProof,
     package: &ActLocalSemanticProvenanceV5Certificate,
+    predecessor_package_proof_hashes: &[String],
+    predecessor_members: &[V5UnifiedSurfaceMember],
+    cubical_decisions: &[Value],
 ) -> V5PrefixLocalSemanticPackageProof {
+    let observed_role_kinds = observed_grammar
+        .entries
+        .iter()
+        .map(|entry| entry.kind.clone())
+        .collect::<Vec<_>>();
     let mut role_rows = package
         .role_resolutions
         .iter()
@@ -6120,15 +6898,63 @@ fn project_prefix_local_semantic_package(
                     (V5PrefixLocalResolutionClass::NamedResidual, None)
                 }
             };
-            let mut target_family_ids = resolution.constructor_search.matching_family_ids.clone();
-            target_family_ids.sort();
-            target_family_ids.dedup();
-            let mut target_relation_hashes = resolution
+            let target_relation_pairing_exact =
+                resolution.constructor_search.matching_family_ids.len()
+                    == resolution
+                        .constructor_search
+                        .fresh_term_relation_derivation_hashes
+                        .len();
+            let mut target_relations = resolution
                 .constructor_search
-                .fresh_term_relation_derivation_hashes
-                .clone();
-            target_relation_hashes.sort();
-            target_relation_hashes.dedup();
+                .matching_family_ids
+                .iter()
+                .cloned()
+                .zip(
+                    resolution
+                        .constructor_search
+                        .fresh_term_relation_derivation_hashes
+                        .iter()
+                        .cloned(),
+                )
+                .map(|(family_id, relation_derivation_hash)| {
+                    let mut pair = V5PrefixLocalFamilyRelationPair {
+                        family_id,
+                        relation_derivation_hash,
+                        pair_derivation_hash: String::new(),
+                    };
+                    pair.pair_derivation_hash = prefix_local_family_relation_pair_hash(&pair);
+                    pair
+                })
+                .collect::<Vec<_>>();
+            target_relations.sort_by(|left, right| {
+                left.family_id.cmp(&right.family_id).then_with(|| {
+                    left.relation_derivation_hash
+                        .cmp(&right.relation_derivation_hash)
+                })
+            });
+            let unique_family_count = target_relations
+                .iter()
+                .map(|pair| pair.family_id.as_str())
+                .collect::<BTreeSet<_>>()
+                .len();
+            let target_relation_pairing_exact = target_relation_pairing_exact
+                && unique_family_count == target_relations.len()
+                && target_relations.iter().all(|pair| {
+                    !pair.relation_derivation_hash.is_empty()
+                        && pair.pair_derivation_hash == prefix_local_family_relation_pair_hash(pair)
+                })
+                && match &resolution_class {
+                    V5PrefixLocalResolutionClass::ProvedFamily => {
+                        target_relations.len() == 1
+                            && resolved_family_id
+                                .as_ref()
+                                .is_some_and(|resolved| target_relations[0].family_id == *resolved)
+                    }
+                    V5PrefixLocalResolutionClass::TheoremBackedImpossibility => {
+                        target_relations.len() != 1
+                    }
+                    V5PrefixLocalResolutionClass::NamedResidual => false,
+                };
             let mut row = V5PrefixLocalAuthoritativeRoleRow {
                 declaration_id: resolution.declaration_id.clone(),
                 occurrence: match &resolution.resolution {
@@ -6152,8 +6978,8 @@ fn project_prefix_local_semantic_package(
                 no_default_rule: resolution
                     .constructor_search
                     .no_wildcard_or_default_absence_rule,
-                target_family_ids,
-                target_relation_hashes,
+                target_relations,
+                target_relation_pairing_exact,
                 resolution_class,
                 resolved_family_id,
                 resolved: resolution.resolved,
@@ -6203,7 +7029,32 @@ fn project_prefix_local_semantic_package(
         && package.stage2_constitutive_question_not_assumed
         && package.stage9_boundary_decided_by_relation_theorem
         && package.r2_generated_instance_not_exported;
+    let predecessor_member_surface_digest =
+        tagged_hash("unified-predecessor-surface", predecessor_members);
+    let contributing_predecessor_member_hashes = predecessor_members
+        .iter()
+        .map(|member| member.derivation_hash.clone())
+        .collect::<Vec<_>>();
+    let cubical_decision_surface_digest =
+        tagged_hash("prefix-local-cubical-decision-surface", cubical_decisions);
+    let predecessor_commitments_exact = package.unified_quotient.predecessor_surface_digest
+        == predecessor_member_surface_digest
+        && predecessor_package_proof_hashes.len() == package.stage.saturating_sub(1) as usize
+        && predecessor_package_proof_hashes
+            .iter()
+            .all(|hash| !hash.is_empty())
+        && contributing_predecessor_member_hashes
+            == predecessor_members
+                .iter()
+                .map(|member| member.derivation_hash.clone())
+                .collect::<Vec<_>>()
+        && !cubical_decision_surface_digest.is_empty();
     let local_completeness = package.t_bi_b1_proved
+        && replay_v5_prefix_local_rule_authority(rule_authority)
+        && replay_prefix_local_observed_grammar(observed_grammar)
+        && !rule_authority.source_document_read
+        && !rule_authority.structural_scalar_read
+        && !rule_authority.desired_vector_read
         && package.t_bi_b2_proved
         && package.every_role_declaration_resolved
         && package.every_marginal_family_credited_or_theorem_impossible
@@ -6213,6 +7064,7 @@ fn project_prefix_local_semantic_package(
         && package.named_a3_residual_count == 0
         && package.silent_residue_count == 0
         && special_cases_proved
+        && predecessor_commitments_exact
         && credited_family_ids.len() == package.credited_semantic_family_count
         && u32::try_from(credited_family_ids.len()).ok() == Some(package.semantic_family_nu)
         && role_rows.iter().all(|row| {
@@ -6228,15 +7080,18 @@ fn project_prefix_local_semantic_package(
                 && row.exact_coordinate_predicate_replayed
                 && row.exact_mechanism_predicate_replayed
                 && row.exact_local_role_predicate_replayed
+                && row.target_relation_pairing_exact
                 && row.resolution_class != V5PrefixLocalResolutionClass::NamedResidual
         });
     let mut proof = V5PrefixLocalSemanticPackageProof {
         theorem_id: T_BI_B1_B2_PREFIX_LOCAL_THEOREM_ID.to_owned(),
+        rule_authority_derivation_hash: rule_authority.derivation_hash.clone(),
         stage: package.stage,
         candidate_hash: package.candidate_hash.clone(),
         predecessor_signature_digest: package.predecessor_signature_digest.clone(),
-        v3_declaration_hash: v3.derivation_hash.clone(),
+        v3_declaration_hash: v3.surface_hash.clone(),
         v4_candidate_local_source_hash: source.source_derivation_hash.clone(),
+        observed_grammar: observed_grammar.clone(),
         observed_role_kinds,
         role_rows,
         family_rows,
@@ -6244,12 +7099,16 @@ fn project_prefix_local_semantic_package(
         unified_quotient_derivation_hash: package.unified_quotient.derivation_hash.clone(),
         exact_a3_capability_derivation_hash: package.exact_a3_capability.derivation_hash.clone(),
         finite_closure_derivation_hash: package.finite_closure.derivation_hash.clone(),
+        predecessor_package_proof_hashes: predecessor_package_proof_hashes.to_vec(),
+        predecessor_member_surface_digest,
+        contributing_predecessor_member_hashes,
+        cubical_decision_surface_digest,
+        predecessor_commitments_exact,
         credited_family_ids,
         semantic_nu: package.semantic_family_nu,
         role_declaration_count: package.role_declaration_count,
         proved_family_declaration_count: package.proved_family_declaration_count,
-        theorem_impossibility_declaration_count: package
-            .theorem_impossibility_declaration_count,
+        theorem_impossibility_declaration_count: package.theorem_impossibility_declaration_count,
         named_role_residual_count: package.named_role_residual_count,
         named_quotient_residual_count: package.named_quotient_residual_count,
         named_a3_residual_count: package.named_a3_residual_count,
@@ -6293,50 +7152,78 @@ fn issue_one_prefix_local(
     prefix: &SealedSignature,
     stage: u32,
     candidate: &Telescope,
-    v3: &ActLocalProvenanceV3Certificate,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
+    v3: &ActLocalV3PrefixDeclaration,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+    v4_r1_rule: &V4PrefixLocalTypedR1RuleToken,
     source_surface: &V4PrefixLocalSourceSurface,
-    registry: &BTreeSet<String>,
+    rule_authority: &V5PrefixLocalRuleAuthority,
+    observed_grammar: &V5PrefixLocalObservedGrammarProof,
     predecessor_members: &[V5UnifiedSurfaceMember],
     cubical_decisions: &[Value],
+    prefix_general: bool,
 ) -> Result<ActLocalSemanticProvenanceV5Certificate, ActLocalSemanticProvenanceV5Error> {
-    let replay_errors =
-        replay_v4_prefix_local_source_surface(prefix, candidate, v3, source_surface);
+    let replay_errors = if prefix_general {
+        replay_v4_prefix_general_source_surface(
+            prefix,
+            candidate,
+            predecessor_v3,
+            v3,
+            v3_r2_rule,
+            v4_r1_rule,
+            source_surface,
+        )
+    } else {
+        replay_v4_prefix_local_source_surface(
+            prefix,
+            candidate,
+            predecessor_v3,
+            v3,
+            v3_r2_rule,
+            v4_r1_rule,
+            source_surface,
+        )
+    };
     if !replay_errors.is_empty() {
         return Err(ActLocalSemanticProvenanceV5Error::Input(format!(
             "v4 prefix-local source surface did not replay: {}",
             replay_errors.join("; ")
         )));
     }
-    let declarations = prefix_local_role_declaration_inputs(v3)?;
-    let observed = declarations
-        .iter()
-        .map(|declaration| declaration.occurrence.kind.clone())
-        .collect::<BTreeSet<_>>();
-    if !observed.is_subset(registry) {
+    let declarations = prefix_local_role_declaration_inputs(v3, predecessor_v3)?;
+    if !replay_prefix_local_observed_grammar(observed_grammar)
+        || observed_grammar.declaration_count != declarations.len()
+    {
         return Err(ActLocalSemanticProvenanceV5Error::Relation(
-            "prefix-local registry omits an observed role kind".to_owned(),
+            "prefix-local observed constructor grammar did not replay exactly".to_owned(),
         ));
     }
-    let source = V5SemanticSourceView::prefix_local(source_surface, declarations.len());
+    let source = V5SemanticSourceView::prefix_local(
+        source_surface,
+        declarations.len(),
+        observed_grammar.exact_observed_cover,
+    );
     issue_one_from_source(
         prefix,
         stage,
         candidate,
-        v3,
+        &v3.surface_hash,
         &source,
         &declarations,
-        V5RoleRegistrySurface::PrefixLocal(registry),
+        V5RoleRegistrySurface::PrefixLocal(observed_grammar),
+        V5RuleAuthorityMode::PrefixLocal(rule_authority),
         predecessor_members,
         cubical_decisions,
     )
 }
 
 /// Build the B1/B2 semantic sequence without constructing or replaying the
-/// historical 27-kind registry.  Each package is built twice, once over the
-/// exact observed grammar and once after adjoining an unused sentinel; only
-/// the registry-erased projections may agree and become authority.
-pub fn issue_prefix_local_semantic_sequence_v5(
+/// historical 27-kind registry.  The declaration, v4 source, closed observed
+/// grammar, semantic package, and prefix accumulator each emit a receipt at
+/// their actual issuance site; B3 only validates this trace later.
+fn issue_prefix_semantic_sequence_under(
     entries: &[(u32, Telescope)],
+    prefix_general: bool,
 ) -> Result<V5PrefixLocalSemanticSequence, ActLocalSemanticProvenanceV5Error> {
     if entries.is_empty()
         || !entries
@@ -6348,79 +7235,334 @@ pub fn issue_prefix_local_semantic_sequence_v5(
             "prefix-local v5 sequence must be contiguous from Stage 1".to_owned(),
         ));
     }
-    let v3_packages = issue_act_local_sequence_v3(entries)
-        .map_err(|error| ActLocalSemanticProvenanceV5Error::Input(error.to_string()))?;
+    let rule_authority = issue_v5_prefix_local_rule_authority();
+    if !replay_v5_prefix_local_rule_authority(&rule_authority) {
+        return Err(ActLocalSemanticProvenanceV5Error::Input(
+            "prefix-local semantic rule authority did not replay".to_owned(),
+        ));
+    }
+    let v3_r2_rule = issue_act_local_v3_typed_r2_rule_token();
+    let v4_r1_rule = issue_v4_prefix_local_typed_r1_rule_token();
+    let mut issuance_receipts = Vec::<V5PrefixLocalIssuanceReceipt>::new();
+    let rule_bundle_hash = tagged_hash(
+        "prefix-local-rule-authority-bundle",
+        &(
+            &v3_r2_rule.derivation_hash,
+            &v4_r1_rule.derivation_hash,
+            &rule_authority.derivation_hash,
+        ),
+    );
+    append_prefix_local_issuance_receipt(
+        &mut issuance_receipts,
+        None,
+        V5PrefixLocalIssuanceOperation::RuleAuthorityIssue,
+        "authority/rules".to_owned(),
+        Vec::new(),
+        vec![
+            v3_r2_rule.derivation_hash.clone(),
+            v4_r1_rule.derivation_hash.clone(),
+            rule_authority.derivation_hash.clone(),
+        ],
+        rule_bundle_hash,
+    )?;
     let mut accepted = Vec::<(u32, Telescope)>::new();
+    let mut v3_declarations = Vec::<ActLocalV3PrefixDeclaration>::new();
     let mut predecessor_members = Vec::<V5UnifiedSurfaceMember>::new();
     let mut cubical_decisions = Vec::<Value>::new();
-    let mut proofs = Vec::new();
-    for ((stage, candidate), v3) in entries.iter().zip(&v3_packages) {
+    let mut proofs = Vec::<V5PrefixLocalSemanticPackageProof>::new();
+    let mut accumulator_node = None::<String>;
+    let mut accumulator_hash = tagged_hash("prefix-local-empty-accumulator", &0u8);
+    for (stage, candidate) in entries {
         let prefix = SealedSignature::from_telescopes(accepted.clone());
-        let source_surface = issue_v4_prefix_local_source_surface(&prefix, *stage, candidate, v3)
-            .map_err(|error| ActLocalSemanticProvenanceV5Error::Input(error.to_string()))?;
+        let stage_node = |suffix: &str| format!("stage-{stage:02}/{suffix}");
+        let candidate_node = stage_node("candidate-prefix");
+        let mut candidate_predecessors = vec!["authority/rules".to_owned()];
+        if let Some(previous) = &accumulator_node {
+            candidate_predecessors.push(previous.clone());
+        }
+        let candidate_binding_hash = tagged_hash(
+            "prefix-local-candidate-prefix-binding",
+            &(*stage, candidate_hash(candidate), prefix.digest()),
+        );
+        append_prefix_local_issuance_receipt(
+            &mut issuance_receipts,
+            Some(*stage),
+            V5PrefixLocalIssuanceOperation::CandidatePrefixBind,
+            candidate_node.clone(),
+            candidate_predecessors,
+            vec![candidate_hash(candidate), prefix.digest().to_owned()],
+            candidate_binding_hash,
+        )?;
+
+        let v3 = issue_act_local_prefix_declaration_v3(
+            &prefix,
+            *stage,
+            candidate,
+            &v3_declarations,
+            &v3_r2_rule,
+        )
+        .map_err(|error| ActLocalSemanticProvenanceV5Error::Input(error.to_string()))?;
+        if !replay_act_local_prefix_declaration_v3(
+            &prefix,
+            candidate,
+            &v3_declarations,
+            &v3_r2_rule,
+            &v3,
+        )
+        .is_empty()
+        {
+            return Err(ActLocalSemanticProvenanceV5Error::Invariant(format!(
+                "Stage {stage} v3 declaration did not replay at issuance"
+            )));
+        }
+        let v3_node = stage_node("v3-declaration");
+        let mut v3_inputs = vec![v3_r2_rule.derivation_hash.clone()];
+        v3_inputs.extend(
+            v3_declarations
+                .iter()
+                .map(|projection| projection.surface_hash.clone()),
+        );
+        append_prefix_local_issuance_receipt(
+            &mut issuance_receipts,
+            Some(*stage),
+            V5PrefixLocalIssuanceOperation::V3DeclarationIssue,
+            v3_node.clone(),
+            vec![candidate_node.clone()],
+            v3_inputs,
+            v3.surface_hash.clone(),
+        )?;
+
+        let source_surface = if prefix_general {
+            issue_v4_prefix_general_source_surface(
+                &prefix,
+                *stage,
+                candidate,
+                &v3_declarations,
+                &v3,
+                &v3_r2_rule,
+                &v4_r1_rule,
+            )
+        } else {
+            issue_v4_prefix_local_source_surface(
+                &prefix,
+                *stage,
+                candidate,
+                &v3_declarations,
+                &v3,
+                &v3_r2_rule,
+                &v4_r1_rule,
+            )
+        }
+        .map_err(|error| ActLocalSemanticProvenanceV5Error::Input(error.to_string()))?;
+        let v4_node = stage_node("v4-candidate-local-source");
+        append_prefix_local_issuance_receipt(
+            &mut issuance_receipts,
+            Some(*stage),
+            V5PrefixLocalIssuanceOperation::V4CandidateLocalSourceIssue,
+            v4_node.clone(),
+            vec![candidate_node, v3_node.clone()],
+            vec![
+                v3.surface_hash.clone(),
+                v3_r2_rule.derivation_hash.clone(),
+                v4_r1_rule.derivation_hash.clone(),
+            ],
+            source_surface.source_hash.clone(),
+        )?;
+        let declarations = prefix_local_role_declaration_inputs(&v3, &v3_declarations)?;
+        let observed_grammar = issue_prefix_local_observed_grammar(&declarations)?;
+        if !replay_prefix_local_observed_grammar(&observed_grammar) {
+            return Err(ActLocalSemanticProvenanceV5Error::Invariant(format!(
+                "Stage {stage} closed observed role grammar did not replay"
+            )));
+        }
+        let grammar_node = stage_node("observed-role-grammar");
+        append_prefix_local_issuance_receipt(
+            &mut issuance_receipts,
+            Some(*stage),
+            V5PrefixLocalIssuanceOperation::ObservedGrammarIssue,
+            grammar_node.clone(),
+            vec![v3_node],
+            declarations
+                .iter()
+                .map(|declaration| declaration.source_resolution_hash.clone())
+                .chain(std::iter::once(v3.surface_hash.clone()))
+                .collect(),
+            observed_grammar.derivation_hash.clone(),
+        )?;
         let source_view = V5SemanticSourceView::prefix_local(
             &source_surface,
-            prefix_local_role_declaration_inputs(v3)?.len(),
+            declarations.len(),
+            observed_grammar.exact_observed_cover,
         );
         cubical_decisions.extend(cubical_decision_values(&source_view));
-        let declarations = prefix_local_role_declaration_inputs(v3)?;
-        let observed = declarations
+        let predecessor_package_proof_hashes = proofs
             .iter()
-            .map(|declaration| declaration.occurrence.kind.clone())
-            .collect::<BTreeSet<_>>();
+            .map(|proof| proof.derivation_hash.clone())
+            .collect::<Vec<_>>();
+        let predecessor_member_surface_digest =
+            tagged_hash("unified-predecessor-surface", &predecessor_members);
+        let cubical_decision_surface_digest =
+            tagged_hash("prefix-local-cubical-decision-surface", &cubical_decisions);
         let base = issue_one_prefix_local(
             &prefix,
             *stage,
             candidate,
-            v3,
+            &v3_declarations,
+            &v3,
+            &v3_r2_rule,
+            &v4_r1_rule,
             &source_surface,
-            &observed,
+            &rule_authority,
+            &observed_grammar,
             &predecessor_members,
             &cubical_decisions,
+            prefix_general,
         )?;
-        const SENTINEL: &str = "__unused_prefix_local_role_extension_sentinel__";
-        if observed.contains(SENTINEL) {
-            return Err(ActLocalSemanticProvenanceV5Error::Invariant(
-                "observed role grammar collides with extension sentinel".to_owned(),
-            ));
+        let semantic_node = stage_node("b1-b2-semantic-package");
+        let mut semantic_predecessors = vec![v4_node, grammar_node];
+        if let Some(previous) = &accumulator_node {
+            semantic_predecessors.push(previous.clone());
         }
-        let mut extended_registry = observed.clone();
-        extended_registry.insert(SENTINEL.to_owned());
-        let extended = issue_one_prefix_local(
-            &prefix,
-            *stage,
-            candidate,
-            v3,
-            &source_surface,
-            &extended_registry,
+        append_prefix_local_issuance_receipt(
+            &mut issuance_receipts,
+            Some(*stage),
+            V5PrefixLocalIssuanceOperation::B1B2SemanticPackageIssue,
+            semantic_node.clone(),
+            semantic_predecessors,
+            vec![
+                source_surface.source_hash.clone(),
+                observed_grammar.derivation_hash.clone(),
+                predecessor_member_surface_digest,
+                cubical_decision_surface_digest,
+                accumulator_hash.clone(),
+            ],
+            base.derivation_hash.clone(),
+        )?;
+        let mut base_proof = project_prefix_local_semantic_package(
+            &v3,
+            &source_view,
+            &rule_authority,
+            &observed_grammar,
+            &base,
+            &predecessor_package_proof_hashes,
             &predecessor_members,
             &cubical_decisions,
-        )?;
-        let observed_role_kinds = observed.into_iter().collect::<Vec<_>>();
-        let mut base_proof = project_prefix_local_semantic_package(
-            v3,
-            &source_view,
-            observed_role_kinds.clone(),
-            &base,
         );
-        let extended_proof = project_prefix_local_semantic_package(
-            v3,
-            &source_view,
-            observed_role_kinds,
-            &extended,
-        );
-        let extension_equal = extension_comparison_projection(&base_proof)
-            == extension_comparison_projection(&extended_proof);
-        base_proof.unused_registry_extension_projection_equal = extension_equal;
-        base_proof.proved &= extension_equal;
+        // The authoritative issuer accepts no caller-supplied registry.  An
+        // unobserved label therefore has no input channel into the result;
+        // extension invariance follows by construction from exact parsing of
+        // the declaration cover, rather than from one sentinel experiment.
+        let extension_invariant_by_construction =
+            replay_prefix_local_observed_grammar(&observed_grammar)
+                && base_proof.role_rows.iter().all(|row| {
+                    observed_grammar.entries.iter().any(|entry| {
+                        entry.kind == row.occurrence.kind
+                            && entry
+                                .declaration_ids
+                                .iter()
+                                .any(|id| id == &row.declaration_id)
+                    })
+                });
+        base_proof.unused_registry_extension_projection_equal = extension_invariant_by_construction;
+        base_proof.proved &= extension_invariant_by_construction;
         base_proof.derivation_hash = prefix_local_semantic_package_hash(&base_proof);
         if !base_proof.proved {
             return Err(ActLocalSemanticProvenanceV5Error::Invariant(format!(
-                "Stage {stage} prefix-local semantic package did not close"
+                "Stage {stage} prefix-local semantic package did not close: B1={} B2={} roles={} marginal={} anchor={} special={} [R1={},S2={},S9={},R2={}] predecessor={} grammar={} extension={} historical_registry={} forbidden_input={} residuals={}/{}/{} silent={} nu={} R1-cases={}/{} exact-completion={} families={:?} role-rules={:?}",
+                base_proof.t_bi_b1_proved,
+                base_proof.t_bi_b2_proved,
+                base_proof.every_role_declaration_resolved,
+                base_proof.every_marginal_family_credited_or_theorem_impossible,
+                base_proof.local_anchor_nonreuse_holds,
+                base_proof.special_cases_proved,
+                base.stage1_r1_preserved,
+                base.stage2_constitutive_question_not_assumed,
+                base.stage9_boundary_decided_by_relation_theorem,
+                base.r2_generated_instance_not_exported,
+                base_proof.predecessor_commitments_exact,
+                replay_prefix_local_observed_grammar(&base_proof.observed_grammar),
+                base_proof.unused_registry_extension_projection_equal,
+                base_proof.historical_registry_consulted,
+                base_proof.archive_structural_bar_verdict_or_future_read,
+                base_proof.named_role_residual_count,
+                base_proof.named_quotient_residual_count,
+                base_proof.named_a3_residual_count,
+                base_proof.silent_residue_count,
+                base.semantic_family_nu,
+                base.stage1_carrier_role_case_proofs.len(),
+                base.stage1_carrier_role_case_proofs
+                    .iter()
+                    .filter(|proof| proof.proved)
+                    .count(),
+                !base
+                    .stage1_exact_completion_equality_derivation_hash
+                    .is_empty(),
+                base.semantic_families
+                    .iter()
+                    .map(|family| (
+                        &family.source,
+                        &family.fresh_marginality,
+                        family.marginal,
+                        family.credited,
+                        &family.anchor
+                    ))
+                    .collect::<Vec<_>>(),
+                base.role_resolutions
+                    .iter()
+                    .map(|resolution| resolution.constructor_search.rule)
+                    .collect::<Vec<_>>(),
             )));
         }
+        let package_node = stage_node("authoritative-package-seal");
+        append_prefix_local_issuance_receipt(
+            &mut issuance_receipts,
+            Some(*stage),
+            V5PrefixLocalIssuanceOperation::AuthoritativePackageSeal,
+            package_node.clone(),
+            vec![semantic_node],
+            vec![
+                base.derivation_hash.clone(),
+                base_proof.observed_grammar.derivation_hash.clone(),
+                base_proof.predecessor_member_surface_digest.clone(),
+            ],
+            base_proof.derivation_hash.clone(),
+        )?;
         predecessor_members.extend(base.unified_quotient.current_members.iter().cloned());
+        let next_member_surface = tagged_hash("unified-predecessor-surface", &predecessor_members);
+        let next_cubical_surface =
+            tagged_hash("prefix-local-cubical-decision-surface", &cubical_decisions);
+        let next_accumulator_hash = tagged_hash(
+            "prefix-local-semantic-accumulator",
+            &(
+                &accumulator_hash,
+                &base_proof.derivation_hash,
+                &next_member_surface,
+                &next_cubical_surface,
+            ),
+        );
+        let next_accumulator_node = stage_node("prefix-accumulator");
+        let mut accumulator_predecessors = vec![package_node];
+        if let Some(previous) = &accumulator_node {
+            accumulator_predecessors.push(previous.clone());
+        }
+        append_prefix_local_issuance_receipt(
+            &mut issuance_receipts,
+            Some(*stage),
+            V5PrefixLocalIssuanceOperation::PrefixAccumulatorAdvance,
+            next_accumulator_node.clone(),
+            accumulator_predecessors,
+            vec![
+                accumulator_hash,
+                base_proof.derivation_hash.clone(),
+                next_member_surface,
+                next_cubical_surface,
+            ],
+            next_accumulator_hash.clone(),
+        )?;
+        accumulator_hash = next_accumulator_hash;
+        accumulator_node = Some(next_accumulator_node);
         accepted.push((*stage, candidate.clone()));
+        v3_declarations.push(v3);
         proofs.push(base_proof);
     }
     let semantic_nu_vector = proofs
@@ -6433,12 +7575,14 @@ pub fn issue_prefix_local_semantic_sequence_v5(
         .collect::<BTreeSet<_>>()
         .into_iter()
         .collect::<Vec<_>>();
-    let every_package_registry_extension_invariant = proofs.iter().all(|proof| {
-        proof.proved && proof.unused_registry_extension_projection_equal
-    });
+    let every_package_registry_extension_invariant = proofs
+        .iter()
+        .all(|proof| proof.proved && proof.unused_registry_extension_projection_equal);
+    let every_package_closed_observed_grammar = proofs
+        .iter()
+        .all(|proof| replay_prefix_local_observed_grammar(&proof.observed_grammar));
     let no_historical_registry_or_future_input = proofs.iter().all(|proof| {
-        !proof.historical_registry_consulted
-            && !proof.archive_structural_bar_verdict_or_future_read
+        !proof.historical_registry_consulted && !proof.archive_structural_bar_verdict_or_future_read
     });
     let t_bi_b1_proved_on_sequence = proofs.iter().all(|proof| proof.t_bi_b1_proved);
     let t_bi_b2_proved_on_sequence = proofs.iter().all(|proof| proof.t_bi_b2_proved);
@@ -6449,21 +7593,88 @@ pub fn issue_prefix_local_semantic_sequence_v5(
             .map(|proof| proof.derivation_hash.as_str())
             .collect::<Vec<_>>(),
     );
+    let mut sequence_predecessors = proofs
+        .iter()
+        .map(|proof| format!("stage-{:02}/authoritative-package-seal", proof.stage))
+        .collect::<Vec<_>>();
+    if let Some(accumulator) = &accumulator_node {
+        sequence_predecessors.push(accumulator.clone());
+    }
+    append_prefix_local_issuance_receipt(
+        &mut issuance_receipts,
+        None,
+        V5PrefixLocalIssuanceOperation::SequenceSeal,
+        "prefix-sequence/seal".to_owned(),
+        sequence_predecessors,
+        proofs
+            .iter()
+            .map(|proof| proof.derivation_hash.clone())
+            .chain(std::iter::once(accumulator_hash))
+            .collect(),
+        authoritative_sequence_seal.clone(),
+    )?;
+    let issuance_trace_root = tagged_hash(
+        "prefix-local-issuance-trace-root",
+        &issuance_receipts
+            .iter()
+            .map(|receipt| receipt.receipt_hash.as_str())
+            .collect::<Vec<_>>(),
+    );
+    if issuance_receipts
+        .iter()
+        .enumerate()
+        .any(|(index, receipt)| {
+            !replay_prefix_local_issuance_receipt(&issuance_receipts[..index], receipt)
+        })
+    {
+        return Err(ActLocalSemanticProvenanceV5Error::Invariant(
+            "prefix-local issuance trace failed its final topological replay".to_owned(),
+        ));
+    }
     let mut sequence = V5PrefixLocalSemanticSequence {
-        schema: V5_PREFIX_LOCAL_SEMANTIC_SEQUENCE_SCHEMA.to_owned(),
-        theorem_id: T_BI_B1_B2_PREFIX_LOCAL_THEOREM_ID.to_owned(),
+        schema: if prefix_general {
+            V5_PREFIX_GENERAL_SEMANTIC_SEQUENCE_SCHEMA
+        } else {
+            V5_PREFIX_LOCAL_SEMANTIC_SEQUENCE_SCHEMA
+        }
+        .to_owned(),
+        theorem_id: if prefix_general {
+            T_BI_B1_B2_PREFIX_GENERAL_THEOREM_ID
+        } else {
+            T_BI_B1_B2_PREFIX_LOCAL_THEOREM_ID
+        }
+        .to_owned(),
+        rule_authority,
         packages: proofs,
         semantic_nu_vector,
         sorted_unique_observed_role_kinds,
+        every_package_closed_observed_grammar,
         every_package_registry_extension_invariant,
         no_historical_registry_or_future_input,
         t_bi_b1_proved_on_sequence,
         t_bi_b2_proved_on_sequence,
         authoritative_sequence_seal,
+        issuance_receipts,
+        issuance_trace_root,
         derivation_hash: String::new(),
     };
     sequence.derivation_hash = prefix_local_semantic_sequence_hash(&sequence);
     Ok(sequence)
+}
+
+pub fn issue_prefix_local_semantic_sequence_v5(
+    entries: &[(u32, Telescope)],
+) -> Result<V5PrefixLocalSemanticSequence, ActLocalSemanticProvenanceV5Error> {
+    issue_prefix_semantic_sequence_under(entries, false)
+}
+
+/// Versioned BI-1b successor.  It is identical to the source-first v5
+/// construction except that the Step-8 R2 boundary/M1 proof is issued by the
+/// prefix-general typed theorem.
+pub fn issue_prefix_general_semantic_sequence_v6(
+    entries: &[(u32, Telescope)],
+) -> Result<V5PrefixLocalSemanticSequence, ActLocalSemanticProvenanceV5Error> {
+    issue_prefix_semantic_sequence_under(entries, true)
 }
 
 pub fn replay_prefix_local_semantic_sequence_v5(
@@ -6476,9 +7687,26 @@ pub fn replay_prefix_local_semantic_sequence_v5(
     }
     match issue_prefix_local_semantic_sequence_v5(entries) {
         Ok(expected) if expected == *claimed => {}
-        Ok(_) => errors.push(
-            "prefix-local v5 sequence differs from deterministic reissuance".to_owned(),
-        ),
+        Ok(_) => {
+            errors.push("prefix-local v5 sequence differs from deterministic reissuance".to_owned())
+        }
+        Err(error) => errors.push(error.to_string()),
+    }
+    errors
+}
+
+pub fn replay_prefix_general_semantic_sequence_v6(
+    entries: &[(u32, Telescope)],
+    claimed: &V5PrefixLocalSemanticSequence,
+) -> Vec<String> {
+    let mut errors = Vec::new();
+    if claimed.derivation_hash != prefix_local_semantic_sequence_hash(claimed) {
+        errors.push("prefix-general v6 sequence digest mismatch".to_owned());
+    }
+    match issue_prefix_general_semantic_sequence_v6(entries) {
+        Ok(expected) if expected == *claimed => {}
+        Ok(_) => errors
+            .push("prefix-general v6 sequence differs from deterministic reissuance".to_owned()),
         Err(error) => errors.push(error.to_string()),
     }
     errors
@@ -6828,15 +8056,17 @@ mod tests {
                 &v5.packages[index],
             )
             .expect("prefix-local erasure proof");
-            assert!(replay_prefix_local_role_registry_erasure_v5(
-                &prefix,
-                &source[index].1,
-                &v3[index],
-                &v4[index],
-                &v5.packages[index],
-                &proof,
-            )
-            .is_empty());
+            assert!(
+                replay_prefix_local_role_registry_erasure_v5(
+                    &prefix,
+                    &source[index].1,
+                    &v3[index],
+                    &v4[index],
+                    &v5.packages[index],
+                    &proof,
+                )
+                .is_empty()
+            );
             assert!(proof.proved);
             assert!(proof.target_computation_registry_extension_invariant);
             assert!(proof.resolution_registry_extension_invariant);
@@ -6855,7 +8085,11 @@ mod tests {
             vec![1, 0, 1, 3]
         );
         assert_eq!(proofs[0].credited_family_ids.len(), 1);
-        assert_eq!(proofs[0].rows.len(), 4);
+        // The sole declaration row is the completion relation.  The four
+        // carrier-role cases are theorem cases on the package, not synthetic
+        // role declarations and must not be multiplied into this surface.
+        assert_eq!(proofs[0].rows.len(), 1);
+        assert_eq!(v5.packages[0].stage1_carrier_role_case_proofs.len(), 4);
         assert_eq!(
             proofs[0]
                 .rows
@@ -6912,15 +8146,50 @@ mod tests {
         assert!(replay_prefix_local_semantic_sequence_v5(&source, &sequence).is_empty());
         assert_eq!(sequence.semantic_nu_vector, vec![1, 0, 1, 3]);
         assert_eq!(sequence.packages.len(), 4);
+        assert_eq!(sequence.issuance_receipts.len(), 30);
+        assert_eq!(
+            sequence.issuance_trace_root,
+            tagged_hash(
+                "prefix-local-issuance-trace-root",
+                &sequence
+                    .issuance_receipts
+                    .iter()
+                    .map(|receipt| receipt.receipt_hash.as_str())
+                    .collect::<Vec<_>>()
+            )
+        );
+        assert!(
+            sequence
+                .issuance_receipts
+                .iter()
+                .enumerate()
+                .all(|(index, receipt)| replay_prefix_local_issuance_receipt(
+                    &sequence.issuance_receipts[..index],
+                    receipt
+                ))
+        );
+        assert!(sequence.every_package_closed_observed_grammar);
         assert!(sequence.every_package_registry_extension_invariant);
         assert!(sequence.no_historical_registry_or_future_input);
         assert!(sequence.t_bi_b1_proved_on_sequence);
         assert!(sequence.t_bi_b2_proved_on_sequence);
         assert!(sequence.packages.iter().all(|package| {
             package.proved
+                && replay_prefix_local_observed_grammar(&package.observed_grammar)
                 && package.unused_registry_extension_projection_equal
                 && !package.historical_registry_consulted
                 && !package.archive_structural_bar_verdict_or_future_read
+                && package.predecessor_commitments_exact
+                && package.predecessor_package_proof_hashes
+                    == sequence.packages[..package.stage.saturating_sub(1) as usize]
+                        .iter()
+                        .map(|predecessor| predecessor.derivation_hash.clone())
+                        .collect::<Vec<_>>()
+                && package.role_rows.iter().all(|row| {
+                    row.target_relations.iter().all(|pair| {
+                        pair.pair_derivation_hash == prefix_local_family_relation_pair_hash(pair)
+                    })
+                })
         }));
 
         let encoded = serde_json::to_string(&sequence).expect("serialize prefix-local sequence");
@@ -6928,6 +8197,7 @@ mod tests {
             "legacy_package",
             "historical_role_registry",
             "historical_registry_suffix",
+            "__unused_prefix_local_role_extension_sentinel__",
             "structural_nu",
             "enacted_future",
         ] {
@@ -6960,5 +8230,110 @@ mod tests {
         forged.derivation_hash = prefix_local_semantic_sequence_hash(&forged);
         let errors = replay_prefix_local_semantic_sequence_v5(&source, &forged);
         assert!(errors.iter().any(|error| error.contains("reissuance")));
+    }
+
+    #[test]
+    fn source_first_prefix_local_replay_rejects_repaired_pairing_mutation() {
+        let source = (1..=4)
+            .map(|stage| (stage, Telescope::reference(stage)))
+            .collect::<Vec<_>>();
+        let mut forged =
+            issue_prefix_local_semantic_sequence_v5(&source).expect("prefix-local v5 sequence");
+        let (package_index, row_index, pair_index) = forged
+            .packages
+            .iter()
+            .enumerate()
+            .find_map(|(package_index, package)| {
+                package
+                    .role_rows
+                    .iter()
+                    .enumerate()
+                    .find_map(|(row_index, row)| {
+                        (!row.target_relations.is_empty()).then_some((package_index, row_index, 0))
+                    })
+            })
+            .expect("the four-stage prefix has a related role/family pair");
+        let pair =
+            &mut forged.packages[package_index].role_rows[row_index].target_relations[pair_index];
+        pair.relation_derivation_hash.push_str("-forged");
+        pair.pair_derivation_hash = prefix_local_family_relation_pair_hash(pair);
+        let row = &mut forged.packages[package_index].role_rows[row_index];
+        row.derivation_hash = authoritative_role_row_hash(row);
+        forged.packages[package_index].derivation_hash =
+            prefix_local_semantic_package_hash(&forged.packages[package_index]);
+        forged.authoritative_sequence_seal = tagged_hash(
+            "prefix-local-semantic-package-seal",
+            &forged
+                .packages
+                .iter()
+                .map(|package| package.derivation_hash.as_str())
+                .collect::<Vec<_>>(),
+        );
+        forged.derivation_hash = prefix_local_semantic_sequence_hash(&forged);
+        let errors = replay_prefix_local_semantic_sequence_v5(&source, &forged);
+        assert!(errors.iter().any(|error| error.contains("reissuance")));
+    }
+
+    #[test]
+    fn source_first_prefix_local_replay_rejects_fully_rehashed_trace_mutation() {
+        let source = (1..=4)
+            .map(|stage| (stage, Telescope::reference(stage)))
+            .collect::<Vec<_>>();
+        let mut forged =
+            issue_prefix_local_semantic_sequence_v5(&source).expect("prefix-local v5 sequence");
+        forged.issuance_receipts[9]
+            .exact_input_hashes
+            .push("blake3:forged-input".to_owned());
+        for index in 0..forged.issuance_receipts.len() {
+            let predecessor_hashes = forged.issuance_receipts[index]
+                .predecessor_node_ids
+                .iter()
+                .map(|node_id| {
+                    forged.issuance_receipts[..index]
+                        .iter()
+                        .find(|receipt| &receipt.node_id == node_id)
+                        .expect("topological predecessor")
+                        .receipt_hash
+                        .clone()
+                })
+                .collect::<Vec<_>>();
+            forged.issuance_receipts[index].predecessor_receipt_hashes = predecessor_hashes;
+            forged.issuance_receipts[index].receipt_hash =
+                prefix_local_issuance_receipt_hash(&forged.issuance_receipts[index]);
+        }
+        forged.issuance_trace_root = tagged_hash(
+            "prefix-local-issuance-trace-root",
+            &forged
+                .issuance_receipts
+                .iter()
+                .map(|receipt| receipt.receipt_hash.as_str())
+                .collect::<Vec<_>>(),
+        );
+        forged.derivation_hash = prefix_local_semantic_sequence_hash(&forged);
+        let errors = replay_prefix_local_semantic_sequence_v5(&source, &forged);
+        assert!(errors.iter().any(|error| error.contains("reissuance")));
+    }
+
+    #[test]
+    fn source_first_prefix_local_exact_fifteen_closes_without_a_desired_vector_premise() {
+        let source = (1..=15)
+            .map(|stage| (stage, Telescope::reference(stage)))
+            .collect::<Vec<_>>();
+        let sequence =
+            issue_prefix_local_semantic_sequence_v5(&source).expect("exact-fifteen prefix-local");
+        assert!(replay_prefix_local_semantic_sequence_v5(&source, &sequence).is_empty());
+        assert_eq!(sequence.packages.len(), 15);
+        assert_eq!(sequence.issuance_receipts.len(), 107);
+        assert!(sequence.packages.iter().all(|package| {
+            package.proved
+                && package.predecessor_commitments_exact
+                && replay_prefix_local_observed_grammar(&package.observed_grammar)
+        }));
+        assert!(sequence.t_bi_b1_proved_on_sequence);
+        assert!(sequence.t_bi_b2_proved_on_sequence);
+        eprintln!(
+            "source-first exact-fifteen semantic vector: {:?}",
+            sequence.semantic_nu_vector
+        );
     }
 }

@@ -1,0 +1,925 @@
+{
+  "schema": "semantic-family-cardinality-invariance-v1",
+  "date": "2026-07-23",
+  "theorem_id": "T-NU-EQ1-finite-family-bijection-preserves-semantic-nu",
+  "source_bindings": [
+    {
+      "path": "docs/stage4_semantic_divergence_adjudication.md",
+      "role": "adopted_Option_A_and_F_UC4_scope",
+      "byte_length": 9750,
+      "blake3": "blake3:491b6c534a86e775c319a8a50520dd4788467c7ce32070feac53739032d8f282"
+    },
+    {
+      "path": "docs/bi1b_prefix_general_provenance_plan.md",
+      "role": "BI1b_invariance_gate_without_UC1_scoring",
+      "byte_length": 6561,
+      "blake3": "blake3:9f89a3510a41fe9a791122acb12b3239cb538ea2d526976c7acfdda10155543a"
+    },
+    {
+      "path": "docs/univalent_collapse_hypothesis.md",
+      "role": "frozen_UC1a_UC1b_and_F_UC4_statement",
+      "byte_length": 8829,
+      "blake3": "blake3:31dea8217caee18db94fceef091a201d5ba6ef80139eeadc85bbc80c724e92b3"
+    },
+    {
+      "path": "docs/stage4_semantic_parsimony_v3.json",
+      "role": "four_cross_bound_source_first_semantic_package_proofs",
+      "byte_length": 73000,
+      "blake3": "blake3:2425f0867e914c02cefde356d943a1623561d5fe3c57a6ff9277f914f662984c"
+    },
+    {
+      "path": "docs/naturality_orbit_transport_v1.json",
+      "role": "adopted_R_T1_package_equality_and_A3_family_transport_surface",
+      "byte_length": 417274,
+      "blake3": "blake3:5440292209c30542df064b65110b26743e695b96bcd1cba585fb497c81879d4b"
+    },
+    {
+      "path": "crates/pen-type/src/equality.rs",
+      "role": "frozen_expression_equality_surface",
+      "byte_length": 4757,
+      "blake3": "blake3:7c1ed7386c35aa7e5196e044b194f63e61204e431c3837018305977fbcee6c31"
+    },
+    {
+      "path": "crates/pen-search/src/act_local_semantic_provenance_v5.rs",
+      "role": "credited_family_sets_and_within_package_equivalence_closure",
+      "byte_length": 354739,
+      "blake3": "blake3:8508f8b735067dbea24bc284447663fcb378dd58b7b1ee63bf419f7a8df4478a"
+    },
+    {
+      "path": "crates/pen-search/src/naturality_orbit_transport.rs",
+      "role": "A3_and_R_T1_transport_issuer",
+      "byte_length": 72344,
+      "blake3": "blake3:92baec2b7bf3d8f91b59f1b08058a9fcb02eb40d9ff27026b85af17532f6fbcb"
+    },
+    {
+      "path": "crates/pen-search/src/semantic_nu_invariance_v1.rs",
+      "role": "finite_bijection_cardinality_theorem_and_scope_audit",
+      "byte_length": 58754,
+      "blake3": "blake3:367e8b4f9182d23ab59f71fe8f482b049dd189d160d5f073c9e6b39c3d6a232f"
+    }
+  ],
+  "stage4_option_a_and_f_uc4_markers_replayed": true,
+  "bi1b_invariance_gate_marker_replayed": true,
+  "uc1_hypothesis_markers_replayed": true,
+  "archived_stage4_v3_digest_valid": true,
+  "archived_naturality_transport_digest_valid": true,
+  "frozen_equality_procedure": "kernel-v1-beta-normal-equality",
+  "stage4_packages": [
+    {
+      "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "former_axis": "pi",
+      "application_order_axis": "2_then_3",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                },
+                {
+                  "Var": 3
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "prefix_signature_digest": "blake3:11c74244bfb002c53bc4f3b9a3c7013e7e38460ad03ce63bf9bc41e535fc8458",
+      "archived_root_derivation_hash": "blake3:7d4840effcaa2ae1ec810b8510de3ac2c855e6168265dd387e210926bcb20b97",
+      "archived_stage4_package_derivation_hash": "blake3:5ab156d65eae597cae4b1d53bf9807a6f5985282b6528c77f34645b616a9bfae",
+      "current_b3_token_derivation_hash": "blake3:774ee5ee0ed5f0a6d77b303fe40d5c7b0ed09849d2d7c168f174a3629697d2fc",
+      "current_package_derivation_hash": "blake3:5ab156d65eae597cae4b1d53bf9807a6f5985282b6528c77f34645b616a9bfae",
+      "current_package_proved": true,
+      "current_package_t_bi_b1_proved": true,
+      "current_package_t_bi_b2_proved": true,
+      "current_package_zero_named_or_silent_residue": true,
+      "credited_family_ids": [
+        "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+        "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+        "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+      ],
+      "credited_family_row_derivation_hashes": [
+        "blake3:4424862c43af299be639ddb8ccfd29b7c25a2161f5ca221ab81c96170ca6524e",
+        "blake3:5ef6d8db3060f0924b049583dc6575fcfe08fd538c6865fdb4d509d72945eacd",
+        "blake3:a8c15c1f89e5428370b7119c57be7db710c08c34e4b747de2746c36f3ed7ce08"
+      ],
+      "semantic_nu": 3,
+      "cardinality_matches_semantic_nu": true,
+      "archived_and_current_semantic_nu_match": true,
+      "archived_and_current_package_hash_match": true,
+      "identity_bijection": {
+        "theorem_id": "T-NU-EQ1-finite-family-bijection-preserves-semantic-nu",
+        "relation_id": "stage4-r-t1-reflexive-family-identity",
+        "source_object_id": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "target_object_id": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "source_family_ids": [
+          "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+          "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "target_family_ids": [
+          "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+          "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "forward": [
+          {
+            "source_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "target_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "derivation_hash": "blake3:1b76c515c652978f946a4c0a389bfa90dd0ef72bde3b3c998e87dee295bcd18a"
+          },
+          {
+            "source_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "target_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "derivation_hash": "blake3:b4b43e15de0371eabf2ae15e645d05537fe58090a9f4c81b0c2742edbb70000c"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "backward": [
+          {
+            "source_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "target_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "derivation_hash": "blake3:1b76c515c652978f946a4c0a389bfa90dd0ef72bde3b3c998e87dee295bcd18a"
+          },
+          {
+            "source_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "target_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "derivation_hash": "blake3:b4b43e15de0371eabf2ae15e645d05537fe58090a9f4c81b0c2742edbb70000c"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "source_is_finite_set": true,
+        "target_is_finite_set": true,
+        "forward_is_total_function": true,
+        "backward_is_total_function": true,
+        "forward_is_injective": true,
+        "backward_is_injective": true,
+        "forward_then_backward_is_identity": true,
+        "backward_then_forward_is_identity": true,
+        "certified_bijection": true,
+        "source_cardinality": 3,
+        "target_cardinality": 3,
+        "cardinalities_equal": true,
+        "proof_by_two_inverse_injections": true,
+        "semantic_nu_invariant": true,
+        "derivation_hash": "blake3:290dc700bd7a8bcb5e446dc23b34701e6a8ccabe620faf5a1c843945f196e3ec"
+      },
+      "derivation_hash": "blake3:3e5adeca16464350755c90b92c4fcf9ab89da23602b7153163aab473d0ebef85"
+    },
+    {
+      "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "former_axis": "pi",
+      "application_order_axis": "3_then_2",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 3
+                    }
+                  ]
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "prefix_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+      "archived_root_derivation_hash": "blake3:c3d03e1797c386bcac7903573107af15550964d2846980f0b9a618c7326d3710",
+      "archived_stage4_package_derivation_hash": "blake3:c1b15a9f4654f542b994cf913de8da60f750c729a3f85c18f4f5d65aff756241",
+      "current_b3_token_derivation_hash": "blake3:fbf8e4e7a2ee1e596cd71ac2eb6dc420670edd36b9a38951682b70766254d663",
+      "current_package_derivation_hash": "blake3:c1b15a9f4654f542b994cf913de8da60f750c729a3f85c18f4f5d65aff756241",
+      "current_package_proved": true,
+      "current_package_t_bi_b1_proved": true,
+      "current_package_t_bi_b2_proved": true,
+      "current_package_zero_named_or_silent_residue": true,
+      "credited_family_ids": [
+        "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+        "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+      ],
+      "credited_family_row_derivation_hashes": [
+        "blake3:b3f5ade79041e67d4f93a8a953e8c2a73018dd7fe1e8c8a47400df1b9d07d1ce",
+        "blake3:b9a9206db7baa849fd49f4e5cb96e93bf6b7061b373c89b8a5fd4e28599da343"
+      ],
+      "semantic_nu": 2,
+      "cardinality_matches_semantic_nu": true,
+      "archived_and_current_semantic_nu_match": true,
+      "archived_and_current_package_hash_match": true,
+      "identity_bijection": {
+        "theorem_id": "T-NU-EQ1-finite-family-bijection-preserves-semantic-nu",
+        "relation_id": "stage4-r-t1-reflexive-family-identity",
+        "source_object_id": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "target_object_id": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "source_family_ids": [
+          "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "target_family_ids": [
+          "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "forward": [
+          {
+            "source_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "target_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "derivation_hash": "blake3:1b76c515c652978f946a4c0a389bfa90dd0ef72bde3b3c998e87dee295bcd18a"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "backward": [
+          {
+            "source_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "target_family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+            "derivation_hash": "blake3:1b76c515c652978f946a4c0a389bfa90dd0ef72bde3b3c998e87dee295bcd18a"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "source_is_finite_set": true,
+        "target_is_finite_set": true,
+        "forward_is_total_function": true,
+        "backward_is_total_function": true,
+        "forward_is_injective": true,
+        "backward_is_injective": true,
+        "forward_then_backward_is_identity": true,
+        "backward_then_forward_is_identity": true,
+        "certified_bijection": true,
+        "source_cardinality": 2,
+        "target_cardinality": 2,
+        "cardinalities_equal": true,
+        "proof_by_two_inverse_injections": true,
+        "semantic_nu_invariant": true,
+        "derivation_hash": "blake3:73b277f8a9d7b1fbd2add6cb79e0c518ec85df462b5a7fba257c1a7309bb415d"
+      },
+      "derivation_hash": "blake3:90a77ad36049066ccfe8a26df1a77727fb14a284d7e52457490e38eaea8b6a0b"
+    },
+    {
+      "candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "former_axis": "sigma",
+      "application_order_axis": "3_then_2",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 3
+                    }
+                  ]
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "prefix_signature_digest": "blake3:5272b4b7e4d1e3766a6e31efceae35397153b2848a15128ad4b7d2abdf8a8b04",
+      "archived_root_derivation_hash": "blake3:550e00a020723db203ad6a95b1f2c439a672acc5124f7559a6e8cca083d897ec",
+      "archived_stage4_package_derivation_hash": "blake3:46d91a3597ea1eadfc03bc7a468dd0bd980f858e21159d3c7f59ac53341304d3",
+      "current_b3_token_derivation_hash": "blake3:7e08b799a72d90d39b83616dd8fd926c1aa5dfdc47db929709ac453496266244",
+      "current_package_derivation_hash": "blake3:46d91a3597ea1eadfc03bc7a468dd0bd980f858e21159d3c7f59ac53341304d3",
+      "current_package_proved": true,
+      "current_package_t_bi_b1_proved": true,
+      "current_package_t_bi_b2_proved": true,
+      "current_package_zero_named_or_silent_residue": true,
+      "credited_family_ids": [
+        "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+        "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+      ],
+      "credited_family_row_derivation_hashes": [
+        "blake3:8279fd0b45f7a926cd984f251ccdc0e08e5e82531812d35623d29c23b3c53ce2",
+        "blake3:b005ae855111237d71de41fd15bb693533587a15a91e2e968eb472f0db8281a5"
+      ],
+      "semantic_nu": 2,
+      "cardinality_matches_semantic_nu": true,
+      "archived_and_current_semantic_nu_match": true,
+      "archived_and_current_package_hash_match": true,
+      "identity_bijection": {
+        "theorem_id": "T-NU-EQ1-finite-family-bijection-preserves-semantic-nu",
+        "relation_id": "stage4-r-t1-reflexive-family-identity",
+        "source_object_id": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "target_object_id": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "source_family_ids": [
+          "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "target_family_ids": [
+          "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "forward": [
+          {
+            "source_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "target_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "derivation_hash": "blake3:469c310ad84a7f21fb7b83c3595c1e7e6801cca760c8f35fa43e4f118b2aa361"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "backward": [
+          {
+            "source_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "target_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "derivation_hash": "blake3:469c310ad84a7f21fb7b83c3595c1e7e6801cca760c8f35fa43e4f118b2aa361"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "source_is_finite_set": true,
+        "target_is_finite_set": true,
+        "forward_is_total_function": true,
+        "backward_is_total_function": true,
+        "forward_is_injective": true,
+        "backward_is_injective": true,
+        "forward_then_backward_is_identity": true,
+        "backward_then_forward_is_identity": true,
+        "certified_bijection": true,
+        "source_cardinality": 2,
+        "target_cardinality": 2,
+        "cardinalities_equal": true,
+        "proof_by_two_inverse_injections": true,
+        "semantic_nu_invariant": true,
+        "derivation_hash": "blake3:e169d53b2171571dbbbe9f8afe1a5c4487e6c6b2e100717341c178a496473f06"
+      },
+      "derivation_hash": "blake3:1df425eae79dc1a3256ed04f1ccaa050ac88f317ee085e668c0b1e79b1658c48"
+    },
+    {
+      "candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "former_axis": "sigma",
+      "application_order_axis": "2_then_3",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                },
+                {
+                  "Var": 3
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "prefix_signature_digest": "blake3:300a8d5386b748139a4321d987c5a6095d3dcb592b3dc3e2d7a96ef7d9752f2a",
+      "archived_root_derivation_hash": "blake3:c106ff11e8269f56f6d6affdfe1126deaf70293fbcac8afe0b6b54191c7faae4",
+      "archived_stage4_package_derivation_hash": "blake3:ee1b5f090b82e78069a95f13c2bed8fbc3af96c8c7e73cad7b108d552c3ec51d",
+      "current_b3_token_derivation_hash": "blake3:c5fd866f2573ce37ff83defc3b5f3d34dd25d3ba2dd007ddc8a658fa55cf349f",
+      "current_package_derivation_hash": "blake3:ee1b5f090b82e78069a95f13c2bed8fbc3af96c8c7e73cad7b108d552c3ec51d",
+      "current_package_proved": true,
+      "current_package_t_bi_b1_proved": true,
+      "current_package_t_bi_b2_proved": true,
+      "current_package_zero_named_or_silent_residue": true,
+      "credited_family_ids": [
+        "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+        "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+        "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+      ],
+      "credited_family_row_derivation_hashes": [
+        "blake3:1732da66f735021fe74d24881723837ddb2f48f08cea489bb66767010d99f87e",
+        "blake3:452b290e6bb240ef5e8c26806d4f7a85295aac8bd2ffb49f9ea666fb608f22c9",
+        "blake3:ec9a0a913dbb4f2307c486c1448b18be85c6ce0657547b14e8974b45d832850c"
+      ],
+      "semantic_nu": 3,
+      "cardinality_matches_semantic_nu": true,
+      "archived_and_current_semantic_nu_match": true,
+      "archived_and_current_package_hash_match": true,
+      "identity_bijection": {
+        "theorem_id": "T-NU-EQ1-finite-family-bijection-preserves-semantic-nu",
+        "relation_id": "stage4-r-t1-reflexive-family-identity",
+        "source_object_id": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "target_object_id": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "source_family_ids": [
+          "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+          "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "target_family_ids": [
+          "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+          "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+          "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+        ],
+        "forward": [
+          {
+            "source_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "target_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "derivation_hash": "blake3:469c310ad84a7f21fb7b83c3595c1e7e6801cca760c8f35fa43e4f118b2aa361"
+          },
+          {
+            "source_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "target_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "derivation_hash": "blake3:b4b43e15de0371eabf2ae15e645d05537fe58090a9f4c81b0c2742edbb70000c"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "backward": [
+          {
+            "source_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "target_family_id": "blake3:7eeeacfecfff800fe91058411fe62cc90d30128de6b7df1d8e41aa167698ca52",
+            "derivation_hash": "blake3:469c310ad84a7f21fb7b83c3595c1e7e6801cca760c8f35fa43e4f118b2aa361"
+          },
+          {
+            "source_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "target_family_id": "blake3:a5b8df009d259eb703c61f41d8e3128cb2d49bad072f4e68e55dea86ee399f09",
+            "derivation_hash": "blake3:b4b43e15de0371eabf2ae15e645d05537fe58090a9f4c81b0c2742edbb70000c"
+          },
+          {
+            "source_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "target_family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+            "derivation_hash": "blake3:9fdf493707ee1e7ee6af43525d93e38237729d3ead54fc486204354a94d5f9ab"
+          }
+        ],
+        "source_is_finite_set": true,
+        "target_is_finite_set": true,
+        "forward_is_total_function": true,
+        "backward_is_total_function": true,
+        "forward_is_injective": true,
+        "backward_is_injective": true,
+        "forward_then_backward_is_identity": true,
+        "backward_then_forward_is_identity": true,
+        "certified_bijection": true,
+        "source_cardinality": 3,
+        "target_cardinality": 3,
+        "cardinalities_equal": true,
+        "proof_by_two_inverse_injections": true,
+        "semantic_nu_invariant": true,
+        "derivation_hash": "blake3:9e303f05e0f49e64cd67eea69a9db5db2a9798b3d9d1ccc8911a7765ca0b535d"
+      },
+      "derivation_hash": "blake3:579605beefdd4357699c2c17e5596ab2256ae444b6549e287ad74d89bffe3b7b"
+    }
+  ],
+  "exact_four_current_b1_b2_b3_packages": true,
+  "exact_stage4_semantic_vector": [
+    3,
+    2,
+    2,
+    3
+  ],
+  "a3_naturality_family_bijection": {
+    "theorem_id": "T-NU-EQ1-finite-family-bijection-preserves-semantic-nu",
+    "relation_id": "adopted-A3-naturality-pointwise-to-direct-family-identity",
+    "source_object_id": "A3-direct-J3-family-carrier",
+    "target_object_id": "A3-pointwise-specialization-family-carrier",
+    "source_family_ids": [
+      "blake3:0ea7d505ce3430c73c6d088a25d5e1e6d5746de2a11e8aea57a920cd5f16a389",
+      "blake3:2a4281a096e65e03cdf48a4527056e598db9f648f2d3158973a6bde372baa89d",
+      "blake3:2a5423bac155dd63b8ef5acba2ba0d37aa4de084aa1fe184af748b5db3a4cece",
+      "blake3:431f6e1f2e408b6e1b31b33afb9ef2c51eb1877b5ef442c57f0d136fec874897",
+      "blake3:4b2a8ff1d5c71d1aa2f41e48f282e86a9d76df6813dcd241980207b8f77c27dd",
+      "blake3:cd0f63ce60253c48836442f0b03f4ea9dfaba75a3b1add85e1f602186e600cba",
+      "blake3:dadc91c68f280f7364e622052bae6b750b638c9262a34b5442112fe692bb8fc8",
+      "blake3:f53775a6e636182aca0b3b0965d8638f55505a85639f525e997d40781030a7df"
+    ],
+    "target_family_ids": [
+      "blake3:0ea7d505ce3430c73c6d088a25d5e1e6d5746de2a11e8aea57a920cd5f16a389",
+      "blake3:2a4281a096e65e03cdf48a4527056e598db9f648f2d3158973a6bde372baa89d",
+      "blake3:2a5423bac155dd63b8ef5acba2ba0d37aa4de084aa1fe184af748b5db3a4cece",
+      "blake3:431f6e1f2e408b6e1b31b33afb9ef2c51eb1877b5ef442c57f0d136fec874897",
+      "blake3:4b2a8ff1d5c71d1aa2f41e48f282e86a9d76df6813dcd241980207b8f77c27dd",
+      "blake3:cd0f63ce60253c48836442f0b03f4ea9dfaba75a3b1add85e1f602186e600cba",
+      "blake3:dadc91c68f280f7364e622052bae6b750b638c9262a34b5442112fe692bb8fc8",
+      "blake3:f53775a6e636182aca0b3b0965d8638f55505a85639f525e997d40781030a7df"
+    ],
+    "forward": [
+      {
+        "source_family_id": "blake3:0ea7d505ce3430c73c6d088a25d5e1e6d5746de2a11e8aea57a920cd5f16a389",
+        "target_family_id": "blake3:0ea7d505ce3430c73c6d088a25d5e1e6d5746de2a11e8aea57a920cd5f16a389",
+        "derivation_hash": "blake3:10494ea143c5dca0b9cf87568c48c14f54a72e93d2f6f4e275117132f4d40a8f"
+      },
+      {
+        "source_family_id": "blake3:2a4281a096e65e03cdf48a4527056e598db9f648f2d3158973a6bde372baa89d",
+        "target_family_id": "blake3:2a4281a096e65e03cdf48a4527056e598db9f648f2d3158973a6bde372baa89d",
+        "derivation_hash": "blake3:ebab546794ddbd77cb61413db924bf707d2899a8aabd7fb99c14ddc9fa67da04"
+      },
+      {
+        "source_family_id": "blake3:2a5423bac155dd63b8ef5acba2ba0d37aa4de084aa1fe184af748b5db3a4cece",
+        "target_family_id": "blake3:2a5423bac155dd63b8ef5acba2ba0d37aa4de084aa1fe184af748b5db3a4cece",
+        "derivation_hash": "blake3:e40f5733d7786b0ebf68010baf24fd865d16a187e6036d08734dad018c0b0e30"
+      },
+      {
+        "source_family_id": "blake3:431f6e1f2e408b6e1b31b33afb9ef2c51eb1877b5ef442c57f0d136fec874897",
+        "target_family_id": "blake3:431f6e1f2e408b6e1b31b33afb9ef2c51eb1877b5ef442c57f0d136fec874897",
+        "derivation_hash": "blake3:39714f608bfdd8ce57901700b42480b4214ab7e9007f02a01bd195194a448539"
+      },
+      {
+        "source_family_id": "blake3:4b2a8ff1d5c71d1aa2f41e48f282e86a9d76df6813dcd241980207b8f77c27dd",
+        "target_family_id": "blake3:4b2a8ff1d5c71d1aa2f41e48f282e86a9d76df6813dcd241980207b8f77c27dd",
+        "derivation_hash": "blake3:2ecc7b89f15271772d8fdeba482ae5e75f9bcfd7ff3bfd58a8fbeb85ded3bc26"
+      },
+      {
+        "source_family_id": "blake3:cd0f63ce60253c48836442f0b03f4ea9dfaba75a3b1add85e1f602186e600cba",
+        "target_family_id": "blake3:cd0f63ce60253c48836442f0b03f4ea9dfaba75a3b1add85e1f602186e600cba",
+        "derivation_hash": "blake3:7d73b01b58cd0ef19dd1ccee679847f539899715df2e2535d99d3ae3cef6b81f"
+      },
+      {
+        "source_family_id": "blake3:dadc91c68f280f7364e622052bae6b750b638c9262a34b5442112fe692bb8fc8",
+        "target_family_id": "blake3:dadc91c68f280f7364e622052bae6b750b638c9262a34b5442112fe692bb8fc8",
+        "derivation_hash": "blake3:4b017a00f52d322ab250b38ba82a1c8b914e87d6d34fd4b1b55c800d565719fe"
+      },
+      {
+        "source_family_id": "blake3:f53775a6e636182aca0b3b0965d8638f55505a85639f525e997d40781030a7df",
+        "target_family_id": "blake3:f53775a6e636182aca0b3b0965d8638f55505a85639f525e997d40781030a7df",
+        "derivation_hash": "blake3:31f42fd9b390bc3034b36e1c5a640e9e0225a8f559c03800deda48cf21d16cfa"
+      }
+    ],
+    "backward": [
+      {
+        "source_family_id": "blake3:0ea7d505ce3430c73c6d088a25d5e1e6d5746de2a11e8aea57a920cd5f16a389",
+        "target_family_id": "blake3:0ea7d505ce3430c73c6d088a25d5e1e6d5746de2a11e8aea57a920cd5f16a389",
+        "derivation_hash": "blake3:10494ea143c5dca0b9cf87568c48c14f54a72e93d2f6f4e275117132f4d40a8f"
+      },
+      {
+        "source_family_id": "blake3:2a4281a096e65e03cdf48a4527056e598db9f648f2d3158973a6bde372baa89d",
+        "target_family_id": "blake3:2a4281a096e65e03cdf48a4527056e598db9f648f2d3158973a6bde372baa89d",
+        "derivation_hash": "blake3:ebab546794ddbd77cb61413db924bf707d2899a8aabd7fb99c14ddc9fa67da04"
+      },
+      {
+        "source_family_id": "blake3:2a5423bac155dd63b8ef5acba2ba0d37aa4de084aa1fe184af748b5db3a4cece",
+        "target_family_id": "blake3:2a5423bac155dd63b8ef5acba2ba0d37aa4de084aa1fe184af748b5db3a4cece",
+        "derivation_hash": "blake3:e40f5733d7786b0ebf68010baf24fd865d16a187e6036d08734dad018c0b0e30"
+      },
+      {
+        "source_family_id": "blake3:431f6e1f2e408b6e1b31b33afb9ef2c51eb1877b5ef442c57f0d136fec874897",
+        "target_family_id": "blake3:431f6e1f2e408b6e1b31b33afb9ef2c51eb1877b5ef442c57f0d136fec874897",
+        "derivation_hash": "blake3:39714f608bfdd8ce57901700b42480b4214ab7e9007f02a01bd195194a448539"
+      },
+      {
+        "source_family_id": "blake3:4b2a8ff1d5c71d1aa2f41e48f282e86a9d76df6813dcd241980207b8f77c27dd",
+        "target_family_id": "blake3:4b2a8ff1d5c71d1aa2f41e48f282e86a9d76df6813dcd241980207b8f77c27dd",
+        "derivation_hash": "blake3:2ecc7b89f15271772d8fdeba482ae5e75f9bcfd7ff3bfd58a8fbeb85ded3bc26"
+      },
+      {
+        "source_family_id": "blake3:cd0f63ce60253c48836442f0b03f4ea9dfaba75a3b1add85e1f602186e600cba",
+        "target_family_id": "blake3:cd0f63ce60253c48836442f0b03f4ea9dfaba75a3b1add85e1f602186e600cba",
+        "derivation_hash": "blake3:7d73b01b58cd0ef19dd1ccee679847f539899715df2e2535d99d3ae3cef6b81f"
+      },
+      {
+        "source_family_id": "blake3:dadc91c68f280f7364e622052bae6b750b638c9262a34b5442112fe692bb8fc8",
+        "target_family_id": "blake3:dadc91c68f280f7364e622052bae6b750b638c9262a34b5442112fe692bb8fc8",
+        "derivation_hash": "blake3:4b017a00f52d322ab250b38ba82a1c8b914e87d6d34fd4b1b55c800d565719fe"
+      },
+      {
+        "source_family_id": "blake3:f53775a6e636182aca0b3b0965d8638f55505a85639f525e997d40781030a7df",
+        "target_family_id": "blake3:f53775a6e636182aca0b3b0965d8638f55505a85639f525e997d40781030a7df",
+        "derivation_hash": "blake3:31f42fd9b390bc3034b36e1c5a640e9e0225a8f559c03800deda48cf21d16cfa"
+      }
+    ],
+    "source_is_finite_set": true,
+    "target_is_finite_set": true,
+    "forward_is_total_function": true,
+    "backward_is_total_function": true,
+    "forward_is_injective": true,
+    "backward_is_injective": true,
+    "forward_then_backward_is_identity": true,
+    "backward_then_forward_is_identity": true,
+    "certified_bijection": true,
+    "source_cardinality": 8,
+    "target_cardinality": 8,
+    "cardinalities_equal": true,
+    "proof_by_two_inverse_injections": true,
+    "semantic_nu_invariant": true,
+    "derivation_hash": "blake3:079d845018fa67186cf3e566a429941bd9d7fc05a787787142b6f4b06e272666"
+  },
+  "adopted_surface_audits": [
+    {
+      "surface": "frozen_kernel_univalent_equality",
+      "evidence_hash": "blake3:7c1ed7386c35aa7e5196e044b194f63e61204e431c3837018305977fbcee6c31",
+      "exact_carrier": "two expressions at one scope, equal exactly when their fuel-bounded beta normal forms are syntactically equal",
+      "exports_finite_semantic_family_bijection": false,
+      "exported_bijection_instances": 0,
+      "covered_by_cardinality_theorem": false,
+      "cannot_be_used_as_cross_package_family_transport": true,
+      "exact_reason": "EqualityWitness has no library-equivalence, family-extractor transport, or forward/backward semantic-family map field.",
+      "derivation_hash": "blake3:1a736fca7fc188e9ce8815d744af9c6dac341756b26748fa258d2ccd1e38ecbc"
+    },
+    {
+      "surface": "v5_unified_within_package_equivalence_closure",
+      "evidence_hash": "blake3:8508f8b735067dbea24bc284447663fcb378dd58b7b1ee63bf419f7a8df4478a",
+      "exact_carrier": "the finite CoreExpr/OrdinarySchema2/CubicalPath member universe of one source-first package",
+      "exports_finite_semantic_family_bijection": false,
+      "exported_bijection_instances": 0,
+      "covered_by_cardinality_theorem": false,
+      "cannot_be_used_as_cross_package_family_transport": true,
+      "exact_reason": "The closed four-rule quotient computes components within one package; it exports no map between credited-family carriers of two candidate packages.",
+      "derivation_hash": "blake3:56c9e915b8dca3b5227a671050a864fc1130a109532bede5261ed2bb18c4deb5"
+    },
+    {
+      "surface": "naturality_orbit_family_transport",
+      "evidence_hash": "blake3:942637b70ee7ebf89aa1c67a3f388653817ffe246fef09a1a886c3e00748dd94",
+      "exact_carrier": "the eight direct J3 natural-family IDs and the eight pointwise specializations joined to those same family IDs",
+      "exports_finite_semantic_family_bijection": true,
+      "exported_bijection_instances": 1,
+      "covered_by_cardinality_theorem": true,
+      "cannot_be_used_as_cross_package_family_transport": true,
+      "exact_reason": "The exported family identity is covered by T-NU-EQ1. Its carrier is the historical A3/J3 naturality orbit, not either UC-1 Stage-4 act axis.",
+      "derivation_hash": "blake3:9d2d50407a70c37d2bd1d3936a84558b7f6b93a357d013df53d74cb6b55d4cfe"
+    },
+    {
+      "surface": "stage4_rt1_pointwise_package_equality",
+      "evidence_hash": "blake3:999b78a62e006cd76fd7c00acce8445b2fa5cd2bcf1f9b280350904799d3ecce",
+      "exact_carrier": "three clause presentations compared pointwise by role, kernel type, parameter sorts, and frozen expression equality",
+      "exports_finite_semantic_family_bijection": false,
+      "exported_bijection_instances": 0,
+      "covered_by_cardinality_theorem": false,
+      "cannot_be_used_as_cross_package_family_transport": true,
+      "exact_reason": "All six distinct Stage-4 comparisons have packages_equal=false, and the comparison record exports no semantic-family map even in the equality case.",
+      "derivation_hash": "blake3:942e28262aac72051066f302ee5189506a2e989e7f78f2bea078e9e0f37a52bd"
+    },
+    {
+      "surface": "rt2_successor_scheme_renaming",
+      "evidence_hash": "blake3:14e3cf8993eb6f708ff46e95be04b4cbd39e5e3317fb64030778e8bc32e3cf85",
+      "exact_carrier": "canonical renaming of parameters inside a five-scheme successor comparison",
+      "exports_finite_semantic_family_bijection": false,
+      "exported_bijection_instances": 0,
+      "covered_by_cardinality_theorem": false,
+      "cannot_be_used_as_cross_package_family_transport": true,
+      "exact_reason": "R-T2's renaming bijection is scheme-local and does not transport source-first credited semantic-family classes between Stage-4 acts.",
+      "derivation_hash": "blake3:f8f94fd3a5f795f85c2b45e9d562fe62199c91bb70a3d405c1a16bbf0e646030"
+    }
+  ],
+  "every_exported_semantic_family_bijection_covered": true,
+  "stage4_axis_audits": [
+    {
+      "axis": "order",
+      "fixed_coordinate": "former=pi",
+      "left_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "left_semantic_nu": 3,
+      "right_semantic_nu": 2,
+      "semantic_nu_equal": false,
+      "r_t1_comparison_derivation_hash": "blake3:dd86bd0b7653efa10089007517edcb0103fe183261593ea0867b6862c5e5d11d",
+      "r_t1_packages_equal": false,
+      "r_t1_exports_cross_package_family_map": false,
+      "typed_act_equivalence_witness_present": false,
+      "extractor_functoriality_witness_present": false,
+      "finite_family_bijection_witness_present": false,
+      "cardinality_theorem_instantiated": false,
+      "conditional_obstruction_if_equivalence_requires_family_bijection": true,
+      "gap_id": "UC1A_TYPED_PARAMETER_SWAP_AND_FAMILY_TRANSPORT_UNEXPORTED",
+      "exact_missing_construction": "Construct a typed proof that the two parameters are mutually non-dependent; construct the context-swap equivalence and its inverse laws; prove that source-first family extraction is functorial under that swap; and export the resulting forward/backward maps on credited semantic-family classes.",
+      "f_uc4_assessment_authorized": false,
+      "derivation_hash": "blake3:2329ba09c46ae9a9fef782fc654142e8de6e08fe7b9b591713c7f1b630c0d49c"
+    },
+    {
+      "axis": "order",
+      "fixed_coordinate": "former=sigma",
+      "left_candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "right_candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "left_semantic_nu": 3,
+      "right_semantic_nu": 2,
+      "semantic_nu_equal": false,
+      "r_t1_comparison_derivation_hash": "blake3:09cda2cbee60468462380ec7dbcc945a0146202b4ed0e03843395771473f278c",
+      "r_t1_packages_equal": false,
+      "r_t1_exports_cross_package_family_map": false,
+      "typed_act_equivalence_witness_present": false,
+      "extractor_functoriality_witness_present": false,
+      "finite_family_bijection_witness_present": false,
+      "cardinality_theorem_instantiated": false,
+      "conditional_obstruction_if_equivalence_requires_family_bijection": true,
+      "gap_id": "UC1A_TYPED_PARAMETER_SWAP_AND_FAMILY_TRANSPORT_UNEXPORTED",
+      "exact_missing_construction": "Construct a typed proof that the two parameters are mutually non-dependent; construct the context-swap equivalence and its inverse laws; prove that source-first family extraction is functorial under that swap; and export the resulting forward/backward maps on credited semantic-family classes.",
+      "f_uc4_assessment_authorized": false,
+      "derivation_hash": "blake3:441790c17b898acc341e3a3b30da94e23633636566de46daee3403c25f6efba5"
+    },
+    {
+      "axis": "former",
+      "fixed_coordinate": "application_order=2_then_3",
+      "left_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "left_semantic_nu": 3,
+      "right_semantic_nu": 3,
+      "semantic_nu_equal": true,
+      "r_t1_comparison_derivation_hash": "blake3:923e7ce584c5a4736e9781de15ec0eb7d7e019a53bb817af47e0881d1bae8feb",
+      "r_t1_packages_equal": false,
+      "r_t1_exports_cross_package_family_map": false,
+      "typed_act_equivalence_witness_present": false,
+      "extractor_functoriality_witness_present": false,
+      "finite_family_bijection_witness_present": false,
+      "cardinality_theorem_instantiated": false,
+      "conditional_obstruction_if_equivalence_requires_family_bijection": false,
+      "gap_id": "UC1B_LIBRARY_ACT_EQUIVALENCE_AND_FAMILY_TRANSPORT_UNEXPORTED",
+      "exact_missing_construction": "Construct the claimed library equivalence B4^Pi ~= B4^Sigma with former-eliminator witness correspondence; prove source-first extractor functoriality across that library equivalence; and export inverse forward/backward maps on credited semantic-family classes.",
+      "f_uc4_assessment_authorized": false,
+      "derivation_hash": "blake3:beeb34c50f00845d4194a7be0c591daa7b0631cfed921f6a3c43943742b738a1"
+    },
+    {
+      "axis": "former",
+      "fixed_coordinate": "application_order=3_then_2",
+      "left_candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "left_semantic_nu": 2,
+      "right_semantic_nu": 2,
+      "semantic_nu_equal": true,
+      "r_t1_comparison_derivation_hash": "blake3:ca7d60b702e2d241d12e080db790cd8662c2d80ad385b735d2eee67fca4a0ef5",
+      "r_t1_packages_equal": false,
+      "r_t1_exports_cross_package_family_map": false,
+      "typed_act_equivalence_witness_present": false,
+      "extractor_functoriality_witness_present": false,
+      "finite_family_bijection_witness_present": false,
+      "cardinality_theorem_instantiated": false,
+      "conditional_obstruction_if_equivalence_requires_family_bijection": false,
+      "gap_id": "UC1B_LIBRARY_ACT_EQUIVALENCE_AND_FAMILY_TRANSPORT_UNEXPORTED",
+      "exact_missing_construction": "Construct the claimed library equivalence B4^Pi ~= B4^Sigma with former-eliminator witness correspondence; prove source-first extractor functoriality across that library equivalence; and export inverse forward/backward maps on credited semantic-family classes.",
+      "f_uc4_assessment_authorized": false,
+      "derivation_hash": "blake3:c77b6fc6de76e45869746ff6ad744b1147e636a4466af8bb13ea1e5512f89ca2"
+    }
+  ],
+  "uc1a_order_axis_instantiates_invariance": false,
+  "uc1b_former_axis_instantiates_invariance": false,
+  "order_axis_has_conditional_cardinality_obstruction": true,
+  "former_axis_semantic_nu_invisible": true,
+  "f_uc4_assessment_authorized": false,
+  "named_construction_gaps": [
+    "UC1_CROSS_PACKAGE_SEMANTIC_FAMILY_BIJECTION_API_ABSENT",
+    "UC1A_TYPED_PARAMETER_SWAP_AND_FAMILY_TRANSPORT_UNEXPORTED",
+    "UC1B_LIBRARY_ACT_EQUIVALENCE_AND_FAMILY_TRANSPORT_UNEXPORTED"
+  ],
+  "outcome": "generic_invariance_proved_exported_surfaces_covered_stage4_axis_instantiation_blocked",
+  "permitted_conclusion": "T-NU-EQ1 proves that semantic-family nu is invariant under every concrete finite family-class bijection accepted by its two-inverse-law verifier. Every semantic-family bijection actually exported on the audited adopted surfaces is covered: the A3 direct/pointwise eight-family identity and each Stage-4 package's reflexive identity. The two order pairs have a conditional 3-versus-2 cardinality obstruction if a future UC-1a act equivalence is required to transport credited families bijectively; the former pairs are nu-invisible at 3=3 and 2=2.",
+  "forbidden_conclusion": "This certificate does not prove or refute UC-1a or UC-1b, does not fire F-UC4, and does not score UC-1. No adopted API currently constructs a typed Stage-4 parameter swap or Pi/Sigma library-act equivalence together with functorial source-first extraction and inverse maps on credited family classes.",
+  "uc1_scored": false,
+  "bi2_outcome_read": false,
+  "result_digest": "blake3:a39f052911d14b850727efad14875b7c1929577a66e3762d5e1bf06ba9bc1c2f"
+}

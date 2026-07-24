@@ -1,0 +1,141 @@
+{
+  "schema": "bi1-option-a-enacted-first-sweep-v3",
+  "date": "2026-07-23",
+  "source_bindings": [
+    {
+      "path": "docs/stage4_semantic_divergence_adjudication.md",
+      "role": "adopted Option A and F-S4-3",
+      "blake3": "blake3:491b6c534a86e775c319a8a50520dd4788467c7ce32070feac53739032d8f282"
+    },
+    {
+      "path": "docs/branch_invariance_program_plan.md",
+      "role": "F-BI1 through F-BI6 and BI-1/BI-2 separation",
+      "blake3": "blake3:6a5d0343dfc7b2f7b82570cbf2fa48a1857659eb61a8c7c1e48922f78f9bc86b"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance.rs",
+      "role": "crate-private branch-parametric continuation core",
+      "blake3": "blake3:fc1ce77dec9200f2f1151f630808f7e939b80e5c06e69a49b5da5f4daeee552c"
+    },
+    {
+      "path": "crates/pen-search/src/stage4_option_a_execution_v1.rs",
+      "role": "replayed four-root Option-A execution capability",
+      "blake3": "blake3:42c720b53631ec46ad95fe14eb9c8728582ac25f618fcec28a8f37359c47bc82"
+    },
+    {
+      "path": "crates/pen-search/src/t_bi_nu1_regression_v6.rs",
+      "role": "post-seal enacted candidate and semantic-vector comparator",
+      "blake3": "blake3:8dc8260781951a193691fe8925e263ab1a8d2bed55117405404bbb67e45861d3"
+    }
+  ],
+  "option_a_execution_capability_digest": "blake3:e78674bb45e51198346715f485eb80f099c29125347b06c476add8161426e2d1",
+  "option_a_capability_replayed_before_any_branch": true,
+  "option_a_real_choice_preserved": true,
+  "cone_digest": "blake3:417719ae12e4bf3f72196a35064c8767cd41ddca765c28736bfe760c999b3a93",
+  "cone_replayed_before_any_branch": true,
+  "enacted_root_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+  "enacted_branch_issued_first": true,
+  "enacted_regression": {
+    "schema": "bi1-option-a-enacted-postseal-tbi-v6-regression-v3",
+    "option_a_execution_capability_digest": "blake3:e78674bb45e51198346715f485eb80f099c29125347b06c476add8161426e2d1",
+    "enacted_root_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+    "enacted_branch_certificate_digest": "blake3:5ac75d60b84ce1bc6871c9c027426c28f4d80cbfd44bf5cedaeb99fc8e216a70",
+    "t_bi_v6_projection_digest": "blake3:a486d0bb738447c2723967afa3f12afbc5f4d8e19f1f935dc92dcae57b887fd4",
+    "enacted_certificate_sealed_before_t_bi_projection_issued": true,
+    "enacted_certificate_replayed_before_comparison": true,
+    "exact_candidate_hash_vector": true,
+    "exact_semantic_nu_vector": true,
+    "unique_typed_dischargers_replayed": true,
+    "t_bi_v6_projection_replayed": true,
+    "t_bi_v6_extraction_complete": true,
+    "t_bi_v6_operational_regression_exact": true,
+    "t_bi_v6_f_al1_prime_passed": true,
+    "t_bi_v6_non_enacted_work_absent": true,
+    "enacted_regression_passed": true,
+    "enacted_outcome_vectors_exported": false,
+    "derivation_hash": "blake3:3454e0cdf1f198f60ff643c690a32986207a5965e3e9df307112104657d3e09d"
+  },
+  "enacted_regression_passed_before_non_enacted_issuance": true,
+  "branch_rows": [
+    {
+      "issuance_ordinal": 0,
+      "branch_root_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "branch_digest_prefix": "2016726758f3",
+      "enacted_root": true,
+      "certificate_digest": "blake3:5ac75d60b84ce1bc6871c9c027426c28f4d80cbfd44bf5cedaeb99fc8e216a70",
+      "continuation_outcome": "DebtFreeHalt { halt_stage: 15, next_stage: 16 }",
+      "reached_guarded_stage_count": 11,
+      "every_reached_guarded_stage_has_unique_typed_discharger": true,
+      "branch_indexed_only": true,
+      "json_name": "BI_BRANCH_V3_2016726758f3_CERTIFICATE.json",
+      "report_name": "BI_BRANCH_V3_2016726758f3_RESULT.md",
+      "row_hash": "blake3:101efbfeadbca6673a8114aa6c8b020af424710074f259511d24c1726f7d0cae"
+    },
+    {
+      "issuance_ordinal": 1,
+      "branch_root_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "branch_digest_prefix": "43a0ed707770",
+      "enacted_root": false,
+      "certificate_digest": "blake3:473d05bc808fc034d20541c49484374af2992c45a1d3658901ecba7c01e6b984",
+      "continuation_outcome": "ExpressivityGap { stage: 8, exact_error: \"BI_CANDIDATE_CONE_SEMANTIC_GAP: Stage-8 candidate blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 is Unknown, so the known discharger census cannot establish uniqueness\" }",
+      "reached_guarded_stage_count": 4,
+      "every_reached_guarded_stage_has_unique_typed_discharger": false,
+      "branch_indexed_only": true,
+      "json_name": "BI_BRANCH_V3_43a0ed707770_CERTIFICATE.json",
+      "report_name": "BI_BRANCH_V3_43a0ed707770_RESULT.md",
+      "row_hash": "blake3:fc74603b669ebe0eb8eccfc513f0ec3f00938ec140f2db436edb4e3ad144fefe"
+    },
+    {
+      "issuance_ordinal": 2,
+      "branch_root_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "branch_digest_prefix": "4b2211ecae25",
+      "enacted_root": false,
+      "certificate_digest": "blake3:07d452d788afa084128350ba8fec4cad01f56b1afacf57abe6b6f3d21083e048",
+      "continuation_outcome": "ExpressivityGap { stage: 8, exact_error: \"BI_CANDIDATE_CONE_SEMANTIC_GAP: Stage-8 candidate blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 is Unknown, so the known discharger census cannot establish uniqueness\" }",
+      "reached_guarded_stage_count": 4,
+      "every_reached_guarded_stage_has_unique_typed_discharger": false,
+      "branch_indexed_only": true,
+      "json_name": "BI_BRANCH_V3_4b2211ecae25_CERTIFICATE.json",
+      "report_name": "BI_BRANCH_V3_4b2211ecae25_RESULT.md",
+      "row_hash": "blake3:1c3d991eaf8b9c3b6aa7bd58e91ecf8b083b31f72efbed46d65e0b352d402b0c"
+    },
+    {
+      "issuance_ordinal": 3,
+      "branch_root_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "branch_digest_prefix": "b4f821d9bb28",
+      "enacted_root": false,
+      "certificate_digest": "blake3:0056f219ad010c22ea2c73c893d346dde9335c7fbe6b51340e13141115cbc54c",
+      "continuation_outcome": "ExpressivityGap { stage: 8, exact_error: \"BI_CANDIDATE_CONE_SEMANTIC_GAP: Stage-8 candidate blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 is Unknown, so the known discharger census cannot establish uniqueness\" }",
+      "reached_guarded_stage_count": 4,
+      "every_reached_guarded_stage_has_unique_typed_discharger": false,
+      "branch_indexed_only": true,
+      "json_name": "BI_BRANCH_V3_b4f821d9bb28_CERTIFICATE.json",
+      "report_name": "BI_BRANCH_V3_b4f821d9bb28_RESULT.md",
+      "row_hash": "blake3:15c584d16441b2b6421fc631090207e3d86bec249a26d76583ad85333e62c4ea"
+    }
+  ],
+  "branch_count": 4,
+  "exact_four_root_surface": true,
+  "all_branch_certificates_independently_replayed": true,
+  "all_reached_guarded_stages_have_unique_typed_dischargers": false,
+  "all_lawful_stops_sealed_without_improvised_selection": true,
+  "non_enacted_branch_count": 3,
+  "non_enacted_branches_consumed_enacted_outcomes": false,
+  "value_or_bar_used_as_selector": false,
+  "divergence_suppression_or_repair_performed": false,
+  "class_representative_substitution_used": false,
+  "f_s4_3_preserved": true,
+  "f_bi1_preserved": true,
+  "f_bi2_preserved": true,
+  "f_bi3_preserved": true,
+  "f_bi4_preserved": true,
+  "f_bi5_preserved": true,
+  "f_bi6_preserved": true,
+  "cross_branch_g2_verdict_issued": false,
+  "cross_branch_g3_verdict_issued": false,
+  "bi2_finale_issued": false,
+  "bi4_cone_report_issued": false,
+  "unindexed_halt_ledger_or_o_claim_issued": false,
+  "permitted_conclusion": "Four Option-A branch-indexed BI-1 continuations were independently issued after an enacted-first F-BI5 regression. This manifest issues no cross-branch G2/G3 verdict, BI-2 finale, BI-4 cone report, or unindexed halt, ledger, O, or F1 claim.",
+  "result_digest": "blake3:7a03ff1dab14cff0b385b9d2b482071671296a8c6132dc63f37cb9eeb2506fdb"
+}

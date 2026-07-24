@@ -10,17 +10,15 @@
 //! deterministic replay. The diagnostic bar is computed and recorded but is
 //! never read by selection.
 
-use crate::act_local_provenance::{
-    ActLocalNuProvenanceCertificate, T_BI_NU1_THEOREM_ID, issue_act_local_provenance,
-    issue_act_local_sequence,
+use crate::act_local_provenance::{ActLocalNuProvenanceCertificate, T_BI_NU1_THEOREM_ID};
+use crate::branch_semantic_provenance_v3::{
+    BRANCH_SEMANTIC_PROVENANCE_V3_THEOREM_ID, BranchSemanticProvenanceV3Token,
+    issue_branch_semantic_provenance_v3, replay_branch_semantic_provenance_v3,
+    validate_branch_semantic_provenance_v3_token_integrity,
 };
 use crate::enumerate::{EnumerationContext, enumerate_telescopes};
-use crate::naturality_orbit_transport::{
-    issue_stage4_r_t1_orbit_audit, replay_stage4_r_t1_orbit_audit,
-};
-use crate::r_t2_future_hole_confluence_v2::{
-    Rt2FutureHoleConfluenceV2Certificate, Rt2FutureHoleConfluenceV2Outcome,
-    replay_archived_stage4_fork_projection,
+use crate::stage4_option_a_execution_v1::{
+    Stage4OptionAReplayedExecutionGrantV1, issue_replayed_stage4_option_a_execution_v1,
 };
 use pen_core::canonical::canonical_key_telescope;
 use pen_core::encode::telescope_bit_cost;
@@ -59,11 +57,12 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const BRANCH_INVARIANCE_CORE_SCHEMA: &str = "branch-invariance-continuation-core-v2";
-pub const BRANCH_INVARIANCE_CORE_DATE: &str = "2026-07-22";
+pub const BRANCH_INVARIANCE_CORE_SCHEMA: &str =
+    "branch-invariance-option-a-semantic-continuation-core-v3";
+pub const BRANCH_INVARIANCE_CORE_DATE: &str = "2026-07-23";
 pub const BRANCH_FIRST_SELECTION_STAGE: u32 = 5;
 pub const BRANCH_WINDOW_DEPTH: u16 = 2;
-pub const BRANCH_NU_PROVENANCE_SCHEMA: &str = "branch-local-nu-provenance-v2";
+pub const BRANCH_NU_PROVENANCE_SCHEMA: &str = "branch-local-semantic-nu-provenance-v3";
 pub const BRANCH_NU_DECOMPOSITION_THEOREM_ID: &str =
     "T-BI-NU1-candidate-local-structural-nu-family-orbit-decomposition";
 pub const BRANCH_NU_DECOMPOSITION_GAP: &str = "No adopted theorem currently bijects the summands of structural_nu with candidate-local typed, normalized, natural, marginal family IDs or independently exported live A3 demand-output positions. The missing theorem must also join every R2 generated-instance subtraction injectively to an actually counted family ID and its parent family.";
@@ -71,9 +70,6 @@ pub const BRANCH_ACT_LOCAL_PROVENANCE_ISSUANCE_GAP_PREFIX: &str =
     "BI_ACT_LOCAL_PROVENANCE_ISSUANCE_GAP: ";
 
 const DEMAND_MECHANISM_COUNT: u32 = 10;
-const R_T2_ARTIFACT_BYTES: &[u8] =
-    include_bytes!("../../../docs/r_t2_future_hole_confluence_v2_dependent_context_v2.json");
-const R_T3_ADJUDICATION_BYTES: &[u8] = include_bytes!("../../../docs/r_t3_stage4_adjudication.md");
 const R2_ADJUDICATION_BYTES: &[u8] = include_bytes!("../../../docs/e2_quotient_adjudications.md");
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -120,6 +116,7 @@ fn diagnostic_nu_provenance_token(
         diagnostic_nu,
         structural_formula_replayed_from_branch_prefix: true,
         historical_score_vector_or_bar_used_as_input: false,
+        semantic_family_evidence_v3: None,
         disposition: BranchNuProvenanceDisposition::DiagnosticFormulaOnly {
             missing_theorem_id: BRANCH_NU_DECOMPOSITION_THEOREM_ID.to_owned(),
             exact_gap: BRANCH_NU_DECOMPOSITION_GAP.to_owned(),
@@ -145,8 +142,43 @@ fn act_local_provenance_gap_token(
         0,
     );
     token.disposition = BranchNuProvenanceDisposition::DiagnosticFormulaOnly {
-        missing_theorem_id: T_BI_NU1_THEOREM_ID.to_owned(),
+        missing_theorem_id: BRANCH_SEMANTIC_PROVENANCE_V3_THEOREM_ID.to_owned(),
         exact_gap: format!("{BRANCH_ACT_LOCAL_PROVENANCE_ISSUANCE_GAP_PREFIX}{exact_error}"),
+    };
+    token.derivation_hash = nu_provenance_digest(&token);
+    token
+}
+
+fn semantic_family_nu_provenance_token(
+    evidence: BranchSemanticProvenanceV3Token,
+    structural_formula_total: u32,
+) -> BranchNuProvenanceToken {
+    let family_hashes = evidence
+        .credited_family_rows
+        .iter()
+        .map(|row| row.authoritative_family_row_derivation_hash.clone())
+        .collect::<Vec<_>>();
+    let removed = evidence.r2_premise.r2_removed_occurrence_hashes.clone();
+    let adjustment = i32::try_from(removed.len()).map_or(i32::MIN + 1, |count| -count);
+    let mut token = BranchNuProvenanceToken {
+        schema: BRANCH_NU_PROVENANCE_SCHEMA.to_owned(),
+        stage: evidence.stage,
+        candidate_hash: evidence.candidate_hash.clone(),
+        predecessor_signature_digest: evidence.predecessor_signature_digest.clone(),
+        structural_formula_total,
+        r2_generated_instance_adjustment: adjustment,
+        diagnostic_nu: evidence.semantic_nu,
+        structural_formula_replayed_from_branch_prefix: true,
+        historical_score_vector_or_bar_used_as_input: false,
+        semantic_family_evidence_v3: Some(evidence.clone()),
+        disposition: BranchNuProvenanceDisposition::ExactCertified {
+            theorem_id: BRANCH_SEMANTIC_PROVENANCE_V3_THEOREM_ID.to_owned(),
+            certificate_hash: evidence.derivation_hash.clone(),
+            counted_family_ids: evidence.credited_family_ids.clone(),
+            authoritative_family_token_hashes: family_hashes,
+            generated_instance_family_ids_removed_by_quotient: removed,
+        },
+        derivation_hash: String::new(),
     };
     token.derivation_hash = nu_provenance_digest(&token);
     token
@@ -163,6 +195,7 @@ fn exact_nu_provenance_token(package: &ActLocalNuProvenanceCertificate) -> Branc
         diagnostic_nu: package.exact_certified_nu,
         structural_formula_replayed_from_branch_prefix: true,
         historical_score_vector_or_bar_used_as_input: false,
+        semantic_family_evidence_v3: None,
         disposition: BranchNuProvenanceDisposition::ExactCertified {
             theorem_id: T_BI_NU1_THEOREM_ID.to_owned(),
             certificate_hash: package.derivation_hash.clone(),
@@ -194,17 +227,19 @@ pub fn replay_branch_nu_provenance_token(token: &BranchNuProvenanceToken) -> Vec
     {
         errors.push("branch nu-provenance token has an invalid replay surface".to_owned());
     }
-    let expected_diagnostic = if token.r2_generated_instance_adjustment < 0 {
-        token
-            .structural_formula_total
-            .saturating_sub(token.r2_generated_instance_adjustment.unsigned_abs())
-    } else {
-        token
-            .structural_formula_total
-            .saturating_add(token.r2_generated_instance_adjustment as u32)
-    };
-    if token.diagnostic_nu != expected_diagnostic {
-        errors.push("branch nu-provenance diagnostic arithmetic mismatch".to_owned());
+    if token.semantic_family_evidence_v3.is_none() {
+        let expected_diagnostic = if token.r2_generated_instance_adjustment < 0 {
+            token
+                .structural_formula_total
+                .saturating_sub(token.r2_generated_instance_adjustment.unsigned_abs())
+        } else {
+            token
+                .structural_formula_total
+                .saturating_add(token.r2_generated_instance_adjustment as u32)
+        };
+        if token.diagnostic_nu != expected_diagnostic {
+            errors.push("legacy branch nu-provenance diagnostic arithmetic mismatch".to_owned());
+        }
     }
     match &token.disposition {
         BranchNuProvenanceDisposition::DiagnosticFormulaOnly {
@@ -212,7 +247,8 @@ pub fn replay_branch_nu_provenance_token(token: &BranchNuProvenanceToken) -> Vec
             exact_gap,
         } if (missing_theorem_id == BRANCH_NU_DECOMPOSITION_THEOREM_ID
             && exact_gap == BRANCH_NU_DECOMPOSITION_GAP)
-            || (missing_theorem_id == T_BI_NU1_THEOREM_ID
+            || ((missing_theorem_id == T_BI_NU1_THEOREM_ID
+                || missing_theorem_id == BRANCH_SEMANTIC_PROVENANCE_V3_THEOREM_ID)
                 && exact_gap
                     .strip_prefix(BRANCH_ACT_LOCAL_PROVENANCE_ISSUANCE_GAP_PREFIX)
                     .is_some_and(|error| !error.is_empty())) => {}
@@ -229,19 +265,54 @@ pub fn replay_branch_nu_provenance_token(token: &BranchNuProvenanceToken) -> Vec
             let removed_ids = generated_instance_family_ids_removed_by_quotient
                 .iter()
                 .collect::<BTreeSet<_>>();
-            let removed_count = token
-                .r2_generated_instance_adjustment
-                .checked_neg()
-                .and_then(|count| usize::try_from(count).ok());
-            if theorem_id != T_BI_NU1_THEOREM_ID
-                || certificate_hash.is_empty()
-                || counted_family_ids.len() != token.diagnostic_nu as usize
-                || authoritative_family_token_hashes.len() != token.diagnostic_nu as usize
-                || token_hashes.len() != authoritative_family_token_hashes.len()
-                || removed_count != Some(generated_instance_family_ids_removed_by_quotient.len())
-                || removed_ids.len() != generated_instance_family_ids_removed_by_quotient.len()
-            {
-                errors.push("exact T-BI-NU1 projection is malformed".to_owned());
+            if let Some(evidence) = &token.semantic_family_evidence_v3 {
+                errors.extend(validate_branch_semantic_provenance_v3_token_integrity(
+                    evidence,
+                ));
+                let projected_hashes = evidence
+                    .credited_family_rows
+                    .iter()
+                    .map(|row| row.authoritative_family_row_derivation_hash.as_str())
+                    .collect::<Vec<_>>();
+                if theorem_id != BRANCH_SEMANTIC_PROVENANCE_V3_THEOREM_ID
+                    || certificate_hash != &evidence.derivation_hash
+                    || token.stage != evidence.stage
+                    || token.candidate_hash != evidence.candidate_hash
+                    || token.predecessor_signature_digest != evidence.predecessor_signature_digest
+                    || token.diagnostic_nu != evidence.semantic_nu
+                    || counted_family_ids != &evidence.credited_family_ids
+                    || authoritative_family_token_hashes
+                        .iter()
+                        .map(String::as_str)
+                        .ne(projected_hashes)
+                    || generated_instance_family_ids_removed_by_quotient
+                        != &evidence.r2_premise.r2_removed_occurrence_hashes
+                    || counted_family_ids.len() != token.diagnostic_nu as usize
+                    || token_hashes.len() != authoritative_family_token_hashes.len()
+                    || removed_ids.len() != generated_instance_family_ids_removed_by_quotient.len()
+                    || !evidence.proved
+                    || !evidence.no_history_or_forbidden_input
+                {
+                    errors.push(
+                        "exact source-first semantic-family projection is malformed".to_owned(),
+                    );
+                }
+            } else {
+                let removed_count = token
+                    .r2_generated_instance_adjustment
+                    .checked_neg()
+                    .and_then(|count| usize::try_from(count).ok());
+                if theorem_id != T_BI_NU1_THEOREM_ID
+                    || certificate_hash.is_empty()
+                    || counted_family_ids.len() != token.diagnostic_nu as usize
+                    || authoritative_family_token_hashes.len() != token.diagnostic_nu as usize
+                    || token_hashes.len() != authoritative_family_token_hashes.len()
+                    || removed_count
+                        != Some(generated_instance_family_ids_removed_by_quotient.len())
+                    || removed_ids.len() != generated_instance_family_ids_removed_by_quotient.len()
+                {
+                    errors.push("exact legacy T-BI-NU1 projection is malformed".to_owned());
+                }
             }
         }
         _ => errors.push("branch nu-provenance gap statement drifted".to_owned()),
@@ -269,12 +340,16 @@ pub struct CertifiedStage4BranchSeed {
 pub struct CertifiedStage4BranchCone {
     pub schema: String,
     pub date: String,
-    pub r_t3_option_b_replayed: bool,
-    pub r_t2_certificate_digest: String,
-    pub r_t2_replay_valid: bool,
-    pub naturality_transport_digest: String,
-    pub naturality_transport_replay_valid: bool,
+    pub option_a_execution_capability_digest: String,
+    pub option_a_execution_capability_replay_valid: bool,
+    pub stage4_semantic_v3_result_digest: String,
+    pub semantic_nu_diagnostic_only_at_guarded_stages: bool,
+    pub bar_diagnostic_only_at_guarded_stages: bool,
+    pub f_s4_3_armed: bool,
+    pub guarded_value_selection_used: bool,
     pub minimum_kappa: u16,
+    /// Descriptive minimum only.  Option A authorizes all four roots, so this
+    /// number neither filters the cone nor constrains a seed's own value.
     pub minimum_certified_nu: u32,
     /// The common pre-fork stem, projected from the sealed signature.  No
     /// post-fork enacted entry is exposed to a branch runner.
@@ -334,6 +409,10 @@ pub struct BranchNuProvenanceToken {
     pub diagnostic_nu: u32,
     pub structural_formula_replayed_from_branch_prefix: bool,
     pub historical_score_vector_or_bar_used_as_input: bool,
+    /// Source-first semantic-family evidence.  `Some` is the authoritative
+    /// Option-A v3 path; `None` is retained only so the burned v2 program can
+    /// still deserialize its own in-memory legacy projections.
+    pub semantic_family_evidence_v3: Option<BranchSemanticProvenanceV3Token>,
     pub disposition: BranchNuProvenanceDisposition,
     pub derivation_hash: String,
 }
@@ -597,8 +676,9 @@ fn exact_stage4_prefix(stem: &[(u32, Telescope)], telescope: &Telescope) -> Seal
 /// Rebuild the four branch seeds from the two independently replayed cone
 /// certificates. Sorting makes serialization deterministic; no member is
 /// selected and the order is unavailable to the continuation selector.
-pub fn issue_certified_stage4_branch_cone()
--> Result<CertifiedStage4BranchCone, BranchInvarianceError> {
+#[cfg(any())]
+fn issue_legacy_stage4_branch_cone_v2() -> Result<CertifiedStage4BranchCone, BranchInvarianceError>
+{
     let adjudication = std::str::from_utf8(R_T3_ADJUDICATION_BYTES)
         .map_err(|error| BranchInvarianceError::Prerequisite(error.to_string()))?;
     let r_t3_option_b_replayed = adjudication.contains("Option B adopted")
@@ -746,6 +826,148 @@ pub fn issue_certified_stage4_branch_cone()
     };
     cone.derivation_hash = cone_result_digest(&cone);
     Ok(cone)
+}
+
+/// Project the adopted Option-A execution capability into four continuation
+/// seeds.  Value and the bar are recorded, but neither can filter a guarded
+/// cone or select a root.
+pub fn issue_certified_stage4_branch_cone()
+-> Result<CertifiedStage4BranchCone, BranchInvarianceError> {
+    let grant = issue_replayed_stage4_option_a_execution_v1()
+        .map_err(|error| BranchInvarianceError::Prerequisite(error.to_string()))?;
+    issue_certified_stage4_branch_cone_from_replayed_option_a(&grant)
+}
+
+/// Project a cone from an already independently replayed Option-A grant.
+/// Crate visibility prevents callers from fabricating the private joined
+/// proof object while allowing a four-branch sweep to pay the authority-chain
+/// replay exactly once.
+pub(crate) fn issue_certified_stage4_branch_cone_from_replayed_option_a(
+    grant: &Stage4OptionAReplayedExecutionGrantV1,
+) -> Result<CertifiedStage4BranchCone, BranchInvarianceError> {
+    let capability = grant.capability();
+    let replay = grant.replay();
+    if !replay.valid
+        || !capability.all_four_execution_authorized()
+        || !capability.complete_sweep_required_for_cone_verdict()
+        || !capability.has_no_selector()
+        || !capability.semantic_nu_is_diagnostic_only()
+        || !capability.bar_is_diagnostic_only()
+        || !capability.f_s4_3_armed()
+        || capability.roots().len() != 4
+    {
+        return Err(BranchInvarianceError::Prerequisite(format!(
+            "Stage-4 Option-A execution capability did not replay as an unselected four-root grant: {:?}",
+            replay.errors
+        )));
+    }
+
+    let common_stem = capability
+        .common_stem()
+        .iter()
+        .map(|entry| (entry.stage(), entry.telescope().clone()))
+        .collect::<Vec<_>>();
+    let common_stem_signature_digest = SealedSignature::from_telescopes(common_stem.clone())
+        .digest()
+        .to_owned();
+    if common_stem.iter().map(|(stage, _)| *stage).ne(1..=3)
+        || common_stem_signature_digest != capability.common_stem_signature_digest()
+    {
+        return Err(BranchInvarianceError::Invariant(
+            "Option-A capability did not expose the exact cross-bound Stage-1-through-3 stem"
+                .to_owned(),
+        ));
+    }
+
+    let mut branches = Vec::with_capacity(4);
+    for root in capability.roots() {
+        let mut entries = common_stem.clone();
+        entries.push((4, root.telescope().clone()));
+        if candidate_hash(root.telescope()) != root.candidate_hash()
+            || SealedSignature::from_telescopes(entries).digest() != root.prefix_signature_digest()
+            || root.telescope().kappa() as u16 != root.kappa()
+            || !root.execution_authorized()
+        {
+            return Err(BranchInvarianceError::Invariant(format!(
+                "Option-A root {} failed its exact telescope/prefix/execution join",
+                root.candidate_hash()
+            )));
+        }
+        let mut seed = CertifiedStage4BranchSeed {
+            candidate_hash: root.candidate_hash().to_owned(),
+            telescope: root.telescope().clone(),
+            r_t1_class_id: root.r_t1_class_id().to_owned(),
+            economy_probe_class_key: root.r_t2_economy_geometry_key().to_owned(),
+            prefix_signature_digest: root.prefix_signature_digest().to_owned(),
+            certified_kappa: root.kappa(),
+            certified_nu: root.semantic_nu(),
+            seed_derivation_hash: String::new(),
+        };
+        seed.seed_derivation_hash = seed_digest(&seed);
+        branches.push(seed);
+    }
+    branches.sort_by(|left, right| left.candidate_hash.cmp(&right.candidate_hash));
+    let economy_probe_class_count = branches
+        .iter()
+        .map(|branch| branch.economy_probe_class_key.as_str())
+        .collect::<BTreeSet<_>>()
+        .len();
+    if economy_probe_class_count != 2 {
+        return Err(BranchInvarianceError::Invariant(format!(
+            "Option-A R-T2 economy geometry has {economy_probe_class_count} classes, expected 2"
+        )));
+    }
+    let minimum_kappa = branches
+        .iter()
+        .map(|branch| branch.certified_kappa)
+        .min()
+        .ok_or_else(|| BranchInvarianceError::Invariant("Option-A cone is empty".to_owned()))?;
+    let minimum_certified_nu = branches
+        .iter()
+        .map(|branch| branch.certified_nu)
+        .min()
+        .ok_or_else(|| BranchInvarianceError::Invariant("Option-A cone is empty".to_owned()))?;
+    let mut cone = CertifiedStage4BranchCone {
+        schema: BRANCH_INVARIANCE_CORE_SCHEMA.to_owned(),
+        date: BRANCH_INVARIANCE_CORE_DATE.to_owned(),
+        option_a_execution_capability_digest: capability.derivation_hash().to_owned(),
+        option_a_execution_capability_replay_valid: true,
+        stage4_semantic_v3_result_digest: capability.source_v3_result_digest().to_owned(),
+        semantic_nu_diagnostic_only_at_guarded_stages: true,
+        bar_diagnostic_only_at_guarded_stages: true,
+        f_s4_3_armed: true,
+        guarded_value_selection_used: false,
+        minimum_kappa,
+        minimum_certified_nu,
+        common_stem,
+        common_stem_signature_digest,
+        branch_count: branches.len(),
+        branches,
+        economy_probe_class_count,
+        no_branch_selected: true,
+        ordering_used_only_for_serialization: true,
+        derivation_hash: String::new(),
+    };
+    cone.derivation_hash = cone_result_digest(&cone);
+    Ok(cone)
+}
+
+pub(crate) fn replay_certified_stage4_branch_cone_from_replayed_option_a(
+    grant: &Stage4OptionAReplayedExecutionGrantV1,
+    cone: &CertifiedStage4BranchCone,
+) -> Vec<String> {
+    let mut errors = Vec::new();
+    if cone.derivation_hash != cone_result_digest(cone) {
+        errors.push("Stage-4 branch cone digest mismatch".to_owned());
+    }
+    match issue_certified_stage4_branch_cone_from_replayed_option_a(grant) {
+        Ok(expected) if &expected == cone => {}
+        Ok(_) => errors.push(
+            "Stage-4 branch cone differs from replayed-grant deterministic projection".to_owned(),
+        ),
+        Err(error) => errors.push(error.to_string()),
+    }
+    errors
 }
 
 pub fn replay_certified_stage4_branch_cone(cone: &CertifiedStage4BranchCone) -> Vec<String> {
@@ -1188,37 +1410,46 @@ fn assess_candidate(
             Err(error) => (false, Some(error.to_string()), String::new()),
         };
     let structural_formula_total = structural_nu(candidate, library, history).total;
-    // Exact act-local provenance is an admissibility premise, not a score.
-    // It is issued for every typed, non-internal candidate before the
-    // discharger census. Stage 8 still delays the typed MapCube/R2 action
-    // replay until the census is a singleton; only its intrinsic T-BI-NU1
-    // projection is available here.
-    let (exact_package, provenance_issuance_error) = if kernel_typed && !identified_with_prefix {
-        match issue_act_local_provenance(signature, stage, candidate) {
-            Ok(package) => (Some(package), None),
+    // Exact source-first semantic evidence is a meaning/provenance premise,
+    // never a value selector. Stage 8 still delays the operational typed
+    // MapCube action replay until the discharger census is a singleton.
+    let predecessor_entries = signature
+        .entries()
+        .iter()
+        .map(|entry| (entry.step, entry.telescope.clone()))
+        .collect::<Vec<_>>();
+    let (semantic_evidence, provenance_issuance_error) = if kernel_typed && !identified_with_prefix
+    {
+        match issue_branch_semantic_provenance_v3(&predecessor_entries, stage, candidate) {
+            Ok(evidence) => (Some(evidence), None),
             Err(error) => (None, Some(error.to_string())),
         }
     } else {
         (None, None)
     };
-    let r2_generated_instance_adjustment = exact_package
+    let r2_generated_instance_adjustment = semantic_evidence
         .as_ref()
-        .map_or(0, |package| package.generated_instance_adjustment);
+        .and_then(|evidence| {
+            i32::try_from(evidence.r2_premise.r2_generated_instance_removed_count)
+                .ok()
+                .map(|count| -count)
+        })
+        .unwrap_or(0);
     let semantic_nu = if identified_with_prefix {
         0
     } else {
-        exact_package
+        semantic_evidence
             .as_ref()
-            .map_or(structural_formula_total, |package| {
-                package.exact_certified_nu
-            })
+            .map_or(structural_formula_total, |evidence| evidence.semantic_nu)
     };
     let local_role_capacity = 4 * u32::from(kappa);
     let diagnostic_formula_replayed_and_capacity_bound_satisfied = kernel_typed
         && !identified_with_prefix
         && semantic_nu <= local_role_capacity.saturating_add(demand_capacity);
-    let nu_provenance = match (&exact_package, &provenance_issuance_error) {
-        (Some(package), _) => exact_nu_provenance_token(package),
+    let nu_provenance = match (semantic_evidence.clone(), &provenance_issuance_error) {
+        (Some(evidence), _) => {
+            semantic_family_nu_provenance_token(evidence, structural_formula_total)
+        }
         (None, Some(error)) => act_local_provenance_gap_token(
             stage,
             candidate_digest.clone(),
@@ -1234,10 +1465,16 @@ fn assess_candidate(
             r2_generated_instance_adjustment,
         ),
     };
-    let ordinary_family_token_hashes = exact_package.as_ref().map_or_else(
-        Vec::new,
-        ActLocalNuProvenanceCertificate::authoritative_token_hashes,
-    );
+    let ordinary_family_token_hashes =
+        semantic_evidence
+            .as_ref()
+            .map_or_else(Vec::new, |evidence| {
+                evidence
+                    .credited_family_rows
+                    .iter()
+                    .map(|row| row.authoritative_family_row_derivation_hash.clone())
+                    .collect()
+            });
     // The realization preserves this already-certified ordinary charge and
     // mints no family credit.
     let charge = future_v2::issue_filler_ordinary_charge_provenance_v2(
@@ -1526,27 +1763,65 @@ fn apply_postselection_r2(
         .map_err(|error| error.to_string())?;
     let generated_actions =
         prove_candidate_generated_actions(stage, &assessment.telescope, library, &elaboration)?;
-    let exact_package = issue_act_local_provenance(signature, stage, &assessment.telescope)
-        .map_err(|error| format!("T-BI-NU1 Stage-{stage} postselection replay: {error}"))?;
-    if exact_package.structural_formula_total != assessment.structural_formula_total
-        || exact_package.generated_instance_adjustment != -(generated_actions.len() as i32)
-        || exact_package.generated_instance_removals.len() != generated_actions.len()
+    let evidence = assessment
+        .nu_provenance
+        .semantic_family_evidence_v3
+        .as_ref()
+        .ok_or_else(|| {
+            format!(
+                "BI_R2_POSTSELECTION_REPLAY_GAP: Stage-{stage} winner has no source-first semantic evidence"
+            )
+        })?;
+    let predecessor_entries = signature
+        .entries()
+        .iter()
+        .map(|entry| (entry.step, entry.telescope.clone()))
+        .collect::<Vec<_>>();
+    let semantic_replay = replay_branch_semantic_provenance_v3(
+        &predecessor_entries,
+        stage,
+        &assessment.telescope,
+        evidence,
+    );
+    let r2 = &evidence.r2_premise;
+    if !semantic_replay.is_empty()
+        || !r2.proved
+        || r2.r2_generated_instance_removed_count != generated_actions.len()
+        || r2.r2_removed_occurrence_hashes.len() != generated_actions.len()
+        || r2.r2_step8_typed_signature_derivation_hash.is_none()
+        || r2.r2_m1_generated_membership_derivation_hash.is_none()
+        || !r2.r2_m1_generated_membership_replayed
+        || !r2.r2_parent_membership_replayed
+        || !r2.r2_removed_occurrences_absent_from_unified_membership
+        || !r2.r2_removed_occurrences_not_exported_as_families
+        || !r2.r2_generated_instance_not_multiplied
     {
         return Err(format!(
-            "T-BI-NU1 Stage-{stage} quotient projection does not join the typed R2 action census"
+            "BI_R2_POSTSELECTION_REPLAY_GAP: Stage-{stage} prefix-local R2 projection does not join the typed action census: {semantic_replay:?}"
         ));
     }
     assessment.r2_applied_after_unique_discharge = true;
-    assessment.r2_generated_instance_adjustment = exact_package.generated_instance_adjustment;
+    assessment.r2_generated_instance_adjustment =
+        -i32::try_from(generated_actions.len()).map_err(|_| "R2 action count exceeds i32")?;
     assessment.r2_generated_action_evidence = generated_actions;
-    assessment.semantic_nu = exact_package.exact_certified_nu;
     assessment.diagnostic_formula_replayed_and_capacity_bound_satisfied = assessment.kernel_typed
         && !assessment.identified_with_prefix
         && assessment.semantic_nu
             <= assessment
                 .local_role_capacity
                 .saturating_add(demand_capacity);
-    assessment.nu_provenance = exact_nu_provenance_token(&exact_package);
+    if assessment.nu_provenance.r2_generated_instance_adjustment
+        != assessment.r2_generated_instance_adjustment
+    {
+        return Err(format!(
+            "BI_R2_POSTSELECTION_REPLAY_GAP: Stage-{stage} semantic token removal count drifted"
+        ));
+    }
+    let ordinary_family_token_hashes = evidence
+        .credited_family_rows
+        .iter()
+        .map(|row| row.authoritative_family_row_derivation_hash.clone())
+        .collect::<Vec<_>>();
     let charge = future_v2::issue_filler_ordinary_charge_provenance_v2(
         stage,
         &assessment.telescope,
@@ -1554,7 +1829,7 @@ fn apply_postselection_r2(
         assessment.semantic_nu,
         assessment.telescope.bit_cost(),
         assessment.nu_provenance.derivation_hash.clone(),
-        exact_package.authoritative_token_hashes(),
+        ordinary_family_token_hashes,
     );
     assessment.ordinary_charge_provenance_hash = charge.provenance_hash.clone();
     assessment.structural_discharge_evidence =
@@ -1603,46 +1878,43 @@ fn common_prefix(
 ) -> Result<(Vec<(u32, Telescope)>, Vec<BranchLedgerRow>), BranchInvarianceError> {
     let mut telescopes = cone.common_stem.clone();
     telescopes.push((4, seed.telescope.clone()));
-    // Re-derive the shared stem from its actual telescopes. No historical
-    // score vector is accepted as input. Stage 4 is then checked against the
-    // independent R-T1 transport value, but that value does not create the
-    // formula output.
+    // Re-derive every semantic-family package from the actual candidate and
+    // exact predecessor prefix.  The structural scalar remains diagnostic.
     let mut library: Library = Vec::new();
     let mut history = Vec::<(u32, u32)>::new();
     let mut prior = Vec::<(u32, Telescope)>::new();
     let mut ledger = Vec::new();
-    let exact_packages = issue_act_local_sequence(&telescopes).map_err(|error| {
-        BranchInvarianceError::Invariant(format!("T-BI-NU1 shared-prefix issuance failed: {error}"))
-    })?;
-    for ((stage, telescope), exact_package) in telescopes.iter().zip(&exact_packages) {
+    for (stage, telescope) in &telescopes {
         let formula = structural_nu(telescope, &library, &history).total;
-        if *stage == 4 && formula != seed.certified_nu {
+        let evidence =
+            issue_branch_semantic_provenance_v3(&prior, *stage, telescope).map_err(|error| {
+                BranchInvarianceError::Invariant(format!(
+                    "source-first semantic shared-prefix issuance failed at Stage {stage}: {error}"
+                ))
+            })?;
+        if *stage == 4 && evidence.semantic_nu != seed.certified_nu {
             return Err(BranchInvarianceError::Invariant(format!(
-                "branch-local Stage-4 structural formula {formula} differs from independent R-T1 value {}",
-                seed.certified_nu
+                "branch-local Stage-4 semantic nu {} differs from its cross-bound root value {}",
+                evidence.semantic_nu, seed.certified_nu
             )));
         }
         let digest = candidate_hash(telescope);
-        if exact_package.stage != *stage
-            || exact_package.candidate_hash != digest
-            || exact_package.structural_formula_total != formula
-            || exact_package.generated_instance_adjustment != 0
-            || exact_package.exact_certified_nu != formula
-        {
+        if evidence.stage != *stage || evidence.candidate_hash != digest || !evidence.proved {
             return Err(BranchInvarianceError::Invariant(format!(
-                "T-BI-NU1 shared-prefix projection drifted at Stage {stage}"
+                "source-first semantic shared-prefix projection drifted at Stage {stage}"
             )));
         }
-        let token = exact_nu_provenance_token(exact_package);
+        let semantic_nu = evidence.semantic_nu;
+        let token = semantic_family_nu_provenance_token(evidence, formula);
         ledger.push(BranchLedgerRow {
             stage: *stage,
             candidate_hash: digest,
             kappa: telescope.kappa() as u16,
-            semantic_nu: formula,
+            semantic_nu,
             nu_provenance: token,
         });
         library.push(LibraryEntry::from_telescope(telescope, &library));
-        history.push((*stage, formula));
+        history.push((*stage, semantic_nu));
         prior.push((*stage, telescope.clone()));
     }
     Ok((telescopes, ledger))
@@ -1724,9 +1996,11 @@ pub fn execute_branch_continuation(
 ) -> Result<BranchContinuation, BranchInvarianceError> {
     if cone.derivation_hash != cone_result_digest(cone)
         || cone.schema != BRANCH_INVARIANCE_CORE_SCHEMA
-        || !cone.r_t3_option_b_replayed
-        || !cone.r_t2_replay_valid
-        || !cone.naturality_transport_replay_valid
+        || !cone.option_a_execution_capability_replay_valid
+        || !cone.semantic_nu_diagnostic_only_at_guarded_stages
+        || !cone.bar_diagnostic_only_at_guarded_stages
+        || !cone.f_s4_3_armed
+        || cone.guarded_value_selection_used
         || !cone.no_branch_selected
         || cone.branch_count != 4
         || cone.branches.len() != 4
@@ -1758,7 +2032,7 @@ pub fn execute_branch_continuation(
     if branch.seed_derivation_hash != seed_digest(&branch)
         || candidate_hash(&branch.telescope) != branch.candidate_hash
         || branch.certified_kappa != cone.minimum_kappa
-        || branch.certified_nu != cone.minimum_certified_nu
+        || !matches!(branch.certified_nu, 2 | 3)
     {
         return Err(BranchInvarianceError::Prerequisite(
             "selected branch seed failed its cone join".to_owned(),
@@ -2127,7 +2401,14 @@ mod tests {
         assert_eq!(cone.economy_probe_class_count, 2);
         assert!(cone.no_branch_selected);
         assert_eq!(cone.minimum_kappa, 3);
-        assert_eq!(cone.minimum_certified_nu, 5);
+        assert_eq!(cone.minimum_certified_nu, 2);
+        assert_eq!(
+            cone.branches
+                .iter()
+                .map(|branch| branch.certified_nu)
+                .collect::<Vec<_>>(),
+            vec![3, 2, 2, 3]
+        );
     }
 
     #[test]
@@ -2160,7 +2441,7 @@ mod tests {
                     .iter()
                     .map(|row| row.semantic_nu)
                     .collect::<Vec<_>>(),
-                vec![1, 1, 2, 5]
+                vec![1, 0, 1, branch.certified_nu]
             );
             assert!(result.complete_ledger.iter().all(|row| {
                 row.nu_provenance.is_exact_certified()
@@ -2228,7 +2509,7 @@ mod tests {
             BranchNuProvenanceDisposition::DiagnosticFormulaOnly {
                 missing_theorem_id,
                 exact_gap,
-            } if missing_theorem_id == T_BI_NU1_THEOREM_ID
+            } if missing_theorem_id == BRANCH_SEMANTIC_PROVENANCE_V3_THEOREM_ID
                 && exact_gap
                     == &format!("{BRANCH_ACT_LOCAL_PROVENANCE_ISSUANCE_GAP_PREFIX}{exact_error}")
         ));

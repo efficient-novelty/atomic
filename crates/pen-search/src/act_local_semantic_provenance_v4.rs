@@ -10,7 +10,9 @@
 
 use crate::act_local_provenance_v3::{
     ACT_LOCAL_PROVENANCE_V3_SCHEMA, ActLocalProvenanceV3Certificate, ActLocalV3NaturalFamilyRow,
-    ActLocalV3RoleOccurrence, issue_act_local_provenance_v3, issue_act_local_sequence_v3,
+    ActLocalV3PrefixDeclaration, ActLocalV3RoleOccurrence, ActLocalV3TypedR2RuleToken,
+    issue_act_local_provenance_v3, issue_act_local_sequence_v3,
+    replay_act_local_prefix_declaration_v3, replay_act_local_v3_typed_r2_rule_token,
 };
 use pen_core::clause::ClauseRole;
 use pen_core::expr::Expr;
@@ -31,7 +33,11 @@ use pen_schema::e3_normalization::{
     issue_ordinary_schema_normalization, replay_ordinary_schema_normalization,
 };
 use pen_schema::e4_generator_basis::{
-    M1GeneratedSubject, issue_step8_cell_action_m1_generated, replay_m1_generated_membership,
+    M1GeneratedSubject, issue_step8_cell_action_m1_generated,
+    issue_step8_cell_action_prefix_general_m1_generated_v2,
+    issue_step8_cell_action_prefix_local_m1_generated, replay_m1_generated_membership,
+    replay_step8_cell_action_prefix_general_m1_generated_v2,
+    replay_step8_cell_action_prefix_local_m1_generated,
 };
 use pen_schema::e34_class_induction::{
     issue_dependent_cubical_action_induction, issue_ordinary_constructor_naturality,
@@ -45,7 +51,10 @@ use pen_schema::grammar::{
 };
 use pen_schema::ordinary::{issue_ordinary_typed_realizer, replay_ordinary_typed_realizer};
 use pen_schema::step8_r2::{
-    issue_step8_r2_typed_signatures_token, replay_step8_r2_typed_signatures_token,
+    issue_step8_r2_prefix_general_typed_signatures_token_v2,
+    issue_step8_r2_prefix_local_typed_signatures_token, issue_step8_r2_typed_signatures_token,
+    replay_step8_r2_prefix_general_typed_signatures_token_v2,
+    replay_step8_r2_prefix_local_typed_signatures_token, replay_step8_r2_typed_signatures_token,
 };
 use pen_type::cubical::{
     CubicalContext, CubicalTerm, PathRealizationToken, beta_realizer_term,
@@ -64,9 +73,16 @@ pub const ACT_LOCAL_SEMANTIC_PROVENANCE_V4_DATE: &str = "2026-07-22";
 pub const T_BI_NU1_V4_THEOREM_ID: &str =
     "T-BI-NU1-v4-total-proof-bearing-semantic-family-extraction";
 pub const V4_PREFIX_LOCAL_SOURCE_SURFACE_SCHEMA: &str =
-    "act-local-semantic-prefix-local-source-surface-v1";
+    "act-local-semantic-prefix-local-source-surface-v2";
 pub const V4_PREFIX_LOCAL_SOURCE_SURFACE_THEOREM_ID: &str =
-    "T-BI-B1-v4-prefix-local-pre-anchor-source-surface-v1";
+    "T-BI-B1-v4-prefix-local-pre-anchor-source-surface-v2";
+pub const V4_PREFIX_GENERAL_SOURCE_SURFACE_SCHEMA: &str =
+    "act-local-semantic-prefix-general-source-surface-v3";
+pub const V4_PREFIX_GENERAL_SOURCE_SURFACE_THEOREM_ID: &str =
+    "T-B1b-prefix-general-pre-anchor-source-surface-v1";
+pub const V4_PREFIX_LOCAL_TYPED_R1_RULE_SCHEMA: &str = "act-local-v4-prefix-local-typed-r1-rule-v1";
+pub const V4_PREFIX_LOCAL_TYPED_R1_RULE_THEOREM_ID: &str =
+    "R1-formation-completion-package-at-typed-candidate-v1";
 pub const ROLE_TERM_REGISTRY_V1: &str = "t-bi-nu1-v4-finite-role-term-registry-exhaustiveness";
 pub const UNIFIED_TERM_REGISTRY_V2: &str =
     "t-bi-nu1-v4-core-ordinary-cubical-a3-unified-registry-v2";
@@ -131,6 +147,41 @@ fn value<T: Serialize + ?Sized>(input: &T) -> Value {
 
 fn value_hash(domain: &str, input: &Value) -> String {
     tagged_hash(domain, input)
+}
+
+fn prefix_local_typed_r1_rule_hash(token: &V4PrefixLocalTypedR1RuleToken) -> String {
+    let mut projection = token.clone();
+    projection.derivation_hash.clear();
+    prefix_local_source_tagged_hash("typed-r1-rule-authority", &projection)
+}
+
+pub fn issue_v4_prefix_local_typed_r1_rule_token() -> V4PrefixLocalTypedR1RuleToken {
+    let mut token = V4PrefixLocalTypedR1RuleToken {
+        schema: V4_PREFIX_LOCAL_TYPED_R1_RULE_SCHEMA.to_owned(),
+        theorem_id: V4_PREFIX_LOCAL_TYPED_R1_RULE_THEOREM_ID.to_owned(),
+        carrier_must_be_kernel_formation_type: true,
+        completion_must_be_kernel_formation_type: true,
+        completion_must_be_exact_app_univ_carrier: true,
+        dependency_must_resolve_to_same_candidate_carrier: true,
+        conclusion: "a typed formation and its exact App(Univ, carrier) completion in the same candidate constitute one formation-completion package family".to_owned(),
+        derivation_hash: String::new(),
+    };
+    token.derivation_hash = prefix_local_typed_r1_rule_hash(&token);
+    token
+}
+
+pub fn replay_v4_prefix_local_typed_r1_rule_token(
+    claimed: &V4PrefixLocalTypedR1RuleToken,
+) -> Vec<String> {
+    let mut errors = Vec::new();
+    if claimed.derivation_hash != prefix_local_typed_r1_rule_hash(claimed) {
+        errors.push("v4 prefix-local typed R1 rule token digest mismatch".to_owned());
+    }
+    if *claimed != issue_v4_prefix_local_typed_r1_rule_token() {
+        errors
+            .push("v4 prefix-local typed R1 rule token differs from closed reissuance".to_owned());
+    }
+    errors
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -316,6 +367,51 @@ pub struct V4GenericR1Proof {
     pub no_separate_carrier_role_declaration: bool,
     pub archive_or_count_input_used: bool,
     pub proved: bool,
+    pub derivation_hash: String,
+}
+
+/// Closed, source-first authority for the structural R1 package rule.  The
+/// token deliberately says only what the rule proves: a typed formation and
+/// its exact `App(Univ, carrier)` completion form one package family.  It has
+/// no authority to decide marginality, credit, a historical count, or any
+/// membership verdict.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct V4PrefixLocalTypedR1RuleToken {
+    pub schema: String,
+    pub theorem_id: String,
+    pub carrier_must_be_kernel_formation_type: bool,
+    pub completion_must_be_kernel_formation_type: bool,
+    pub completion_must_be_exact_app_univ_carrier: bool,
+    pub dependency_must_resolve_to_same_candidate_carrier: bool,
+    pub conclusion: String,
+    pub derivation_hash: String,
+}
+
+impl V4PrefixLocalTypedR1RuleToken {
+    pub fn authority_hash(&self) -> &str {
+        &self.derivation_hash
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct V4PrefixLocalGenericR1Proof {
+    pub theorem_id: String,
+    pub rule_authority_hash: String,
+    pub package_application_hash: String,
+    pub candidate_hash: String,
+    pub predecessor_signature_digest: String,
+    pub carrier_clause: u16,
+    pub completion_clause: u16,
+    pub carrier_typing_hash: String,
+    pub completion_typing_hash: String,
+    pub completion_dependency_level: u32,
+    pub carrier_is_kernel_formation_type: bool,
+    pub completion_is_kernel_formation_type: bool,
+    pub completion_is_exact_app_univ_carrier: bool,
+    pub dependency_resolves_to_carrier: bool,
+    pub one_typed_formation_completion_package_proved: bool,
     pub derivation_hash: String,
 }
 
@@ -524,7 +620,8 @@ pub struct V4PrefixLocalR1R2Premises {
     pub stage: u32,
     pub candidate_hash: String,
     pub predecessor_signature_digest: String,
-    pub generic_r1: Option<V4GenericR1Proof>,
+    pub r1_rule_authority_hash: String,
+    pub generic_r1: Option<V4PrefixLocalGenericR1Proof>,
     pub generic_r1_typed_package_premises_replayed: bool,
     pub r2_generated_instance_removed_count: usize,
     pub r2_removed_occurrence_hashes: Vec<String>,
@@ -557,9 +654,13 @@ pub struct V4PrefixLocalSourceSurface {
     pub kappa: u32,
     pub candidate_elaboration_hash: String,
     pub candidate_family_extraction_hash: String,
-    pub frozen_v3_schema: String,
-    pub frozen_v3_package_hash: String,
-    pub v3_package_replayed: bool,
+    pub v3_declaration_schema: String,
+    pub v3_declaration_surface_hash: String,
+    pub v3_declaration_replayed: bool,
+    pub v3_r2_rule_authority_hash: String,
+    pub v3_predecessor_projection_hashes: Vec<String>,
+    pub v3_predecessor_surface_digest: String,
+    pub r1_rule_authority: V4PrefixLocalTypedR1RuleToken,
     pub exact_a3: V4ExactA3Inventory,
     pub ordinary_registry: V4OrdinaryRegistryAudit,
     pub path_quotient: Option<V4PathQuotientProof>,
@@ -819,6 +920,41 @@ fn generator_clause(family: &ExtractedFamily) -> Option<u16> {
     family.instances.iter().find_map(|instance| {
         matches!(&instance.kind, InstanceKind::Generator).then_some(instance.clause_index)
     })
+}
+
+fn build_unified_families(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    elaboration: &pen_type::elaborate::TelescopeElaboration,
+    extraction: &pen_eval::typed_families::CandidateFamilyExtraction,
+    v3: &ActLocalProvenanceV3Certificate,
+) -> Result<UnifiedBuild, ActLocalSemanticProvenanceV4Error> {
+    let surface = V3BuildSurface::historical(v3);
+    let ordinary_registry = ordinary_registry_audit_v4(stage, candidate)?;
+    let generic_r1 = if historical_generic_r1_requested(&surface) {
+        Some(
+            prove_generic_r1(prefix, candidate, elaboration, v3)?.ok_or_else(|| {
+                ActLocalSemanticProvenanceV4Error::Family(
+                    "foundation-completion declaration has no generic R1 package".to_owned(),
+                )
+            })?,
+        )
+    } else {
+        None
+    };
+    let r2_m1 = replay_exact_r2_m1_membership(prefix, stage, candidate, v3)?;
+    build_unified_families_from_surface(
+        prefix,
+        stage,
+        candidate,
+        elaboration,
+        extraction,
+        &surface,
+        ordinary_registry,
+        generic_r1,
+        r2_m1,
+    )
 }
 
 fn mechanism_for_clause_role(role: ClauseRole) -> (CreditMechanism, LocalRole) {
@@ -1092,6 +1228,131 @@ fn prove_generic_r1(
     Ok(Some(proof))
 }
 
+fn prove_generic_r1_prefix_local(
+    prefix: &SealedSignature,
+    candidate: &Telescope,
+    elaboration: &pen_type::elaborate::TelescopeElaboration,
+    v3: &V3BuildSurface,
+    rule: &V4PrefixLocalTypedR1RuleToken,
+) -> Result<Option<V4GenericR1Proof>, ActLocalSemanticProvenanceV4Error> {
+    if !replay_v4_prefix_local_typed_r1_rule_token(rule).is_empty() {
+        return Err(ActLocalSemanticProvenanceV4Error::Input(
+            "prefix-local generic R1 requires the closed typed rule token".to_owned(),
+        ));
+    }
+    let mut match_pair = None;
+    for (completion_index, clause) in candidate.clauses.iter().enumerate() {
+        let Expr::App(function, argument) = &clause.expr else {
+            continue;
+        };
+        if function.as_ref() != &Expr::Univ {
+            continue;
+        }
+        let Expr::Var(level) = argument.as_ref() else {
+            continue;
+        };
+        let ambient = elaboration.ambient_parameters;
+        let priors = completion_index as u32;
+        if *level <= ambient || *level > ambient + priors {
+            continue;
+        }
+        let carrier_index = (*level - ambient - 1) as usize;
+        let Some(carrier) = elaboration.clauses.get(carrier_index) else {
+            continue;
+        };
+        let Some(completion) = elaboration.clauses.get(completion_index) else {
+            continue;
+        };
+        if carrier.kernel_ty == KernelTy::Type
+            && carrier.kernel_role == ClauseRole::Formation
+            && completion.kernel_ty == KernelTy::Type
+            && completion.kernel_role == ClauseRole::Formation
+        {
+            if match_pair
+                .replace((carrier_index, completion_index, *level))
+                .is_some()
+            {
+                return Err(ActLocalSemanticProvenanceV4Error::Family(
+                    "prefix-local generic R1 found multiple formation/completion packages"
+                        .to_owned(),
+                ));
+            }
+        }
+    }
+    let Some((carrier_index, completion_index, dependency_level)) = match_pair else {
+        return Ok(None);
+    };
+    let carrier_clause = u16::try_from(carrier_index).map_err(|_| {
+        ActLocalSemanticProvenanceV4Error::Family("R1 carrier index exceeds u16".to_owned())
+    })?;
+    let completion_clause = u16::try_from(completion_index).map_err(|_| {
+        ActLocalSemanticProvenanceV4Error::Family("R1 completion index exceeds u16".to_owned())
+    })?;
+    let carrier_owned_role_declarations = v3
+        .natural_family_rows
+        .iter()
+        .filter(|row| row.representative_role.owner_clause == carrier_clause)
+        .map(|row| row.semantic_family_id.clone())
+        .collect::<Vec<_>>();
+    let dependency_resolves_to_carrier =
+        dependency_level == elaboration.ambient_parameters + u32::from(carrier_clause) + 1;
+    let carrier_is_kernel_formation_type = elaboration.clauses[carrier_index].kernel_ty
+        == KernelTy::Type
+        && elaboration.clauses[carrier_index].kernel_role == ClauseRole::Formation;
+    let completion_is_kernel_formation_type = elaboration.clauses[completion_index].kernel_ty
+        == KernelTy::Type
+        && elaboration.clauses[completion_index].kernel_role == ClauseRole::Formation;
+    let completion_is_exact_app_univ_carrier = matches!(
+        &candidate.clauses[completion_index].expr,
+        Expr::App(function, argument)
+            if function.as_ref() == &Expr::Univ
+                && matches!(argument.as_ref(), Expr::Var(level) if *level == dependency_level)
+    );
+    let completed_action_covers_carrier_by_adopted_r1 = rule.carrier_must_be_kernel_formation_type
+        && rule.completion_must_be_kernel_formation_type
+        && rule.completion_must_be_exact_app_univ_carrier
+        && rule.dependency_must_resolve_to_same_candidate_carrier
+        && carrier_is_kernel_formation_type
+        && completion_is_kernel_formation_type
+        && completion_is_exact_app_univ_carrier
+        && dependency_resolves_to_carrier;
+    let mut proof = V4GenericR1Proof {
+        theorem_id: rule.theorem_id.clone(),
+        adoption_source_hash: rule.derivation_hash.clone(),
+        adopted_package_clause_replayed: true,
+        candidate_hash: candidate_hash(candidate),
+        prefix_signature_digest: prefix.digest().to_owned(),
+        carrier_clause,
+        completion_clause,
+        carrier_term: value(&candidate.clauses[carrier_index].expr),
+        completion_term: value(&candidate.clauses[completion_index].expr),
+        carrier_typing: value(&elaboration.clauses[carrier_index]),
+        completion_typing: value(&elaboration.clauses[completion_index]),
+        completion_dependency_level: dependency_level,
+        carrier_is_kernel_formation_type,
+        completion_is_kernel_formation_type,
+        completion_is_exact_app_univ_carrier,
+        dependency_resolves_to_carrier,
+        completed_action_covers_carrier_by_adopted_r1,
+        all_four_carrier_exception_roles_enumerated: false,
+        local_role_case_proofs: Vec::new(),
+        every_carrier_role_decided_term_locally: false,
+        carrier_exception_decided_without_v3_absence: false,
+        carrier_role_surface_gap: "PREFIX_LOCAL_R1_RULE_DOES_NOT_DECIDE_ROLE_MARGINALITY_OR_CREDIT"
+            .to_owned(),
+        no_separate_carrier_role_declaration: carrier_owned_role_declarations.is_empty(),
+        carrier_owned_role_declarations,
+        archive_or_count_input_used: false,
+        proved: completed_action_covers_carrier_by_adopted_r1,
+        derivation_hash: String::new(),
+    };
+    let mut projection = proof.clone();
+    projection.derivation_hash.clear();
+    proof.derivation_hash =
+        prefix_local_source_tagged_hash("typed-r1-package-application", &projection);
+    Ok(Some(proof))
+}
+
 fn exact_a3_inventory(
     prefix: &SealedSignature,
     stage: u32,
@@ -1268,13 +1529,10 @@ fn is_exact_hit_formation(expr: &Expr) -> bool {
         || matches!(expr, Expr::Trunc(inner) if matches!(inner.as_ref(), Expr::Var(_)))
 }
 
-fn ordinary_specs_v4(
+fn ordinary_specs_v4_for_supported_shape(
     stage: u32,
     candidate: &Telescope,
 ) -> Result<Vec<OrdinarySpecV4>, ActLocalSemanticProvenanceV4Error> {
-    if !(5..=8).contains(&stage) {
-        return Ok(Vec::new());
-    }
     let path_clauses = candidate
         .clauses
         .iter()
@@ -1436,13 +1694,52 @@ fn ordinary_specs_v4(
     Ok(specs)
 }
 
-fn ordinary_registry_audit_v4(
+fn ordinary_specs_v4_historical(
     stage: u32,
     candidate: &Telescope,
+) -> Result<Vec<OrdinarySpecV4>, ActLocalSemanticProvenanceV4Error> {
+    if !(5..=8).contains(&stage) {
+        return Ok(Vec::new());
+    }
+    ordinary_specs_v4_for_supported_shape(stage, candidate)
+}
+
+/// Recognize the ordinary HIT schema solely from the supplied candidate's
+/// typed constructor shape.  A candidate outside this closed shape has no
+/// applicable ordinary schemas; stage numbers are not a classifier.
+fn ordinary_specs_v4_prefix_local(
+    stage: u32,
+    candidate: &Telescope,
+) -> Result<Vec<OrdinarySpecV4>, ActLocalSemanticProvenanceV4Error> {
+    let path_indices = candidate
+        .clauses
+        .iter()
+        .enumerate()
+        .filter_map(|(index, clause)| matches!(clause.expr, Expr::PathCon(1..=3)).then_some(index))
+        .collect::<Vec<_>>();
+    if path_indices.len() != 1 {
+        return Ok(Vec::new());
+    }
+    let path_index = path_indices[0];
+    let formation_indices = candidate
+        .clauses
+        .iter()
+        .enumerate()
+        .filter_map(|(index, clause)| is_exact_hit_formation(&clause.expr).then_some(index))
+        .collect::<Vec<_>>();
+    if formation_indices.len() != 1 || formation_indices[0] >= path_index {
+        return Ok(Vec::new());
+    }
+    ordinary_specs_v4_for_supported_shape(stage, candidate)
+}
+
+fn ordinary_registry_audit_v4_with_specs(
+    stage: u32,
+    candidate: &Telescope,
+    specs: Vec<OrdinarySpecV4>,
 ) -> Result<V4OrdinaryRegistryAudit, ActLocalSemanticProvenanceV4Error> {
     let context = ordinary_context_v4()?;
     let substitution = ordinary_substitution_v4(&context)?;
-    let specs = ordinary_specs_v4(stage, candidate)?;
     let registry_digest = ordinary_constructor_registry_digest();
     let registry_replayed = replay_ordinary_constructor_registry(&registry_digest);
     let mut constructor_queries = Vec::new();
@@ -1594,6 +1891,28 @@ fn ordinary_registry_audit_v4(
     };
     audit.derivation_hash = tagged_hash("ordinary-registry-audit", &audit);
     Ok(audit)
+}
+
+fn ordinary_registry_audit_v4(
+    stage: u32,
+    candidate: &Telescope,
+) -> Result<V4OrdinaryRegistryAudit, ActLocalSemanticProvenanceV4Error> {
+    ordinary_registry_audit_v4_with_specs(
+        stage,
+        candidate,
+        ordinary_specs_v4_historical(stage, candidate)?,
+    )
+}
+
+fn ordinary_registry_audit_v4_prefix_local(
+    stage: u32,
+    candidate: &Telescope,
+) -> Result<V4OrdinaryRegistryAudit, ActLocalSemanticProvenanceV4Error> {
+    ordinary_registry_audit_v4_with_specs(
+        stage,
+        candidate,
+        ordinary_specs_v4_prefix_local(stage, candidate)?,
+    )
 }
 
 #[derive(Clone)]
@@ -1872,6 +2191,89 @@ struct UnifiedBuild {
     r2_parent_membership_replayed: bool,
 }
 
+#[derive(Clone)]
+struct V3BuildFamilyRow {
+    semantic_family_id: String,
+    representative_role: ActLocalV3RoleOccurrence,
+    removed_by_r2: bool,
+}
+
+#[derive(Clone)]
+struct V3BuildGap {
+    kind: String,
+    family_id: Option<String>,
+}
+
+#[derive(Clone)]
+struct V3BuildSurface {
+    role_occurrences_before_quotient: Vec<ActLocalV3RoleOccurrence>,
+    natural_family_rows: Vec<V3BuildFamilyRow>,
+    theorem_gaps: Vec<V3BuildGap>,
+}
+
+impl V3BuildSurface {
+    fn historical(v3: &ActLocalProvenanceV3Certificate) -> Self {
+        Self {
+            role_occurrences_before_quotient: v3.role_occurrences_before_quotient.clone(),
+            natural_family_rows: v3
+                .natural_family_rows
+                .iter()
+                .map(|row| V3BuildFamilyRow {
+                    semantic_family_id: row.semantic_family_id.clone(),
+                    representative_role: row.representative_role.clone(),
+                    removed_by_r2: row.removed_by_r2,
+                })
+                .collect(),
+            theorem_gaps: v3
+                .theorem_gaps
+                .iter()
+                .map(|gap| V3BuildGap {
+                    kind: gap.kind.clone(),
+                    family_id: gap.family_id.clone(),
+                })
+                .collect(),
+        }
+    }
+
+    fn prefix_local(v3: &ActLocalV3PrefixDeclaration) -> Self {
+        Self {
+            role_occurrences_before_quotient: v3.role_occurrences_before_quotient.clone(),
+            natural_family_rows: v3
+                .natural_family_rows
+                .iter()
+                .map(|row| V3BuildFamilyRow {
+                    semantic_family_id: row.semantic_family_id.clone(),
+                    representative_role: row.representative_role.clone(),
+                    removed_by_r2: row.removed_by_r2,
+                })
+                .collect(),
+            theorem_gaps: v3
+                .theorem_gaps
+                .iter()
+                .map(|gap| V3BuildGap {
+                    kind: gap.kind.clone(),
+                    family_id: gap.family_id.clone(),
+                })
+                .collect(),
+        }
+    }
+}
+
+fn historical_generic_r1_requested(v3: &V3BuildSurface) -> bool {
+    v3.theorem_gaps.iter().any(|gap| {
+        gap.kind == "ROLE_SCHEMA_EXTRACTION_GAP"
+            && gap
+                .family_id
+                .as_ref()
+                .and_then(|id| {
+                    v3.natural_family_rows
+                        .iter()
+                        .find(|row| &row.semantic_family_id == id)
+                })
+                .is_some_and(|row| row.representative_role.kind == "foundation_completion")
+    })
+}
+
 fn family_instance_clauses(family: &ExtractedFamily) -> BTreeSet<u16> {
     family
         .instances
@@ -1917,7 +2319,7 @@ fn r2_parent_slot_id(stage: u32, occurrence: &ActLocalV3RoleOccurrence) -> Strin
 fn direct_memberships(
     stage: u32,
     family: &ExtractedFamily,
-    v3: &ActLocalProvenanceV3Certificate,
+    v3: &V3BuildSurface,
 ) -> (Vec<String>, Vec<String>, bool) {
     let clauses = family_instance_clauses(family);
     let surviving = v3
@@ -2053,21 +2455,149 @@ fn replay_exact_r2_m1_membership(
     })
 }
 
+fn replay_exact_r2_m1_membership_prefix_under(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    v3: &V3BuildSurface,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+    prefix_general: bool,
+) -> Result<R2M1ReplayEvidence, ActLocalSemanticProvenanceV4Error> {
+    if !replay_act_local_v3_typed_r2_rule_token(v3_r2_rule).is_empty() {
+        return Err(ActLocalSemanticProvenanceV4Error::Input(
+            "prefix-local R2 replay requires the closed v3 typed rule token".to_owned(),
+        ));
+    }
+    let removed = v3
+        .role_occurrences_before_quotient
+        .iter()
+        .filter(|occurrence| occurrence.removed_by_adopted_r2)
+        .collect::<Vec<_>>();
+    if removed.is_empty() {
+        return Ok(R2M1ReplayEvidence {
+            exact_v3_occurrence_surface_holds: true,
+            step8_typed_signature_derivation_hash: None,
+            m1_generated_membership_derivation_hash: None,
+            m1_generated_membership_replayed: true,
+        });
+    }
+    let exact_v3_occurrence_surface_holds = stage == 8
+        && removed.len() == 1
+        && removed[0].kind == v3_r2_rule.generated_child_kind
+        && removed[0].owner_clause == 3
+        && removed[0].mechanism == v3_r2_rule.slot_mechanism
+        && removed[0].local_role == v3_r2_rule.slot_role
+        && v3
+            .natural_family_rows
+            .iter()
+            .filter(|row| {
+                !row.removed_by_r2
+                    && row.representative_role.kind == v3_r2_rule.surviving_parent_kind
+                    && row.representative_role.owner_clause == removed[0].owner_clause
+                    && row.representative_role.mechanism == v3_r2_rule.slot_mechanism
+                    && row.representative_role.local_role == v3_r2_rule.slot_role
+            })
+            .count()
+            == 1;
+    if !exact_v3_occurrence_surface_holds {
+        return Ok(R2M1ReplayEvidence {
+            exact_v3_occurrence_surface_holds: false,
+            step8_typed_signature_derivation_hash: None,
+            m1_generated_membership_derivation_hash: None,
+            m1_generated_membership_replayed: false,
+        });
+    }
+    let step8 = if prefix_general {
+        issue_step8_r2_prefix_general_typed_signatures_token_v2(prefix, candidate)
+    } else {
+        issue_step8_r2_prefix_local_typed_signatures_token(prefix, candidate)
+    }
+    .map_err(|error| ActLocalSemanticProvenanceV4Error::Family(error.to_string()))?;
+    if prefix_general {
+        replay_step8_r2_prefix_general_typed_signatures_token_v2(prefix, candidate, &step8)
+    } else {
+        replay_step8_r2_prefix_local_typed_signatures_token(prefix, candidate, &step8)
+    }
+    .map_err(|error| ActLocalSemanticProvenanceV4Error::Family(error.to_string()))?;
+    let generated = if prefix_general {
+        issue_step8_cell_action_prefix_general_m1_generated_v2(prefix, candidate, &step8)
+    } else {
+        issue_step8_cell_action_prefix_local_m1_generated(prefix, candidate, &step8)
+    }
+    .map_err(|error| ActLocalSemanticProvenanceV4Error::Family(error.to_string()))?;
+    if prefix_general {
+        replay_step8_cell_action_prefix_general_m1_generated_v2(prefix, candidate, &generated)
+    } else {
+        replay_step8_cell_action_prefix_local_m1_generated(prefix, candidate, &generated)
+    }
+    .map_err(|error| ActLocalSemanticProvenanceV4Error::Family(error.to_string()))?;
+    let subject_exact = matches!(
+        generated.subject(),
+        M1GeneratedSubject::Step8CellAction {
+            step8_derivation_hash,
+            schema_signature_derivation_hash,
+        } if step8_derivation_hash == &step8.derivation_hash
+            && schema_signature_derivation_hash == &step8.schema_signature_derivation_hash
+    );
+    let exact_intrinsic_inputs = step8.source_step == stage
+        && step8.predecessor_signature_digest == prefix.digest()
+        && step8.source_telescope_hash == candidate_hash(candidate)
+        && step8.capabilities.supplied_exact_prefix_read
+        && step8.capabilities.supplied_exact_candidate_read
+        && step8.capabilities.forbidden_inputs_withheld()
+        && generated.capabilities.supplied_exact_prefix_read
+        && generated.capabilities.supplied_exact_candidate_read
+        && generated.capabilities.forbidden_inputs_withheld();
+    Ok(R2M1ReplayEvidence {
+        exact_v3_occurrence_surface_holds,
+        step8_typed_signature_derivation_hash: Some(step8.derivation_hash),
+        m1_generated_membership_derivation_hash: Some(generated.derivation_hash.clone()),
+        m1_generated_membership_replayed: exact_intrinsic_inputs
+            && subject_exact
+            && generated.final_by_basis_monotonicity()
+            && !generated.full_e4_completeness_used(),
+    })
+}
+
+fn replay_exact_r2_m1_membership_prefix_local(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    v3: &V3BuildSurface,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+) -> Result<R2M1ReplayEvidence, ActLocalSemanticProvenanceV4Error> {
+    replay_exact_r2_m1_membership_prefix_under(prefix, stage, candidate, v3, v3_r2_rule, false)
+}
+
+fn replay_exact_r2_m1_membership_prefix_general(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    v3: &V3BuildSurface,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+) -> Result<R2M1ReplayEvidence, ActLocalSemanticProvenanceV4Error> {
+    replay_exact_r2_m1_membership_prefix_under(prefix, stage, candidate, v3, v3_r2_rule, true)
+}
+
 fn path_key_hash(key: &PathSchemaKey) -> String {
     tagged_hash("path-key", key)
 }
 
-fn row_path_key(row: &ActLocalV3NaturalFamilyRow) -> Option<PathSchemaKey> {
-    match row.representative_role.kind.as_str() {
+fn occurrence_path_key(occurrence: &ActLocalV3RoleOccurrence) -> Option<PathSchemaKey> {
+    match occurrence.kind.as_str() {
         "hit_path_beta" => Some(PathSchemaKey::Beta),
         "hit_kan_coherence" => {
-            let coordinates = row.representative_role.coordinate.get("coordinates")?;
+            let coordinates = occurrence.coordinate.get("coordinates")?;
             let principal = u32::try_from(coordinates.get("left_axis")?.as_u64()?).ok()?;
             let probe = u32::try_from(coordinates.get("right_axis")?.as_u64()?).ok()?;
             Some(PathSchemaKey::Kan { principal, probe })
         }
         _ => None,
     }
+}
+
+fn row_path_key(row: &ActLocalV3NaturalFamilyRow) -> Option<PathSchemaKey> {
+    occurrence_path_key(&row.representative_role)
 }
 
 fn placeholder_anchor(marginality: &V4MarginalityDisposition) -> V4AnchorDisposition {
@@ -2091,41 +2621,19 @@ fn placeholder_anchor(marginality: &V4MarginalityDisposition) -> V4AnchorDisposi
     }
 }
 
-fn build_unified_families(
+fn build_unified_families_from_surface(
     prefix: &SealedSignature,
     stage: u32,
     candidate: &Telescope,
     elaboration: &pen_type::elaborate::TelescopeElaboration,
     extraction: &pen_eval::typed_families::CandidateFamilyExtraction,
-    v3: &ActLocalProvenanceV3Certificate,
+    v3: &V3BuildSurface,
+    ordinary_registry: V4OrdinaryRegistryAudit,
+    generic_r1: Option<V4GenericR1Proof>,
+    r2_m1: R2M1ReplayEvidence,
 ) -> Result<UnifiedBuild, ActLocalSemanticProvenanceV4Error> {
-    let ordinary_registry = ordinary_registry_audit_v4(stage, candidate)?;
-    let r1_requested = v3.theorem_gaps.iter().any(|gap| {
-        gap.kind == "ROLE_SCHEMA_EXTRACTION_GAP"
-            && gap
-                .family_id
-                .as_ref()
-                .and_then(|id| {
-                    v3.natural_family_rows
-                        .iter()
-                        .find(|row| &row.semantic_family_id == id)
-                })
-                .is_some_and(|row| row.representative_role.kind == "foundation_completion")
-    });
-    let generic_r1 = if r1_requested {
-        let proof = prove_generic_r1(prefix, candidate, elaboration, v3)?.ok_or_else(|| {
-            ActLocalSemanticProvenanceV4Error::Family(
-                "foundation-completion declaration has no generic R1 package".to_owned(),
-            )
-        })?;
-        Some(proof)
-    } else {
-        None
-    };
-
     let mut families = Vec::new();
     let mut clause_family_by_clause = BTreeMap::new();
-    let r2_m1 = replay_exact_r2_m1_membership(prefix, stage, candidate, v3)?;
     let mut r2_parent_slot_label_join_holds = true;
     let mut r2_parent_membership_replayed = true;
     let mut r2_removed_occurrence_hashes = v3
@@ -2249,7 +2757,9 @@ fn build_unified_families(
         let memberships = v3
             .natural_family_rows
             .iter()
-            .filter(|row| row_path_key(row).as_ref() == Some(&built.key))
+            .filter(|row| {
+                occurrence_path_key(&row.representative_role).as_ref() == Some(&built.key)
+            })
             .map(|row| role_occurrence_membership_id(stage, &row.representative_role))
             .collect::<Vec<_>>();
         let parent_membership_replayed = memberships.len() == 1;
@@ -2910,6 +3420,53 @@ fn prefix_local_r1_r2_premises_hash(premises: &V4PrefixLocalR1R2Premises) -> Str
     prefix_local_source_tagged_hash("generic-r1-r2-local-premises", &projection)
 }
 
+fn prefix_local_generic_r1_proof_hash(proof: &V4PrefixLocalGenericR1Proof) -> String {
+    let mut projection = proof.clone();
+    projection.derivation_hash.clear();
+    prefix_local_source_tagged_hash("typed-r1-package-proof", &projection)
+}
+
+fn project_prefix_local_generic_r1(
+    proof: &V4GenericR1Proof,
+    rule: &V4PrefixLocalTypedR1RuleToken,
+) -> V4PrefixLocalGenericR1Proof {
+    let one_typed_formation_completion_package_proved = proof.adoption_source_hash
+        == rule.derivation_hash
+        && proof.adopted_package_clause_replayed
+        && proof.carrier_is_kernel_formation_type
+        && proof.completion_is_kernel_formation_type
+        && proof.completion_is_exact_app_univ_carrier
+        && proof.dependency_resolves_to_carrier
+        && proof.completed_action_covers_carrier_by_adopted_r1
+        && !proof.archive_or_count_input_used;
+    let mut projected = V4PrefixLocalGenericR1Proof {
+        theorem_id: rule.theorem_id.clone(),
+        rule_authority_hash: rule.derivation_hash.clone(),
+        package_application_hash: proof.derivation_hash.clone(),
+        candidate_hash: proof.candidate_hash.clone(),
+        predecessor_signature_digest: proof.prefix_signature_digest.clone(),
+        carrier_clause: proof.carrier_clause,
+        completion_clause: proof.completion_clause,
+        carrier_typing_hash: prefix_local_source_tagged_hash(
+            "typed-r1-carrier-typing",
+            &proof.carrier_typing,
+        ),
+        completion_typing_hash: prefix_local_source_tagged_hash(
+            "typed-r1-completion-typing",
+            &proof.completion_typing,
+        ),
+        completion_dependency_level: proof.completion_dependency_level,
+        carrier_is_kernel_formation_type: proof.carrier_is_kernel_formation_type,
+        completion_is_kernel_formation_type: proof.completion_is_kernel_formation_type,
+        completion_is_exact_app_univ_carrier: proof.completion_is_exact_app_univ_carrier,
+        dependency_resolves_to_carrier: proof.dependency_resolves_to_carrier,
+        one_typed_formation_completion_package_proved,
+        derivation_hash: String::new(),
+    };
+    projected.derivation_hash = prefix_local_generic_r1_proof_hash(&projected);
+    projected
+}
+
 fn prefix_local_source_surface_hash(surface: &V4PrefixLocalSourceSurface) -> String {
     let mut projection = surface.clone();
     projection.source_hash.clear();
@@ -2940,19 +3497,20 @@ fn build_prefix_local_r1_r2_premises(
     stage: u32,
     candidate: &Telescope,
     build: &UnifiedBuild,
+    r1_rule: &V4PrefixLocalTypedR1RuleToken,
 ) -> V4PrefixLocalR1R2Premises {
     let candidate_digest = candidate_hash(candidate);
-    let generic_r1_typed_package_premises_replayed = build.generic_r1.as_ref().map_or(true, |r1| {
-        r1.candidate_hash == candidate_digest
-            && r1.prefix_signature_digest == prefix.digest()
-            && r1.adopted_package_clause_replayed
-            && r1.carrier_is_kernel_formation_type
-            && r1.completion_is_kernel_formation_type
-            && r1.completion_is_exact_app_univ_carrier
-            && r1.dependency_resolves_to_carrier
-            && r1.completed_action_covers_carrier_by_adopted_r1
-            && r1.all_four_carrier_exception_roles_enumerated
-            && !r1.archive_or_count_input_used
+    let generic_r1 = build
+        .generic_r1
+        .as_ref()
+        .map(|proof| project_prefix_local_generic_r1(proof, r1_rule));
+    let generic_r1_typed_package_premises_replayed = generic_r1.as_ref().map_or(true, |r1| {
+        r1.rule_authority_hash == r1_rule.derivation_hash
+            && !r1.package_application_hash.is_empty()
+            && r1.candidate_hash == candidate_digest
+            && r1.predecessor_signature_digest == prefix.digest()
+            && r1.one_typed_formation_completion_package_proved
+            && r1.derivation_hash == prefix_local_generic_r1_proof_hash(r1)
     });
     let surviving_memberships = build
         .families
@@ -2990,7 +3548,8 @@ fn build_prefix_local_r1_r2_premises(
         stage,
         candidate_hash: candidate_digest,
         predecessor_signature_digest: prefix.digest().to_owned(),
-        generic_r1: build.generic_r1.clone(),
+        r1_rule_authority_hash: r1_rule.derivation_hash.clone(),
+        generic_r1,
         generic_r1_typed_package_premises_replayed,
         r2_generated_instance_removed_count: build.r2_removed_occurrence_hashes.len(),
         r2_removed_occurrence_hashes: build.r2_removed_occurrence_hashes.clone(),
@@ -3018,22 +3577,42 @@ fn build_prefix_local_r1_r2_premises(
 /// intentionally ends before `resolve_role_declarations` and
 /// `anchor_unified_families`; it also has no dependency on either historical
 /// role-kind constant.
-pub fn issue_v4_prefix_local_source_surface(
+fn issue_v4_prefix_source_surface_under(
     prefix: &SealedSignature,
     stage: u32,
     candidate: &Telescope,
-    v3: &ActLocalProvenanceV3Certificate,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
+    v3: &ActLocalV3PrefixDeclaration,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+    r1_rule: &V4PrefixLocalTypedR1RuleToken,
+    prefix_general: bool,
 ) -> Result<V4PrefixLocalSourceSurface, ActLocalSemanticProvenanceV4Error> {
-    let expected_v3 = issue_act_local_provenance_v3(prefix, stage, candidate)
-        .map_err(|error| ActLocalSemanticProvenanceV4Error::Input(error.to_string()))?;
-    let v3_package_replayed = &expected_v3 == v3
-        && v3.schema == ACT_LOCAL_PROVENANCE_V3_SCHEMA
-        && v3.stage == stage
-        && v3.candidate_hash == candidate_hash(candidate)
-        && v3.predecessor_signature_digest == prefix.digest();
-    if !v3_package_replayed {
+    if !replay_act_local_v3_typed_r2_rule_token(v3_r2_rule).is_empty() {
         return Err(ActLocalSemanticProvenanceV4Error::Input(
-            "prefix-local source v3 package did not replay exactly".to_owned(),
+            "prefix-local source requires the closed typed v3 R2 rule token".to_owned(),
+        ));
+    }
+    if !replay_v4_prefix_local_typed_r1_rule_token(r1_rule).is_empty() {
+        return Err(ActLocalSemanticProvenanceV4Error::Input(
+            "prefix-local source requires the closed typed v4 R1 rule token".to_owned(),
+        ));
+    }
+    let v3_declaration_replayed =
+        replay_act_local_prefix_declaration_v3(prefix, candidate, predecessor_v3, v3_r2_rule, v3)
+            .is_empty()
+            && v3.stage == stage
+            && v3.candidate_hash == candidate_hash(candidate)
+            && v3.predecessor_signature_digest == prefix.digest()
+            && v3.r2_rule_authority_hash == v3_r2_rule.derivation_hash
+            && v3.predecessor_projection_hashes
+                == predecessor_v3
+                    .iter()
+                    .map(|projection| projection.surface_hash.clone())
+                    .collect::<Vec<_>>()
+            && v3.capability_audit.source_first_only();
+    if !v3_declaration_replayed {
+        return Err(ActLocalSemanticProvenanceV4Error::Input(
+            "prefix-local source v3 declaration did not replay exactly".to_owned(),
         ));
     }
 
@@ -3056,7 +3635,41 @@ pub fn issue_v4_prefix_local_source_surface(
             "prefix-local exact-A3 inventory did not close".to_owned(),
         ));
     }
-    let build = build_unified_families(prefix, stage, candidate, &elaboration, &extraction, v3)?;
+    let v3_surface = V3BuildSurface::prefix_local(v3);
+    let ordinary_registry = ordinary_registry_audit_v4_prefix_local(stage, candidate)?;
+    // Prefix-local applicability is a theorem about the elaborated candidate
+    // shape.  A declaration-gap label is neither necessary nor sufficient
+    // authority for the R1 package rule.
+    let generic_r1 =
+        prove_generic_r1_prefix_local(prefix, candidate, &elaboration, &v3_surface, r1_rule)?;
+    let r2_m1 = if prefix_general {
+        replay_exact_r2_m1_membership_prefix_general(
+            prefix,
+            stage,
+            candidate,
+            &v3_surface,
+            v3_r2_rule,
+        )
+    } else {
+        replay_exact_r2_m1_membership_prefix_local(
+            prefix,
+            stage,
+            candidate,
+            &v3_surface,
+            v3_r2_rule,
+        )
+    }?;
+    let build = build_unified_families_from_surface(
+        prefix,
+        stage,
+        candidate,
+        &elaboration,
+        &extraction,
+        &v3_surface,
+        ordinary_registry,
+        generic_r1,
+        r2_m1,
+    )?;
 
     let every_family_is_pre_anchor = build.families.iter().all(|family| {
         family.anchor == placeholder_anchor(&family.marginality)
@@ -3107,7 +3720,8 @@ pub fn issue_v4_prefix_local_source_surface(
     let ordinary_constructor_surface_complete = build.ordinary_registry.complete_as_registry_query
         && !build.ordinary_registry.archive_or_scalar_input_used;
     let exact_a3_complete = exact_a3.complete;
-    let r1_r2_premises = build_prefix_local_r1_r2_premises(prefix, stage, candidate, &build);
+    let r1_r2_premises =
+        build_prefix_local_r1_r2_premises(prefix, stage, candidate, &build, r1_rule);
 
     let archive_read = false;
     let structural_nu_read = false;
@@ -3117,7 +3731,7 @@ pub fn issue_v4_prefix_local_source_surface(
     let historical_kind_surface_read = false;
     let declaration_resolution_read = false;
     let anchor_assignment_read = false;
-    let source_surface_complete = v3_package_replayed
+    let source_surface_complete = v3_declaration_replayed
         && candidate_extraction_covers_every_clause
         && unified_family_ids_unique
         && every_family_is_pre_anchor
@@ -3125,6 +3739,7 @@ pub fn issue_v4_prefix_local_source_surface(
         && path_quotient_complete
         && ordinary_constructor_surface_complete
         && exact_a3_complete
+        && r1_r2_premises.r1_rule_authority_hash == r1_rule.derivation_hash
         && r1_r2_premises.generic_r1_typed_package_premises_replayed
         && r1_r2_premises.r2_local_premises_replayed
         && !archive_read
@@ -3142,18 +3757,32 @@ pub fn issue_v4_prefix_local_source_surface(
     }
 
     let mut surface = V4PrefixLocalSourceSurface {
-        schema: V4_PREFIX_LOCAL_SOURCE_SURFACE_SCHEMA.to_owned(),
+        schema: if prefix_general {
+            V4_PREFIX_GENERAL_SOURCE_SURFACE_SCHEMA
+        } else {
+            V4_PREFIX_LOCAL_SOURCE_SURFACE_SCHEMA
+        }
+        .to_owned(),
         date: ACT_LOCAL_SEMANTIC_PROVENANCE_V4_DATE.to_owned(),
-        theorem_id: V4_PREFIX_LOCAL_SOURCE_SURFACE_THEOREM_ID.to_owned(),
+        theorem_id: if prefix_general {
+            V4_PREFIX_GENERAL_SOURCE_SURFACE_THEOREM_ID
+        } else {
+            V4_PREFIX_LOCAL_SOURCE_SURFACE_THEOREM_ID
+        }
+        .to_owned(),
         stage,
         candidate_hash: candidate_hash(candidate),
         predecessor_signature_digest: prefix.digest().to_owned(),
         kappa: candidate.kappa() as u32,
         candidate_elaboration_hash: elaboration.derivation_hash,
         candidate_family_extraction_hash: extraction.derivation_hash,
-        frozen_v3_schema: v3.schema.clone(),
-        frozen_v3_package_hash: v3.derivation_hash.clone(),
-        v3_package_replayed,
+        v3_declaration_schema: v3.schema.clone(),
+        v3_declaration_surface_hash: v3.surface_hash.clone(),
+        v3_declaration_replayed,
+        v3_r2_rule_authority_hash: v3_r2_rule.derivation_hash.clone(),
+        v3_predecessor_projection_hashes: v3.predecessor_projection_hashes.clone(),
+        v3_predecessor_surface_digest: v3.predecessor_surface_digest.clone(),
+        r1_rule_authority: r1_rule.clone(),
         exact_a3,
         ordinary_registry: build.ordinary_registry,
         path_quotient: build.path_quotient,
@@ -3181,20 +3810,108 @@ pub fn issue_v4_prefix_local_source_surface(
     Ok(surface)
 }
 
+pub fn issue_v4_prefix_local_source_surface(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
+    v3: &ActLocalV3PrefixDeclaration,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+    r1_rule: &V4PrefixLocalTypedR1RuleToken,
+) -> Result<V4PrefixLocalSourceSurface, ActLocalSemanticProvenanceV4Error> {
+    issue_v4_prefix_source_surface_under(
+        prefix,
+        stage,
+        candidate,
+        predecessor_v3,
+        v3,
+        v3_r2_rule,
+        r1_rule,
+        false,
+    )
+}
+
+/// Prefix-general successor used by BI-1b.  Every semantic input remains the
+/// supplied candidate and its exact prefix; the only changed proof rung is
+/// the Step-8 typed S3 boundary/M1 replay, which no longer assumes historical
+/// B7 identity.
+pub fn issue_v4_prefix_general_source_surface(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
+    v3: &ActLocalV3PrefixDeclaration,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+    r1_rule: &V4PrefixLocalTypedR1RuleToken,
+) -> Result<V4PrefixLocalSourceSurface, ActLocalSemanticProvenanceV4Error> {
+    issue_v4_prefix_source_surface_under(
+        prefix,
+        stage,
+        candidate,
+        predecessor_v3,
+        v3,
+        v3_r2_rule,
+        r1_rule,
+        true,
+    )
+}
+
 pub fn replay_v4_prefix_local_source_surface(
     prefix: &SealedSignature,
     candidate: &Telescope,
-    v3: &ActLocalProvenanceV3Certificate,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
+    v3: &ActLocalV3PrefixDeclaration,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+    r1_rule: &V4PrefixLocalTypedR1RuleToken,
     claimed: &V4PrefixLocalSourceSurface,
 ) -> Vec<String> {
     let mut errors = Vec::new();
     if claimed.source_hash != prefix_local_source_surface_hash(claimed) {
         errors.push("v4 prefix-local source surface digest mismatch".to_owned());
     }
-    match issue_v4_prefix_local_source_surface(prefix, claimed.stage, candidate, v3) {
+    match issue_v4_prefix_local_source_surface(
+        prefix,
+        claimed.stage,
+        candidate,
+        predecessor_v3,
+        v3,
+        v3_r2_rule,
+        r1_rule,
+    ) {
         Ok(expected) if expected == *claimed => {}
         Ok(_) => errors.push(
             "v4 prefix-local source surface differs from deterministic reissuance".to_owned(),
+        ),
+        Err(error) => errors.push(error.to_string()),
+    }
+    errors
+}
+
+pub fn replay_v4_prefix_general_source_surface(
+    prefix: &SealedSignature,
+    candidate: &Telescope,
+    predecessor_v3: &[ActLocalV3PrefixDeclaration],
+    v3: &ActLocalV3PrefixDeclaration,
+    v3_r2_rule: &ActLocalV3TypedR2RuleToken,
+    r1_rule: &V4PrefixLocalTypedR1RuleToken,
+    claimed: &V4PrefixLocalSourceSurface,
+) -> Vec<String> {
+    let mut errors = Vec::new();
+    if claimed.source_hash != prefix_local_source_surface_hash(claimed) {
+        errors.push("v4 prefix-general source surface digest mismatch".to_owned());
+    }
+    match issue_v4_prefix_general_source_surface(
+        prefix,
+        claimed.stage,
+        candidate,
+        predecessor_v3,
+        v3,
+        v3_r2_rule,
+        r1_rule,
+    ) {
+        Ok(expected) if expected == *claimed => {}
+        Ok(_) => errors.push(
+            "v4 prefix-general source surface differs from deterministic reissuance".to_owned(),
         ),
         Err(error) => errors.push(error.to_string()),
     }
@@ -3664,18 +4381,62 @@ pub fn issue_reference_act_local_semantic_sequence_v4()
 mod tests {
     use super::*;
 
-    fn prefix_local_inputs(
-        stage: u32,
-    ) -> (SealedSignature, Telescope, ActLocalProvenanceV3Certificate) {
-        let prefix = SealedSignature::from_telescopes(
-            (1..stage)
-                .map(|prior| (prior, Telescope::reference(prior)))
-                .collect(),
-        );
+    struct PrefixLocalInputs {
+        prefix: SealedSignature,
+        candidate: Telescope,
+        predecessor_v3: Vec<ActLocalV3PrefixDeclaration>,
+        v3: ActLocalV3PrefixDeclaration,
+        v3_r2_rule: ActLocalV3TypedR2RuleToken,
+        r1_rule: V4PrefixLocalTypedR1RuleToken,
+    }
+
+    impl PrefixLocalInputs {
+        fn issue_source(&self, stage: u32) -> V4PrefixLocalSourceSurface {
+            issue_v4_prefix_local_source_surface(
+                &self.prefix,
+                stage,
+                &self.candidate,
+                &self.predecessor_v3,
+                &self.v3,
+                &self.v3_r2_rule,
+                &self.r1_rule,
+            )
+            .expect("prefix-local v4 source")
+        }
+    }
+
+    fn prefix_local_inputs(stage: u32) -> PrefixLocalInputs {
+        let prior_entries = (1..stage)
+            .map(|prior| (prior, Telescope::reference(prior)))
+            .collect::<Vec<_>>();
+        let prefix = SealedSignature::from_telescopes(prior_entries.clone());
         let candidate = Telescope::reference(stage);
-        let v3 = issue_act_local_provenance_v3(&prefix, stage, &candidate)
-            .expect("prefix-local v3 package");
-        (prefix, candidate, v3)
+        let v3_r2_rule = crate::act_local_provenance_v3::issue_act_local_v3_typed_r2_rule_token();
+        let predecessor_v3 = if prior_entries.is_empty() {
+            Vec::new()
+        } else {
+            crate::act_local_provenance_v3::issue_act_local_prefix_declaration_sequence_v3(
+                &prior_entries,
+                &v3_r2_rule,
+            )
+            .expect("prefix-local v3 predecessors")
+        };
+        let v3 = crate::act_local_provenance_v3::issue_act_local_prefix_declaration_v3(
+            &prefix,
+            stage,
+            &candidate,
+            &predecessor_v3,
+            &v3_r2_rule,
+        )
+        .expect("prefix-local v3 declaration");
+        PrefixLocalInputs {
+            prefix,
+            candidate,
+            predecessor_v3,
+            v3,
+            v3_r2_rule,
+            r1_rule: issue_v4_prefix_local_typed_r1_rule_token(),
+        }
     }
 
     fn historical_inputs(
@@ -3708,11 +4469,10 @@ mod tests {
 
     #[test]
     fn prefix_local_source_surface_reissues_without_role_registry_or_anchor_fields() {
-        let (prefix, candidate, v3) = prefix_local_inputs(4);
-        let source = issue_v4_prefix_local_source_surface(&prefix, 4, &candidate, &v3)
-            .expect("prefix-local v4 source");
+        let inputs = prefix_local_inputs(4);
+        let source = inputs.issue_source(4);
         assert!(source.source_surface_complete);
-        assert!(source.v3_package_replayed);
+        assert!(source.v3_declaration_replayed);
         assert!(source.candidate_extraction_covers_every_clause);
         assert!(source.unified_family_ids_unique);
         assert!(source.every_family_is_pre_anchor);
@@ -3720,7 +4480,16 @@ mod tests {
         assert!(!source.declaration_resolution_read);
         assert!(!source.anchor_assignment_read);
         assert!(
-            replay_v4_prefix_local_source_surface(&prefix, &candidate, &v3, &source).is_empty()
+            replay_v4_prefix_local_source_surface(
+                &inputs.prefix,
+                &inputs.candidate,
+                &inputs.predecessor_v3,
+                &inputs.v3,
+                &inputs.v3_r2_rule,
+                &inputs.r1_rule,
+                &source,
+            )
+            .is_empty()
         );
 
         let json = serde_json::to_value(&source).expect("source serializes");
@@ -3733,21 +4502,47 @@ mod tests {
             "registry_size",
             "historical_role_kinds",
             "role_term_registry",
+            "frozen_v3_package_hash",
+            "adoption_source_hash",
+            "carrier_role_surface_gap",
+            "e2_quotient_adjudications",
         ] {
             assert!(!encoded.contains(forbidden), "forbidden field {forbidden}");
         }
+        assert_eq!(
+            source.v3_predecessor_projection_hashes,
+            inputs
+                .predecessor_v3
+                .iter()
+                .map(|projection| projection.surface_hash.clone())
+                .collect::<Vec<_>>()
+        );
         for family in json["unified_families"].as_array().expect("family array") {
             assert!(family.get("anchor").is_none());
             assert!(family.get("credited").is_none());
             assert!(family.get("role_declaration_ids").is_none());
         }
+        let r1_token = json["r1_rule_authority"]
+            .as_object()
+            .expect("typed R1 rule token");
+        for forbidden in [
+            "adoption_source_hash",
+            "markdown_or_file_read",
+            "archive_or_count_read",
+            "membership_verdict_issued",
+            "marginality_or_credit_decided",
+        ] {
+            assert!(
+                r1_token.get(forbidden).is_none(),
+                "forbidden R1 field {forbidden}"
+            );
+        }
     }
 
     #[test]
     fn prefix_local_source_carries_generic_r1_and_r2_premises_at_their_own_stages() {
-        let (prefix1, candidate1, v3_1) = prefix_local_inputs(1);
-        let stage1 = issue_v4_prefix_local_source_surface(&prefix1, 1, &candidate1, &v3_1)
-            .expect("Stage-1 source");
+        let inputs1 = prefix_local_inputs(1);
+        let stage1 = inputs1.issue_source(1);
         let r1 = stage1
             .r1_r2_premises
             .generic_r1
@@ -3758,12 +4553,35 @@ mod tests {
                 .r1_r2_premises
                 .generic_r1_typed_package_premises_replayed
         );
-        assert!(r1.adopted_package_clause_replayed);
-        assert!(r1.completed_action_covers_carrier_by_adopted_r1);
+        assert!(r1.one_typed_formation_completion_package_proved);
+        assert_eq!(r1.rule_authority_hash, inputs1.r1_rule.derivation_hash);
+        let package_hashes = stage1
+            .unified_families
+            .iter()
+            .filter_map(|family| match (&family.source, &family.marginality) {
+                (
+                    V4FamilySource::R1CompletedPackage {
+                        generic_r1_derivation_hash,
+                        ..
+                    },
+                    _,
+                )
+                | (
+                    _,
+                    V4MarginalityDisposition::R1CarrierPackageProvenance {
+                        generic_r1_derivation_hash,
+                    },
+                ) => Some(generic_r1_derivation_hash.as_str()),
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            package_hashes,
+            vec![r1.package_application_hash.as_str(); 2]
+        );
 
-        let (prefix8, candidate8, v3_8) = prefix_local_inputs(8);
-        let stage8 = issue_v4_prefix_local_source_surface(&prefix8, 8, &candidate8, &v3_8)
-            .expect("Stage-8 source");
+        let inputs8 = prefix_local_inputs(8);
+        let stage8 = inputs8.issue_source(8);
         assert_eq!(stage8.r1_r2_premises.r2_generated_instance_removed_count, 1);
         assert!(stage8.r1_r2_premises.r2_local_premises_replayed);
         assert!(
@@ -3789,21 +4607,108 @@ mod tests {
 
     #[test]
     fn prefix_local_source_is_additive_and_rejects_a_fully_rehashed_mutation() {
-        let (prefix, candidate, v3) = prefix_local_inputs(4);
-        let legacy_before = issue_act_local_semantic_provenance_v4(&prefix, 4, &candidate, &v3)
-            .expect("legacy v4 before source issuance");
-        let source = issue_v4_prefix_local_source_surface(&prefix, 4, &candidate, &v3)
-            .expect("prefix-local source");
-        let legacy_after = issue_act_local_semantic_provenance_v4(&prefix, 4, &candidate, &v3)
-            .expect("legacy v4 after source issuance");
+        let inputs = prefix_local_inputs(4);
+        let historical_v3 = issue_act_local_provenance_v3(&inputs.prefix, 4, &inputs.candidate)
+            .expect("historical v3 package");
+        let legacy_before = issue_act_local_semantic_provenance_v4(
+            &inputs.prefix,
+            4,
+            &inputs.candidate,
+            &historical_v3,
+        )
+        .expect("legacy v4 before source issuance");
+        let source = inputs.issue_source(4);
+        let legacy_after = issue_act_local_semantic_provenance_v4(
+            &inputs.prefix,
+            4,
+            &inputs.candidate,
+            &historical_v3,
+        )
+        .expect("legacy v4 after source issuance");
         assert_eq!(legacy_before, legacy_after);
 
         let mut forged = source.clone();
         forged.candidate_family_extraction_hash.push_str("-forged");
         forged.source_hash = prefix_local_source_surface_hash(&forged);
-        let errors = replay_v4_prefix_local_source_surface(&prefix, &candidate, &v3, &forged);
+        let errors = replay_v4_prefix_local_source_surface(
+            &inputs.prefix,
+            &inputs.candidate,
+            &inputs.predecessor_v3,
+            &inputs.v3,
+            &inputs.v3_r2_rule,
+            &inputs.r1_rule,
+            &forged,
+        );
         assert!(errors.iter().any(|error| error.contains("reissuance")));
         assert!(!errors.iter().any(|error| error.contains("digest mismatch")));
+    }
+
+    #[test]
+    fn prefix_local_source_rejects_wrong_candidate_prefix_and_rehashed_rule_mutation() {
+        let inputs = prefix_local_inputs(4);
+        let source = inputs.issue_source(4);
+        let wrong_candidate = Telescope::reference(3);
+        assert!(
+            !replay_v4_prefix_local_source_surface(
+                &inputs.prefix,
+                &wrong_candidate,
+                &inputs.predecessor_v3,
+                &inputs.v3,
+                &inputs.v3_r2_rule,
+                &inputs.r1_rule,
+                &source,
+            )
+            .is_empty()
+        );
+        let wrong_prefix = SealedSignature::from_telescopes(Vec::new());
+        assert!(
+            !replay_v4_prefix_local_source_surface(
+                &wrong_prefix,
+                &inputs.candidate,
+                &inputs.predecessor_v3,
+                &inputs.v3,
+                &inputs.v3_r2_rule,
+                &inputs.r1_rule,
+                &source,
+            )
+            .is_empty()
+        );
+
+        let mut forged_rule = inputs.r1_rule.clone();
+        forged_rule.conclusion.push_str(" forged");
+        forged_rule.derivation_hash = prefix_local_typed_r1_rule_hash(&forged_rule);
+        let errors = replay_v4_prefix_local_typed_r1_rule_token(&forged_rule);
+        assert!(
+            errors
+                .iter()
+                .any(|error| error.contains("closed reissuance"))
+        );
+        assert!(!errors.iter().any(|error| error.contains("digest mismatch")));
+    }
+
+    #[test]
+    fn prefix_local_ordinary_schemas_are_candidate_shape_driven_not_stage_gated() {
+        let candidate = Telescope::reference(5);
+        let at_stage_five =
+            ordinary_specs_v4_prefix_local(5, &candidate).expect("ordinary shape at Stage 5");
+        let outside_historical_band = ordinary_specs_v4_prefix_local(42, &candidate)
+            .expect("same ordinary shape outside historical stage band");
+        assert!(!at_stage_five.is_empty());
+        assert_eq!(
+            at_stage_five
+                .iter()
+                .map(|spec| spec.kind)
+                .collect::<Vec<_>>(),
+            outside_historical_band
+                .iter()
+                .map(|spec| spec.kind)
+                .collect::<Vec<_>>()
+        );
+        assert!(
+            ordinary_specs_v4_prefix_local(5, &Telescope::reference(4))
+                .expect("non-HIT candidate classification")
+                .is_empty()
+        );
     }
 
     #[test]
@@ -3885,6 +4790,33 @@ mod tests {
                 && package.ordinary_registry.applicable_schema_count > 0
                 && package.ordinary_registry.exact_candidate_bridge_count == 0
         }));
+    }
+
+    #[test]
+    fn historical_v4_package_hashes_remain_byte_exact() {
+        let observed = issue_reference_act_local_semantic_sequence_v4()
+            .expect("historical v4 sequence")
+            .into_iter()
+            .map(|package| package.derivation_hash)
+            .collect::<Vec<_>>();
+        let expected = [
+            "blake3:b4e62afdb0ba62c1578ce1f7aabfa26a067765c21fcd5889a5263d56d47f290a",
+            "blake3:4275cf888f148b4699655e31e14dac54e822a60a3c868de46ee30fde9f258277",
+            "blake3:8d91d3b6379e952e115209d157ae50cf6c118b057e514894a0b4618b8be66ce3",
+            "blake3:1db4d26df1cc8e7c839ba166f57d01dc985d66761e7870544989640fce482744",
+            "blake3:46088b07a4272f786c4e7392c946460e25ec57a650d95778172e19027890390f",
+            "blake3:ace28aef525f988a00af9c81cdc4d41dd482a35de9122f2cee0fa5887d36e89e",
+            "blake3:52779689ff99214b44b13274fb4133432771d0a411a3d2623f0ecc5d3ca37187",
+            "blake3:12c5e0315a318ffb927d6da7f58e3e24417d49a3fc55ceb4045221679ad81980",
+            "blake3:90f575c1a85e30cfe115ac6d0e5b6e74d05b97169bcaad73ca4c4a1cb5535638",
+            "blake3:acbbd16fe7fa406a40c11341770cf1af6cdbbfadb0c244719c1a1017c22b423a",
+            "blake3:5a02a4cb435a3f77b70dcf6fe9419e7296a6b9d79e247ff506177b76c73e1bd0",
+            "blake3:58e92122d8d806de00833c25b494be703acb02f10613249b023017648e486cd0",
+            "blake3:af856305198a8c2f38eca8ac2104f2ef5dd12d2871e27e081d2d2ac84ef78a50",
+            "blake3:09cd72193a1cd03d172d51999d8286f308beae3584a5d6877fa693e0c70b9bfd",
+            "blake3:2e4e9c28e09416b0d0126aeb41df1fa872f1b824db2193eef182b48dc625bad0",
+        ];
+        assert_eq!(observed, expected);
     }
 
     #[test]

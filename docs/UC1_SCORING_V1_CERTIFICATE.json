@@ -1,0 +1,2108 @@
+{
+  "schema": "uc1-scoring-v1",
+  "date": "2026-07-23",
+  "source_bindings": [
+    {
+      "path": "docs/mainline_completion_plan.md",
+      "role": "frozen M-2 construction brief and quantifier policy",
+      "byte_length": {
+        "value": 5658,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:8d86a0acedeee12ee0cf646587bb29a13877d3ec7b30dcd3dd513b4598342351"
+    },
+    {
+      "path": "docs/univalent_collapse_hypothesis.md",
+      "role": "pre-registered UC-1 predictions, zones, and falsifiers",
+      "byte_length": {
+        "value": 8829,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:31dea8217caee18db94fceef091a201d5ba6ef80139eeadc85bbc80c724e92b3"
+    },
+    {
+      "path": "docs/nu_register_adjudication.md",
+      "role": "adopted semantic-family register and F-NR6",
+      "byte_length": {
+        "value": 8085,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:bd59a0e10cdf9fe25e2b36b8e9c19427af21c1b07e577fdc11385a90f207de7d"
+    },
+    {
+      "path": "docs/semantic_nu_transport_maps_v2.json",
+      "role": "sealed M-1 typed transport maps and order-axis obstructions",
+      "byte_length": {
+        "value": 194829,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:18371e81482040febe645f611e259cee1b64a8ad7ed61a890f07712bac4696d6"
+    },
+    {
+      "path": "docs/BI4_CONE_V2_CERTIFICATE.json",
+      "role": "sealed cone-level G3a verdict and authenticated BI lineage",
+      "byte_length": {
+        "value": 103957,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:59d7a67e641d3cc297bd99cc161e4be1c8f46cef0e08df6bf05e3d745f30bba8"
+    },
+    {
+      "path": "docs/r_t2_future_hole_confluence_v2_dependent_context_v2.json",
+      "role": "sealed pairwise Stage-5 scheme-set matchings",
+      "byte_length": {
+        "value": 468100,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:664ac42b93d065b7dc965296d49cee6b9fafbb147ff6f3394d6769c5071acafa"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_2016726758f3_CERTIFICATE.json",
+      "role": "retired sealed BI-1 v3 winner telescopes and live demand records",
+      "byte_length": {
+        "value": 463064,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:99c70276db9b15fe417c38a16af2c690dc945c9a954bba5e00de67b7ce204824"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_43a0ed707770_CERTIFICATE.json",
+      "role": "retired sealed BI-1 v3 winner telescopes and live demand records",
+      "byte_length": {
+        "value": 170260,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:efb07a882fe26e2f164def9f489b40e105c49a37d322d03e26299df06cf4fd6c"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_4b2211ecae25_CERTIFICATE.json",
+      "role": "retired sealed BI-1 v3 winner telescopes and live demand records",
+      "byte_length": {
+        "value": 170263,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:bfd7cf75c2d1e37450975ef38dd6a775b8462ee78ef61d9279ba591e7f99c38e"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_b4f821d9bb28_CERTIFICATE.json",
+      "role": "retired sealed BI-1 v3 winner telescopes and live demand records",
+      "byte_length": {
+        "value": 171340,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:d29dbd8f4bca0d14689646dc08e72474df5cd577d91c5fdb4f9181298d726938"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_2016726758f3_CERTIFICATE.json",
+      "role": "sealed BI-1b branch certificate joined through BI-2",
+      "byte_length": {
+        "value": 3121,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:14d748530cb46744b0c1d0403a6f2248a654c7dc65588efb1383029576f050db"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_43a0ed707770_CERTIFICATE.json",
+      "role": "sealed BI-1b branch certificate joined through BI-2",
+      "byte_length": {
+        "value": 377484,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:08b6bba6d2b7d18091273ab959e715b4ca4479d2aabf8ed2094c64a0424ec8ac"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_4b2211ecae25_CERTIFICATE.json",
+      "role": "sealed BI-1b branch certificate joined through BI-2",
+      "byte_length": {
+        "value": 377490,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:7073c84c2a4932aba9d2454d029e039957e61fa2df344fafd7750817fbd951d3"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_b4f821d9bb28_CERTIFICATE.json",
+      "role": "sealed BI-1b branch certificate joined through BI-2",
+      "byte_length": {
+        "value": 377491,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:04310e9819b9b6210dfbe2372e8fe9727bf1faec1e3b44ead9709fad4d1120ee"
+    },
+    {
+      "path": "docs/BI1B_CORRESPONDENCE_DIAGNOSTIC.json",
+      "role": "sealed write-only winner byte-identity correspondence",
+      "byte_length": {
+        "value": 30999,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:d909f54dfa91a187807428e16511d5f79e8b87b33f4cb3c421abdfbb09d2869b"
+    },
+    {
+      "path": "docs/BI2_FOUR_BRANCH_FINALES_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 aggregate and lineage index",
+      "byte_length": {
+        "value": 9082,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:d3b590a5261201adb52730788a0706cc346d385197d098eefd94b501fadd4aef"
+    },
+    {
+      "path": "docs/BI2_BRANCH_2016726758f3_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch finale",
+      "byte_length": {
+        "value": 227473,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:956141e49a85c21f33404ff5c84a3483f750a7e3b01089327cb3206e494f9be2"
+    },
+    {
+      "path": "docs/BI2_BRANCH_43a0ed707770_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch finale",
+      "byte_length": {
+        "value": 227210,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:7a7707b0ce4961674d670164d1091b7b4a99a3e3e7c070e74201b81131280679"
+    },
+    {
+      "path": "docs/BI2_BRANCH_4b2211ecae25_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch finale",
+      "byte_length": {
+        "value": 227213,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:1f439de4cbcfe2785e04fd6222a85051d894ee3ad1d32f6f0d778bd39d730784"
+    },
+    {
+      "path": "docs/BI2_BRANCH_b4f821d9bb28_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch finale",
+      "byte_length": {
+        "value": 227464,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:cfed76b34bc97b8d250b1f20097bafea46937031441292f8e1eb0169e1cbf52c"
+    },
+    {
+      "path": "crates/pen-search/src/uc1_scoring_v1.rs",
+      "role": "M-2 issue, replay, scoring, and create-new implementation",
+      "byte_length": {
+        "value": 94316,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:c9294b4a11454b9793e8c8c0fa20f0390095f53a9b9f32f43db83bef36e355b7"
+    },
+    {
+      "path": "crates/pen-search/examples/uc1_scoring_v1.rs",
+      "role": "M-2 create-new executable boundary",
+      "byte_length": {
+        "value": 857,
+        "register": "artifact_metadata",
+        "meaning": "bound source byte length; artifact metadata only"
+      },
+      "blake3": "blake3:00daff7d355538cd5408fcdbecce5e74a22034201cf37afd6d8cb7d9b92f5322"
+    }
+  ],
+  "input_artifact_count": {
+    "value": 22,
+    "register": "artifact_metadata",
+    "meaning": "byte-bound plan, certificate, and issuer inputs"
+  },
+  "numeric_register_policy": "nu-register-split-v1: semantic_family_nu is law-level authority; proof_inventory counts evidence; structural_testimony is diagnostic only; syntax_identifier labels stages; artifact_metadata describes files",
+  "lineage": {
+    "m1_transport_replay_valid": true,
+    "bi2_bundle_replay_valid": true,
+    "bi4_replay_valid": true,
+    "r_t2_full_current_source_reissue_attempted": true,
+    "r_t2_live_reissue_valid": false,
+    "r_t2_live_reissue_errors": [
+      "live R-T2 v2 issuance failed"
+    ],
+    "r_t2_live_reissue_serialized_blockers": [
+      "prerequisite failed: create-new A3 inventory artifact replay failed: certificate differs from definition replay"
+    ],
+    "r_t2_sealed_fallback_used": true,
+    "r_t2_certificate_self_digest_valid": true,
+    "r_t2_archived_stage4_projection_replay_valid": true,
+    "r_t2_p3_pair_surface_valid": true,
+    "r_t2_sealed_surface_authentication_valid": true,
+    "bi4_source_bindings_match_all_consumed_bi_inputs": true,
+    "every_bi1_bi1b_bi2_branch_digest_joined": true,
+    "correspondence_joined_to_all_bi1b_branches": true,
+    "exact_joined_branch_count": {
+      "value": 4,
+      "register": "proof_inventory",
+      "meaning": "BI branch lineages joined exactly"
+    },
+    "derivation_hash": "blake3:128e98e17a4fb4b90bc910b9f2fe729e24da5c5b774b357f88a321d011434c86"
+  },
+  "p1": {
+    "prediction_id": "P1_LEDGER_IDENTITY",
+    "quantifier": "cone_all_branches_stage_five_through_fifteen",
+    "verdict": "passed",
+    "source_level": "G3a_stage5_to15_kappa_semantic_nu",
+    "source_verdict": "passed",
+    "branch_count": {
+      "value": 4,
+      "register": "proof_inventory",
+      "meaning": "cone branches compared by G3a"
+    },
+    "unordered_pair_count": {
+      "value": 6,
+      "register": "proof_inventory",
+      "meaning": "unordered branch pairs compared by G3a"
+    },
+    "stage_band_first": {
+      "value": 5,
+      "register": "syntax_identifier",
+      "meaning": "first successor stage in P1"
+    },
+    "stage_band_last": {
+      "value": 15,
+      "register": "syntax_identifier",
+      "meaning": "last successor stage in P1"
+    },
+    "stage_count": {
+      "value": 11,
+      "register": "proof_inventory",
+      "meaning": "successor stages covered by P1"
+    },
+    "every_g3a_pair_equal": true,
+    "g3a_derivation_hash": "blake3:0435d4df01fde08bcc0c23a49ffde8f5b840529ef95319b5c0cd5efcd32b994d",
+    "derivation_hash": "blake3:6eb62b1ba15c3e0fce04ef86e01bde00339a6f6dcb071a21080cf96ea3880d7e"
+  },
+  "p2": {
+    "prediction_id": "P2_WINNER_IDENTITY_MODULO_FORK_SHADOW",
+    "quantifier": "every_unordered_branch_pair_stage_five_through_fifteen",
+    "verdict": "passed",
+    "branch_count": {
+      "value": 4,
+      "register": "proof_inventory",
+      "meaning": "sealed branches compared by P2"
+    },
+    "unordered_pair_count": {
+      "value": 6,
+      "register": "proof_inventory",
+      "meaning": "unordered branch pairs in P2"
+    },
+    "fork_shadow_stage_count": {
+      "value": 3,
+      "register": "proof_inventory",
+      "meaning": "stages normalized by fork-shadow relabeling"
+    },
+    "fork_shadow_pair_stage_comparison_count": {
+      "value": 18,
+      "register": "proof_inventory",
+      "meaning": "fork-shadow pair-stage comparisons"
+    },
+    "correspondence_stage_count": {
+      "value": 8,
+      "register": "proof_inventory",
+      "meaning": "later stages proved through correspondence transitivity"
+    },
+    "sealed_correspondence_input_row_count": {
+      "value": 24,
+      "register": "proof_inventory",
+      "meaning": "sealed alternate-to-enacted correspondence rows"
+    },
+    "transitive_pair_stage_proof_count": {
+      "value": 48,
+      "register": "proof_inventory",
+      "meaning": "pair-stage identities proved by enacted-root transitivity"
+    },
+    "fork_shadow_comparisons": [
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "left_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "right_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "left_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "right_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:7c1bbe0d75827fc16ae70c512d114156614af5e820a166160f4575a84b38166b"
+      },
+      {
+        "stage": {
+          "value": 6,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "left_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "right_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "left_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "right_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:e53034d454abea4da706642325a0707e8b683a54e10bb12eeca3edb987b1fda2"
+      },
+      {
+        "stage": {
+          "value": 7,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "left_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "right_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "left_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "right_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:2ab868a785112d769810c92b8fd8280ce26d2fce97dcbd6d0e49ed46bd3af420"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "right_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "left_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "right_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:3593a59c51c94a36a44b460d76d54851301d1fedbdb1c538bca60ee2065913d6"
+      },
+      {
+        "stage": {
+          "value": 6,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "right_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "left_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "right_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:cc0e2baeb579762a1c309c193814b2ef9f579534efef370773a08f7ab8e413cc"
+      },
+      {
+        "stage": {
+          "value": 7,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "right_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "left_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "right_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:b2e3a22381f2f8dcbf6d16f49b6d4fd639c959076b525789a0d36e26428e6491"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "right_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "left_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "right_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:b90d39802c06375f7a5de040acbce24f3bfa717477d2b50fded90f069432190c"
+      },
+      {
+        "stage": {
+          "value": 6,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "right_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "left_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "right_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:a46a19cf891c6f990ef133b1bf0b6b49947ee35a9385c4c6e8e7424559407ed4"
+      },
+      {
+        "stage": {
+          "value": 7,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "right_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "left_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "right_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:8e826efeeee5eb261599ab668bb7254628fcfafc3b4235a850279c7622a13e31"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "right_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "left_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "right_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:3a0f142bb616328b0264ea55f840321b09ac6efed98dc6d1603f89acd5193b30"
+      },
+      {
+        "stage": {
+          "value": 6,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "right_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "left_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "right_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:ba5cd6ff999b1be361a5511238531941f1d847738bb8ff39833b1e454a7fcf8e"
+      },
+      {
+        "stage": {
+          "value": 7,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "right_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "left_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "right_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:51d0fdfc704227c2844142ffd58c7acf854636961d67f3ae9e46a86a47d11ee1"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "right_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "left_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "right_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:f755f12e4c0a8f2a3cf4771cbf073903e130ca2847672533877bb08986ed9f56"
+      },
+      {
+        "stage": {
+          "value": 6,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "right_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "left_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "right_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:d23ff084c09fb3530c6588aa0edaca9fefae9fffd4e067fa535b2626a722e366"
+      },
+      {
+        "stage": {
+          "value": 7,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "right_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "left_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "right_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:312b5d065a7df67307ac77edaf05e8822f8121e372d831518fbd0417159feab9"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "right_winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "left_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "right_canonical_telescope_hash": "blake3:34b38f64b1b850fbe0afb705fc869caa01f122d36b12e58c8c2daa2a056394ff",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:a8028dc439fc87edc239e6a658af9d7797c45429d8382f1f3692a78386c6a688"
+      },
+      {
+        "stage": {
+          "value": 6,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "right_winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "left_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "right_canonical_telescope_hash": "blake3:c29492e0e08faf4246d119fe5a2e93af8528ddef572ae7fd5b3cf674ace52114",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:cfa1fc8b52800b0c4a41067ffc8280930555bdfcf60df92794654274d621bbd7"
+      },
+      {
+        "stage": {
+          "value": 7,
+          "register": "syntax_identifier",
+          "meaning": "P2 fork-shadow comparison stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "right_winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "left_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "right_canonical_telescope_hash": "blake3:95021b8d232b36f3302c2f02ca905bd8e7916f573c4fa25005cabea1418d5f40",
+        "left_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the left"
+        },
+        "right_stage4_reference_relabel_count": {
+          "value": 0,
+          "register": "proof_inventory",
+          "meaning": "recursive Expr::Lib(4) occurrences relabelled on the right"
+        },
+        "left_relabel_applied": false,
+        "right_relabel_applied": false,
+        "canonical_telescopes_identical": true,
+        "derivation_hash": "blake3:067df00321b0cae94d8f9a81aea2a7b6ee3fc2a0a941270cbfb74ca41c7b4f6d"
+      }
+    ],
+    "enacted_root_transitivity_comparisons": [
+      {
+        "stage": {
+          "value": 8,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "right_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "enacted_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "left_to_enacted_evidence_hash": "blake3:645a4da304ba3c2644f3ce6a3a0d1495803b555e850293c8c06a97900ff51051",
+        "right_to_enacted_evidence_hash": "blake3:74ca9901ec00cf2ec43d554b65cd88f4f3c36836491b1f8508e63ed0402003a1",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:0e02b711a956b105ed6fd8e2847fec44ba0010d2c3c6256524bc5389f8afbf4b"
+      },
+      {
+        "stage": {
+          "value": 9,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "right_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "enacted_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "left_to_enacted_evidence_hash": "blake3:2998bc31848864f8a8d4f348b4acb8b8d66aaaae9a5ba7c1d0782b1273ea3e87",
+        "right_to_enacted_evidence_hash": "blake3:5698184587e9c64478dd4646d539f2877529e96e86d97eb871ddd985e7b445e6",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:100cc9e23a6e3159fce09d332ad74c0752e8ec0dad48821a0404e15792d5eb59"
+      },
+      {
+        "stage": {
+          "value": 10,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "right_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "enacted_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "left_to_enacted_evidence_hash": "blake3:f01df1efa9bcc61f3159becbb9553e664492d59b31789f703386dbdf61a7e338",
+        "right_to_enacted_evidence_hash": "blake3:ceea8d2d8c2496f9563f7ea6c27c0b1d7405258ad1ebeb3c4709a1bd368b539b",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:743a98ac4593e6358adf170fe78b1dce3ad326bdb4c2b749dce2ca2363cd3ba0"
+      },
+      {
+        "stage": {
+          "value": 11,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "right_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "enacted_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "left_to_enacted_evidence_hash": "blake3:27d7f1a585dc3eceb5c4e9ca77cbc4639cea8c92dee4195a7204babf1a0ff856",
+        "right_to_enacted_evidence_hash": "blake3:9dc7c444dc93f95a409bd84c8305a23c23e9b73aa5a44c5ac37f4c260b56a147",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:b3132f6186db108238000c87aef60dcee852225f826f55a91475d49251b09665"
+      },
+      {
+        "stage": {
+          "value": 12,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "right_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "enacted_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "left_to_enacted_evidence_hash": "blake3:9b4087821df804108ca208ee9f6ee2c5ac9837e809d4832b0ff7e78a955bc0a9",
+        "right_to_enacted_evidence_hash": "blake3:e1607d432562c21f14546f413c63731e611c9ca4fcd602de25fde341eff5d3e3",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:2ff8f5ea585c56353dd8069b8835731fcee33b9ceb8884dbbebb19a7530751ee"
+      },
+      {
+        "stage": {
+          "value": 13,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "right_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "enacted_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "left_to_enacted_evidence_hash": "blake3:bba7c2f35aa505c14981af967b9b6bac6807aa8eb3a6cb3194dc511dbd5c767d",
+        "right_to_enacted_evidence_hash": "blake3:4d4087b38f514033af7866556789f27a60eda7c399e4aceff8aeafab1be6efaf",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:8bc0d7f064795cd243242c316d347914856b61dc6e0c71309301c2f65de3b761"
+      },
+      {
+        "stage": {
+          "value": 14,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "right_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "enacted_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "left_to_enacted_evidence_hash": "blake3:af050fa96ef609a6541618e61db2d0e0a9c2b3dfc518b4ec3be4267d08598911",
+        "right_to_enacted_evidence_hash": "blake3:b2b8404b5d39ef4c2ab26e512d571a1470dc4c1b718d64acccbc35c1d5aee23d",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:56fab0914fbb5a92811f9898460b9d6003e541c8e63f3d7bea559187a7690beb"
+      },
+      {
+        "stage": {
+          "value": 15,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "right_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "enacted_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "left_to_enacted_evidence_hash": "blake3:442035fa260d8641eaf589e1343bab4f0f19e211738677f13caca46bd477ed7d",
+        "right_to_enacted_evidence_hash": "blake3:49f2f2c00388ac8f40d233dce70c5339d8bbc411dd5f95238554a28da64f8a08",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:ff4751ab916d02be3aa8ffbd3968488f11f46faacb7b56e358762a4fcd111a81"
+      },
+      {
+        "stage": {
+          "value": 8,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "right_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "enacted_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "left_to_enacted_evidence_hash": "blake3:645a4da304ba3c2644f3ce6a3a0d1495803b555e850293c8c06a97900ff51051",
+        "right_to_enacted_evidence_hash": "blake3:abddd842d4e2f7145083163eb639432051ae73a118a7eee6649e9f5b847e70a9",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:9bf67d43d98eec8cf3a14d96ae1c3ec13c8e35addb75897a03fca2d23cd1bfbf"
+      },
+      {
+        "stage": {
+          "value": 9,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "right_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "enacted_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "left_to_enacted_evidence_hash": "blake3:2998bc31848864f8a8d4f348b4acb8b8d66aaaae9a5ba7c1d0782b1273ea3e87",
+        "right_to_enacted_evidence_hash": "blake3:f115f3bbc57c9a125708e4135ce5281cebfc7caa68b06bd579d8bb7ba0097f9f",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:cd605dcf91910ce9a230be27fbc6212923c059c217ad7d54b18c1299cc1d629a"
+      },
+      {
+        "stage": {
+          "value": 10,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "right_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "enacted_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "left_to_enacted_evidence_hash": "blake3:f01df1efa9bcc61f3159becbb9553e664492d59b31789f703386dbdf61a7e338",
+        "right_to_enacted_evidence_hash": "blake3:5d6515c89b4727a56963a9313aa3733116614ad5543bb45e8036da239a7b0807",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:f796840814fa5d1655727c5fe9d28c0ac1d4c2e0596200147f7d73d6b08ff11c"
+      },
+      {
+        "stage": {
+          "value": 11,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "right_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "enacted_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "left_to_enacted_evidence_hash": "blake3:27d7f1a585dc3eceb5c4e9ca77cbc4639cea8c92dee4195a7204babf1a0ff856",
+        "right_to_enacted_evidence_hash": "blake3:dcf32081d6465a65d25be5996df43e1255cc170fa22059532eacf705b93b902d",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:9dff568b2506a8ec5bed3ea51015643754f02c7c52e6f3f1336f16ff99ffc7c5"
+      },
+      {
+        "stage": {
+          "value": 12,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "right_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "enacted_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "left_to_enacted_evidence_hash": "blake3:9b4087821df804108ca208ee9f6ee2c5ac9837e809d4832b0ff7e78a955bc0a9",
+        "right_to_enacted_evidence_hash": "blake3:b4dfdc41e67c8fd98f0fde2b31dc8c235b7210b76ba09b139d0560a65ab87b9b",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:73921ff3194912e690f3a89dc82a7e130deaffb3d856ba80f096cf6306c77a7d"
+      },
+      {
+        "stage": {
+          "value": 13,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "right_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "enacted_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "left_to_enacted_evidence_hash": "blake3:bba7c2f35aa505c14981af967b9b6bac6807aa8eb3a6cb3194dc511dbd5c767d",
+        "right_to_enacted_evidence_hash": "blake3:bebc9c0cb12b0ad37dc917888f27b464931846a3542dfa32ea7ba55f7dddc0c0",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:a208c978a392f82bb1613f155c63ab19488afe6ad5f3c4597ac7d8004c58196e"
+      },
+      {
+        "stage": {
+          "value": 14,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "right_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "enacted_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "left_to_enacted_evidence_hash": "blake3:af050fa96ef609a6541618e61db2d0e0a9c2b3dfc518b4ec3be4267d08598911",
+        "right_to_enacted_evidence_hash": "blake3:2829199b061f18f82b76ff7ca9b1374af917558167686ac85b35a2eaa5842c9b",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:dc66f4364ee1bd762f19f96db5798987834f3471a7337d198470f91a47b2ed5e"
+      },
+      {
+        "stage": {
+          "value": 15,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "right_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "enacted_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "left_to_enacted_evidence_hash": "blake3:442035fa260d8641eaf589e1343bab4f0f19e211738677f13caca46bd477ed7d",
+        "right_to_enacted_evidence_hash": "blake3:02895a84f7707c85b59cc38e0083be3f631172a2400fc7ad215c4d51a07359ba",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:2730b42412822e105128249d9a4ddc052ebf513e109f2d4fab3e66343c68a2e7"
+      },
+      {
+        "stage": {
+          "value": 8,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "right_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "enacted_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "left_to_enacted_evidence_hash": "blake3:645a4da304ba3c2644f3ce6a3a0d1495803b555e850293c8c06a97900ff51051",
+        "right_to_enacted_evidence_hash": "blake3:a8dcfc7aa8d0fb8b18fe7b46af5f81a29d4412e9f69f89d57522badd02fd0a86",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:c452dde3f4d7ababdf9d95baaebe1ce28fdd848d1db9639ba385dd511498297d"
+      },
+      {
+        "stage": {
+          "value": 9,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "right_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "enacted_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "left_to_enacted_evidence_hash": "blake3:2998bc31848864f8a8d4f348b4acb8b8d66aaaae9a5ba7c1d0782b1273ea3e87",
+        "right_to_enacted_evidence_hash": "blake3:aece158e70f5156142b78444015affeea48d248cc5695c485f720ab19c06f48c",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:84e0845ae90bc566b8fad1cec6e3e75b7dfcbb337c58694cd887de0ecd4ecd35"
+      },
+      {
+        "stage": {
+          "value": 10,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "right_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "enacted_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "left_to_enacted_evidence_hash": "blake3:f01df1efa9bcc61f3159becbb9553e664492d59b31789f703386dbdf61a7e338",
+        "right_to_enacted_evidence_hash": "blake3:fbea812f0003814549b89b8198d1e642aa4e49cb571affc79dddb4a22c58a59b",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:6072e79f1e8f06c2f8c80c17341e20a02768e8b2ecb90c6f6125aa30ae634318"
+      },
+      {
+        "stage": {
+          "value": 11,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "right_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "enacted_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "left_to_enacted_evidence_hash": "blake3:27d7f1a585dc3eceb5c4e9ca77cbc4639cea8c92dee4195a7204babf1a0ff856",
+        "right_to_enacted_evidence_hash": "blake3:ed4422413c6c03e470b687a90b79902d0eaf7680382740d0ec892e788155605e",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:9600cad459a53e9400072edc5f95ae93a207009c7b111b4e31d2e0da729804b8"
+      },
+      {
+        "stage": {
+          "value": 12,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "right_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "enacted_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "left_to_enacted_evidence_hash": "blake3:9b4087821df804108ca208ee9f6ee2c5ac9837e809d4832b0ff7e78a955bc0a9",
+        "right_to_enacted_evidence_hash": "blake3:13fea1c8b8965289bccf9334901ae7febaa64e6e229353786b747ad5f61174ba",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:c31031a7c616f39bb6819e42413355b1027d14bc9329dcf12e5cc8a364657e7c"
+      },
+      {
+        "stage": {
+          "value": 13,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "right_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "enacted_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "left_to_enacted_evidence_hash": "blake3:bba7c2f35aa505c14981af967b9b6bac6807aa8eb3a6cb3194dc511dbd5c767d",
+        "right_to_enacted_evidence_hash": "blake3:66e272a563b3476289e23dd3f45e0da84296922dde9be2db1ff08635d05d3184",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:8ae3240aa7e9c2c52c2f4730a4adfb77dba872c01217e45f9338b00aece0d0bb"
+      },
+      {
+        "stage": {
+          "value": 14,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "right_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "enacted_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "left_to_enacted_evidence_hash": "blake3:af050fa96ef609a6541618e61db2d0e0a9c2b3dfc518b4ec3be4267d08598911",
+        "right_to_enacted_evidence_hash": "blake3:20e9ca93a3317c109fb905900ec68739b2897ab242f0370cf6c87aaae1142b4f",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:5cd82a9755ebef3fdbd1a35ce2a6b8ee2a4494101b39f90cfc5224420439582e"
+      },
+      {
+        "stage": {
+          "value": 15,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "right_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "enacted_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "left_to_enacted_evidence_hash": "blake3:442035fa260d8641eaf589e1343bab4f0f19e211738677f13caca46bd477ed7d",
+        "right_to_enacted_evidence_hash": "blake3:6536f74df2d2f1f9fad4e2700bb648f052c71fff0cd8dbf8e36fb518a10e0ffa",
+        "left_edge_is_reflexive": true,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:028e8c69388733e7cdd7e32dcdc12636f4f1901fe4e5225c7c42bcee7331d91b"
+      },
+      {
+        "stage": {
+          "value": 8,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "right_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "enacted_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "left_to_enacted_evidence_hash": "blake3:74ca9901ec00cf2ec43d554b65cd88f4f3c36836491b1f8508e63ed0402003a1",
+        "right_to_enacted_evidence_hash": "blake3:abddd842d4e2f7145083163eb639432051ae73a118a7eee6649e9f5b847e70a9",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:7165f3c3cf79ae47ddbe2c70c265dc262aa8559617b46e455ebd507b948289b4"
+      },
+      {
+        "stage": {
+          "value": 9,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "right_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "enacted_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "left_to_enacted_evidence_hash": "blake3:5698184587e9c64478dd4646d539f2877529e96e86d97eb871ddd985e7b445e6",
+        "right_to_enacted_evidence_hash": "blake3:f115f3bbc57c9a125708e4135ce5281cebfc7caa68b06bd579d8bb7ba0097f9f",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:56c25147e6b40441344185f040958c9489dade251c1bb525c5ef47ce2388cbb5"
+      },
+      {
+        "stage": {
+          "value": 10,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "right_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "enacted_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "left_to_enacted_evidence_hash": "blake3:ceea8d2d8c2496f9563f7ea6c27c0b1d7405258ad1ebeb3c4709a1bd368b539b",
+        "right_to_enacted_evidence_hash": "blake3:5d6515c89b4727a56963a9313aa3733116614ad5543bb45e8036da239a7b0807",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:9c0c1ab7431c10e475e7ebe31ecc6a468e13c46d7a4d425ea759266c0bd29cfd"
+      },
+      {
+        "stage": {
+          "value": 11,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "right_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "enacted_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "left_to_enacted_evidence_hash": "blake3:9dc7c444dc93f95a409bd84c8305a23c23e9b73aa5a44c5ac37f4c260b56a147",
+        "right_to_enacted_evidence_hash": "blake3:dcf32081d6465a65d25be5996df43e1255cc170fa22059532eacf705b93b902d",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:94e02c593a4a7fa932c4ff7e6b9d218c31e0f2a555e5fec417dc894faf586145"
+      },
+      {
+        "stage": {
+          "value": 12,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "right_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "enacted_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "left_to_enacted_evidence_hash": "blake3:e1607d432562c21f14546f413c63731e611c9ca4fcd602de25fde341eff5d3e3",
+        "right_to_enacted_evidence_hash": "blake3:b4dfdc41e67c8fd98f0fde2b31dc8c235b7210b76ba09b139d0560a65ab87b9b",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:1fc5c6f8134bf6340d0ae7c41a73e8edda113781052406dfafadbcb5f20316b3"
+      },
+      {
+        "stage": {
+          "value": 13,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "right_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "enacted_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "left_to_enacted_evidence_hash": "blake3:4d4087b38f514033af7866556789f27a60eda7c399e4aceff8aeafab1be6efaf",
+        "right_to_enacted_evidence_hash": "blake3:bebc9c0cb12b0ad37dc917888f27b464931846a3542dfa32ea7ba55f7dddc0c0",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:aa308453e201240352435a62d2c2f52d228756509ce5dc2379c829e3fdf52f41"
+      },
+      {
+        "stage": {
+          "value": 14,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "right_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "enacted_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "left_to_enacted_evidence_hash": "blake3:b2b8404b5d39ef4c2ab26e512d571a1470dc4c1b718d64acccbc35c1d5aee23d",
+        "right_to_enacted_evidence_hash": "blake3:2829199b061f18f82b76ff7ca9b1374af917558167686ac85b35a2eaa5842c9b",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:582fac5a9c2456812780275e356ba48fb50e00bce872fa24e689c335be222911"
+      },
+      {
+        "stage": {
+          "value": 15,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "right_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "enacted_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "left_to_enacted_evidence_hash": "blake3:49f2f2c00388ac8f40d233dce70c5339d8bbc411dd5f95238554a28da64f8a08",
+        "right_to_enacted_evidence_hash": "blake3:02895a84f7707c85b59cc38e0083be3f631172a2400fc7ad215c4d51a07359ba",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:777181bf8e31f8ad22e64a12c2cb8da3d110d642178b5c96aff30d700ccd11b9"
+      },
+      {
+        "stage": {
+          "value": 8,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "right_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "enacted_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "left_to_enacted_evidence_hash": "blake3:74ca9901ec00cf2ec43d554b65cd88f4f3c36836491b1f8508e63ed0402003a1",
+        "right_to_enacted_evidence_hash": "blake3:a8dcfc7aa8d0fb8b18fe7b46af5f81a29d4412e9f69f89d57522badd02fd0a86",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:6d2725aae654d6582ccbf0263a786fde5aadbc02172537195f7d131d1fbe398b"
+      },
+      {
+        "stage": {
+          "value": 9,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "right_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "enacted_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "left_to_enacted_evidence_hash": "blake3:5698184587e9c64478dd4646d539f2877529e96e86d97eb871ddd985e7b445e6",
+        "right_to_enacted_evidence_hash": "blake3:aece158e70f5156142b78444015affeea48d248cc5695c485f720ab19c06f48c",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:0a5ede42b61873c3e41bf2c5be15722c4fc8abec043d31a72166fc829a86d351"
+      },
+      {
+        "stage": {
+          "value": 10,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "right_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "enacted_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "left_to_enacted_evidence_hash": "blake3:ceea8d2d8c2496f9563f7ea6c27c0b1d7405258ad1ebeb3c4709a1bd368b539b",
+        "right_to_enacted_evidence_hash": "blake3:fbea812f0003814549b89b8198d1e642aa4e49cb571affc79dddb4a22c58a59b",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:6c07ab821cddfca04d85b9fa73e248b7fe6e1334a660b2fd21b731e1533a190f"
+      },
+      {
+        "stage": {
+          "value": 11,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "right_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "enacted_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "left_to_enacted_evidence_hash": "blake3:9dc7c444dc93f95a409bd84c8305a23c23e9b73aa5a44c5ac37f4c260b56a147",
+        "right_to_enacted_evidence_hash": "blake3:ed4422413c6c03e470b687a90b79902d0eaf7680382740d0ec892e788155605e",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:766498514511dd9486b76ff9de5e67b733d53d5a870612c1bbbe0100d716fa53"
+      },
+      {
+        "stage": {
+          "value": 12,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "right_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "enacted_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "left_to_enacted_evidence_hash": "blake3:e1607d432562c21f14546f413c63731e611c9ca4fcd602de25fde341eff5d3e3",
+        "right_to_enacted_evidence_hash": "blake3:13fea1c8b8965289bccf9334901ae7febaa64e6e229353786b747ad5f61174ba",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:941024f169b23ab90ade8573dbf49a940889e71b0fdad4805d1e67b353802482"
+      },
+      {
+        "stage": {
+          "value": 13,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "right_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "enacted_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "left_to_enacted_evidence_hash": "blake3:4d4087b38f514033af7866556789f27a60eda7c399e4aceff8aeafab1be6efaf",
+        "right_to_enacted_evidence_hash": "blake3:66e272a563b3476289e23dd3f45e0da84296922dde9be2db1ff08635d05d3184",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:20f3533ee6a727129c1e97692b3a5d9d1fea312bcf2e7762b4c579e1709bc219"
+      },
+      {
+        "stage": {
+          "value": 14,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "right_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "enacted_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "left_to_enacted_evidence_hash": "blake3:b2b8404b5d39ef4c2ab26e512d571a1470dc4c1b718d64acccbc35c1d5aee23d",
+        "right_to_enacted_evidence_hash": "blake3:20e9ca93a3317c109fb905900ec68739b2897ab242f0370cf6c87aaae1142b4f",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:9b0dce6e9554063c57defbb12e9cfed8e1e95b52331d30f292b1c964459b0777"
+      },
+      {
+        "stage": {
+          "value": 15,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "right_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "enacted_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "left_to_enacted_evidence_hash": "blake3:49f2f2c00388ac8f40d233dce70c5339d8bbc411dd5f95238554a28da64f8a08",
+        "right_to_enacted_evidence_hash": "blake3:6536f74df2d2f1f9fad4e2700bb648f052c71fff0cd8dbf8e36fb518a10e0ffa",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:832dfa6934ac589173e3f7d5ea13a9ac3a8afb71df16ae728038a2789993858c"
+      },
+      {
+        "stage": {
+          "value": 8,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "right_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "enacted_winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "left_to_enacted_evidence_hash": "blake3:abddd842d4e2f7145083163eb639432051ae73a118a7eee6649e9f5b847e70a9",
+        "right_to_enacted_evidence_hash": "blake3:a8dcfc7aa8d0fb8b18fe7b46af5f81a29d4412e9f69f89d57522badd02fd0a86",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:4117c671767d06b301494c825f07bff6cda934260e1ac6a277a280afb1807974"
+      },
+      {
+        "stage": {
+          "value": 9,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "right_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "enacted_winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "left_to_enacted_evidence_hash": "blake3:f115f3bbc57c9a125708e4135ce5281cebfc7caa68b06bd579d8bb7ba0097f9f",
+        "right_to_enacted_evidence_hash": "blake3:aece158e70f5156142b78444015affeea48d248cc5695c485f720ab19c06f48c",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:1bc3670964c6dd07ae8ce2f6cc33d8eb3cc37e1690b3bd4428e5a57f996d864f"
+      },
+      {
+        "stage": {
+          "value": 10,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "right_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "enacted_winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "left_to_enacted_evidence_hash": "blake3:5d6515c89b4727a56963a9313aa3733116614ad5543bb45e8036da239a7b0807",
+        "right_to_enacted_evidence_hash": "blake3:fbea812f0003814549b89b8198d1e642aa4e49cb571affc79dddb4a22c58a59b",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:a1747cca61e2b436f896bfc31f81d42787e307e859d5275c7e8fddfb3368be7b"
+      },
+      {
+        "stage": {
+          "value": 11,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "right_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "enacted_winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "left_to_enacted_evidence_hash": "blake3:dcf32081d6465a65d25be5996df43e1255cc170fa22059532eacf705b93b902d",
+        "right_to_enacted_evidence_hash": "blake3:ed4422413c6c03e470b687a90b79902d0eaf7680382740d0ec892e788155605e",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:746fc6c09c6198f0fc0e76b4dcf6262c001bacdbcaef445d0f9652eb3ea5a955"
+      },
+      {
+        "stage": {
+          "value": 12,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "right_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "enacted_winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "left_to_enacted_evidence_hash": "blake3:b4dfdc41e67c8fd98f0fde2b31dc8c235b7210b76ba09b139d0560a65ab87b9b",
+        "right_to_enacted_evidence_hash": "blake3:13fea1c8b8965289bccf9334901ae7febaa64e6e229353786b747ad5f61174ba",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:4fe54de960b01f6c695e3c63d2181ecca3e926146b3e54c541e9a2302ec8f91f"
+      },
+      {
+        "stage": {
+          "value": 13,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "right_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "enacted_winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "left_to_enacted_evidence_hash": "blake3:bebc9c0cb12b0ad37dc917888f27b464931846a3542dfa32ea7ba55f7dddc0c0",
+        "right_to_enacted_evidence_hash": "blake3:66e272a563b3476289e23dd3f45e0da84296922dde9be2db1ff08635d05d3184",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:a7097184b7435a9a18f97ec7a4dd3f82074c29b18328022350165197e49211bc"
+      },
+      {
+        "stage": {
+          "value": 14,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "right_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "enacted_winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "left_to_enacted_evidence_hash": "blake3:2829199b061f18f82b76ff7ca9b1374af917558167686ac85b35a2eaa5842c9b",
+        "right_to_enacted_evidence_hash": "blake3:20e9ca93a3317c109fb905900ec68739b2897ab242f0370cf6c87aaae1142b4f",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:967158f9583ac808c567bd7f0e3ec21756b2c1938e1dc32b428b21dacce8903e"
+      },
+      {
+        "stage": {
+          "value": 15,
+          "register": "syntax_identifier",
+          "meaning": "P2 enacted-root transitivity stage"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "enacted_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "left_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "right_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "enacted_winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+        "left_to_enacted_evidence_hash": "blake3:02895a84f7707c85b59cc38e0083be3f631172a2400fc7ad215c4d51a07359ba",
+        "right_to_enacted_evidence_hash": "blake3:6536f74df2d2f1f9fad4e2700bb648f052c71fff0cd8dbf8e36fb518a10e0ffa",
+        "left_edge_is_reflexive": false,
+        "right_edge_is_reflexive": false,
+        "both_edges_replayed": true,
+        "identity_proved_by_enacted_root_transitivity": true,
+        "derivation_hash": "blake3:965784d616921e2dea5264d963991d02aadcf2ad0a8e0847a3128e874834aa24"
+      }
+    ],
+    "every_stage4_reference_recursively_relabelled": true,
+    "all_fork_shadow_telescopes_identical": true,
+    "all_later_winners_identical_by_enacted_root_transitivity": true,
+    "derivation_hash": "blake3:53ea69c290d7502893a7ff3faf23530edf5477839bdea740781f48ade2b1d7b6"
+  },
+  "p3": {
+    "prediction_id": "P3_MARGIN_CONFINEMENT",
+    "quantifier": "every_rt2_branch_pair_stage_five_live_demand",
+    "verdict": "refuted",
+    "unordered_pair_count": {
+      "value": 6,
+      "register": "proof_inventory",
+      "meaning": "R-T2 branch pairs scored by P3"
+    },
+    "counterexample_count": {
+      "value": 6,
+      "register": "proof_inventory",
+      "meaning": "literal live-demand pairs absent from their perfect matching"
+    },
+    "counterexamples": [
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "Stage-5 live demand compared with R-T2 matching"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "left_live_structural_scheme_id": "blake3:effc6b16907fd83a1fb839966d502e0b98f89229b3645579cf2c995551279362",
+        "right_live_structural_scheme_id": "blake3:eb17d204816ba0e433f0c12832e2c46a5cfcafa0392109a569190fa5bfbef6b9",
+        "left_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "left branch live structural demand schemes"
+        },
+        "right_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "right branch live structural demand schemes"
+        },
+        "perfect_matching_edge_count": {
+          "value": 3,
+          "register": "proof_inventory",
+          "meaning": "literal edges in this sealed R-T2 perfect matching"
+        },
+        "live_pair_is_literal_perfect_matching_edge": false,
+        "f_uc2_counterexample": true,
+        "r_t2_pair_derivation_hash": "blake3:ca8401a4992f32eab3ace85549e060c74105f8c17c26e455e69c0feefdedeedd",
+        "derivation_hash": "blake3:df4183841e186b6ecf73fc060be7c2bf16c8d117ddfcb1f47f5e1bdcf249e376"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "Stage-5 live demand compared with R-T2 matching"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_live_structural_scheme_id": "blake3:effc6b16907fd83a1fb839966d502e0b98f89229b3645579cf2c995551279362",
+        "right_live_structural_scheme_id": "blake3:ea777de7a4c3eb979c30d193b0a536e7626ed66deffcc6dac319f9ae0e4a4a4e",
+        "left_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "left branch live structural demand schemes"
+        },
+        "right_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "right branch live structural demand schemes"
+        },
+        "perfect_matching_edge_count": {
+          "value": 2,
+          "register": "proof_inventory",
+          "meaning": "literal edges in this sealed R-T2 perfect matching"
+        },
+        "live_pair_is_literal_perfect_matching_edge": false,
+        "f_uc2_counterexample": true,
+        "r_t2_pair_derivation_hash": "blake3:b1dc6caddfffd50747965e60ede8bc96afc59299a05a39336e81d2f76f1b14ec",
+        "derivation_hash": "blake3:c2bd52a6db6b86289c404b4192475016c039be491eb0b163e3eb56bbb81ba708"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "Stage-5 live demand compared with R-T2 matching"
+        },
+        "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_live_structural_scheme_id": "blake3:effc6b16907fd83a1fb839966d502e0b98f89229b3645579cf2c995551279362",
+        "right_live_structural_scheme_id": "blake3:4ca45f603ddf8d33d97616eaf3a9e6b05629cd91813d238da540b42e26cf7cd4",
+        "left_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "left branch live structural demand schemes"
+        },
+        "right_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "right branch live structural demand schemes"
+        },
+        "perfect_matching_edge_count": {
+          "value": 3,
+          "register": "proof_inventory",
+          "meaning": "literal edges in this sealed R-T2 perfect matching"
+        },
+        "live_pair_is_literal_perfect_matching_edge": false,
+        "f_uc2_counterexample": true,
+        "r_t2_pair_derivation_hash": "blake3:dd0b96a88ac90f6f7c2beb5edf4c308c2b217f4366dfa06208993c65b8871db2",
+        "derivation_hash": "blake3:4109796a4366e0386adf804d322dc387b5c611a73505a238da5b110c168b8619"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "Stage-5 live demand compared with R-T2 matching"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_live_structural_scheme_id": "blake3:eb17d204816ba0e433f0c12832e2c46a5cfcafa0392109a569190fa5bfbef6b9",
+        "right_live_structural_scheme_id": "blake3:ea777de7a4c3eb979c30d193b0a536e7626ed66deffcc6dac319f9ae0e4a4a4e",
+        "left_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "left branch live structural demand schemes"
+        },
+        "right_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "right branch live structural demand schemes"
+        },
+        "perfect_matching_edge_count": {
+          "value": 3,
+          "register": "proof_inventory",
+          "meaning": "literal edges in this sealed R-T2 perfect matching"
+        },
+        "live_pair_is_literal_perfect_matching_edge": false,
+        "f_uc2_counterexample": true,
+        "r_t2_pair_derivation_hash": "blake3:7b1cd1cad2c031c2f9466f6f0c295dfbeca50e60658b5697797f351900d9eda5",
+        "derivation_hash": "blake3:427408b400d7ec6a94d357af117d4143e2e30c719beead0081be83cef7b65c61"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "Stage-5 live demand compared with R-T2 matching"
+        },
+        "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_live_structural_scheme_id": "blake3:eb17d204816ba0e433f0c12832e2c46a5cfcafa0392109a569190fa5bfbef6b9",
+        "right_live_structural_scheme_id": "blake3:4ca45f603ddf8d33d97616eaf3a9e6b05629cd91813d238da540b42e26cf7cd4",
+        "left_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "left branch live structural demand schemes"
+        },
+        "right_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "right branch live structural demand schemes"
+        },
+        "perfect_matching_edge_count": {
+          "value": 2,
+          "register": "proof_inventory",
+          "meaning": "literal edges in this sealed R-T2 perfect matching"
+        },
+        "live_pair_is_literal_perfect_matching_edge": false,
+        "f_uc2_counterexample": true,
+        "r_t2_pair_derivation_hash": "blake3:1d8b5cda24f604428b1925f5a455e221be88234b562fd0754909dd7c3f7b4bd3",
+        "derivation_hash": "blake3:7150db14bcaf6b177f0f9a310cc042da04935dfa5b05ddde449d44c50b8fbc2c"
+      },
+      {
+        "stage": {
+          "value": 5,
+          "register": "syntax_identifier",
+          "meaning": "Stage-5 live demand compared with R-T2 matching"
+        },
+        "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "left_live_structural_scheme_id": "blake3:ea777de7a4c3eb979c30d193b0a536e7626ed66deffcc6dac319f9ae0e4a4a4e",
+        "right_live_structural_scheme_id": "blake3:4ca45f603ddf8d33d97616eaf3a9e6b05629cd91813d238da540b42e26cf7cd4",
+        "left_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "left branch live structural demand schemes"
+        },
+        "right_live_scheme_count": {
+          "value": 1,
+          "register": "proof_inventory",
+          "meaning": "right branch live structural demand schemes"
+        },
+        "perfect_matching_edge_count": {
+          "value": 3,
+          "register": "proof_inventory",
+          "meaning": "literal edges in this sealed R-T2 perfect matching"
+        },
+        "live_pair_is_literal_perfect_matching_edge": false,
+        "f_uc2_counterexample": true,
+        "r_t2_pair_derivation_hash": "blake3:ca5696d569cf78d117c75b7257078a90d640d5d5cc96dee6c17465d5bd4f6d41",
+        "derivation_hash": "blake3:b3cb4d4ff7565cadb94a0ad0212993cf552471d9ca7dc02899b378cf49aff7a2"
+      }
+    ],
+    "every_live_pair_in_pairwise_matching": false,
+    "f_uc2_triggered": true,
+    "derivation_hash": "blake3:ca704eb10e19b0e0b48c9904475ed05ea899b11c78f4752a5f6567556a0605ee"
+  },
+  "f_uc4": {
+    "falsifier_id": "F-UC4",
+    "quantifier": "accepted_proof_bearing_transport_class_order_axis",
+    "transport_scope_boundary_id": "M1_PROOF_BEARING_TYPED_TRANSPORT_CLASS_ONLY",
+    "exported_typed_transport_map_count": {
+      "value": 5,
+      "register": "proof_inventory",
+      "meaning": "M-1 proof-bearing typed transport maps replayed"
+    },
+    "order_axis_obstruction_count": {
+      "value": 2,
+      "register": "proof_inventory",
+      "meaning": "order-axis no-bijection obstructions applied"
+    },
+    "order_axis_obstructions": [
+      {
+        "fixed_coordinate": "former=pi",
+        "left_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "right_candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "left_semantic_nu": {
+          "value": 3,
+          "register": "semantic_family_nu",
+          "meaning": "left act semantic-family cardinality"
+        },
+        "right_semantic_nu": {
+          "value": 2,
+          "register": "semantic_family_nu",
+          "meaning": "right act semantic-family cardinality"
+        },
+        "semantic_nu_distinct": true,
+        "no_accepted_typed_family_bijection_exists": true,
+        "m1_obstruction_derivation_hash": "blake3:d747769cf69ce0b499b86c404f14cdecbded7313e3d55b60179af4bef8c2a6f4",
+        "derivation_hash": "blake3:dfc3fc0abe2cd008050527048f44414c725f479100de44f83c6d6a1716d52a69"
+      },
+      {
+        "fixed_coordinate": "former=sigma",
+        "left_candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "right_candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "left_semantic_nu": {
+          "value": 3,
+          "register": "semantic_family_nu",
+          "meaning": "left act semantic-family cardinality"
+        },
+        "right_semantic_nu": {
+          "value": 2,
+          "register": "semantic_family_nu",
+          "meaning": "right act semantic-family cardinality"
+        },
+        "semantic_nu_distinct": true,
+        "no_accepted_typed_family_bijection_exists": true,
+        "m1_obstruction_derivation_hash": "blake3:dc0e335d32e6b13d3ae0e1d757a9e65e9cdc99b4b3e9d7f6efa8b3bb89a092d9",
+        "derivation_hash": "blake3:08d07472d1d7eb00e3f4c858eeee84be4873eea3ebc79846b5625f6058eb0daf"
+      }
+    ],
+    "generic_transport_invariance_replayed": true,
+    "both_order_axis_three_versus_two_obstructions_replayed": true,
+    "order_axis_equivalence_refuted_in_adopted_transport_class": true,
+    "burns_uc1a": true,
+    "burns_uc1d": true,
+    "does_not_assess_uc1b_former_semantics": true,
+    "derivation_hash": "blake3:ede2aa186de2f4f224600a3e62969b4bc5ce7b9f0d8ffbc86324ca4e73103ce6"
+  },
+  "clause_dispositions": [
+    {
+      "clause_id": "UC-1a",
+      "status": "burned",
+      "grounds": "F-UC4: semantic-family nu is invariant in the adopted proof-bearing transport class, while both within-former order pairs carry certified 3-versus-2 [semantic_family_nu] obstructions",
+      "evidence_derivation_hashes": [
+        "blake3:ede2aa186de2f4f224600a3e62969b4bc5ce7b9f0d8ffbc86324ca4e73103ce6"
+      ],
+      "derivation_hash": "blake3:d18445162f95d1a74fa595d2290c0ff2280401e9dbe9a24d8aec73020e81b16d"
+    },
+    {
+      "clause_id": "UC-1b",
+      "status": "untested",
+      "grounds": "U_T2_UNATTEMPTED: M-1's narrow transport class does not construct or obstruct Pi/Sigma act-level former equivalence",
+      "evidence_derivation_hashes": [
+        "blake3:b9d84d8927e4d1e369e6cf9904664e5f0a9ecc1cdf9e3e92644133cae14e804c"
+      ],
+      "derivation_hash": "blake3:591974f7fc139523279c44f4260e9c2216095c7f5ba7db67f1f721d5d38eae30"
+    },
+    {
+      "clause_id": "UC-1c",
+      "status": "burned",
+      "grounds": "F-UC2: every sealed Stage-5 live-demand pair is absent from its R-T2 perfect matching, so margin confinement is refuted",
+      "evidence_derivation_hashes": [
+        "blake3:ca704eb10e19b0e0b48c9904475ed05ea899b11c78f4752a5f6567556a0605ee"
+      ],
+      "derivation_hash": "blake3:820280c5cd4fc09fe8184829ad683a37a2be70cf4151afccbf7babfbd3c3b805"
+    },
+    {
+      "clause_id": "UC-1d",
+      "status": "burned",
+      "grounds": "full collapse fails independently through the burned order-gauge and healing clauses",
+      "evidence_derivation_hashes": [
+        "blake3:ede2aa186de2f4f224600a3e62969b4bc5ce7b9f0d8ffbc86324ca4e73103ce6",
+        "blake3:ca704eb10e19b0e0b48c9904475ed05ea899b11c78f4752a5f6567556a0605ee"
+      ],
+      "derivation_hash": "blake3:b645182fbd8b52459557a0362092bcbd91c5d68763f2e1ebdff846b68bfbcd7c"
+    }
+  ],
+  "outcome_zone": "Z-LEDGER",
+  "sole_former_axis_residual": "U_T2_UNATTEMPTED",
+  "residual_nonblocking_because_p3_refuted": true,
+  "z_collapse_or_z_heal_guessed": false,
+  "no_new_equivalence_semantics_assumed": true,
+  "no_candidate_or_value_recomputed_or_newly_observed_for_scoring": true,
+  "semantic_nu_bar_hash_or_enumeration_order_used_as_selector": false,
+  "mutation_falsifiers": [
+    "flip_any_prediction_or_clause_verdict_then_replay_must_fail",
+    "change_any_bound_digest_then_replay_must_fail",
+    "change_any_claim_quantifier_then_replay_must_fail",
+    "change_any_numeric_register_tag_then_replay_must_fail",
+    "promote_any_P3_live_pair_to_a_matching_edge_then_replay_must_fail",
+    "drop_or_weaken_either_F_UC4_order_obstruction_then_replay_must_fail",
+    "toggle_R_T2_live_or_sealed_fallback_status_or_remove_its_exact_error_then_replay_must_fail"
+  ],
+  "permitted_conclusion": "P1 Passed and P2 Passed, but P3 Refuted under F-UC2; F-UC4 independently burns UC-1a in the adopted narrow transport class. Therefore UC-1c and UC-1d are burned, the scored zone is Z-LEDGER, and UC-1b remains only as U_T2_UNATTEMPTED.",
+  "forbidden_conclusion": "This artifact does not infer Pi/Sigma former equivalence or inequivalence, does not guess Z-COLLAPSE or Z-HEAL, does not broaden M-1's transport class, and does not use semantic nu, structural testimony, a bar, a hash, or enumeration order as a selector.",
+  "result_digest": "blake3:74ede5271122f8f7998f46350ce95dd2f6ae7fa5d019bde6156ceaf5188b86c6"
+}

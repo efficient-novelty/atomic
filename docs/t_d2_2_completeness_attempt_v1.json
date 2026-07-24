@@ -1,0 +1,917 @@
+{
+  "schema": "t-d2-2-completeness-attempt-v1",
+  "date": "2026-07-23",
+  "status": "stopped_on_td21_finite_domain_dependency",
+  "theorem_disposition": "not_attempted_dependency_unsatisfied",
+  "adjudication_sha256": "sha256:fffd48c0eb5f89b6728842aa6f9de5aa43013ab867278d6b8ec6b2737ed92151",
+  "source_bindings": [
+    {
+      "path": "docs/depth_two_domain_adjudication.md",
+      "role": "adopted T-D2 law and boundedness stop",
+      "byte_length": {
+        "decimal": "6825",
+        "register": "law",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:fffd48c0eb5f89b6728842aa6f9de5aa43013ab867278d6b8ec6b2737ed92151",
+      "register": "law"
+    },
+    {
+      "path": "docs/step_15_completion_open_problem.md",
+      "role": "prior Schema2 grammar requirement and raw-AST warning",
+      "byte_length": {
+        "decimal": "15507",
+        "register": "law",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:fe3b2eb8f17f12563596d7a937d39d2618625503cf4ba1af8bba33e224309c82",
+      "register": "law"
+    },
+    {
+      "path": "crates/pen-core/src/expr.rs",
+      "role": "recursive expression carrier and structural equality",
+      "byte_length": {
+        "decimal": "10207",
+        "register": "kernel_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:f4da000f35a343fe6ad749c36e12d56330c8787efc73bb9c01a0289f65ea2531",
+      "register": "kernel_testimony"
+    },
+    {
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "unbounded clause-vector representation",
+      "byte_length": {
+        "decimal": "19443",
+        "register": "kernel_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:be2d6e9dc0c111279c5535c9b933ea0a157837e2fb5af59ece6b8cba5adfafa0",
+      "register": "kernel_testimony"
+    },
+    {
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "frozen kernel acceptance and Susp closure",
+      "byte_length": {
+        "decimal": "102010",
+        "register": "kernel_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:6b713bb5286648a1c7a22c55a2446af8eca58223343ce2cd716c49748e447719",
+      "register": "kernel_testimony"
+    },
+    {
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "frozen normalizer and Susp preservation",
+      "byte_length": {
+        "decimal": "17962",
+        "register": "kernel_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:7d3398b60708bf1ac132609e0bf84d6a26383f9dcc90f11f99d5803ed9da73f2",
+      "register": "kernel_testimony"
+    },
+    {
+      "path": "crates/pen-type/src/equality.rs",
+      "role": "frozen beta-normal syntactic equality",
+      "byte_length": {
+        "decimal": "4757",
+        "register": "kernel_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:3aa5fd8d4e9667c1534f39fc0c76ef956e6372301b767f2442c918c6b85c3401",
+      "register": "kernel_testimony"
+    },
+    {
+      "path": "crates/pen-eval/src/typed_families.rs",
+      "role": "adopted family presentation quotient",
+      "byte_length": {
+        "decimal": "53286",
+        "register": "kernel_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:8ac9d5f76c8e965aee6ef43244a4df1b8ec6bd264e14a3eac52d8d56f2319c67",
+      "register": "kernel_testimony"
+    },
+    {
+      "path": "crates/pen-search/src/t_d2_2_completeness_attempt_v1.rs",
+      "role": "this theorem-attempt issuer and replay",
+      "byte_length": {
+        "decimal": "62282",
+        "register": "proof_program",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:3e3d3bcb2e527bf57163b67c1c640e649db02685a91727a3c59c4d5d4bb3de8f",
+      "register": "proof_program"
+    },
+    {
+      "path": "crates/pen-search/src/t_d2_1_domain_build_v1.rs",
+      "role": "T-D2-1 domain-build implementation",
+      "byte_length": {
+        "decimal": "67179",
+        "register": "dependency_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:b00bf929e44d762b75a1d6fbf883fc822f6567c9c062d883519a2cb726afe3b0",
+      "register": "dependency_testimony"
+    },
+    {
+      "path": "docs/t_d2_1_domain_build_v1.json",
+      "role": "T-D2-1 create-new certificate",
+      "byte_length": {
+        "decimal": "35882",
+        "register": "dependency_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:79a7fea2d14801b7a83539eb0e4db38e25b7327c505fb689e84a4a25da2437d0",
+      "register": "dependency_testimony"
+    },
+    {
+      "path": "docs/T_D2_1_DOMAIN_BUILD_V1_RESULT.md",
+      "role": "T-D2-1 deterministic result report",
+      "byte_length": {
+        "decimal": "5752",
+        "register": "dependency_testimony",
+        "meaning": "exact source byte length"
+      },
+      "sha256": "sha256:5b455d509cedab1cbb0383cfe8b554dc39a9d6219a68cd765c393a4c2447a656",
+      "register": "dependency_testimony"
+    }
+  ],
+  "td21_binding": {
+    "expected_source_path": "crates/pen-search/src/t_d2_1_domain_build_v1.rs",
+    "expected_certificate_path": "docs/t_d2_1_domain_build_v1.json",
+    "expected_report_path": "docs/T_D2_1_DOMAIN_BUILD_V1_RESULT.md",
+    "source_present": true,
+    "certificate_present": true,
+    "report_present": true,
+    "source_sha256": "sha256:b00bf929e44d762b75a1d6fbf883fc822f6567c9c062d883519a2cb726afe3b0",
+    "certificate_sha256": "sha256:79a7fea2d14801b7a83539eb0e4db38e25b7327c505fb689e84a4a25da2437d0",
+    "report_sha256": "sha256:5b455d509cedab1cbb0383cfe8b554dc39a9d6219a68cd765c393a4c2447a656",
+    "typed_certificate_parse_succeeded": true,
+    "typed_certificate_parse_error": null,
+    "exact_v1_schema_matched": true,
+    "typed_certificate_result_digest": "blake3:0811bf4686f42ead69f1d642ab47682933eeecaaa34d788da7a8e27b49214790",
+    "public_replay_valid": true,
+    "public_replay_errors": [],
+    "typed_certificate_authenticated": true,
+    "typed_source_binding_sha256": "sha256:b00bf929e44d762b75a1d6fbf883fc822f6567c9c062d883519a2cb726afe3b0",
+    "runtime_source_matches_typed_binding": true,
+    "report_matches_deterministic_render": true,
+    "dependency_trusted": true,
+    "typed_open_gap_ids": [
+      "T_D2_1_FIXED_DEPTH_TWO_FRAGMENT_NOT_OPERATIONALLY_DEFINED",
+      "TD21_NFSCH2_MEMBERSHIP_DECISION_NOT_TOTAL",
+      "TD21_TOTAL_TYPED_NORMALIZATION_NOT_PROVED",
+      "TD21_GENERAL_UNIVALENT_FAMILY_QUOTIENT_NOT_DECIDABLE",
+      "T_D2_1_LITERAL_KERNEL_ACCEPTED_QUOTIENT_INFINITE",
+      "TD21_CORPUS_REGRESSION_BLOCKED_UNTIL_DOMAIN_EXISTS"
+    ],
+    "declared_schema": "t-d2-1-independent-depth-two-domain-build-v1",
+    "declared_status": "stopped_named_gaps",
+    "declared_open_gaps": [
+      "TD21_CORPUS_REGRESSION_BLOCKED_UNTIL_DOMAIN_EXISTS",
+      "TD21_GENERAL_UNIVALENT_FAMILY_QUOTIENT_NOT_DECIDABLE",
+      "TD21_NFSCH2_MEMBERSHIP_DECISION_NOT_TOTAL",
+      "TD21_TOTAL_TYPED_NORMALIZATION_NOT_PROVED",
+      "T_D2_1_FIXED_DEPTH_TWO_FRAGMENT_NOT_OPERATIONALLY_DEFINED",
+      "T_D2_1_LITERAL_KERNEL_ACCEPTED_QUOTIENT_INFINITE"
+    ],
+    "fixed_fragment_operationally_defined": false,
+    "membership_decidable": false,
+    "quotient_finitely_enumerable": false,
+    "declared_td22_prerequisite_satisfied": false,
+    "dependency_contract_satisfied": false,
+    "disposition": "present_named_gap",
+    "exact_obstruction": "The typed exact-v1 T-D2-1 certificate passed public replay and is bound as a named-gap result: the fixed depth-two fragment is not operationally defined and the literal kernel-accepted quotient is not finite.",
+    "binding_digest": "sha256:2b9d04915692e51057d8d5388a785c9e1eed9853bc8a6ab8a94a1c0119d4d64d"
+  },
+  "boundary_audit": {
+    "adjudication_names_fixed_depth_two_fragment": true,
+    "adjudication_supplies_inductive_fragment_grammar": false,
+    "adjudication_supplies_semantic_depth_predicate": false,
+    "adjudication_supplies_expression_size_bound": false,
+    "adjudication_supplies_telescope_length_bound": false,
+    "ambient_parameter_cap": {
+      "decimal": "2",
+      "register": "kernel_testimony",
+      "meaning": "frozen elaborator ambient-parameter cap"
+    },
+    "ambient_cap_bounds_recursive_expression_depth": false,
+    "ambient_cap_bounds_telescope_length": false,
+    "recursive_expr_carrier_detected": true,
+    "unbounded_clause_vector_detected": true,
+    "finite_u32_payloads_imply_finite_recursive_ast_carrier": false,
+    "raw_ast_cap_permitted_as_schema2_proxy": false,
+    "literal_kernel_reading_refuted_by_counterfamily": true,
+    "exact_conclusion": "The adopted phrase “fixed depth-two closure fragment” has no operational grammar or semantic depth predicate in the bound authority. Frozen kernel acceptance alone leaves recursive expression nesting and telescope length unbounded. Finite scalar payload types do not make the recursively generated AST carrier finite. T-D2-1 must stop rather than substitute a search node cap.",
+    "audit_digest": "sha256:8d2f7e1a9314d959b22e1a81abdc775bb8966a9a8205079c04a0d620d6aa12cb"
+  },
+  "literal_kernel_counterfamily": {
+    "family_definition": "E_0 := Univ; E_(n+1) := Susp(E_n), for every natural number n",
+    "successor_rule": "The frozen synth branch maps every typed inner expression to a typed Susp(inner); normalization recursively preserves the Susp constructor.",
+    "quantifier": "all natural-number indices; the recorded seven-row prefix is a replay regression only",
+    "history_independent": true,
+    "sample_prefix_size": {
+      "decimal": "7",
+      "register": "kernel_testimony",
+      "meaning": "replayed finite prefix, not a domain bound"
+    },
+    "rows": [
+      {
+        "index": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "counterfamily index"
+        },
+        "defining_equation": "E_0 = Univ",
+        "expression_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "kernel_accepted": true,
+        "ambient_parameters": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "minimal ambient parameters"
+        },
+        "kernel_role": "formation",
+        "normal_form_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "normal_form_is_expression": true,
+        "canonical_parameter_count": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "canonical natural-family parameter count"
+        },
+        "closed_zero_parameter_family": true,
+        "row_digest": "sha256:18d9101114d960f74fed74f14bc29706b8d9c9ff108290184d617e41cc146719"
+      },
+      {
+        "index": {
+          "decimal": "1",
+          "register": "kernel_testimony",
+          "meaning": "counterfamily index"
+        },
+        "defining_equation": "E_1 = Susp(E_0)",
+        "expression_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "kernel_accepted": true,
+        "ambient_parameters": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "minimal ambient parameters"
+        },
+        "kernel_role": "formation",
+        "normal_form_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "normal_form_is_expression": true,
+        "canonical_parameter_count": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "canonical natural-family parameter count"
+        },
+        "closed_zero_parameter_family": true,
+        "row_digest": "sha256:9fd51a750c02492d6849d5019e925c77731cf46b9301d5d367a69107a8572be7"
+      },
+      {
+        "index": {
+          "decimal": "2",
+          "register": "kernel_testimony",
+          "meaning": "counterfamily index"
+        },
+        "defining_equation": "E_2 = Susp(E_1)",
+        "expression_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "kernel_accepted": true,
+        "ambient_parameters": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "minimal ambient parameters"
+        },
+        "kernel_role": "formation",
+        "normal_form_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "normal_form_is_expression": true,
+        "canonical_parameter_count": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "canonical natural-family parameter count"
+        },
+        "closed_zero_parameter_family": true,
+        "row_digest": "sha256:9602133aa7b28682d27da79ef72c1c5032fca6ed7aa36f707e1575fa7dde8a0d"
+      },
+      {
+        "index": {
+          "decimal": "3",
+          "register": "kernel_testimony",
+          "meaning": "counterfamily index"
+        },
+        "defining_equation": "E_3 = Susp(E_2)",
+        "expression_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "kernel_accepted": true,
+        "ambient_parameters": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "minimal ambient parameters"
+        },
+        "kernel_role": "formation",
+        "normal_form_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "normal_form_is_expression": true,
+        "canonical_parameter_count": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "canonical natural-family parameter count"
+        },
+        "closed_zero_parameter_family": true,
+        "row_digest": "sha256:6fb9c88773df5042a4b5641841f76eb31b76e2b779c93cc0302fc32912d87825"
+      },
+      {
+        "index": {
+          "decimal": "4",
+          "register": "kernel_testimony",
+          "meaning": "counterfamily index"
+        },
+        "defining_equation": "E_4 = Susp(E_3)",
+        "expression_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "kernel_accepted": true,
+        "ambient_parameters": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "minimal ambient parameters"
+        },
+        "kernel_role": "formation",
+        "normal_form_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "normal_form_is_expression": true,
+        "canonical_parameter_count": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "canonical natural-family parameter count"
+        },
+        "closed_zero_parameter_family": true,
+        "row_digest": "sha256:eb2b8c45f967e3219c2974e1e8514a9395c70394a0ffee0e8d51b769e54ba069"
+      },
+      {
+        "index": {
+          "decimal": "5",
+          "register": "kernel_testimony",
+          "meaning": "counterfamily index"
+        },
+        "defining_equation": "E_5 = Susp(E_4)",
+        "expression_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "kernel_accepted": true,
+        "ambient_parameters": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "minimal ambient parameters"
+        },
+        "kernel_role": "formation",
+        "normal_form_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "normal_form_is_expression": true,
+        "canonical_parameter_count": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "canonical natural-family parameter count"
+        },
+        "closed_zero_parameter_family": true,
+        "row_digest": "sha256:a68ccfe6df8e98fa87a9286dbb0c150223be7202bcd7ad8e96e16bc4e279e464"
+      },
+      {
+        "index": {
+          "decimal": "6",
+          "register": "kernel_testimony",
+          "meaning": "counterfamily index"
+        },
+        "defining_equation": "E_6 = Susp(E_5)",
+        "expression_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "kernel_accepted": true,
+        "ambient_parameters": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "minimal ambient parameters"
+        },
+        "kernel_role": "formation",
+        "normal_form_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "normal_form_is_expression": true,
+        "canonical_parameter_count": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "canonical natural-family parameter count"
+        },
+        "closed_zero_parameter_family": true,
+        "row_digest": "sha256:c0a12242e4a9b1b58ab9b0a2eec7af485448286627205e59a883f3a90d79cda4"
+      }
+    ],
+    "pairwise_checks": [
+      {
+        "left_index": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "1",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "right_normal_form_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "distinct": true,
+        "pair_digest": "sha256:3fa9c5a93c901a3c3bbc50722b64fbf48cfe48cec709a3338648b674cb64662c"
+      },
+      {
+        "left_index": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "2",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "right_normal_form_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "distinct": true,
+        "pair_digest": "sha256:8f9dfa686db846994917eaf8508765820151d393606178009c86fd788a209fc3"
+      },
+      {
+        "left_index": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "3",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "right_normal_form_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "distinct": true,
+        "pair_digest": "sha256:a54ecf2c1c4f5253b3aa615a517f7115bdccff26fafa6f87c8a9e91ccea56ce9"
+      },
+      {
+        "left_index": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "4",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "right_normal_form_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "distinct": true,
+        "pair_digest": "sha256:2d86f255695cf1755d4265fcf1366cc5351bd60ec73bbbb9f1e7839d3a3aabf5"
+      },
+      {
+        "left_index": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "5",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "right_normal_form_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "distinct": true,
+        "pair_digest": "sha256:828b1f7bf5dba56fde308d2d50d152bdbdf3a1f800b4d68f04aeca0a087eed0d"
+      },
+      {
+        "left_index": {
+          "decimal": "0",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "6",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:3e3c506aedaf940beeea91c14e0925e5f10ac5747d5d5db416174bc2d34e0e21",
+        "right_normal_form_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "distinct": true,
+        "pair_digest": "sha256:4f2eda56d5678fe62208339b990a8cae58341e48cd745919b07994e0cc107f1b"
+      },
+      {
+        "left_index": {
+          "decimal": "1",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "2",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "right_normal_form_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "distinct": true,
+        "pair_digest": "sha256:ca9f0abeb17d16a22ecb3419ac232b6a8be4bd5c155ab14ba273e4ce5f928e46"
+      },
+      {
+        "left_index": {
+          "decimal": "1",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "3",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "right_normal_form_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "distinct": true,
+        "pair_digest": "sha256:9e090b00e173ef5284c1ec7ed0d2d743df37b00dbf650f3a6cc4a47562df42e0"
+      },
+      {
+        "left_index": {
+          "decimal": "1",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "4",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "right_normal_form_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "distinct": true,
+        "pair_digest": "sha256:9c73bb474a3f76154a49cce254387c852563747c0af83c6a8663f73ed1a1595b"
+      },
+      {
+        "left_index": {
+          "decimal": "1",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "5",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "right_normal_form_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "distinct": true,
+        "pair_digest": "sha256:7f9c33dc47cf2821f604bd2a9cd978742b40bda4ce2e62fe9cbb5a9f7709c1a8"
+      },
+      {
+        "left_index": {
+          "decimal": "1",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "6",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:fcfd91b2b318896e83d6ef1a7816fb45d9d3fea42337ca3b0ee58ccacfd028cd",
+        "right_normal_form_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "distinct": true,
+        "pair_digest": "sha256:4fab31f564ce0f3369c2c287a164e0a99e9b6c98af19e3bf8dd5a06e69c0ba7c"
+      },
+      {
+        "left_index": {
+          "decimal": "2",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "3",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "right_normal_form_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "distinct": true,
+        "pair_digest": "sha256:78c46ca6dff73700598b32abd505e44753e22cd12f22c6227954b9008ee2e875"
+      },
+      {
+        "left_index": {
+          "decimal": "2",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "4",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "right_normal_form_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "distinct": true,
+        "pair_digest": "sha256:5c5ef0ddf156715a75a84783d768d9cc274bedb18a0314b3f2aad19cabc2588e"
+      },
+      {
+        "left_index": {
+          "decimal": "2",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "5",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "right_normal_form_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "distinct": true,
+        "pair_digest": "sha256:df5ded32944dd1e285b0524ef1d19afeaa63312a5e4088792d1f75f58162052e"
+      },
+      {
+        "left_index": {
+          "decimal": "2",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "6",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:b12be861d51626be673bdea2b6502cae02ab7a7292a07a7e498b38cc9c6ecb06",
+        "right_normal_form_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "distinct": true,
+        "pair_digest": "sha256:f0ce4a5ca73ab1aed6d83b18869238c8ab5f5c14a6c159a011620986b23d35ea"
+      },
+      {
+        "left_index": {
+          "decimal": "3",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "4",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "right_normal_form_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "distinct": true,
+        "pair_digest": "sha256:5650128439cb4b7a75998022216d2c4a31da9eb6c4ccaadbb7d9ef8cb2164cdc"
+      },
+      {
+        "left_index": {
+          "decimal": "3",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "5",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "right_normal_form_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "distinct": true,
+        "pair_digest": "sha256:67145870a16332f1d019a8bc7d543417873d2737d5193805e80b71d42c3c8011"
+      },
+      {
+        "left_index": {
+          "decimal": "3",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "6",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:9b3719212760b0ae2509f11eecf2dabb0b67a7ab6961a62124c01330d40b3c52",
+        "right_normal_form_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "distinct": true,
+        "pair_digest": "sha256:42dd1745f1eca5dc726d722ff65ac946b87c0e650e97a86d947522bd74abcde5"
+      },
+      {
+        "left_index": {
+          "decimal": "4",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "5",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "right_normal_form_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "distinct": true,
+        "pair_digest": "sha256:427b625ba0a5debcec9280a365357a9bb4deca335089da92367c719025b838e5"
+      },
+      {
+        "left_index": {
+          "decimal": "4",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "6",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:f2ea768463d910312aa11ebf3341ea8f3bea9399a5c5ca2364b001a69e2ea1eb",
+        "right_normal_form_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "distinct": true,
+        "pair_digest": "sha256:23ff20bd04a856c8035d7d33ca5fe75b8cf4c01559d92a4d09c6fa1e0c1ce6ba"
+      },
+      {
+        "left_index": {
+          "decimal": "5",
+          "register": "kernel_testimony",
+          "meaning": "left counterfamily index"
+        },
+        "right_index": {
+          "decimal": "6",
+          "register": "kernel_testimony",
+          "meaning": "right counterfamily index"
+        },
+        "frozen_univalent_equal": false,
+        "left_normal_form_sha256": "sha256:0b9fa8796cf11b96949a4f71c08b99287a5710c5b181715327f67b7a827bb14d",
+        "right_normal_form_sha256": "sha256:f012a85e0138fc350751a7a298406d186cb252905d22488933126e387794502c",
+        "distinct": true,
+        "pair_digest": "sha256:d28200950803e9ec9c22e6b2119bcbb46057adb047ab3ab04f14df0e8fe926e8"
+      }
+    ],
+    "every_sample_kernel_accepted": true,
+    "every_sample_beta_normal": true,
+    "every_sample_closed_zero_parameter": true,
+    "every_sample_pair_distinct": true,
+    "kernel_successor_closure_source_bound": true,
+    "normalizer_constructor_preservation_source_bound": true,
+    "structural_constructor_injectivity_source_bound": true,
+    "frozen_equality_is_normal_form_syntax_source_bound": true,
+    "closed_family_quotient_has_no_renaming_identification": true,
+    "mathematical_obstruction": "Under the literal all-kernel-accepted reading, n -> E_n is an injection into closed, typed, beta-normal, zero-parameter family presentations. Frozen equality is syntactic equality of beta normal forms, so E_m and E_n remain distinct when m != n. Therefore the quotient is not finitely enumerable. The finite prefix is replay testimony for the generic source-level induction, not an enumeration bound.",
+    "raw_ast_depth_is_schema2_depth": false,
+    "finite_quotient_conclusion_available": false,
+    "derivation_digest": "sha256:c9df711a2ef5cdc4fc4e7713372c65e4736a31c9d1605e01a4917b3ada8bf4b2"
+  },
+  "future_least_fixed_point_procedure": {
+    "procedure_id": "independent-carrier-least-fixed-point-surjectivity-v1",
+    "required_td21_exports": [
+      "sealed generator-independent finite carrier with structural representatives",
+      "decidable membership and a semantic depth-one/depth-two tag",
+      "typed normalization, idempotence, and equality witnesses",
+      "family/instance quotient decision in both directions",
+      "finite intermediate closure or cut-elimination for generator premises"
+    ],
+    "steps": [
+      {
+        "ordinal": {
+          "decimal": "1",
+          "register": "proof_program",
+          "meaning": "least-fixed-point procedure ordinal"
+        },
+        "step_id": "seal-independent-carrier",
+        "action": "Replay T-D2-1 and seal the carrier, quotient, history digest, and depth tags before loading any generator reachability relation.",
+        "domain_membership_created_by_generator": false,
+        "result_digest": "sha256:6f7dbb35787449115a2ae0c4a4cea9d35015799804ba5029772a47ddab0bfe57"
+      },
+      {
+        "ordinal": {
+          "decimal": "2",
+          "register": "proof_program",
+          "meaning": "least-fixed-point procedure ordinal"
+        },
+        "step_id": "initialize-zero-premise-reachability",
+        "action": "Mark only independently present carrier nodes concluded by verified zero-premise rules.",
+        "domain_membership_created_by_generator": false,
+        "result_digest": "sha256:d2addcb7564f2f8de30892ede1edfef879e5d7c33138d45583a50ea8353eb85a"
+      },
+      {
+        "ordinal": {
+          "decimal": "3",
+          "register": "proof_program",
+          "meaning": "least-fixed-point procedure ordinal"
+        },
+        "step_id": "saturate-frozen-rule-relation",
+        "action": "Iterate frozen rules to a least fixed point; each rule may mark an existing carrier node reachable but may not manufacture domain membership.",
+        "domain_membership_created_by_generator": false,
+        "result_digest": "sha256:f2ec3a19d3b481b93302d4b88b41670dcbcd4ded3960f73050f07984582cc19d"
+      },
+      {
+        "ordinal": {
+          "decimal": "4",
+          "register": "proof_program",
+          "meaning": "least-fixed-point procedure ordinal"
+        },
+        "step_id": "recheck-typed-normal-equality",
+        "action": "Re-elaborate and normalize every conclusion, then compare through the T-D2-1 structural equality witness rather than a hash alone.",
+        "domain_membership_created_by_generator": false,
+        "result_digest": "sha256:8bf1c8330eed2bc31ac74c5d411d3bda155e2c755c34acf35ac76927cf49ded1"
+      },
+      {
+        "ordinal": {
+          "decimal": "5",
+          "register": "proof_program",
+          "meaning": "least-fixed-point procedure ordinal"
+        },
+        "step_id": "check-both-inclusions",
+        "action": "Check D subset Reach for surjectivity and Reach subset D for rule soundness/closure; never silently discard an out-of-domain conclusion.",
+        "domain_membership_created_by_generator": false,
+        "result_digest": "sha256:7d321a638c66afe467ea7d6154ed10c99f1986a5e0f55764c7fb14ff05da119c"
+      },
+      {
+        "ordinal": {
+          "decimal": "6",
+          "register": "proof_program",
+          "meaning": "least-fixed-point procedure ordinal"
+        },
+        "step_id": "publish-proof-or-refutation",
+        "action": "Emit derivations for every carrier class or publish the least unreached structural representative with its failed-rule frontier.",
+        "domain_membership_created_by_generator": false,
+        "result_digest": "sha256:991b09465f89ba754ec82c5a0be429f713b839515b24fd30425e45c68b0fd1c8"
+      },
+      {
+        "ordinal": {
+          "decimal": "7",
+          "register": "proof_program",
+          "meaning": "least-fixed-point procedure ordinal"
+        },
+        "step_id": "recompute-depth-one-restriction",
+        "action": "Filter by the independently defined depth-one tag, rerun saturation, and only afterward compare the sealed depth-one campaign as regression.",
+        "domain_membership_created_by_generator": false,
+        "result_digest": "sha256:d04bac6ade8360c697c0e59726a24b244e37984f837d28f0aea2dba50ec9e5f0"
+      }
+    ],
+    "domain_carrier_sealed_before_generator_reachability": true,
+    "generator_rules_only_mark_existing_domain_nodes": true,
+    "generator_rules_may_extend_domain_carrier": false,
+    "equality_uses_structural_witness_not_hash_alone": true,
+    "domain_subset_reach_is_surjectivity_obligation": true,
+    "reach_subset_domain_is_soundness_obligation": true,
+    "missing_domain_node_is_published_refutation": true,
+    "out_of_domain_generator_conclusion_is_silent_drop": false,
+    "arbitrary_derivation_depth_cap_used": false,
+    "intermediate_closure_or_cut_elimination_required": true,
+    "depth_one_restriction_recomputed_from_independent_tag": true,
+    "procedure_executed": false,
+    "procedure_digest": "sha256:df44c694e63b3604520c72c8ce7c0feac74c8bdf088b3cc79888232cafae317e"
+  },
+  "domain_membership_decision_executed": false,
+  "generator_inventory_imported_into_domain_membership": false,
+  "a3_inventory_imported_into_domain_membership": false,
+  "historical_61_or_89_rows_used_to_seed_or_bound_domain": false,
+  "surjectivity_claimed": false,
+  "incompleteness_claimed": false,
+  "exact_result": "Dependency stop, not a completeness verdict: T-D2-1 has not produced an operative independent finite quotient. The literal kernel-accepted reading is obstructed by the closed family E_n = Susp^n(Univ), while the intended fixed depth-two fragment remains operationally undefined. The future least-fixed-point algorithm is registered but not executed.",
+  "open_gaps": [
+    "T_D2_1_FIXED_DEPTH_TWO_FRAGMENT_NOT_OPERATIONALLY_DEFINED",
+    "TD21_NFSCH2_MEMBERSHIP_DECISION_NOT_TOTAL",
+    "TD21_TOTAL_TYPED_NORMALIZATION_NOT_PROVED",
+    "TD21_GENERAL_UNIVALENT_FAMILY_QUOTIENT_NOT_DECIDABLE",
+    "T_D2_1_LITERAL_KERNEL_ACCEPTED_QUOTIENT_INFINITE",
+    "TD21_CORPUS_REGRESSION_BLOCKED_UNTIL_DOMAIN_EXISTS",
+    "TD22_LITERAL_KERNEL_ACCEPTANCE_HAS_SUSP_N_COUNTERFAMILY",
+    "TD22_TD21_FINITE_INDEPENDENT_DOMAIN_NOT_AVAILABLE"
+  ],
+  "zero_charge": {
+    "kappa_minted": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "kappa minted"
+    },
+    "nu_minted": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "nu minted"
+    },
+    "anchors_minted": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "anchors minted"
+    },
+    "zero_charge_holds": true
+  },
+  "gate": {
+    "td21_domain_build_required": true,
+    "td21_domain_build_satisfied": false,
+    "td22_surjectivity_verdict_issued": false,
+    "td22_refutation_verdict_issued": false,
+    "td23_or_bc3_authorized_by_this_artifact": false,
+    "m3_or_m4_gate_moved": false,
+    "exact_gate_statement": "T-D2-2 remains unattempted until T-D2-1 exports a generator-independent, decidable, finitely enumerable semantic carrier. This artifact changes no downstream gate."
+  },
+  "result_digest": "sha256:ff8bc3d979edb1557e841457ff5a47ab336059fc3fe9c10ffa22b26f65e854bc"
+}

@@ -41,12 +41,23 @@ pub const T_BI_NU1_V3_THEOREM_ID: &str = "T-BI-NU1-v3-full-A3-pre-candidate-orbi
 pub const ACT_LOCAL_ORDINARY_TOKEN_V3: &str = "act-local-ordinary-family-token-v3";
 pub const R1_PACKAGE_THEOREM_ID: &str = "formation-completion-package-R1";
 pub const R2_GENERATED_ACTION_THEOREM_ID: &str = "derived-action-generator-membership-rule-v1";
+pub const ACT_LOCAL_PREFIX_DECLARATION_V3_SCHEMA: &str =
+    "act-local-prefix-declaration-v3-source-first-v1";
+pub const ACT_LOCAL_PREFIX_DECLARATION_V3_THEOREM_ID: &str =
+    "T-BI-NU1-v3-prefix-local-declaration-projection-v1";
+pub const ACT_LOCAL_V3_TYPED_R2_RULE_SCHEMA: &str = "act-local-v3-typed-r2-rule-token-v1";
 
 const R2_ADJUDICATION_BYTES: &[u8] = include_bytes!("../../../docs/e2_quotient_adjudications.md");
 
 fn tagged_hash<T: Serialize + ?Sized>(domain: &str, value: &T) -> String {
     let bytes = serde_json::to_vec(&(ACT_LOCAL_PROVENANCE_V3_SCHEMA, domain, value))
         .expect("v3 act-local evidence serializes");
+    format!("blake3:{}", blake3_hex(&bytes))
+}
+
+fn prefix_local_tagged_hash<T: Serialize + ?Sized>(domain: &str, value: &T) -> String {
+    let bytes = serde_json::to_vec(&(ACT_LOCAL_PREFIX_DECLARATION_V3_SCHEMA, domain, value))
+        .expect("v3 prefix-local declaration evidence serializes");
     format!("blake3:{}", blake3_hex(&bytes))
 }
 
@@ -378,6 +389,123 @@ impl ActLocalV3ForbiddenInputAudit {
             && !self.enacted_future_read
             && !self.caller_supplied_demand_timeline_read
     }
+}
+
+/// Closed, typed authority for the one R2 quotient used by the prefix-local
+/// declaration issuer.  The slot is typed by the semantic mechanism/role
+/// enums; the token has no path, markdown, archive, or caller-selected count
+/// input.  Reissuance, rather than possession of a matching digest alone, is
+/// the authority check.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct ActLocalV3TypedR2RuleToken {
+    pub schema: String,
+    pub theorem_id: String,
+    pub generated_child_kind: String,
+    pub surviving_parent_kind: String,
+    pub slot_mechanism: CreditMechanism,
+    pub slot_role: LocalRole,
+    pub same_candidate_and_owner_clause_required: bool,
+    pub surviving_parent_must_be_distinct: bool,
+    pub e4_generator_membership_witness_required: bool,
+    pub operational_membership_verdict_issued: bool,
+    pub conclusion: String,
+    pub markdown_or_file_read: bool,
+    pub archived_count_or_label_read: bool,
+    pub derivation_hash: String,
+}
+
+impl ActLocalV3TypedR2RuleToken {
+    pub fn authority_hash(&self) -> &str {
+        &self.derivation_hash
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct ActLocalV3PrefixNaturalFamilyRow {
+    pub semantic_family_id: String,
+    pub family_shape_key: String,
+    pub representative_role: ActLocalV3RoleOccurrence,
+    pub occurrence_count: usize,
+    pub collapsed_uniform_instance_count: usize,
+    pub generator_univalent_key: String,
+    pub generator_canonical_normal_form: Expr,
+    pub generator_parameter_sorts: Vec<String>,
+    pub generator_kernel_type_json: String,
+    pub generator_typed_normalized_natural: bool,
+    pub marginal: bool,
+    pub removed_by_r2: bool,
+    pub gap_id: Option<String>,
+    pub derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct ActLocalV3PrefixCapabilityAudit {
+    pub candidate_and_exact_prefix_capability: bool,
+    pub predecessor_projection_capability: bool,
+    pub typed_r2_rule_token_capability: bool,
+    pub markdown_or_file_source_scan_capability: bool,
+    pub historical_v3_package_capability: bool,
+    pub historical_counter_or_upper_bound_capability: bool,
+    pub predecessor_full_package_hash_capability: bool,
+    pub count_based_predecessor_selector_capability: bool,
+}
+
+impl ActLocalV3PrefixCapabilityAudit {
+    fn source_first() -> Self {
+        Self {
+            candidate_and_exact_prefix_capability: true,
+            predecessor_projection_capability: true,
+            typed_r2_rule_token_capability: true,
+            markdown_or_file_source_scan_capability: false,
+            historical_v3_package_capability: false,
+            historical_counter_or_upper_bound_capability: false,
+            predecessor_full_package_hash_capability: false,
+            count_based_predecessor_selector_capability: false,
+        }
+    }
+
+    pub fn source_first_only(&self) -> bool {
+        self.candidate_and_exact_prefix_capability
+            && self.predecessor_projection_capability
+            && self.typed_r2_rule_token_capability
+            && !self.markdown_or_file_source_scan_capability
+            && !self.historical_v3_package_capability
+            && !self.historical_counter_or_upper_bound_capability
+            && !self.predecessor_full_package_hash_capability
+            && !self.count_based_predecessor_selector_capability
+    }
+}
+
+/// The declaration-only projection consumed by the source-first v4/v5 path.
+/// In particular, this type has no field for a historical v3 certificate
+/// hash, archive counter, scalar upper bound, or predecessor full-package
+/// hash.  Its predecessor chain consists exclusively of hashes of this same
+/// projection type.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct ActLocalV3PrefixDeclaration {
+    pub schema: String,
+    pub date: String,
+    pub theorem_id: String,
+    pub stage: u32,
+    pub candidate_hash: String,
+    pub predecessor_signature_digest: String,
+    pub kappa: u32,
+    pub r2_rule_authority_hash: String,
+    pub predecessor_projection_hashes: Vec<String>,
+    pub predecessor_surface_digest: String,
+    pub role_occurrences_before_quotient: Vec<ActLocalV3RoleOccurrence>,
+    pub natural_family_rows: Vec<ActLocalV3PrefixNaturalFamilyRow>,
+    pub theorem_gaps: Vec<ActLocalV3Gap>,
+    pub r2_rule_application_total: bool,
+    pub quotient_partition_exact: bool,
+    pub uniform_specializations_not_multiplied: bool,
+    pub all_structurally_typed_predecessors_enumerated: bool,
+    pub capability_audit: ActLocalV3PrefixCapabilityAudit,
+    pub surface_hash: String,
 }
 
 #[derive(Clone, Debug, Error, Eq, PartialEq)]
@@ -1643,6 +1771,660 @@ pub fn replay_act_local_provenance_v3(
     errors
 }
 
+fn typed_r2_rule_token_hash(token: &ActLocalV3TypedR2RuleToken) -> String {
+    let mut projection = token.clone();
+    projection.derivation_hash.clear();
+    prefix_local_tagged_hash("typed-R2-rule-token", &projection)
+}
+
+/// Issue the closed R2 rule used by the prefix-local declaration path.
+///
+/// This issuer intentionally has no parameters: in particular, it cannot
+/// receive a filename, markdown text, archived count, role label choice, or
+/// desired verdict.  The exact typed rule is therefore replayed from code and
+/// then self-digested.
+pub fn issue_act_local_v3_typed_r2_rule_token() -> ActLocalV3TypedR2RuleToken {
+    let mut token = ActLocalV3TypedR2RuleToken {
+        schema: ACT_LOCAL_V3_TYPED_R2_RULE_SCHEMA.to_owned(),
+        theorem_id: R2_GENERATED_ACTION_THEOREM_ID.to_owned(),
+        generated_child_kind: "hit_canonical_operation_action".to_owned(),
+        surviving_parent_kind: "hit_post_path_face".to_owned(),
+        slot_mechanism: CreditMechanism::P6UniformSpecialization,
+        slot_role: LocalRole::SupportAction,
+        same_candidate_and_owner_clause_required: true,
+        surviving_parent_must_be_distinct: true,
+        e4_generator_membership_witness_required: true,
+        operational_membership_verdict_issued: false,
+        conclusion:
+            "if a separately replayed E-4 generator-membership witness proves that the typed child is generated by the distinct typed parent, the child is quotient membership of that parent rather than an independent natural family"
+                .to_owned(),
+        markdown_or_file_read: false,
+        archived_count_or_label_read: false,
+        derivation_hash: String::new(),
+    };
+    token.derivation_hash = typed_r2_rule_token_hash(&token);
+    token
+}
+
+pub fn replay_act_local_v3_typed_r2_rule_token(
+    claimed: &ActLocalV3TypedR2RuleToken,
+) -> Vec<String> {
+    let mut errors = Vec::new();
+    if claimed.derivation_hash != typed_r2_rule_token_hash(claimed) {
+        errors.push("v3 typed R2 rule token digest mismatch".to_owned());
+    }
+    if *claimed != issue_act_local_v3_typed_r2_rule_token() {
+        errors.push("v3 typed R2 rule token differs from closed reissuance".to_owned());
+    }
+    errors
+}
+
+fn prefix_natural_family_row_hash(row: &ActLocalV3PrefixNaturalFamilyRow) -> String {
+    let mut projection = row.clone();
+    projection.derivation_hash.clear();
+    prefix_local_tagged_hash("natural-family-row", &projection)
+}
+
+fn prefix_declaration_surface_hash(surface: &ActLocalV3PrefixDeclaration) -> String {
+    let mut projection = surface.clone();
+    projection.surface_hash.clear();
+    prefix_local_tagged_hash("declaration-surface", &projection)
+}
+
+fn predecessor_projection_surface_digest(stage: u32, hashes: &[String]) -> String {
+    prefix_local_tagged_hash("exact-predecessor-projection-surface", &(stage, hashes))
+}
+
+fn prefix_referenced_role(
+    kind: &'static str,
+    owner_clause: u16,
+    mechanism: CreditMechanism,
+    local_role: LocalRole,
+    source_stage: u32,
+    source: &ActLocalV3PrefixDeclaration,
+    source_family: &ActLocalV3PrefixNaturalFamilyRow,
+) -> RoleOccurrence {
+    // The exact coordinate retains the source binding.  The natural-family
+    // shape deliberately forgets which equivalent predecessor supplied it;
+    // this is where the quotient, rather than a count-maximizing selector,
+    // collapses duplicate transports.
+    RoleOccurrence {
+        kind,
+        owner_clause,
+        mechanism,
+        local_role,
+        coordinate: json!({
+            "kind": kind,
+            "clause": owner_clause,
+            "coordinates": {
+                "source_step": source_stage,
+                "source_projection_hash": source.surface_hash,
+                "source_family_id": source_family.semantic_family_id,
+                "source_family_row_hash": source_family.derivation_hash,
+            }
+        }),
+        natural_family_shape: json!({
+            "kind": kind,
+            "clause": owner_clause,
+            "coordinates": {
+                "typed_predecessor_family_shape": source_family.family_shape_key,
+                "typed_predecessor_generator": source_family.generator_univalent_key,
+            }
+        }),
+        uniform_specialization: false,
+        removed_by_r2: false,
+    }
+}
+
+/// Prefix-local role enumeration.  The historical enumerator remains
+/// unchanged.  The two classes that historically used `dominant_reference`
+/// are handled explicitly here: every structurally referenced, typed source
+/// projection is enumerated, and source identity is erased only in the
+/// natural-family quotient key above.
+fn enumerate_prefix_local_role_occurrences(
+    candidate: &Telescope,
+    library: &Library,
+    predecessor_projections: &[ActLocalV3PrefixDeclaration],
+    prefix_telescopes: &[(u32, Telescope)],
+) -> Result<(Vec<RoleOccurrence>, bool), ActLocalProvenanceV3Error> {
+    use CreditMechanism as M;
+    use LocalRole as L;
+
+    match candidate.classify(library) {
+        TelescopeClass::Axiomatic => {
+            let mut rows = Vec::new();
+            for (index, clause) in candidate.clauses.iter().enumerate() {
+                if is_axiomatic_intro(&clause.expr) {
+                    rows.push(role(
+                        "axiomatic_introduction_head",
+                        as_u16(index)?,
+                        M::IntrinsicKernel,
+                        L::KernelHead,
+                        json!({}),
+                    ));
+                }
+            }
+            let refs = candidate.lib_refs().into_iter().collect::<Vec<_>>();
+            for source_step in refs.iter().copied() {
+                let source = predecessor_projections
+                    .iter()
+                    .find(|projection| projection.stage == source_step)
+                    .ok_or_else(|| {
+                        ActLocalProvenanceV3Error::Enumeration(format!(
+                            "typed axiomatic source step {source_step} is absent from the exact projection prefix"
+                        ))
+                    })?;
+                let owner = clause_for_ref(candidate, source_step)?;
+                for family in source.natural_family_rows.iter().filter(|family| {
+                    family.marginal
+                        && !family.removed_by_r2
+                        && family.generator_typed_normalized_natural
+                }) {
+                    rows.push(prefix_referenced_role(
+                        "axiomatic_inherited_family",
+                        owner,
+                        M::P5InheritedSurface,
+                        L::SupportAction,
+                        source_step,
+                        source,
+                        family,
+                    ));
+                }
+            }
+            for index in 0..candidate.clauses.len() {
+                rows.push(role(
+                    "axiomatic_local_and_bridge_face",
+                    as_u16(index)?,
+                    M::P5LocalAndBridge,
+                    L::SupportAction,
+                    json!({}),
+                ));
+            }
+            for pair in refs.windows(2) {
+                rows.push(role(
+                    "axiomatic_support_bridge",
+                    clause_for_ref(candidate, pair[1])?,
+                    M::P5LocalAndBridge,
+                    L::SupportAction,
+                    json!({"left_step": pair[0], "right_step": pair[1]}),
+                ));
+            }
+            Ok((rows, true))
+        }
+        TelescopeClass::Synthesis => {
+            let mut rows = Vec::new();
+            for index in 0..candidate.clauses.len() {
+                rows.push(role(
+                    "synthesis_local_declaration",
+                    as_u16(index)?,
+                    M::IntrinsicKernel,
+                    L::KernelHead,
+                    json!({}),
+                ));
+            }
+            for (index, clause) in candidate.clauses.iter().enumerate() {
+                if is_polymorphic_temporal_elim(&clause.expr) {
+                    for target_step in 1..=library.len() as u32 {
+                        rows.push(uniform_role(
+                            "synthesis_uniform_temporal_action",
+                            as_u16(index)?,
+                            M::P6UniformSpecialization,
+                            L::SupportAction,
+                            json!({"step": target_step}),
+                        ));
+                    }
+                }
+            }
+            let modal_sources = candidate
+                .lib_refs()
+                .into_iter()
+                .filter(|step| {
+                    library
+                        .get(step.saturating_sub(1) as usize)
+                        .is_some_and(|entry| entry.capabilities.has_modal_ops)
+                })
+                .collect::<Vec<_>>();
+            for source_step in modal_sources {
+                let source = predecessor_projections
+                    .iter()
+                    .find(|projection| projection.stage == source_step)
+                    .ok_or_else(|| {
+                        ActLocalProvenanceV3Error::Enumeration(format!(
+                            "typed modal source step {source_step} is absent from the exact projection prefix"
+                        ))
+                    })?;
+                for (index, clause) in candidate.clauses.iter().enumerate() {
+                    if !is_distributive_law(&clause.expr) {
+                        continue;
+                    }
+                    for family in source.natural_family_rows.iter().filter(|family| {
+                        family.marginal
+                            && !family.removed_by_r2
+                            && family.generator_typed_normalized_natural
+                    }) {
+                        rows.push(prefix_referenced_role(
+                            "synthesis_distributive_transport",
+                            as_u16(index)?,
+                            M::DistributiveInheritance,
+                            L::Coherence,
+                            source_step,
+                            source,
+                            family,
+                        ));
+                    }
+                }
+            }
+            if let Some(owner) = candidate
+                .clauses
+                .iter()
+                .position(|clause| is_spatial_temporal_clause(&clause.expr))
+            {
+                let owner = as_u16(owner)?;
+                for (source_step, source_telescope) in prefix_telescopes {
+                    for (path_index, path_clause) in source_telescope.clauses.iter().enumerate() {
+                        let Expr::PathCon(dimension) = path_clause.expr else {
+                            continue;
+                        };
+                        for left_axis in 0..dimension {
+                            for right_axis in 0..dimension {
+                                rows.push(role(
+                                    "synthesis_infinitesimal_shift",
+                                    owner,
+                                    M::CombinatorialSynthesis,
+                                    L::SupportAction,
+                                    json!({
+                                        "source_step": source_step,
+                                        "source_path_clause": path_index,
+                                        "left_axis": left_axis,
+                                        "right_axis": right_axis,
+                                    }),
+                                ));
+                            }
+                        }
+                    }
+                }
+            }
+            Ok((rows, true))
+        }
+        // These branches have no predecessor-count selection in the
+        // historical implementation.  Supplying an empty package slice also
+        // makes a historical package/counter read impossible at the type of
+        // this call; Axiomatic and Synthesis were intercepted above.
+        _ => enumerate_role_occurrences(candidate, library, &[], prefix_telescopes)
+            .map(|rows| (rows, true)),
+    }
+}
+
+fn prefix_family_has_preimage(
+    family_shape_key: &str,
+    generator: &ActLocalV3GeneratorEvidence,
+    predecessors: &[ActLocalV3PrefixDeclaration],
+) -> Result<bool, ActLocalProvenanceV3Error> {
+    let scope = generator.parameter_sorts.len() as u32;
+    for family in predecessors
+        .iter()
+        .flat_map(|projection| projection.natural_family_rows.iter())
+        .filter(|family| !family.removed_by_r2)
+    {
+        let comparable = family.family_shape_key == family_shape_key
+            && family.generator_parameter_sorts == generator.parameter_sorts
+            && family.generator_kernel_type_json == generator.kernel_type_json;
+        if !comparable {
+            continue;
+        }
+        let witness = univalent_equality(
+            &family.generator_canonical_normal_form,
+            &generator.canonical_normal_form,
+            scope,
+            256,
+        )
+        .map_err(|error| ActLocalProvenanceV3Error::Family(error.to_string()))?;
+        if witness.equal {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+fn validate_typed_r2_applications(
+    roles: &[RoleOccurrence],
+    token: &ActLocalV3TypedR2RuleToken,
+) -> bool {
+    roles
+        .iter()
+        .filter(|occurrence| occurrence.removed_by_r2)
+        .all(|child| {
+            child.kind == token.generated_child_kind
+                && child.mechanism == token.slot_mechanism
+                && child.local_role == token.slot_role
+                && roles
+                    .iter()
+                    .filter(|parent| {
+                        !parent.removed_by_r2
+                            && parent.kind == token.surviving_parent_kind
+                            && parent.owner_clause == child.owner_clause
+                            && parent.mechanism == token.slot_mechanism
+                            && parent.local_role == token.slot_role
+                    })
+                    .count()
+                    == 1
+        })
+}
+
+fn issue_prefix_declaration_one(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    predecessor_projections: &[ActLocalV3PrefixDeclaration],
+    r2_rule: &ActLocalV3TypedR2RuleToken,
+) -> Result<ActLocalV3PrefixDeclaration, ActLocalProvenanceV3Error> {
+    validate_prefix(prefix, stage)?;
+    if !replay_act_local_v3_typed_r2_rule_token(r2_rule).is_empty() {
+        return Err(ActLocalProvenanceV3Error::Input(
+            "prefix-local declaration received a non-authoritative typed R2 rule token".to_owned(),
+        ));
+    }
+    if predecessor_projections.len() != stage.saturating_sub(1) as usize {
+        return Err(ActLocalProvenanceV3Error::Input(format!(
+            "Stage {stage} requires every exact predecessor projection"
+        )));
+    }
+
+    let mut library: Library = Vec::new();
+    for entry in prefix.entries() {
+        library.push(LibraryEntry::from_telescope(&entry.telescope, &library));
+    }
+    // Elaboration is a gate, not a field in the projection: downstream only
+    // needs the exact candidate/prefix binding and the declaration surface.
+    elaborate_telescope(prefix, candidate, stage.saturating_sub(1))
+        .map_err(|error| ActLocalProvenanceV3Error::Family(error.to_string()))?;
+    let closure = predecessor_closure(prefix)
+        .map_err(|error| ActLocalProvenanceV3Error::Family(error.to_string()))?;
+    let CandidateExtractionOutcome::Extracted(extraction) =
+        extract_candidate_families(prefix, &closure, candidate, stage.saturating_sub(1))
+    else {
+        return Err(ActLocalProvenanceV3Error::Family(
+            "prefix-local candidate family extraction was kernel-invalid".to_owned(),
+        ));
+    };
+    let prefix_telescopes = prefix
+        .entries()
+        .iter()
+        .map(|entry| (entry.step, entry.telescope.clone()))
+        .collect::<Vec<_>>();
+    let (roles, all_structurally_typed_predecessors_enumerated) =
+        enumerate_prefix_local_role_occurrences(
+            candidate,
+            &library,
+            predecessor_projections,
+            &prefix_telescopes,
+        )?;
+    let r2_rule_application_total = validate_typed_r2_applications(&roles, r2_rule);
+    if !r2_rule_application_total {
+        return Err(ActLocalProvenanceV3Error::Enumeration(
+            "a generated R2 child lacked its unique distinct typed parent at the same local slot"
+                .to_owned(),
+        ));
+    }
+    let role_occurrences_before_quotient = roles
+        .iter()
+        .map(RoleOccurrence::serializable)
+        .collect::<Vec<_>>();
+
+    let mut grouped: BTreeMap<String, Vec<(RoleOccurrence, ActLocalV3GeneratorEvidence)>> =
+        BTreeMap::new();
+    let mut removed_by_r2 = 0usize;
+    for occurrence in roles {
+        if occurrence.removed_by_r2 {
+            removed_by_r2 += 1;
+            continue;
+        }
+        let family = generator_for_clause(&extraction.families, occurrence.owner_clause)
+            .ok_or_else(|| {
+                ActLocalProvenanceV3Error::Family(format!(
+                    "prefix-local role {} at clause {} has no extracted owner family",
+                    occurrence.kind, occurrence.owner_clause
+                ))
+            })?;
+        let generator =
+            generator_evidence(family, occurrence.owner_clause, &extraction.derivation_hash);
+        let generator_typed_normalized_natural = generator
+            .owner_clause_normalization_and_typing_replayed
+            && generator.naturality_square_equal
+            && generator.owner_is_generator_or_instance;
+        if !generator_typed_normalized_natural {
+            return Err(ActLocalProvenanceV3Error::Family(format!(
+                "prefix-local role {} lacks typed normalized natural owner evidence",
+                occurrence.kind
+            )));
+        }
+        let shape_key = tagged_hash(
+            "natural-family-shape",
+            &(
+                &occurrence.natural_family_shape,
+                &generator.generator_univalent_key,
+                &generator.parameter_sorts,
+                &generator.kernel_type_json,
+            ),
+        );
+        grouped
+            .entry(shape_key)
+            .or_default()
+            .push((occurrence, generator));
+    }
+
+    let mut theorem_gaps = Vec::new();
+    let mut natural_family_rows = Vec::new();
+    for (shape_key, members) in grouped {
+        let (representative, generator) = &members[0];
+        let semantic_family_id = tagged_hash(
+            "semantic-natural-family",
+            &(
+                &shape_key,
+                &generator.generator_univalent_key,
+                &generator.derivation_hash,
+            ),
+        );
+        let marginal = !prefix_family_has_preimage(&shape_key, generator, predecessor_projections)?;
+        let gap_id = if marginal {
+            let theorem_gap = gap(
+                stage,
+                Some(&semantic_family_id),
+                "ROLE_SCHEMA_EXTRACTION_GAP",
+                format!(
+                    "the typed-family extractor proves owner clause {} but does not construct, type, or naturalize semantic role `{}`; owner typing cannot be promoted to role-family typing",
+                    representative.owner_clause, representative.kind
+                ),
+            );
+            let id = theorem_gap.id.clone();
+            theorem_gaps.push(theorem_gap);
+            Some(id)
+        } else {
+            None
+        };
+        let collapsed_uniform_instance_count = members
+            .iter()
+            .skip(1)
+            .filter(|(occurrence, _)| occurrence.uniform_specialization)
+            .count();
+        let mut row = ActLocalV3PrefixNaturalFamilyRow {
+            semantic_family_id,
+            family_shape_key: shape_key,
+            representative_role: representative.serializable(),
+            occurrence_count: members.len(),
+            collapsed_uniform_instance_count,
+            generator_univalent_key: generator.generator_univalent_key.clone(),
+            generator_canonical_normal_form: generator.canonical_normal_form.clone(),
+            generator_parameter_sorts: generator.parameter_sorts.clone(),
+            generator_kernel_type_json: generator.kernel_type_json.clone(),
+            generator_typed_normalized_natural: true,
+            marginal,
+            removed_by_r2: false,
+            gap_id,
+            derivation_hash: String::new(),
+        };
+        row.derivation_hash = prefix_natural_family_row_hash(&row);
+        natural_family_rows.push(row);
+    }
+
+    let quotient_partition_exact = role_occurrences_before_quotient.len()
+        == removed_by_r2
+            + natural_family_rows
+                .iter()
+                .map(|row| row.occurrence_count)
+                .sum::<usize>();
+    let uniform_specializations_not_multiplied = natural_family_rows.iter().all(|row| {
+        row.occurrence_count == 1
+            || row.collapsed_uniform_instance_count <= row.occurrence_count.saturating_sub(1)
+    });
+    let capability_audit = ActLocalV3PrefixCapabilityAudit::source_first();
+    if !quotient_partition_exact
+        || !uniform_specializations_not_multiplied
+        || !all_structurally_typed_predecessors_enumerated
+        || !capability_audit.source_first_only()
+    {
+        return Err(ActLocalProvenanceV3Error::Enumeration(
+            "prefix-local declaration projection did not close its source-first quotient"
+                .to_owned(),
+        ));
+    }
+
+    let predecessor_projection_hashes = predecessor_projections
+        .iter()
+        .map(|projection| projection.surface_hash.clone())
+        .collect::<Vec<_>>();
+    let predecessor_surface_digest =
+        predecessor_projection_surface_digest(stage, &predecessor_projection_hashes);
+    let mut surface = ActLocalV3PrefixDeclaration {
+        schema: ACT_LOCAL_PREFIX_DECLARATION_V3_SCHEMA.to_owned(),
+        date: ACT_LOCAL_PROVENANCE_V3_DATE.to_owned(),
+        theorem_id: ACT_LOCAL_PREFIX_DECLARATION_V3_THEOREM_ID.to_owned(),
+        stage,
+        candidate_hash: candidate_hash(candidate),
+        predecessor_signature_digest: prefix.digest().to_owned(),
+        kappa: candidate.kappa() as u32,
+        r2_rule_authority_hash: r2_rule.authority_hash().to_owned(),
+        predecessor_projection_hashes,
+        predecessor_surface_digest,
+        role_occurrences_before_quotient,
+        natural_family_rows,
+        theorem_gaps,
+        r2_rule_application_total,
+        quotient_partition_exact,
+        uniform_specializations_not_multiplied,
+        all_structurally_typed_predecessors_enumerated,
+        capability_audit,
+        surface_hash: String::new(),
+    };
+    surface.surface_hash = prefix_declaration_surface_hash(&surface);
+    Ok(surface)
+}
+
+fn issue_prefix_declaration_sequence_checked_token(
+    entries: &[(u32, Telescope)],
+    r2_rule: &ActLocalV3TypedR2RuleToken,
+) -> Result<Vec<ActLocalV3PrefixDeclaration>, ActLocalProvenanceV3Error> {
+    if entries.is_empty()
+        || !entries
+            .iter()
+            .map(|(stage, _)| *stage)
+            .eq(1..=entries.len() as u32)
+    {
+        return Err(ActLocalProvenanceV3Error::Input(
+            "v3 prefix-local declaration sequence must be contiguous from Stage 1".to_owned(),
+        ));
+    }
+    let mut accepted = Vec::<(u32, Telescope)>::new();
+    let mut projections = Vec::new();
+    for (stage, candidate) in entries {
+        let prefix = SealedSignature::from_telescopes(accepted.clone());
+        let projection =
+            issue_prefix_declaration_one(&prefix, *stage, candidate, &projections, r2_rule)?;
+        accepted.push((*stage, candidate.clone()));
+        projections.push(projection);
+    }
+    Ok(projections)
+}
+
+pub fn issue_act_local_prefix_declaration_sequence_v3(
+    entries: &[(u32, Telescope)],
+    r2_rule: &ActLocalV3TypedR2RuleToken,
+) -> Result<Vec<ActLocalV3PrefixDeclaration>, ActLocalProvenanceV3Error> {
+    if !replay_act_local_v3_typed_r2_rule_token(r2_rule).is_empty() {
+        return Err(ActLocalProvenanceV3Error::Input(
+            "v3 prefix-local sequence requires the closed typed R2 rule token".to_owned(),
+        ));
+    }
+    issue_prefix_declaration_sequence_checked_token(entries, r2_rule)
+}
+
+pub fn issue_act_local_prefix_declaration_v3(
+    prefix: &SealedSignature,
+    stage: u32,
+    candidate: &Telescope,
+    predecessor_projections: &[ActLocalV3PrefixDeclaration],
+    r2_rule: &ActLocalV3TypedR2RuleToken,
+) -> Result<ActLocalV3PrefixDeclaration, ActLocalProvenanceV3Error> {
+    validate_prefix(prefix, stage)?;
+    let prefix_entries = prefix
+        .entries()
+        .iter()
+        .map(|entry| (entry.step, entry.telescope.clone()))
+        .collect::<Vec<_>>();
+    let expected_predecessors = if prefix_entries.is_empty() {
+        Vec::new()
+    } else {
+        issue_act_local_prefix_declaration_sequence_v3(&prefix_entries, r2_rule)?
+    };
+    if expected_predecessors != predecessor_projections {
+        return Err(ActLocalProvenanceV3Error::Input(
+            "supplied predecessor declaration projections differ from source-first reissuance"
+                .to_owned(),
+        ));
+    }
+    issue_prefix_declaration_one(prefix, stage, candidate, predecessor_projections, r2_rule)
+}
+
+pub fn replay_act_local_prefix_declaration_v3(
+    prefix: &SealedSignature,
+    candidate: &Telescope,
+    predecessor_projections: &[ActLocalV3PrefixDeclaration],
+    r2_rule: &ActLocalV3TypedR2RuleToken,
+    claimed: &ActLocalV3PrefixDeclaration,
+) -> Vec<String> {
+    let mut errors = Vec::new();
+    if claimed.surface_hash != prefix_declaration_surface_hash(claimed) {
+        errors.push("v3 prefix-local declaration surface digest mismatch".to_owned());
+    }
+    match issue_act_local_prefix_declaration_v3(
+        prefix,
+        claimed.stage,
+        candidate,
+        predecessor_projections,
+        r2_rule,
+    ) {
+        Ok(expected) if expected == *claimed => {}
+        Ok(_) => errors
+            .push("v3 prefix-local declaration differs from source-first reissuance".to_owned()),
+        Err(error) => errors.push(error.to_string()),
+    }
+    errors
+}
+
+pub fn replay_act_local_prefix_declaration_sequence_v3(
+    entries: &[(u32, Telescope)],
+    r2_rule: &ActLocalV3TypedR2RuleToken,
+    claimed: &[ActLocalV3PrefixDeclaration],
+) -> Vec<String> {
+    match issue_act_local_prefix_declaration_sequence_v3(entries, r2_rule) {
+        Ok(expected) if expected == claimed => Vec::new(),
+        Ok(_) => vec![
+            "v3 prefix-local declaration sequence differs from source-first reissuance".to_owned(),
+        ],
+        Err(error) => vec![error.to_string()],
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1681,5 +2463,180 @@ mod tests {
         forged.candidate_minted_output_position_count = 1;
         forged.derivation_hash = certificate_digest(&forged);
         assert!(!replay_act_local_provenance_v3(&prefix, &entries[4].1, &forged).is_empty());
+    }
+
+    #[test]
+    fn prefix_local_r2_authority_is_closed_typed_and_reissued() {
+        let token = issue_act_local_v3_typed_r2_rule_token();
+        assert!(replay_act_local_v3_typed_r2_rule_token(&token).is_empty());
+        assert!(!token.markdown_or_file_read);
+        assert!(!token.archived_count_or_label_read);
+        assert!(token.e4_generator_membership_witness_required);
+        assert!(!token.operational_membership_verdict_issued);
+        assert_eq!(
+            token.slot_mechanism,
+            CreditMechanism::P6UniformSpecialization
+        );
+        assert_eq!(token.slot_role, LocalRole::SupportAction);
+        assert_eq!(token.authority_hash(), token.derivation_hash);
+
+        let mut forged = token.clone();
+        forged.surviving_parent_kind = "desired-count-selected-parent".to_owned();
+        forged.derivation_hash = typed_r2_rule_token_hash(&forged);
+        assert!(!replay_act_local_v3_typed_r2_rule_token(&forged).is_empty());
+    }
+
+    #[test]
+    fn prefix_local_sequence_is_deterministic_projection_only_and_r2_total() {
+        let entries = (1..=8)
+            .map(|stage| (stage, Telescope::reference(stage)))
+            .collect::<Vec<_>>();
+        let r2 = issue_act_local_v3_typed_r2_rule_token();
+        let first = issue_act_local_prefix_declaration_sequence_v3(&entries, &r2)
+            .expect("first source-first declaration sequence");
+        let second = issue_act_local_prefix_declaration_sequence_v3(&entries, &r2)
+            .expect("second source-first declaration sequence");
+        assert_eq!(first, second);
+        assert!(replay_act_local_prefix_declaration_sequence_v3(&entries, &r2, &first).is_empty());
+        assert!(first.iter().all(|surface| {
+            surface.capability_audit.source_first_only()
+                && surface.r2_rule_application_total
+                && surface.quotient_partition_exact
+                && surface.uniform_specializations_not_multiplied
+                && surface.all_structurally_typed_predecessors_enumerated
+                && surface.r2_rule_authority_hash == r2.derivation_hash
+                && surface.predecessor_projection_hashes
+                    == first[..surface.stage.saturating_sub(1) as usize]
+                        .iter()
+                        .map(|prior| prior.surface_hash.clone())
+                        .collect::<Vec<_>>()
+        }));
+        let stage8 = &first[7];
+        assert!(
+            stage8
+                .role_occurrences_before_quotient
+                .iter()
+                .any(|occurrence| {
+                    occurrence.kind == r2.generated_child_kind && occurrence.removed_by_adopted_r2
+                })
+        );
+
+        let json = serde_json::to_string(&first).expect("projection sequence serializes");
+        for forbidden_field in [
+            "predecessor_act_local_digest",
+            "blind_local_role_capacity_4kappa",
+            "adopted_export_upper_bound_4kappa_plus_exported_orbits",
+            "counterfactual_all_quotient_orbits_upper_bound",
+            "invalid_raw_occurrence_upper_bound",
+            "natural_family_count_after_quotient",
+        ] {
+            assert!(!json.contains(forbidden_field), "leaked {forbidden_field}");
+        }
+    }
+
+    #[test]
+    fn prefix_local_enumerates_every_typed_structural_source_without_count_selection() {
+        let entries = (1..=14)
+            .map(|stage| (stage, Telescope::reference(stage)))
+            .collect::<Vec<_>>();
+        let r2 = issue_act_local_v3_typed_r2_rule_token();
+        let surfaces = issue_act_local_prefix_declaration_sequence_v3(&entries, &r2)
+            .expect("source-first declaration sequence through Stage 14");
+        let stage14 = &surfaces[13];
+        assert!(
+            !stage14
+                .capability_audit
+                .count_based_predecessor_selector_capability
+        );
+        assert!(
+            !stage14
+                .capability_audit
+                .markdown_or_file_source_scan_capability
+        );
+
+        let refs = entries[13].1.lib_refs();
+        let expected = refs
+            .iter()
+            .flat_map(|source_step| {
+                surfaces[*source_step as usize - 1]
+                    .natural_family_rows
+                    .iter()
+                    .filter(|family| {
+                        family.marginal
+                            && !family.removed_by_r2
+                            && family.generator_typed_normalized_natural
+                    })
+                    .map(move |family| (*source_step, family.derivation_hash.clone()))
+            })
+            .collect::<BTreeSet<_>>();
+        let observed = stage14
+            .role_occurrences_before_quotient
+            .iter()
+            .filter(|occurrence| occurrence.kind == "axiomatic_inherited_family")
+            .filter_map(|occurrence| {
+                let coordinate = occurrence.coordinate.get("coordinates")?;
+                let source_step = u32::try_from(coordinate.get("source_step")?.as_u64()?).ok()?;
+                let row_hash = coordinate
+                    .get("source_family_row_hash")?
+                    .as_str()?
+                    .to_owned();
+                Some((source_step, row_hash))
+            })
+            .collect::<BTreeSet<_>>();
+        assert!(!expected.is_empty());
+        assert_eq!(observed, expected);
+    }
+
+    #[test]
+    fn prefix_local_replay_rejects_fully_rehashed_surface_and_predecessor_mutations() {
+        let entries = (1..=4)
+            .map(|stage| (stage, Telescope::reference(stage)))
+            .collect::<Vec<_>>();
+        let r2 = issue_act_local_v3_typed_r2_rule_token();
+        let surfaces = issue_act_local_prefix_declaration_sequence_v3(&entries, &r2)
+            .expect("source-first declaration prefix");
+        let prefix = SealedSignature::from_telescopes(entries[..3].to_vec());
+
+        let mut forged_surface = surfaces[3].clone();
+        forged_surface.kappa = forged_surface.kappa.saturating_add(1);
+        forged_surface.surface_hash = prefix_declaration_surface_hash(&forged_surface);
+        assert!(
+            !replay_act_local_prefix_declaration_v3(
+                &prefix,
+                &entries[3].1,
+                &surfaces[..3],
+                &r2,
+                &forged_surface,
+            )
+            .is_empty()
+        );
+
+        let mut forged_predecessors = surfaces[..3].to_vec();
+        forged_predecessors[1].kappa = forged_predecessors[1].kappa.saturating_add(1);
+        forged_predecessors[1].surface_hash =
+            prefix_declaration_surface_hash(&forged_predecessors[1]);
+        assert!(
+            issue_act_local_prefix_declaration_v3(
+                &prefix,
+                4,
+                &entries[3].1,
+                &forged_predecessors,
+                &r2,
+            )
+            .is_err()
+        );
+    }
+
+    #[test]
+    fn additive_prefix_path_does_not_change_historical_v3_reissuance() {
+        let entries = (1..=4)
+            .map(|stage| (stage, Telescope::reference(stage)))
+            .collect::<Vec<_>>();
+        let before = issue_act_local_sequence_v3(&entries).expect("historical v3 before");
+        let r2 = issue_act_local_v3_typed_r2_rule_token();
+        let _ = issue_act_local_prefix_declaration_sequence_v3(&entries, &r2)
+            .expect("additive prefix-local path");
+        let after = issue_act_local_sequence_v3(&entries).expect("historical v3 after");
+        assert_eq!(before, after);
     }
 }

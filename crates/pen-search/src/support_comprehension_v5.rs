@@ -9,8 +9,9 @@
 use crate::motive_typed_open_specialization_v4::{
     DependentContextualInternalProjectionV4, ExactOpenDependencyCycleBlockerV4,
     MotiveTypedOpenSpecializationProjectionV4, OpenInternalDerivationV4,
-    issue_dependent_contextual_internal_v4, issue_exact_open_dependency_cycle_blocker_v4,
-    issue_motive_typed_open_specialization_v4, replay_exact_open_dependency_cycle_blocker_v4,
+    issue_dependent_contextual_internal_v4, issue_exact_open_dependency_cycle_blocker_for_row_v4,
+    issue_motive_typed_open_specialization_v4,
+    replay_exact_open_dependency_cycle_blocker_for_row_v4,
     replay_motive_typed_open_specialization_v4,
 };
 use crate::t_sm1a_contextual_formation_v4::issue_chronological_image_internal_v4;
@@ -246,6 +247,112 @@ fn source_motives_from_sealed_expression(
     ])
 }
 
+/// Validate one caller-supplied row using only its exact live A3 data.
+///
+/// In particular this predicate neither enumerates alternative rows nor tries
+/// the repaired specialization.  The support-comprehension theorem applies
+/// exactly when the canonical graph already exposes the forbidden `p2 -> p2`
+/// edge: the exact first realizer contains target `Var(2)`.
+fn exact_row_input(
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older_source: &A3TypedClauseSource,
+    newest_source: &A3TypedClauseSource,
+) -> Result<SealedSupportAnalysisInputV5, SupportComprehensionV5Error> {
+    if scheme.rule_constructor != A3RuleConstructor::ChronologicalComparison
+        || instance.scheme_id != scheme.scheme_id
+        || instance.source_anchor_ids
+            != vec![
+                older_source.anchor_id.clone(),
+                newest_source.anchor_id.clone(),
+            ]
+        || instance.source_family_keys
+            != vec![
+                older_source.canonical_family_key.clone(),
+                newest_source.canonical_family_key.clone(),
+            ]
+        || older_source.step >= newest_source.step
+        || !older_source.exported_public_clause
+        || !newest_source.exported_public_clause
+        || newest_source.kernel_type == KernelTy::Type
+    {
+        return Err(SupportComprehensionV5Error::SealedInstance(
+            "supplied values do not form one exact public chronological row".to_owned(),
+        ));
+    }
+    let Some(source_interface_motives) = source_motives_from_sealed_expression(newest_source)
+    else {
+        return Err(SupportComprehensionV5Error::SealedInstance(
+            "newest source is not the dependent two-parameter source shape".to_owned(),
+        ));
+    };
+    let A3DemandOutputType::ChronologicalInteraction {
+        older_family,
+        older_type,
+        newest_family,
+        newest_type,
+        interface_mode,
+        interface_slot_map,
+    } = &scheme.required_output
+    else {
+        return Err(SupportComprehensionV5Error::SealedInstance(
+            "supplied scheme is not a chronological interaction".to_owned(),
+        ));
+    };
+    if older_family != &older_source.canonical_family_key
+        || older_type != &older_source.kernel_type
+        || newest_family != &newest_source.canonical_family_key
+        || newest_type != &newest_source.kernel_type
+    {
+        return Err(SupportComprehensionV5Error::SealedInstance(
+            "chronological output families or kernel types do not join the supplied sources"
+                .to_owned(),
+        ));
+    }
+    replay_chronological_interface_slot_map(interface_slot_map, interface_slot_map.declared_arity)
+        .map_err(|error| SupportComprehensionV5Error::SealedInstance(error.to_string()))?;
+    let flattened_interface_assignments = interface_slot_map
+        .assignments
+        .iter()
+        .map(|assignment| (assignment.interface_slot, assignment.parameter))
+        .collect::<Vec<_>>();
+    if flattened_interface_assignments != vec![(1, 1), (2, 2)] {
+        return Err(SupportComprehensionV5Error::SealedInstance(
+            "support comprehension requires the exact two-slot identity interface".to_owned(),
+        ));
+    }
+    let first_realizer = match interface_mode {
+        A3ChronologicalInterfaceMode::DirectType => older_source
+            .canonical_presentation
+            .canonical_normal_form
+            .clone(),
+        A3ChronologicalInterfaceMode::PointwiseTypeValuedFunction { .. } => Expr::App(
+            Box::new(
+                older_source
+                    .canonical_presentation
+                    .canonical_normal_form
+                    .clone(),
+            ),
+            Box::new(Expr::Var(1)),
+        ),
+    };
+    if !first_realizer.var_refs().contains(&2) {
+        return Err(SupportComprehensionV5Error::SealedInstance(
+            "canonical dependency graph has no p2 self-edge".to_owned(),
+        ));
+    }
+    Ok(SealedSupportAnalysisInputV5 {
+        instance: instance.clone(),
+        scheme: scheme.clone(),
+        older_source: older_source.clone(),
+        newest_source: newest_source.clone(),
+        interface_mode: interface_mode.clone(),
+        flattened_interface_assignments,
+        source_interface_motives,
+        first_realizer,
+    })
+}
+
 /// Select the comprehension input solely from the sealed A3 surface.  The
 /// selection criterion is the forbidden self-dependency in the flattened
 /// slot map; neither the v4 blocker nor a successful repaired derivation is
@@ -353,8 +460,9 @@ fn exact_sealed_input() -> Result<SealedSupportAnalysisInputV5, SupportComprehen
     Ok(candidates.remove(0))
 }
 
-fn canonical_support_analysis() -> Result<CanonicalSupportAnalysisV5, SupportComprehensionV5Error> {
-    let input = exact_sealed_input()?;
+fn canonical_support_analysis_for_input(
+    input: SealedSupportAnalysisInputV5,
+) -> Result<CanonicalSupportAnalysisV5, SupportComprehensionV5Error> {
     let instance = input.instance;
     let scheme = input.scheme;
     let older_source = input.older_source;
@@ -682,6 +790,7 @@ fn attach_v4_cycle_regression(
 
 fn source_internal(
     signature: &SealedSignature,
+    visible_library: u32,
     analysis: &CanonicalSupportAnalysisV5,
 ) -> Result<OpenInternalDerivationV4, SupportComprehensionV5Error> {
     let body = Telescope::new(vec![ClauseRec::new(
@@ -695,7 +804,7 @@ fn source_internal(
     let declaration = issue_dependent_ambient_context_declaration(
         signature,
         &body,
-        15,
+        visible_library,
         analysis.source_interface_motives.clone(),
     )
     .map_err(|error| SupportComprehensionV5Error::Dependent(error.to_string()))?;
@@ -708,37 +817,71 @@ fn source_internal(
 
 fn projection_internal(
     signature: &SealedSignature,
+    visible_library: u32,
     motives: &[DependentContextMotive],
     term: Expr,
 ) -> Result<DependentContextualInternalProjectionV4, SupportComprehensionV5Error> {
     let probe = Telescope::new(vec![ClauseRec::new(ClauseRole::Introduction, term.clone())]);
-    let probe_declaration =
-        issue_dependent_ambient_context_declaration(signature, &probe, 15, motives.to_vec())
-            .map_err(|error| SupportComprehensionV5Error::Dependent(error.to_string()))?;
+    let probe_declaration = issue_dependent_ambient_context_declaration(
+        signature,
+        &probe,
+        visible_library,
+        motives.to_vec(),
+    )
+    .map_err(|error| SupportComprehensionV5Error::Dependent(error.to_string()))?;
     let role = probe_declaration
         .projection()
         .typed_body_elaboration
         .kernel_role;
     let body = Telescope::new(vec![ClauseRec::new(role, term)]);
-    let declaration =
-        issue_dependent_ambient_context_declaration(signature, &body, 15, motives.to_vec())
-            .map_err(|error| SupportComprehensionV5Error::Dependent(error.to_string()))?;
+    let declaration = issue_dependent_ambient_context_declaration(
+        signature,
+        &body,
+        visible_library,
+        motives.to_vec(),
+    )
+    .map_err(|error| SupportComprehensionV5Error::Dependent(error.to_string()))?;
     let internal = issue_dependent_contextual_internal_v4(signature, declaration.projection())
         .map_err(|error| SupportComprehensionV5Error::V4(error.to_string()))?;
     Ok(internal.projection().clone())
 }
 
-pub fn issue_support_comprehension_derivation_v5()
--> Result<SupportComprehensionDerivationV5, SupportComprehensionV5Error> {
-    let signature = SealedSignature::genesis_del_h15();
-
-    // Canonical support selection consumes only the live sealed instance.
-    // The v4 blocker is replayed afterward as a non-selecting regression.
-    let analysis = canonical_support_analysis()?;
-    let blocker = issue_exact_open_dependency_cycle_blocker_v4()
-        .map_err(|error| SupportComprehensionV5Error::V4(error.to_string()))?;
-    replay_exact_open_dependency_cycle_blocker_v4(&blocker)
-        .map_err(|error| SupportComprehensionV5Error::V4(error.to_string()))?;
+/// Issue support comprehension for one exact live dependency-cycle row.
+///
+/// The exact-row predicate is checked directly and the sources are replayed
+/// against `signature` by the v4 blocker theorem before specialization.  No
+/// corpus archive or historical outcome participates.
+pub fn issue_support_comprehension_derivation_for_row_v5(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+) -> Result<SupportComprehensionDerivationV5, SupportComprehensionV5Error> {
+    // Canonical support selection consumes only the supplied exact row.  The
+    // v4 blocker is replayed afterward as a non-selecting regression.
+    let input = exact_row_input(instance, scheme, older, newest)?;
+    let analysis = canonical_support_analysis_for_input(input)?;
+    let blocker = issue_exact_open_dependency_cycle_blocker_for_row_v4(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+    )
+    .map_err(|error| SupportComprehensionV5Error::V4(error.to_string()))?;
+    replay_exact_open_dependency_cycle_blocker_for_row_v4(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+        &blocker,
+    )
+    .map_err(|error| SupportComprehensionV5Error::V4(error.to_string()))?;
     let analysis = attach_v4_cycle_regression(analysis, &blocker)?;
 
     // The analysis is completed and sealed before any repaired
@@ -749,29 +892,33 @@ pub fn issue_support_comprehension_derivation_v5()
         witness_term.clone(),
     )]);
     let support_probe_token = issue_dependent_ambient_context_declaration(
-        &signature,
+        signature,
         &probe,
-        15,
+        visible_library,
         analysis.support_motives.clone(),
     )
     .map_err(|error| SupportComprehensionV5Error::Dependent(error.to_string()))?;
-    replay_dependent_ambient_context_declaration(&signature, support_probe_token.projection())
+    replay_dependent_ambient_context_declaration(signature, support_probe_token.projection())
         .map_err(|error| SupportComprehensionV5Error::Dependent(error.to_string()))?;
     let support_probe_declaration = support_probe_token.projection().clone();
 
-    let source = source_internal(&signature, &analysis)?;
+    let source = source_internal(signature, visible_library, &analysis)?;
     let first_image = issue_chronological_image_internal_v4(
-        &signature,
-        15,
+        signature,
+        visible_library,
         &analysis.older_source,
         analysis.interface_mode.clone(),
         support_probe_declaration.exact_ambient_kernel_types.clone(),
     )
     .map_err(|error| SupportComprehensionV5Error::ImageInternal(error.to_string()))?;
-    let second_image =
-        projection_internal(&signature, &analysis.support_motives, witness_term.clone())?;
+    let second_image = projection_internal(
+        signature,
+        visible_library,
+        &analysis.support_motives,
+        witness_term.clone(),
+    )?;
     let specialization_token = issue_motive_typed_open_specialization_v4(
-        &signature,
+        signature,
         source,
         analysis.support_motives.clone(),
         vec![
@@ -790,7 +937,7 @@ pub fn issue_support_comprehension_derivation_v5()
         ],
     )
     .map_err(|error| SupportComprehensionV5Error::Specialization(error.to_string()))?;
-    replay_motive_typed_open_specialization_v4(&signature, specialization_token.projection())
+    replay_motive_typed_open_specialization_v4(signature, specialization_token.projection())
         .map_err(|error| SupportComprehensionV5Error::Specialization(error.to_string()))?;
     let specialization = specialization_token.projection().clone();
 
@@ -896,6 +1043,46 @@ pub fn issue_support_comprehension_derivation_v5()
     Ok(derivation)
 }
 
+/// Replay one exact-row support-comprehension derivation by full reissuance.
+pub fn replay_support_comprehension_derivation_for_row_v5(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+    claimed: &SupportComprehensionDerivationV5,
+) -> Result<(), SupportComprehensionV5Error> {
+    let reissued = issue_support_comprehension_derivation_for_row_v5(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+    )?;
+    if reissued == *claimed {
+        Ok(())
+    } else {
+        Err(SupportComprehensionV5Error::ReplayMismatch)
+    }
+}
+
+/// Historical Genesis wrapper retained for the v5/v6 certificate lineage.
+pub fn issue_support_comprehension_derivation_v5()
+-> Result<SupportComprehensionDerivationV5, SupportComprehensionV5Error> {
+    let signature = SealedSignature::genesis_del_h15();
+    let input = exact_sealed_input()?;
+    issue_support_comprehension_derivation_for_row_v5(
+        &signature,
+        15,
+        &input.instance,
+        &input.scheme,
+        &input.older_source,
+        &input.newest_source,
+    )
+}
+
 pub fn replay_support_comprehension_derivation_v5(
     claimed: &SupportComprehensionDerivationV5,
 ) -> Result<(), SupportComprehensionV5Error> {
@@ -956,5 +1143,80 @@ mod tests {
         let mut charge_mutation = derivation;
         charge_mutation.realizers_nu_charge = 1;
         assert!(replay_support_comprehension_derivation_v5(&charge_mutation).is_err());
+    }
+
+    #[test]
+    fn exact_row_api_matches_genesis_and_rejects_row_or_signature_binding_mutations() {
+        let signature = SealedSignature::genesis_del_h15();
+        let input = exact_sealed_input().expect("exact live row");
+        let generic = issue_support_comprehension_derivation_for_row_v5(
+            &signature,
+            15,
+            &input.instance,
+            &input.scheme,
+            &input.older_source,
+            &input.newest_source,
+        )
+        .expect("generic support derivation");
+        let legacy = issue_support_comprehension_derivation_v5().expect("legacy derivation");
+        assert_eq!(generic, legacy);
+        assert_eq!(generic.specialization.signature_digest, signature.digest());
+        assert_eq!(generic.specialization.visible_library, 15);
+        replay_support_comprehension_derivation_for_row_v5(
+            &signature,
+            15,
+            &input.instance,
+            &input.scheme,
+            &input.older_source,
+            &input.newest_source,
+            &generic,
+        )
+        .expect("generic replay");
+
+        let mut forged_instance = input.instance.clone();
+        forged_instance.origin_evidence_hash.push_str("-forged");
+        assert!(
+            issue_support_comprehension_derivation_for_row_v5(
+                &signature,
+                15,
+                &forged_instance,
+                &input.scheme,
+                &input.older_source,
+                &input.newest_source,
+            )
+            .is_err()
+        );
+
+        let mut mutated_claim = generic;
+        mutated_claim
+            .specialization
+            .signature_digest
+            .push_str("-mutated");
+        assert!(
+            replay_support_comprehension_derivation_for_row_v5(
+                &signature,
+                15,
+                &input.instance,
+                &input.scheme,
+                &input.older_source,
+                &input.newest_source,
+                &mutated_claim,
+            )
+            .is_err()
+        );
+    }
+
+    #[test]
+    fn legacy_v5_projection_remains_byte_lineage_compatible() {
+        let derivation = issue_support_comprehension_derivation_v5().expect("support derivation");
+        let archived: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../../docs/support_comprehension_chronological_v5.json"
+        ))
+        .expect("archived v5 JSON");
+        assert_eq!(
+            serde_json::to_value(&derivation).expect("current v5 projection"),
+            archived["support_comprehension"],
+            "generic exact-row API must not alter the immutable v5 projection"
+        );
     }
 }

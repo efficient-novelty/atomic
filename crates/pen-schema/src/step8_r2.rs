@@ -16,13 +16,27 @@ use pen_core::telescope::Telescope;
 use pen_type::cubical::typed_boundary::{
     HistoricalTypedBundleEvidenceKind, RegisteredBoundaryKind,
     issue_historical_prefix_v3_c6_typed_bundle_token,
+    issue_typed_declared_boundary_token_v3_for_historical_prefix,
+    issue_typed_declared_s3_boundary_token_v4_for_prefix_general,
+    registered_boundary_diagram_for_historical_prefix,
+    registered_s3_boundary_diagram_for_prefix_general_v4,
     replay_historical_prefix_v3_c6_typed_bundle_token,
+    replay_typed_declared_boundary_token_v3_for_historical_prefix,
+    replay_typed_declared_s3_boundary_token_v4_for_prefix_general,
 };
 use pen_type::elaborate::SealedSignature;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 pub const STEP8_R2_TOKEN_VERSION: &str = "schema2-step8-r2-typed-signatures-v1";
+pub const STEP8_R2_PREFIX_LOCAL_TOKEN_VERSION: &str =
+    "schema2-step8-r2-prefix-local-typed-signatures-v1";
+pub const STEP8_R2_PREFIX_LOCAL_TYPED_BOUNDARY_API: &str =
+    "typed-declared-boundary-v3-for-supplied-historical-prefix";
+pub const STEP8_R2_PREFIX_GENERAL_TOKEN_VERSION: &str =
+    "schema2-step8-r2-prefix-general-typed-signatures-v2";
+pub const STEP8_R2_PREFIX_GENERAL_TYPED_BOUNDARY_API: &str =
+    "typed-declared-s3-boundary-v4-for-arbitrary-typed-prefix";
 pub const STEP8_R2_FALSIFIER: &str = "F-Q4";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -64,6 +78,77 @@ pub struct Step8R2TypedSignaturesToken {
     pub derivation_hash: String,
 }
 
+/// The read capability surface of the source-first Step-8 issuer.  Positive
+/// capabilities are deliberately narrow.  The negative fields are sealed
+/// into the token so a downstream provenance theorem can distinguish this
+/// path from the older archival C6 handoff without inspecting implementation
+/// details.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Step8R2PrefixLocalCapabilities {
+    pub supplied_exact_prefix_read: bool,
+    pub supplied_exact_candidate_read: bool,
+    pub source_bound_typed_boundary_read: bool,
+    pub schema2_term_typing_read: bool,
+    pub archival_constant_bridge_read: bool,
+    pub archive_input_read: bool,
+    pub historical_count_input_read: bool,
+    pub acceptance_bar_input_read: bool,
+    pub membership_verdict_input_read: bool,
+    pub enacted_future_input_read: bool,
+}
+
+impl Step8R2PrefixLocalCapabilities {
+    pub const fn forbidden_inputs_withheld(&self) -> bool {
+        !self.archival_constant_bridge_read
+            && !self.archive_input_read
+            && !self.historical_count_input_read
+            && !self.acceptance_bar_input_read
+            && !self.membership_verdict_input_read
+            && !self.enacted_future_input_read
+    }
+}
+
+/// Source-first counterpart of [`Step8R2TypedSignaturesToken`].  Unlike the
+/// historical token, this certificate is issued from caller-supplied prefix
+/// and candidate values and stops at the lowest public source-bound typed
+/// boundary judgment.  In particular it neither requests nor records an
+/// `ArchivalConstantBridge`.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Step8R2PrefixLocalTypedSignaturesToken {
+    pub token_version: String,
+    pub rule: String,
+    pub source_step: u32,
+    pub predecessor_signature_digest: String,
+    pub source_telescope_hash: String,
+    pub source_clause_shapes: Vec<String>,
+    pub registered_boundary_kind: String,
+    pub registered_boundary_dimension: u32,
+    pub typed_boundary_api: String,
+    pub typed_boundary_dependency_hash: String,
+    pub typed_boundary_derivation_hash: String,
+    pub reference_only_derivation_hash: String,
+    pub base_binding_derivation_hash: Option<String>,
+    pub element_overlay_derivation_hash: Option<String>,
+    pub typed_boundary_face_count: u64,
+    pub operation_signature: String,
+    pub left_unit_signature: String,
+    pub cell_action_signature: String,
+    pub cell_action_body: String,
+    pub first_slot_orientation: bool,
+    pub operation_signature_typed: bool,
+    pub left_unit_signature_typed: bool,
+    pub cell_action_term_typed: bool,
+    pub cell_action_boundary_derived_by_map_cube: bool,
+    pub schema_signature_derivation_hash: String,
+    pub coherence_generator_membership_decided: bool,
+    pub cell_action_generator_membership_decided: bool,
+    pub independent_family_tokens_issued: u32,
+    pub capabilities: Step8R2PrefixLocalCapabilities,
+    pub derivation_hash: String,
+}
+
 #[derive(Clone, Debug, Error, Eq, PartialEq)]
 pub enum Step8R2Error {
     #[error("registered S3 boundary bundle failed: {0}")]
@@ -76,12 +161,54 @@ pub enum Step8R2Error {
     SourceShapeDrift,
     #[error("Step-8 R2 token replay mismatch")]
     ReplayMismatch,
+    #[error("source-bound Step-8 typed boundary failed: {0}")]
+    PrefixLocalBoundary(String),
+    #[error("source-bound Step-8 R2 token replay mismatch")]
+    PrefixLocalReplayMismatch,
 }
 
 fn tagged_hash(domain: &str, payload: &impl Serialize) -> String {
     let bytes = serde_json::to_vec(&(STEP8_R2_TOKEN_VERSION, domain, payload))
         .expect("Step-8 R2 proof data serializes");
     format!("blake3:{}", blake3::hash(&bytes).to_hex())
+}
+
+fn prefix_local_tagged_hash(domain: &str, payload: &impl Serialize) -> String {
+    let bytes = serde_json::to_vec(&(STEP8_R2_PREFIX_LOCAL_TOKEN_VERSION, domain, payload))
+        .expect("prefix-local Step-8 R2 proof data serializes");
+    format!("blake3:{}", blake3::hash(&bytes).to_hex())
+}
+
+fn prefix_general_tagged_hash(domain: &str, payload: &impl Serialize) -> String {
+    let bytes = serde_json::to_vec(&(STEP8_R2_PREFIX_GENERAL_TOKEN_VERSION, domain, payload))
+        .expect("prefix-general Step-8 R2 proof data serializes");
+    format!("blake3:{}", blake3::hash(&bytes).to_hex())
+}
+
+fn exact_step8_clause_shapes(candidate: &Telescope) -> Result<Vec<String>, Step8R2Error> {
+    let expected_clauses = [
+        Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
+        Expr::Var(1),
+        Expr::PathCon(3),
+        Expr::Lam(Box::new(Expr::Var(1))),
+        Expr::Lam(Box::new(Expr::Var(2))),
+    ];
+    if candidate.clauses.len() != expected_clauses.len()
+        || candidate
+            .clauses
+            .iter()
+            .zip(expected_clauses.iter())
+            .any(|(clause, expected)| clause.expr != *expected)
+    {
+        return Err(Step8R2Error::SourceShapeDrift);
+    }
+    Ok(vec![
+        "App(Univ,Var(1))".to_owned(),
+        "Var(1)".to_owned(),
+        "PathCon(3)".to_owned(),
+        "Lam(Var(1))".to_owned(),
+        "Lam(Var(2))".to_owned(),
+    ])
 }
 
 pub fn issue_step8_r2_typed_signatures_token() -> Result<Step8R2TypedSignaturesToken, Step8R2Error>
@@ -92,22 +219,7 @@ pub fn issue_step8_r2_typed_signatures_token() -> Result<Step8R2TypedSignaturesT
             .collect(),
     );
     let current = Telescope::reference(8);
-    let expected_clauses = [
-        Expr::App(Box::new(Expr::Univ), Box::new(Expr::Var(1))),
-        Expr::Var(1),
-        Expr::PathCon(3),
-        Expr::Lam(Box::new(Expr::Var(1))),
-        Expr::Lam(Box::new(Expr::Var(2))),
-    ];
-    if current.clauses.len() != expected_clauses.len()
-        || current
-            .clauses
-            .iter()
-            .zip(expected_clauses.iter())
-            .any(|(clause, expected)| clause.expr != *expected)
-    {
-        return Err(Step8R2Error::SourceShapeDrift);
-    }
+    let source_clause_shapes = exact_step8_clause_shapes(&current)?;
     let bundle = issue_historical_prefix_v3_c6_typed_bundle_token(
         &predecessor,
         RegisteredBoundaryKind::S3,
@@ -165,13 +277,7 @@ pub fn issue_step8_r2_typed_signatures_token() -> Result<Step8R2TypedSignaturesT
         source_step: 8,
         predecessor_signature_digest: predecessor.digest().to_owned(),
         source_telescope_hash: pen_type::elaborate::candidate_hash(&current),
-        source_clause_shapes: vec![
-            "App(Univ,Var(1))".to_owned(),
-            "Var(1)".to_owned(),
-            "PathCon(3)".to_owned(),
-            "Lam(Var(1))".to_owned(),
-            "Lam(Var(2))".to_owned(),
-        ],
+        source_clause_shapes,
         registered_interpretation_overlay_replayed: true,
         raw_pen_core_to_schema2_term_elaboration_proved: false,
         registered_boundary_kind: "s3".to_owned(),
@@ -207,6 +313,277 @@ pub fn issue_step8_r2_typed_signatures_token() -> Result<Step8R2TypedSignaturesT
     Ok(token)
 }
 
+/// Issue the Step-8 typed signatures from the exact prefix and candidate
+/// supplied by the caller.  This function contains no reference-telescope
+/// constructor: source validation and boundary typing are delegated to the
+/// public source-bound V3 typed-boundary API.
+pub fn issue_step8_r2_prefix_local_typed_signatures_token(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+) -> Result<Step8R2PrefixLocalTypedSignaturesToken, Step8R2Error> {
+    let source_clause_shapes = exact_step8_clause_shapes(current)?;
+    let diagram = registered_boundary_diagram_for_historical_prefix(
+        predecessor,
+        RegisteredBoundaryKind::S3,
+        current,
+    )
+    .map_err(|error| Step8R2Error::PrefixLocalBoundary(error.to_string()))?;
+    let typed_boundary = issue_typed_declared_boundary_token_v3_for_historical_prefix(
+        predecessor,
+        RegisteredBoundaryKind::S3,
+        current,
+        diagram,
+    )
+    .map_err(|error| Step8R2Error::PrefixLocalBoundary(error.to_string()))?;
+    replay_typed_declared_boundary_token_v3_for_historical_prefix(
+        predecessor,
+        current,
+        &typed_boundary,
+    )
+    .map_err(|error| Step8R2Error::PrefixLocalBoundary(error.to_string()))?;
+    if typed_boundary.kind() != RegisteredBoundaryKind::S3
+        || typed_boundary.dimension() != 3
+        || typed_boundary.faces().len() != 6
+        || typed_boundary.base_binding_derivation_hash().is_none()
+        || typed_boundary.element_overlay_derivation_hash().is_none()
+    {
+        return Err(Step8R2Error::BundleMetadataDrift);
+    }
+
+    let carrier = TypeExpr::parameter(0);
+    let base = TermExpr::variable(1);
+    let context = form_schema_context(vec![
+        Declaration::TypeParameter {
+            binder: BinderId(0),
+            name: "S3".to_owned(),
+            universe: 0,
+        },
+        Declaration::OpaqueElement {
+            binder: BinderId(1),
+            name: "base".to_owned(),
+            ty: carrier.clone(),
+        },
+    ])
+    .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    let boundary_ref = DerivationRef::parse(typed_boundary.derivation_hash().to_owned())
+        .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    let signatures = issue_step8_registered_signatures(context, carrier, base, boundary_ref)
+        .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    replay_step8_registered_signatures(&signatures)
+        .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    if !signatures.operation_signature_typed()
+        || !signatures.left_unit_signature_typed()
+        || !signatures.cell_action_term_typed()
+        || !signatures.cell_action_boundary_derived_by_map_cube()
+        || signatures.coherence_generator_membership_decided()
+        || signatures.cell_action_generator_membership_decided()
+    {
+        return Err(Step8R2Error::Signature(
+            "typed-signature or pending-membership invariant drifted".to_owned(),
+        ));
+    }
+
+    let capabilities = Step8R2PrefixLocalCapabilities {
+        supplied_exact_prefix_read: true,
+        supplied_exact_candidate_read: true,
+        source_bound_typed_boundary_read: true,
+        schema2_term_typing_read: true,
+        archival_constant_bridge_read: false,
+        archive_input_read: false,
+        historical_count_input_read: false,
+        acceptance_bar_input_read: false,
+        membership_verdict_input_read: false,
+        enacted_future_input_read: false,
+    };
+    if !capabilities.forbidden_inputs_withheld() {
+        return Err(Step8R2Error::BundleMetadataDrift);
+    }
+    let typed_boundary_dependency_hash =
+        prefix_local_tagged_hash("source-bound-typed-boundary-dependency", &typed_boundary);
+    let mut token = Step8R2PrefixLocalTypedSignaturesToken {
+        token_version: STEP8_R2_PREFIX_LOCAL_TOKEN_VERSION.to_owned(),
+        rule: DERIVED_ACTION_MEMBERSHIP_RULE.to_owned(),
+        source_step: 8,
+        predecessor_signature_digest: predecessor.digest().to_owned(),
+        source_telescope_hash: pen_type::elaborate::candidate_hash(current),
+        source_clause_shapes,
+        registered_boundary_kind: "s3".to_owned(),
+        registered_boundary_dimension: 3,
+        typed_boundary_api: STEP8_R2_PREFIX_LOCAL_TYPED_BOUNDARY_API.to_owned(),
+        typed_boundary_dependency_hash,
+        typed_boundary_derivation_hash: typed_boundary.derivation_hash().to_owned(),
+        reference_only_derivation_hash: typed_boundary.reference_only_derivation_hash().to_owned(),
+        base_binding_derivation_hash: typed_boundary
+            .base_binding_derivation_hash()
+            .map(str::to_owned),
+        element_overlay_derivation_hash: typed_boundary
+            .element_overlay_derivation_hash()
+            .map(str::to_owned),
+        typed_boundary_face_count: typed_boundary.faces().len() as u64,
+        operation_signature: "mu : (El(S3) * El(S3)) -> El(S3)".to_owned(),
+        left_unit_signature: "Pi x:El(S3). Path El(S3) (mu(base,x)) x".to_owned(),
+        cell_action_signature: "Pi x:El(S3). Cube^3(El(S3); boundary=mu(base,x))".to_owned(),
+        cell_action_body: "lambda x i0 i1 i2. mu(p(i0,i1,i2),x)".to_owned(),
+        first_slot_orientation: signatures.first_slot_orientation(),
+        operation_signature_typed: true,
+        left_unit_signature_typed: true,
+        cell_action_term_typed: true,
+        cell_action_boundary_derived_by_map_cube: true,
+        schema_signature_derivation_hash: signatures.derivation_hash().to_owned(),
+        coherence_generator_membership_decided: false,
+        cell_action_generator_membership_decided: false,
+        independent_family_tokens_issued: 0,
+        capabilities,
+        derivation_hash: String::new(),
+    };
+    token.derivation_hash = prefix_local_tagged_hash("typed-signatures", &token);
+    Ok(token)
+}
+
+pub fn replay_step8_r2_prefix_local_typed_signatures_token(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+    token: &Step8R2PrefixLocalTypedSignaturesToken,
+) -> Result<(), Step8R2Error> {
+    let replay = issue_step8_r2_prefix_local_typed_signatures_token(predecessor, current)?;
+    if replay == *token {
+        Ok(())
+    } else {
+        Err(Step8R2Error::PrefixLocalReplayMismatch)
+    }
+}
+
+/// Prefix-general successor used by BI-1b.  The caller supplies the complete
+/// seven-act prefix and the Step-8 candidate.  The typed-boundary dependency
+/// re-elaborates that prefix and never compares it with historical B7.
+pub fn issue_step8_r2_prefix_general_typed_signatures_token_v2(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+) -> Result<Step8R2PrefixLocalTypedSignaturesToken, Step8R2Error> {
+    let source_clause_shapes = exact_step8_clause_shapes(current)?;
+    let diagram = registered_s3_boundary_diagram_for_prefix_general_v4(predecessor, current)
+        .map_err(|error| Step8R2Error::PrefixLocalBoundary(error.to_string()))?;
+    let typed_boundary =
+        issue_typed_declared_s3_boundary_token_v4_for_prefix_general(predecessor, current, diagram)
+            .map_err(|error| Step8R2Error::PrefixLocalBoundary(error.to_string()))?;
+    replay_typed_declared_s3_boundary_token_v4_for_prefix_general(
+        predecessor,
+        current,
+        &typed_boundary,
+    )
+    .map_err(|error| Step8R2Error::PrefixLocalBoundary(error.to_string()))?;
+    if typed_boundary.kind() != RegisteredBoundaryKind::S3
+        || typed_boundary.dimension() != 3
+        || typed_boundary.faces().len() != 6
+        || typed_boundary.base_binding_derivation_hash().is_none()
+        || typed_boundary.element_overlay_derivation_hash().is_none()
+    {
+        return Err(Step8R2Error::BundleMetadataDrift);
+    }
+
+    let carrier = TypeExpr::parameter(0);
+    let base = TermExpr::variable(1);
+    let context = form_schema_context(vec![
+        Declaration::TypeParameter {
+            binder: BinderId(0),
+            name: "S3".to_owned(),
+            universe: 0,
+        },
+        Declaration::OpaqueElement {
+            binder: BinderId(1),
+            name: "base".to_owned(),
+            ty: carrier.clone(),
+        },
+    ])
+    .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    let boundary_ref = DerivationRef::parse(typed_boundary.derivation_hash().to_owned())
+        .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    let signatures = issue_step8_registered_signatures(context, carrier, base, boundary_ref)
+        .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    replay_step8_registered_signatures(&signatures)
+        .map_err(|error| Step8R2Error::Signature(error.to_string()))?;
+    if !signatures.operation_signature_typed()
+        || !signatures.left_unit_signature_typed()
+        || !signatures.cell_action_term_typed()
+        || !signatures.cell_action_boundary_derived_by_map_cube()
+        || signatures.coherence_generator_membership_decided()
+        || signatures.cell_action_generator_membership_decided()
+    {
+        return Err(Step8R2Error::Signature(
+            "typed-signature or pending-membership invariant drifted".to_owned(),
+        ));
+    }
+
+    let capabilities = Step8R2PrefixLocalCapabilities {
+        supplied_exact_prefix_read: true,
+        supplied_exact_candidate_read: true,
+        source_bound_typed_boundary_read: true,
+        schema2_term_typing_read: true,
+        archival_constant_bridge_read: false,
+        archive_input_read: false,
+        historical_count_input_read: false,
+        acceptance_bar_input_read: false,
+        membership_verdict_input_read: false,
+        enacted_future_input_read: false,
+    };
+    if !capabilities.forbidden_inputs_withheld() {
+        return Err(Step8R2Error::BundleMetadataDrift);
+    }
+    let typed_boundary_dependency_hash =
+        prefix_general_tagged_hash("source-bound-typed-boundary-dependency", &typed_boundary);
+    let mut token = Step8R2PrefixLocalTypedSignaturesToken {
+        token_version: STEP8_R2_PREFIX_GENERAL_TOKEN_VERSION.to_owned(),
+        rule: DERIVED_ACTION_MEMBERSHIP_RULE.to_owned(),
+        source_step: 8,
+        predecessor_signature_digest: predecessor.digest().to_owned(),
+        source_telescope_hash: pen_type::elaborate::candidate_hash(current),
+        source_clause_shapes,
+        registered_boundary_kind: "s3".to_owned(),
+        registered_boundary_dimension: 3,
+        typed_boundary_api: STEP8_R2_PREFIX_GENERAL_TYPED_BOUNDARY_API.to_owned(),
+        typed_boundary_dependency_hash,
+        typed_boundary_derivation_hash: typed_boundary.derivation_hash().to_owned(),
+        reference_only_derivation_hash: typed_boundary.reference_only_derivation_hash().to_owned(),
+        base_binding_derivation_hash: typed_boundary
+            .base_binding_derivation_hash()
+            .map(str::to_owned),
+        element_overlay_derivation_hash: typed_boundary
+            .element_overlay_derivation_hash()
+            .map(str::to_owned),
+        typed_boundary_face_count: typed_boundary.faces().len() as u64,
+        operation_signature: "mu : (El(S3) * El(S3)) -> El(S3)".to_owned(),
+        left_unit_signature: "Pi x:El(S3). Path El(S3) (mu(base,x)) x".to_owned(),
+        cell_action_signature: "Pi x:El(S3). Cube^3(El(S3); boundary=mu(base,x))".to_owned(),
+        cell_action_body: "lambda x i0 i1 i2. mu(p(i0,i1,i2),x)".to_owned(),
+        first_slot_orientation: signatures.first_slot_orientation(),
+        operation_signature_typed: true,
+        left_unit_signature_typed: true,
+        cell_action_term_typed: true,
+        cell_action_boundary_derived_by_map_cube: true,
+        schema_signature_derivation_hash: signatures.derivation_hash().to_owned(),
+        coherence_generator_membership_decided: false,
+        cell_action_generator_membership_decided: false,
+        independent_family_tokens_issued: 0,
+        capabilities,
+        derivation_hash: String::new(),
+    };
+    token.derivation_hash = prefix_general_tagged_hash("typed-signatures", &token);
+    Ok(token)
+}
+
+pub fn replay_step8_r2_prefix_general_typed_signatures_token_v2(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+    token: &Step8R2PrefixLocalTypedSignaturesToken,
+) -> Result<(), Step8R2Error> {
+    let replay = issue_step8_r2_prefix_general_typed_signatures_token_v2(predecessor, current)?;
+    if replay == *token {
+        Ok(())
+    } else {
+        Err(Step8R2Error::PrefixLocalReplayMismatch)
+    }
+}
+
 pub fn replay_step8_r2_typed_signatures_token(
     token: &Step8R2TypedSignaturesToken,
 ) -> Result<(), Step8R2Error> {
@@ -221,11 +598,70 @@ pub fn replay_step8_r2_typed_signatures_token(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use pen_core::clause::{ClauseRec, ClauseRole};
+
+    fn exact_prefix_and_candidate() -> (SealedSignature, Telescope) {
+        (
+            SealedSignature::from_telescopes(
+                (1_u32..=7)
+                    .map(|step| (step, Telescope::reference(step)))
+                    .collect(),
+            ),
+            Telescope::reference(8),
+        )
+    }
+
+    fn alternate_prefix_and_candidate() -> (SealedSignature, Telescope) {
+        let alternate = Telescope::new(vec![
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(2)),
+                ))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::App(
+                    Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(3)))),
+                    Box::new(Expr::Var(2)),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Elimination,
+                Expr::App(
+                    Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Var(2)),
+                ),
+            ),
+        ]);
+        (
+            SealedSignature::from_telescopes(
+                (1..=7)
+                    .map(|step| {
+                        (
+                            step,
+                            if step == 4 {
+                                alternate.clone()
+                            } else {
+                                Telescope::reference(step)
+                            },
+                        )
+                    })
+                    .collect(),
+            ),
+            Telescope::reference(8),
+        )
+    }
 
     #[test]
     fn exact_step8_signatures_and_s3_bundle_join_replay() {
         let token = issue_step8_r2_typed_signatures_token().expect("Step-8 signatures type");
         replay_step8_r2_typed_signatures_token(&token).expect("token replays");
+        assert_eq!(
+            token.derivation_hash,
+            "blake3:18a5766e762b29a85a458805b3a8bdafd3b6fe91584dc533c5c9c6eb2a7901f3"
+        );
         assert!(token.registered_boundary_archive_join_replayed);
         assert!(token.registered_interpretation_overlay_replayed);
         assert!(!token.raw_pen_core_to_schema2_term_elaboration_proved);
@@ -256,6 +692,110 @@ mod tests {
         assert_eq!(
             replay_step8_r2_typed_signatures_token(&invented_credit),
             Err(Step8R2Error::ReplayMismatch)
+        );
+    }
+
+    #[test]
+    fn prefix_local_step8_stops_at_source_bound_typed_boundary() {
+        let (prefix, candidate) = exact_prefix_and_candidate();
+        let token =
+            issue_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate).unwrap();
+        replay_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate, &token).unwrap();
+        assert_eq!(token.predecessor_signature_digest, prefix.digest());
+        assert_eq!(
+            token.source_telescope_hash,
+            pen_type::elaborate::candidate_hash(&candidate)
+        );
+        assert_eq!(token.typed_boundary_face_count, 6);
+        assert_eq!(
+            token.typed_boundary_api,
+            STEP8_R2_PREFIX_LOCAL_TYPED_BOUNDARY_API
+        );
+        assert!(token.base_binding_derivation_hash.is_some());
+        assert!(token.element_overlay_derivation_hash.is_some());
+        assert!(token.capabilities.supplied_exact_prefix_read);
+        assert!(token.capabilities.supplied_exact_candidate_read);
+        assert!(token.capabilities.source_bound_typed_boundary_read);
+        assert!(token.capabilities.schema2_term_typing_read);
+        assert!(token.capabilities.forbidden_inputs_withheld());
+        assert!(!token.capabilities.archival_constant_bridge_read);
+    }
+
+    #[test]
+    fn prefix_general_step8_types_a_fork_without_historical_b7_authority() {
+        let (prefix, candidate) = alternate_prefix_and_candidate();
+        assert!(matches!(
+            issue_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate),
+            Err(Step8R2Error::PrefixLocalBoundary(message))
+                if message.contains("exact sealed B_7")
+        ));
+        let token =
+            issue_step8_r2_prefix_general_typed_signatures_token_v2(&prefix, &candidate).unwrap();
+        replay_step8_r2_prefix_general_typed_signatures_token_v2(&prefix, &candidate, &token)
+            .unwrap();
+        assert_eq!(token.token_version, STEP8_R2_PREFIX_GENERAL_TOKEN_VERSION);
+        assert_eq!(
+            token.typed_boundary_api,
+            STEP8_R2_PREFIX_GENERAL_TYPED_BOUNDARY_API
+        );
+        assert_eq!(token.predecessor_signature_digest, prefix.digest());
+        assert_eq!(
+            token.source_telescope_hash,
+            pen_type::elaborate::candidate_hash(&candidate)
+        );
+        assert!(token.capabilities.forbidden_inputs_withheld());
+    }
+
+    #[test]
+    fn prefix_general_step8_preserves_the_enacted_typed_boundary_judgment() {
+        let (prefix, candidate) = exact_prefix_and_candidate();
+        let legacy =
+            issue_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate).unwrap();
+        let general =
+            issue_step8_r2_prefix_general_typed_signatures_token_v2(&prefix, &candidate).unwrap();
+        assert_eq!(
+            general.typed_boundary_derivation_hash,
+            legacy.typed_boundary_derivation_hash
+        );
+        assert_eq!(
+            general.reference_only_derivation_hash,
+            legacy.reference_only_derivation_hash
+        );
+        assert_eq!(
+            general.base_binding_derivation_hash,
+            legacy.base_binding_derivation_hash
+        );
+        assert_eq!(
+            general.element_overlay_derivation_hash,
+            legacy.element_overlay_derivation_hash
+        );
+        assert_eq!(
+            general.schema_signature_derivation_hash,
+            legacy.schema_signature_derivation_hash
+        );
+    }
+
+    #[test]
+    fn prefix_local_mutation_fails_even_after_claim_is_rehashed() {
+        let (prefix, candidate) = exact_prefix_and_candidate();
+        let mut token =
+            issue_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate).unwrap();
+        token.capabilities.archive_input_read = true;
+        token.derivation_hash.clear();
+        token.derivation_hash = prefix_local_tagged_hash("typed-signatures", &token);
+        assert_eq!(
+            replay_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate, &token),
+            Err(Step8R2Error::PrefixLocalReplayMismatch)
+        );
+    }
+
+    #[test]
+    fn prefix_local_issuer_rejects_non_step8_source() {
+        let (prefix, _) = exact_prefix_and_candidate();
+        let wrong = Telescope::reference(7);
+        assert_eq!(
+            issue_step8_r2_prefix_local_typed_signatures_token(&prefix, &wrong),
+            Err(Step8R2Error::SourceShapeDrift)
         );
     }
 }

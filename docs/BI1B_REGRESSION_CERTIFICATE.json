@@ -1,0 +1,585 @@
+{
+  "schema": "bi1b-enacted-stage8-prefix-general-v6-regression-v1",
+  "date": "2026-07-23",
+  "preflight": {
+    "sealed_sweep_digest": "blake3:7a03ff1dab14cff0b385b9d2b482071671296a8c6132dc63f37cb9eeb2506fdb",
+    "sealed_stage4_cone_digest": "blake3:417719ae12e4bf3f72196a35064c8767cd41ddca765c28736bfe760c999b3a93",
+    "sealed_branch_certificate_digests": [
+      "blake3:5ac75d60b84ce1bc6871c9c027426c28f4d80cbfd44bf5cedaeb99fc8e216a70",
+      "blake3:473d05bc808fc034d20541c49484374af2992c45a1d3658901ecba7c01e6b984",
+      "blake3:07d452d788afa084128350ba8fec4cad01f56b1afacf57abe6b6f3d21083e048",
+      "blake3:0056f219ad010c22ea2c73c893d346dde9335c7fbe6b51340e13141115cbc54c"
+    ],
+    "public_v3_replay_passed": false,
+    "public_v3_replay_errors": [
+      "Option-A execution capability failed: Stage-4 Option-A v1 prerequisite failed: Stage-4 semantic parsimony v3 failed full replay: Stage-4 v3 embedded V2 claim failed full replay: Stage-4 v2 BI-0 opening failed: BI-0 v6 Stage-4 opening differs from deterministic passing-gate reissuance"
+    ],
+    "sealed_testimony_fallback_used": true,
+    "frozen_manifest_digest_exact": true,
+    "frozen_branch_root_and_certificate_bindings_exact": true,
+    "common_stage4_cone_binding_exact": true,
+    "every_branch_root_matches_its_sealed_seed": true,
+    "exactly_one_enacted_root_cross_bound": true,
+    "sealed_manifest_self_digest_valid": true,
+    "every_manifest_row_self_digest_valid": true,
+    "every_branch_certificate_self_digest_valid": true,
+    "every_manifest_branch_cross_binding_exact": true,
+    "sealed_content_preflight_passed": true
+  },
+  "extraction_authority": {
+    "schema": "branch-prefix-general-semantic-provenance-v4",
+    "date": "2026-07-23",
+    "theorem_id": "T-B1b-prefix-general-candidate-source-first-semantic-provenance-v1",
+    "procedure_id": "BI-1b-one-parametric-v3-v4-v5-B1-B2-prefix-general-extraction-v1",
+    "v4_source_schema": "act-local-semantic-prefix-general-source-surface-v3",
+    "v4_source_theorem_id": "T-B1b-prefix-general-pre-anchor-source-surface-v1",
+    "v5_sequence_schema": "act-local-semantic-family-provenance-prefix-general-v2",
+    "v5_sequence_theorem_id": "T-B1b-B1-B2-prefix-general-source-first-registry-extension-invariant-v1",
+    "v5_rule_authority_derivation_hash": "blake3:b35ebdcef8a259f165046572207fdb7498a25be7dd84d2f8e591117ccec945a4",
+    "step8_r2_version": "schema2-step8-r2-prefix-general-typed-signatures-v2",
+    "step8_typed_boundary_api": "typed-declared-s3-boundary-v4-for-arbitrary-typed-prefix",
+    "step8_m1_version": "schema2-e4-prefix-general-step8-m1-generated-v2",
+    "one_procedure_for_every_prefix": true,
+    "candidate_and_exact_prefix_are_only_semantic_inputs": true,
+    "archive_input_read": false,
+    "historical_registry_input_read": false,
+    "structural_nu_input_read": false,
+    "bar_input_read": false,
+    "verdict_input_read": false,
+    "enacted_future_input_read": false,
+    "enacted_classification_input_read": false,
+    "byte_identity_input_read": false,
+    "proved": true,
+    "derivation_hash": "blake3:644f32fa13632e4da3c52e32f2c983a0113d4e48d83764d1432a2e21bd6384d4"
+  },
+  "extraction_authority_replayed": true,
+  "enacted_bi1_branch_certificate_digest": "blake3:5ac75d60b84ce1bc6871c9c027426c28f4d80cbfd44bf5cedaeb99fc8e216a70",
+  "enacted_stage8_candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+  "t_bi_v6_certificate_digest": "blake3:d51d0543c32542200fff6e5cfd234da1bb2ffc12c058c805ac7974385727c8b4",
+  "t_bi_v6_frozen_digest_exact": true,
+  "t_bi_v6_self_digest_valid": true,
+  "t_bi_v6_public_deterministic_replay_passed": false,
+  "t_bi_v6_public_replay_errors": [
+    "T-BI v6 certificate differs from deterministic create-new reissuance"
+  ],
+  "t_bi_v6_postseal_reissuance_drift_only": true,
+  "t_bi_v6_frozen_testimony_authenticated": true,
+  "current_t_bi_v6_reissuance_digest": "blake3:252091a52b8ac91a733bd90b3fed2bd5f371c42a34869e22239e54d0f3d1662e",
+  "current_t_bi_v6_global_semantic_surface_matches_frozen": true,
+  "current_t_bi_v6_stage8_semantic_projection_matches_frozen": true,
+  "t_bi_v6_stage8_package_derivation_hash": "blake3:019a488cb6cf07a5a354b30efe0a39d2031ac96868e368b3d9a86430c0c7aedb",
+  "v6_credited_family_ids": [
+    "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632"
+  ],
+  "prefix_general_credited_family_ids": [
+    "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632"
+  ],
+  "v6_proved_rows": [
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:1e4f2fc7a677c3653ea56c44d9ab845bb0e5a92c77f1e7d305a6cd59715b1989",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:12049d2c280089af543f094e8b68bc4ef71cecbf78cc985ee9efff360995cba7",
+      "target_family_ids": [
+        "blake3:12049d2c280089af543f094e8b68bc4ef71cecbf78cc985ee9efff360995cba7"
+      ],
+      "classification_hash": "blake3:3429537dfb8f0c880b3797b3d38f5b33bc31afd78c8ebb7f8b0879771fead22c"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:249bd90d20cef03cc06059798188191a9b4d87b10d96c2852de3f1aff905fc4c",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:a83ab4c6d4ca068df5ce1470ca72429e0a7df3a143e81c16218497f05ebcc6fc",
+      "target_family_ids": [
+        "blake3:a83ab4c6d4ca068df5ce1470ca72429e0a7df3a143e81c16218497f05ebcc6fc"
+      ],
+      "classification_hash": "blake3:94edd556000af76bdbe8d30960d24c3736e8195317280ca5808506f6243277f0"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:30c68c3cd669ed1f7590cb9694867b976c65626b314b0ba561b80c6e81e31e97",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:1abb6565fedfdfe6d30aaa93e0585d88155d03a8f6483126d552d14babadb23a",
+      "target_family_ids": [
+        "blake3:1abb6565fedfdfe6d30aaa93e0585d88155d03a8f6483126d552d14babadb23a"
+      ],
+      "classification_hash": "blake3:0a75015c53c70587c652ded517ccaa7e8a56c4084e64baf1440af765cef2380d"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:3159bb1891c02dfe1c1c27563d60d5a6faba718c4109362a47b6cc2ba3cf1422",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:c066f673d8dd864f4b0330930663125d50353d83bd0cf815f88bbbde605fadcd",
+      "target_family_ids": [
+        "blake3:c066f673d8dd864f4b0330930663125d50353d83bd0cf815f88bbbde605fadcd"
+      ],
+      "classification_hash": "blake3:479d573d1d37a2c9ee6d8e1c330bdb6e9fa6ea43f76be9337658d18d24566a3c"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:77b93e94616482c981a2a0dfb0c3409e958311aa6f14e890ce281aa465923acb",
+      "role_kind": "hit_post_path_face",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:c6b7978b7eddea1a10ad569b770c4cb3fdf16dafce7a25f5848ef8fb85235022",
+      "target_family_ids": [
+        "blake3:c6b7978b7eddea1a10ad569b770c4cb3fdf16dafce7a25f5848ef8fb85235022"
+      ],
+      "classification_hash": "blake3:626cf1d7c501f31f81d3c9a8d884be5035d09ea22d751635f27835eb391b56c0"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:860c14a85b376ca9199600079cd06d9be37636b82e7bd7c2690e392cb553c07c",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:df4e5a882578a28842c9f13fd384b5f17acb5cadc6362aa60fdac64a999034fa",
+      "target_family_ids": [
+        "blake3:df4e5a882578a28842c9f13fd384b5f17acb5cadc6362aa60fdac64a999034fa"
+      ],
+      "classification_hash": "blake3:6dcd102c56cb424f8e20fcc51e217dce12970f45d5a186daa5e4a2d2f6298386"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:8aba8d51a6a91a7783781d65056cc15e8027a96a2ccd84ccc8dcbda4bda4bab8",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:946a7480761c54db2413d9d70764b2b1a9df34d909317521256386d02b3d105b",
+      "target_family_ids": [
+        "blake3:946a7480761c54db2413d9d70764b2b1a9df34d909317521256386d02b3d105b"
+      ],
+      "classification_hash": "blake3:3dced5c992aba8a7a4efd924536ddcc729ff281d926c89a5b8a4b9998926fddc"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:8deffadab6690a49ec9efaefab35e1c6e42a62d537ab09dc39ef2dca8bd00cba",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:3b63adc3d9102914921f6c388e3b3e8a72cb2f543b1aa7e6c0451176f2288123",
+      "target_family_ids": [
+        "blake3:3b63adc3d9102914921f6c388e3b3e8a72cb2f543b1aa7e6c0451176f2288123"
+      ],
+      "classification_hash": "blake3:9f8f60c7cd60fef168a05d7be88cb97ecbc23caf14a59d0f5f161c191953334b"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:af89fd3d7765a3f8a0ed68669f6d4170af557fb2fa841303a1072e83ae0e428a",
+      "role_kind": "hit_path_beta",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632",
+      "target_family_ids": [
+        "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632"
+      ],
+      "classification_hash": "blake3:81baebdc11448341db374bc0e22ef52470d3ffd90e41cd8555b0e198bc1b2161"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:c4fbd90133ab325186c31260b916e4b029db5674bd011baff239c8e3c18362d3",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:895a192b8ca02234300cd851dcff4322cc15511295ab4df97b690bf4577df6a0",
+      "target_family_ids": [
+        "blake3:895a192b8ca02234300cd851dcff4322cc15511295ab4df97b690bf4577df6a0"
+      ],
+      "classification_hash": "blake3:0bca78a666fcf608314ea8dc5ded7ae98e8484b50b3b9c46e60f8281ab6de096"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:c693c86e440fcd1fd7d9fccd4b826911cdcd4dcb3065f9c5ca47d6bc5408e181",
+      "role_kind": "hit_post_path_face",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:a07895b3fbd813a047881b4567674921a0d64f63961aa15b94db422cdd35862b",
+      "target_family_ids": [
+        "blake3:a07895b3fbd813a047881b4567674921a0d64f63961aa15b94db422cdd35862b"
+      ],
+      "classification_hash": "blake3:b876a697c76ba7f63f70117193d3650ff82368fbb6532bbf75d5dfcad0aa72a7"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:fa121bc7d10e4659df36235420b1c699d66df4a8f8f0ec48d8f928e5d35dbcd3",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:afb8e4ff1f948d71a09f0b0c344748c065b094bb4002fcdd9c059f053e874350",
+      "target_family_ids": [
+        "blake3:afb8e4ff1f948d71a09f0b0c344748c065b094bb4002fcdd9c059f053e874350"
+      ],
+      "classification_hash": "blake3:f3eca5da9a58ef38858ec9eda2c20e361ddfd67289efe9cde4cbba108bb89acd"
+    }
+  ],
+  "prefix_general_proved_rows": [
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:1e4f2fc7a677c3653ea56c44d9ab845bb0e5a92c77f1e7d305a6cd59715b1989",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:12049d2c280089af543f094e8b68bc4ef71cecbf78cc985ee9efff360995cba7",
+      "target_family_ids": [
+        "blake3:12049d2c280089af543f094e8b68bc4ef71cecbf78cc985ee9efff360995cba7"
+      ],
+      "classification_hash": "blake3:3429537dfb8f0c880b3797b3d38f5b33bc31afd78c8ebb7f8b0879771fead22c"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:249bd90d20cef03cc06059798188191a9b4d87b10d96c2852de3f1aff905fc4c",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:a83ab4c6d4ca068df5ce1470ca72429e0a7df3a143e81c16218497f05ebcc6fc",
+      "target_family_ids": [
+        "blake3:a83ab4c6d4ca068df5ce1470ca72429e0a7df3a143e81c16218497f05ebcc6fc"
+      ],
+      "classification_hash": "blake3:94edd556000af76bdbe8d30960d24c3736e8195317280ca5808506f6243277f0"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:30c68c3cd669ed1f7590cb9694867b976c65626b314b0ba561b80c6e81e31e97",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:1abb6565fedfdfe6d30aaa93e0585d88155d03a8f6483126d552d14babadb23a",
+      "target_family_ids": [
+        "blake3:1abb6565fedfdfe6d30aaa93e0585d88155d03a8f6483126d552d14babadb23a"
+      ],
+      "classification_hash": "blake3:0a75015c53c70587c652ded517ccaa7e8a56c4084e64baf1440af765cef2380d"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:3159bb1891c02dfe1c1c27563d60d5a6faba718c4109362a47b6cc2ba3cf1422",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:c066f673d8dd864f4b0330930663125d50353d83bd0cf815f88bbbde605fadcd",
+      "target_family_ids": [
+        "blake3:c066f673d8dd864f4b0330930663125d50353d83bd0cf815f88bbbde605fadcd"
+      ],
+      "classification_hash": "blake3:479d573d1d37a2c9ee6d8e1c330bdb6e9fa6ea43f76be9337658d18d24566a3c"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:77b93e94616482c981a2a0dfb0c3409e958311aa6f14e890ce281aa465923acb",
+      "role_kind": "hit_post_path_face",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:c6b7978b7eddea1a10ad569b770c4cb3fdf16dafce7a25f5848ef8fb85235022",
+      "target_family_ids": [
+        "blake3:c6b7978b7eddea1a10ad569b770c4cb3fdf16dafce7a25f5848ef8fb85235022"
+      ],
+      "classification_hash": "blake3:626cf1d7c501f31f81d3c9a8d884be5035d09ea22d751635f27835eb391b56c0"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:860c14a85b376ca9199600079cd06d9be37636b82e7bd7c2690e392cb553c07c",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:df4e5a882578a28842c9f13fd384b5f17acb5cadc6362aa60fdac64a999034fa",
+      "target_family_ids": [
+        "blake3:df4e5a882578a28842c9f13fd384b5f17acb5cadc6362aa60fdac64a999034fa"
+      ],
+      "classification_hash": "blake3:6dcd102c56cb424f8e20fcc51e217dce12970f45d5a186daa5e4a2d2f6298386"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:8aba8d51a6a91a7783781d65056cc15e8027a96a2ccd84ccc8dcbda4bda4bab8",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:946a7480761c54db2413d9d70764b2b1a9df34d909317521256386d02b3d105b",
+      "target_family_ids": [
+        "blake3:946a7480761c54db2413d9d70764b2b1a9df34d909317521256386d02b3d105b"
+      ],
+      "classification_hash": "blake3:3dced5c992aba8a7a4efd924536ddcc729ff281d926c89a5b8a4b9998926fddc"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:8deffadab6690a49ec9efaefab35e1c6e42a62d537ab09dc39ef2dca8bd00cba",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:3b63adc3d9102914921f6c388e3b3e8a72cb2f543b1aa7e6c0451176f2288123",
+      "target_family_ids": [
+        "blake3:3b63adc3d9102914921f6c388e3b3e8a72cb2f543b1aa7e6c0451176f2288123"
+      ],
+      "classification_hash": "blake3:9f8f60c7cd60fef168a05d7be88cb97ecbc23caf14a59d0f5f161c191953334b"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:af89fd3d7765a3f8a0ed68669f6d4170af557fb2fa841303a1072e83ae0e428a",
+      "role_kind": "hit_path_beta",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632",
+      "target_family_ids": [
+        "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632"
+      ],
+      "classification_hash": "blake3:81baebdc11448341db374bc0e22ef52470d3ffd90e41cd8555b0e198bc1b2161"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:c4fbd90133ab325186c31260b916e4b029db5674bd011baff239c8e3c18362d3",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:895a192b8ca02234300cd851dcff4322cc15511295ab4df97b690bf4577df6a0",
+      "target_family_ids": [
+        "blake3:895a192b8ca02234300cd851dcff4322cc15511295ab4df97b690bf4577df6a0"
+      ],
+      "classification_hash": "blake3:0bca78a666fcf608314ea8dc5ded7ae98e8484b50b3b9c46e60f8281ab6de096"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:c693c86e440fcd1fd7d9fccd4b826911cdcd4dcb3065f9c5ca47d6bc5408e181",
+      "role_kind": "hit_post_path_face",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:a07895b3fbd813a047881b4567674921a0d64f63961aa15b94db422cdd35862b",
+      "target_family_ids": [
+        "blake3:a07895b3fbd813a047881b4567674921a0d64f63961aa15b94db422cdd35862b"
+      ],
+      "classification_hash": "blake3:b876a697c76ba7f63f70117193d3650ff82368fbb6532bbf75d5dfcad0aa72a7"
+    },
+    {
+      "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:fa121bc7d10e4659df36235420b1c699d66df4a8f8f0ec48d8f928e5d35dbcd3",
+      "role_kind": "hit_kan_coherence",
+      "resolution_class": "proved_family",
+      "resolved_family_id": "blake3:afb8e4ff1f948d71a09f0b0c344748c065b094bb4002fcdd9c059f053e874350",
+      "target_family_ids": [
+        "blake3:afb8e4ff1f948d71a09f0b0c344748c065b094bb4002fcdd9c059f053e874350"
+      ],
+      "classification_hash": "blake3:f3eca5da9a58ef38858ec9eda2c20e361ddfd67289efe9cde4cbba108bb89acd"
+    }
+  ],
+  "v6_theorem_impossibility_rows": [],
+  "prefix_general_theorem_impossibility_rows": [],
+  "prefix_general_stage8_token": {
+    "schema": "branch-prefix-general-semantic-provenance-v4",
+    "date": "2026-07-23",
+    "theorem_id": "T-B1b-prefix-general-candidate-source-first-semantic-provenance-v1",
+    "stage": 8,
+    "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+    "predecessor_entry_count": 7,
+    "predecessor_stages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "predecessor_candidate_hashes": [
+      "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+      "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+      "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+      "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+      "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"
+    ],
+    "predecessor_signature_digest": "blake3:301916fbd578c9e0d6375724b44201f0198d2d4bbd9493614009a603325a3adb",
+    "extraction_procedure_digest": "blake3:644f32fa13632e4da3c52e32f2c983a0113d4e48d83764d1432a2e21bd6384d4",
+    "rule_authority_derivation_hash": "blake3:b35ebdcef8a259f165046572207fdb7498a25be7dd84d2f8e591117ccec945a4",
+    "sequence_schema": "act-local-semantic-family-provenance-prefix-general-v2",
+    "sequence_theorem_id": "T-B1b-B1-B2-prefix-general-source-first-registry-extension-invariant-v1",
+    "sequence_derivation_hash": "blake3:eed95081fae2a7a9a955230b3e39351396fa75d0b2c82c4b120cc0f3de809066",
+    "sequence_authoritative_seal": "blake3:4f0ae8a41981550546d99ed6b98f3f414b0b40830f032dc700dd31392fe29fa3",
+    "sequence_issuance_trace_root": "blake3:a80492da02d932ad89daf681346839f419f919e7bc58fab73e8b643ab413143f",
+    "package_derivation_hash": "blake3:b0508b31953d07061054ece2dbc68631d35d3ef2a2f5dcdc8db32fe304bcb083",
+    "package_v3_declaration_hash": "blake3:6b34268021bd1a9ab119da2c0204b0c5f2da0af83eb37987993f7d0e382fd4b0",
+    "package_v4_candidate_local_source_hash": "blake3:dd8195158d1fe4590fc04a30be67416b39e938d3df92832620f6bebe83c6f6e5",
+    "semantic_nu": 1,
+    "credited_family_ids": [
+      "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632"
+    ],
+    "credited_family_rows": [
+      {
+        "family_id": "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632",
+        "authoritative_family_row_derivation_hash": "blake3:6d1ae11e5ea6553136e44fc29fcfca61dfca2d31eda9291630495efa1486d5ef"
+      }
+    ],
+    "proved_family_rows": [
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:1e4f2fc7a677c3653ea56c44d9ab845bb0e5a92c77f1e7d305a6cd59715b1989",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:12049d2c280089af543f094e8b68bc4ef71cecbf78cc985ee9efff360995cba7",
+        "target_family_ids": [
+          "blake3:12049d2c280089af543f094e8b68bc4ef71cecbf78cc985ee9efff360995cba7"
+        ],
+        "classification_hash": "blake3:3429537dfb8f0c880b3797b3d38f5b33bc31afd78c8ebb7f8b0879771fead22c"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:249bd90d20cef03cc06059798188191a9b4d87b10d96c2852de3f1aff905fc4c",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:a83ab4c6d4ca068df5ce1470ca72429e0a7df3a143e81c16218497f05ebcc6fc",
+        "target_family_ids": [
+          "blake3:a83ab4c6d4ca068df5ce1470ca72429e0a7df3a143e81c16218497f05ebcc6fc"
+        ],
+        "classification_hash": "blake3:94edd556000af76bdbe8d30960d24c3736e8195317280ca5808506f6243277f0"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:30c68c3cd669ed1f7590cb9694867b976c65626b314b0ba561b80c6e81e31e97",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:1abb6565fedfdfe6d30aaa93e0585d88155d03a8f6483126d552d14babadb23a",
+        "target_family_ids": [
+          "blake3:1abb6565fedfdfe6d30aaa93e0585d88155d03a8f6483126d552d14babadb23a"
+        ],
+        "classification_hash": "blake3:0a75015c53c70587c652ded517ccaa7e8a56c4084e64baf1440af765cef2380d"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:3159bb1891c02dfe1c1c27563d60d5a6faba718c4109362a47b6cc2ba3cf1422",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:c066f673d8dd864f4b0330930663125d50353d83bd0cf815f88bbbde605fadcd",
+        "target_family_ids": [
+          "blake3:c066f673d8dd864f4b0330930663125d50353d83bd0cf815f88bbbde605fadcd"
+        ],
+        "classification_hash": "blake3:479d573d1d37a2c9ee6d8e1c330bdb6e9fa6ea43f76be9337658d18d24566a3c"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:77b93e94616482c981a2a0dfb0c3409e958311aa6f14e890ce281aa465923acb",
+        "role_kind": "hit_post_path_face",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:c6b7978b7eddea1a10ad569b770c4cb3fdf16dafce7a25f5848ef8fb85235022",
+        "target_family_ids": [
+          "blake3:c6b7978b7eddea1a10ad569b770c4cb3fdf16dafce7a25f5848ef8fb85235022"
+        ],
+        "classification_hash": "blake3:626cf1d7c501f31f81d3c9a8d884be5035d09ea22d751635f27835eb391b56c0"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:860c14a85b376ca9199600079cd06d9be37636b82e7bd7c2690e392cb553c07c",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:df4e5a882578a28842c9f13fd384b5f17acb5cadc6362aa60fdac64a999034fa",
+        "target_family_ids": [
+          "blake3:df4e5a882578a28842c9f13fd384b5f17acb5cadc6362aa60fdac64a999034fa"
+        ],
+        "classification_hash": "blake3:6dcd102c56cb424f8e20fcc51e217dce12970f45d5a186daa5e4a2d2f6298386"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:8aba8d51a6a91a7783781d65056cc15e8027a96a2ccd84ccc8dcbda4bda4bab8",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:946a7480761c54db2413d9d70764b2b1a9df34d909317521256386d02b3d105b",
+        "target_family_ids": [
+          "blake3:946a7480761c54db2413d9d70764b2b1a9df34d909317521256386d02b3d105b"
+        ],
+        "classification_hash": "blake3:3dced5c992aba8a7a4efd924536ddcc729ff281d926c89a5b8a4b9998926fddc"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:8deffadab6690a49ec9efaefab35e1c6e42a62d537ab09dc39ef2dca8bd00cba",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:3b63adc3d9102914921f6c388e3b3e8a72cb2f543b1aa7e6c0451176f2288123",
+        "target_family_ids": [
+          "blake3:3b63adc3d9102914921f6c388e3b3e8a72cb2f543b1aa7e6c0451176f2288123"
+        ],
+        "classification_hash": "blake3:9f8f60c7cd60fef168a05d7be88cb97ecbc23caf14a59d0f5f161c191953334b"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:af89fd3d7765a3f8a0ed68669f6d4170af557fb2fa841303a1072e83ae0e428a",
+        "role_kind": "hit_path_beta",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632",
+        "target_family_ids": [
+          "blake3:b5a82d4ee1751443ee4e24f14ac4f13e6d3c04816c13d492c8d2fb10e68bc632"
+        ],
+        "classification_hash": "blake3:81baebdc11448341db374bc0e22ef52470d3ffd90e41cd8555b0e198bc1b2161"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:c4fbd90133ab325186c31260b916e4b029db5674bd011baff239c8e3c18362d3",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:895a192b8ca02234300cd851dcff4322cc15511295ab4df97b690bf4577df6a0",
+        "target_family_ids": [
+          "blake3:895a192b8ca02234300cd851dcff4322cc15511295ab4df97b690bf4577df6a0"
+        ],
+        "classification_hash": "blake3:0bca78a666fcf608314ea8dc5ded7ae98e8484b50b3b9c46e60f8281ab6de096"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:c693c86e440fcd1fd7d9fccd4b826911cdcd4dcb3065f9c5ca47d6bc5408e181",
+        "role_kind": "hit_post_path_face",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:a07895b3fbd813a047881b4567674921a0d64f63961aa15b94db422cdd35862b",
+        "target_family_ids": [
+          "blake3:a07895b3fbd813a047881b4567674921a0d64f63961aa15b94db422cdd35862b"
+        ],
+        "classification_hash": "blake3:b876a697c76ba7f63f70117193d3650ff82368fbb6532bbf75d5dfcad0aa72a7"
+      },
+      {
+        "declaration_id": "T-BI-NU1-V3-S8-ROLE_SCHEMA_EXTRACTION_GAP-blake3:fa121bc7d10e4659df36235420b1c699d66df4a8f8f0ec48d8f928e5d35dbcd3",
+        "role_kind": "hit_kan_coherence",
+        "resolution_class": "proved_family",
+        "resolved_family_id": "blake3:afb8e4ff1f948d71a09f0b0c344748c065b094bb4002fcdd9c059f053e874350",
+        "target_family_ids": [
+          "blake3:afb8e4ff1f948d71a09f0b0c344748c065b094bb4002fcdd9c059f053e874350"
+        ],
+        "classification_hash": "blake3:f3eca5da9a58ef38858ec9eda2c20e361ddfd67289efe9cde4cbba108bb89acd"
+      }
+    ],
+    "theorem_impossibility_rows": [],
+    "classification_evidence_hashes": [
+      "blake3:8a04906784669dc1c874c3ddf3eb3403d9373f6920d5a7079bff27693845bdf9",
+      "blake3:1e21dbd9c371f4f8b4dbe6b408495c3489674b1cfe6e7e426829a12e933c3b7d",
+      "blake3:b5f64688536965ddeb227e1dccfbe161ad9da521457a63568b7b88b534cb07d9",
+      "blake3:70265b6c547d9f096d41626bdbe04b2110b861a2f73ccadc07c0202955b93e11",
+      "blake3:6ca386fa707e7c52ac99dc687ade2045aa5123b4f68fd99c774b67da5e9b30de",
+      "blake3:dd5c2ec110cafb8bbc5d3709a0b48d029953577dabe38b0f0d6eadcbee2e1bab",
+      "blake3:5ce9da85b1d99837ac2b2fa88f1ba545ecc9d753338ee23c6db022c9e8dff25a",
+      "blake3:7af3d5cd3beb38a3cf311781f47c8830a9faf48dd85c4f0acc7af65c7d5b99f6",
+      "blake3:06411cd4e3324d037497d2e1eeba1d453ab009c8fbca7a2cf3d884e5cf7c2388",
+      "blake3:d81d72c49a5678fba78e90d00f88d2e1bfceace5eb63daacddfb66aa9c1db38b",
+      "blake3:55ae8637600b64ff76fe7048dcbcfbe5ecd8e81a8cec26da868dff7f10d9c630",
+      "blake3:568443a75b7819f25a74601a89c9b49fe6e532e5d86241fda6e148e59139aa42"
+    ],
+    "role_declaration_count": 12,
+    "proved_family_declaration_count": 12,
+    "theorem_impossibility_declaration_count": 0,
+    "named_role_residual_count": 0,
+    "named_quotient_residual_count": 0,
+    "named_a3_residual_count": 0,
+    "silent_residue_count": 0,
+    "r2_generated_instance_removed_count": 1,
+    "r2_removed_occurrence_hashes": [
+      "blake3:7919fb6bf30c0719418ed72b3a2cb703557ef902463e3b876ee9f5d6fd57ea15"
+    ],
+    "r2_step8_typed_signature_derivation_hash": "blake3:70bb5c24cf0bae80e0d76b4b4348229375cc59fbc5e7baa7a32b3a1d44ae9c4d",
+    "r2_m1_generated_membership_derivation_hash": "blake3:da5ae52920fc42562cad1e01b91d5d4c2eb17b2f12f9e36c42328a41255f81af",
+    "r2_local_premises_replayed": true,
+    "exact_prefix_candidate_package_binding": true,
+    "v4_source_replayed_and_matches_package": true,
+    "issuance_trace_replayed": true,
+    "independent_reissuance_equal": true,
+    "all_residual_counts_zero": true,
+    "every_role_declaration_resolved": true,
+    "every_marginal_family_credited_or_theorem_impossible": true,
+    "local_anchor_nonreuse_holds": true,
+    "no_archive_or_historical_registry_input": true,
+    "structural_nu_input_read": false,
+    "bar_input_read": false,
+    "verdict_input_read": false,
+    "enacted_future_input_read": false,
+    "enacted_classification_input_read": false,
+    "byte_identity_input_read": false,
+    "proved": true,
+    "derivation_hash": "blake3:dd70c18386ba5911f263af06ba13d22fdb522d7998c6f15d7a13cad3a3515485"
+  },
+  "prefix_general_stage8_token_replayed": true,
+  "exact_family_ids_reproduced": true,
+  "exact_proved_rows_reproduced": true,
+  "exact_theorem_impossibility_rows_reproduced": true,
+  "exact_role_and_semantic_totals_reproduced": true,
+  "v6_r2_typed_signature_derivation_hash": "blake3:a6061a794c1c5ee58616e6ad1b234391aeafa54113005cf7a6c2a806894f6d5a",
+  "prefix_general_r2_typed_signature_derivation_hash": "blake3:70bb5c24cf0bae80e0d76b4b4348229375cc59fbc5e7baa7a32b3a1d44ae9c4d",
+  "v6_r2_m1_membership_derivation_hash": "blake3:19b49fe484233739affadc9de6f346469ef3f25bc456c8272d32798c9bd0638a",
+  "prefix_general_r2_m1_membership_derivation_hash": "blake3:da5ae52920fc42562cad1e01b91d5d4c2eb17b2f12f9e36c42328a41255f81af",
+  "r2_proof_hashes_recorded_as_separate_evidence": true,
+  "exact_r2_regression_reproduced": true,
+  "zero_residuals_reproduced": true,
+  "one_procedure_digest": true,
+  "f_b1b_1_passed": true,
+  "authorization": {
+    "schema": "bi1b-row-free-enacted-regression-authorization-v1",
+    "sealed_global_bi1_sweep_digest": "blake3:7a03ff1dab14cff0b385b9d2b482071671296a8c6132dc63f37cb9eeb2506fdb",
+    "sealed_global_stage4_cone_digest": "blake3:417719ae12e4bf3f72196a35064c8767cd41ddca765c28736bfe760c999b3a93",
+    "sealed_global_bi1_sweep_content_authenticated": true,
+    "extraction_procedure_digest": "blake3:644f32fa13632e4da3c52e32f2c983a0113d4e48d83764d1432a2e21bd6384d4",
+    "authorized_sealed_branch_certificate_digests": [
+      "blake3:0056f219ad010c22ea2c73c893d346dde9335c7fbe6b51340e13141115cbc54c",
+      "blake3:07d452d788afa084128350ba8fec4cad01f56b1afacf57abe6b6f3d21083e048",
+      "blake3:473d05bc808fc034d20541c49484374af2992c45a1d3658901ecba7c01e6b984",
+      "blake3:5ac75d60b84ce1bc6871c9c027426c28f4d80cbfd44bf5cedaeb99fc8e216a70"
+    ],
+    "hard_regression_passed": true,
+    "exact_proved_rows_reproduced": true,
+    "exact_theorem_impossibility_rows_reproduced": true,
+    "zero_residuals_reproduced": true,
+    "one_prefix_parametric_procedure": true,
+    "family_ids_exported": false,
+    "semantic_vectors_exported": false,
+    "enacted_winners_exported": false,
+    "enacted_outcomes_exported": false,
+    "selector_capability_exported": false,
+    "derivation_hash": "blake3:f8b63f92d696db362847387398b1e1bbb8f40353c3ba1610210da1a4e6b57f36"
+  },
+  "authorization_replayed": true,
+  "alternate_branch_work_executed_before_regression_sealed": false,
+  "bi2_finale_issued": false,
+  "bi4_cone_verdict_issued": false,
+  "g2_verdict_issued": false,
+  "g3_verdict_issued": false,
+  "uc1_scored": false,
+  "unindexed_claim_issued": false,
+  "result_digest": "blake3:52f317b5c70dab597b74522ed0dd16a2509dd08d253f5d660dc36cca0b627681"
+}

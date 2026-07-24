@@ -1,0 +1,353 @@
+{
+  "schema": "t-d2-2-operational-domain-surjectivity-v2",
+  "date": "2026-07-24",
+  "status": "stopped_on_td21_v2_prerequisite",
+  "theorem_disposition": "not_attempted_dependency_unsatisfied",
+  "numeric_register_policy": "Every public quantitative datum is a tagged decimal. Digits in dates, versions, theorem labels, gap IDs, and digests are syntax identifiers.",
+  "source_bindings": [
+    {
+      "path": "docs/depth_two_domain_adjudication.md",
+      "role": "independent-domain and noncircular-surjectivity law",
+      "byte_length": {
+        "decimal": "6825",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:2fe49271403603bb57ce1e312b4b1d1048b4a358dec6c3eee942f37a64374645",
+      "register": "law"
+    },
+    {
+      "path": "docs/schema2_operational_domain_adjudication.md",
+      "role": "adopted operational bounds and fitting ban",
+      "byte_length": {
+        "decimal": "8316",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:3789e69507d3aa9dcfb52cc136a2f1a5bdd237ffbb6b641a908016af0d79b0d7",
+      "register": "law"
+    },
+    {
+      "path": "docs/bridge_completion_plan.md",
+      "role": "frozen bridge construction and gate discipline",
+      "byte_length": {
+        "decimal": "5920",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:453ff1ccf946f8c18bbdd18800799ef28ad3e40bc6acc81698613cc7d076e5ce",
+      "register": "law"
+    },
+    {
+      "path": "crates/pen-search/src/t_d2_1_operational_domain_v2.rs",
+      "role": "current public T-D2-1 dependency contract",
+      "byte_length": {
+        "decimal": "132748",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:4f448336317f211e2472bf856347b079d27102133eb35174126a1ad0c026d3ba",
+      "register": "independent_domain_authority"
+    },
+    {
+      "path": "crates/pen-eval/src/typed_families.rs",
+      "role": "sample canonical-presentation and naturality machinery; not a universal theorem",
+      "byte_length": {
+        "decimal": "53286",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:f902f5035153429f0922891d6a527303bff989c3cc820c2e8ba3845d830c18af",
+      "register": "missing_theorem"
+    },
+    {
+      "path": "crates/pen-schema/src/context.rs",
+      "role": "restricted E1 context surface with its typed-elaboration gap",
+      "byte_length": {
+        "decimal": "71070",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:d0de2a49de234034ec60e62e7735658055bc4e9e3abedd5790c7d471de5f1904",
+      "register": "missing_theorem"
+    },
+    {
+      "path": "crates/pen-type/src/ambient_former_internality.rs",
+      "role": "closed-candidate transparent-former scope; not a generic contextual bridge",
+      "byte_length": {
+        "decimal": "36309",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:c0f1a77c4e1f7dcb11f230f7c075cdc7b197931d27e453f7ed5528780e7e2347",
+      "register": "missing_theorem"
+    },
+    {
+      "path": "crates/pen-search/src/t_d2_2_operational_surjectivity_v2.rs",
+      "role": "this fail-closed dependency audit",
+      "byte_length": {
+        "decimal": "46276",
+        "register": "artifact_metadata",
+        "meaning": "exact source byte length"
+      },
+      "blake3": "blake3:9bee9e3c9a7eb4a8a4b6cb613b4c06022e68f65991d1ee5fe7bbea943523dd39",
+      "register": "artifact_metadata"
+    }
+  ],
+  "td21_binding": {
+    "typed_result_digest": "blake3:c8efdb7a4fdbded4ae86488234f3bb0c6e0aa3044f5a173dd0b2c99754778bb1",
+    "public_replay_valid": true,
+    "public_replay_errors": [],
+    "t_d2_1_reported_prerequisite_satisfied": false,
+    "symbolic_membership_elimination_reported_total": false,
+    "symbolic_induction_reported_total": false,
+    "explicit_representative_vector_extensionally_complete": false,
+    "family_regression_reported_passed": false,
+    "membership_row_regression_reported_passed": false,
+    "contextual_binder_probe": {
+      "typed_judgment_accepted": true,
+      "adopted_quotient_established": false,
+      "domain_member": false,
+      "exact_obstruction": "The frozen APIs provide typing and normalization but no replayable parameter-telescope naturality derivation, checked weakening/renaming family, or univalent-equality witness family. A normal-form/type hash is not the adopted natural-family quotient.",
+      "derivation": {
+        "rule": "former_application",
+        "former": "lambda_introduction",
+        "exact_node": {
+          "node": "former_application",
+          "former": "lambda_introduction",
+          "arguments": [
+            {
+              "node": "bound_variable",
+              "binder_level": {
+                "value": 1,
+                "bound_name": "sealed_maximum_binder_nesting"
+              }
+            }
+          ],
+          "dimension": null
+        },
+        "parameter_telescope_digest": "blake3:3c31a68d4ccff29c40be3fb62a522ca99a8ea35d0d5b54625fa28b0c1a082460",
+        "active_binder_classifiers": [],
+        "parameter_coordinates_used": [],
+        "exact_canonical_presentation": {
+          "Lam": {
+            "Var": 1
+          }
+        },
+        "kernel_type_json": "{\"Fun\":[\"Neutral\",\"Neutral\"]}",
+        "normal_form": {
+          "Lam": {
+            "Var": 1
+          }
+        },
+        "semantic_depth": "former_one",
+        "kernel_rule": "lam-intro",
+        "kernel_derivation_hash": "blake3:238ef32a4a96afcdddfffa37f14f0b06fad62d196a31cb5bae9de75fe2482bba",
+        "normalization_derivation_hash": "blake3:0ff9e60a027c01f0ea58013c549f073ce0e11b2a80d7df79254cd8539eef2f60",
+        "children": [
+          {
+            "rule": "bound_projection",
+            "former": null,
+            "exact_node": {
+              "node": "bound_variable",
+              "binder_level": {
+                "value": 1,
+                "bound_name": "sealed_maximum_binder_nesting"
+              }
+            },
+            "parameter_telescope_digest": "blake3:3c31a68d4ccff29c40be3fb62a522ca99a8ea35d0d5b54625fa28b0c1a082460",
+            "active_binder_classifiers": [
+              {
+                "classifier": "neutral"
+              }
+            ],
+            "parameter_coordinates_used": [],
+            "exact_canonical_presentation": {
+              "Var": 1
+            },
+            "kernel_type_json": "\"Neutral\"",
+            "normal_form": {
+              "Var": 1
+            },
+            "semantic_depth": "resident_zero",
+            "kernel_rule": "local-var-1",
+            "kernel_derivation_hash": "blake3:483015969295ae7cb9413c73631800d17d8620eaae79a42acd6aaacb0a584dad",
+            "normalization_derivation_hash": "blake3:1ef6a88a98494f67e78983cc288480d3a2c84fc12e4b6624de03bd4cc499bfed",
+            "children": [],
+            "every_child_context_replayed": true,
+            "presentation_preserves_coordinate_sharing": true,
+            "presentation_preserves_resident_content": true,
+            "typed_and_normalized": true,
+            "carrier_key": "blake3:6f92e587aa064b4cbc9c6ce47c337dc42edd54ca29458a7e441664255218bca9",
+            "quotient_evidence": {
+              "parameter_telescope_digest": "blake3:3c31a68d4ccff29c40be3fb62a522ca99a8ea35d0d5b54625fa28b0c1a082460",
+              "canonical_weakening_maps_checked": false,
+              "canonical_renaming_maps_checked": false,
+              "naturality_derivation_replayed": false,
+              "univalent_equality_witnesses_replayed": false,
+              "adopted_quotient_established": false,
+              "exact_obstruction": "The frozen APIs provide typing and normalization but no replayable parameter-telescope naturality derivation, checked weakening/renaming family, or univalent-equality witness family. A normal-form/type hash is not the adopted natural-family quotient.",
+              "derivation_hash": "blake3:b07940d2216b105a0a41215a1b04a7ec9d75e5417e68b5962fa9b28a36311551"
+            },
+            "quotient_key": null,
+            "derivation_hash": "blake3:54d64d83089cc176287087e89c50219f59cfb9e240503d80c3043f88a6882baf"
+          }
+        ],
+        "every_child_context_replayed": true,
+        "presentation_preserves_coordinate_sharing": true,
+        "presentation_preserves_resident_content": true,
+        "typed_and_normalized": true,
+        "carrier_key": "blake3:b4aab5b8376651f2525c6d78385d91176b7009a4a60893ce3549dd4ecdff2fc1",
+        "quotient_evidence": {
+          "parameter_telescope_digest": "blake3:3c31a68d4ccff29c40be3fb62a522ca99a8ea35d0d5b54625fa28b0c1a082460",
+          "canonical_weakening_maps_checked": false,
+          "canonical_renaming_maps_checked": false,
+          "naturality_derivation_replayed": false,
+          "univalent_equality_witnesses_replayed": false,
+          "adopted_quotient_established": false,
+          "exact_obstruction": "The frozen APIs provide typing and normalization but no replayable parameter-telescope naturality derivation, checked weakening/renaming family, or univalent-equality witness family. A normal-form/type hash is not the adopted natural-family quotient.",
+          "derivation_hash": "blake3:13404661190db15fe7a9863fe9bd3785f24124842f74a6b11cec24ca4c971391"
+        },
+        "quotient_key": null,
+        "derivation_hash": "blake3:6b282e850a11d44acd28832ded367a28e579b330299b88695513f721fa8caa4d"
+      },
+      "derivation_hash": "blake3:c75118c544dc37291b82f327df04ac1f16d37e324a355ba07469834f27c941a3"
+    },
+    "closed_bound_variable_probe": {
+      "typed_judgment_accepted": false,
+      "adopted_quotient_established": false,
+      "domain_member": false,
+      "exact_obstruction": "bound variable 1 is not in the active binder prefix 0",
+      "derivation": null,
+      "derivation_hash": "blake3:2ed1989e71f34b898faabe9ef2abc469688086db3d7e309de24f3fa51644cd17"
+    },
+    "contextual_binder_probe_publicly_replayed": true,
+    "binder_child_context_preserved": true,
+    "closed_bound_variable_rejected": true,
+    "quotient_probe_established": false,
+    "required_contract_checks": [
+      {
+        "contract_id": "TD22_V2_CONTEXT_INDEXED_MEMBERSHIP_DERIVATION_UNAVAILABLE",
+        "required_public_object": "A public, replayable T-D2-1 derivation of Gamma; Delta |- node member, exposing every recursive premise with its own context and reconstructing the typed conclusion.",
+        "available": false,
+        "exact_obstruction": "The public LambdaIntroduction(BoundVariable(1)) probe is sound: its child retains one active binder and the same BoundVariable(1) is rejected closed. That local witness does not establish the universal contextual grammar/eliminator and constructor induction, which repaired T-D2-1 keeps false.",
+        "no_proxy_accepted": true,
+        "derivation_hash": "blake3:ed1fd383914d1d3236a15581c31f40b66d878d6f78ffba2ff6e95e00aeeee778"
+      },
+      {
+        "contract_id": "TD22_V2_NATURAL_FAMILY_QUOTIENT_WITNESS_UNAVAILABLE",
+        "required_public_object": "A public theorem object carrying the dependent parameter telescope, checked canonical renaming, naturality for every well-typed substitution, univalent congruence, and the natural-family/instance quotient witness.",
+        "available": false,
+        "exact_obstruction": "The certificate currently reports quotient booleans and hashes. Existing typed-family machinery checks only a small sample of renamings; it does not export the universal dependent-family quotient theorem required by the adopted domain.",
+        "no_proxy_accepted": true,
+        "derivation_hash": "blake3:e64784b1f8ec3a390618a0d2f46c3e2e6476e21ca90dde0bf47ea838cdb02e40"
+      },
+      {
+        "contract_id": "TD22_V2_FULL_CONTENT_REGRESSION_PROJECTION_UNAVAILABLE",
+        "required_public_object": "A public full-content projection from every sealed proved family and A3 membership row into the operational family judgment, including its role-specific typing and quotient witnesses.",
+        "available": false,
+        "exact_obstruction": "Older proxy artifacts reported inventory/count assertions of 61 and 89, but repaired T-D2-1 recognizes zero exact judgments and does not promote those counts to an exact-content regression theorem. Counts and IDs are testimony, never a replacement for typed content.",
+        "no_proxy_accepted": true,
+        "derivation_hash": "blake3:3e4d2a5a11a546ed0c4c8583f3fcf1107f167df9892eebb3735fe9bd22b1306b"
+      }
+    ],
+    "every_required_public_contract_available": false,
+    "complete_typed_dependency_contract": false,
+    "exact_dependency_statement": "T-D2-1's current public symbolic grammar proposal and archived proxy regressions do not supply the universal context-indexed induction, quotient witness, or exact-content regression theorem T-D2-2 needs. Finiteness itself remains unproved. The prerequisite is therefore false at the consumer boundary regardless of any older summary boolean.",
+    "binding_digest": "blake3:6902322bfcdc989792a2cb84dcdb6e5dbe5ad02ccad36552440855f46bb552f5"
+  },
+  "named_gaps": [
+    {
+      "id": "TD22_V2_CONTEXT_INDEXED_MEMBERSHIP_DERIVATION_UNAVAILABLE",
+      "phase": "T-D2-1 contextual membership dependency",
+      "exact_obstruction": "The public LambdaIntroduction(BoundVariable(1)) probe is sound: its child retains one active binder and the same BoundVariable(1) is rejected closed. That local witness does not establish the universal contextual grammar/eliminator and constructor induction, which repaired T-D2-1 keeps false.",
+      "minimal_witness_shape": "LambdaIntroduction(BoundVariable(1)): the body is valid under one active binder and invalid as a closed member.",
+      "keeps_grammar_unloaded": true,
+      "keeps_surjectivity_unissued": true,
+      "derivation_hash": "blake3:a3a3417b1ed0baeda0a906c7a6c40ef45d293e9178ccce21d7c60cc28f183fa7"
+    },
+    {
+      "id": "TD22_V2_NATURAL_FAMILY_QUOTIENT_WITNESS_UNAVAILABLE",
+      "phase": "T-D2-1 natural-family quotient dependency",
+      "exact_obstruction": "The certificate currently reports quotient booleans and hashes. Existing typed-family machinery checks only a small sample of renamings; it does not export the universal dependent-family quotient theorem required by the adopted domain.",
+      "minimal_witness_shape": "A two-parameter family under an arbitrary well-typed dependent substitution outside the identity/single-transposition sample.",
+      "keeps_grammar_unloaded": true,
+      "keeps_surjectivity_unissued": true,
+      "derivation_hash": "blake3:f6c07c2259751c4d080be55e04d8b87e2f7f778b1f834cd6dd9c683222d6e0f6"
+    },
+    {
+      "id": "TD22_V2_FULL_CONTENT_REGRESSION_PROJECTION_UNAVAILABLE",
+      "phase": "T-D2-1 full-content regression dependency",
+      "exact_obstruction": "Older proxy artifacts reported inventory/count assertions of 61 and 89, but repaired T-D2-1 recognizes zero exact judgments and does not promote those counts to an exact-content regression theorem. Counts and IDs are testimony, never a replacement for typed content.",
+      "minimal_witness_shape": "A recognized regression row whose public projection supplies only recognition metadata rather than the complete typed family judgment.",
+      "keeps_grammar_unloaded": true,
+      "keeps_surjectivity_unissued": true,
+      "derivation_hash": "blake3:5c53b5edde765d34d252cca568ce14bb0571eebf49a3548d9cd0c8bc1db1a06c"
+    }
+  ],
+  "desired_outcome_read": false,
+  "generator_inventory_used_to_shape_domain": false,
+  "regression_inventory_used_to_shape_domain": false,
+  "selector_value_or_bar_read": false,
+  "zero_charge": {
+    "kappa_minted": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "kappa minted"
+    },
+    "nu_minted": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "nu minted"
+    },
+    "anchors_minted": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "anchors minted"
+    },
+    "demand_orbits_minted": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "demand orbits minted"
+    },
+    "zero_charge_holds": true,
+    "derivation_hash": "blake3:38c461c8065cd3c782adffd1a74a5d15e323833a34e292700b3d5a9b745fee8f"
+  },
+  "gate": {
+    "bridge_grammar_loaded": false,
+    "operational_scope_bindings_built": false,
+    "generator_derivation_relation_built": false,
+    "reach_subset_domain_attempted": false,
+    "domain_subset_reach_attempted": false,
+    "theorem_verdict_issued": false,
+    "surjectivity_proved": false,
+    "surjectivity_refuted": false,
+    "marker_surface_size": {
+      "decimal": "0",
+      "register": "gate",
+      "meaning": "target-marker surface; target annotations are forbidden and none are built"
+    },
+    "t_d2_3_key_schema_changed": false,
+    "m3_v1_remains_authoritative": true,
+    "m3_successor_issued": false,
+    "m4_authorized": false,
+    "exact_gate_statement": "The T-D2-1 consumer contract is incomplete. BC-1 is not issued or inspected, no operational scope binding or generator derivation relation is constructed, neither inclusion is attempted, no theorem verdict exists, M-3 v1 remains authoritative, and M-4 remains unauthorized.",
+    "derivation_hash": "blake3:e4e4b90f6d1aeb857b23025bf456eae7b5b1158699cb4e4f57133f1dd87f08fe"
+  },
+  "exact_result": "Lawful dependency stop. T-D2-1's current public certificate supplies a bounded symbolic grammar proposal and a sound local binder probe, but it does not prove the universal context-indexed induction, finite quotient, natural-family quotient theorem, or full-content regression projection required by a noncircular T-D2-2 proof. The older count proxies remain insufficient testimony. The bridge grammar was never loaded; no target markers, generator derivations, inclusion attempts, proof, or refutation were produced.",
+  "permitted_conclusion": "T-D2-2 remains unattempted. This certificate proves only that its public dependency contract is incomplete; it is neither evidence for nor evidence against surjectivity.",
+  "required_successor_action": "Repair T-D2-1 with versioned public theorem objects for context-indexed membership, the complete dependent natural-family quotient, and full-content regression projection. Rerun this dependency audit create-new; only then may a separately versioned T-D2-2 generator-derivation theorem load BC-1.",
+  "mutation_falsifiers": [
+    "claim_a_context_stripped_recursive_premise_then_replay_must_fail",
+    "replace_a_universal_naturality_witness_with_a_sample_renaming_then_replay_must_fail",
+    "replace_full_typed_regression_content_with_counts_or_identifiers_then_replay_must_fail",
+    "load_or_inspect_BC1_before_every_dependency_contract_is_public_then_replay_must_fail",
+    "construct_any_target_marker_or_generator_relation_on_this_stop_then_replay_must_fail",
+    "echo_any_claimed_proof_or_refutation_from_an_invalid_replay_then_replay_must_fail",
+    "mint_any_kappa_nu_anchor_or_demand_orbit_then_replay_must_fail",
+    "move_M3_or_M4_or_change_T_D2_3_then_replay_must_fail",
+    "read_any_desired_outcome_inventory_value_bar_or_hash_as_selector_then_replay_must_fail",
+    "add_any_unknown_JSON_field_then_replay_must_fail"
+  ],
+  "result_digest": "blake3:c9a9071f712323a6ac686f041ceb6d5caa58ded4174c8154fe0191409dac1fa9"
+}

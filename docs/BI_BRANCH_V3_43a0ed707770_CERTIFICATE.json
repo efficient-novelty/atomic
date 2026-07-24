@@ -1,0 +1,3000 @@
+{
+  "schema": "bi1-option-a-independent-branch-v3",
+  "date": "2026-07-23",
+  "option_a_execution_capability_digest": "blake3:e78674bb45e51198346715f485eb80f099c29125347b06c476add8161426e2d1",
+  "cone_digest": "blake3:417719ae12e4bf3f72196a35064c8767cd41ddca765c28736bfe760c999b3a93",
+  "branch_root_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+  "branch_digest_prefix": "43a0ed707770",
+  "enacted_root": false,
+  "issuance_ordinal": 1,
+  "enacted_regression_authorization_digest": "blake3:3454e0cdf1f198f60ff643c690a32986207a5965e3e9df307112104657d3e09d",
+  "continuation": {
+    "schema": "branch-invariance-option-a-semantic-continuation-core-v3",
+    "date": "2026-07-23",
+    "branch": {
+      "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 3
+                    }
+                  ]
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "r_t1_class_id": "blake3:57ee7407cb49294946e0e3761d871e2cac47555ddd5156db044e27b16af2da9b",
+      "economy_probe_class_key": "blake3:b79a0e6556a9e5a4adb24fec4620b7994379900851388b1fd5a344f9a66f491a",
+      "prefix_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+      "certified_kappa": 3,
+      "certified_nu": 2,
+      "seed_derivation_hash": "blake3:e9d1d19ea9abe0f3c21e3e146846eb315a80370332b4a560fd921fbfee8fba76"
+    },
+    "limits": {
+      "max_inspected_stage": 64,
+      "max_enumerated_candidates_per_stage": 10000000
+    },
+    "initial_prefix_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+    "initial_prefix_ledger": [
+      {
+        "stage": 1,
+        "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "kappa": 2,
+        "semantic_nu": 1,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 1,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "predecessor_signature_digest": "blake3:fcfaddfd614022b3f5b0daabd7c06751e7dbac04aee5469c49043d2423c66e20",
+          "structural_formula_total": 1,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 1,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 1,
+            "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+            "predecessor_entry_count": 0,
+            "predecessor_stages": [],
+            "predecessor_candidate_hashes": [],
+            "predecessor_signature_digest": "blake3:fcfaddfd614022b3f5b0daabd7c06751e7dbac04aee5469c49043d2423c66e20",
+            "semantic_nu": 1,
+            "credited_family_ids": [
+              "blake3:25a30e71c82c25e4dbce578f0c9f00507a90a2df7c005100a22fdfa32cc13583"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:25a30e71c82c25e4dbce578f0c9f00507a90a2df7c005100a22fdfa32cc13583",
+                "authoritative_family_row_derivation_hash": "blake3:c164a70e276ff19491b4cd41027781e71beba6808a43bcc6fce572d49aa9116c"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:269bc99d0ba38460d9c18b9a2e2113fbb71373b24acd4c7212239cf6493d2637",
+            "package_v3_declaration_hash": "blake3:0c3784481b1557b089f01a76d24d51daa256ebe13d28c786cde000a48dbfaed0",
+            "package_v4_candidate_local_source_hash": "blake3:c5a9212bc32eccf32178eedfb627ce291a53895b0df2c80e1fb26b053b5d7688",
+            "sequence_derivation_hash": "blake3:0c204c60fd1dbc3d104a1ea483213375cd801f13c3ddee9952b348cb774b3de5",
+            "sequence_authoritative_seal": "blake3:3f3ec8fc4cddca8d47f12202d86d4bd3fa10efdf6b728607a9c6c8dc4cb048b6",
+            "sequence_issuance_trace_root": "blake3:3bf1ca08d3ec54073c63ba229e34b319a2b711819fd4d98699ce0e3f24eeb07e",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:7374587ba9c994730b299b1ac27ca90685b17c5867db9c60e31421c1e8baae79",
+            "b3_authoritative_prefix_semantic_seal": "blake3:b4b06ea3e7cb8ce375da01ec0f2ef4a1b065379c620a09ed0334a79eaaf8e9c5",
+            "b3_issuance_trace_root": "blake3:3bf1ca08d3ec54073c63ba229e34b319a2b711819fd4d98699ce0e3f24eeb07e",
+            "role_declaration_count": 1,
+            "proved_family_declaration_count": 1,
+            "theorem_impossibility_declaration_count": 0,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 1,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:0c3784481b1557b089f01a76d24d51daa256ebe13d28c786cde000a48dbfaed0",
+              "v4_prefix_local_source_hash": "blake3:c5a9212bc32eccf32178eedfb627ce291a53895b0df2c80e1fb26b053b5d7688",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:67456c5258f7de2baa1895a6d14cb01ca3a03e4a687f8a5eecea6686219a6876",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:e4b8aceac06b7a0442ab9fc8d67ee30997c22c47229130c3441bd26a13cd5fce"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:26d1fe74809e10cc0ad3ad0378cfa92991d0978d64fa999cd23212e72ceb47b4"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:26d1fe74809e10cc0ad3ad0378cfa92991d0978d64fa999cd23212e72ceb47b4",
+            "counted_family_ids": [
+              "blake3:25a30e71c82c25e4dbce578f0c9f00507a90a2df7c005100a22fdfa32cc13583"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:c164a70e276ff19491b4cd41027781e71beba6808a43bcc6fce572d49aa9116c"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:d7627bd23ea69e5b5468dbf1ec660305d31e37c8a2a628895681469229a82543"
+        }
+      },
+      {
+        "stage": 2,
+        "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "kappa": 1,
+        "semantic_nu": 0,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 2,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "predecessor_signature_digest": "blake3:be623a2f25ae686ac37301c38ba62bb96a67b5e42f10604e3d6df96f11032005",
+          "structural_formula_total": 1,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 0,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 2,
+            "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+            "predecessor_entry_count": 1,
+            "predecessor_stages": [
+              1
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7"
+            ],
+            "predecessor_signature_digest": "blake3:be623a2f25ae686ac37301c38ba62bb96a67b5e42f10604e3d6df96f11032005",
+            "semantic_nu": 0,
+            "credited_family_ids": [],
+            "credited_family_rows": [],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:90980691457d7a62146698b8c0fb90d6c25aefb463ff576b71f461eb9d8f6448",
+            "package_v3_declaration_hash": "blake3:da2a54b12d5d7ee1d52cb9328d4a24a227b66a2c5dc4ac4dbf9c0f7f3343ea66",
+            "package_v4_candidate_local_source_hash": "blake3:2ff6316089d33e4711e75796c6875be6377e846457bf23a685587f9586efcc3d",
+            "sequence_derivation_hash": "blake3:0c92be4cf0732fb31935c07a7eb195c7bbaab81ffc2029c16903d4983d2e2088",
+            "sequence_authoritative_seal": "blake3:c70dd521109adf91712006d966a605d0b460ad4df08ef3c454b90315cb04533e",
+            "sequence_issuance_trace_root": "blake3:7906fdfcb0214ef4fbd50865b8b4d664515b2cf9ef5c2afe406d5ff0e1121774",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:eeb412b43a6000218d90b25cbc9aa03813449f32df1ec502e2ceaeec0f294ed0",
+            "b3_authoritative_prefix_semantic_seal": "blake3:9612829830ea6fc7ef45df186ac80fe62cf1239c35302775fdb763f889d442f2",
+            "b3_issuance_trace_root": "blake3:7906fdfcb0214ef4fbd50865b8b4d664515b2cf9ef5c2afe406d5ff0e1121774",
+            "role_declaration_count": 1,
+            "proved_family_declaration_count": 1,
+            "theorem_impossibility_declaration_count": 0,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 2,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:da2a54b12d5d7ee1d52cb9328d4a24a227b66a2c5dc4ac4dbf9c0f7f3343ea66",
+              "v4_prefix_local_source_hash": "blake3:2ff6316089d33e4711e75796c6875be6377e846457bf23a685587f9586efcc3d",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:2d6b15978948ee97538a0b1dbaa5baa4494c5123777d612f7723737ed045b4b6",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:6971b6d78de08d36c556b8c13232149814135f6cc839e19d3edacf8183a117aa"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:837273b4608ce60789a263b90547985e88d01b5d596d2bcab09cf8468a009d29"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:837273b4608ce60789a263b90547985e88d01b5d596d2bcab09cf8468a009d29",
+            "counted_family_ids": [],
+            "authoritative_family_token_hashes": [],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:efe64b20a1f37ab58e293d002539a05ec33e53f6549a08d25a04c8f67e115dc1"
+        }
+      },
+      {
+        "stage": 3,
+        "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+        "kappa": 1,
+        "semantic_nu": 1,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 3,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "predecessor_signature_digest": "blake3:3e6728c35b5e2653432bd09ed0cb9b9f14537b5d32646cc8ba9c688404e6ed21",
+          "structural_formula_total": 2,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 1,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 3,
+            "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+            "predecessor_entry_count": 2,
+            "predecessor_stages": [
+              1,
+              2
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+              "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555"
+            ],
+            "predecessor_signature_digest": "blake3:3e6728c35b5e2653432bd09ed0cb9b9f14537b5d32646cc8ba9c688404e6ed21",
+            "semantic_nu": 1,
+            "credited_family_ids": [
+              "blake3:7eb09c9ee994e8b1e3258a461f414e1ffbea16a89e7ce829f9bfde53285c5715"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:7eb09c9ee994e8b1e3258a461f414e1ffbea16a89e7ce829f9bfde53285c5715",
+                "authoritative_family_row_derivation_hash": "blake3:e467d2d5efe794b6abef1251db5e105b7ab6c899e88754a964ceb594a589a24c"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:0976184828abd58d68e56ed180688ec26d54e576872acbecccce2751282e3edc",
+            "package_v3_declaration_hash": "blake3:decd3f82677b4af4bd3b767c9ecfe5544d2752caf21c247d2e892cc79ca39f04",
+            "package_v4_candidate_local_source_hash": "blake3:a674e2f851d1ba3f8c460a94f81b521c4db777f775724ad54e7c22a2b0f79077",
+            "sequence_derivation_hash": "blake3:fe2757f7093d894301970418f67546e223af75cbff653c8a039f05025dcae710",
+            "sequence_authoritative_seal": "blake3:24125a1b80d8354adc82c348f7b840155abee38266f2a613aed9fec5ef8d1e5b",
+            "sequence_issuance_trace_root": "blake3:9a6cf3ea7953b4f81db95cfff8218f438400948ef33ecaabd0782c3e1670f562",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:3f5d53843e1b1e31e2f9f2fbccfc174e16e5e925a44e1233304de7368654d740",
+            "b3_authoritative_prefix_semantic_seal": "blake3:283c5c7f4ee6ce8173c2b1578165459103335fa1b1e3520d989706ade6428c09",
+            "b3_issuance_trace_root": "blake3:9a6cf3ea7953b4f81db95cfff8218f438400948ef33ecaabd0782c3e1670f562",
+            "role_declaration_count": 2,
+            "proved_family_declaration_count": 1,
+            "theorem_impossibility_declaration_count": 1,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 3,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:decd3f82677b4af4bd3b767c9ecfe5544d2752caf21c247d2e892cc79ca39f04",
+              "v4_prefix_local_source_hash": "blake3:a674e2f851d1ba3f8c460a94f81b521c4db777f775724ad54e7c22a2b0f79077",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:d021d568c1bce33d41d549b0a8ba27d951f57c0a3fcd059782c4e24d1e8741a9",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:0e4dd08f65e74a0249e78d9d4292e62e37c5387c16c15dbce60de2f364563420"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:8b89cdd89fee027572f0cc55edbd72ccba0c3ec64e99ef20ea29e6b98154927c"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:8b89cdd89fee027572f0cc55edbd72ccba0c3ec64e99ef20ea29e6b98154927c",
+            "counted_family_ids": [
+              "blake3:7eb09c9ee994e8b1e3258a461f414e1ffbea16a89e7ce829f9bfde53285c5715"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:e467d2d5efe794b6abef1251db5e105b7ab6c899e88754a964ceb594a589a24c"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:30a1c22b6276c8472e2676e332f59e8dbe7f6ff55ec7f5ac3219f243a766dea1"
+        }
+      },
+      {
+        "stage": 4,
+        "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "kappa": 3,
+        "semantic_nu": 2,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 4,
+          "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+          "predecessor_signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+          "structural_formula_total": 5,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 2,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 4,
+            "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+            "predecessor_entry_count": 3,
+            "predecessor_stages": [
+              1,
+              2,
+              3
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+              "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+              "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e"
+            ],
+            "predecessor_signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+            "semantic_nu": 2,
+            "credited_family_ids": [
+              "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+              "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+                "authoritative_family_row_derivation_hash": "blake3:b3f5ade79041e67d4f93a8a953e8c2a73018dd7fe1e8c8a47400df1b9d07d1ce"
+              },
+              {
+                "family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+                "authoritative_family_row_derivation_hash": "blake3:b9a9206db7baa849fd49f4e5cb96e93bf6b7061b373c89b8a5fd4e28599da343"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:c1b15a9f4654f542b994cf913de8da60f750c729a3f85c18f4f5d65aff756241",
+            "package_v3_declaration_hash": "blake3:9b12827f29cefee715459a2c77a858e5da59f5127d59a47f346c7835ade12d2a",
+            "package_v4_candidate_local_source_hash": "blake3:1fd7f8a048941e381185e4bccf1bdba99d797cfea54ee12ad8c72924641f0693",
+            "sequence_derivation_hash": "blake3:6570810939cd55103e0e22fc0486edc978cc9eeb269b5817fec5254480a6494f",
+            "sequence_authoritative_seal": "blake3:cb76a81f44893554cf88a8983877fae86a2f74b42b0d1e8bcc8210f4619a46f6",
+            "sequence_issuance_trace_root": "blake3:2e0fb091b844a464026c7169ae3489241e73b11e9622c43f45cc84ba7e584988",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:fbf8e4e7a2ee1e596cd71ac2eb6dc420670edd36b9a38951682b70766254d663",
+            "b3_authoritative_prefix_semantic_seal": "blake3:ec8962807bcb56130abceba4192cb24e743a606797b30a9a8a6280e10853ecbe",
+            "b3_issuance_trace_root": "blake3:2e0fb091b844a464026c7169ae3489241e73b11e9622c43f45cc84ba7e584988",
+            "role_declaration_count": 5,
+            "proved_family_declaration_count": 2,
+            "theorem_impossibility_declaration_count": 3,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 4,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:9b12827f29cefee715459a2c77a858e5da59f5127d59a47f346c7835ade12d2a",
+              "v4_prefix_local_source_hash": "blake3:1fd7f8a048941e381185e4bccf1bdba99d797cfea54ee12ad8c72924641f0693",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:9f8eb8fc856f8c7fe4bcd809208fa88abd34e91f70504c7dfc40f31064afa6b5",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:f731d444a7f79f6eeee32740ec9e50c0211fdd23c95387ffd17bc1e940a5572e"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:09cc403c17516b30f6f7c76bd5d7f26a8985ccdb446994e65e3d30775ebe0ee6"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:09cc403c17516b30f6f7c76bd5d7f26a8985ccdb446994e65e3d30775ebe0ee6",
+            "counted_family_ids": [
+              "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+              "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:b3f5ade79041e67d4f93a8a953e8c2a73018dd7fe1e8c8a47400df1b9d07d1ce",
+              "blake3:b9a9206db7baa849fd49f4e5cb96e93bf6b7061b373c89b8a5fd4e28599da343"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:44801e5e0ffe692b7dc897acacd8958abbd1c3bc5e5e7cace61d5bede4b41445"
+        }
+      }
+    ],
+    "stages": [
+      {
+        "stage": 5,
+        "demand": {
+          "stage": 5,
+          "prefix_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+          "coarse_required_packages": [
+            "initial_hit"
+          ],
+          "a3_required_packages": [
+            "initial_hit"
+          ],
+          "structural_constructors": [
+            "initial_hit"
+          ],
+          "structural_scheme_ids": [
+            "blake3:eb17d204816ba0e433f0c12832e2c46a5cfcafa0392109a569190fa5bfbef6b9"
+          ],
+          "structural_instance_ids": [
+            "blake3:7e00c5bf76a0d0683e3a99052a1d3c8bac8b92d3386dd7bdde572b17773aa9b9"
+          ],
+          "a3_window_derivation_hash": "blake3:c4b434aa335974b75fd776fdb8a8e014b638c081c70fc5862fcc81d80ec6ae9a",
+          "a3_inventory_derivation_hash": "blake3:d4c7a4cdebf6d7b292022d016185fb26a6e816f4081d5e8be08975280e92401f",
+          "exact_prefix_inventory_exhaustive": true,
+          "coarse_and_a3_demands_agree": true,
+          "debt_free": false,
+          "derivation_hash": "blake3:95f2cd1830032766642bd38f8c29d8cd5e2e030fa1d34a7723219c4b2f6526cc"
+        },
+        "diagnostic_bar": "20/21",
+        "bar_used_as_gate_or_selector": false,
+        "score_used_as_selector": false,
+        "cone_enumerated": 1,
+        "cone_admitted": 1,
+        "cone_deduped": 1,
+        "cone_digest": "blake3:3d3de5178da7b6aee095b61bc4ead4498a90c38d37c000479533f3bb92f0a6ff",
+        "assessments": [
+          {
+            "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+            "canonical_key": "fc0f4087",
+            "telescope": {
+              "clauses": [
+                {
+                  "role": "formation",
+                  "expr": {
+                    "App": [
+                      "Univ",
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "role": "path_attach",
+                  "expr": {
+                    "PathCon": 1
+                  }
+                }
+              ]
+            },
+            "kappa": 3,
+            "bit_kappa": 21,
+            "kernel_typed": true,
+            "kernel_failure": null,
+            "elaboration_derivation_hash": "blake3:c473112c64b159087f74de199f9a01aab5cf72638491cf3dd9a9a5c678495e0f",
+            "identified_with_prefix": false,
+            "structural_formula_total": 7,
+            "r2_generated_instance_adjustment": 0,
+            "r2_generated_action_evidence": [],
+            "r2_applied_after_unique_discharge": false,
+            "semantic_nu": 6,
+            "local_role_capacity": 12,
+            "live_demand_output_capacity": 360,
+            "diagnostic_formula_replayed_and_capacity_bound_satisfied": true,
+            "nu_provenance": {
+              "schema": "branch-local-semantic-nu-provenance-v3",
+              "stage": 5,
+              "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+              "predecessor_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+              "structural_formula_total": 7,
+              "r2_generated_instance_adjustment": 0,
+              "diagnostic_nu": 6,
+              "structural_formula_replayed_from_branch_prefix": true,
+              "historical_score_vector_or_bar_used_as_input": false,
+              "semantic_family_evidence_v3": {
+                "schema": "branch-prefix-candidate-semantic-provenance-v3",
+                "date": "2026-07-23",
+                "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+                "stage": 5,
+                "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+                "predecessor_entry_count": 4,
+                "predecessor_stages": [
+                  1,
+                  2,
+                  3,
+                  4
+                ],
+                "predecessor_candidate_hashes": [
+                  "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+                  "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+                  "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+                  "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308"
+                ],
+                "predecessor_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+                "semantic_nu": 6,
+                "credited_family_ids": [
+                  "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+                  "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+                  "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+                  "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+                  "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+                  "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab"
+                ],
+                "credited_family_rows": [
+                  {
+                    "family_id": "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+                    "authoritative_family_row_derivation_hash": "blake3:4ca8b0e5fe4d27e5278b3c618fd97d07ffb833e14481353d2c4051a0fead1ec5"
+                  },
+                  {
+                    "family_id": "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+                    "authoritative_family_row_derivation_hash": "blake3:30f919827b69f0ce364b7b73888042536c05b1d369173a1752c441c528dcd6b8"
+                  },
+                  {
+                    "family_id": "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+                    "authoritative_family_row_derivation_hash": "blake3:a8f13e56428a531a7e93544f53f37b32f5fa1b01c5a60218fd6fa949e03e07f9"
+                  },
+                  {
+                    "family_id": "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+                    "authoritative_family_row_derivation_hash": "blake3:87b6fe59646631e4ad149949b91cc745ea2a8cb4d2756f8e1649c1fe62d98a59"
+                  },
+                  {
+                    "family_id": "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+                    "authoritative_family_row_derivation_hash": "blake3:795b601868165689ee75809af696596a3dd39291a811703c54f97a125d0016f7"
+                  },
+                  {
+                    "family_id": "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab",
+                    "authoritative_family_row_derivation_hash": "blake3:0c3acfa0e3cd68bd8586305077707d92b9e8dfd521484005f6e81b01337abe2e"
+                  }
+                ],
+                "exact_credited_family_row_join": true,
+                "package_derivation_hash": "blake3:943e856e5a5e30e1d73341aa4e85ed7d2dbb93e3cf9d412ef9ac3ce414f6d233",
+                "package_v3_declaration_hash": "blake3:a124ec3f8499549897303a0fb29d5f3c4d8ceca9059733b537c0db91f786ee39",
+                "package_v4_candidate_local_source_hash": "blake3:c32c9926fdb4bf7d2ff3dd6000d6c6f8477909f7d2a760b81b2625e8f77a5d86",
+                "sequence_derivation_hash": "blake3:73766999ddc4d9f524925e41d4d1cb92717008038f6d807a4f1aa2f6574af8a3",
+                "sequence_authoritative_seal": "blake3:0efa854148ec4493fba8c4a8df25ae2e8d89dfdd8d57ace7088d53b398072b36",
+                "sequence_issuance_trace_root": "blake3:c852b57018e95263314ab1531fe4e8d81449359141d597ed35384a073040e4ff",
+                "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+                "b3_token_derivation_hash": "blake3:6de26d04afa7c1b159f655602c69f0749286a63eefa6e28dfcb6c68001ecbcdb",
+                "b3_authoritative_prefix_semantic_seal": "blake3:915c53334bd8e36521fbf39a8555672c617b8d8a1227b11dff3254443287915b",
+                "b3_issuance_trace_root": "blake3:c852b57018e95263314ab1531fe4e8d81449359141d597ed35384a073040e4ff",
+                "role_declaration_count": 7,
+                "proved_family_declaration_count": 7,
+                "theorem_impossibility_declaration_count": 0,
+                "named_role_residual_count": 0,
+                "named_quotient_residual_count": 0,
+                "named_a3_residual_count": 0,
+                "silent_residue_count": 0,
+                "t_bi_b1_proved": true,
+                "t_bi_b2_proved": true,
+                "t_bi_b3_proved": true,
+                "package_proved": true,
+                "every_role_declaration_resolved": true,
+                "every_marginal_family_credited_or_theorem_impossible": true,
+                "local_anchor_nonreuse_holds": true,
+                "no_historical_registry_consulted": true,
+                "no_archive_structural_bar_verdict_or_future_input": true,
+                "sequence_no_historical_registry_or_future_input": true,
+                "b3_no_historical_registry_or_legacy_v5_authority": true,
+                "b3_no_archive_structural_bar_verdict_or_future_input": true,
+                "exact_prefix_candidate_package_binding": true,
+                "all_residual_counts_zero": true,
+                "r2_premise": {
+                  "stage": 5,
+                  "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+                  "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+                  "v3_declaration_surface_hash": "blake3:a124ec3f8499549897303a0fb29d5f3c4d8ceca9059733b537c0db91f786ee39",
+                  "v4_prefix_local_source_hash": "blake3:c32c9926fdb4bf7d2ff3dd6000d6c6f8477909f7d2a760b81b2625e8f77a5d86",
+                  "v4_source_matches_isolated_package": true,
+                  "v4_source_surface_replayed": true,
+                  "r2_premises_derivation_hash": "blake3:e3add6a0283e78f26bdce55e947c343e2e737708f8b0655a1eebaa5ad1848864",
+                  "r2_generated_instance_removed_count": 0,
+                  "r2_removed_occurrence_hashes": [],
+                  "r2_parent_slot_label_join_holds": true,
+                  "r2_exact_v3_occurrence_surface_holds": true,
+                  "r2_step8_typed_signature_derivation_hash": null,
+                  "r2_m1_generated_membership_derivation_hash": null,
+                  "r2_m1_generated_membership_replayed": true,
+                  "r2_parent_membership_replayed": true,
+                  "r2_removed_occurrences_absent_from_unified_membership": true,
+                  "r2_removed_occurrences_not_exported_as_families": true,
+                  "r2_generated_instance_not_multiplied": true,
+                  "r2_local_premises_replayed": true,
+                  "non_stage8_projection_is_exact_zero_none_trivial": true,
+                  "v4_forbidden_inputs_absent": true,
+                  "proved": true,
+                  "derivation_hash": "blake3:239f6134ff8de79dfd3568b722d43e68348c016ab896d49025e0473f11323796"
+                },
+                "no_history_or_forbidden_input": true,
+                "proved": true,
+                "derivation_hash": "blake3:ffed41d7689ee5f3e94454b99ba411fb4b18f68bf91d4b12d29c422403631559"
+              },
+              "disposition": {
+                "kind": "exact_certified",
+                "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+                "certificate_hash": "blake3:ffed41d7689ee5f3e94454b99ba411fb4b18f68bf91d4b12d29c422403631559",
+                "counted_family_ids": [
+                  "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+                  "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+                  "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+                  "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+                  "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+                  "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab"
+                ],
+                "authoritative_family_token_hashes": [
+                  "blake3:4ca8b0e5fe4d27e5278b3c618fd97d07ffb833e14481353d2c4051a0fead1ec5",
+                  "blake3:30f919827b69f0ce364b7b73888042536c05b1d369173a1752c441c528dcd6b8",
+                  "blake3:a8f13e56428a531a7e93544f53f37b32f5fa1b01c5a60218fd6fa949e03e07f9",
+                  "blake3:87b6fe59646631e4ad149949b91cc745ea2a8cb4d2756f8e1649c1fe62d98a59",
+                  "blake3:795b601868165689ee75809af696596a3dd39291a811703c54f97a125d0016f7",
+                  "blake3:0c3acfa0e3cd68bd8586305077707d92b9e8dfd521484005f6e81b01337abe2e"
+                ],
+                "generated_instance_family_ids_removed_by_quotient": []
+              },
+              "derivation_hash": "blake3:91592e12cc8f37be6954d008b19009094e4f9b4dfd8cd64cb55b907bd930446e"
+            },
+            "ordinary_charge_provenance_hash": "blake3:852c123b007f3ce2fa424335cdca845c8864c09fe062657226843cf4859c5881",
+            "structural_discharge_evidence": [
+              {
+                "constructor": "initial_hit",
+                "a3_scheme_id": "blake3:eb17d204816ba0e433f0c12832e2c46a5cfcafa0392109a569190fa5bfbef6b9",
+                "a3_instance_id": "blake3:7e00c5bf76a0d0683e3a99052a1d3c8bac8b92d3386dd7bdde572b17773aa9b9",
+                "registration_disposition": "registered",
+                "registration_formation_hash": "blake3:995bf67d52e949aaa740644bd9d33cba001a4a6ea9843abad763dd1c261c13fb",
+                "registration_replay_valid": true,
+                "realization_disposition": "realized",
+                "realization_hash": "blake3:6faa30d4d906c6cb2156baa8d7ecc439150af42f462125482bc24d958ce9d2b4",
+                "realization_replay_valid": true,
+                "provider_relation_satisfied": true,
+                "constructor_absent_after_filler": true,
+                "specialized_expression_is_filler_reference": true,
+                "zero_marginal_discharge_charge": true,
+                "typed_total_discharge_replayed": true,
+                "named_gap_id": null,
+                "named_gap_phase": null,
+                "named_gap_error": null,
+                "semantic_evidence_gap": false,
+                "derivation_hash": "blake3:18a4357a61e1fc53e0f525070f7eb5d7021fac0ef174819a051c7e4bfad191c2"
+              }
+            ],
+            "every_live_structural_demand_realized": true,
+            "semantic_evidence_gap": false,
+            "guarded_total_discharger": true,
+            "rho": "2/1",
+            "diagnostic_clears_bar": true,
+            "derivation_hash": "blake3:67ac72d3e60a17cf92ee96433a4b45b9dfa06165a6327b278d1bbd4e45356500"
+          }
+        ],
+        "discharger_hashes": [
+          "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+        ],
+        "discharger_count": 1,
+        "diagnostic_bar_clearing_count": 1,
+        "r2_rule_evidence_hash": null,
+        "r2_applied_only_after_unique_discharge": true,
+        "winner": {
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "canonical_key": "fc0f4087",
+          "telescope": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": {
+                  "App": [
+                    "Univ",
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Var": 1
+                }
+              },
+              {
+                "role": "path_attach",
+                "expr": {
+                  "PathCon": 1
+                }
+              }
+            ]
+          },
+          "kappa": 3,
+          "semantic_nu": 6,
+          "nu_provenance": {
+            "schema": "branch-local-semantic-nu-provenance-v3",
+            "stage": 5,
+            "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+            "predecessor_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+            "structural_formula_total": 7,
+            "r2_generated_instance_adjustment": 0,
+            "diagnostic_nu": 6,
+            "structural_formula_replayed_from_branch_prefix": true,
+            "historical_score_vector_or_bar_used_as_input": false,
+            "semantic_family_evidence_v3": {
+              "schema": "branch-prefix-candidate-semantic-provenance-v3",
+              "date": "2026-07-23",
+              "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+              "stage": 5,
+              "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+              "predecessor_entry_count": 4,
+              "predecessor_stages": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "predecessor_candidate_hashes": [
+                "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+                "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+                "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+                "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308"
+              ],
+              "predecessor_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+              "semantic_nu": 6,
+              "credited_family_ids": [
+                "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+                "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+                "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+                "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+                "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+                "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab"
+              ],
+              "credited_family_rows": [
+                {
+                  "family_id": "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+                  "authoritative_family_row_derivation_hash": "blake3:4ca8b0e5fe4d27e5278b3c618fd97d07ffb833e14481353d2c4051a0fead1ec5"
+                },
+                {
+                  "family_id": "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+                  "authoritative_family_row_derivation_hash": "blake3:30f919827b69f0ce364b7b73888042536c05b1d369173a1752c441c528dcd6b8"
+                },
+                {
+                  "family_id": "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+                  "authoritative_family_row_derivation_hash": "blake3:a8f13e56428a531a7e93544f53f37b32f5fa1b01c5a60218fd6fa949e03e07f9"
+                },
+                {
+                  "family_id": "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+                  "authoritative_family_row_derivation_hash": "blake3:87b6fe59646631e4ad149949b91cc745ea2a8cb4d2756f8e1649c1fe62d98a59"
+                },
+                {
+                  "family_id": "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+                  "authoritative_family_row_derivation_hash": "blake3:795b601868165689ee75809af696596a3dd39291a811703c54f97a125d0016f7"
+                },
+                {
+                  "family_id": "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab",
+                  "authoritative_family_row_derivation_hash": "blake3:0c3acfa0e3cd68bd8586305077707d92b9e8dfd521484005f6e81b01337abe2e"
+                }
+              ],
+              "exact_credited_family_row_join": true,
+              "package_derivation_hash": "blake3:943e856e5a5e30e1d73341aa4e85ed7d2dbb93e3cf9d412ef9ac3ce414f6d233",
+              "package_v3_declaration_hash": "blake3:a124ec3f8499549897303a0fb29d5f3c4d8ceca9059733b537c0db91f786ee39",
+              "package_v4_candidate_local_source_hash": "blake3:c32c9926fdb4bf7d2ff3dd6000d6c6f8477909f7d2a760b81b2625e8f77a5d86",
+              "sequence_derivation_hash": "blake3:73766999ddc4d9f524925e41d4d1cb92717008038f6d807a4f1aa2f6574af8a3",
+              "sequence_authoritative_seal": "blake3:0efa854148ec4493fba8c4a8df25ae2e8d89dfdd8d57ace7088d53b398072b36",
+              "sequence_issuance_trace_root": "blake3:c852b57018e95263314ab1531fe4e8d81449359141d597ed35384a073040e4ff",
+              "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+              "b3_token_derivation_hash": "blake3:6de26d04afa7c1b159f655602c69f0749286a63eefa6e28dfcb6c68001ecbcdb",
+              "b3_authoritative_prefix_semantic_seal": "blake3:915c53334bd8e36521fbf39a8555672c617b8d8a1227b11dff3254443287915b",
+              "b3_issuance_trace_root": "blake3:c852b57018e95263314ab1531fe4e8d81449359141d597ed35384a073040e4ff",
+              "role_declaration_count": 7,
+              "proved_family_declaration_count": 7,
+              "theorem_impossibility_declaration_count": 0,
+              "named_role_residual_count": 0,
+              "named_quotient_residual_count": 0,
+              "named_a3_residual_count": 0,
+              "silent_residue_count": 0,
+              "t_bi_b1_proved": true,
+              "t_bi_b2_proved": true,
+              "t_bi_b3_proved": true,
+              "package_proved": true,
+              "every_role_declaration_resolved": true,
+              "every_marginal_family_credited_or_theorem_impossible": true,
+              "local_anchor_nonreuse_holds": true,
+              "no_historical_registry_consulted": true,
+              "no_archive_structural_bar_verdict_or_future_input": true,
+              "sequence_no_historical_registry_or_future_input": true,
+              "b3_no_historical_registry_or_legacy_v5_authority": true,
+              "b3_no_archive_structural_bar_verdict_or_future_input": true,
+              "exact_prefix_candidate_package_binding": true,
+              "all_residual_counts_zero": true,
+              "r2_premise": {
+                "stage": 5,
+                "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+                "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+                "v3_declaration_surface_hash": "blake3:a124ec3f8499549897303a0fb29d5f3c4d8ceca9059733b537c0db91f786ee39",
+                "v4_prefix_local_source_hash": "blake3:c32c9926fdb4bf7d2ff3dd6000d6c6f8477909f7d2a760b81b2625e8f77a5d86",
+                "v4_source_matches_isolated_package": true,
+                "v4_source_surface_replayed": true,
+                "r2_premises_derivation_hash": "blake3:e3add6a0283e78f26bdce55e947c343e2e737708f8b0655a1eebaa5ad1848864",
+                "r2_generated_instance_removed_count": 0,
+                "r2_removed_occurrence_hashes": [],
+                "r2_parent_slot_label_join_holds": true,
+                "r2_exact_v3_occurrence_surface_holds": true,
+                "r2_step8_typed_signature_derivation_hash": null,
+                "r2_m1_generated_membership_derivation_hash": null,
+                "r2_m1_generated_membership_replayed": true,
+                "r2_parent_membership_replayed": true,
+                "r2_removed_occurrences_absent_from_unified_membership": true,
+                "r2_removed_occurrences_not_exported_as_families": true,
+                "r2_generated_instance_not_multiplied": true,
+                "r2_local_premises_replayed": true,
+                "non_stage8_projection_is_exact_zero_none_trivial": true,
+                "v4_forbidden_inputs_absent": true,
+                "proved": true,
+                "derivation_hash": "blake3:239f6134ff8de79dfd3568b722d43e68348c016ab896d49025e0473f11323796"
+              },
+              "no_history_or_forbidden_input": true,
+              "proved": true,
+              "derivation_hash": "blake3:ffed41d7689ee5f3e94454b99ba411fb4b18f68bf91d4b12d29c422403631559"
+            },
+            "disposition": {
+              "kind": "exact_certified",
+              "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+              "certificate_hash": "blake3:ffed41d7689ee5f3e94454b99ba411fb4b18f68bf91d4b12d29c422403631559",
+              "counted_family_ids": [
+                "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+                "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+                "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+                "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+                "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+                "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab"
+              ],
+              "authoritative_family_token_hashes": [
+                "blake3:4ca8b0e5fe4d27e5278b3c618fd97d07ffb833e14481353d2c4051a0fead1ec5",
+                "blake3:30f919827b69f0ce364b7b73888042536c05b1d369173a1752c441c528dcd6b8",
+                "blake3:a8f13e56428a531a7e93544f53f37b32f5fa1b01c5a60218fd6fa949e03e07f9",
+                "blake3:87b6fe59646631e4ad149949b91cc745ea2a8cb4d2756f8e1649c1fe62d98a59",
+                "blake3:795b601868165689ee75809af696596a3dd39291a811703c54f97a125d0016f7",
+                "blake3:0c3acfa0e3cd68bd8586305077707d92b9e8dfd521484005f6e81b01337abe2e"
+              ],
+              "generated_instance_family_ids_removed_by_quotient": []
+            },
+            "derivation_hash": "blake3:91592e12cc8f37be6954d008b19009094e4f9b4dfd8cd64cb55b907bd930446e"
+          },
+          "selected_by": "unique_typed_a3_total_discharger",
+          "diagnostic_clears_bar": true,
+          "derivation_hash": "blake3:8e4edfcb1ace596a4fcd7751e094ff347d307250bed8cf3e4e16d038b471d2f6"
+        },
+        "derivation_hash": "blake3:d8de44028edc67f867eca798e0cf5bafa3a9908c48fe8165e963c05b6ba662c6"
+      },
+      {
+        "stage": 6,
+        "demand": {
+          "stage": 6,
+          "prefix_signature_digest": "blake3:3623fc78ea9b0eaf397258cfd7cfd31e82ad684f6b25b501fcc000155120c473",
+          "coarse_required_packages": [
+            "truncation_hit"
+          ],
+          "a3_required_packages": [
+            "truncation_hit"
+          ],
+          "structural_constructors": [
+            "truncation_hit"
+          ],
+          "structural_scheme_ids": [
+            "blake3:e950578a3755263bcf893e32d9a32f75db06573a3989fc7a5e52c284534364d0"
+          ],
+          "structural_instance_ids": [
+            "blake3:916afa2b7f2137798e7210bc2add1f979f6587595956ee9b2db3182b00e5591f"
+          ],
+          "a3_window_derivation_hash": "blake3:d5484a8b31cb6ab9269998e4e6848034cd02f7f49918afa1846a4c5b74260fd4",
+          "a3_inventory_derivation_hash": "blake3:0194959986033d37311d8d1fc0770efadd120cfa1c29e2637a69d6fe6f0d29d1",
+          "exact_prefix_inventory_exhaustive": true,
+          "coarse_and_a3_demands_agree": true,
+          "debt_free": false,
+          "derivation_hash": "blake3:acddcdb800d96abc6042bd312294d62cb32d3863f7e767666f598267b601f027"
+        },
+        "diagnostic_bar": "8/5",
+        "bar_used_as_gate_or_selector": false,
+        "score_used_as_selector": false,
+        "cone_enumerated": 1,
+        "cone_admitted": 1,
+        "cone_deduped": 1,
+        "cone_digest": "blake3:cc533d0c64765da05552526444f2fce6e65ba7d544895699bc16630ad52b79fa",
+        "assessments": [
+          {
+            "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+            "canonical_key": "c5484f96",
+            "telescope": {
+              "clauses": [
+                {
+                  "role": "formation",
+                  "expr": {
+                    "Trunc": {
+                      "Var": 1
+                    }
+                  }
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "App": [
+                      {
+                        "Trunc": {
+                          "Var": 1
+                        }
+                      },
+                      {
+                        "Var": 2
+                      }
+                    ]
+                  }
+                },
+                {
+                  "role": "path_attach",
+                  "expr": {
+                    "PathCon": 1
+                  }
+                }
+              ]
+            },
+            "kappa": 3,
+            "bit_kappa": 35,
+            "kernel_typed": true,
+            "kernel_failure": null,
+            "elaboration_derivation_hash": "blake3:b4f71d029342e800ea7b6e3ea34fc6a7f398a3c944f3eb2e1602c71bf4b1a69d",
+            "identified_with_prefix": false,
+            "structural_formula_total": 8,
+            "r2_generated_instance_adjustment": 0,
+            "r2_generated_action_evidence": [],
+            "r2_applied_after_unique_discharge": false,
+            "semantic_nu": 3,
+            "local_role_capacity": 12,
+            "live_demand_output_capacity": 780,
+            "diagnostic_formula_replayed_and_capacity_bound_satisfied": true,
+            "nu_provenance": {
+              "schema": "branch-local-semantic-nu-provenance-v3",
+              "stage": 6,
+              "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+              "predecessor_signature_digest": "blake3:3623fc78ea9b0eaf397258cfd7cfd31e82ad684f6b25b501fcc000155120c473",
+              "structural_formula_total": 8,
+              "r2_generated_instance_adjustment": 0,
+              "diagnostic_nu": 3,
+              "structural_formula_replayed_from_branch_prefix": true,
+              "historical_score_vector_or_bar_used_as_input": false,
+              "semantic_family_evidence_v3": {
+                "schema": "branch-prefix-candidate-semantic-provenance-v3",
+                "date": "2026-07-23",
+                "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+                "stage": 6,
+                "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+                "predecessor_entry_count": 5,
+                "predecessor_stages": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ],
+                "predecessor_candidate_hashes": [
+                  "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+                  "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+                  "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+                  "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+                  "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+                ],
+                "predecessor_signature_digest": "blake3:3623fc78ea9b0eaf397258cfd7cfd31e82ad684f6b25b501fcc000155120c473",
+                "semantic_nu": 3,
+                "credited_family_ids": [
+                  "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+                  "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+                  "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6"
+                ],
+                "credited_family_rows": [
+                  {
+                    "family_id": "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+                    "authoritative_family_row_derivation_hash": "blake3:9c58c785e6b09c87e8295e0d2f2ea207393671ad9a3dcb4aea12ac8472bb5853"
+                  },
+                  {
+                    "family_id": "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+                    "authoritative_family_row_derivation_hash": "blake3:ea4b6fed9030a6515fff85d5234fd74bdc6f54d540d11182860b6596e59d0899"
+                  },
+                  {
+                    "family_id": "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6",
+                    "authoritative_family_row_derivation_hash": "blake3:8042439a693cf6132a472c1154e22d52636f647b938fca2c9d29a2ec904914e2"
+                  }
+                ],
+                "exact_credited_family_row_join": true,
+                "package_derivation_hash": "blake3:b73569f769e2cbf736e4bb0a866682c94ba3f0c1eff0692200a2e2d83b13a231",
+                "package_v3_declaration_hash": "blake3:9189735944c180dd74e3bcc8bf9488f772cdc11c0e154fa4e02676ddd751f49a",
+                "package_v4_candidate_local_source_hash": "blake3:6ca5f456df8e0689954417744bdf444f048816680aec571fc4b285608def3040",
+                "sequence_derivation_hash": "blake3:e8019788307441253bf3f42c92f65f804fb863519bd5ce6e7b1e7954dc808f13",
+                "sequence_authoritative_seal": "blake3:e41c3c06a01e40c34e4177e47e1aee34793ef82250778d2f18e266daeaee5b42",
+                "sequence_issuance_trace_root": "blake3:ed2671cc21194d1740c8075ad5351ca3c204aa863fbde071e4b87a171b897c0b",
+                "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+                "b3_token_derivation_hash": "blake3:8ba8a7d9b33c94900b3f4bd6eb74134a64f1119162351ddf68a504a87978fffb",
+                "b3_authoritative_prefix_semantic_seal": "blake3:426065b9b5625b9dbe2da2b6e6eb58a3b35464b2eb0fb3e4a7ae4141cedf4c54",
+                "b3_issuance_trace_root": "blake3:ed2671cc21194d1740c8075ad5351ca3c204aa863fbde071e4b87a171b897c0b",
+                "role_declaration_count": 6,
+                "proved_family_declaration_count": 6,
+                "theorem_impossibility_declaration_count": 0,
+                "named_role_residual_count": 0,
+                "named_quotient_residual_count": 0,
+                "named_a3_residual_count": 0,
+                "silent_residue_count": 0,
+                "t_bi_b1_proved": true,
+                "t_bi_b2_proved": true,
+                "t_bi_b3_proved": true,
+                "package_proved": true,
+                "every_role_declaration_resolved": true,
+                "every_marginal_family_credited_or_theorem_impossible": true,
+                "local_anchor_nonreuse_holds": true,
+                "no_historical_registry_consulted": true,
+                "no_archive_structural_bar_verdict_or_future_input": true,
+                "sequence_no_historical_registry_or_future_input": true,
+                "b3_no_historical_registry_or_legacy_v5_authority": true,
+                "b3_no_archive_structural_bar_verdict_or_future_input": true,
+                "exact_prefix_candidate_package_binding": true,
+                "all_residual_counts_zero": true,
+                "r2_premise": {
+                  "stage": 6,
+                  "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+                  "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+                  "v3_declaration_surface_hash": "blake3:9189735944c180dd74e3bcc8bf9488f772cdc11c0e154fa4e02676ddd751f49a",
+                  "v4_prefix_local_source_hash": "blake3:6ca5f456df8e0689954417744bdf444f048816680aec571fc4b285608def3040",
+                  "v4_source_matches_isolated_package": true,
+                  "v4_source_surface_replayed": true,
+                  "r2_premises_derivation_hash": "blake3:99a6151a95e971d47583713907795a8889645aa5dfc18ed1fbd535e8c9e64502",
+                  "r2_generated_instance_removed_count": 0,
+                  "r2_removed_occurrence_hashes": [],
+                  "r2_parent_slot_label_join_holds": true,
+                  "r2_exact_v3_occurrence_surface_holds": true,
+                  "r2_step8_typed_signature_derivation_hash": null,
+                  "r2_m1_generated_membership_derivation_hash": null,
+                  "r2_m1_generated_membership_replayed": true,
+                  "r2_parent_membership_replayed": true,
+                  "r2_removed_occurrences_absent_from_unified_membership": true,
+                  "r2_removed_occurrences_not_exported_as_families": true,
+                  "r2_generated_instance_not_multiplied": true,
+                  "r2_local_premises_replayed": true,
+                  "non_stage8_projection_is_exact_zero_none_trivial": true,
+                  "v4_forbidden_inputs_absent": true,
+                  "proved": true,
+                  "derivation_hash": "blake3:759933f0d45e25d6fa3414451aff4aed4d7b633dc3d038f8ffa6824d9820f8cd"
+                },
+                "no_history_or_forbidden_input": true,
+                "proved": true,
+                "derivation_hash": "blake3:bdec07348e2041a127eabe883996553f7bf814a8e3439af75ed4baa81f230225"
+              },
+              "disposition": {
+                "kind": "exact_certified",
+                "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+                "certificate_hash": "blake3:bdec07348e2041a127eabe883996553f7bf814a8e3439af75ed4baa81f230225",
+                "counted_family_ids": [
+                  "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+                  "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+                  "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6"
+                ],
+                "authoritative_family_token_hashes": [
+                  "blake3:9c58c785e6b09c87e8295e0d2f2ea207393671ad9a3dcb4aea12ac8472bb5853",
+                  "blake3:ea4b6fed9030a6515fff85d5234fd74bdc6f54d540d11182860b6596e59d0899",
+                  "blake3:8042439a693cf6132a472c1154e22d52636f647b938fca2c9d29a2ec904914e2"
+                ],
+                "generated_instance_family_ids_removed_by_quotient": []
+              },
+              "derivation_hash": "blake3:842a331599423c9ab82744754a1b53a5cfef4e153b3c1bb4e326f365464bff82"
+            },
+            "ordinary_charge_provenance_hash": "blake3:540a1ed6d9fb93567d72add5cf57a2268f1bd5616e62a261679e30df582bfe34",
+            "structural_discharge_evidence": [
+              {
+                "constructor": "truncation_hit",
+                "a3_scheme_id": "blake3:e950578a3755263bcf893e32d9a32f75db06573a3989fc7a5e52c284534364d0",
+                "a3_instance_id": "blake3:916afa2b7f2137798e7210bc2add1f979f6587595956ee9b2db3182b00e5591f",
+                "registration_disposition": "registered",
+                "registration_formation_hash": "blake3:a6b311682d5a25c042e1a5f9df01905b32093949046c7c47ca57e138b68ca367",
+                "registration_replay_valid": true,
+                "realization_disposition": "realized",
+                "realization_hash": "blake3:048dfdf0255ffd85487eaf09f08ec14883f2d445224bc236484ece7c2290ae01",
+                "realization_replay_valid": true,
+                "provider_relation_satisfied": true,
+                "constructor_absent_after_filler": true,
+                "specialized_expression_is_filler_reference": true,
+                "zero_marginal_discharge_charge": true,
+                "typed_total_discharge_replayed": true,
+                "named_gap_id": null,
+                "named_gap_phase": null,
+                "named_gap_error": null,
+                "semantic_evidence_gap": false,
+                "derivation_hash": "blake3:032a893a752489cb17811e5bb1810fa0f654708dbe8749621a8540afe4d2909e"
+              }
+            ],
+            "every_live_structural_demand_realized": true,
+            "semantic_evidence_gap": false,
+            "guarded_total_discharger": true,
+            "rho": "1/1",
+            "diagnostic_clears_bar": false,
+            "derivation_hash": "blake3:9f12103b00136e9fb8d5ceb4f578b4070624db350a17585cfb72aa82d2df9bae"
+          }
+        ],
+        "discharger_hashes": [
+          "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+        ],
+        "discharger_count": 1,
+        "diagnostic_bar_clearing_count": 0,
+        "r2_rule_evidence_hash": null,
+        "r2_applied_only_after_unique_discharge": true,
+        "winner": {
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "canonical_key": "c5484f96",
+          "telescope": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": {
+                  "Trunc": {
+                    "Var": 1
+                  }
+                }
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "App": [
+                    {
+                      "Trunc": {
+                        "Var": 1
+                      }
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                }
+              },
+              {
+                "role": "path_attach",
+                "expr": {
+                  "PathCon": 1
+                }
+              }
+            ]
+          },
+          "kappa": 3,
+          "semantic_nu": 3,
+          "nu_provenance": {
+            "schema": "branch-local-semantic-nu-provenance-v3",
+            "stage": 6,
+            "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+            "predecessor_signature_digest": "blake3:3623fc78ea9b0eaf397258cfd7cfd31e82ad684f6b25b501fcc000155120c473",
+            "structural_formula_total": 8,
+            "r2_generated_instance_adjustment": 0,
+            "diagnostic_nu": 3,
+            "structural_formula_replayed_from_branch_prefix": true,
+            "historical_score_vector_or_bar_used_as_input": false,
+            "semantic_family_evidence_v3": {
+              "schema": "branch-prefix-candidate-semantic-provenance-v3",
+              "date": "2026-07-23",
+              "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+              "stage": 6,
+              "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+              "predecessor_entry_count": 5,
+              "predecessor_stages": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "predecessor_candidate_hashes": [
+                "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+                "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+                "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+                "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+                "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+              ],
+              "predecessor_signature_digest": "blake3:3623fc78ea9b0eaf397258cfd7cfd31e82ad684f6b25b501fcc000155120c473",
+              "semantic_nu": 3,
+              "credited_family_ids": [
+                "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+                "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+                "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6"
+              ],
+              "credited_family_rows": [
+                {
+                  "family_id": "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+                  "authoritative_family_row_derivation_hash": "blake3:9c58c785e6b09c87e8295e0d2f2ea207393671ad9a3dcb4aea12ac8472bb5853"
+                },
+                {
+                  "family_id": "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+                  "authoritative_family_row_derivation_hash": "blake3:ea4b6fed9030a6515fff85d5234fd74bdc6f54d540d11182860b6596e59d0899"
+                },
+                {
+                  "family_id": "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6",
+                  "authoritative_family_row_derivation_hash": "blake3:8042439a693cf6132a472c1154e22d52636f647b938fca2c9d29a2ec904914e2"
+                }
+              ],
+              "exact_credited_family_row_join": true,
+              "package_derivation_hash": "blake3:b73569f769e2cbf736e4bb0a866682c94ba3f0c1eff0692200a2e2d83b13a231",
+              "package_v3_declaration_hash": "blake3:9189735944c180dd74e3bcc8bf9488f772cdc11c0e154fa4e02676ddd751f49a",
+              "package_v4_candidate_local_source_hash": "blake3:6ca5f456df8e0689954417744bdf444f048816680aec571fc4b285608def3040",
+              "sequence_derivation_hash": "blake3:e8019788307441253bf3f42c92f65f804fb863519bd5ce6e7b1e7954dc808f13",
+              "sequence_authoritative_seal": "blake3:e41c3c06a01e40c34e4177e47e1aee34793ef82250778d2f18e266daeaee5b42",
+              "sequence_issuance_trace_root": "blake3:ed2671cc21194d1740c8075ad5351ca3c204aa863fbde071e4b87a171b897c0b",
+              "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+              "b3_token_derivation_hash": "blake3:8ba8a7d9b33c94900b3f4bd6eb74134a64f1119162351ddf68a504a87978fffb",
+              "b3_authoritative_prefix_semantic_seal": "blake3:426065b9b5625b9dbe2da2b6e6eb58a3b35464b2eb0fb3e4a7ae4141cedf4c54",
+              "b3_issuance_trace_root": "blake3:ed2671cc21194d1740c8075ad5351ca3c204aa863fbde071e4b87a171b897c0b",
+              "role_declaration_count": 6,
+              "proved_family_declaration_count": 6,
+              "theorem_impossibility_declaration_count": 0,
+              "named_role_residual_count": 0,
+              "named_quotient_residual_count": 0,
+              "named_a3_residual_count": 0,
+              "silent_residue_count": 0,
+              "t_bi_b1_proved": true,
+              "t_bi_b2_proved": true,
+              "t_bi_b3_proved": true,
+              "package_proved": true,
+              "every_role_declaration_resolved": true,
+              "every_marginal_family_credited_or_theorem_impossible": true,
+              "local_anchor_nonreuse_holds": true,
+              "no_historical_registry_consulted": true,
+              "no_archive_structural_bar_verdict_or_future_input": true,
+              "sequence_no_historical_registry_or_future_input": true,
+              "b3_no_historical_registry_or_legacy_v5_authority": true,
+              "b3_no_archive_structural_bar_verdict_or_future_input": true,
+              "exact_prefix_candidate_package_binding": true,
+              "all_residual_counts_zero": true,
+              "r2_premise": {
+                "stage": 6,
+                "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+                "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+                "v3_declaration_surface_hash": "blake3:9189735944c180dd74e3bcc8bf9488f772cdc11c0e154fa4e02676ddd751f49a",
+                "v4_prefix_local_source_hash": "blake3:6ca5f456df8e0689954417744bdf444f048816680aec571fc4b285608def3040",
+                "v4_source_matches_isolated_package": true,
+                "v4_source_surface_replayed": true,
+                "r2_premises_derivation_hash": "blake3:99a6151a95e971d47583713907795a8889645aa5dfc18ed1fbd535e8c9e64502",
+                "r2_generated_instance_removed_count": 0,
+                "r2_removed_occurrence_hashes": [],
+                "r2_parent_slot_label_join_holds": true,
+                "r2_exact_v3_occurrence_surface_holds": true,
+                "r2_step8_typed_signature_derivation_hash": null,
+                "r2_m1_generated_membership_derivation_hash": null,
+                "r2_m1_generated_membership_replayed": true,
+                "r2_parent_membership_replayed": true,
+                "r2_removed_occurrences_absent_from_unified_membership": true,
+                "r2_removed_occurrences_not_exported_as_families": true,
+                "r2_generated_instance_not_multiplied": true,
+                "r2_local_premises_replayed": true,
+                "non_stage8_projection_is_exact_zero_none_trivial": true,
+                "v4_forbidden_inputs_absent": true,
+                "proved": true,
+                "derivation_hash": "blake3:759933f0d45e25d6fa3414451aff4aed4d7b633dc3d038f8ffa6824d9820f8cd"
+              },
+              "no_history_or_forbidden_input": true,
+              "proved": true,
+              "derivation_hash": "blake3:bdec07348e2041a127eabe883996553f7bf814a8e3439af75ed4baa81f230225"
+            },
+            "disposition": {
+              "kind": "exact_certified",
+              "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+              "certificate_hash": "blake3:bdec07348e2041a127eabe883996553f7bf814a8e3439af75ed4baa81f230225",
+              "counted_family_ids": [
+                "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+                "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+                "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6"
+              ],
+              "authoritative_family_token_hashes": [
+                "blake3:9c58c785e6b09c87e8295e0d2f2ea207393671ad9a3dcb4aea12ac8472bb5853",
+                "blake3:ea4b6fed9030a6515fff85d5234fd74bdc6f54d540d11182860b6596e59d0899",
+                "blake3:8042439a693cf6132a472c1154e22d52636f647b938fca2c9d29a2ec904914e2"
+              ],
+              "generated_instance_family_ids_removed_by_quotient": []
+            },
+            "derivation_hash": "blake3:842a331599423c9ab82744754a1b53a5cfef4e153b3c1bb4e326f365464bff82"
+          },
+          "selected_by": "unique_typed_a3_total_discharger",
+          "diagnostic_clears_bar": false,
+          "derivation_hash": "blake3:0b2a81603c60be617d8265c141212631e1cae60fccc5dea8e53d7f12dfe82623"
+        },
+        "derivation_hash": "blake3:2ad20b2f301e8db91a2caf157e45afbfa3afc0df0f5ccdcbe842b9da3405ca6b"
+      },
+      {
+        "stage": 7,
+        "demand": {
+          "stage": 7,
+          "prefix_signature_digest": "blake3:924de8817389686f8add45bb8b4edadfc30ac35f887c71f0e82041ea5eb1d1b8",
+          "coarse_required_packages": [
+            "higher_hit"
+          ],
+          "a3_required_packages": [
+            "higher_hit"
+          ],
+          "structural_constructors": [
+            "higher_hit"
+          ],
+          "structural_scheme_ids": [
+            "blake3:f37e6e443bb48198cc7076f7795c1bcee729ec038ae2dfd3b1071fdd9185d926"
+          ],
+          "structural_instance_ids": [
+            "blake3:9a9615842cf6823b09bef37855781a7cf2b142c3520c6dda3c7a1c1b4d42fc9f"
+          ],
+          "a3_window_derivation_hash": "blake3:8ecf525b74c1bd1c9240a9cf8bdeabc4e81f3ac948cc2921210ccb4f1bb42190",
+          "a3_inventory_derivation_hash": "blake3:61de19c1defaec098e02939b23cfa506d18eb914feec146036317b65f95172e5",
+          "exact_prefix_inventory_exhaustive": true,
+          "coarse_and_a3_demands_agree": true,
+          "debt_free": false,
+          "derivation_hash": "blake3:9e86425c29d6565619727477fd90d243f59564332521c07bf92dc4f6400f9f1d"
+        },
+        "diagnostic_bar": "13/8",
+        "bar_used_as_gate_or_selector": false,
+        "score_used_as_selector": false,
+        "cone_enumerated": 1,
+        "cone_admitted": 1,
+        "cone_deduped": 1,
+        "cone_digest": "blake3:1aac2a656f4e9d2a3f8be6c12a5af12a8cf3775a435dd4009d722ec851bf1b65",
+        "assessments": [
+          {
+            "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+            "canonical_key": "fd0f421a",
+            "telescope": {
+              "clauses": [
+                {
+                  "role": "formation",
+                  "expr": {
+                    "App": [
+                      "Univ",
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "role": "path_attach",
+                  "expr": {
+                    "PathCon": 2
+                  }
+                }
+              ]
+            },
+            "kappa": 3,
+            "bit_kappa": 23,
+            "kernel_typed": true,
+            "kernel_failure": null,
+            "elaboration_derivation_hash": "blake3:48f6108e6adce44fda3ddf7f6942d446725d449f67196d02d89f20ee14287d5e",
+            "identified_with_prefix": false,
+            "structural_formula_total": 10,
+            "r2_generated_instance_adjustment": 0,
+            "r2_generated_action_evidence": [],
+            "r2_applied_after_unique_discharge": false,
+            "semantic_nu": 1,
+            "local_role_capacity": 12,
+            "live_demand_output_capacity": 780,
+            "diagnostic_formula_replayed_and_capacity_bound_satisfied": true,
+            "nu_provenance": {
+              "schema": "branch-local-semantic-nu-provenance-v3",
+              "stage": 7,
+              "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+              "predecessor_signature_digest": "blake3:924de8817389686f8add45bb8b4edadfc30ac35f887c71f0e82041ea5eb1d1b8",
+              "structural_formula_total": 10,
+              "r2_generated_instance_adjustment": 0,
+              "diagnostic_nu": 1,
+              "structural_formula_replayed_from_branch_prefix": true,
+              "historical_score_vector_or_bar_used_as_input": false,
+              "semantic_family_evidence_v3": {
+                "schema": "branch-prefix-candidate-semantic-provenance-v3",
+                "date": "2026-07-23",
+                "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+                "stage": 7,
+                "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+                "predecessor_entry_count": 6,
+                "predecessor_stages": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
+                "predecessor_candidate_hashes": [
+                  "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+                  "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+                  "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+                  "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+                  "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+                  "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+                ],
+                "predecessor_signature_digest": "blake3:924de8817389686f8add45bb8b4edadfc30ac35f887c71f0e82041ea5eb1d1b8",
+                "semantic_nu": 1,
+                "credited_family_ids": [
+                  "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99"
+                ],
+                "credited_family_rows": [
+                  {
+                    "family_id": "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99",
+                    "authoritative_family_row_derivation_hash": "blake3:1c13930435c3a9aaa422c3191be1def4447d1b0d11b518865a7d7d396da49108"
+                  }
+                ],
+                "exact_credited_family_row_join": true,
+                "package_derivation_hash": "blake3:4a03a20a7c63433538a90fc0914a300f7779645d884011718085e8f67a66ada5",
+                "package_v3_declaration_hash": "blake3:030f9c76c2f35483c2777fdd806db69da593077a10fd21465b7c6953654500bb",
+                "package_v4_candidate_local_source_hash": "blake3:c4d0c63d616bdf27294ac9fccb5d99e73abe9b46a410776d5cc651eb186e205b",
+                "sequence_derivation_hash": "blake3:5b210be6655fdedb8b73e1d4746f1bb562e62c62be87fd584af3c58410817207",
+                "sequence_authoritative_seal": "blake3:846119c575fc3cfce149c8306654b031e4da46b71d8e4600517810a1e474cb16",
+                "sequence_issuance_trace_root": "blake3:f58bb3da265b5f2f43e4bb2df4e72fc0391456966f448e5aef61bd9aef969baf",
+                "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+                "b3_token_derivation_hash": "blake3:2acac278ec47d6b92585ace06acae825fab6dd91edc71a6afc3ec5028d0e01cc",
+                "b3_authoritative_prefix_semantic_seal": "blake3:8ca50d69fdfefb50036e8bc3e1022962944a2ac25ad5b01943cf26a497f9f76a",
+                "b3_issuance_trace_root": "blake3:f58bb3da265b5f2f43e4bb2df4e72fc0391456966f448e5aef61bd9aef969baf",
+                "role_declaration_count": 5,
+                "proved_family_declaration_count": 5,
+                "theorem_impossibility_declaration_count": 0,
+                "named_role_residual_count": 0,
+                "named_quotient_residual_count": 0,
+                "named_a3_residual_count": 0,
+                "silent_residue_count": 0,
+                "t_bi_b1_proved": true,
+                "t_bi_b2_proved": true,
+                "t_bi_b3_proved": true,
+                "package_proved": true,
+                "every_role_declaration_resolved": true,
+                "every_marginal_family_credited_or_theorem_impossible": true,
+                "local_anchor_nonreuse_holds": true,
+                "no_historical_registry_consulted": true,
+                "no_archive_structural_bar_verdict_or_future_input": true,
+                "sequence_no_historical_registry_or_future_input": true,
+                "b3_no_historical_registry_or_legacy_v5_authority": true,
+                "b3_no_archive_structural_bar_verdict_or_future_input": true,
+                "exact_prefix_candidate_package_binding": true,
+                "all_residual_counts_zero": true,
+                "r2_premise": {
+                  "stage": 7,
+                  "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+                  "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+                  "v3_declaration_surface_hash": "blake3:030f9c76c2f35483c2777fdd806db69da593077a10fd21465b7c6953654500bb",
+                  "v4_prefix_local_source_hash": "blake3:c4d0c63d616bdf27294ac9fccb5d99e73abe9b46a410776d5cc651eb186e205b",
+                  "v4_source_matches_isolated_package": true,
+                  "v4_source_surface_replayed": true,
+                  "r2_premises_derivation_hash": "blake3:b2ad8d78523efff4481f8a7464cfe8eba5ed47271fdfe9aee0445ced1d0d22ee",
+                  "r2_generated_instance_removed_count": 0,
+                  "r2_removed_occurrence_hashes": [],
+                  "r2_parent_slot_label_join_holds": true,
+                  "r2_exact_v3_occurrence_surface_holds": true,
+                  "r2_step8_typed_signature_derivation_hash": null,
+                  "r2_m1_generated_membership_derivation_hash": null,
+                  "r2_m1_generated_membership_replayed": true,
+                  "r2_parent_membership_replayed": true,
+                  "r2_removed_occurrences_absent_from_unified_membership": true,
+                  "r2_removed_occurrences_not_exported_as_families": true,
+                  "r2_generated_instance_not_multiplied": true,
+                  "r2_local_premises_replayed": true,
+                  "non_stage8_projection_is_exact_zero_none_trivial": true,
+                  "v4_forbidden_inputs_absent": true,
+                  "proved": true,
+                  "derivation_hash": "blake3:efa07895206e2199fc49e5779d79a07c410f2eb26592eb82c11877989a1402f4"
+                },
+                "no_history_or_forbidden_input": true,
+                "proved": true,
+                "derivation_hash": "blake3:b5ab37e094b49c83230be111e5f6e551891a3caa3e9ca24530d820461bd1d5d9"
+              },
+              "disposition": {
+                "kind": "exact_certified",
+                "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+                "certificate_hash": "blake3:b5ab37e094b49c83230be111e5f6e551891a3caa3e9ca24530d820461bd1d5d9",
+                "counted_family_ids": [
+                  "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99"
+                ],
+                "authoritative_family_token_hashes": [
+                  "blake3:1c13930435c3a9aaa422c3191be1def4447d1b0d11b518865a7d7d396da49108"
+                ],
+                "generated_instance_family_ids_removed_by_quotient": []
+              },
+              "derivation_hash": "blake3:bacba3c2f971f306caa05fd18740e141067d6c792008511a7056d242e3662a9d"
+            },
+            "ordinary_charge_provenance_hash": "blake3:aa84d54f354b997535d7656e8e2bbc1db01a70d9bb10f7e62c5f1bc20b1f3b1e",
+            "structural_discharge_evidence": [
+              {
+                "constructor": "higher_hit",
+                "a3_scheme_id": "blake3:f37e6e443bb48198cc7076f7795c1bcee729ec038ae2dfd3b1071fdd9185d926",
+                "a3_instance_id": "blake3:9a9615842cf6823b09bef37855781a7cf2b142c3520c6dda3c7a1c1b4d42fc9f",
+                "registration_disposition": "registered",
+                "registration_formation_hash": "blake3:16b53223d55b3e99f8d821be0693bd26cc614d4f177e7628fb1dcfc52d90603b",
+                "registration_replay_valid": true,
+                "realization_disposition": "realized",
+                "realization_hash": "blake3:142b94ce20a61346cb9bc63f0c07b1fb272ca11a5dd3c3b2cd383f8464b19537",
+                "realization_replay_valid": true,
+                "provider_relation_satisfied": true,
+                "constructor_absent_after_filler": true,
+                "specialized_expression_is_filler_reference": true,
+                "zero_marginal_discharge_charge": true,
+                "typed_total_discharge_replayed": true,
+                "named_gap_id": null,
+                "named_gap_phase": null,
+                "named_gap_error": null,
+                "semantic_evidence_gap": false,
+                "derivation_hash": "blake3:261bc6eb9e720851dc744338ec733ff1cec1be387549586ecdda67fa7b863f7f"
+              }
+            ],
+            "every_live_structural_demand_realized": true,
+            "semantic_evidence_gap": false,
+            "guarded_total_discharger": true,
+            "rho": "1/3",
+            "diagnostic_clears_bar": false,
+            "derivation_hash": "blake3:e1c0b6d7194937390dd7aeafe9a7b6685ea8be6d89c78f0b249da1bdaa78085b"
+          }
+        ],
+        "discharger_hashes": [
+          "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"
+        ],
+        "discharger_count": 1,
+        "diagnostic_bar_clearing_count": 0,
+        "r2_rule_evidence_hash": null,
+        "r2_applied_only_after_unique_discharge": true,
+        "winner": {
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "canonical_key": "fd0f421a",
+          "telescope": {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": {
+                  "App": [
+                    "Univ",
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "role": "introduction",
+                "expr": {
+                  "Var": 1
+                }
+              },
+              {
+                "role": "path_attach",
+                "expr": {
+                  "PathCon": 2
+                }
+              }
+            ]
+          },
+          "kappa": 3,
+          "semantic_nu": 1,
+          "nu_provenance": {
+            "schema": "branch-local-semantic-nu-provenance-v3",
+            "stage": 7,
+            "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+            "predecessor_signature_digest": "blake3:924de8817389686f8add45bb8b4edadfc30ac35f887c71f0e82041ea5eb1d1b8",
+            "structural_formula_total": 10,
+            "r2_generated_instance_adjustment": 0,
+            "diagnostic_nu": 1,
+            "structural_formula_replayed_from_branch_prefix": true,
+            "historical_score_vector_or_bar_used_as_input": false,
+            "semantic_family_evidence_v3": {
+              "schema": "branch-prefix-candidate-semantic-provenance-v3",
+              "date": "2026-07-23",
+              "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+              "stage": 7,
+              "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+              "predecessor_entry_count": 6,
+              "predecessor_stages": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "predecessor_candidate_hashes": [
+                "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+                "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+                "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+                "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+                "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+                "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+              ],
+              "predecessor_signature_digest": "blake3:924de8817389686f8add45bb8b4edadfc30ac35f887c71f0e82041ea5eb1d1b8",
+              "semantic_nu": 1,
+              "credited_family_ids": [
+                "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99"
+              ],
+              "credited_family_rows": [
+                {
+                  "family_id": "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99",
+                  "authoritative_family_row_derivation_hash": "blake3:1c13930435c3a9aaa422c3191be1def4447d1b0d11b518865a7d7d396da49108"
+                }
+              ],
+              "exact_credited_family_row_join": true,
+              "package_derivation_hash": "blake3:4a03a20a7c63433538a90fc0914a300f7779645d884011718085e8f67a66ada5",
+              "package_v3_declaration_hash": "blake3:030f9c76c2f35483c2777fdd806db69da593077a10fd21465b7c6953654500bb",
+              "package_v4_candidate_local_source_hash": "blake3:c4d0c63d616bdf27294ac9fccb5d99e73abe9b46a410776d5cc651eb186e205b",
+              "sequence_derivation_hash": "blake3:5b210be6655fdedb8b73e1d4746f1bb562e62c62be87fd584af3c58410817207",
+              "sequence_authoritative_seal": "blake3:846119c575fc3cfce149c8306654b031e4da46b71d8e4600517810a1e474cb16",
+              "sequence_issuance_trace_root": "blake3:f58bb3da265b5f2f43e4bb2df4e72fc0391456966f448e5aef61bd9aef969baf",
+              "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+              "b3_token_derivation_hash": "blake3:2acac278ec47d6b92585ace06acae825fab6dd91edc71a6afc3ec5028d0e01cc",
+              "b3_authoritative_prefix_semantic_seal": "blake3:8ca50d69fdfefb50036e8bc3e1022962944a2ac25ad5b01943cf26a497f9f76a",
+              "b3_issuance_trace_root": "blake3:f58bb3da265b5f2f43e4bb2df4e72fc0391456966f448e5aef61bd9aef969baf",
+              "role_declaration_count": 5,
+              "proved_family_declaration_count": 5,
+              "theorem_impossibility_declaration_count": 0,
+              "named_role_residual_count": 0,
+              "named_quotient_residual_count": 0,
+              "named_a3_residual_count": 0,
+              "silent_residue_count": 0,
+              "t_bi_b1_proved": true,
+              "t_bi_b2_proved": true,
+              "t_bi_b3_proved": true,
+              "package_proved": true,
+              "every_role_declaration_resolved": true,
+              "every_marginal_family_credited_or_theorem_impossible": true,
+              "local_anchor_nonreuse_holds": true,
+              "no_historical_registry_consulted": true,
+              "no_archive_structural_bar_verdict_or_future_input": true,
+              "sequence_no_historical_registry_or_future_input": true,
+              "b3_no_historical_registry_or_legacy_v5_authority": true,
+              "b3_no_archive_structural_bar_verdict_or_future_input": true,
+              "exact_prefix_candidate_package_binding": true,
+              "all_residual_counts_zero": true,
+              "r2_premise": {
+                "stage": 7,
+                "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+                "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+                "v3_declaration_surface_hash": "blake3:030f9c76c2f35483c2777fdd806db69da593077a10fd21465b7c6953654500bb",
+                "v4_prefix_local_source_hash": "blake3:c4d0c63d616bdf27294ac9fccb5d99e73abe9b46a410776d5cc651eb186e205b",
+                "v4_source_matches_isolated_package": true,
+                "v4_source_surface_replayed": true,
+                "r2_premises_derivation_hash": "blake3:b2ad8d78523efff4481f8a7464cfe8eba5ed47271fdfe9aee0445ced1d0d22ee",
+                "r2_generated_instance_removed_count": 0,
+                "r2_removed_occurrence_hashes": [],
+                "r2_parent_slot_label_join_holds": true,
+                "r2_exact_v3_occurrence_surface_holds": true,
+                "r2_step8_typed_signature_derivation_hash": null,
+                "r2_m1_generated_membership_derivation_hash": null,
+                "r2_m1_generated_membership_replayed": true,
+                "r2_parent_membership_replayed": true,
+                "r2_removed_occurrences_absent_from_unified_membership": true,
+                "r2_removed_occurrences_not_exported_as_families": true,
+                "r2_generated_instance_not_multiplied": true,
+                "r2_local_premises_replayed": true,
+                "non_stage8_projection_is_exact_zero_none_trivial": true,
+                "v4_forbidden_inputs_absent": true,
+                "proved": true,
+                "derivation_hash": "blake3:efa07895206e2199fc49e5779d79a07c410f2eb26592eb82c11877989a1402f4"
+              },
+              "no_history_or_forbidden_input": true,
+              "proved": true,
+              "derivation_hash": "blake3:b5ab37e094b49c83230be111e5f6e551891a3caa3e9ca24530d820461bd1d5d9"
+            },
+            "disposition": {
+              "kind": "exact_certified",
+              "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+              "certificate_hash": "blake3:b5ab37e094b49c83230be111e5f6e551891a3caa3e9ca24530d820461bd1d5d9",
+              "counted_family_ids": [
+                "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99"
+              ],
+              "authoritative_family_token_hashes": [
+                "blake3:1c13930435c3a9aaa422c3191be1def4447d1b0d11b518865a7d7d396da49108"
+              ],
+              "generated_instance_family_ids_removed_by_quotient": []
+            },
+            "derivation_hash": "blake3:bacba3c2f971f306caa05fd18740e141067d6c792008511a7056d242e3662a9d"
+          },
+          "selected_by": "unique_typed_a3_total_discharger",
+          "diagnostic_clears_bar": false,
+          "derivation_hash": "blake3:1c9ea02d4dd941e8a88ba4b44b9ea061c1c9c600a5551f6cb3ee275b9e951585"
+        },
+        "derivation_hash": "blake3:9f407487c2866a55b9eac66966f76c59d8dbac39c0c851c4bd8418b7a7921342"
+      },
+      {
+        "stage": 8,
+        "demand": {
+          "stage": 8,
+          "prefix_signature_digest": "blake3:cd01eb0f6d32cfefe56125be904c6760c26246806e471825c87219729357b26f",
+          "coarse_required_packages": [
+            "sphere_lift"
+          ],
+          "a3_required_packages": [
+            "sphere_lift"
+          ],
+          "structural_constructors": [
+            "sphere_lift"
+          ],
+          "structural_scheme_ids": [
+            "blake3:b092b6a22f9d8c69c1b305505db804bcadf9016c943921f64dd20d9f149851c0"
+          ],
+          "structural_instance_ids": [
+            "blake3:f7edc811038b2829e119adb7a548d7789185305524c91c47430b7d35501d1c44"
+          ],
+          "a3_window_derivation_hash": "blake3:ab408769eeb59630a982cdb20eec4aeaf232527a95fd39a75b81e6b0a07321fb",
+          "a3_inventory_derivation_hash": "blake3:c24c3f89a929e4d5a77cc4ba941684750474e505184801c4e120d82867194b1b",
+          "exact_prefix_inventory_exhaustive": true,
+          "coarse_and_a3_demands_agree": true,
+          "debt_free": false,
+          "derivation_hash": "blake3:34164a6e0f46092cf3509f0d56c04d748f26fafed458a4c4b021b76bf2049ec9"
+        },
+        "diagnostic_bar": "147/104",
+        "bar_used_as_gate_or_selector": false,
+        "score_used_as_selector": false,
+        "cone_enumerated": 1,
+        "cone_admitted": 1,
+        "cone_deduped": 1,
+        "cone_digest": "blake3:2e33ddf67fa66397a274deef8075c9830f4ca1bb4a7d902ed0b41738f15e6ff8",
+        "assessments": [
+          {
+            "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+            "canonical_key": "7c7f677a",
+            "telescope": {
+              "clauses": [
+                {
+                  "role": "formation",
+                  "expr": {
+                    "App": [
+                      "Univ",
+                      {
+                        "Var": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "role": "path_attach",
+                  "expr": {
+                    "PathCon": 3
+                  }
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "Lam": {
+                      "Var": 1
+                    }
+                  }
+                },
+                {
+                  "role": "introduction",
+                  "expr": {
+                    "Lam": {
+                      "Var": 2
+                    }
+                  }
+                }
+              ]
+            },
+            "kappa": 5,
+            "bit_kappa": 37,
+            "kernel_typed": true,
+            "kernel_failure": null,
+            "elaboration_derivation_hash": "blake3:5999e105bddef00ae6c931d298b650948e560028dbaef904935785625f3768fc",
+            "identified_with_prefix": false,
+            "structural_formula_total": 18,
+            "r2_generated_instance_adjustment": 0,
+            "r2_generated_action_evidence": [],
+            "r2_applied_after_unique_discharge": false,
+            "semantic_nu": 18,
+            "local_role_capacity": 20,
+            "live_demand_output_capacity": 780,
+            "diagnostic_formula_replayed_and_capacity_bound_satisfied": true,
+            "nu_provenance": {
+              "schema": "branch-local-semantic-nu-provenance-v3",
+              "stage": 8,
+              "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+              "predecessor_signature_digest": "blake3:cd01eb0f6d32cfefe56125be904c6760c26246806e471825c87219729357b26f",
+              "structural_formula_total": 18,
+              "r2_generated_instance_adjustment": 0,
+              "diagnostic_nu": 18,
+              "structural_formula_replayed_from_branch_prefix": true,
+              "historical_score_vector_or_bar_used_as_input": false,
+              "semantic_family_evidence_v3": null,
+              "disposition": {
+                "kind": "diagnostic_formula_only",
+                "missing_theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+                "exact_gap": "BI_ACT_LOCAL_PROVENANCE_ISSUANCE_GAP: branch semantic v3 intrinsic isolation failed: T-BI-B3 v3 source binding failed: invalid v5 input: v4 kernel family extraction failed: source-bound Step-8 typed boundary failed: V3 historical predecessor signature is not the exact sealed B_7"
+              },
+              "derivation_hash": "blake3:523f8dc96da00660516db654d984724d84f9538d91e45e92859b24b28010b0c4"
+            },
+            "ordinary_charge_provenance_hash": "blake3:35a552e16c6ea6b83344346248c0b72b299054817754ba3f553fa36b236cd00a",
+            "structural_discharge_evidence": [],
+            "every_live_structural_demand_realized": false,
+            "semantic_evidence_gap": true,
+            "guarded_total_discharger": false,
+            "rho": "18/5",
+            "diagnostic_clears_bar": true,
+            "derivation_hash": "blake3:5619f6bf9186c54d119c7de723a9863699eb555d0d25b745bef30fa2a560e5e4"
+          }
+        ],
+        "discharger_hashes": [],
+        "discharger_count": 0,
+        "diagnostic_bar_clearing_count": 1,
+        "r2_rule_evidence_hash": null,
+        "r2_applied_only_after_unique_discharge": true,
+        "winner": null,
+        "derivation_hash": "blake3:5726276124872755ebe3e4f1ff86c2285a9d225eca324aa30d242c14397c2225"
+      }
+    ],
+    "terminal_demand": {
+      "stage": 8,
+      "prefix_signature_digest": "blake3:cd01eb0f6d32cfefe56125be904c6760c26246806e471825c87219729357b26f",
+      "coarse_required_packages": [
+        "sphere_lift"
+      ],
+      "a3_required_packages": [
+        "sphere_lift"
+      ],
+      "structural_constructors": [
+        "sphere_lift"
+      ],
+      "structural_scheme_ids": [
+        "blake3:b092b6a22f9d8c69c1b305505db804bcadf9016c943921f64dd20d9f149851c0"
+      ],
+      "structural_instance_ids": [
+        "blake3:f7edc811038b2829e119adb7a548d7789185305524c91c47430b7d35501d1c44"
+      ],
+      "a3_window_derivation_hash": "blake3:ab408769eeb59630a982cdb20eec4aeaf232527a95fd39a75b81e6b0a07321fb",
+      "a3_inventory_derivation_hash": "blake3:c24c3f89a929e4d5a77cc4ba941684750474e505184801c4e120d82867194b1b",
+      "exact_prefix_inventory_exhaustive": true,
+      "coarse_and_a3_demands_agree": true,
+      "debt_free": false,
+      "derivation_hash": "blake3:34164a6e0f46092cf3509f0d56c04d748f26fafed458a4c4b021b76bf2049ec9"
+    },
+    "outcome": {
+      "kind": "expressivity_gap",
+      "stage": 8,
+      "exact_error": "BI_CANDIDATE_CONE_SEMANTIC_GAP: Stage-8 candidate blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0 is Unknown, so the known discharger census cannot establish uniqueness"
+    },
+    "complete_ledger": [
+      {
+        "stage": 1,
+        "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "kappa": 2,
+        "semantic_nu": 1,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 1,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "predecessor_signature_digest": "blake3:fcfaddfd614022b3f5b0daabd7c06751e7dbac04aee5469c49043d2423c66e20",
+          "structural_formula_total": 1,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 1,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 1,
+            "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+            "predecessor_entry_count": 0,
+            "predecessor_stages": [],
+            "predecessor_candidate_hashes": [],
+            "predecessor_signature_digest": "blake3:fcfaddfd614022b3f5b0daabd7c06751e7dbac04aee5469c49043d2423c66e20",
+            "semantic_nu": 1,
+            "credited_family_ids": [
+              "blake3:25a30e71c82c25e4dbce578f0c9f00507a90a2df7c005100a22fdfa32cc13583"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:25a30e71c82c25e4dbce578f0c9f00507a90a2df7c005100a22fdfa32cc13583",
+                "authoritative_family_row_derivation_hash": "blake3:c164a70e276ff19491b4cd41027781e71beba6808a43bcc6fce572d49aa9116c"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:269bc99d0ba38460d9c18b9a2e2113fbb71373b24acd4c7212239cf6493d2637",
+            "package_v3_declaration_hash": "blake3:0c3784481b1557b089f01a76d24d51daa256ebe13d28c786cde000a48dbfaed0",
+            "package_v4_candidate_local_source_hash": "blake3:c5a9212bc32eccf32178eedfb627ce291a53895b0df2c80e1fb26b053b5d7688",
+            "sequence_derivation_hash": "blake3:0c204c60fd1dbc3d104a1ea483213375cd801f13c3ddee9952b348cb774b3de5",
+            "sequence_authoritative_seal": "blake3:3f3ec8fc4cddca8d47f12202d86d4bd3fa10efdf6b728607a9c6c8dc4cb048b6",
+            "sequence_issuance_trace_root": "blake3:3bf1ca08d3ec54073c63ba229e34b319a2b711819fd4d98699ce0e3f24eeb07e",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:7374587ba9c994730b299b1ac27ca90685b17c5867db9c60e31421c1e8baae79",
+            "b3_authoritative_prefix_semantic_seal": "blake3:b4b06ea3e7cb8ce375da01ec0f2ef4a1b065379c620a09ed0334a79eaaf8e9c5",
+            "b3_issuance_trace_root": "blake3:3bf1ca08d3ec54073c63ba229e34b319a2b711819fd4d98699ce0e3f24eeb07e",
+            "role_declaration_count": 1,
+            "proved_family_declaration_count": 1,
+            "theorem_impossibility_declaration_count": 0,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 1,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:0c3784481b1557b089f01a76d24d51daa256ebe13d28c786cde000a48dbfaed0",
+              "v4_prefix_local_source_hash": "blake3:c5a9212bc32eccf32178eedfb627ce291a53895b0df2c80e1fb26b053b5d7688",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:67456c5258f7de2baa1895a6d14cb01ca3a03e4a687f8a5eecea6686219a6876",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:e4b8aceac06b7a0442ab9fc8d67ee30997c22c47229130c3441bd26a13cd5fce"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:26d1fe74809e10cc0ad3ad0378cfa92991d0978d64fa999cd23212e72ceb47b4"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:26d1fe74809e10cc0ad3ad0378cfa92991d0978d64fa999cd23212e72ceb47b4",
+            "counted_family_ids": [
+              "blake3:25a30e71c82c25e4dbce578f0c9f00507a90a2df7c005100a22fdfa32cc13583"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:c164a70e276ff19491b4cd41027781e71beba6808a43bcc6fce572d49aa9116c"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:d7627bd23ea69e5b5468dbf1ec660305d31e37c8a2a628895681469229a82543"
+        }
+      },
+      {
+        "stage": 2,
+        "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "kappa": 1,
+        "semantic_nu": 0,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 2,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "predecessor_signature_digest": "blake3:be623a2f25ae686ac37301c38ba62bb96a67b5e42f10604e3d6df96f11032005",
+          "structural_formula_total": 1,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 0,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 2,
+            "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+            "predecessor_entry_count": 1,
+            "predecessor_stages": [
+              1
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7"
+            ],
+            "predecessor_signature_digest": "blake3:be623a2f25ae686ac37301c38ba62bb96a67b5e42f10604e3d6df96f11032005",
+            "semantic_nu": 0,
+            "credited_family_ids": [],
+            "credited_family_rows": [],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:90980691457d7a62146698b8c0fb90d6c25aefb463ff576b71f461eb9d8f6448",
+            "package_v3_declaration_hash": "blake3:da2a54b12d5d7ee1d52cb9328d4a24a227b66a2c5dc4ac4dbf9c0f7f3343ea66",
+            "package_v4_candidate_local_source_hash": "blake3:2ff6316089d33e4711e75796c6875be6377e846457bf23a685587f9586efcc3d",
+            "sequence_derivation_hash": "blake3:0c92be4cf0732fb31935c07a7eb195c7bbaab81ffc2029c16903d4983d2e2088",
+            "sequence_authoritative_seal": "blake3:c70dd521109adf91712006d966a605d0b460ad4df08ef3c454b90315cb04533e",
+            "sequence_issuance_trace_root": "blake3:7906fdfcb0214ef4fbd50865b8b4d664515b2cf9ef5c2afe406d5ff0e1121774",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:eeb412b43a6000218d90b25cbc9aa03813449f32df1ec502e2ceaeec0f294ed0",
+            "b3_authoritative_prefix_semantic_seal": "blake3:9612829830ea6fc7ef45df186ac80fe62cf1239c35302775fdb763f889d442f2",
+            "b3_issuance_trace_root": "blake3:7906fdfcb0214ef4fbd50865b8b4d664515b2cf9ef5c2afe406d5ff0e1121774",
+            "role_declaration_count": 1,
+            "proved_family_declaration_count": 1,
+            "theorem_impossibility_declaration_count": 0,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 2,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:da2a54b12d5d7ee1d52cb9328d4a24a227b66a2c5dc4ac4dbf9c0f7f3343ea66",
+              "v4_prefix_local_source_hash": "blake3:2ff6316089d33e4711e75796c6875be6377e846457bf23a685587f9586efcc3d",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:2d6b15978948ee97538a0b1dbaa5baa4494c5123777d612f7723737ed045b4b6",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:6971b6d78de08d36c556b8c13232149814135f6cc839e19d3edacf8183a117aa"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:837273b4608ce60789a263b90547985e88d01b5d596d2bcab09cf8468a009d29"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:837273b4608ce60789a263b90547985e88d01b5d596d2bcab09cf8468a009d29",
+            "counted_family_ids": [],
+            "authoritative_family_token_hashes": [],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:efe64b20a1f37ab58e293d002539a05ec33e53f6549a08d25a04c8f67e115dc1"
+        }
+      },
+      {
+        "stage": 3,
+        "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+        "kappa": 1,
+        "semantic_nu": 1,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 3,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "predecessor_signature_digest": "blake3:3e6728c35b5e2653432bd09ed0cb9b9f14537b5d32646cc8ba9c688404e6ed21",
+          "structural_formula_total": 2,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 1,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 3,
+            "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+            "predecessor_entry_count": 2,
+            "predecessor_stages": [
+              1,
+              2
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+              "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555"
+            ],
+            "predecessor_signature_digest": "blake3:3e6728c35b5e2653432bd09ed0cb9b9f14537b5d32646cc8ba9c688404e6ed21",
+            "semantic_nu": 1,
+            "credited_family_ids": [
+              "blake3:7eb09c9ee994e8b1e3258a461f414e1ffbea16a89e7ce829f9bfde53285c5715"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:7eb09c9ee994e8b1e3258a461f414e1ffbea16a89e7ce829f9bfde53285c5715",
+                "authoritative_family_row_derivation_hash": "blake3:e467d2d5efe794b6abef1251db5e105b7ab6c899e88754a964ceb594a589a24c"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:0976184828abd58d68e56ed180688ec26d54e576872acbecccce2751282e3edc",
+            "package_v3_declaration_hash": "blake3:decd3f82677b4af4bd3b767c9ecfe5544d2752caf21c247d2e892cc79ca39f04",
+            "package_v4_candidate_local_source_hash": "blake3:a674e2f851d1ba3f8c460a94f81b521c4db777f775724ad54e7c22a2b0f79077",
+            "sequence_derivation_hash": "blake3:fe2757f7093d894301970418f67546e223af75cbff653c8a039f05025dcae710",
+            "sequence_authoritative_seal": "blake3:24125a1b80d8354adc82c348f7b840155abee38266f2a613aed9fec5ef8d1e5b",
+            "sequence_issuance_trace_root": "blake3:9a6cf3ea7953b4f81db95cfff8218f438400948ef33ecaabd0782c3e1670f562",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:3f5d53843e1b1e31e2f9f2fbccfc174e16e5e925a44e1233304de7368654d740",
+            "b3_authoritative_prefix_semantic_seal": "blake3:283c5c7f4ee6ce8173c2b1578165459103335fa1b1e3520d989706ade6428c09",
+            "b3_issuance_trace_root": "blake3:9a6cf3ea7953b4f81db95cfff8218f438400948ef33ecaabd0782c3e1670f562",
+            "role_declaration_count": 2,
+            "proved_family_declaration_count": 1,
+            "theorem_impossibility_declaration_count": 1,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 3,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:decd3f82677b4af4bd3b767c9ecfe5544d2752caf21c247d2e892cc79ca39f04",
+              "v4_prefix_local_source_hash": "blake3:a674e2f851d1ba3f8c460a94f81b521c4db777f775724ad54e7c22a2b0f79077",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:d021d568c1bce33d41d549b0a8ba27d951f57c0a3fcd059782c4e24d1e8741a9",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:0e4dd08f65e74a0249e78d9d4292e62e37c5387c16c15dbce60de2f364563420"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:8b89cdd89fee027572f0cc55edbd72ccba0c3ec64e99ef20ea29e6b98154927c"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:8b89cdd89fee027572f0cc55edbd72ccba0c3ec64e99ef20ea29e6b98154927c",
+            "counted_family_ids": [
+              "blake3:7eb09c9ee994e8b1e3258a461f414e1ffbea16a89e7ce829f9bfde53285c5715"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:e467d2d5efe794b6abef1251db5e105b7ab6c899e88754a964ceb594a589a24c"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:30a1c22b6276c8472e2676e332f59e8dbe7f6ff55ec7f5ac3219f243a766dea1"
+        }
+      },
+      {
+        "stage": 4,
+        "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "kappa": 3,
+        "semantic_nu": 2,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 4,
+          "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+          "predecessor_signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+          "structural_formula_total": 5,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 2,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 4,
+            "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+            "predecessor_entry_count": 3,
+            "predecessor_stages": [
+              1,
+              2,
+              3
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+              "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+              "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e"
+            ],
+            "predecessor_signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+            "semantic_nu": 2,
+            "credited_family_ids": [
+              "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+              "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+                "authoritative_family_row_derivation_hash": "blake3:b3f5ade79041e67d4f93a8a953e8c2a73018dd7fe1e8c8a47400df1b9d07d1ce"
+              },
+              {
+                "family_id": "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03",
+                "authoritative_family_row_derivation_hash": "blake3:b9a9206db7baa849fd49f4e5cb96e93bf6b7061b373c89b8a5fd4e28599da343"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:c1b15a9f4654f542b994cf913de8da60f750c729a3f85c18f4f5d65aff756241",
+            "package_v3_declaration_hash": "blake3:9b12827f29cefee715459a2c77a858e5da59f5127d59a47f346c7835ade12d2a",
+            "package_v4_candidate_local_source_hash": "blake3:1fd7f8a048941e381185e4bccf1bdba99d797cfea54ee12ad8c72924641f0693",
+            "sequence_derivation_hash": "blake3:6570810939cd55103e0e22fc0486edc978cc9eeb269b5817fec5254480a6494f",
+            "sequence_authoritative_seal": "blake3:cb76a81f44893554cf88a8983877fae86a2f74b42b0d1e8bcc8210f4619a46f6",
+            "sequence_issuance_trace_root": "blake3:2e0fb091b844a464026c7169ae3489241e73b11e9622c43f45cc84ba7e584988",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:fbf8e4e7a2ee1e596cd71ac2eb6dc420670edd36b9a38951682b70766254d663",
+            "b3_authoritative_prefix_semantic_seal": "blake3:ec8962807bcb56130abceba4192cb24e743a606797b30a9a8a6280e10853ecbe",
+            "b3_issuance_trace_root": "blake3:2e0fb091b844a464026c7169ae3489241e73b11e9622c43f45cc84ba7e584988",
+            "role_declaration_count": 5,
+            "proved_family_declaration_count": 2,
+            "theorem_impossibility_declaration_count": 3,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 4,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:9b12827f29cefee715459a2c77a858e5da59f5127d59a47f346c7835ade12d2a",
+              "v4_prefix_local_source_hash": "blake3:1fd7f8a048941e381185e4bccf1bdba99d797cfea54ee12ad8c72924641f0693",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:9f8eb8fc856f8c7fe4bcd809208fa88abd34e91f70504c7dfc40f31064afa6b5",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:f731d444a7f79f6eeee32740ec9e50c0211fdd23c95387ffd17bc1e940a5572e"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:09cc403c17516b30f6f7c76bd5d7f26a8985ccdb446994e65e3d30775ebe0ee6"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:09cc403c17516b30f6f7c76bd5d7f26a8985ccdb446994e65e3d30775ebe0ee6",
+            "counted_family_ids": [
+              "blake3:19ce26ca468e271e8f539459c117bd059674d328957c2708c09121da5b8476b3",
+              "blake3:d0d9aee0b98ce55cd4ba48ce2ba5e590a09a23b993004dd6c447bbff71ff3f03"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:b3f5ade79041e67d4f93a8a953e8c2a73018dd7fe1e8c8a47400df1b9d07d1ce",
+              "blake3:b9a9206db7baa849fd49f4e5cb96e93bf6b7061b373c89b8a5fd4e28599da343"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:44801e5e0ffe692b7dc897acacd8958abbd1c3bc5e5e7cace61d5bede4b41445"
+        }
+      },
+      {
+        "stage": 5,
+        "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "kappa": 3,
+        "semantic_nu": 6,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "predecessor_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+          "structural_formula_total": 7,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 6,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 5,
+            "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+            "predecessor_entry_count": 4,
+            "predecessor_stages": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+              "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+              "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+              "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308"
+            ],
+            "predecessor_signature_digest": "blake3:8a0ea93137ad14619260bdc0546cc6fd3c75cd4d52c021f7cbe045acffc95c6f",
+            "semantic_nu": 6,
+            "credited_family_ids": [
+              "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+              "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+              "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+              "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+              "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+              "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+                "authoritative_family_row_derivation_hash": "blake3:4ca8b0e5fe4d27e5278b3c618fd97d07ffb833e14481353d2c4051a0fead1ec5"
+              },
+              {
+                "family_id": "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+                "authoritative_family_row_derivation_hash": "blake3:30f919827b69f0ce364b7b73888042536c05b1d369173a1752c441c528dcd6b8"
+              },
+              {
+                "family_id": "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+                "authoritative_family_row_derivation_hash": "blake3:a8f13e56428a531a7e93544f53f37b32f5fa1b01c5a60218fd6fa949e03e07f9"
+              },
+              {
+                "family_id": "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+                "authoritative_family_row_derivation_hash": "blake3:87b6fe59646631e4ad149949b91cc745ea2a8cb4d2756f8e1649c1fe62d98a59"
+              },
+              {
+                "family_id": "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+                "authoritative_family_row_derivation_hash": "blake3:795b601868165689ee75809af696596a3dd39291a811703c54f97a125d0016f7"
+              },
+              {
+                "family_id": "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab",
+                "authoritative_family_row_derivation_hash": "blake3:0c3acfa0e3cd68bd8586305077707d92b9e8dfd521484005f6e81b01337abe2e"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:943e856e5a5e30e1d73341aa4e85ed7d2dbb93e3cf9d412ef9ac3ce414f6d233",
+            "package_v3_declaration_hash": "blake3:a124ec3f8499549897303a0fb29d5f3c4d8ceca9059733b537c0db91f786ee39",
+            "package_v4_candidate_local_source_hash": "blake3:c32c9926fdb4bf7d2ff3dd6000d6c6f8477909f7d2a760b81b2625e8f77a5d86",
+            "sequence_derivation_hash": "blake3:73766999ddc4d9f524925e41d4d1cb92717008038f6d807a4f1aa2f6574af8a3",
+            "sequence_authoritative_seal": "blake3:0efa854148ec4493fba8c4a8df25ae2e8d89dfdd8d57ace7088d53b398072b36",
+            "sequence_issuance_trace_root": "blake3:c852b57018e95263314ab1531fe4e8d81449359141d597ed35384a073040e4ff",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:6de26d04afa7c1b159f655602c69f0749286a63eefa6e28dfcb6c68001ecbcdb",
+            "b3_authoritative_prefix_semantic_seal": "blake3:915c53334bd8e36521fbf39a8555672c617b8d8a1227b11dff3254443287915b",
+            "b3_issuance_trace_root": "blake3:c852b57018e95263314ab1531fe4e8d81449359141d597ed35384a073040e4ff",
+            "role_declaration_count": 7,
+            "proved_family_declaration_count": 7,
+            "theorem_impossibility_declaration_count": 0,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 5,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:a124ec3f8499549897303a0fb29d5f3c4d8ceca9059733b537c0db91f786ee39",
+              "v4_prefix_local_source_hash": "blake3:c32c9926fdb4bf7d2ff3dd6000d6c6f8477909f7d2a760b81b2625e8f77a5d86",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:e3add6a0283e78f26bdce55e947c343e2e737708f8b0655a1eebaa5ad1848864",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:239f6134ff8de79dfd3568b722d43e68348c016ab896d49025e0473f11323796"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:ffed41d7689ee5f3e94454b99ba411fb4b18f68bf91d4b12d29c422403631559"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:ffed41d7689ee5f3e94454b99ba411fb4b18f68bf91d4b12d29c422403631559",
+            "counted_family_ids": [
+              "blake3:0dca433db0e0d0ee02d49c117383578f6dd00f3dcf95865262c531a73548665c",
+              "blake3:30fd073e97808fcb52348418fe9b4710f42f611a286f36c3b726d0a6c8dc98ec",
+              "blake3:740fd77f416929b683eafd0ed0c05e68810dabfb0a367f00a6272520f0443a32",
+              "blake3:9cefa52a04407460a35a84e29fdf6f6ca11ddcd31f72169fbfa5828fb8ccf476",
+              "blake3:c79eff70f8fd6812ac9ed3e321d9919e262c4f20ca0f4aafac8556f64e09fa0f",
+              "blake3:e5ce4766c56af9c9053267e24a12fc85bb86ea8458d42d262540af9bd73dc2ab"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:4ca8b0e5fe4d27e5278b3c618fd97d07ffb833e14481353d2c4051a0fead1ec5",
+              "blake3:30f919827b69f0ce364b7b73888042536c05b1d369173a1752c441c528dcd6b8",
+              "blake3:a8f13e56428a531a7e93544f53f37b32f5fa1b01c5a60218fd6fa949e03e07f9",
+              "blake3:87b6fe59646631e4ad149949b91cc745ea2a8cb4d2756f8e1649c1fe62d98a59",
+              "blake3:795b601868165689ee75809af696596a3dd39291a811703c54f97a125d0016f7",
+              "blake3:0c3acfa0e3cd68bd8586305077707d92b9e8dfd521484005f6e81b01337abe2e"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:91592e12cc8f37be6954d008b19009094e4f9b4dfd8cd64cb55b907bd930446e"
+        }
+      },
+      {
+        "stage": 6,
+        "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "kappa": 3,
+        "semantic_nu": 3,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "predecessor_signature_digest": "blake3:3623fc78ea9b0eaf397258cfd7cfd31e82ad684f6b25b501fcc000155120c473",
+          "structural_formula_total": 8,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 3,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 6,
+            "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+            "predecessor_entry_count": 5,
+            "predecessor_stages": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+              "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+              "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+              "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+              "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+            ],
+            "predecessor_signature_digest": "blake3:3623fc78ea9b0eaf397258cfd7cfd31e82ad684f6b25b501fcc000155120c473",
+            "semantic_nu": 3,
+            "credited_family_ids": [
+              "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+              "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+              "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+                "authoritative_family_row_derivation_hash": "blake3:9c58c785e6b09c87e8295e0d2f2ea207393671ad9a3dcb4aea12ac8472bb5853"
+              },
+              {
+                "family_id": "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+                "authoritative_family_row_derivation_hash": "blake3:ea4b6fed9030a6515fff85d5234fd74bdc6f54d540d11182860b6596e59d0899"
+              },
+              {
+                "family_id": "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6",
+                "authoritative_family_row_derivation_hash": "blake3:8042439a693cf6132a472c1154e22d52636f647b938fca2c9d29a2ec904914e2"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:b73569f769e2cbf736e4bb0a866682c94ba3f0c1eff0692200a2e2d83b13a231",
+            "package_v3_declaration_hash": "blake3:9189735944c180dd74e3bcc8bf9488f772cdc11c0e154fa4e02676ddd751f49a",
+            "package_v4_candidate_local_source_hash": "blake3:6ca5f456df8e0689954417744bdf444f048816680aec571fc4b285608def3040",
+            "sequence_derivation_hash": "blake3:e8019788307441253bf3f42c92f65f804fb863519bd5ce6e7b1e7954dc808f13",
+            "sequence_authoritative_seal": "blake3:e41c3c06a01e40c34e4177e47e1aee34793ef82250778d2f18e266daeaee5b42",
+            "sequence_issuance_trace_root": "blake3:ed2671cc21194d1740c8075ad5351ca3c204aa863fbde071e4b87a171b897c0b",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:8ba8a7d9b33c94900b3f4bd6eb74134a64f1119162351ddf68a504a87978fffb",
+            "b3_authoritative_prefix_semantic_seal": "blake3:426065b9b5625b9dbe2da2b6e6eb58a3b35464b2eb0fb3e4a7ae4141cedf4c54",
+            "b3_issuance_trace_root": "blake3:ed2671cc21194d1740c8075ad5351ca3c204aa863fbde071e4b87a171b897c0b",
+            "role_declaration_count": 6,
+            "proved_family_declaration_count": 6,
+            "theorem_impossibility_declaration_count": 0,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 6,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:9189735944c180dd74e3bcc8bf9488f772cdc11c0e154fa4e02676ddd751f49a",
+              "v4_prefix_local_source_hash": "blake3:6ca5f456df8e0689954417744bdf444f048816680aec571fc4b285608def3040",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:99a6151a95e971d47583713907795a8889645aa5dfc18ed1fbd535e8c9e64502",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:759933f0d45e25d6fa3414451aff4aed4d7b633dc3d038f8ffa6824d9820f8cd"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:bdec07348e2041a127eabe883996553f7bf814a8e3439af75ed4baa81f230225"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:bdec07348e2041a127eabe883996553f7bf814a8e3439af75ed4baa81f230225",
+            "counted_family_ids": [
+              "blake3:26620f29d8bb3f928f7e9eb6d9707634b390952ccaba53056b2c3d04621939e0",
+              "blake3:3dc2a6543bfd7b069d95163a507c85f23ef4a83cfa960c19494c59705fcef70a",
+              "blake3:f7dfbbc12149ff9bfcf6caf8575d4a707a223eeaf79ea88ad8cb25ab641374c6"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:9c58c785e6b09c87e8295e0d2f2ea207393671ad9a3dcb4aea12ac8472bb5853",
+              "blake3:ea4b6fed9030a6515fff85d5234fd74bdc6f54d540d11182860b6596e59d0899",
+              "blake3:8042439a693cf6132a472c1154e22d52636f647b938fca2c9d29a2ec904914e2"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:842a331599423c9ab82744754a1b53a5cfef4e153b3c1bb4e326f365464bff82"
+        }
+      },
+      {
+        "stage": 7,
+        "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "kappa": 3,
+        "semantic_nu": 1,
+        "nu_provenance": {
+          "schema": "branch-local-semantic-nu-provenance-v3",
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "predecessor_signature_digest": "blake3:924de8817389686f8add45bb8b4edadfc30ac35f887c71f0e82041ea5eb1d1b8",
+          "structural_formula_total": 10,
+          "r2_generated_instance_adjustment": 0,
+          "diagnostic_nu": 1,
+          "structural_formula_replayed_from_branch_prefix": true,
+          "historical_score_vector_or_bar_used_as_input": false,
+          "semantic_family_evidence_v3": {
+            "schema": "branch-prefix-candidate-semantic-provenance-v3",
+            "date": "2026-07-23",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "stage": 7,
+            "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+            "predecessor_entry_count": 6,
+            "predecessor_stages": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "predecessor_candidate_hashes": [
+              "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+              "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+              "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+              "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+              "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+              "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+            ],
+            "predecessor_signature_digest": "blake3:924de8817389686f8add45bb8b4edadfc30ac35f887c71f0e82041ea5eb1d1b8",
+            "semantic_nu": 1,
+            "credited_family_ids": [
+              "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99"
+            ],
+            "credited_family_rows": [
+              {
+                "family_id": "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99",
+                "authoritative_family_row_derivation_hash": "blake3:1c13930435c3a9aaa422c3191be1def4447d1b0d11b518865a7d7d396da49108"
+              }
+            ],
+            "exact_credited_family_row_join": true,
+            "package_derivation_hash": "blake3:4a03a20a7c63433538a90fc0914a300f7779645d884011718085e8f67a66ada5",
+            "package_v3_declaration_hash": "blake3:030f9c76c2f35483c2777fdd806db69da593077a10fd21465b7c6953654500bb",
+            "package_v4_candidate_local_source_hash": "blake3:c4d0c63d616bdf27294ac9fccb5d99e73abe9b46a410776d5cc651eb186e205b",
+            "sequence_derivation_hash": "blake3:5b210be6655fdedb8b73e1d4746f1bb562e62c62be87fd584af3c58410817207",
+            "sequence_authoritative_seal": "blake3:846119c575fc3cfce149c8306654b031e4da46b71d8e4600517810a1e474cb16",
+            "sequence_issuance_trace_root": "blake3:f58bb3da265b5f2f43e4bb2df4e72fc0391456966f448e5aef61bd9aef969baf",
+            "b3_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+            "b3_token_derivation_hash": "blake3:2acac278ec47d6b92585ace06acae825fab6dd91edc71a6afc3ec5028d0e01cc",
+            "b3_authoritative_prefix_semantic_seal": "blake3:8ca50d69fdfefb50036e8bc3e1022962944a2ac25ad5b01943cf26a497f9f76a",
+            "b3_issuance_trace_root": "blake3:f58bb3da265b5f2f43e4bb2df4e72fc0391456966f448e5aef61bd9aef969baf",
+            "role_declaration_count": 5,
+            "proved_family_declaration_count": 5,
+            "theorem_impossibility_declaration_count": 0,
+            "named_role_residual_count": 0,
+            "named_quotient_residual_count": 0,
+            "named_a3_residual_count": 0,
+            "silent_residue_count": 0,
+            "t_bi_b1_proved": true,
+            "t_bi_b2_proved": true,
+            "t_bi_b3_proved": true,
+            "package_proved": true,
+            "every_role_declaration_resolved": true,
+            "every_marginal_family_credited_or_theorem_impossible": true,
+            "local_anchor_nonreuse_holds": true,
+            "no_historical_registry_consulted": true,
+            "no_archive_structural_bar_verdict_or_future_input": true,
+            "sequence_no_historical_registry_or_future_input": true,
+            "b3_no_historical_registry_or_legacy_v5_authority": true,
+            "b3_no_archive_structural_bar_verdict_or_future_input": true,
+            "exact_prefix_candidate_package_binding": true,
+            "all_residual_counts_zero": true,
+            "r2_premise": {
+              "stage": 7,
+              "v3_r2_rule_authority_hash": "blake3:6bf8017b1ca209fd712b2df0d29906458cd4c2e0908d3bbb6fd8a10b0d804e3d",
+              "v4_r1_rule_authority_hash": "blake3:c55fac45788ec5daab280f5017c4f20bf41d48d56aa85100583563b511d21342",
+              "v3_declaration_surface_hash": "blake3:030f9c76c2f35483c2777fdd806db69da593077a10fd21465b7c6953654500bb",
+              "v4_prefix_local_source_hash": "blake3:c4d0c63d616bdf27294ac9fccb5d99e73abe9b46a410776d5cc651eb186e205b",
+              "v4_source_matches_isolated_package": true,
+              "v4_source_surface_replayed": true,
+              "r2_premises_derivation_hash": "blake3:b2ad8d78523efff4481f8a7464cfe8eba5ed47271fdfe9aee0445ced1d0d22ee",
+              "r2_generated_instance_removed_count": 0,
+              "r2_removed_occurrence_hashes": [],
+              "r2_parent_slot_label_join_holds": true,
+              "r2_exact_v3_occurrence_surface_holds": true,
+              "r2_step8_typed_signature_derivation_hash": null,
+              "r2_m1_generated_membership_derivation_hash": null,
+              "r2_m1_generated_membership_replayed": true,
+              "r2_parent_membership_replayed": true,
+              "r2_removed_occurrences_absent_from_unified_membership": true,
+              "r2_removed_occurrences_not_exported_as_families": true,
+              "r2_generated_instance_not_multiplied": true,
+              "r2_local_premises_replayed": true,
+              "non_stage8_projection_is_exact_zero_none_trivial": true,
+              "v4_forbidden_inputs_absent": true,
+              "proved": true,
+              "derivation_hash": "blake3:efa07895206e2199fc49e5779d79a07c410f2eb26592eb82c11877989a1402f4"
+            },
+            "no_history_or_forbidden_input": true,
+            "proved": true,
+            "derivation_hash": "blake3:b5ab37e094b49c83230be111e5f6e551891a3caa3e9ca24530d820461bd1d5d9"
+          },
+          "disposition": {
+            "kind": "exact_certified",
+            "theorem_id": "T-BI-branch-v3-exact-prefix-candidate-source-first-semantic-evidence",
+            "certificate_hash": "blake3:b5ab37e094b49c83230be111e5f6e551891a3caa3e9ca24530d820461bd1d5d9",
+            "counted_family_ids": [
+              "blake3:8b6e3ea58769ece0bcbbcb188b309ed7b894028ca1000eb932643c1d7f1d4c99"
+            ],
+            "authoritative_family_token_hashes": [
+              "blake3:1c13930435c3a9aaa422c3191be1def4447d1b0d11b518865a7d7d396da49108"
+            ],
+            "generated_instance_family_ids_removed_by_quotient": []
+          },
+          "derivation_hash": "blake3:bacba3c2f971f306caa05fd18740e141067d6c792008511a7056d242e3662a9d"
+        }
+      }
+    ],
+    "completed_through_stage15": false,
+    "debt_free_halt_at_stage15": false,
+    "every_reached_guarded_stage_unique": false,
+    "bar_never_used_as_gate_or_selector": true,
+    "score_never_used_as_selector": true,
+    "expected_winner_score_ledger_or_bar_accepted_as_runner_input": false,
+    "hash_or_enumeration_order_used_as_selector": false,
+    "resource_limit_used_as_halt_claim": false,
+    "derivation_hash": "blake3:0a3740904c3584f5e63076a55d714bbd06598a22d328c98999756cc4f405155b"
+  },
+  "continuation_replayed": true,
+  "candidate_hash_vector": [
+    "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+    "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+    "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+    "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+    "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+    "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+    "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"
+  ],
+  "semantic_nu_vector": [
+    1,
+    0,
+    1,
+    2,
+    6,
+    3,
+    1
+  ],
+  "guarded_stages": [
+    {
+      "stage": 5,
+      "demand_derivation_hash": "blake3:95f2cd1830032766642bd38f8c29d8cd5e2e030fa1d34a7723219c4b2f6526cc",
+      "discharger_count": 1,
+      "discharger_hashes": [
+        "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0"
+      ],
+      "winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+      "winner_kernel_typed": true,
+      "winner_exact_semantic_provenance": true,
+      "winner_total_discharge_replayed": true,
+      "candidate_semantic_gaps_absent": true,
+      "unique_typed_total_discharger": true,
+      "selection_disposition": "unique_typed_total_discharger",
+      "no_improvised_selection": true,
+      "value_used_as_selector": false,
+      "bar_used_as_selector": false,
+      "derivation_hash": "blake3:7d0c47935c2b5a1c4656f616292990b685ec8502e83a3886503cfd5ca7e12de0"
+    },
+    {
+      "stage": 6,
+      "demand_derivation_hash": "blake3:acddcdb800d96abc6042bd312294d62cb32d3863f7e767666f598267b601f027",
+      "discharger_count": 1,
+      "discharger_hashes": [
+        "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d"
+      ],
+      "winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+      "winner_kernel_typed": true,
+      "winner_exact_semantic_provenance": true,
+      "winner_total_discharge_replayed": true,
+      "candidate_semantic_gaps_absent": true,
+      "unique_typed_total_discharger": true,
+      "selection_disposition": "unique_typed_total_discharger",
+      "no_improvised_selection": true,
+      "value_used_as_selector": false,
+      "bar_used_as_selector": false,
+      "derivation_hash": "blake3:7591df7a3f9390b7cd8baa696ebe438f98313ae6ab952823774be9d63bf9e318"
+    },
+    {
+      "stage": 7,
+      "demand_derivation_hash": "blake3:9e86425c29d6565619727477fd90d243f59564332521c07bf92dc4f6400f9f1d",
+      "discharger_count": 1,
+      "discharger_hashes": [
+        "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906"
+      ],
+      "winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+      "winner_kernel_typed": true,
+      "winner_exact_semantic_provenance": true,
+      "winner_total_discharge_replayed": true,
+      "candidate_semantic_gaps_absent": true,
+      "unique_typed_total_discharger": true,
+      "selection_disposition": "unique_typed_total_discharger",
+      "no_improvised_selection": true,
+      "value_used_as_selector": false,
+      "bar_used_as_selector": false,
+      "derivation_hash": "blake3:292ea85452bb2ec0da30585cb9c3e7f36821f37b12b8fb935c389c730a347e7f"
+    },
+    {
+      "stage": 8,
+      "demand_derivation_hash": "blake3:34164a6e0f46092cf3509f0d56c04d748f26fafed458a4c4b021b76bf2049ec9",
+      "discharger_count": 0,
+      "discharger_hashes": [],
+      "winner_hash": null,
+      "winner_kernel_typed": false,
+      "winner_exact_semantic_provenance": false,
+      "winner_total_discharge_replayed": false,
+      "candidate_semantic_gaps_absent": false,
+      "unique_typed_total_discharger": false,
+      "selection_disposition": "lawful_stop_expressivity_gap",
+      "no_improvised_selection": true,
+      "value_used_as_selector": false,
+      "bar_used_as_selector": false,
+      "derivation_hash": "blake3:5627615ceab488ee8abf34cf2e95606873ac050fc8df51ab717ee7959784c1a1"
+    }
+  ],
+  "every_reached_guarded_stage_has_unique_typed_discharger": false,
+  "every_reached_live_demand_totally_discharged": false,
+  "lawful_stop_sealed_without_improvised_selection": true,
+  "semantic_value_never_used_as_selector": true,
+  "bar_never_used_as_selector": true,
+  "hash_or_enumeration_order_never_used_as_selector": true,
+  "expected_or_enacted_outcomes_never_accepted_as_runner_input": true,
+  "resource_limit_never_used_as_halt_claim": true,
+  "enacted_outcomes_consumed_by_branch_issuer": false,
+  "f_s4_3_preserved": true,
+  "branch_indexed_only": true,
+  "bi2_finale_issued": false,
+  "bi4_cone_verdict_issued": false,
+  "unindexed_halt_or_o_claim_issued": false,
+  "result_digest": "blake3:473d05bc808fc034d20541c49484374af2992c45a1d3658901ecba7c01e6b984"
+}

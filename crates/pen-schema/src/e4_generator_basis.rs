@@ -33,9 +33,13 @@ use crate::stage1_r1::{
     R1_MEMBERSHIP_GAP, R1LocalRole, issue_stage1_r1_package_token, replay_stage1_r1_package_token,
 };
 use crate::step8_r2::{
-    Step8R2TypedSignaturesToken, issue_step8_r2_typed_signatures_token,
-    replay_step8_r2_typed_signatures_token,
+    Step8R2PrefixLocalTypedSignaturesToken, Step8R2TypedSignaturesToken,
+    issue_step8_r2_typed_signatures_token,
+    replay_step8_r2_prefix_general_typed_signatures_token_v2,
+    replay_step8_r2_prefix_local_typed_signatures_token, replay_step8_r2_typed_signatures_token,
 };
+use pen_core::telescope::Telescope;
+use pen_type::elaborate::{SealedSignature, candidate_hash};
 use serde::Serialize;
 use thiserror::Error;
 
@@ -49,6 +53,8 @@ pub const E4_NORMALIZATION_NATURALITY_GAP: &str =
 pub const E4_CUBICAL_SCHEMA_ACTION_GAP: &str =
     "E4_GENERAL_DEPENDENT_CUBICAL_SCHEMA_ACTION_INDUCTION_NOT_PROVED";
 pub const E4_M1_RULE: &str = "procedural-adjudication-p1-monotone-membership-m1";
+pub const E4_PREFIX_LOCAL_M1_VERSION: &str = "schema2-e4-prefix-local-step8-m1-generated-v1";
+pub const E4_PREFIX_GENERAL_M1_VERSION: &str = "schema2-e4-prefix-general-step8-m1-generated-v2";
 pub const E4_M1_INDEPENDENT_GAP: &str = "M1_INDEPENDENT_VERDICT_REQUIRES_COMPLETE_E4_BASIS";
 pub const CUBE_AT_MAP_CUBE_COMPUTATION_RULE: &str =
     "schema2-constructor-computation-cube-at-map-cube-v1";
@@ -391,6 +397,32 @@ pub struct Step8MapCubeGenerationProof {
     derivation_hash: String,
 }
 
+/// Source-first MapCube proof.  Its boundary dependency is the typed
+/// boundary derivation sealed by the supplied-prefix R2 token, rather than
+/// the archival C6 bundle used by the historical compatibility path.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct Step8PrefixLocalMapCubeGenerationProof {
+    step8: Step8R2PrefixLocalTypedSignaturesToken,
+    registered_signatures: Box<Step8RegisteredSignatures>,
+    parent_cube_action: Box<ParentCubeActionGeneratedToken>,
+    sub_basis_inclusion: Step8PrefixLocalSubBasisInclusionProof,
+    derivation_hash: String,
+}
+
+impl Step8PrefixLocalMapCubeGenerationProof {
+    pub fn step8(&self) -> &Step8R2PrefixLocalTypedSignaturesToken {
+        &self.step8
+    }
+
+    pub fn parent_cube_action(&self) -> &ParentCubeActionGeneratedToken {
+        &self.parent_cube_action
+    }
+
+    pub fn derivation_hash(&self) -> &str {
+        &self.derivation_hash
+    }
+}
+
 impl Step8MapCubeGenerationProof {
     pub fn parent_cube_action(&self) -> &ParentCubeActionGeneratedToken {
         &self.parent_cube_action
@@ -504,6 +536,19 @@ pub struct E4SubBasisInclusionProof {
     derivation_hash: String,
 }
 
+/// Definition-level inclusion of the one MapCube generator kind into E-4.
+/// This source-first proof does not execute the unrelated weakening exemplar;
+/// the full basis inventory is read directly from the closed enum.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct Step8PrefixLocalSubBasisInclusionProof {
+    sub_basis_kinds: Vec<E4GeneratorKind>,
+    full_basis_kinds: Vec<E4GeneratorKind>,
+    full_basis_inventory_hash: String,
+    every_sub_basis_kind_registered: bool,
+    weakening_exemplar_replayed: bool,
+    derivation_hash: String,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum M1GeneratedSubject {
@@ -525,6 +570,90 @@ pub struct M1GeneratedMembershipToken {
     final_by_basis_monotonicity: bool,
     full_e4_completeness_used: bool,
     derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct Step8PrefixLocalM1TypedDependencies {
+    pub predecessor_signature_digest: String,
+    pub source_telescope_hash: String,
+    pub typed_boundary_dependency_hash: String,
+    pub typed_boundary_derivation_hash: String,
+    pub reference_only_derivation_hash: String,
+    pub base_binding_derivation_hash: String,
+    pub element_overlay_derivation_hash: String,
+    pub schema_signature_derivation_hash: String,
+    pub parent_cube_action_derivation_hash: String,
+    pub sub_basis_inclusion_derivation_hash: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct Step8PrefixLocalM1Capabilities {
+    pub supplied_exact_prefix_read: bool,
+    pub supplied_exact_candidate_read: bool,
+    pub source_bound_typed_boundary_read: bool,
+    pub term_level_map_cube_computation_read: bool,
+    pub cubical_face_map_rule_read: bool,
+    pub definition_level_sub_basis_inclusion_read: bool,
+    pub weakening_exemplar_read: bool,
+    pub archival_constant_bridge_read: bool,
+    pub archive_input_read: bool,
+    pub historical_count_input_read: bool,
+    pub acceptance_bar_input_read: bool,
+    pub membership_verdict_input_read: bool,
+    pub enacted_future_input_read: bool,
+}
+
+impl Step8PrefixLocalM1Capabilities {
+    pub const fn forbidden_inputs_withheld(&self) -> bool {
+        !self.weakening_exemplar_read
+            && !self.archival_constant_bridge_read
+            && !self.archive_input_read
+            && !self.historical_count_input_read
+            && !self.acceptance_bar_input_read
+            && !self.membership_verdict_input_read
+            && !self.enacted_future_input_read
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct Step8PrefixLocalM1GeneratedMembershipToken {
+    pub token_version: String,
+    pub rule: String,
+    pub membership_rule: String,
+    pub subject: M1GeneratedSubject,
+    pub typed_dependencies: Step8PrefixLocalM1TypedDependencies,
+    pub sub_basis_digest: String,
+    pub generating_derivation: Step8PrefixLocalMapCubeGenerationProof,
+    pub final_by_basis_monotonicity: bool,
+    pub full_e4_completeness_used: bool,
+    pub capabilities: Step8PrefixLocalM1Capabilities,
+    pub derivation_hash: String,
+}
+
+impl Step8PrefixLocalM1GeneratedMembershipToken {
+    pub fn subject(&self) -> &M1GeneratedSubject {
+        &self.subject
+    }
+
+    pub fn sub_basis_digest(&self) -> &str {
+        &self.sub_basis_digest
+    }
+
+    pub fn generating_derivation(&self) -> &Step8PrefixLocalMapCubeGenerationProof {
+        &self.generating_derivation
+    }
+
+    pub const fn final_by_basis_monotonicity(&self) -> bool {
+        self.final_by_basis_monotonicity
+    }
+
+    pub const fn full_e4_completeness_used(&self) -> bool {
+        self.full_e4_completeness_used
+    }
+
+    pub fn derivation_hash(&self) -> &str {
+        &self.derivation_hash
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
@@ -694,6 +823,26 @@ fn tagged_hash(domain: &str, payload: &impl Serialize) -> String {
     let bytes = serde_json::to_vec(&(E4_GENERATOR_BASIS_VERSION, domain, payload))
         .expect("E-4 proof data serializes");
     format!("blake3:{}", blake3::hash(&bytes).to_hex())
+}
+
+fn prefix_local_tagged_hash(domain: &str, payload: &impl Serialize) -> String {
+    let bytes = serde_json::to_vec(&(E4_PREFIX_LOCAL_M1_VERSION, domain, payload))
+        .expect("prefix-local E-4 proof data serializes");
+    format!("blake3:{}", blake3::hash(&bytes).to_hex())
+}
+
+fn prefix_general_tagged_hash(domain: &str, payload: &impl Serialize) -> String {
+    let bytes = serde_json::to_vec(&(E4_PREFIX_GENERAL_M1_VERSION, domain, payload))
+        .expect("prefix-general E-4 proof data serializes");
+    format!("blake3:{}", blake3::hash(&bytes).to_hex())
+}
+
+fn prefix_m1_tagged_hash(prefix_general: bool, domain: &str, payload: &impl Serialize) -> String {
+    if prefix_general {
+        prefix_general_tagged_hash(domain, payload)
+    } else {
+        prefix_local_tagged_hash(domain, payload)
+    }
 }
 
 fn identity_image(declaration: &Declaration) -> SubstitutionImage {
@@ -1663,8 +1812,9 @@ pub fn replay_parent_cube_action_generated(
     }
 }
 
-fn reconstruct_exact_step8_registered_signatures(
-    step8: &Step8R2TypedSignaturesToken,
+fn reconstruct_step8_registered_signatures(
+    boundary_derivation_hash: &str,
+    expected_schema_signature_derivation_hash: &str,
 ) -> Result<Step8RegisteredSignatures, E4GeneratorError> {
     let carrier = TypeExpr::parameter(0);
     let base = TermExpr::variable(1);
@@ -1680,13 +1830,13 @@ fn reconstruct_exact_step8_registered_signatures(
             ty: carrier.clone(),
         },
     ])?;
-    let bundle = DerivationRef::parse(step8.registered_boundary_bundle_derivation_hash.clone())
+    let bundle = DerivationRef::parse(boundary_derivation_hash.to_owned())
         .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
     let signatures = issue_step8_registered_signatures(context, carrier.clone(), base, bundle)
         .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
     replay_step8_registered_signatures(&signatures)
         .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
-    if signatures.derivation_hash() != step8.schema_signature_derivation_hash {
+    if signatures.derivation_hash() != expected_schema_signature_derivation_hash {
         return Err(E4GeneratorError::Step8InvariantDrift);
     }
     Ok(signatures)
@@ -1721,22 +1871,24 @@ fn issue_sub_basis_inclusion(
     Ok(proof)
 }
 
-pub fn issue_step8_cell_action_m1_generated(
-    step8: &Step8R2TypedSignaturesToken,
-) -> Result<M1GeneratedMembershipToken, E4GeneratorError> {
-    replay_step8_r2_typed_signatures_token(step8)
-        .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
-    if step8.rule != DERIVED_ACTION_MEMBERSHIP_RULE
-        || step8.registered_boundary_dimension != 3
-        || !step8.operation_signature_typed
-        || !step8.cell_action_term_typed
-        || !step8.cell_action_boundary_derived_by_map_cube
-        || step8.cell_action_generator_membership_decided
-        || step8.independent_family_tokens_issued != 0
-    {
-        return Err(E4GeneratorError::Step8InvariantDrift);
-    }
-    let registered_signatures = reconstruct_exact_step8_registered_signatures(step8)?;
+struct Step8MapCubeTermProofParts {
+    registered_signatures: Step8RegisteredSignatures,
+    parent_cube_action: ParentCubeActionGeneratedToken,
+}
+
+/// Shared term-level proof for the historical and source-first M1 issuers.
+/// It consumes only a typed boundary derivation and the expected Schema2
+/// signature hash.  Prefix validation, archival bridges, weakening
+/// exemplars, counts, bars and verdicts are intentionally outside this
+/// judgment.
+fn issue_step8_map_cube_term_proof(
+    boundary_derivation_hash: &str,
+    expected_schema_signature_derivation_hash: &str,
+) -> Result<Step8MapCubeTermProofParts, E4GeneratorError> {
+    let registered_signatures = reconstruct_step8_registered_signatures(
+        boundary_derivation_hash,
+        expected_schema_signature_derivation_hash,
+    )?;
     let carrier = TypeExpr::parameter(0);
     let base = TermExpr::variable(1);
     let context = form_schema_context(vec![
@@ -1753,9 +1905,8 @@ pub fn issue_step8_cell_action_m1_generated(
     ])?;
     let window =
         SupportWindow::new(7, 8).map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
-    let bundle_derivation =
-        DerivationRef::parse(step8.registered_boundary_bundle_derivation_hash.clone())
-            .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
+    let bundle_derivation = DerivationRef::parse(boundary_derivation_hash.to_owned())
+        .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
     let bundle = RegisteredBoundaryBundleRef {
         derivation: bundle_derivation,
         source_step: 8,
@@ -1858,12 +2009,61 @@ pub fn issue_step8_cell_action_m1_generated(
     if &full_row_type != registered_signatures.cell_action_type() {
         return Err(E4GeneratorError::Step8InvariantDrift);
     }
+    Ok(Step8MapCubeTermProofParts {
+        registered_signatures,
+        parent_cube_action,
+    })
+}
+
+fn issue_prefix_local_sub_basis_inclusion()
+-> Result<Step8PrefixLocalSubBasisInclusionProof, E4GeneratorError> {
+    let sub_basis_kinds = vec![E4GeneratorKind::CubicalFaceMap];
+    let full_basis_kinds = E4GeneratorKind::ALL.to_vec();
+    let every_sub_basis_kind_registered = sub_basis_kinds
+        .iter()
+        .all(|kind| full_basis_kinds.contains(kind));
+    if !every_sub_basis_kind_registered {
+        return Err(E4GeneratorError::Step8InvariantDrift);
+    }
+    let full_basis_inventory_hash =
+        prefix_local_tagged_hash("closed-e4-generator-kind-inventory", &full_basis_kinds);
+    let mut proof = Step8PrefixLocalSubBasisInclusionProof {
+        sub_basis_kinds,
+        full_basis_kinds,
+        full_basis_inventory_hash,
+        every_sub_basis_kind_registered,
+        weakening_exemplar_replayed: false,
+        derivation_hash: String::new(),
+    };
+    proof.derivation_hash = prefix_local_tagged_hash("sub-basis-inclusion", &proof);
+    Ok(proof)
+}
+
+pub fn issue_step8_cell_action_m1_generated(
+    step8: &Step8R2TypedSignaturesToken,
+) -> Result<M1GeneratedMembershipToken, E4GeneratorError> {
+    replay_step8_r2_typed_signatures_token(step8)
+        .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
+    if step8.rule != DERIVED_ACTION_MEMBERSHIP_RULE
+        || step8.registered_boundary_dimension != 3
+        || !step8.operation_signature_typed
+        || !step8.cell_action_term_typed
+        || !step8.cell_action_boundary_derived_by_map_cube
+        || step8.cell_action_generator_membership_decided
+        || step8.independent_family_tokens_issued != 0
+    {
+        return Err(E4GeneratorError::Step8InvariantDrift);
+    }
+    let term_proof = issue_step8_map_cube_term_proof(
+        &step8.registered_boundary_bundle_derivation_hash,
+        &step8.schema_signature_derivation_hash,
+    )?;
 
     let sub_basis_inclusion = issue_sub_basis_inclusion(vec![E4GeneratorKind::CubicalFaceMap])?;
     let mut generating_derivation = Step8MapCubeGenerationProof {
         step8: step8.clone(),
-        registered_signatures: Box::new(registered_signatures),
-        parent_cube_action: Box::new(parent_cube_action),
+        registered_signatures: Box::new(term_proof.registered_signatures),
+        parent_cube_action: Box::new(term_proof.parent_cube_action),
         sub_basis_inclusion,
         derivation_hash: String::new(),
     };
@@ -1897,6 +2097,187 @@ pub fn issue_step8_cell_action_m1_generated(
     };
     token.derivation_hash = tagged_hash("m1-generated-membership", &token);
     Ok(token)
+}
+
+/// Issue the monotone M1 verdict against a supplied exact Step-8 prefix and
+/// candidate.  Both the R2 replay and the MapCube proof remain bound to those
+/// inputs; no historical compatibility token is constructed on this path.
+fn issue_step8_cell_action_prefix_m1_generated_under(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+    step8: &Step8R2PrefixLocalTypedSignaturesToken,
+    prefix_general: bool,
+) -> Result<Step8PrefixLocalM1GeneratedMembershipToken, E4GeneratorError> {
+    if prefix_general {
+        replay_step8_r2_prefix_general_typed_signatures_token_v2(predecessor, current, step8)
+    } else {
+        replay_step8_r2_prefix_local_typed_signatures_token(predecessor, current, step8)
+    }
+    .map_err(|error| E4GeneratorError::Step8(error.to_string()))?;
+    if step8.rule != DERIVED_ACTION_MEMBERSHIP_RULE
+        || step8.source_step != 8
+        || step8.predecessor_signature_digest != predecessor.digest()
+        || step8.source_telescope_hash != candidate_hash(current)
+        || step8.registered_boundary_dimension != 3
+        || !step8.operation_signature_typed
+        || !step8.cell_action_term_typed
+        || !step8.cell_action_boundary_derived_by_map_cube
+        || step8.cell_action_generator_membership_decided
+        || step8.independent_family_tokens_issued != 0
+        || !step8.capabilities.forbidden_inputs_withheld()
+    {
+        return Err(E4GeneratorError::Step8InvariantDrift);
+    }
+    let term_proof = issue_step8_map_cube_term_proof(
+        &step8.typed_boundary_derivation_hash,
+        &step8.schema_signature_derivation_hash,
+    )?;
+    let sub_basis_inclusion = issue_prefix_local_sub_basis_inclusion()?;
+    if sub_basis_inclusion.weakening_exemplar_replayed {
+        return Err(E4GeneratorError::Step8InvariantDrift);
+    }
+    let mut generating_derivation = Step8PrefixLocalMapCubeGenerationProof {
+        step8: step8.clone(),
+        registered_signatures: Box::new(term_proof.registered_signatures),
+        parent_cube_action: Box::new(term_proof.parent_cube_action),
+        sub_basis_inclusion,
+        derivation_hash: String::new(),
+    };
+    generating_derivation.derivation_hash = prefix_m1_tagged_hash(
+        prefix_general,
+        "step8-map-cube-generating-derivation",
+        &generating_derivation,
+    );
+    let sub_basis_digest = prefix_m1_tagged_hash(
+        prefix_general,
+        "step8-map-cube-sub-basis",
+        &(
+            E4GeneratorKind::CubicalFaceMap,
+            &generating_derivation.parent_cube_action,
+            &generating_derivation.sub_basis_inclusion,
+            &step8.schema_signature_derivation_hash,
+            &step8.typed_boundary_derivation_hash,
+        ),
+    );
+    let subject = M1GeneratedSubject::Step8CellAction {
+        step8_derivation_hash: step8.derivation_hash.clone(),
+        schema_signature_derivation_hash: step8.schema_signature_derivation_hash.clone(),
+    };
+    let typed_dependencies = Step8PrefixLocalM1TypedDependencies {
+        predecessor_signature_digest: predecessor.digest().to_owned(),
+        source_telescope_hash: candidate_hash(current),
+        typed_boundary_dependency_hash: step8.typed_boundary_dependency_hash.clone(),
+        typed_boundary_derivation_hash: step8.typed_boundary_derivation_hash.clone(),
+        reference_only_derivation_hash: step8.reference_only_derivation_hash.clone(),
+        base_binding_derivation_hash: step8
+            .base_binding_derivation_hash
+            .clone()
+            .ok_or(E4GeneratorError::Step8InvariantDrift)?,
+        element_overlay_derivation_hash: step8
+            .element_overlay_derivation_hash
+            .clone()
+            .ok_or(E4GeneratorError::Step8InvariantDrift)?,
+        schema_signature_derivation_hash: step8.schema_signature_derivation_hash.clone(),
+        parent_cube_action_derivation_hash: generating_derivation
+            .parent_cube_action
+            .derivation_hash()
+            .to_owned(),
+        sub_basis_inclusion_derivation_hash: generating_derivation
+            .sub_basis_inclusion
+            .derivation_hash
+            .clone(),
+    };
+    let capabilities = Step8PrefixLocalM1Capabilities {
+        supplied_exact_prefix_read: true,
+        supplied_exact_candidate_read: true,
+        source_bound_typed_boundary_read: true,
+        term_level_map_cube_computation_read: true,
+        cubical_face_map_rule_read: true,
+        definition_level_sub_basis_inclusion_read: true,
+        weakening_exemplar_read: false,
+        archival_constant_bridge_read: false,
+        archive_input_read: false,
+        historical_count_input_read: false,
+        acceptance_bar_input_read: false,
+        membership_verdict_input_read: false,
+        enacted_future_input_read: false,
+    };
+    if !capabilities.forbidden_inputs_withheld() {
+        return Err(E4GeneratorError::Step8InvariantDrift);
+    }
+    let mut token = Step8PrefixLocalM1GeneratedMembershipToken {
+        token_version: if prefix_general {
+            E4_PREFIX_GENERAL_M1_VERSION
+        } else {
+            E4_PREFIX_LOCAL_M1_VERSION
+        }
+        .to_owned(),
+        rule: E4_M1_RULE.to_owned(),
+        membership_rule: DERIVED_ACTION_MEMBERSHIP_RULE.to_owned(),
+        subject,
+        typed_dependencies,
+        sub_basis_digest,
+        generating_derivation,
+        final_by_basis_monotonicity: true,
+        full_e4_completeness_used: false,
+        capabilities,
+        derivation_hash: String::new(),
+    };
+    token.derivation_hash =
+        prefix_m1_tagged_hash(prefix_general, "m1-generated-membership", &token);
+    Ok(token)
+}
+
+pub fn issue_step8_cell_action_prefix_local_m1_generated(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+    step8: &Step8R2PrefixLocalTypedSignaturesToken,
+) -> Result<Step8PrefixLocalM1GeneratedMembershipToken, E4GeneratorError> {
+    issue_step8_cell_action_prefix_m1_generated_under(predecessor, current, step8, false)
+}
+
+/// Prefix-general BI-1b successor.  It differs from the v1 API only in the
+/// source replay theorem used for the Step-8 typed-boundary dependency.
+pub fn issue_step8_cell_action_prefix_general_m1_generated_v2(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+    step8: &Step8R2PrefixLocalTypedSignaturesToken,
+) -> Result<Step8PrefixLocalM1GeneratedMembershipToken, E4GeneratorError> {
+    issue_step8_cell_action_prefix_m1_generated_under(predecessor, current, step8, true)
+}
+
+pub fn replay_step8_cell_action_prefix_local_m1_generated(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+    token: &Step8PrefixLocalM1GeneratedMembershipToken,
+) -> Result<(), E4GeneratorError> {
+    let replay = issue_step8_cell_action_prefix_local_m1_generated(
+        predecessor,
+        current,
+        token.generating_derivation.step8(),
+    )?;
+    if replay == *token {
+        Ok(())
+    } else {
+        Err(E4GeneratorError::ReplayMismatch)
+    }
+}
+
+pub fn replay_step8_cell_action_prefix_general_m1_generated_v2(
+    predecessor: &SealedSignature,
+    current: &Telescope,
+    token: &Step8PrefixLocalM1GeneratedMembershipToken,
+) -> Result<(), E4GeneratorError> {
+    let replay = issue_step8_cell_action_prefix_general_m1_generated_v2(
+        predecessor,
+        current,
+        token.generating_derivation.step8(),
+    )?;
+    if replay == *token {
+        Ok(())
+    } else {
+        Err(E4GeneratorError::ReplayMismatch)
+    }
 }
 
 pub fn replay_m1_generated_membership(
@@ -1975,7 +2356,9 @@ pub fn replay_e4_development_audit(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::step8_r2::issue_step8_r2_typed_signatures_token;
+    use crate::step8_r2::{
+        issue_step8_r2_prefix_local_typed_signatures_token, issue_step8_r2_typed_signatures_token,
+    };
     use std::collections::BTreeSet;
 
     fn dependent_context() -> FormedSchemaContext {
@@ -2163,6 +2546,10 @@ mod tests {
         let step8 = issue_step8_r2_typed_signatures_token().unwrap();
         let generated = issue_step8_cell_action_m1_generated(&step8).unwrap();
         replay_m1_generated_membership(&generated).unwrap();
+        assert_eq!(
+            generated.derivation_hash(),
+            "blake3:563760a3d4326aca4fbb08130df2d13fe2c1cedddd1650fb9874ecbe8d5bbe50"
+        );
         assert!(generated.final_by_basis_monotonicity());
         assert!(!generated.full_e4_completeness_used());
         assert_eq!(
@@ -2207,6 +2594,76 @@ mod tests {
                 .frozen_equality_used()
         );
         assert!(!generated.sub_basis_digest().is_empty());
+    }
+
+    #[test]
+    fn prefix_local_step8_map_cube_is_source_bound_and_weakening_free() {
+        let prefix = SealedSignature::from_telescopes(
+            (1_u32..=7)
+                .map(|step| (step, Telescope::reference(step)))
+                .collect(),
+        );
+        let candidate = Telescope::reference(8);
+        let step8 =
+            issue_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate).unwrap();
+        let generated =
+            issue_step8_cell_action_prefix_local_m1_generated(&prefix, &candidate, &step8).unwrap();
+        replay_step8_cell_action_prefix_local_m1_generated(&prefix, &candidate, &generated)
+            .unwrap();
+        assert!(generated.final_by_basis_monotonicity);
+        assert!(!generated.full_e4_completeness_used);
+        assert_eq!(
+            generated.typed_dependencies.predecessor_signature_digest,
+            prefix.digest()
+        );
+        assert_eq!(
+            generated.typed_dependencies.source_telescope_hash,
+            candidate_hash(&candidate)
+        );
+        assert_eq!(
+            generated
+                .generating_derivation
+                .parent_cube_action()
+                .face_equations()
+                .len(),
+            6
+        );
+        assert!(generated.capabilities.source_bound_typed_boundary_read);
+        assert!(generated.capabilities.term_level_map_cube_computation_read);
+        assert!(
+            generated
+                .capabilities
+                .definition_level_sub_basis_inclusion_read
+        );
+        assert!(generated.capabilities.forbidden_inputs_withheld());
+        assert!(!generated.capabilities.weakening_exemplar_read);
+        assert!(
+            !generated
+                .generating_derivation
+                .sub_basis_inclusion
+                .weakening_exemplar_replayed
+        );
+    }
+
+    #[test]
+    fn prefix_local_m1_mutation_fails_after_rehash() {
+        let prefix = SealedSignature::from_telescopes(
+            (1_u32..=7)
+                .map(|step| (step, Telescope::reference(step)))
+                .collect(),
+        );
+        let candidate = Telescope::reference(8);
+        let step8 =
+            issue_step8_r2_prefix_local_typed_signatures_token(&prefix, &candidate).unwrap();
+        let mut generated =
+            issue_step8_cell_action_prefix_local_m1_generated(&prefix, &candidate, &step8).unwrap();
+        generated.capabilities.archive_input_read = true;
+        generated.derivation_hash.clear();
+        generated.derivation_hash = prefix_local_tagged_hash("m1-generated-membership", &generated);
+        assert_eq!(
+            replay_step8_cell_action_prefix_local_m1_generated(&prefix, &candidate, &generated,),
+            Err(E4GeneratorError::ReplayMismatch)
+        );
     }
 
     #[test]

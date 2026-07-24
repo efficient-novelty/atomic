@@ -9,6 +9,23 @@ use crate::branch_invariance::{
     BranchContinuation, BranchContinuationOutcome, BranchNuProvenanceDisposition,
     CertifiedStage4BranchCone, replay_branch_continuation,
 };
+use crate::motive_typed_open_specialization_v4::{
+    MOTIVE_TYPED_OPEN_SPECIALIZATION_V4_VERSION,
+    issue_chronological_open_specialization_for_instance_v4,
+    replay_chronological_open_specialization_for_instance_v4,
+};
+use crate::support_comprehension_hardening_v6::{
+    SUPPORT_COMPREHENSION_HARDENING_V6_SCHEMA, issue_support_comprehension_hardening_for_row_v6,
+    replay_support_comprehension_hardening_for_row_v6,
+};
+use crate::support_comprehension_v5::{
+    SUPPORT_COMPREHENSION_V5_VERSION, issue_support_comprehension_derivation_for_row_v5,
+    replay_support_comprehension_derivation_for_row_v5,
+};
+use crate::t_sm1a_contextual_formation_v4::{
+    T_SM1A_CONTEXTUAL_FORMATION_V4_VERSION, issue_chronological_formation_specialization_v4,
+    replay_chronological_formation_specialization_v4,
+};
 use pen_core::clause::ClauseRec;
 use pen_core::expr::Expr;
 use pen_core::telescope::Telescope;
@@ -1359,6 +1376,478 @@ fn replay_branch_chronological_membership_audit(
     }
 }
 
+fn chronological_first_image_v4(
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+) -> Result<Expr, String> {
+    let A3DemandOutputType::ChronologicalInteraction {
+        interface_mode,
+        interface_slot_map,
+        ..
+    } = &scheme.required_output
+    else {
+        return Err("chronological scheme has a non-chronological output".to_owned());
+    };
+    replay_chronological_interface_slot_map(interface_slot_map, interface_slot_map.declared_arity)
+        .map_err(|error| format!("chronological interface slot-map replay: {error}"))?;
+    Ok(match interface_mode {
+        A3ChronologicalInterfaceMode::DirectType => {
+            older.canonical_presentation.canonical_normal_form.clone()
+        }
+        A3ChronologicalInterfaceMode::PointwiseTypeValuedFunction { .. } => Expr::App(
+            Box::new(older.canonical_presentation.canonical_normal_form.clone()),
+            Box::new(Expr::Var(1)),
+        ),
+    })
+}
+
+/// Decide the support-comprehension case from the live dependency graph
+/// before attempting any specialization.  In particular, this is not an
+/// exception/fallback path: F-DC2 forbids trying the ordinary theorem and
+/// selecting a repair from its outcome.
+fn is_exact_support_comprehension_cycle_v4(
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+) -> Result<bool, String> {
+    if newest.kernel_type == KernelTy::Type || newest.canonical_presentation.parameters.len() != 2 {
+        return Ok(false);
+    }
+    let A3DemandOutputType::ChronologicalInteraction {
+        interface_slot_map, ..
+    } = &scheme.required_output
+    else {
+        return Err("chronological scheme has a non-chronological output".to_owned());
+    };
+    let assignments = interface_slot_map
+        .assignments
+        .iter()
+        .map(|assignment| (assignment.interface_slot, assignment.parameter))
+        .collect::<Vec<_>>();
+    let first_realizer = chronological_first_image_v4(scheme, older)?;
+    // The source p2 motive becomes El(Eventually(first_realizer)).  With the
+    // exact identity tail p2 -> target p2, occurrence of target p2 in the
+    // first realizer is precisely the forbidden p2 -> p2 dependency edge.
+    Ok(assignments == vec![(1, 1), (2, 2)] && first_realizer.var_refs().contains(&2))
+}
+
+fn exact_chronological_binding_v4<'a>(
+    window: &'a A3HistoricalWindow,
+    scheme: &A3TypedDemandScheme,
+    instance: &A3TypedDemandInstance,
+) -> Result<
+    (
+        &'a A3TypedClauseSource,
+        &'a A3TypedClauseSource,
+        A3ChronologicalInterfaceMode,
+        bool,
+    ),
+    String,
+> {
+    if scheme.rule_constructor != A3RuleConstructor::ChronologicalComparison
+        || instance.scheme_id != scheme.scheme_id
+    {
+        return Err("chronological instance/scheme join failed".to_owned());
+    }
+    let (older, newest) = chronological_sources(window, instance)?;
+    let A3DemandOutputType::ChronologicalInteraction {
+        older_family,
+        older_type,
+        newest_family,
+        newest_type,
+        interface_mode,
+        ..
+    } = &scheme.required_output
+    else {
+        return Err("chronological scheme has a non-chronological output".to_owned());
+    };
+    if older_family != &older.canonical_family_key
+        || older_type != &older.kernel_type
+        || newest_family != &newest.canonical_family_key
+        || newest_type != &newest.kernel_type
+        || instance.source_family_keys
+            != vec![
+                older.canonical_family_key.clone(),
+                newest.canonical_family_key.clone(),
+            ]
+    {
+        return Err("chronological output does not exactly bind its typed sources".to_owned());
+    }
+    let expected_mode = match &older.kernel_type {
+        KernelTy::Type => A3ChronologicalInterfaceMode::DirectType,
+        KernelTy::Fun(domain, codomain) if codomain.as_ref() == &KernelTy::Type => {
+            A3ChronologicalInterfaceMode::PointwiseTypeValuedFunction {
+                domain: domain.as_ref().clone(),
+            }
+        }
+        _ => return Err("older chronological interface is not Type-valued".to_owned()),
+    };
+    if interface_mode != &expected_mode {
+        return Err("chronological interface-mode evidence drifted".to_owned());
+    }
+    Ok((
+        older,
+        newest,
+        interface_mode.clone(),
+        matches!(interface_mode, A3ChronologicalInterfaceMode::DirectType),
+    ))
+}
+
+/// Branch-parametric successor of the legacy closed-v2 chronological adapter.
+///
+/// Formation, ordinary open specialization, and the unique
+/// support-comprehension graph are disjoint live syntactic classes.  Each
+/// class is selected before theorem issuance and replayed against the supplied
+/// signature; no enacted archive, recorded verdict, or issuer outcome is
+/// consulted.
+fn issue_branch_chronological_membership_audit_v4(
+    signature: &SealedSignature,
+    visible_library: u32,
+    window: &A3HistoricalWindow,
+    scheme: &A3TypedDemandScheme,
+    instance: &A3TypedDemandInstance,
+) -> Result<(BranchDMembershipAudit, bool), String> {
+    let (older, newest, interface_mode, direct) =
+        exact_chronological_binding_v4(window, scheme, instance)?;
+    let A3DemandOutputType::ChronologicalInteraction {
+        interface_slot_map, ..
+    } = &scheme.required_output
+    else {
+        return Err("chronological scheme has a non-chronological output".to_owned());
+    };
+    let orbit = window
+        .orbits
+        .iter()
+        .find(|orbit| {
+            orbit.scheme_id == scheme.scheme_id
+                && orbit.member_instance_ids.contains(&instance.instance_id)
+        })
+        .ok_or_else(|| "chronological instance has no exact quotient orbit".to_owned())?;
+    let reversed_instance = A3TypedDemandInstance {
+        source_anchor_ids: vec![newest.anchor_id.clone(), older.anchor_id.clone()],
+        ..instance.clone()
+    };
+    let source_or_evidence_swap_rejected =
+        chronological_sources(window, &reversed_instance).is_err();
+    if !source_or_evidence_swap_rejected {
+        return Err("chronological source-order negative control was accepted".to_owned());
+    }
+
+    let (
+        evidence_hash,
+        output_kernel_typed,
+        internal_closure_preimage,
+        internality_rule_id,
+        exact_substitution_from_sealed_preimage_replayed,
+        marginal_charge_zero,
+    ) = if newest.kernel_type == KernelTy::Type {
+        let token = issue_chronological_formation_specialization_v4(
+            signature,
+            visible_library,
+            older,
+            newest,
+            interface_mode,
+            interface_slot_map.clone(),
+        )
+        .map_err(|error| format!("contextual Formation v4 issuance failed: {error}"))?;
+        let projection = token.projection();
+        replay_chronological_formation_specialization_v4(signature, projection)
+            .map_err(|error| format!("contextual Formation v4 replay failed: {error}"))?;
+        let exact_join = projection.signature_digest == signature.digest()
+            && projection.visible_library == visible_library
+            && projection.source.sealed_family.source == *newest
+            && projection.older_source == *older
+            && projection.interface_mode
+                == match &scheme.required_output {
+                    A3DemandOutputType::ChronologicalInteraction { interface_mode, .. } => {
+                        interface_mode.clone()
+                    }
+                    _ => unreachable!("checked above"),
+                }
+            && projection.slot_map == *interface_slot_map;
+        let output_kernel_typed = exact_join
+            && projection.every_image_exactly_typed
+            && projection
+                .image_typings
+                .iter()
+                .all(|image| image.exact_classifier_replayed && image.genuine_internal_replayed)
+            && projection.specialized_internal.exact_kernel_typing_replayed
+            && projection.normalization_commutes.equal;
+        let internal_closure_preimage = projection.source.internal_closure_issued
+            && projection.specialized_internal.internal_closure_issued
+            && projection.post_substitution_internal_replayed
+            && !projection.candidate_fresh_formation_admitted;
+        let exact_substitution = projection.structural_substitution_replayed
+            && projection.exact_open_substitution_result_replayed
+            && projection.ordered_identity_tail_exact
+            && projection.no_permutation_or_instance_override;
+        let marginal_charge_zero = projection.marginal_nu == 0
+            && projection.source.zero_credit
+            && projection.specialized_internal.marginal_kappa == 0
+            && projection.specialized_internal.marginal_nu == 0
+            && projection.specialized_internal.anchors_minted == 0;
+        (
+            tagged_hash(
+                "branch-chronological-formation-v4-evidence",
+                &(
+                    signature.digest(),
+                    window.window_derivation_hash.as_str(),
+                    scheme.scheme_id.as_str(),
+                    instance.instance_id.as_str(),
+                    orbit.orbit_derivation_hash.as_str(),
+                    projection,
+                ),
+            ),
+            output_kernel_typed,
+            internal_closure_preimage,
+            T_SM1A_CONTEXTUAL_FORMATION_V4_VERSION.to_owned(),
+            exact_substitution,
+            marginal_charge_zero,
+        )
+    } else if is_exact_support_comprehension_cycle_v4(scheme, older, newest)? {
+        let derivation = issue_support_comprehension_derivation_for_row_v5(
+            signature,
+            visible_library,
+            instance,
+            scheme,
+            older,
+            newest,
+        )
+        .map_err(|error| format!("support-comprehension v5 issuance failed: {error}"))?;
+        replay_support_comprehension_derivation_for_row_v5(
+            signature,
+            visible_library,
+            instance,
+            scheme,
+            older,
+            newest,
+            &derivation,
+        )
+        .map_err(|error| format!("support-comprehension v5 replay failed: {error}"))?;
+        let hardening = issue_support_comprehension_hardening_for_row_v6(
+            signature,
+            visible_library,
+            instance,
+            scheme,
+            older,
+            newest,
+            &derivation,
+        )
+        .map_err(|error| format!("support-comprehension hardening v6 issuance failed: {error}"))?;
+        replay_support_comprehension_hardening_for_row_v6(
+            signature,
+            visible_library,
+            instance,
+            scheme,
+            older,
+            newest,
+            &derivation,
+            &hardening,
+        )
+        .map_err(|error| format!("support-comprehension hardening v6 replay failed: {error}"))?;
+        let hardening_proved = hardening.base_derivation_replayed
+            && hardening.graph_normal_form.proved
+            && hardening.zero_mint_capability.proved
+            && hardening.proved
+            && hardening.bound_support_derivation_hash == derivation.derivation_hash
+            && derivation.specialization.signature_digest == signature.digest()
+            && derivation.specialization.visible_library == visible_library;
+        let projection = &derivation.specialization;
+        let exact_join = derivation.canonical_analysis.sealed_instance == *instance
+            && derivation.canonical_analysis.sealed_scheme == *scheme
+            && derivation.canonical_analysis.older_source == *older
+            && derivation.canonical_analysis.newest_source == *newest
+            && projection.signature_digest == signature.digest()
+            && projection.visible_library == visible_library;
+        let output_kernel_typed = hardening_proved
+            && exact_join
+            && projection
+                .images
+                .iter()
+                .all(|image| image.internal_evidence_replayed)
+            && projection
+                .normalized_target_totality
+                .total_specialization_theorem_issued
+            && projection.specialized_internal.raw_to_normal_equality.equal;
+        let internal_closure_preimage = hardening_proved
+            && derivation.support_context_acyclic
+            && derivation.support_context_canonical
+            && projection
+                .specialized_internal
+                .normalized_internal
+                .totality
+                .total_specialization_theorem_issued
+            && projection
+                .specialized_internal
+                .normalized_internal
+                .outcome_filtering_audit
+                == (true, true)
+            && projection
+                .specialized_internal
+                .normalized_internal
+                .zero_charge_audit
+                == (0, 0, 0);
+        let exact_substitution = projection.substitution_result
+            == derivation.specialized_expression
+            && projection.specialized_internal.raw_expression == projection.substitution_result
+            && !projection.substitution_derivation_hash.is_empty()
+            && hardening
+                .graph_normal_form
+                .exact_one_admissible_generator_subset
+            && hardening
+                .graph_normal_form
+                .exact_one_order_preserving_factorization
+            && derivation
+                .canonical_analysis
+                .unique_minimal_support_extension_proved;
+        (
+            tagged_hash(
+                "branch-chronological-support-comprehension-v5-evidence",
+                &(
+                    signature.digest(),
+                    window.window_derivation_hash.as_str(),
+                    scheme.scheme_id.as_str(),
+                    instance.instance_id.as_str(),
+                    orbit.orbit_derivation_hash.as_str(),
+                    &derivation,
+                    &hardening,
+                ),
+            ),
+            output_kernel_typed,
+            internal_closure_preimage,
+            format!(
+                "{SUPPORT_COMPREHENSION_V5_VERSION}+{SUPPORT_COMPREHENSION_HARDENING_V6_SCHEMA}+{MOTIVE_TYPED_OPEN_SPECIALIZATION_V4_VERSION}"
+            ),
+            exact_substitution,
+            derivation.zero_accounting_proved
+                && hardening
+                    .zero_mint_capability
+                    .projection_agrees_with_derived_zero
+                && hardening.zero_mint_capability.no_forbidden_capability,
+        )
+    } else {
+        let token = issue_chronological_open_specialization_for_instance_v4(
+            signature,
+            visible_library,
+            instance,
+            scheme,
+            older,
+            newest,
+        )
+        .map_err(|error| format!("motive-typed open specialization v4 issuance failed: {error}"))?;
+        let projection = token.projection();
+        replay_chronological_open_specialization_for_instance_v4(
+            signature,
+            visible_library,
+            instance,
+            scheme,
+            older,
+            newest,
+            projection,
+        )
+        .map_err(|error| format!("motive-typed open specialization v4 replay failed: {error}"))?;
+        let output_kernel_typed = projection.signature_digest == signature.digest()
+            && projection.visible_library == visible_library
+            && projection
+                .images
+                .iter()
+                .all(|image| image.internal_evidence_replayed)
+            && projection
+                .normalized_target_totality
+                .total_specialization_theorem_issued
+            && projection.specialized_internal.raw_to_normal_equality.equal;
+        let internal_closure_preimage = projection
+            .specialized_internal
+            .normalized_internal
+            .totality
+            .total_specialization_theorem_issued
+            && projection
+                .specialized_internal
+                .normalized_internal
+                .outcome_filtering_audit
+                == (true, true)
+            && projection
+                .specialized_internal
+                .normalized_internal
+                .zero_charge_audit
+                == (0, 0, 0);
+        let exact_substitution = projection.specialized_internal.raw_expression
+            == projection.substitution_result
+            && !projection.substitution_derivation_hash.is_empty()
+            && projection.target_may_remain_open;
+        let marginal_charge_zero = projection.target_declaration.marginal_kappa == 0
+            && projection.target_declaration.marginal_nu == 0
+            && projection.target_declaration.anchors_minted == 0
+            && projection
+                .specialized_internal
+                .normalized_internal
+                .marginal_nu
+                == 0;
+        (
+            tagged_hash(
+                "branch-chronological-open-v4-evidence",
+                &(
+                    signature.digest(),
+                    window.window_derivation_hash.as_str(),
+                    scheme.scheme_id.as_str(),
+                    instance.instance_id.as_str(),
+                    orbit.orbit_derivation_hash.as_str(),
+                    projection,
+                ),
+            ),
+            output_kernel_typed,
+            internal_closure_preimage,
+            MOTIVE_TYPED_OPEN_SPECIALIZATION_V4_VERSION.to_owned(),
+            exact_substitution,
+            marginal_charge_zero,
+        )
+    };
+
+    let row = finish_membership_audit(
+        instance,
+        scheme,
+        evidence_hash,
+        true,
+        output_kernel_typed,
+        internal_closure_preimage,
+        internality_rule_id,
+        false,
+        exact_substitution_from_sealed_preimage_replayed,
+        instance.identity_or_uniform_specialization && orbit.uniform_specializations_collapsed,
+        instance.independently_exported_demand || orbit.independently_exported_demand_orbit,
+        marginal_charge_zero,
+        source_or_evidence_swap_rejected,
+        None,
+        false,
+    );
+    Ok((row, direct))
+}
+
+fn replay_branch_chronological_membership_audit_v4(
+    signature: &SealedSignature,
+    visible_library: u32,
+    window: &A3HistoricalWindow,
+    scheme: &A3TypedDemandScheme,
+    instance: &A3TypedDemandInstance,
+    claimed: &BranchDMembershipAudit,
+) -> Vec<String> {
+    match issue_branch_chronological_membership_audit_v4(
+        signature,
+        visible_library,
+        window,
+        scheme,
+        instance,
+    ) {
+        Ok((expected, _)) if expected == *claimed => Vec::new(),
+        Ok(_) => vec![
+            "contextual-v4 chronological D-membership differs from exact reissuance".to_owned(),
+        ],
+        Err(error) => vec![format!(
+            "contextual-v4 chronological D-membership reissuance failed: {error}"
+        )],
+    }
+}
+
 fn charge_joins_step(
     charge: &future_v2::FillerOrdinaryChargeProvenanceV2,
     source: &BranchFinaleStepInput,
@@ -1619,6 +2108,15 @@ fn capacity_gap_audit(
 /// [`execute_certified_branch_finale`].
 pub fn execute_branch_finale(input: &BranchFinaleInput) -> Result<BranchFinaleAudit, String> {
     execute_branch_finale_inner(input, false)
+}
+
+/// Execute only after a crate-internal adapter has independently replayed and
+/// exactly joined every upstream branch and ordinary-provenance certificate.
+/// This must never be used as a raw-input certification escape hatch.
+pub(crate) fn execute_replayed_branch_finale_input(
+    input: &BranchFinaleInput,
+) -> Result<BranchFinaleAudit, String> {
+    execute_branch_finale_inner(input, true)
 }
 
 fn execute_branch_finale_inner(
@@ -2312,7 +2810,7 @@ fn execute_branch_finale_inner(
     for instance in &final_window.instances {
         let scheme = scheme_for_instance(final_window, instance)?;
         if scheme.rule_constructor == A3RuleConstructor::ChronologicalComparison {
-            match issue_branch_chronological_membership_audit(
+            match issue_branch_chronological_membership_audit_v4(
                 &full_signature,
                 input.halt_step,
                 final_window,
@@ -2641,15 +3139,16 @@ fn execute_branch_finale_inner(
                     .iter()
                     .find(|instance| instance.instance_id == original.a3_instance_id)?;
                 let scheme = scheme_for_instance(final_window, instance).ok()?;
-                let original_authoritative_replay = replay_branch_chronological_membership_audit(
-                    &full_signature,
-                    input.halt_step,
-                    final_window,
-                    scheme,
-                    instance,
-                    original,
-                )
-                .is_empty();
+                let original_authoritative_replay =
+                    replay_branch_chronological_membership_audit_v4(
+                        &full_signature,
+                        input.halt_step,
+                        final_window,
+                        scheme,
+                        instance,
+                        original,
+                    )
+                    .is_empty();
                 let mut counterfactual_rows = membership.clone();
                 let counterfactual_membership = {
                     let mutated = counterfactual_rows
@@ -2671,7 +3170,7 @@ fn execute_branch_finale_inner(
                 let counterfactual_membership_hash =
                     counterfactual_membership.derivation_hash.clone();
                 let authoritative_membership_reissue_rejected = original_authoritative_replay
-                    && !replay_branch_chronological_membership_audit(
+                    && !replay_branch_chronological_membership_audit_v4(
                         &full_signature,
                         input.halt_step,
                         final_window,
@@ -2914,12 +3413,12 @@ mod tests {
     }
 
     #[test]
-    fn branch_generic_finale_replays_and_records_chronological_closure_gaps() {
+    fn branch_generic_finale_replays_all_contextual_v4_chronological_rows() {
         let (input, audit) = raw_fixture();
         assert!(replay_branch_finale_input(&input, &audit).is_empty());
         assert!(!audit.continuation_provenance_join_exact);
         assert!(audit.every_window_inventory_exhaustive);
-        assert_eq!(audit.expressivity_gaps.len(), 85);
+        assert_eq!(audit.expressivity_gaps.len(), 13);
         let chronological_gaps = audit
             .expressivity_gaps
             .iter()
@@ -2932,7 +3431,7 @@ mod tests {
                 .iter()
                 .filter(|gap| gap.contains("BI_CHRONOLOGICAL_"))
                 .count(),
-            72
+            0
         );
         assert_eq!(
             audit
@@ -2951,8 +3450,34 @@ mod tests {
                     && matches!(row.disposition, BranchDMembershipDisposition::Derivable)
             })
             .collect::<Vec<_>>();
-        assert!(derived_chronological.is_empty());
-        assert!(!audit.exact_d_partition);
+        assert_eq!(derived_chronological.len(), 72);
+        assert_eq!(audit.final_direct_chronological_count, 64);
+        assert_eq!(audit.final_pointwise_chronological_count, 8);
+        assert_eq!(
+            derived_chronological
+                .iter()
+                .filter(|row| row.internality_rule_id == T_SM1A_CONTEXTUAL_FORMATION_V4_VERSION)
+                .count(),
+            54
+        );
+        assert_eq!(
+            derived_chronological
+                .iter()
+                .filter(|row| row.internality_rule_id == MOTIVE_TYPED_OPEN_SPECIALIZATION_V4_VERSION)
+                .count(),
+            17
+        );
+        assert_eq!(
+            derived_chronological
+                .iter()
+                .filter(|row| row
+                    .internality_rule_id
+                    .contains(SUPPORT_COMPREHENSION_V5_VERSION))
+                .count(),
+            1
+        );
+        assert_eq!(audit.derivable_instance_count, 89);
+        assert!(audit.exact_d_partition);
         assert!(audit.every_registration_evidence_mutation_rejected);
         assert_eq!(audit.structural_realization_count, 0);
         assert_eq!(audit.realization_gap_ids.len(), 13);
@@ -2969,7 +3494,7 @@ mod tests {
         assert!(!audit.stage3_wrinkle_reproduced);
         assert!(!audit.focus_projection_reproduces_branch_ladder);
         assert!(audit.every_membership_source_or_evidence_swap_rejected);
-        assert_eq!(audit.issuer_gap_instance_ids.len(), 72);
+        assert!(audit.issuer_gap_instance_ids.is_empty());
         assert!(audit.f1_counterfactual.is_none());
         assert!(!audit.f1_counterfactual_underdetermination_detected);
         assert!(

@@ -7,11 +7,15 @@
 
 use crate::support_comprehension_v5::{
     CanonicalSupportAnalysisV5, SupportComprehensionDerivationV5,
-    replay_support_comprehension_derivation_v5,
+    replay_support_comprehension_derivation_for_row_v5, replay_support_comprehension_derivation_v5,
 };
 use pen_core::expr::Expr;
 use pen_core::hash::blake3_hex;
+use pen_eval::a3_demand_grammar::{
+    A3TypedClauseSource, A3TypedDemandInstance, A3TypedDemandScheme,
+};
 use pen_type::dependent_context::DependentContextMotive;
+use pen_type::elaborate::SealedSignature;
 use serde::Serialize;
 use std::collections::BTreeSet;
 use thiserror::Error;
@@ -424,7 +428,7 @@ fn graph_normal_form(
         Ok(theorem)
     } else {
         Err(SupportComprehensionHardeningV6Error::Graph(
-            "exact sealed graph did not have one canonical comprehension factorization".to_owned(),
+            "exact live graph did not have one canonical comprehension factorization".to_owned(),
         ))
     }
 }
@@ -618,11 +622,9 @@ fn token_digest(token: &SupportComprehensionHardeningV6Token) -> String {
     tagged_hash("support-hardening-token", &projection)
 }
 
-pub fn issue_support_comprehension_hardening_v6(
+fn issue_support_comprehension_hardening_core_v6(
     derivation: &SupportComprehensionDerivationV5,
 ) -> Result<SupportComprehensionHardeningV6Token, SupportComprehensionHardeningV6Error> {
-    replay_support_comprehension_derivation_v5(derivation)
-        .map_err(|error| SupportComprehensionHardeningV6Error::Base(error.to_string()))?;
     let base_derivation_replayed = true;
     let graph_normal_form = graph_normal_form(&derivation.canonical_analysis)?;
     let zero_mint_capability = zero_mint_capability(derivation)?;
@@ -640,6 +642,82 @@ pub fn issue_support_comprehension_hardening_v6(
     };
     token.derivation_hash = token_digest(&token);
     Ok(token)
+}
+
+/// Harden one exact live support-comprehension row.  The base derivation is
+/// first reissued from the supplied signature and complete A3 row; the graph
+/// normal form and no-mint capability theorems are then bound to that exact
+/// base hash.
+pub fn issue_support_comprehension_hardening_for_row_v6(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+    derivation: &SupportComprehensionDerivationV5,
+) -> Result<SupportComprehensionHardeningV6Token, SupportComprehensionHardeningV6Error> {
+    replay_support_comprehension_derivation_for_row_v5(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+        derivation,
+    )
+    .map_err(|error| SupportComprehensionHardeningV6Error::Base(error.to_string()))?;
+    issue_support_comprehension_hardening_core_v6(derivation)
+}
+
+/// Preserve the Genesis v6 API.
+pub fn issue_support_comprehension_hardening_v6(
+    derivation: &SupportComprehensionDerivationV5,
+) -> Result<SupportComprehensionHardeningV6Token, SupportComprehensionHardeningV6Error> {
+    replay_support_comprehension_derivation_v5(derivation)
+        .map_err(|error| SupportComprehensionHardeningV6Error::Base(error.to_string()))?;
+    issue_support_comprehension_hardening_core_v6(derivation)
+}
+
+/// Replay exact-row hardening by reissuing both the base v5 theorem and the
+/// complete v6 token under the supplied signature.
+pub fn replay_support_comprehension_hardening_for_row_v6(
+    signature: &SealedSignature,
+    visible_library: u32,
+    instance: &A3TypedDemandInstance,
+    scheme: &A3TypedDemandScheme,
+    older: &A3TypedClauseSource,
+    newest: &A3TypedClauseSource,
+    derivation: &SupportComprehensionDerivationV5,
+    claimed: &SupportComprehensionHardeningV6Token,
+) -> Result<(), SupportComprehensionHardeningV6Error> {
+    replay_support_comprehension_derivation_for_row_v5(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+        derivation,
+    )
+    .map_err(|error| SupportComprehensionHardeningV6Error::Base(error.to_string()))?;
+    if claimed.derivation_hash != token_digest(claimed) {
+        return Err(SupportComprehensionHardeningV6Error::ReplayMismatch);
+    }
+    let expected = issue_support_comprehension_hardening_for_row_v6(
+        signature,
+        visible_library,
+        instance,
+        scheme,
+        older,
+        newest,
+        derivation,
+    )?;
+    if expected == *claimed {
+        Ok(())
+    } else {
+        Err(SupportComprehensionHardeningV6Error::ReplayMismatch)
+    }
 }
 
 pub fn replay_support_comprehension_hardening_v6(
@@ -707,5 +785,72 @@ mod tests {
         stale.specialized_expression = Expr::Var(999);
         assert!(issue_support_comprehension_hardening_v6(&stale).is_err());
         assert!(replay_support_comprehension_hardening_v6(&stale, &token).is_err());
+    }
+
+    #[test]
+    fn exact_row_hardening_matches_genesis_and_rejects_row_mutation() {
+        let signature = SealedSignature::genesis_del_h15();
+        let derivation = issue_support_comprehension_derivation_v5().expect("support derivation");
+        let analysis = &derivation.canonical_analysis;
+        let generic = issue_support_comprehension_hardening_for_row_v6(
+            &signature,
+            15,
+            &analysis.sealed_instance,
+            &analysis.sealed_scheme,
+            &analysis.older_source,
+            &analysis.newest_source,
+            &derivation,
+        )
+        .expect("generic hardening");
+        let legacy =
+            issue_support_comprehension_hardening_v6(&derivation).expect("legacy hardening");
+        assert_eq!(generic, legacy);
+        assert!(generic.proved);
+        assert_eq!(
+            derivation.specialization.signature_digest,
+            signature.digest()
+        );
+        replay_support_comprehension_hardening_for_row_v6(
+            &signature,
+            15,
+            &analysis.sealed_instance,
+            &analysis.sealed_scheme,
+            &analysis.older_source,
+            &analysis.newest_source,
+            &derivation,
+            &generic,
+        )
+        .expect("generic hardening replay");
+
+        let mut forged_scheme = analysis.sealed_scheme.clone();
+        forged_scheme.formation_derivation_hash.push_str("-forged");
+        assert!(
+            issue_support_comprehension_hardening_for_row_v6(
+                &signature,
+                15,
+                &analysis.sealed_instance,
+                &forged_scheme,
+                &analysis.older_source,
+                &analysis.newest_source,
+                &derivation,
+            )
+            .is_err()
+        );
+    }
+
+    #[test]
+    fn legacy_v6_projection_remains_byte_lineage_compatible() {
+        let derivation = issue_support_comprehension_derivation_v5().expect("support derivation");
+        let hardening =
+            issue_support_comprehension_hardening_v6(&derivation).expect("support hardening");
+        let archived: serde_json::Value = serde_json::from_slice(include_bytes!(
+            "../../../docs/support_comprehension_chronological_v5.json"
+        ))
+        .expect("archived v5 JSON");
+        assert_eq!(
+            serde_json::to_value(&hardening).expect("current v6 projection"),
+            archived["support_comprehension_hardening"],
+            "generic exact-row API must not alter the immutable v6 projection"
+        );
     }
 }

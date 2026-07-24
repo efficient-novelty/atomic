@@ -30,7 +30,9 @@ use super::{
     endpoint_source_digest, issue_endpoint_schema_premise_context, realize_endpoint_path_basis,
     realize_path_basis, replay_endpoint_path_realization, replay_path_realization,
 };
-use crate::elaborate::{KernelTy, SealedSignature, TelescopeElaboration};
+use crate::elaborate::{
+    KernelTy, SealedSignature, TelescopeElaboration, candidate_hash, elaborate_telescope,
+};
 use crate::substitution::{
     ParameterSort, SORT_PRESERVATION_SCOPE, SortPreservingSubstitutionToken,
     SortedParameterContext, SubstitutionImage, issue_sort_preserving_substitution,
@@ -516,6 +518,10 @@ pub enum TypedBoundaryError {
     HistoricalPrefixMismatch { predecessor: u32 },
     #[error("V3 historical package step {step} is not its exact sealed telescope")]
     HistoricalCurrentTelescopeMismatch { step: u32 },
+    #[error("V4 prefix-general S3 boundary requires an exact contiguous seven-entry prefix")]
+    PrefixGeneralS3PrefixShapeMismatch,
+    #[error("V4 prefix-general predecessor step {step} did not elaborate: {error}")]
+    PrefixGeneralPredecessorElaboration { step: u32, error: String },
     #[error("registered historical source failed formed-path elaboration: {error}")]
     FormedPathElaboration { error: String },
     #[error("registered source has the wrong formation/path clauses or dimension")]
@@ -696,6 +702,70 @@ fn registered_source_for_historical_prefix(
     })
 }
 
+/// Prefix-parametric source reconstruction for the registered S3 boundary.
+///
+/// Unlike [`registered_source_for_historical_prefix`], this theorem does not
+/// compare the predecessor against the historical B7 telescope sequence.  It
+/// re-elaborates each of the seven supplied predecessor acts against only its
+/// own earlier prefix, then elaborates the registered five-clause S3 package
+/// over that exact prefix.  The local S3 interpretation is therefore licensed
+/// by typing and source shape, not by enacted-prefix identity.
+fn registered_s3_source_for_prefix_general_v4(
+    predecessor_signature: &SealedSignature,
+    current_telescope: &Telescope,
+) -> Result<RegisteredSource, TypedBoundaryError> {
+    const STEP: u32 = 8;
+    if predecessor_signature.entries().len() != (STEP - 1) as usize
+        || predecessor_signature
+            .entries()
+            .iter()
+            .map(|entry| entry.step)
+            .ne(1..STEP)
+    {
+        return Err(TypedBoundaryError::PrefixGeneralS3PrefixShapeMismatch);
+    }
+
+    let mut checked_prefix = Vec::<(u32, Telescope)>::new();
+    for entry in predecessor_signature.entries() {
+        let earlier = SealedSignature::from_telescopes(checked_prefix.clone());
+        elaborate_telescope(&earlier, &entry.telescope, entry.step.saturating_sub(1)).map_err(
+            |error| TypedBoundaryError::PrefixGeneralPredecessorElaboration {
+                step: entry.step,
+                error: error.to_string(),
+            },
+        )?;
+        checked_prefix.push((entry.step, entry.telescope.clone()));
+    }
+    if SealedSignature::from_telescopes(checked_prefix).digest() != predecessor_signature.digest() {
+        return Err(TypedBoundaryError::PrefixGeneralS3PrefixShapeMismatch);
+    }
+
+    let sealed_current = Telescope::reference(STEP);
+    if current_telescope != &sealed_current {
+        return Err(TypedBoundaryError::HistoricalCurrentTelescopeMismatch { step: STEP });
+    }
+    let (typing, elaboration) =
+        elaborate_formed_path(predecessor_signature, current_telescope, STEP - 1).map_err(
+            |error| TypedBoundaryError::FormedPathElaboration {
+                error: error.to_string(),
+            },
+        )?;
+    let kind = RegisteredBoundaryKind::S3;
+    if typing.formation_clause != HISTORICAL_FORMATION_CLAUSE
+        || typing.path_clause != HISTORICAL_PATH_CLAUSE
+        || typing.dimension != kind.dimension()
+    {
+        return Err(TypedBoundaryError::RegisteredPathShapeMismatch);
+    }
+    Ok(RegisteredSource {
+        kind,
+        candidate_hash: candidate_hash(current_telescope),
+        telescope: current_telescope.clone(),
+        typing,
+        elaboration,
+    })
+}
+
 fn parameter_context_for_source(source: &RegisteredSource) -> TypedParameterContext {
     let owner = source.typing.formation_normal_form.clone();
     let bindings = match source.kind {
@@ -772,6 +842,18 @@ pub fn registered_boundary_diagram_for_historical_prefix(
     canonical_diagram_for_source(&registered_source_for_historical_prefix(
         predecessor_signature,
         kind,
+        current_telescope,
+    )?)
+}
+
+/// Build the registered S3 diagram from an arbitrary typed seven-act prefix.
+/// No historical prefix or branch identity is accepted as an input.
+pub fn registered_s3_boundary_diagram_for_prefix_general_v4(
+    predecessor_signature: &SealedSignature,
+    current_telescope: &Telescope,
+) -> Result<DeclaredBoundaryDiagram, TypedBoundaryError> {
+    canonical_diagram_for_source(&registered_s3_source_for_prefix_general_v4(
+        predecessor_signature,
         current_telescope,
     )?)
 }
@@ -2472,6 +2554,45 @@ pub fn issue_typed_declared_boundary_token_v3_for_historical_prefix(
     )
 }
 
+/// Prefix-general successor of the historical-prefix V3 API for the S3
+/// package.  It uses the same adopted element-overlay axiom and token
+/// representation, but its source theorem re-elaborates the caller's exact
+/// seven-act prefix rather than comparing it with sealed historical B7.
+///
+/// On historical B7 this returns exactly the legacy token; that equality is a
+/// regression theorem, not an input to issuance on any other prefix.
+pub fn issue_typed_declared_s3_boundary_token_v4_for_prefix_general(
+    predecessor_signature: &SealedSignature,
+    current_telescope: &Telescope,
+    map: DeclaredBoundaryDiagram,
+) -> Result<TypedDeclaredBoundaryToken, TypedBoundaryError> {
+    let source =
+        registered_s3_source_for_prefix_general_v4(predecessor_signature, current_telescope)?;
+    let reference_only = issue_reference_only_charge_token_from_source(
+        predecessor_signature,
+        &source,
+        map.clone(),
+        TypedBoundaryAxiom::V3ElementOverlay,
+    )?;
+    let overlay = issue_historical_element_overlay_token_from_source(
+        predecessor_signature.digest(),
+        &source,
+    )?;
+    let base_binding = Some(construct_historical_base_binding_token_v3(
+        predecessor_signature.digest(),
+        registered_s3_source_for_prefix_general_v4(predecessor_signature, current_telescope)?,
+        &overlay,
+    )?);
+    assemble_typed_declared_boundary_token(
+        predecessor_signature.digest(),
+        source,
+        map,
+        reference_only,
+        base_binding,
+        TypedBoundaryAxiom::V3ElementOverlay,
+    )
+}
+
 pub fn replay_typed_declared_boundary_token(
     signature: &SealedSignature,
     token: &TypedDeclaredBoundaryToken,
@@ -2504,6 +2625,28 @@ pub fn replay_typed_declared_boundary_token_v3_for_historical_prefix(
     let replay = issue_typed_declared_boundary_token_v3_for_historical_prefix(
         predecessor_signature,
         token.kind,
+        current_telescope,
+        token.map.clone(),
+    )?;
+    if &replay == token {
+        Ok(())
+    } else {
+        Err(TypedBoundaryError::TypedBoundaryV3ReplayMismatch)
+    }
+}
+
+pub fn replay_typed_declared_s3_boundary_token_v4_for_prefix_general(
+    predecessor_signature: &SealedSignature,
+    current_telescope: &Telescope,
+    token: &TypedDeclaredBoundaryToken,
+) -> Result<(), TypedBoundaryError> {
+    if token.kind != RegisteredBoundaryKind::S3 {
+        return Err(TypedBoundaryError::RegisteredDiagramMismatch {
+            kind: RegisteredBoundaryKind::S3,
+        });
+    }
+    let replay = issue_typed_declared_s3_boundary_token_v4_for_prefix_general(
+        predecessor_signature,
         current_telescope,
         token.map.clone(),
     )?;
@@ -4134,6 +4277,7 @@ pub fn replay_historical_v3_c6_typed_handoff_token(
 mod tests {
     use super::super::boundary_variants::generic_declared_boundary;
     use super::*;
+    use pen_core::clause::ClauseRec;
 
     fn signature() -> SealedSignature {
         SealedSignature::genesis_del_h15()
@@ -4143,6 +4287,46 @@ mod tests {
         SealedSignature::from_telescopes(
             (1..step)
                 .map(|prior| (prior, Telescope::reference(prior)))
+                .collect(),
+        )
+    }
+
+    fn alternate_stage4_prefix() -> SealedSignature {
+        let alternate = Telescope::new(vec![
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::Lam(Box::new(Expr::Pi(
+                    Box::new(Expr::Var(1)),
+                    Box::new(Expr::Var(2)),
+                ))),
+            ),
+            ClauseRec::new(
+                ClauseRole::Introduction,
+                Expr::App(
+                    Box::new(Expr::App(Box::new(Expr::Var(1)), Box::new(Expr::Var(3)))),
+                    Box::new(Expr::Var(2)),
+                ),
+            ),
+            ClauseRec::new(
+                ClauseRole::Elimination,
+                Expr::App(
+                    Box::new(Expr::Lam(Box::new(Expr::Var(1)))),
+                    Box::new(Expr::Var(2)),
+                ),
+            ),
+        ]);
+        SealedSignature::from_telescopes(
+            (1..=7)
+                .map(|step| {
+                    (
+                        step,
+                        if step == 4 {
+                            alternate.clone()
+                        } else {
+                            Telescope::reference(step)
+                        },
+                    )
+                })
                 .collect(),
         )
     }
@@ -4674,6 +4858,53 @@ mod tests {
             ),
             Err(TypedBoundaryError::HistoricalCurrentTelescopeMismatch { step: 6 })
         );
+    }
+
+    #[test]
+    fn prefix_general_s3_boundary_accepts_a_typed_fork_without_historical_b7() {
+        let prefix = alternate_stage4_prefix();
+        let current = Telescope::reference(8);
+        assert_ne!(prefix, predecessor_prefix(8));
+        let diagram =
+            registered_s3_boundary_diagram_for_prefix_general_v4(&prefix, &current).unwrap();
+        let token = issue_typed_declared_s3_boundary_token_v4_for_prefix_general(
+            &prefix, &current, diagram,
+        )
+        .unwrap();
+        replay_typed_declared_s3_boundary_token_v4_for_prefix_general(&prefix, &current, &token)
+            .unwrap();
+        assert_eq!(token.kind(), RegisteredBoundaryKind::S3);
+        assert_eq!(token.signature_digest, prefix.digest());
+        assert_eq!(token.candidate_hash, candidate_hash(&current));
+        assert_eq!(token.faces().len(), 6);
+    }
+
+    #[test]
+    fn prefix_general_s3_boundary_is_exactly_legacy_on_historical_b7() {
+        let prefix = predecessor_prefix(8);
+        let current = Telescope::reference(8);
+        let legacy_diagram = registered_boundary_diagram_for_historical_prefix(
+            &prefix,
+            RegisteredBoundaryKind::S3,
+            &current,
+        )
+        .unwrap();
+        let legacy = issue_typed_declared_boundary_token_v3_for_historical_prefix(
+            &prefix,
+            RegisteredBoundaryKind::S3,
+            &current,
+            legacy_diagram,
+        )
+        .unwrap();
+        let general_diagram =
+            registered_s3_boundary_diagram_for_prefix_general_v4(&prefix, &current).unwrap();
+        let general = issue_typed_declared_s3_boundary_token_v4_for_prefix_general(
+            &prefix,
+            &current,
+            general_diagram,
+        )
+        .unwrap();
+        assert_eq!(general, legacy);
     }
 
     #[test]

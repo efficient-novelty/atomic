@@ -1,0 +1,190 @@
+{
+  "schema": "bi2-four-branch-finales-index-v2",
+  "date": "2026-07-23",
+  "source_bindings": [
+    {
+      "path": "docs/branch_invariance_program_plan.md",
+      "role": "frozen BI-2 mission, scope, and falsifiers",
+      "blake3": "blake3:6a5d0343dfc7b2f7b82570cbf2fa48a1857659eb61a8c7c1e48922f78f9bc86b"
+    },
+    {
+      "path": "docs/bi1b_prefix_general_provenance_plan.md",
+      "role": "sealed BI-1b upstream discipline",
+      "blake3": "blake3:9f89a3510a41fe9a791122acb12b3239cb538ea2d526976c7acfdda10155543a"
+    },
+    {
+      "path": "crates/pen-search/src/bi2_branch_finales_v1.rs",
+      "role": "BI-2 branch adapter, replay, and create-new issuer",
+      "blake3": "blake3:6a02c2f50e66829fe1bd37ea22afe0486b5dcfe0a493c5f5ad6360cebee1c42f"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance_finale.rs",
+      "role": "branch-parametric A3, D, O16, and F1 semantic core",
+      "blake3": "blake3:de1d68496c01eed643a4a6e256b43f0f66c854dff0b29095c39d74fd9cbf9631"
+    },
+    {
+      "path": "crates/pen-search/src/branch_prefix_general_provenance_v4.rs",
+      "role": "zero-input prefix-general extraction authority",
+      "blake3": "blake3:947e2d117053a1b2b25d279805915ac1401d6a490019f2780f500ea1f2e33fff"
+    },
+    {
+      "path": "crates/pen-search/src/act_local_semantic_provenance_v5.rs",
+      "role": "prefix-general v6 B1/B2 semantic sequence theorem",
+      "blake3": "blake3:8508f8b735067dbea24bc284447663fcb378dd58b7b1ee63bf419f7a8df4478a"
+    },
+    {
+      "path": "crates/pen-search/src/bi1b_prefix_general_sweep_v1.rs",
+      "role": "upstream four-branch deterministic replay",
+      "blake3": "blake3:fad65f5f06febedf053b5298924ab18b5adade7d74c551466f6b00b89c08ccc8"
+    },
+    {
+      "path": "crates/pen-search/src/t_sm1a_contextual_formation_v4.rs",
+      "role": "branch-parametric contextual-Formation Internal theorem",
+      "blake3": "blake3:ff44f261016583d65d3a40a858ddad7977a67bab7fbc0352a1c666f83cf876bf"
+    },
+    {
+      "path": "crates/pen-search/src/motive_typed_open_specialization_v4.rs",
+      "role": "branch-parametric dependent open-specialization theorem",
+      "blake3": "blake3:7d231978b06f786e8aad9f823e64fca73dc482bd674151468412eab3bee5474c"
+    },
+    {
+      "path": "crates/pen-search/src/support_comprehension_v5.rs",
+      "role": "canonical support-comprehension theorem for the unique cyclic row",
+      "blake3": "blake3:18a1406e3936fa1f6a7c5063d636db4da2dfca9830d20a417b153b0e379d8444"
+    },
+    {
+      "path": "crates/pen-search/src/support_comprehension_hardening_v6.rs",
+      "role": "support graph-normal-form and zero-mint hardening",
+      "blake3": "blake3:f022cf5b43bc99c5d433d5fe79e54bdf94df6342b571a962024a0566e1208f2d"
+    },
+    {
+      "path": "docs/dependent_context_adjudication.md",
+      "role": "adopted dependent-context law",
+      "blake3": "blake3:acc0f44597cbcb039086d49bd36a848793c98b6dc9b949e62a7fa4130aef86e6"
+    },
+    {
+      "path": "docs/support_comprehension_adjudication.md",
+      "role": "adopted support-comprehension law",
+      "blake3": "blake3:78ce58282285ae0ac1f569f46d2564fe1da68e30c71d160039337ae13c6b821d"
+    }
+  ],
+  "predecessor_v1_index_binding": {
+    "path": "docs/BI2_FOUR_BRANCH_FINALES_V1_CERTIFICATE.json",
+    "role": "aggregate-only immutable partial BI-2 v1 predecessor index",
+    "blake3": "blake3:8cb3d93b3e074780c86f1b67d0dd64287d5aee248d5daa0279b787b2d0568b4a"
+  },
+  "row_free_authorization": {
+    "schema": "bi2-prefix-general-branch-finale-v2",
+    "date": "2026-07-23",
+    "bi1b_sweep_digest": "blake3:79272aa307186696b2a6a4cd63b969cf7d9fc08a6ee4efde8f00ca30e5ac9e3d",
+    "bi1b_regression_certificate_digest": "blake3:52f317b5c70dab597b74522ed0dd16a2509dd08d253f5d660dc36cca0b627681",
+    "bi1b_regression_authorization_digest": "blake3:f8b63f92d696db362847387398b1e1bbb8f40353c3ba1610210da1a4e6b57f36",
+    "prefix_general_extraction_authority_digest": "blake3:644f32fa13632e4da3c52e32f2c983a0113d4e48d83764d1432a2e21bd6384d4",
+    "exact_four_branch_surface_authenticated": true,
+    "every_bi1b_branch_certificate_replayed": true,
+    "public_deterministic_replay_passed": false,
+    "public_replay_errors": [
+      "BI-1b sweep differs from deterministic reissuance"
+    ],
+    "frozen_testimony_fallback_used": true,
+    "frozen_bi1b_sweep_digest_exact": true,
+    "authorized_branch_roots": [
+      "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4"
+    ],
+    "authorized_bi1b_branch_certificate_digests": [
+      "blake3:5bdad12481ec6e96a6439e101ea95b4a4000ecbdf95d71ed70f5a5f237ad406a",
+      "blake3:7513e4b9a7f80fb501439501961fb5ac3c2af57a204ac7d23cde8709c88ef4d2",
+      "blake3:d1a6413e1fbc4b88bd431d303d412db90639f78dec69399f26826b3cb0c216d1",
+      "blake3:e1bed5d96478b92a8cf3b4361c97873784757107a1f56450ea8664091cd63867"
+    ],
+    "branch_family_rows_exported": false,
+    "branch_semantic_vectors_exported": false,
+    "branch_winners_exported": false,
+    "branch_outcomes_exported": false,
+    "correspondence_rows_exported": false,
+    "selector_capability_exported": false,
+    "derivation_hash": "blake3:5a26c2140d229c28fa261768adcc03c5355adb97f2b352152e7fd8cc5fdb7c7d"
+  },
+  "rows": [
+    {
+      "issuance_ordinal": 0,
+      "branch_root_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "enacted_root": true,
+      "branch_certificate_digest": "blake3:2b1c578445838932139bec04a223150b07c7832cb29cb31ac190c0dd84a730b4",
+      "final_a3_inventory_count": 89,
+      "semantic_o16_empty_branch_indexed": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "e5_class_complete": true,
+      "expressivity_gap_count": 0,
+      "branch_indexed_only": true,
+      "row_hash": "blake3:215dfc37fc3d3e1397503289e816692ecbb368a999c9166d8757a5a94196f60f"
+    },
+    {
+      "issuance_ordinal": 1,
+      "branch_root_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "enacted_root": false,
+      "branch_certificate_digest": "blake3:63e026c1ceee27b26802c3f18a46e051389f3a992ba2f808274a1d5334644e05",
+      "final_a3_inventory_count": 89,
+      "semantic_o16_empty_branch_indexed": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "e5_class_complete": true,
+      "expressivity_gap_count": 0,
+      "branch_indexed_only": true,
+      "row_hash": "blake3:7b4468450e12cb3ec04de1663fc32f1f1300974f8c272a9dd645a01cb8260743"
+    },
+    {
+      "issuance_ordinal": 2,
+      "branch_root_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "enacted_root": false,
+      "branch_certificate_digest": "blake3:fe1ff6c8ac02e399bcd2d6eb4c0f3e98e3f62097e0cee96c1066c98e86176ead",
+      "final_a3_inventory_count": 89,
+      "semantic_o16_empty_branch_indexed": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "e5_class_complete": true,
+      "expressivity_gap_count": 0,
+      "branch_indexed_only": true,
+      "row_hash": "blake3:3e4ca9900477a5e793606dd8e1d545eda9b0ecc537af9036fa4322c11038a1ca"
+    },
+    {
+      "issuance_ordinal": 3,
+      "branch_root_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "enacted_root": false,
+      "branch_certificate_digest": "blake3:db4ade8d2254e44103e7f64b62a74322786d21e84ff17d22fd6c87f408fccb7a",
+      "final_a3_inventory_count": 89,
+      "semantic_o16_empty_branch_indexed": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "e5_class_complete": true,
+      "expressivity_gap_count": 0,
+      "branch_indexed_only": true,
+      "row_hash": "blake3:f3245d6ff92e3a68a8480854d6529d929dc84c0b4c9259cf923ab804c6ac04d7"
+    }
+  ],
+  "exact_four_branch_surface": true,
+  "every_branch_certificate_reissued_equal": true,
+  "every_branch_finale_e5_class_complete": true,
+  "every_branch_local_semantic_o16_empty": true,
+  "every_branch_f1_executed": true,
+  "every_branch_f1_excluded": true,
+  "ready_for_bi4_assembly": true,
+  "cross_branch_comparison_performed": false,
+  "bi4_cone_report_issued": false,
+  "cone_g4_verdict_issued": false,
+  "g2_verdict_issued": false,
+  "g3_verdict_issued": false,
+  "uc1_scored": false,
+  "bridge_authorized": false,
+  "unindexed_halt_o_or_theorem12_claim_issued": false,
+  "permitted_conclusion": "Four independently replayed branch-indexed BI-2 finale certificates are sealed and ready for BI-4 assembly. Each row reports only its own relative full-A3 inventory, semantic successor-O, F1, and local-G4 disposition. This index performs no cross-branch comparison and issues no BI-4, cone-G4, G2, G3, UC-1, bridge, or unindexed halt/O/Theorem-12 claim.",
+  "result_digest": "blake3:cfa5bbd27c6f2c9c788ae6eac68e2128f87d18ce54362e72850b8d3aa1fc03ff"
+}

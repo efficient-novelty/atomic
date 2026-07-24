@@ -1,0 +1,576 @@
+{
+  "certificate": {
+    "schema": "branch-invariance-bi0-source-first-opening-gate-v6",
+    "date": "2026-07-22",
+    "theorem_id": "T-BI0-v6-source-first-F-AL1-prime-F-SM1-closed-join",
+    "t_bi_passed_projection": {
+      "schema": "t-bi-nu1-source-first-real-trace-regression-v6",
+      "theorem_id": "T-BI-NU1-v6-source-first-B1-B2-real-trace-B3-F-AL1-prime",
+      "source_certificate_result_digest": "blake3:d51d0543c32542200fff6e5cfd234da1bb2ffc12c058c805ac7974385727c8b4",
+      "exact_prefix_candidate_hashes": [
+        "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+        "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+        "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+        "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+        "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+        "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+        "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+        "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+        "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+        "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+        "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+        "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4"
+      ],
+      "exact_prefix_candidate_hash_digest": "blake3:0be41b6f7de772b01fd66af06d7fda71176ed469a8cf9eaa1343234386b6e79d",
+      "stage1_through3_typed_prefix_entries": [
+        [
+          1,
+          {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": "Univ"
+              },
+              {
+                "role": "formation",
+                "expr": {
+                  "App": [
+                    "Univ",
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        [
+          2,
+          {
+            "clauses": [
+              {
+                "role": "formation",
+                "expr": {
+                  "App": [
+                    "Univ",
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        [
+          3,
+          {
+            "clauses": [
+              {
+                "role": "introduction",
+                "expr": {
+                  "App": [
+                    {
+                      "Lib": 2
+                    },
+                    {
+                      "Var": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      ],
+      "stage1_through3_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+      "authoritative_prefix_semantic_seal": "blake3:f5a2c5396e7786b11bc9f25a118bfc9035b982cb1e490e8af41512bac8f0845a",
+      "intrinsic_sequence_derivation_hash": "blake3:bf820afa042a62ab091d900ce36199bb4a467c4102b2bb92d1947285c9c2b73e",
+      "intrinsic_issuance_trace_root": "blake3:874673b5d8e18525a3e0ce903f12ee4bbd563e82183664775865ae75e5679418",
+      "intrinsic_isolation_theorem_id": "T-BI-B3-v3-real-issuance-trace-transitive-isolation",
+      "intrinsic_isolation_derivation_hash": "blake3:6b41947bf636d9259bb41a6f4768eec2b8c284a418329ae80d67ed83857f0ddb",
+      "role_declaration_count": 330,
+      "proved_family_declaration_count": 61,
+      "theorem_impossibility_declaration_count": 269,
+      "named_registry_residual_count": 0,
+      "named_quotient_residual_count": 0,
+      "named_a3_residual_count": 0,
+      "total_named_residual_count": 0,
+      "silent_residue_count": 0,
+      "semantic_register": [
+        1,
+        0,
+        1,
+        3,
+        6,
+        3,
+        1,
+        1,
+        0,
+        4,
+        1,
+        0,
+        2,
+        3,
+        6
+      ],
+      "structural_register": [
+        1,
+        1,
+        2,
+        5,
+        7,
+        8,
+        10,
+        17,
+        17,
+        19,
+        26,
+        34,
+        46,
+        62,
+        103
+      ],
+      "bare_register_table": [
+        {
+          "stage": 1,
+          "structural": 1,
+          "semantic": 1
+        },
+        {
+          "stage": 2,
+          "structural": 1,
+          "semantic": 0
+        },
+        {
+          "stage": 3,
+          "structural": 2,
+          "semantic": 1
+        },
+        {
+          "stage": 4,
+          "structural": 5,
+          "semantic": 3
+        },
+        {
+          "stage": 5,
+          "structural": 7,
+          "semantic": 6
+        },
+        {
+          "stage": 6,
+          "structural": 8,
+          "semantic": 3
+        },
+        {
+          "stage": 7,
+          "structural": 10,
+          "semantic": 1
+        },
+        {
+          "stage": 8,
+          "structural": 17,
+          "semantic": 1
+        },
+        {
+          "stage": 9,
+          "structural": 17,
+          "semantic": 0
+        },
+        {
+          "stage": 10,
+          "structural": 19,
+          "semantic": 4
+        },
+        {
+          "stage": 11,
+          "structural": 26,
+          "semantic": 1
+        },
+        {
+          "stage": 12,
+          "structural": 34,
+          "semantic": 0
+        },
+        {
+          "stage": 13,
+          "structural": 46,
+          "semantic": 2
+        },
+        {
+          "stage": 14,
+          "structural": 62,
+          "semantic": 3
+        },
+        {
+          "stage": 15,
+          "structural": 103,
+          "semantic": 6
+        }
+      ],
+      "operational_rows": [
+        {
+          "stage": 1,
+          "winner_candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 2,
+          "winner_candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 3,
+          "winner_candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 4,
+          "winner_candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 5,
+          "winner_candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 6,
+          "winner_candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 7,
+          "winner_candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 8,
+          "winner_candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 9,
+          "winner_candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 10,
+          "winner_candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 11,
+          "winner_candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 12,
+          "winner_candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 13,
+          "winner_candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 14,
+          "winner_candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        },
+        {
+          "stage": 15,
+          "winner_candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "winner_admissible_under_recorded_regime": true,
+          "operational_row_exact": true
+        }
+      ],
+      "extraction_complete": true,
+      "exact_operational_regression": true,
+      "f_al1_prime_passed": true,
+      "non_enacted_branch_work_executed": false,
+      "derivation_hash": "blake3:a486d0bb738447c2723967afa3f12afbc5f4d8e19f1f935dc92dcae57b887fd4"
+    },
+    "t_bi_projection_replayed": true,
+    "t_bi_complete_act_local_semantic_certificate": true,
+    "t_bi_exact_operational_regression": true,
+    "t_bi_f_al1_prime_passed": true,
+    "chronological_passed_projection": {
+      "source_schema": "chronological-interface-slot-map-support-comprehension-v5",
+      "source_certificate_result_digest": "blake3:1d7fb570da6825385f7bf21c914a05e0d6a4968b3b60ba58243f892931d1fe3b",
+      "baseline_v4_result_digest": "blake3:1b00718cc6ae78202ff736d855b4906e01362ad0a4916a85619fe64c34950d00",
+      "baseline_replayed": true,
+      "exact_54_plus_18_partition": true,
+      "exact_sealed_72_id_join": true,
+      "support_hardening_derivation_hash": "blake3:9fa64f105d179a4ed035a5cec55b048b8b8c7241d1d231b5c2538d33f7de4b29",
+      "support_graph_normal_form_proved": true,
+      "support_zero_mint_capability_proved": true,
+      "support_replacement_evidence_hash": "blake3:005e4b3cc5e524861459a5c6d8803e84ad2d0b792f41fb3b99da1ada77016fd4",
+      "support_replacement_evidence_bound": true,
+      "inherited_row_equality_count": 71,
+      "inherited_71_exact": true,
+      "changed_case_ids": [
+        "blake3:4c9c4272b11cb6aec0c332cd6697401ccd3f95b8bfa2520b6b6dceb6986d3571"
+      ],
+      "derived_discharge_count": 72,
+      "total_discharge_count": 72,
+      "named_gap_count": 0,
+      "former_derived_count": 9,
+      "former_expected_count": 9,
+      "former_named_gap_count": 0,
+      "t_sm1b_derived_count": 18,
+      "t_sm1b_surface_count": 18,
+      "t_sm1b_named_gap_count": 0,
+      "zero_accounting_proved": true,
+      "fixed_positive_gate_passed": true,
+      "blocking_case_ids": [],
+      "derivation_hash": "blake3:2b407a3b4b16073170bd6d0262584df9366e98cd6e2eeb0337f607dcdc511a6e"
+    },
+    "chronological_projection_replayed": true,
+    "chronological_exact_72_of_72": true,
+    "chronological_exact_9_of_9": true,
+    "chronological_exact_18_of_18": true,
+    "stage1_through3_prefix_entries": [
+      {
+        "stage": 1,
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": "Univ"
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "predecessor_signature_digest": "blake3:fcfaddfd614022b3f5b0daabd7c06751e7dbac04aee5469c49043d2423c66e20",
+        "t_bi_typed_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+        "payload_hash": "blake3:c05455b91ccb58c3ecb74e3454acfe2d023e4a766cd35c8b38ec4be9328e8893"
+      },
+      {
+        "stage": 2,
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "predecessor_signature_digest": "blake3:be623a2f25ae686ac37301c38ba62bb96a67b5e42f10604e3d6df96f11032005",
+        "t_bi_typed_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+        "payload_hash": "blake3:a1f557f3a264186f20be6dd1e655e3c88f6e6ff06c0d2fa50ca741a586f6ae35"
+      },
+      {
+        "stage": 3,
+        "telescope": {
+          "clauses": [
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 2
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+        "predecessor_signature_digest": "blake3:3e6728c35b5e2653432bd09ed0cb9b9f14537b5d32646cc8ba9c688404e6ed21",
+        "t_bi_typed_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+        "payload_hash": "blake3:e7648e75443856b2f1ed7540c2d73deea5b12b6f6510b569c3db9c6a947f764d"
+      }
+    ],
+    "stage1_through3_t_bi_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+    "stage1_through3_bi0_prefix_digest": "blake3:f57da2e73c357f712f7debcd90310cad6af8d28c324bcc0f3d4e10dd1807d972",
+    "join_effect_proof": {
+      "theorem_id": "T-BI0-E2-v6-closed-source-first-prerequisite-join",
+      "operations": [
+        "issue_t_bi_passed_projection",
+        "replay_t_bi_passed_projection",
+        "issue_chronological_projection",
+        "replay_chronological_projection",
+        "join_exact_prerequisites",
+        "seal_bi0_pass_proof",
+        "seal_bi0_certificate"
+      ],
+      "derived_capabilities": [
+        "read_t_bi_passed_projection",
+        "read_chronological_passed_projection",
+        "replay_prerequisite_projection",
+        "compare_prerequisite_projection",
+        "content_hashing"
+      ],
+      "forbidden_successor_capabilities": [],
+      "every_capability_derived_from_closed_operation_enum": true,
+      "no_cone_branch_or_selection_capability": true,
+      "proved": true,
+      "derivation_hash": "blake3:2bc4a838b26162ce841ca0deecbda177678a2b4dae852524b3b124f8a8c89fd8"
+    },
+    "bi0_attempt_executed": true,
+    "bi0_passed": true,
+    "bi0_pass_proof_hash": "blake3:02ff13dde86f0bc99566430a812e2d93dfff055b564dcc630a7870a2b35c26e1",
+    "cone_enumerated": false,
+    "non_enacted_branch_executed": false,
+    "stage4_branch_selected": false,
+    "outcome": "BI0_SEMANTIC_REGISTER_V6_SOURCE_FIRST_PASSED",
+    "permitted_conclusion": "The exact operational/F-AL1-prime T-BI v6 projection and the replayed chronological 72/72, 9/9, and 18/18 projection pass their closed BI-0 join. A separate BI-0 issuer may expose only the exact typed Stage-1-through-3 opening capability. This certificate itself enumerates no cone and executes or selects no branch.",
+    "required_successor_action": "Present the separately issued minimal opening capability to the independent Stage-4 procedure; that procedure must replay the capability and obtain its own cone-enumeration authority.",
+    "result_digest": "blake3:dbeee4e558ea82dca013d7c5f95bb339fd87e52eb814253cecae827d29e49869"
+  },
+  "stage4_opening_capability": {
+    "schema": "bi0-v6-exact-stage1-through3-stage4-opening-capability",
+    "granting_bi0_schema": "branch-invariance-bi0-source-first-opening-gate-v6",
+    "granting_bi0_result_digest": "blake3:dbeee4e558ea82dca013d7c5f95bb339fd87e52eb814253cecae827d29e49869",
+    "granting_bi0_pass_proof_hash": "blake3:02ff13dde86f0bc99566430a812e2d93dfff055b564dcc630a7870a2b35c26e1",
+    "t_bi_source_certificate_result_digest": "blake3:d51d0543c32542200fff6e5cfd234da1bb2ffc12c058c805ac7974385727c8b4",
+    "t_bi_passed_projection_derivation_hash": "blake3:a486d0bb738447c2723967afa3f12afbc5f4d8e19f1f935dc92dcae57b887fd4",
+    "chronological_source_certificate_result_digest": "blake3:1d7fb570da6825385f7bf21c914a05e0d6a4968b3b60ba58243f892931d1fe3b",
+    "chronological_passed_projection_derivation_hash": "blake3:2b407a3b4b16073170bd6d0262584df9366e98cd6e2eeb0337f607dcdc511a6e",
+    "exact_stage1_through3_entries": [
+      {
+        "stage": 1,
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": "Univ"
+            },
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+        "predecessor_signature_digest": "blake3:fcfaddfd614022b3f5b0daabd7c06751e7dbac04aee5469c49043d2423c66e20",
+        "t_bi_typed_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+        "payload_hash": "blake3:c05455b91ccb58c3ecb74e3454acfe2d023e4a766cd35c8b38ec4be9328e8893"
+      },
+      {
+        "stage": 2,
+        "telescope": {
+          "clauses": [
+            {
+              "role": "formation",
+              "expr": {
+                "App": [
+                  "Univ",
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+        "predecessor_signature_digest": "blake3:be623a2f25ae686ac37301c38ba62bb96a67b5e42f10604e3d6df96f11032005",
+        "t_bi_typed_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+        "payload_hash": "blake3:a1f557f3a264186f20be6dd1e655e3c88f6e6ff06c0d2fa50ca741a586f6ae35"
+      },
+      {
+        "stage": 3,
+        "telescope": {
+          "clauses": [
+            {
+              "role": "introduction",
+              "expr": {
+                "App": [
+                  {
+                    "Lib": 2
+                  },
+                  {
+                    "Var": 1
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+        "predecessor_signature_digest": "blake3:3e6728c35b5e2653432bd09ed0cb9b9f14537b5d32646cc8ba9c688404e6ed21",
+        "t_bi_typed_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+        "payload_hash": "blake3:e7648e75443856b2f1ed7540c2d73deea5b12b6f6510b569c3db9c6a947f764d"
+      }
+    ],
+    "exact_stage1_through3_t_bi_prefix_digest": "blake3:dbd4fab756ef8aff78416a0c69b84d4148b99074fb091f5c84cb2bb91ce4bef0",
+    "exact_stage1_through3_payload_hashes": [
+      "blake3:c05455b91ccb58c3ecb74e3454acfe2d023e4a766cd35c8b38ec4be9328e8893",
+      "blake3:a1f557f3a264186f20be6dd1e655e3c88f6e6ff06c0d2fa50ca741a586f6ae35",
+      "blake3:e7648e75443856b2f1ed7540c2d73deea5b12b6f6510b569c3db9c6a947f764d"
+    ],
+    "exact_stage1_through3_bi0_prefix_digest": "blake3:f57da2e73c357f712f7debcd90310cad6af8d28c324bcc0f3d4e10dd1807d972",
+    "permitted_permissions": [
+      "read_exact_typed_prefix",
+      "replay_bi0_pass_binding",
+      "present_to_separate_stage4_procedure"
+    ],
+    "forbidden_capabilities": [
+      "read_full_bi0_certificate",
+      "read_semantic_register",
+      "read_structural_register",
+      "enumerate_cone",
+      "execute_branch",
+      "select_branch",
+      "write_successor_artifact"
+    ],
+    "full_bi0_certificate_present": false,
+    "semantic_or_structural_register_present": false,
+    "cone_execution_capability_present": false,
+    "branch_execution_capability_present": false,
+    "branch_selection_capability_present": false,
+    "exact_prefix_and_pass_binding": true,
+    "derivation_hash": "blake3:26244e2e405955874a3516a987082ddcb404a4f3d75db1529915effe0d2b9372"
+  },
+  "result_digest": "blake3:6b593f84dc03ee1c429017edee61c441a8eb3cba40df3423640688077737aaeb"
+}

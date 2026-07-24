@@ -1,0 +1,2504 @@
+{
+  "schema": "bi4-cone-assembly-v2",
+  "date": "2026-07-23",
+  "source_bindings": [
+    {
+      "path": "docs/bi4_assembly_v2_plan.md",
+      "role": "frozen BI-4 v2 input-lineage successor and falsifiers",
+      "blake3": "blake3:b9434cb4b418f4be247af45854bedfb6d6e3fef235cb45ef444c3ab94004f248"
+    },
+    {
+      "path": "docs/branch_invariance_program_plan.md",
+      "role": "frozen G1-G4 meanings and zone taxonomy",
+      "blake3": "blake3:6a5d0343dfc7b2f7b82570cbf2fa48a1857659eb61a8c7c1e48922f78f9bc86b"
+    },
+    {
+      "path": "crates/pen-search/src/bi4_cone_assembly_v2.rs",
+      "role": "BI-4 v2 issue, replay, comparison, and create-new implementation",
+      "blake3": "blake3:1ad0051ced958d937becbef528d302d9a64336ce4b51fae7ad0822d6a3db957c"
+    },
+    {
+      "path": "crates/pen-search/src/bi2_branch_finales_v1.rs",
+      "role": "sealed BI-2 v2 replay boundary",
+      "blake3": "blake3:6a02c2f50e66829fe1bd37ea22afe0486b5dcfe0a493c5f5ad6360cebee1c42f"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance_finale.rs",
+      "role": "branch-local A3, O16, F1, and Theorem-12 evidence",
+      "blake3": "blake3:de1d68496c01eed643a4a6e256b43f0f66c854dff0b29095c39d74fd9cbf9631"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance_program.rs",
+      "role": "retired BI-4 issuer retained as frozen testimony",
+      "blake3": "blake3:6acb30f5f97b489a45c146dcede4aa9b323a2e2a8ea85ef95ccc88ce9e5e1af9"
+    },
+    {
+      "path": "crates/pen-eval/src/bar.rs",
+      "role": "registered descriptive bar recurrence",
+      "blake3": "blake3:999a12c93e984b6d205fa4b60746d5d3e8734368757398f61107146d788de289"
+    },
+    {
+      "path": "crates/pen-eval/src/coherence.rs",
+      "role": "registered d=2 Fibonacci delta sequence",
+      "blake3": "blake3:e8b0d0307c6d26f13203384d9107aadbbbcbb7e793cddce73abd760363706b57"
+    },
+    {
+      "path": "docs/BI2_FOUR_BRANCH_FINALES_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 aggregate",
+      "blake3": "blake3:d3b590a5261201adb52730788a0706cc346d385197d098eefd94b501fadd4aef"
+    },
+    {
+      "path": "docs/BI2_BRANCH_2016726758f3_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch",
+      "blake3": "blake3:956141e49a85c21f33404ff5c84a3483f750a7e3b01089327cb3206e494f9be2"
+    },
+    {
+      "path": "docs/BI2_BRANCH_43a0ed707770_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch",
+      "blake3": "blake3:7a7707b0ce4961674d670164d1091b7b4a99a3e3e7c070e74201b81131280679"
+    },
+    {
+      "path": "docs/BI2_BRANCH_4b2211ecae25_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch",
+      "blake3": "blake3:1f439de4cbcfe2785e04fd6222a85051d894ee3ad1d32f6f0d778bd39d730784"
+    },
+    {
+      "path": "docs/BI2_BRANCH_b4f821d9bb28_V2_CERTIFICATE.json",
+      "role": "sealed BI-2 v2 branch",
+      "blake3": "blake3:cfed76b34bc97b8d250b1f20097bafea46937031441292f8e1eb0169e1cbf52c"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_2016726758f3_CERTIFICATE.json",
+      "role": "retired BI-1 branch testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:99c70276db9b15fe417c38a16af2c690dc945c9a954bba5e00de67b7ce204824"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_43a0ed707770_CERTIFICATE.json",
+      "role": "retired BI-1 branch testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:efb07a882fe26e2f164def9f489b40e105c49a37d322d03e26299df06cf4fd6c"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_4b2211ecae25_CERTIFICATE.json",
+      "role": "retired BI-1 branch testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:bfd7cf75c2d1e37450975ef38dd6a775b8462ee78ef61d9279ba591e7f99c38e"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_b4f821d9bb28_CERTIFICATE.json",
+      "role": "retired BI-1 branch testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:d29dbd8f4bca0d14689646dc08e72474df5cd577d91c5fdb4f9181298d726938"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_2016726758f3_CERTIFICATE.json",
+      "role": "retained BI-1b continuation testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:14d748530cb46744b0c1d0403a6f2248a654c7dc65588efb1383029576f050db"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_43a0ed707770_CERTIFICATE.json",
+      "role": "retained BI-1b continuation testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:08b6bba6d2b7d18091273ab959e715b4ca4479d2aabf8ed2094c64a0424ec8ac"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_4b2211ecae25_CERTIFICATE.json",
+      "role": "retained BI-1b continuation testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:7073c84c2a4932aba9d2454d029e039957e61fa2df344fafd7750817fbd951d3"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_b4f821d9bb28_CERTIFICATE.json",
+      "role": "retained BI-1b continuation testimony for the original G2 total-discharge predicate",
+      "blake3": "blake3:04310e9819b9b6210dfbe2372e8fe9727bf1faec1e3b44ead9709fad4d1120ee"
+    },
+    {
+      "path": "docs/BI1B_CORRESPONDENCE_DIAGNOSTIC.json",
+      "role": "post-verdict read-only corroboration",
+      "blake3": "blake3:d909f54dfa91a187807428e16511d5f79e8b87b33f4cb3c421abdfbb09d2869b"
+    },
+    {
+      "path": "docs/r_t2_future_hole_confluence_v2_dependent_context_v2.json",
+      "role": "inherited G1 refutation testimony only",
+      "blake3": "blake3:664ac42b93d065b7dc965296d49cee6b9fafbb147ff6f3394d6769c5071acafa"
+    }
+  ],
+  "bi2_index_digest": "blake3:cfa5bbd27c6f2c9c788ae6eac68e2128f87d18ce54362e72850b8d3aa1fc03ff",
+  "bi2_index_schema": "bi2-four-branch-finales-index-v2",
+  "bi2_index_digest_matches_frozen_plan": true,
+  "bi1b_sweep_digest": "blake3:79272aa307186696b2a6a4cd63b969cf7d9fc08a6ee4efde8f00ca30e5ac9e3d",
+  "bi1b_regression_certificate_digest": "blake3:52f317b5c70dab597b74522ed0dd16a2509dd08d253f5d660dc36cca0b627681",
+  "prefix_general_extraction_authority_digest": "blake3:644f32fa13632e4da3c52e32f2c983a0113d4e48d83764d1432a2e21bd6384d4",
+  "bi2_bundle_replay_valid_before_comparison": true,
+  "bi2_bundle_replay_errors": [],
+  "upstream_lineage_authenticated_by_bi2_replay": true,
+  "exact_four_distinct_branch_roots": true,
+  "every_branch_digest_joins_bi2_index": true,
+  "every_branch_certificate_reissued_before_comparison": true,
+  "bi2_ready_for_bi4_assembly": true,
+  "comparison_semantics_changed_from_bi1": false,
+  "granularity_definitions_changed_from_bi1": false,
+  "zone_taxonomy_changed_from_bi1": false,
+  "all_comparisons_computed_before_any_aggregate_verdict": true,
+  "all_six_pairs_published_for_each_comparison": true,
+  "branches": [
+    {
+      "branch_root_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "branch_certificate_digest": "blake3:2b1c578445838932139bec04a223150b07c7832cb29cb31ac190c0dd84a730b4",
+      "retired_bi1_branch_certificate_digest": "blake3:5ac75d60b84ce1bc6871c9c027426c28f4d80cbfd44bf5cedaeb99fc8e216a70",
+      "bi1b_branch_certificate_digest": "blake3:e1bed5d96478b92a8cf3b4361c97873784757107a1f56450ea8664091cd63867",
+      "enacted_root": true,
+      "g2_profile_stage5_through16": [
+        {
+          "stage": 5,
+          "required_packages": [
+            "initial_hit"
+          ],
+          "structural_constructors": [
+            "initial_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:f7dc3d485fae513472bbc47a6f4af90381738570aca3dabd54502e73423f45fe"
+        },
+        {
+          "stage": 6,
+          "required_packages": [
+            "truncation_hit"
+          ],
+          "structural_constructors": [
+            "truncation_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:02d2b958085d9440829701d1abb3d7793a22b7b624e94c92a582257c4e2e76d1"
+        },
+        {
+          "stage": 7,
+          "required_packages": [
+            "higher_hit"
+          ],
+          "structural_constructors": [
+            "higher_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:969a07a13c0ba5c232e42084d27ba070b281892d954830ede19f7a20c9d8cb55"
+        },
+        {
+          "stage": 8,
+          "required_packages": [
+            "sphere_lift"
+          ],
+          "structural_constructors": [
+            "sphere_lift"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:77f7fd590c7a878febf0a0916eedc7fb9fc7027e1df7e7d4186b6ad846ad10ea"
+        },
+        {
+          "stage": 9,
+          "required_packages": [
+            "axiomatic_bundle"
+          ],
+          "structural_constructors": [
+            "axiomatic_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:a3c9b3dc6d1e2621d2d1380ec4555b5e07e41117414df9031d4483ee9006be6e"
+        },
+        {
+          "stage": 10,
+          "required_packages": [
+            "modal_shell"
+          ],
+          "structural_constructors": [
+            "modal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:08b7f0d8a2ac7152706edf6235cd803a945236704094b5b6c5eac69dc66e142c"
+        },
+        {
+          "stage": 11,
+          "required_packages": [
+            "connection_shell"
+          ],
+          "structural_constructors": [
+            "connection_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:fc0ecb9759e509ea254dc585e2aa8ac6f93821cb264a665230950e1a97f0ea0c"
+        },
+        {
+          "stage": 12,
+          "required_packages": [
+            "curvature_shell"
+          ],
+          "structural_constructors": [
+            "curvature_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:189f272984edb9a58b160bfeec3123e27344fd10da4bf88e212141b164f072c3"
+        },
+        {
+          "stage": 13,
+          "required_packages": [
+            "operator_bundle"
+          ],
+          "structural_constructors": [
+            "operator_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:4174c023ce80c6a6ca7686d3e5e2665d9458d4fb3264b4fc7f91c673131d25dc"
+        },
+        {
+          "stage": 14,
+          "required_packages": [
+            "hilbert_functional"
+          ],
+          "structural_constructors": [
+            "hilbert_functional"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:ea4c7201d6e804e13ffcffb18505c067f44f95e724dd89ca57eb3e49561ad9d2"
+        },
+        {
+          "stage": 15,
+          "required_packages": [
+            "temporal_shell"
+          ],
+          "structural_constructors": [
+            "temporal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:dd20a47d002370de4ad1f2f2179c8ab199e8d56ec18c827c787e2bfbf1b68c0f"
+        },
+        {
+          "stage": 16,
+          "required_packages": [],
+          "structural_constructors": [],
+          "live_obligation_count": 0,
+          "total_typed_discharge": false,
+          "debt_free": true,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:69a6fbbad3a347528942d214e6707e5db44406414eaa43bfd8513c455decce1d"
+        }
+      ],
+      "complete_ledger_stage1_through15": [
+        {
+          "stage": 1,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "kappa": 2,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:8e8af9cdf7334e29d8be5580944c6d9f44682b51034de6d98ae307ce809e84c2"
+        },
+        {
+          "stage": 2,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "kappa": 1,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5d8bac65d1d7e321ab913434d2ccf22f539ef4ee0df7da0e4e1678b117e03954"
+        },
+        {
+          "stage": 3,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "kappa": 1,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5e6d0cec349245302f51ea585d9a52df63614abe4e0e94c406ceaa02a4b2d688"
+        },
+        {
+          "stage": 4,
+          "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1ab5c90f238fd9f850e87fa4a0f8bbcc4eccf2fb29acd486e4975f83b6147020"
+        },
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "g3a_ledger_stage5_through15": [
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "complete_sum_kappa": 64,
+      "complete_sum_semantic_nu": 32,
+      "suffix_sum_semantic_nu_stage5_through15": 27,
+      "diagnostic_bar_stage5_through15": [
+        {
+          "stage": 5,
+          "phi": "5/3",
+          "omega": "5/7",
+          "bar": "25/21",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:11e42f03a687b7707079c6e1dd4aa07864c6631ca6a011a5c92ff39b931bce3f"
+        },
+        {
+          "stage": 6,
+          "phi": "8/5",
+          "omega": "11/10",
+          "bar": "44/25",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:d03ac69e7b7e830e81c6a89625efbfad4ea0ba91f6e4b3b001dbf014b4ccbc54"
+        },
+        {
+          "stage": 7,
+          "phi": "13/8",
+          "omega": "14/13",
+          "bar": "7/4",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:e5f61baa08e0d4754484bc4fdaa9baca80bdfd3606f2c64412cacddb67df51c3"
+        },
+        {
+          "stage": 8,
+          "phi": "21/13",
+          "omega": "15/16",
+          "bar": "315/208",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:8f0fff9a0d86f367eff79f67df373bb2331c9310d7cdef59e23cf32be6e57075"
+        },
+        {
+          "stage": 9,
+          "phi": "34/21",
+          "omega": "16/21",
+          "bar": "544/441",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:a9ba62c090386dd0469910a3902e8ea338660d74e923bc8ff0b37b77011191c3"
+        },
+        {
+          "stage": 10,
+          "phi": "55/34",
+          "omega": "16/25",
+          "bar": "88/85",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:48a95ecd413f9d40330ee8f46551e4955826a8cf949a8aa39aaf2b27673ad489"
+        },
+        {
+          "stage": 11,
+          "phi": "89/55",
+          "omega": "20/29",
+          "bar": "356/319",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:51feb33860cdb7b4b227fb3f3d90d8f3559284a9965601b74f39c3deec644596"
+        },
+        {
+          "stage": 12,
+          "phi": "144/89",
+          "omega": "21/34",
+          "bar": "1512/1513",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:539bf083e4051cba87bf6fcb78cbe66b654183b7a1cc92f176dda365998543b7"
+        },
+        {
+          "stage": 13,
+          "phi": "233/144",
+          "omega": "21/40",
+          "bar": "1631/1920",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:ae9b46cc4f08fce54a5533d38fee0f0d4a015375a591bc8302fae2000722c047"
+        },
+        {
+          "stage": 14,
+          "phi": "377/233",
+          "omega": "23/47",
+          "bar": "8671/10951",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:0f3d17f7682849ed66dec70687198a598a81207f4b9673ed63fc3d9b3f80b8c6"
+        },
+        {
+          "stage": 15,
+          "phi": "610/377",
+          "omega": "13/28",
+          "bar": "305/406",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:b7d535e4fc10edac1c1729f3039d90dbce8e501de603b6407925798c894879c2"
+        }
+      ],
+      "g2_original_unique_winner_total_discharge_predicate_replayed": true,
+      "every_ledger_row_provenance_replayed": true,
+      "local_g4_debt_free_halt_at_15": true,
+      "halt_step": 15,
+      "successor_stage": 16,
+      "semantic_o16_empty": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "exact_d_partition": true,
+      "theorem12_full_instance_granularity": true,
+      "e5_complete": true,
+      "expressivity_gap_count": 0,
+      "halt_boundary_premise_hash": "blake3:17e26d1d68845eb74099caaa5bdaa9752469478255a8ca56aeb118e2784e9192",
+      "derivation_hash": "blake3:0b54a01681e7068beee3859546a6c3682d51db63b8b604e3718d3af59b4f405f"
+    },
+    {
+      "branch_root_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "branch_certificate_digest": "blake3:63e026c1ceee27b26802c3f18a46e051389f3a992ba2f808274a1d5334644e05",
+      "retired_bi1_branch_certificate_digest": "blake3:473d05bc808fc034d20541c49484374af2992c45a1d3658901ecba7c01e6b984",
+      "bi1b_branch_certificate_digest": "blake3:5bdad12481ec6e96a6439e101ea95b4a4000ecbdf95d71ed70f5a5f237ad406a",
+      "enacted_root": false,
+      "g2_profile_stage5_through16": [
+        {
+          "stage": 5,
+          "required_packages": [
+            "initial_hit"
+          ],
+          "structural_constructors": [
+            "initial_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:f7dc3d485fae513472bbc47a6f4af90381738570aca3dabd54502e73423f45fe"
+        },
+        {
+          "stage": 6,
+          "required_packages": [
+            "truncation_hit"
+          ],
+          "structural_constructors": [
+            "truncation_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:02d2b958085d9440829701d1abb3d7793a22b7b624e94c92a582257c4e2e76d1"
+        },
+        {
+          "stage": 7,
+          "required_packages": [
+            "higher_hit"
+          ],
+          "structural_constructors": [
+            "higher_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:969a07a13c0ba5c232e42084d27ba070b281892d954830ede19f7a20c9d8cb55"
+        },
+        {
+          "stage": 8,
+          "required_packages": [
+            "sphere_lift"
+          ],
+          "structural_constructors": [
+            "sphere_lift"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:77f7fd590c7a878febf0a0916eedc7fb9fc7027e1df7e7d4186b6ad846ad10ea"
+        },
+        {
+          "stage": 9,
+          "required_packages": [
+            "axiomatic_bundle"
+          ],
+          "structural_constructors": [
+            "axiomatic_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:a3c9b3dc6d1e2621d2d1380ec4555b5e07e41117414df9031d4483ee9006be6e"
+        },
+        {
+          "stage": 10,
+          "required_packages": [
+            "modal_shell"
+          ],
+          "structural_constructors": [
+            "modal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:08b7f0d8a2ac7152706edf6235cd803a945236704094b5b6c5eac69dc66e142c"
+        },
+        {
+          "stage": 11,
+          "required_packages": [
+            "connection_shell"
+          ],
+          "structural_constructors": [
+            "connection_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:fc0ecb9759e509ea254dc585e2aa8ac6f93821cb264a665230950e1a97f0ea0c"
+        },
+        {
+          "stage": 12,
+          "required_packages": [
+            "curvature_shell"
+          ],
+          "structural_constructors": [
+            "curvature_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:189f272984edb9a58b160bfeec3123e27344fd10da4bf88e212141b164f072c3"
+        },
+        {
+          "stage": 13,
+          "required_packages": [
+            "operator_bundle"
+          ],
+          "structural_constructors": [
+            "operator_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:4174c023ce80c6a6ca7686d3e5e2665d9458d4fb3264b4fc7f91c673131d25dc"
+        },
+        {
+          "stage": 14,
+          "required_packages": [
+            "hilbert_functional"
+          ],
+          "structural_constructors": [
+            "hilbert_functional"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:ea4c7201d6e804e13ffcffb18505c067f44f95e724dd89ca57eb3e49561ad9d2"
+        },
+        {
+          "stage": 15,
+          "required_packages": [
+            "temporal_shell"
+          ],
+          "structural_constructors": [
+            "temporal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:dd20a47d002370de4ad1f2f2179c8ab199e8d56ec18c827c787e2bfbf1b68c0f"
+        },
+        {
+          "stage": 16,
+          "required_packages": [],
+          "structural_constructors": [],
+          "live_obligation_count": 0,
+          "total_typed_discharge": false,
+          "debt_free": true,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:69a6fbbad3a347528942d214e6707e5db44406414eaa43bfd8513c455decce1d"
+        }
+      ],
+      "complete_ledger_stage1_through15": [
+        {
+          "stage": 1,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "kappa": 2,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:8e8af9cdf7334e29d8be5580944c6d9f44682b51034de6d98ae307ce809e84c2"
+        },
+        {
+          "stage": 2,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "kappa": 1,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5d8bac65d1d7e321ab913434d2ccf22f539ef4ee0df7da0e4e1678b117e03954"
+        },
+        {
+          "stage": 3,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "kappa": 1,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5e6d0cec349245302f51ea585d9a52df63614abe4e0e94c406ceaa02a4b2d688"
+        },
+        {
+          "stage": 4,
+          "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+          "kappa": 3,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:79c10948a52798ed6f9c138c5096d443ab1a443d6a1ab5ef0d3f15c142386f70"
+        },
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "g3a_ledger_stage5_through15": [
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "complete_sum_kappa": 64,
+      "complete_sum_semantic_nu": 31,
+      "suffix_sum_semantic_nu_stage5_through15": 27,
+      "diagnostic_bar_stage5_through15": [
+        {
+          "stage": 5,
+          "phi": "5/3",
+          "omega": "4/7",
+          "bar": "20/21",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:d1feb9dc7d49902304dad29d5f387b990d7b2d83758efb77bf12644653437df2"
+        },
+        {
+          "stage": 6,
+          "phi": "8/5",
+          "omega": "1/1",
+          "bar": "8/5",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:bbf25b42a0b698b3ab61baa939f8b52b511c22ad8643272f5298afd5e0a38e94"
+        },
+        {
+          "stage": 7,
+          "phi": "13/8",
+          "omega": "1/1",
+          "bar": "13/8",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:e9924ba2de5f4099d8cc1152c95ffbb0648ba861df8ba070306aec114d75f5e1"
+        },
+        {
+          "stage": 8,
+          "phi": "21/13",
+          "omega": "7/8",
+          "bar": "147/104",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:4441180851615e51e2287d3af0e88fb16ed6bc50a03dd1d7e3c0f166768e7dcf"
+        },
+        {
+          "stage": 9,
+          "phi": "34/21",
+          "omega": "5/7",
+          "bar": "170/147",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:3b1cfec520177ae3c1ff211cfcb6c07c46ba99f2220dfe5dffac30a3e48908b9"
+        },
+        {
+          "stage": 10,
+          "phi": "55/34",
+          "omega": "3/5",
+          "bar": "33/34",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:88be106c4e1a728c8c1b2aedc05f4477a7c73577e4f0d62e410e9793074cd5b1"
+        },
+        {
+          "stage": 11,
+          "phi": "89/55",
+          "omega": "19/29",
+          "bar": "1691/1595",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:bb80be4ad495981da41fa4c6fc577d3de5c90da16581ed367f7a2d054d7022df"
+        },
+        {
+          "stage": 12,
+          "phi": "144/89",
+          "omega": "10/17",
+          "bar": "1440/1513",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:fec248ac777296139b9321104ccc9e00622060daf06abbc31519a7651b4395ec"
+        },
+        {
+          "stage": 13,
+          "phi": "233/144",
+          "omega": "1/2",
+          "bar": "233/288",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:50ad3d9b7b6f2a0711ef0cd7764accd5602ae1493d2a3d4b1a14f5cae24b05a1"
+        },
+        {
+          "stage": 14,
+          "phi": "377/233",
+          "omega": "22/47",
+          "bar": "8294/10951",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:aa37d2bc3bdcce43538bdd5f163530ddbb8ef7afb512dd79d633e509e60ea971"
+        },
+        {
+          "stage": 15,
+          "phi": "610/377",
+          "omega": "25/56",
+          "bar": "7625/10556",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:5be561f84efee2665774224a9a47984d9f483d8e93e7f7090a5b4130c35cb8bb"
+        }
+      ],
+      "g2_original_unique_winner_total_discharge_predicate_replayed": true,
+      "every_ledger_row_provenance_replayed": true,
+      "local_g4_debt_free_halt_at_15": true,
+      "halt_step": 15,
+      "successor_stage": 16,
+      "semantic_o16_empty": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "exact_d_partition": true,
+      "theorem12_full_instance_granularity": true,
+      "e5_complete": true,
+      "expressivity_gap_count": 0,
+      "halt_boundary_premise_hash": "blake3:17e26d1d68845eb74099caaa5bdaa9752469478255a8ca56aeb118e2784e9192",
+      "derivation_hash": "blake3:bc4cc2fda945db79a76c717f1a034f44cd499f0276cf6537e0b0faca83a4ae0b"
+    },
+    {
+      "branch_root_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "branch_certificate_digest": "blake3:fe1ff6c8ac02e399bcd2d6eb4c0f3e98e3f62097e0cee96c1066c98e86176ead",
+      "retired_bi1_branch_certificate_digest": "blake3:07d452d788afa084128350ba8fec4cad01f56b1afacf57abe6b6f3d21083e048",
+      "bi1b_branch_certificate_digest": "blake3:d1a6413e1fbc4b88bd431d303d412db90639f78dec69399f26826b3cb0c216d1",
+      "enacted_root": false,
+      "g2_profile_stage5_through16": [
+        {
+          "stage": 5,
+          "required_packages": [
+            "initial_hit"
+          ],
+          "structural_constructors": [
+            "initial_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:f7dc3d485fae513472bbc47a6f4af90381738570aca3dabd54502e73423f45fe"
+        },
+        {
+          "stage": 6,
+          "required_packages": [
+            "truncation_hit"
+          ],
+          "structural_constructors": [
+            "truncation_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:02d2b958085d9440829701d1abb3d7793a22b7b624e94c92a582257c4e2e76d1"
+        },
+        {
+          "stage": 7,
+          "required_packages": [
+            "higher_hit"
+          ],
+          "structural_constructors": [
+            "higher_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:969a07a13c0ba5c232e42084d27ba070b281892d954830ede19f7a20c9d8cb55"
+        },
+        {
+          "stage": 8,
+          "required_packages": [
+            "sphere_lift"
+          ],
+          "structural_constructors": [
+            "sphere_lift"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:77f7fd590c7a878febf0a0916eedc7fb9fc7027e1df7e7d4186b6ad846ad10ea"
+        },
+        {
+          "stage": 9,
+          "required_packages": [
+            "axiomatic_bundle"
+          ],
+          "structural_constructors": [
+            "axiomatic_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:a3c9b3dc6d1e2621d2d1380ec4555b5e07e41117414df9031d4483ee9006be6e"
+        },
+        {
+          "stage": 10,
+          "required_packages": [
+            "modal_shell"
+          ],
+          "structural_constructors": [
+            "modal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:08b7f0d8a2ac7152706edf6235cd803a945236704094b5b6c5eac69dc66e142c"
+        },
+        {
+          "stage": 11,
+          "required_packages": [
+            "connection_shell"
+          ],
+          "structural_constructors": [
+            "connection_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:fc0ecb9759e509ea254dc585e2aa8ac6f93821cb264a665230950e1a97f0ea0c"
+        },
+        {
+          "stage": 12,
+          "required_packages": [
+            "curvature_shell"
+          ],
+          "structural_constructors": [
+            "curvature_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:189f272984edb9a58b160bfeec3123e27344fd10da4bf88e212141b164f072c3"
+        },
+        {
+          "stage": 13,
+          "required_packages": [
+            "operator_bundle"
+          ],
+          "structural_constructors": [
+            "operator_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:4174c023ce80c6a6ca7686d3e5e2665d9458d4fb3264b4fc7f91c673131d25dc"
+        },
+        {
+          "stage": 14,
+          "required_packages": [
+            "hilbert_functional"
+          ],
+          "structural_constructors": [
+            "hilbert_functional"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:ea4c7201d6e804e13ffcffb18505c067f44f95e724dd89ca57eb3e49561ad9d2"
+        },
+        {
+          "stage": 15,
+          "required_packages": [
+            "temporal_shell"
+          ],
+          "structural_constructors": [
+            "temporal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:dd20a47d002370de4ad1f2f2179c8ab199e8d56ec18c827c787e2bfbf1b68c0f"
+        },
+        {
+          "stage": 16,
+          "required_packages": [],
+          "structural_constructors": [],
+          "live_obligation_count": 0,
+          "total_typed_discharge": false,
+          "debt_free": true,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:69a6fbbad3a347528942d214e6707e5db44406414eaa43bfd8513c455decce1d"
+        }
+      ],
+      "complete_ledger_stage1_through15": [
+        {
+          "stage": 1,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "kappa": 2,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:8e8af9cdf7334e29d8be5580944c6d9f44682b51034de6d98ae307ce809e84c2"
+        },
+        {
+          "stage": 2,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "kappa": 1,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5d8bac65d1d7e321ab913434d2ccf22f539ef4ee0df7da0e4e1678b117e03954"
+        },
+        {
+          "stage": 3,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "kappa": 1,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5e6d0cec349245302f51ea585d9a52df63614abe4e0e94c406ceaa02a4b2d688"
+        },
+        {
+          "stage": 4,
+          "candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+          "kappa": 3,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:a40538ea38d6cefdb036de4b85f48b0e858033168e883e46a1078d34c7afa088"
+        },
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "g3a_ledger_stage5_through15": [
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "complete_sum_kappa": 64,
+      "complete_sum_semantic_nu": 31,
+      "suffix_sum_semantic_nu_stage5_through15": 27,
+      "diagnostic_bar_stage5_through15": [
+        {
+          "stage": 5,
+          "phi": "5/3",
+          "omega": "4/7",
+          "bar": "20/21",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:d1feb9dc7d49902304dad29d5f387b990d7b2d83758efb77bf12644653437df2"
+        },
+        {
+          "stage": 6,
+          "phi": "8/5",
+          "omega": "1/1",
+          "bar": "8/5",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:bbf25b42a0b698b3ab61baa939f8b52b511c22ad8643272f5298afd5e0a38e94"
+        },
+        {
+          "stage": 7,
+          "phi": "13/8",
+          "omega": "1/1",
+          "bar": "13/8",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:e9924ba2de5f4099d8cc1152c95ffbb0648ba861df8ba070306aec114d75f5e1"
+        },
+        {
+          "stage": 8,
+          "phi": "21/13",
+          "omega": "7/8",
+          "bar": "147/104",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:4441180851615e51e2287d3af0e88fb16ed6bc50a03dd1d7e3c0f166768e7dcf"
+        },
+        {
+          "stage": 9,
+          "phi": "34/21",
+          "omega": "5/7",
+          "bar": "170/147",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:3b1cfec520177ae3c1ff211cfcb6c07c46ba99f2220dfe5dffac30a3e48908b9"
+        },
+        {
+          "stage": 10,
+          "phi": "55/34",
+          "omega": "3/5",
+          "bar": "33/34",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:88be106c4e1a728c8c1b2aedc05f4477a7c73577e4f0d62e410e9793074cd5b1"
+        },
+        {
+          "stage": 11,
+          "phi": "89/55",
+          "omega": "19/29",
+          "bar": "1691/1595",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:bb80be4ad495981da41fa4c6fc577d3de5c90da16581ed367f7a2d054d7022df"
+        },
+        {
+          "stage": 12,
+          "phi": "144/89",
+          "omega": "10/17",
+          "bar": "1440/1513",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:fec248ac777296139b9321104ccc9e00622060daf06abbc31519a7651b4395ec"
+        },
+        {
+          "stage": 13,
+          "phi": "233/144",
+          "omega": "1/2",
+          "bar": "233/288",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:50ad3d9b7b6f2a0711ef0cd7764accd5602ae1493d2a3d4b1a14f5cae24b05a1"
+        },
+        {
+          "stage": 14,
+          "phi": "377/233",
+          "omega": "22/47",
+          "bar": "8294/10951",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:aa37d2bc3bdcce43538bdd5f163530ddbb8ef7afb512dd79d633e509e60ea971"
+        },
+        {
+          "stage": 15,
+          "phi": "610/377",
+          "omega": "25/56",
+          "bar": "7625/10556",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:5be561f84efee2665774224a9a47984d9f483d8e93e7f7090a5b4130c35cb8bb"
+        }
+      ],
+      "g2_original_unique_winner_total_discharge_predicate_replayed": true,
+      "every_ledger_row_provenance_replayed": true,
+      "local_g4_debt_free_halt_at_15": true,
+      "halt_step": 15,
+      "successor_stage": 16,
+      "semantic_o16_empty": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "exact_d_partition": true,
+      "theorem12_full_instance_granularity": true,
+      "e5_complete": true,
+      "expressivity_gap_count": 0,
+      "halt_boundary_premise_hash": "blake3:17e26d1d68845eb74099caaa5bdaa9752469478255a8ca56aeb118e2784e9192",
+      "derivation_hash": "blake3:8b282b4cdabd3393066404636c79e20b506ab82f10534a5f57c49284ef50b8fe"
+    },
+    {
+      "branch_root_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "branch_certificate_digest": "blake3:db4ade8d2254e44103e7f64b62a74322786d21e84ff17d22fd6c87f408fccb7a",
+      "retired_bi1_branch_certificate_digest": "blake3:0056f219ad010c22ea2c73c893d346dde9335c7fbe6b51340e13141115cbc54c",
+      "bi1b_branch_certificate_digest": "blake3:7513e4b9a7f80fb501439501961fb5ac3c2af57a204ac7d23cde8709c88ef4d2",
+      "enacted_root": false,
+      "g2_profile_stage5_through16": [
+        {
+          "stage": 5,
+          "required_packages": [
+            "initial_hit"
+          ],
+          "structural_constructors": [
+            "initial_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:f7dc3d485fae513472bbc47a6f4af90381738570aca3dabd54502e73423f45fe"
+        },
+        {
+          "stage": 6,
+          "required_packages": [
+            "truncation_hit"
+          ],
+          "structural_constructors": [
+            "truncation_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:02d2b958085d9440829701d1abb3d7793a22b7b624e94c92a582257c4e2e76d1"
+        },
+        {
+          "stage": 7,
+          "required_packages": [
+            "higher_hit"
+          ],
+          "structural_constructors": [
+            "higher_hit"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:969a07a13c0ba5c232e42084d27ba070b281892d954830ede19f7a20c9d8cb55"
+        },
+        {
+          "stage": 8,
+          "required_packages": [
+            "sphere_lift"
+          ],
+          "structural_constructors": [
+            "sphere_lift"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:77f7fd590c7a878febf0a0916eedc7fb9fc7027e1df7e7d4186b6ad846ad10ea"
+        },
+        {
+          "stage": 9,
+          "required_packages": [
+            "axiomatic_bundle"
+          ],
+          "structural_constructors": [
+            "axiomatic_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:a3c9b3dc6d1e2621d2d1380ec4555b5e07e41117414df9031d4483ee9006be6e"
+        },
+        {
+          "stage": 10,
+          "required_packages": [
+            "modal_shell"
+          ],
+          "structural_constructors": [
+            "modal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:08b7f0d8a2ac7152706edf6235cd803a945236704094b5b6c5eac69dc66e142c"
+        },
+        {
+          "stage": 11,
+          "required_packages": [
+            "connection_shell"
+          ],
+          "structural_constructors": [
+            "connection_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:fc0ecb9759e509ea254dc585e2aa8ac6f93821cb264a665230950e1a97f0ea0c"
+        },
+        {
+          "stage": 12,
+          "required_packages": [
+            "curvature_shell"
+          ],
+          "structural_constructors": [
+            "curvature_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:189f272984edb9a58b160bfeec3123e27344fd10da4bf88e212141b164f072c3"
+        },
+        {
+          "stage": 13,
+          "required_packages": [
+            "operator_bundle"
+          ],
+          "structural_constructors": [
+            "operator_bundle"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:4174c023ce80c6a6ca7686d3e5e2665d9458d4fb3264b4fc7f91c673131d25dc"
+        },
+        {
+          "stage": 14,
+          "required_packages": [
+            "hilbert_functional"
+          ],
+          "structural_constructors": [
+            "hilbert_functional"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:ea4c7201d6e804e13ffcffb18505c067f44f95e724dd89ca57eb3e49561ad9d2"
+        },
+        {
+          "stage": 15,
+          "required_packages": [
+            "temporal_shell"
+          ],
+          "structural_constructors": [
+            "temporal_shell"
+          ],
+          "live_obligation_count": 1,
+          "total_typed_discharge": true,
+          "debt_free": false,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:dd20a47d002370de4ad1f2f2179c8ab199e8d56ec18c827c787e2bfbf1b68c0f"
+        },
+        {
+          "stage": 16,
+          "required_packages": [],
+          "structural_constructors": [],
+          "live_obligation_count": 0,
+          "total_typed_discharge": false,
+          "debt_free": true,
+          "exact_bi2_window_step_join": true,
+          "derivation_hash": "blake3:69a6fbbad3a347528942d214e6707e5db44406414eaa43bfd8513c455decce1d"
+        }
+      ],
+      "complete_ledger_stage1_through15": [
+        {
+          "stage": 1,
+          "candidate_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "kappa": 2,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:8e8af9cdf7334e29d8be5580944c6d9f44682b51034de6d98ae307ce809e84c2"
+        },
+        {
+          "stage": 2,
+          "candidate_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "kappa": 1,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5d8bac65d1d7e321ab913434d2ccf22f539ef4ee0df7da0e4e1678b117e03954"
+        },
+        {
+          "stage": 3,
+          "candidate_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "kappa": 1,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:5e6d0cec349245302f51ea585d9a52df63614abe4e0e94c406ceaa02a4b2d688"
+        },
+        {
+          "stage": 4,
+          "candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:93ffa7fb63543fae9c6b5c1c0d6337b3ebbde4b2bff5c5efc30eb7797cce836f"
+        },
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "g3a_ledger_stage5_through15": [
+        {
+          "stage": 5,
+          "candidate_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "kappa": 3,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:1d8416923852362490c448db54745a494802349483a261338a68b6b8d6f11cf8"
+        },
+        {
+          "stage": 6,
+          "candidate_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "kappa": 3,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f8b52ab0350b9b1c057c62c1dedd57eca75d2d175c97f5788289196ca499455d"
+        },
+        {
+          "stage": 7,
+          "candidate_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "kappa": 3,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:e5efc17533be524b065f8f6ccf5a98b714aba1a84fbe7c32dd46cfdd571931fc"
+        },
+        {
+          "stage": 8,
+          "candidate_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:656e2eab944de5877451d541cb8fce18a3b34946a4ce455a95ccd9612f37041b"
+        },
+        {
+          "stage": 9,
+          "candidate_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "kappa": 4,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:08853ce6380f2394d13c9d246f4a1bc90b98dbd9358a63fe3d709e71065b6878"
+        },
+        {
+          "stage": 10,
+          "candidate_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "kappa": 4,
+          "semantic_nu": 4,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:29aceea2bc768d48f6dd5835f272c68f8ea7e04da080f0cf3b71a4bcacae9f3e"
+        },
+        {
+          "stage": 11,
+          "candidate_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "kappa": 5,
+          "semantic_nu": 1,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:25bd5b827943c89fc93e5356cb71eb48d9b00106b1c5d07534e6db61b6cf5161"
+        },
+        {
+          "stage": 12,
+          "candidate_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "kappa": 6,
+          "semantic_nu": 0,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:bc588068bdc7cffe27533277b0b2e9e91be04a86c18815474c2497982b7b956d"
+        },
+        {
+          "stage": 13,
+          "candidate_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "kappa": 7,
+          "semantic_nu": 2,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:f9b1c1bf30f364d02417657bc1051ac461f525cd76443ca9507a8e1a0dc25431"
+        },
+        {
+          "stage": 14,
+          "candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "kappa": 9,
+          "semantic_nu": 3,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:7332a18bd6c75c2ed85eb13813319e582e3e2fe778ae5f3d12755dadef10a9a8"
+        },
+        {
+          "stage": 15,
+          "candidate_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "kappa": 8,
+          "semantic_nu": 6,
+          "provenance_replayed": true,
+          "derivation_hash": "blake3:9a6b26ea01163af639f197e9c814945a15852990ca4d95b09f6160d22d194dbb"
+        }
+      ],
+      "complete_sum_kappa": 64,
+      "complete_sum_semantic_nu": 32,
+      "suffix_sum_semantic_nu_stage5_through15": 27,
+      "diagnostic_bar_stage5_through15": [
+        {
+          "stage": 5,
+          "phi": "5/3",
+          "omega": "5/7",
+          "bar": "25/21",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:11e42f03a687b7707079c6e1dd4aa07864c6631ca6a011a5c92ff39b931bce3f"
+        },
+        {
+          "stage": 6,
+          "phi": "8/5",
+          "omega": "11/10",
+          "bar": "44/25",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:d03ac69e7b7e830e81c6a89625efbfad4ea0ba91f6e4b3b001dbf014b4ccbc54"
+        },
+        {
+          "stage": 7,
+          "phi": "13/8",
+          "omega": "14/13",
+          "bar": "7/4",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:e5f61baa08e0d4754484bc4fdaa9baca80bdfd3606f2c64412cacddb67df51c3"
+        },
+        {
+          "stage": 8,
+          "phi": "21/13",
+          "omega": "15/16",
+          "bar": "315/208",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:8f0fff9a0d86f367eff79f67df373bb2331c9310d7cdef59e23cf32be6e57075"
+        },
+        {
+          "stage": 9,
+          "phi": "34/21",
+          "omega": "16/21",
+          "bar": "544/441",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:a9ba62c090386dd0469910a3902e8ea338660d74e923bc8ff0b37b77011191c3"
+        },
+        {
+          "stage": 10,
+          "phi": "55/34",
+          "omega": "16/25",
+          "bar": "88/85",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:48a95ecd413f9d40330ee8f46551e4955826a8cf949a8aa39aaf2b27673ad489"
+        },
+        {
+          "stage": 11,
+          "phi": "89/55",
+          "omega": "20/29",
+          "bar": "356/319",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:51feb33860cdb7b4b227fb3f3d90d8f3559284a9965601b74f39c3deec644596"
+        },
+        {
+          "stage": 12,
+          "phi": "144/89",
+          "omega": "21/34",
+          "bar": "1512/1513",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:539bf083e4051cba87bf6fcb78cbe66b654183b7a1cc92f176dda365998543b7"
+        },
+        {
+          "stage": 13,
+          "phi": "233/144",
+          "omega": "21/40",
+          "bar": "1631/1920",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:ae9b46cc4f08fce54a5533d38fee0f0d4a015375a591bc8302fae2000722c047"
+        },
+        {
+          "stage": 14,
+          "phi": "377/233",
+          "omega": "23/47",
+          "bar": "8671/10951",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:0f3d17f7682849ed66dec70687198a598a81207f4b9673ed63fc3d9b3f80b8c6"
+        },
+        {
+          "stage": 15,
+          "phi": "610/377",
+          "omega": "13/28",
+          "bar": "305/406",
+          "complete_prior_history_used": true,
+          "derivation_hash": "blake3:b7d535e4fc10edac1c1729f3039d90dbce8e501de603b6407925798c894879c2"
+        }
+      ],
+      "g2_original_unique_winner_total_discharge_predicate_replayed": true,
+      "every_ledger_row_provenance_replayed": true,
+      "local_g4_debt_free_halt_at_15": true,
+      "halt_step": 15,
+      "successor_stage": 16,
+      "semantic_o16_empty": true,
+      "f1_executed": true,
+      "f1_triggered": false,
+      "f1_excluded": true,
+      "exact_d_partition": true,
+      "theorem12_full_instance_granularity": true,
+      "e5_complete": true,
+      "expressivity_gap_count": 0,
+      "halt_boundary_premise_hash": "blake3:17e26d1d68845eb74099caaa5bdaa9752469478255a8ca56aeb118e2784e9192",
+      "derivation_hash": "blake3:e6dc7f6bd218ba1d74d0e8adcf4fc8b88c73aef01f47f474de816b63577a8d67"
+    }
+  ],
+  "g2_pair_comparisons": [
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G2 exact obligation profiles agree at stages 5-15 and the debt-free successor 16",
+      "derivation_hash": "blake3:61c7f3dafad7ed961200605e833e736501951c98f3d78b5a0fa0ee095606cfb9"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G2 exact obligation profiles agree at stages 5-15 and the debt-free successor 16",
+      "derivation_hash": "blake3:5a7c3f245dcb5e8d7ac65547e76ebcdc497e7cee1db86521aa475a57c3a41def"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G2 exact obligation profiles agree at stages 5-15 and the debt-free successor 16",
+      "derivation_hash": "blake3:9a0c92be149fd0b9cb665b42b1743c156320f562f7d81a1bd2800c65457f4f10"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G2 exact obligation profiles agree at stages 5-15 and the debt-free successor 16",
+      "derivation_hash": "blake3:3890ee6880eb71c63d5fbab0ab87094540b3bed299be11f0418060add4f34045"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G2 exact obligation profiles agree at stages 5-15 and the debt-free successor 16",
+      "derivation_hash": "blake3:9846e8ee4511dc3c902ee3975879df103dd347076473789e5ae75d70af896084"
+    },
+    {
+      "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G2 exact obligation profiles agree at stages 5-15 and the debt-free successor 16",
+      "derivation_hash": "blake3:c417cbd87faa4dc4f4db8253589f15f6371f41fa0ad7beac4e109978c18dbe00"
+    }
+  ],
+  "g3a_pair_comparisons": [
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3a exact-certified (kappa,semantic_nu) vectors agree at every stage 5-15; winner identities are excluded",
+      "derivation_hash": "blake3:d689af8493f01e7a0dc0745fcc15bad9e100a5b862dcdca6d61a46ab1b1f4e13"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3a exact-certified (kappa,semantic_nu) vectors agree at every stage 5-15; winner identities are excluded",
+      "derivation_hash": "blake3:13f1768575216ae8f7fe4b82c762f3b71e1ad05c85d1e63c1c3916e9d3c00f82"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3a exact-certified (kappa,semantic_nu) vectors agree at every stage 5-15; winner identities are excluded",
+      "derivation_hash": "blake3:4d19a9f1e6fd745a3d5b44a5309ad07ce3143daeb4a0c0d605e64033803c24c5"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3a exact-certified (kappa,semantic_nu) vectors agree at every stage 5-15; winner identities are excluded",
+      "derivation_hash": "blake3:387c8389a20e33eb65fdeb2a0d9801c5683a29953cc86541721c9637d52885f6"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3a exact-certified (kappa,semantic_nu) vectors agree at every stage 5-15; winner identities are excluded",
+      "derivation_hash": "blake3:865528ba8906ee848db90705e2223e2a7f36d2d021f70448267629493dbbaf03"
+    },
+    {
+      "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3a exact-certified (kappa,semantic_nu) vectors agree at every stage 5-15; winner identities are excluded",
+      "derivation_hash": "blake3:5f2e5e75152211d9f793b725eeb76ba99cdf37876cfac7fba56e5488810d947a"
+    }
+  ],
+  "g3b_pair_comparisons": [
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "equal": false,
+      "first_divergence_stage": 4,
+      "exact_context": "G3b complete Stage 1-15 semantic Sigma-nu differs: left=32, right=31; the first source-row difference is Stage 4 with left semantic_nu=3 and right semantic_nu=2",
+      "derivation_hash": "blake3:120b3b324d4d9c9255646db6b11b5629593a95de7f443fdbdfdbd052ecef8b66"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": false,
+      "first_divergence_stage": 4,
+      "exact_context": "G3b complete Stage 1-15 semantic Sigma-nu differs: left=32, right=31; the first source-row difference is Stage 4 with left semantic_nu=3 and right semantic_nu=2",
+      "derivation_hash": "blake3:02e5508fbbdeb926db417294382a7344b049f147bb5e958938337bef0c82f606"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3b complete Stage 1-15 semantic Sigma-nu agrees at 32",
+      "derivation_hash": "blake3:049a5ffb071bec6edd34f0af4321722b792f4041ccb0dc5f74b1596b2597aaf5"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3b complete Stage 1-15 semantic Sigma-nu agrees at 31",
+      "derivation_hash": "blake3:45389f861f99e1aeb2152d463f83f10c80b55e53bc107510a040a715de912202"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": false,
+      "first_divergence_stage": 4,
+      "exact_context": "G3b complete Stage 1-15 semantic Sigma-nu differs: left=31, right=32; the first source-row difference is Stage 4 with left semantic_nu=2 and right semantic_nu=3",
+      "derivation_hash": "blake3:034d5d29ef4747458fb8fb8bc236b6486f3204214cf27d5932e0f68c9205bf73"
+    },
+    {
+      "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": false,
+      "first_divergence_stage": 4,
+      "exact_context": "G3b complete Stage 1-15 semantic Sigma-nu differs: left=31, right=32; the first source-row difference is Stage 4 with left semantic_nu=2 and right semantic_nu=3",
+      "derivation_hash": "blake3:6c062d838cae36389b88659b7f89d8dc524c3276ba83abd1692d460fc749a580"
+    }
+  ],
+  "g3c_pair_comparisons": [
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "equal": false,
+      "first_divergence_stage": 5,
+      "exact_context": "G3c diagnostic bar first differs at Stage 5: left=25/21 (phi=5/3,omega=5/7); right=20/21 (phi=5/3,omega=4/7)",
+      "derivation_hash": "blake3:e44eaa12fa9be08134a2c4188a13eed02c02b876b20d37bd56c86e443fe896be"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": false,
+      "first_divergence_stage": 5,
+      "exact_context": "G3c diagnostic bar first differs at Stage 5: left=25/21 (phi=5/3,omega=5/7); right=20/21 (phi=5/3,omega=4/7)",
+      "derivation_hash": "blake3:447630aac236b04cc368a8c137659f68c382cf096bb265383a0f624e31925e01"
+    },
+    {
+      "left_branch_root": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3c exact recomputed descriptive bar trajectories agree at stages 5-15",
+      "derivation_hash": "blake3:98dac6b6e6bbdf7821ea9d19082a483c5534c75455045f99a3807063f5ca49ed"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "equal": true,
+      "first_divergence_stage": null,
+      "exact_context": "G3c exact recomputed descriptive bar trajectories agree at stages 5-15",
+      "derivation_hash": "blake3:5eda300413d46ec640564b020ed75fc6225ce43d0264270845c04cdde29a8314"
+    },
+    {
+      "left_branch_root": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": false,
+      "first_divergence_stage": 5,
+      "exact_context": "G3c diagnostic bar first differs at Stage 5: left=20/21 (phi=5/3,omega=4/7); right=25/21 (phi=5/3,omega=5/7)",
+      "derivation_hash": "blake3:a43880f9ef3d7a030b4a00dc6851acd0f49f0492badc4aa5df9963805f8aec9c"
+    },
+    {
+      "left_branch_root": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "right_branch_root": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "equal": false,
+      "first_divergence_stage": 5,
+      "exact_context": "G3c diagnostic bar first differs at Stage 5: left=20/21 (phi=5/3,omega=4/7); right=25/21 (phi=5/3,omega=5/7)",
+      "derivation_hash": "blake3:04e4bc0d7294e9ebfa2bcd1a3d6d3c5541bacf3953f0b2a3f128f7daceb7e984"
+    }
+  ],
+  "g2": {
+    "level": "G2_obligation_profile",
+    "verdict": "passed",
+    "passed": true,
+    "exact_basis": "all six pairwise comparisons of the original Stage 5-15 required-package/constructor/live-count/total-discharge/debt-free rows plus terminal successor 16",
+    "derivation_hash": "blake3:06a444f850f6cf266c3b13c3f06cb3ce62fa960e10300443cbedd3a15327214a"
+  },
+  "g3a": {
+    "level": "G3a_stage5_to15_kappa_semantic_nu",
+    "verdict": "passed",
+    "passed": true,
+    "exact_basis": "all six pairwise comparisons of replayed branch-local (kappa,semantic_nu) rows at stages 5-15; winner identity excluded",
+    "derivation_hash": "blake3:0435d4df01fde08bcc0c23a49ffde8f5b840529ef95319b5c0cd5efcd32b994d"
+  },
+  "g3b": {
+    "level": "G3b_complete_sigma_semantic_nu",
+    "verdict": "refuted",
+    "passed": false,
+    "exact_basis": "all six pairwise comparisons of complete Stage 1-15 semantic Sigma-nu; the common Stage 5-15 suffix is not substituted",
+    "derivation_hash": "blake3:64a3b80bcc2571b701bfb1887c24fec97d421f7d9d4a00d28a80b97c1a3f5c97"
+  },
+  "g3c": {
+    "level": "G3c_diagnostic_bar_trajectory",
+    "verdict": "refuted",
+    "passed": false,
+    "exact_basis": "all six pairwise comparisons of exact d=2 bars recomputed from each complete ordered Stage 1-15 semantic ledger",
+    "derivation_hash": "blake3:e8087279c8e76bc1c32d1c25c2811aed54cae61ebc1f8acb87b4357261b073d5"
+  },
+  "g3_composite": {
+    "level": "G3_numeric_ledger_composite",
+    "verdict": "refuted",
+    "passed": false,
+    "exact_basis": "the frozen composite passes iff G3a, G3b, and G3c all pass; sub-reporting does not weaken the registered standard",
+    "derivation_hash": "blake3:161fa83ee4b572ebbf6f6cd2a34fa671a56ea465bd693b81da6dddfa49e321c9"
+  },
+  "cone_g4": {
+    "level": "cone_G4_debt_free_halt",
+    "verdict": "passed",
+    "passed": true,
+    "exact_basis": "four replayed BI-2 v2 finales with halt=15, successor=16, exact D, semantic O16 empty, F1 executed/excluded, Theorem-12 full-instance proof, E5 complete, zero gaps, and one branch-index-free halt premise",
+    "derivation_hash": "blake3:b9c8f15c416950a49235744935cbef345adc8901d1891ee55752368cd97b3f48"
+  },
+  "cone_g4_halt_boundary_premise_branch_index_free": true,
+  "stage4_offset_only_explanation_proved": true,
+  "z_tree_precondition_present": false,
+  "z_stop_precondition_present": false,
+  "outcome_zone": "Z-SPLIT",
+  "refinement_label": "Z-SPLIT-4",
+  "first_new_divergence_published_verbatim": "First new divergence is G3b for branch pair blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407 versus blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308 at source stage 4: G3b: G3b complete Stage 1-15 semantic Sigma-nu differs: left=32, right=31; the first source-row difference is Stage 4 with left semantic_nu=3 and right semantic_nu=2; G3c: G3c diagnostic bar first differs at Stage 5: left=25/21 (phi=5/3,omega=5/7); right=20/21 (phi=5/3,omega=4/7). Composite G3=refuted; no divergence was averaged, suppressed, or repaired.",
+  "inherited_g1_testimony": {
+    "artifact_blake3": "blake3:664ac42b93d065b7dc965296d49cee6b9fafbb147ff6f3394d6769c5071acafa",
+    "certificate_digest": "blake3:14e3cf8993eb6f708ff46e95be04b4cbd39e5e3317fb64030778e8bc32e3cf85",
+    "outcome": "law_level_confluence_refuted_rung_rt3_opened",
+    "artifact_self_digest_valid": true,
+    "r_t2_confluence_refuted": true,
+    "all_stage5_scheme_sets_inequivalent": true,
+    "order_reversal_invariant": true,
+    "selector_absent": true,
+    "exact_six_inequivalent_five_scheme_pairs": true,
+    "re_litigated_by_bi4_v2": false,
+    "used_to_compute_g2_g3_or_g4": false,
+    "derivation_hash": "blake3:bc5c8a66ee8d7e9121d86348506d4365ac8f2a61b4acf3a488b95a9ef4e59738"
+  },
+  "branch_index_disposition": [
+    {
+      "claim": "G2_obligation_profile_and_one-demand-per-stage_O_ladder_from_Stage5_through_halt",
+      "status": "promoted_to_cone_level",
+      "exact_verdict_premise": "G2_pass",
+      "derivation_hash": "blake3:7bbbf765a796d580bf62178ff190ccc13d1df4fb2a1b2afd2b0ec93a0f86f40c"
+    },
+    {
+      "claim": "G3a_per_stage_kappa_and_semantic_nu_vector_Stage5_through15",
+      "status": "promoted_to_cone_level",
+      "exact_verdict_premise": "G3a_pass",
+      "derivation_hash": "blake3:6b56eb9cacb7e5265706ba9fa40ec3ceab972cc6b68bc38e65171b9966c9ede7"
+    },
+    {
+      "claim": "complete_Stage1_through15_Sigma_semantic_nu",
+      "status": "remains_branch_indexed",
+      "exact_verdict_premise": "G3b_pass",
+      "derivation_hash": "blake3:372f935c8da2822ad936debd3b3bc77eb3d42b9b3b691a1eb94eae9387068769"
+    },
+    {
+      "claim": "diagnostic_bar_trajectory_and_WB1_cumulative_tables",
+      "status": "remains_branch_indexed",
+      "exact_verdict_premise": "G3c_pass",
+      "derivation_hash": "blake3:f51d865bf9fa2b14fba72c764cd7bca577ef1cc1195015809c0c762e967060c6"
+    },
+    {
+      "claim": "G4_debt_free_halt_at_15",
+      "status": "promoted_to_cone_level",
+      "exact_verdict_premise": "cone_G4_pass",
+      "derivation_hash": "blake3:73769fb1033a24f3fdcc51e0265e410a1f8444c344252635d92415bd488dab15"
+    },
+    {
+      "claim": "semantic_O16_empty_at_full_instance_granularity",
+      "status": "promoted_to_cone_level",
+      "exact_verdict_premise": "cone_G4_pass",
+      "derivation_hash": "blake3:62585a73fb7f8825625f2131d526c3da7dcc89d79e6f85a43ac5ff6def9cce4a"
+    },
+    {
+      "claim": "Guard_Rail_F1_excluded",
+      "status": "promoted_to_cone_level",
+      "exact_verdict_premise": "cone_G4_pass",
+      "derivation_hash": "blake3:e117aed2a93c0be7c8b23e91679f9756773ee96e2ec4d3521a0b28e491f364f0"
+    },
+    {
+      "claim": "Theorem12_full_instance_granularity_relative_to_adopted_A3",
+      "status": "promoted_to_cone_level",
+      "exact_verdict_premise": "cone_G4_pass",
+      "derivation_hash": "blake3:3334d45f248bcb755ee401d4149a133f9a30d4b684ac6b02375cf6007c406816"
+    },
+    {
+      "claim": "Stage4_root_act_identity_and_semantic_nu",
+      "status": "remains_branch_indexed",
+      "exact_verdict_premise": "R-T3_free_choice_and_G3b_G3c_refutation",
+      "derivation_hash": "blake3:5aa162b64d0dd3767a9eea924b1ece8fc0cfdc8df0c0f94556cb362cdf08692c"
+    },
+    {
+      "claim": "G1_Stage5_successor_scheme_sets_and_exact_derivations",
+      "status": "remains_branch_indexed",
+      "exact_verdict_premise": "inherited_R_T2_refutation",
+      "derivation_hash": "blake3:f51b67f9ef56996a811edfef13286d746a5367de4ca4054257134de7b4a13ac3"
+    },
+    {
+      "claim": "branch_specific_candidate_winner_and_act_local_provenance_identities",
+      "status": "remains_branch_indexed",
+      "exact_verdict_premise": "G3a_excludes_identity_and_compares_only_kappa_semantic_nu",
+      "derivation_hash": "blake3:3959dc0b2ea306f6bc1ff95e3a69c9844c6ab3f4e604fc2dcc37642c10be2ab5"
+    },
+    {
+      "claim": "complete_Stage1_through15_Sigma_kappa",
+      "status": "remains_branch_indexed",
+      "exact_verdict_premise": "not_a_registered_G3_sub_verdict",
+      "derivation_hash": "blake3:d1e817a5d20d2c8b26829c25c0a4496586881e5e5e20691070d3181a6aedaec8"
+    },
+    {
+      "claim": "complete_cumulative_Delta_Phi_Omega_interface_trajectories",
+      "status": "remains_branch_indexed",
+      "exact_verdict_premise": "G3b_and_G3c_pass",
+      "derivation_hash": "blake3:04f01cfe6eedd5398cda907be66107af72e78da27aa325366c64f47d0a0c15e3"
+    }
+  ],
+  "every_claim_disposed_explicitly": true,
+  "correspondence_corroboration": {
+    "opened_after_all_comparison_verdicts": true,
+    "artifact_blake3": "blake3:d909f54dfa91a187807428e16511d5f79e8b87b33f4cb3c421abdfbb09d2869b",
+    "artifact_self_digest_valid": true,
+    "row_count": 24,
+    "exact_three_alternate_by_eight_stage_surface": true,
+    "every_stage8_through15_winner_byte_identical": true,
+    "every_winner_joins_sealed_bi2_ledger": true,
+    "used_by_any_comparison_verdict": false,
+    "used_by_selector": false,
+    "used_as_provenance": false,
+    "corroboration_only": true,
+    "derivation_hash": "blake3:d880646643cd3441fef687cad12c1a1b16c5ec3ce97fd8bdb510d3ab6abb2691"
+  },
+  "drift_disclosure": {
+    "bi1b_public_deterministic_replay_passed": false,
+    "frozen_testimony_fallback_used": true,
+    "public_replay_errors": [
+      "BI-1b sweep differs from deterministic reissuance"
+    ],
+    "drift_repaired_inside_assembly": false,
+    "drift_concealed_inside_assembly": false,
+    "obsolete_bi4_issuer_retired_not_deleted": true,
+    "derivation_hash": "blake3:08c6127762d17dd588ea21eeffaff524efce321bfd90de0ca827e8e23413dde6"
+  },
+  "no_divergence_suppressed_averaged_or_repaired": true,
+  "class_representative_substitution_used": false,
+  "enacted_branch_used_as_comparison_baseline": false,
+  "uc1_content_present": false,
+  "bridge_executed": false,
+  "final_certificate_issued": false,
+  "mutation_falsifiers": [
+    "replace_the_frozen_BI2_v2_aggregate_digest_then_issuance_must_fail",
+    "flip_any_G2_G3a_G3b_G3c_composite_or_cone_G4_verdict_then_replay_must_fail",
+    "change_any_original_BI1_or_BI1b_unique_discharger_or_winner_join_then_G2_must_fail",
+    "change_any_stage_kappa_semantic_nu_sum_or_bar_then_replay_must_fail",
+    "change_nu_outside_Stage4_then_Z_SPLIT_4_must_disappear",
+    "omit_Stage4_from_complete_sum_or_bar_history_then_replay_must_fail",
+    "shuffle_duplicate_or_omit_any_history_stage_then_replay_must_fail",
+    "drop_or_promote_any_disposition_without_its_exact_verdict_then_replay_must_fail",
+    "use_correspondence_as_verdict_provenance_or_selector_then_replay_must_fail",
+    "conceal_or_repair_the_frozen_BI1b_drift_then_replay_must_fail",
+    "change_zone_or_refinement_label_then_replay_must_fail",
+    "add_UC1_bridge_or_final_certificate_content_then_replay_must_fail"
+  ],
+  "permitted_conclusion": "BI-4 v2 assigns Z-SPLIT with refinement Z-SPLIT-4 from the computed comparisons: G2=passed, G3a=passed, G3b=refuted, G3c=refuted, composite-G3=refuted, and cone-G4=passed. Cone-level promotion and retained branch indices are exactly those in the disposition table. No UC-1, bridge, or final-certificate conclusion is issued.",
+  "result_digest": "blake3:75a9dcc023e8a7e7b00d9e20ced5516cb0d08f8b88ffd80f93d45e2f746191b1"
+}
