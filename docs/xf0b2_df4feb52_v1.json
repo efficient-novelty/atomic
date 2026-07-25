@@ -1,0 +1,947 @@
+{
+  "artifact": "xf0b2_df4feb52_v1",
+  "campaign": "XF-1",
+  "result_digest": "blake3:1abba00b35b7f8a94adef96f2f4fe986b812a4fba0067ede5ff7e01419550805",
+  "sealed": {
+    "campaign": "XF-1",
+    "consequences": [
+      "The concordance's Outcome U stands, with its meaning changed: 31 of 32 families carry lawful classical names and the 32nd does not, but the 32nd is not a candidate novel object.",
+      "The v2 census unit question is unblocked but re-pointed: a principled v2 unit exists, and any v2 census must disclose - in addition to XF-0b's contamination and v1's spent rule - that the register's content is read from a hand-authored reference table.",
+      "A campaign-level methods question is opened, wider than this study: the whole certified fifteen-stage register is read from a hand-authored literal table, and every structural-family gate from stage 3 onward is a per-position literal. Referred to the internal program.",
+      "XF-0 is untouched: it was blind and never read the register; its 3/11 mismatch stands exactly as published.",
+      "The stage-15 fix orphan (XF-0b's Outcome-X row) is unaffected and remains a named question."
+    ],
+    "date": "2026-07-24",
+    "disclosures": [
+      "Information flow (inherited F-C4): not blind; contaminates future blind work.",
+      "Adjudication stability (F-R3): eight contexts, zero flips, all five leads disposed.",
+      "Level vs index, OPEN and disclosed: Telescope::is_connected reads Var as a relative index while the kernel elaborator reads it as an absolute level. The credited family is unaffected (parameters [Type, Type] either way) and no verdict depends on it, but the verifier raised the probability that the hand-authored literal was written under telescope.rs's own convention - in which case the IN-SITU narrative would need re-derivation, though the family and the verdict would not. MUST be settled before any document describes the family 'in situ'.",
+      "Negative existential (F-R2 honesty): eight contexts sweeping overlapping literatures are not eight independent samples. Individual obstructions are high-confidence and mechanical; the claim that NOTHING names this family is medium-confidence, with residual risk concentrated in the illative/Automath corner - precisely where the verifier found B's flip-citation and showed it still does not flip.",
+      "Citation provenance: four analysts declared sources they could not obtain in full (Hickey FOOL 3 numbered rules; Jacobs 1999 definition numbers; Pollack FACS 2002; Niu-Spivak numbered propositions) and declined to invent numbers. No obstruction depends on any of them.",
+      "F-R5 compliance: the export's attractiveness exerted no pressure. Three contexts independently identified the cheap tidy naming that would have closed the concordance at 32/32 and killed it on mechanical grounds; the verifier killed the two attacks that would have named the family; and the export is withdrawn on grounds stronger than the naming question ever offered."
+    ],
+    "information_flow": "Not blind (inherited F-C4): every context read the certified register and the R-0 dossier directly. Contaminates future blind work.",
+    "item": "XF-0b2 targeted re-examination of family df4feb52882e",
+    "parent_study": {
+      "artifact": "xf0b_concordance_v1",
+      "result_digest": "blake3:907b7a474dcc530fe5b332d3caec51758dc104ab3226e915a5c357f7388785d2",
+      "subject_row_verdict": "no_name"
+    },
+    "plan": {
+      "path": "docs/xf0b2_df4feb52_reexamination_plan.md"
+    },
+    "provenance_finding": {
+      "causal_direction": "SETTLED; both readings the first draft left open are wrong. git log -L 335,363:crates/pen-core/src/telescope.rs returns exactly one commit, 5dd8447 (2026-03-13, 'First rust implementation step'); the stage-14 telescope has never been modified since. The search gates postdate it: matches_hilbert_functional_shell 2026-03-14 (698935a), supports_hilbert_functional_clause_at_position 2026-03-15 (64b1c21). The certified register is built by READING the literals (t_bi_nu1_regression_v6.rs reference_entries = (1..=15).map(|s| (s, Telescope::reference(s)))). Step 14 'Hilbert, kappa 9' was PRE-DECLARED in skills/pen-atomic/references/02-target-sequence.md line 47, in commit 4adcf28, the repository's Initial commit. Telescope::reference is a hand-transcribed DESIGN TARGET and the search's stage-14 arms were written afterwards to reproduce it. NO SEARCH IN THIS REPOSITORY EVER FOUND THIS OBJECT.",
+      "core_finding": "The subject clause's exact shape is a hard-coded literal in the search's admissibility layer; supports_hilbert_functional_clause_at_position admits exactly one expression at position 3, every leaf a concrete literal, and is on the live enumeration path. Stronger: late_clause_options bypasses raw enumeration entirely at clause_kappa == 9 and emits the nine-clause telescope verbatim from a literal table.",
+      "corrections_to_the_first_draft": [
+        "'Stage 14 raises the flag by construction' - OVERSTATED: the cited demand_completeness.rs entry is an expectation table, not a raiser; the real raiser is StructuralDebt::requires_hilbert_functional_package, which fires on library CONTENT. Conclusion holds in Guarded mode; the justification cited was wrong.",
+        "'Early families are looser; pinning tightens with stage depth' - REFUTED: supports_initial_hit_clause_at_position is three literal singletons. The pinning is UNIFORM from the earliest structural families onward.",
+        "One of the four listed sites, supports_hilbert_functional_clause, uses Expr::Var(_) WILDCARDS rather than literals.",
+        "Surface-dependence omitted: the position-3 singleton holds on LateFamilySurface::None and RealisticShadow; DesktopClaimShadow and DemoBreadthShadow each offer three alternatives at position 3. Internally consistent with the conclusion since the require-flag is raised only in Guarded mode, but the qualification belongs in the record.",
+        "ADDENDUM C exercises matches_hilbert_functional_shell (the public capability flag), not the enumerate.rs per-position gate it calls decisive; the two carry the same literals under LateFamilySurface::None.",
+        "'Does not touch the naming verdict' - TOO STRONG. Corrected to: the verdict SURVIVES, but the grounds ARE disturbed, because every context's anti-poverty rebuttals presuppose something was choosing."
+      ],
+      "effect_on_export": "DEFEATED. A structure that is a literal in the code cannot be reported as that code's discovery.",
+      "effect_on_naming_verdict": "SURVIVES. Every primary obstruction is 'defining datum D has no counterpart in the family's typed content'; under the translation standard a datum the source does not carry cannot be mapped regardless of why it is absent. The anti-poverty rebuttals are auxiliary everywhere and load-bearing nowhere.",
+      "limit_stated": "Whether a prior Haskell engine (RunAbInitio.hs, referenced by the same brief) ever searched for and found the clause-3 expression is outside this repository's history and is not claimed either way.",
+      "methods_question_referred": "Not 'to what extent is the LATE stratum a transcription' but: the whole certified fifteen-stage register is read from a hand-authored reference table, and every structural-family gate from stage 3 onward is a per-position literal. Bears on XF-0b's headline and on the register's standing as a search result. XF-0 is untouched (it was blind).",
+      "note": "docs/xf0b2_provenance_finding_v2.md (v1 superseded, retained unedited because the verifier audited it)"
+    },
+    "r0": {
+      "ambient_parameters": 1,
+      "app_nodes": 0,
+      "beta_steps_to_normal_form": 0,
+      "canonical_normal_form": "Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))",
+      "clause_expr": "Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))",
+      "clause_normal_form": "Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))",
+      "coarse_assumptions": 2,
+      "family_id": "blake3:df4feb52882ec5b6a56472960c340c6a16be3b8c48dd25d389f9b5dca8e9e62b",
+      "instance_count": 1,
+      "lam_in_pi_domain_occurrences": [
+        "step 14 clause 3"
+      ],
+      "marginal_no_closure_preimage": true,
+      "parameters": [
+        "Type",
+        "Type"
+      ],
+      "predecessor_closure_digest": "blake3:963875e7d8eff61ce694f8d539a0ffd5fe8d8aff1d2d8404985232443fcc89ef",
+      "predecessor_signature_digest": "blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac",
+      "sealed_computation_role_clauses": 0,
+      "signature_digest": "blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a",
+      "stage14_candidate_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+      "var_resolutions": [
+        "Lam body Var 1 -> ambient parameter #1",
+        "Sigma domain Var 1 -> ambient parameter #1",
+        "Sigma codomain Var 2 -> field of clause 0"
+      ]
+    },
+    "r0_notes": {
+      "addendum": "docs/xf0b2_r0_addendum_v1.md",
+      "addendum_findings": [
+        "A: a genuinely dependent product at this exact position ELABORATES (coarse 3), and the well-sorted dependent form Pi(X, Sigma(X, .)) elaborates at coarse 1 - strictly cheaper than the sealed clause's 2.",
+        "B: the sealed corpus contains 5 binder-bound Var occurrences across 3 clauses (step 11 clauses 0 and 1, step 12 clause 0). Binder reference is a device the record uses; stage 14 uses it nowhere.",
+        "C: the naturality square certifies stability of canonicalization under renaming, NOT symmetry in X and Y and NOT functoriality.",
+        "D: app-el-pi fires only when the El'd expression is a Pi, so an inhabitant of this Pi's domain has no elimination behaviour in the kernel at all.",
+        "E: CORRECTION - 'the eta hinge' was a coordinator error. eta's redex is lambda x.(f x); this body is Var 1. Adding eta would collapse nothing. There is no hinge.",
+        "F: AMENDMENT - dossier section 5 hard constraint 1 (equation-freeness as a standing constraint) proves too much and is demoted to a per-target observation.",
+        "G: analyst B's flip-condition was MET (AUT-QE type inclusion at n=1, k=0) and did not flip; it was mis-specified, asking for a rule where the standard asks for a structure."
+      ],
+      "dossier": "docs/xf0b2_r0_dossier_v1.md",
+      "gloss_corrections": [
+        "NOT a dependent product: both Pi and Sigma are non-dependent, stably across every admissible ambient arity.",
+        "The abstraction is the CONSTANT FAMILY lambda_.X, whose body ignores its own binder; not a generic term-level abstraction.",
+        "Var 2 is NOT an unexplained second sort: at the kernel's minimal ambient arity it resolves to the FIELD OF CLAUSE 0, the stage's inner-product-plus-vector datum. A resolution of a reference, not a fusion of clauses; the credited family still abstracts it to a free Type parameter (F-R4 intact).",
+        "NOT RECORDED BY THE CONCORDANCE: the formation is accepted only under TWO COARSE SUBSUMPTIONS, the highest at stage 14 (clause 8 has 1, the other seven have 0). The kernel does NOT certify this Pi-formation as well-sorted; it records the sort mismatch and proceeds. The Pi-binder's classifier is El(Lam(Var 1)) - an element of a function."
+      ],
+      "irreducibility_verdict": "IRREDUCIBLE. Zero App nodes, NF in 0 steps identical to the clause; no eta rule in the kernel; zero computation-role clauses across all fifteen sealed entries; no eta-redex shape. Bounded catalog at scope 4, <=5 nodes: of 99064 expressions exactly 15 are judgmentally equal to Lam(Var 1), and the 7 that are not syntactically Lam-headed are beta-redexes reducing to it. No type-former presentation of the domain exists. The plan's reducibility contingency does not fire.",
+      "raw_probe_output": "docs/xf0b2_r0_probe_output.txt",
+      "role_dossier": "Exactly one occurrence in the entire fifteen-stage register: stage 14 clause 3, axiomatic_introduction_head / intrinsic_kernel / kernel_head, resolution class proved_family. No other stage references it. instances = [Generator] only: no specializations anywhere. Marginal against the 37-family predecessor closure of steps 1..13. One third of stage 14's semantic payment (nu_14 = 3), alongside clause 0 (pointed quiver) and clause 2 (coalgebra for the squaring endofunctor).",
+      "uniqueness": "Stage 14 clause 3 is the only clause in all fifteen sealed telescopes with a Lam in a Pi/Sigma domain position."
+    },
+    "r1": {
+      "arming_discipline": "F-R2: arming widened the search; the bar did not move. Each analyst was given the R-0 elaboration and the registered leads, and the standard verbatim and unchanged.",
+      "fleet": "Five fresh lead analysts (none from the concordance fleet), one per registered lead, plus two independent armed analysts working the whole question in mutual isolation.",
+      "independent_analysts": [
+        {
+          "analyst": "A",
+          "approach": "Outward from the type theory through the registered leads; 10 targets.",
+          "citation_caveat": "For Hickey (FOOL 3, 1996) and Jacobs (1999) numbered definitions could not be obtained from accessible copies (the Cornell PDF is LZW-encoded and did not decode; the Jacobs chapter is not online). Cited at construct level and chapter level respectively, with numbers declined rather than invented. Since both rows are obstructions rather than namings the citation burden is lighter, but a verifier wanting to break the Hickey row should obtain the numbered rule and check whether the well-founded-order datum is optional; if it is, the row still falls on the codomain-self-reference obstruction, which is verified directly against the kernel.",
+          "confidence": "high",
+          "f_r5_compliance": "I judged the coalgebra reading the strongest near-miss precisely BECAUSE it would have closed the concordance at 32/32 and withdrawn the export; I killed it on the source-of-the-structure-map law, not on novelty appeal. I record explicitly that I would have preferred the naming as the cheaper outcome and did not get it.",
+          "kernel_claims_rechecked": [
+            {
+              "claim": "minimal ambient arity for stage 14 is exactly 1",
+              "detail": "Clause 0 at priors=0 demands 1 via its Sigma domain; every other clause demands 0. Max = 1.",
+              "how_checked": "read required_ambient and minimal_ambient_parameters and hand-evaluated on all nine clauses, independently of the probe output",
+              "result": "confirmed"
+            },
+            {
+              "claim": "both binders non-dependent; Lam(Var 1) is the constant family at X",
+              "detail": "Lam binder at level 5, body Var 1 != 5, so the abstraction ignores its own binder. Pi binder at 5, codomain mentions only 1 and 2. Sigma binder at 6, its codomain is Var 2 != 6. All three binders strictly above every occurring level.",
+              "how_checked": "level arithmetic under the frozen convention read directly from normalize.rs; base scope at clause 3 = ambient 1 + priors 3 = 4",
+              "result": "confirmed"
+            },
+            {
+              "claim": "exactly two coarse subsumptions, at the unannotated Lam binder and at as_type on the domain",
+              "detail": "Site 1: the Lam arm calls note_coarse() unconditionally and pushes Neutral, synthesizing Fun(Neutral, Type). Site 2: the Pi arm's as_type on that classifier falls to the default branch and calls note_coarse() again. The Sigma sub-derivation contributes zero. Total 2. Control: clause 8 traces to exactly 1; clause 0 to 0. Matches the dossier table exactly.",
+              "how_checked": "hand-traced synth and as_type on the clause with ambient=1, prior_roles=[Formation x3]; traced clauses 0 and 8 as controls",
+              "result": "confirmed"
+            },
+            {
+              "claim": "the Pi-bound variable receives classifier El(Lam(Var 1))",
+              "detail": "domain_whnf of Lam(Var 1) is itself in 0 steps; the code then executes locals.push(KernelTy::El(domain_whnf.expr)), literally El(Lam(Var 1)). Verbatim, not paraphrase. Also confirmed via resolve that at ambient 1, priors 3, level 1 -> Ambient{1} and level 2 -> Field{0}.",
+              "how_checked": "read elaborate.rs directly",
+              "result": "confirmed"
+            },
+            {
+              "claim": "stage 14 clause 3 is the only clause in the sealed signature with a Lam in a Pi/Sigma domain",
+              "detail": "Domain slots occurring in the corpus: Var(1), Lib(7), Lib(8), Lib(10), Lib(11), Lib(12), Lib(13), Pi(..), Sigma(..), Flat(..), Next(..), Sharp(Eventually(..)), Next(Next(..)) — and, once only, Lam(Var 1) at step 14 clause 3. Stage 14 alone fills the Pi domain slot four other ways, all at coarse 0. Steps 4, 11, 12, 13, 15 all contain Lam clauses, but every one sits at clause top level or under an App, never in a Pi/Sigma domain.",
+              "how_checked": "exhaustive manual scan of all fifteen arms of Telescope::reference",
+              "result": "confirmed"
+            },
+            {
+              "claim": "irreducibility: beta only, no eta, Lam(Var 1) judgmentally distinct from Var 1",
+              "detail": "judgmental_equality is literally normalize(left) == normalize(right) syntactically at a common scope, tagged kernel-v1-beta-normal-equality. Lam(Var 1) contains no App so is its own normal form in 0 steps; Var 1 likewise; syntactically distinct hence judgmentally distinct. No eta arm anywhere. The only App(Lam(..), ..) in all fifteen telescopes is step 4 clause 2.",
+              "how_checked": "read normalize.rs in full and equality.rs; exhaustively scanned Telescope::reference for App(Lam(..), ..) shapes",
+              "result": "confirmed"
+            },
+            {
+              "claim": "NEW FINDING: the alphabet gives Lam no domain slot at all, so the family's index/base object is unrepresentable, not merely unnamed",
+              "detail": "Lam(Box<Expr>) / Lam { body: ExprId } — exactly one child, no annotation. Combined with locals.push(KernelTy::Neutral), the binder of Lam(Var 1) is opaque by construction of the frozen alphabet. Load-bearing: no clause of any telescope could supply a base object for the family, so any target whose defining data include one cannot be given it without adding data to the family (F-R4).",
+              "how_checked": "read expr.rs and the mirrored ExprNode",
+              "result": "confirmed"
+            },
+            {
+              "claim": "NEW FINDING: the sealed corpus does exercise genuine Pi-codomain dependence elsewhere, so the non-dependence of clause 3 is a choice",
+              "detail": "At ambient 0, priors 0, the outer Pi binder occupies level 1, so the inner Var 1 resolves to Local{binder: 1} with classifier El(Lib 10). Step 11 clause 0 is genuinely dependent: Pi(x : L10, Pi(_ : x, x)). This kills the poverty-of-language defence for every target whose missing datum is codomain dependence.",
+              "how_checked": "computed the minimal ambient for step 11 (= 0) and resolved step 11 clause 0 through ElabState::resolve",
+              "result": "confirmed"
+            }
+          ],
+          "residual_risk_flagged": "Telescope::reference(14) is a hardcoded sealed literal, and the search layer's Telescope::is_connected reads Var as a RELATIVE index while the elaborator reads it as an ABSOLUTE level. Under the relative reading clause 3's Var 2 would point at clause 1, not clause 0. The dossier discloses this and uses it for nothing; I do the same, and my verdict does not depend on which clause Var 2 names (the credited family carries it as a free Type parameter either way). But if the campaign ever concludes the sealed literal was authored under the relative reading, the IN-SITU content of clause 3 changes and the role dossier — though not the credited family, and not this verdict — would need re-derivation.",
+          "strongest_near_miss": "Coalgebra for the endofunctor F(Z) = Z x Y — a Moore automaton / stream system in the sense of Rutten, TCS 249(1):3-80, 2000, section 2. The map is nearly total: X to the carrier, Y (in situ, T0) to the output object, clause 3 to the structure map. The single law that killed it: a coalgebra's structure map must have the carrier as its source, and the recorded source is El(Lam(Var 1)), which the frozen kernel certifies is NOT El(Var 1). Naming it a coalgebra requires eta-collapsing the domain, i.e. naming a different family. Runner-up: the CwF/comprehension-category reading, closer in FORM — it is literally Pi at a family — but failing in three places at once.",
+          "targets_tried": [
+            {
+              "lead": "L1",
+              "obstruction": "Two defining data absent: codomain self-reference on f (codomain mentions only levels 1 and 2; Pi binder is level 5), and the well-founded order (no relation-shaped expression in clause 3; the only one at stage 14 is inside clause 0, a different credited family — folding it in is F-R4). The target and the record put their anomaly in opposite slots: Hickey's A is a plain type and the strangeness is in the codomain. Not poverty: step 11 clause 0 exercises genuine Pi-codomain binder dependence.",
+              "outcome": "obstruction",
+              "target": "Very dependent function type (Hickey)"
+            },
+            {
+              "lead": "L1",
+              "obstruction": "Expr has no intersection node and the head of clause 3 is Expr::Pi, whose elaboration pushes a fresh local binder and is a function formation, not a membership conjunction. The characteristic shared-inhabitant law is equational and the family is equation-free. Renaming Pi to iota is fixing the family, not the name (F-R4).",
+              "outcome": "obstruction",
+              "target": "Kopylov dependent intersection"
+            },
+            {
+              "lead": "L2",
+              "obstruction": "Three data absent: labels (no label/name/field-identifier constructor at any arity in the alphabet); self-reference (a self-reference would need level 4, and the elaborator's scope for clause k contains only the k PRIOR fields, so a clause referring to itself is a scope violation by construction); and the projection/eta laws (equations; family is equation-free). Not poverty: the register encodes record-shaped data as nested Sigma at coarse 0 elsewhere in this very telescope.",
+              "outcome": "obstruction",
+              "target": "Dependent / self-referential record types"
+            },
+            {
+              "lead": "L3",
+              "obstruction": "(a) The comprehension datum Gamma.A has no counterpart: the kernel's extended context is Gamma.El(Lam(Var 1)), whereas a CwF's comprehension is defined only for A in Ty(Gamma), and Lam(Var 1) is not in Ty(Gamma). (b) pi-form returns bare KernelTy::Type unconditionally with no Gamma-indexing, so the target's substitution/Beck-Chevalley equations cannot be stated on the source side. (c) Making it work requires reading the two slots of ONE Pi node under two different conventions — F-R4. Note: standard mathematics does name Pi at a constant family, but at a constant family in the CODOMAIN slot, where it is the ordinary function type; it has no name for a constant family in the DOMAIN slot, because there the grammar demands a type.",
+              "outcome": "obstruction",
+              "target": "Pi-type in a CwF / comprehension category applied to a type-in-context presented by a section"
+            },
+            {
+              "lead": "L3",
+              "obstruction": "(1) Pi_pr lands in a SLICE over the base, whereas the kernel assigns clause 3 the classifier Type unconditionally, so there is no slice-indexing to carry Pi_f's fibred structure. Forcing the result into C/1 means setting I = 1, at which point lam_.X carries exactly the same data as X — contradicting the certified judgmental distinctness. (2) The base object I has no source counterpart: Lam has a single child and no annotation slot, and the binder's classifier is Neutral. Pi_f is defined BY an adjunction and the family is equation-free. Not poverty: the register uses display-map-shaped Pi domains at coarse 0 in this very telescope (clauses 5, 6, 7).",
+              "outcome": "obstruction",
+              "target": "Dependent product along a morphism (Pi_f), LCCC"
+            },
+            {
+              "lead": "L4",
+              "obstruction": "(1) The shape object S — the FIRST item of the target's defining data — has no possible source counterpart in the alphabet: Lam has exactly one child and the binder is Neutral. Not that the register forgot to name S; there is no slot in which any clause of any telescope could ever have named it. (2) Nesting order: a container extension is Sigma-of-Pi; the record is Pi-of-Sigma. Swapping is F-R4. Not poverty, decisively: the Sigma-of-Pi container shape is expressed in this very telescope at coarse 0 — clause 0 — and that clause WAS lawfully named (pointed quiver).",
+              "outcome": "obstruction",
+              "target": "Container / indexed container / polynomial functor"
+            },
+            {
+              "lead": "L5",
+              "obstruction": "THE STRONGEST NEAR MISS. A coalgebra's structure map must have the carrier as its source, and the recorded source is not the carrier: the Pi binder's classifier is El(Lam(Var 1)), not El(Var 1), and Lam(Var 1) is judgmentally distinct from Var 1 under the frozen equality. Supplying the identification means eta-collapsing lam_.X to X, producing a DIFFERENT family — and the collapse target Pi(Var 1, Sigma(Var 1, Var 2)) does not occur anywhere at stage 14, so this is not a redundant re-presentation of an existing clause. Not poverty, decisively: the well-sorted coalgebra shape is available in this very telescope at coarse 0 and IS used — clause 2 was lawfully named a coalgebra for the squaring endofunctor. The register can say coalgebra. In clause 3 it says something else, and the family quotient keeps the two apart.",
+              "outcome": "obstruction",
+              "target": "Coalgebra for the endofunctor F(Z) = Z x Y (Moore automaton / stream system)"
+            },
+            {
+              "lead": "own",
+              "obstruction": "LF names this configuration only as a KINDING ERROR, not as a structure. Its Pi-formation rule admits Pi x:A. B only when A is of kind Type; a family of kind (A' -> Type) in the domain position is not derivable at any level of the LF grammar. So the closest classical account of the record's exact shape is that it is ill-kinded — precisely what the kernel independently records as its two coarse subsumptions. Registered as CONFIRMING evidence for NO-NAME rather than as a name: 'ill-formed' is not a classical structure.",
+              "outcome": "obstruction",
+              "target": "Edinburgh Logical Framework: Pi over a type family"
+            },
+            {
+              "lead": "own",
+              "obstruction": "(1) The base M has no source counterpart. (2) The reading is UNDERDETERMINED and choosing it is fixing the family: an 'element of the family lam_.X' over a base I could be a point of the total space I x X or a section I -> X, and the kernel makes no choice — it records El(Lam(Var 1)) verbatim and counts a coarse use. Selecting 'sections' has no source warrant (F-R4). (3) Every law of the target — bilinearity, symmetry, positive-definiteness, completeness, Riesz — is an equation, and the family is equation-free. Not poverty: clause 8 is Lam(Pi(Var 1, Univ)), so the Univ-valued functional shape was available and unused.",
+              "outcome": "obstruction",
+              "target": "Functional on the section space of a trivial bundle; Riesz representation"
+            },
+            {
+              "lead": "own",
+              "obstruction": "(1) The stage/index object is absent and unrepresentable. (2) The target requires BOTH arguments to be functors; the record's codomain is elaborated as a plain Type in a context extended by the Pi binder, not as a functor — two conventions inside one node (F-R4). (3) An end is DEFINED by a universal property expressed as naturality equations; the family is equation-free. (4) pi-form returns bare Type with no stage-indexing, so no reindexing law can be stated on the source side.",
+              "outcome": "obstruction",
+              "target": "Generalized element of the universe; end and natural-transformation type Nat(Delta X, -)"
+            }
+          ],
+          "verdict": "no_name",
+          "what_would_change_my_mind": "Three concrete things, in descending likelihood. (1) A CAMPAIGN-LEVEL RULING THAT THE KERNEL'S ETA-FREENESS IS A PRESENTATION CONVENTION RATHER THAN MATHEMATICAL CONTENT. This is the honest hinge of the whole verdict: under eta the family becomes Pi(Var 1, Sigma(Var 1, Var 2)) = X -> X x Y, which IS lawfully nameable as a coalgebra for the endofunctor (-) x Y, and my verdict flips to NAMED with that as the primary name. I am forbidden by F-R2 from making that ruling myself, and R-0.2 certifies the family irreducible under the FROZEN rules, so on the standard as written the answer is no_name — but a verifier should know that the verdict is exactly one frozen convention deep. (2) A citation I did not find: a named classical structure whose defining data are (a type X, a type Y, and a dependent-product formation whose domain slot holds the constant family at X over NO base object), with laws matching an equation-free singleton formation clause. Searched the very-dependent-type, dependent-intersection, record, CwF/comprehension-category, LCCC, polynomial-functor/container, coalgebra, LF, functional-analytic and generalized-element literatures and found none. (3) A demonstration from the kernel sources that El(Lam(Var 1)) is definitionally the CwF comprehension Gamma.X under the frozen rules. It is not."
+        },
+        {
+          "analyst": "B",
+          "approach": "Inward from the mathematics rather than outward from the type theory; 13 targets across categorical logic, fibrations, Tarski universes, functional analysis, algebraic theories with generalized arities, and LF.",
+          "confidence": "high",
+          "deflationary_assessment": "The honest answer is deflationary and specifically the harshest of the three the brief offers: this is a SORT ERROR, a family occupying a slot that demands a type, and not a structure. It is not 'the exponential X^I with the index elided', because eliding an index presupposes an index and the record has none - the Lam's binder is classified Neutral, so the index is absent rather than suppressed. It is not 'a known notational convention', because no published system was found that forms Pi over a family without first supplying a decoding, an index, or a display map; a convention has users and citations and this shape has neither. Four facts converge on the third option. (i) The kernel itself declines to certify the formation: two coarse subsumptions, the highest count at stage 14. (ii) DECISIVE: every one of my thirteen obstructions is the SAME obstruction wearing different clothes - the domain slot needs a type, an object, a base object, an index, a code, a shape type, a measure space, a cardinal, or a morphism-into-an-object, and in all thirteen cases the record supplies a family over an untyped binder. Thirteen targets from seven disjoint areas of mathematics failing at the identical point is the signature of a defect, not of a structure: a genuinely novel object would fail different targets for different reasons. (iii) The object has no instances, no equations, and exactly one occurrence in a fifteen-stage, 135-clause signature; it is generated once and never used. (iv) A candidate novel mathematical object ought to be MORE certified than its neighbours, and this one is the LEAST certified clause at its stage - its two credited siblings carry coarse 0 and were both named without difficulty. Being strict against my own conclusion's convenience: a sort error is not a name. It identifies no classical structure and supplies no functor, so it cannot discharge the translation standard and cannot flip the verdict to 'named'. The disposition is therefore NO-NAME - but NO-NAME reached on these grounds is not evidence for the export, it is evidence against it, and I would be misreporting my own finding if I let 'no_name' be read as 'novel object'.",
+          "f_r5_compliance": "My verdict is the export-friendly one on its face, so I recorded in the deflationary assessment the reasons the export should nonetheless NOT be registered as a novel object on this evidence. I did not aim for either result and would have been content to close the concordance at 32/32.",
+          "kernel_claims_rechecked": "Six claims re-derived by an independent Python re-implementation of required_ambient, ElabState::resolve and the binder-scope discipline, applied to all 15 telescopes transcribed by hand from Telescope::reference. All confirmed. Did not call the repo's own probe. One WORDING correction to dossier section 2 item 4: 'Nothing outside the Lam-headed class can be judgmentally equal to it' proves the NORMAL FORM is Lam-headed, not the expression, and is refuted by the dossier's own data (7 of 15 judgmentally-equal expressions are non-Lam-headed beta-redexes). The load-bearing claim - that no TYPE-FORMER presentation exists - stands.",
+          "provenance_disclosure_raised": "The exact literal shape Pi(Lam(Var 1), Sigma(Var 1, Var 2)) appears as a hard-coded pattern in at least four places in the repository, including inside matches_hilbert_functional_package in the admissibility layer. Causal direction not established by me; but a document registering this family as a candidate NOVEL MATHEMATICAL OBJECT must disclose it, and someone with repository history should settle the direction before the export firms.",
+          "strongest_near_miss": "Dependent product along a morphism Pi_g in an LCCC (Seely 1984; Gambino-Kock 2013) - the only target whose defining data natively admit a MORPHISM rather than an object in the slot the record fills with a term. Killed because Pi_g's argument must be an object of the slice C/X, and the certified non-dependence means no display map exists to translate.",
+          "verdict": "no_name",
+          "what_would_change_my_mind": "Six items; the first is the crux and was subsequently MET and shown not to flip (see r2.corrections_adopted): a published formation rule of the form 'Gamma |- a : A -> Type implies Gamma |- Pi(a, B) type' - a system forming Pi with a family-as-term in the domain slot, with no intervening decoding, index, or display map."
+        }
+      ],
+      "lead_attempts": [
+        {
+          "analyst_notes": {
+            "declared_gaps": "(A) The 'one-token difference' poverty rebuttal was not run through elaborate_telescope. [CLOSED by the R-0 addendum, section A: it elaborates, at coarse 3.] (B) No corpus-wide survey of whether any sealed clause actually USES a binder-level Var. [CLOSED by the R-0 addendum, section B: 5 occurrences across 3 clauses, at steps 11 and 12.] (C) GENUINE EXPRESSIVE LIMITATION on the record: the grammar has NO intersection former, NO set/subset former, NO Label/Atom type and NO record former. Any obstruction resting on those absences WOULD be a poverty artifact and should be struck. None of the four obstructions rests on them.",
+            "deepest_finding": "THE STRUCTURAL INVERSION. In every construction in this literature — Hickey FOOL 3 Sections 2.1, 3, 3.1; Kopylov LICS 2003 eqs. (4), (8), (11), (12) — the term-level computing object (Field[l], case l of ..., B[f,x], M(Rep)) occupies the CODOMAIN, while the domain is always a bona fide type. L1's whole tradition is about enriching the CODOMAIN discipline. df4feb52882e enriches the DOMAIN slot instead, and under the frozen kernel conventions the domain position is not even a family position. This is not a variant of L1's shape; it is its mirror image, and it is why the kernel logs a sort mismatch rather than a construction.",
+            "kernel_claims_checked": "All dossier kernel claims CONFIRMED, none found wrong: (1) telescope.rs step-14 clause 3 verbatim; the nine-clause table matches source exactly. (2) Binder convention confirmed: normalize.rs normalizes Pi/Sigma DOMAINS at scope_len and CODOMAINS at scope_len+1; elaborate.rs synthesizes the Pi domain BEFORE state.locals.push. (3) Beta-only, no eta: whnf has exactly one firing case, App(Lam body, arg). (4) The 'two coarse subsumptions' claim confirmed precisely: Lam-intro calls note_coarse() yielding Fun(Neutral, body_ty); pi-form calls as_type on that classifier, which increments for any classifier that is not exactly KernelTy::Type. Two, and only two. (5) The El(Lam(Var 1)) classifier confirmed literally: state.locals.push(KernelTy::El(domain_whnf.expr)). (6) Non-dependence confirmed via resolve(): level 1 -> Ambient{1}, level 2 -> Field{0} at ambient 1 with 3 priors; binders live at 5 and 6.",
+            "strongest_attack_on_this_verdict": "The in-situ reading makes T0 = (X->X->U) x X, whose first factor is EXACTLY Hickey's order datum '< in A -> A -> U_i' and whose second is a distinguished base point — so a determined analyst could claim clause 3 in situ IS a very dependent function type with its well-founded order supplied. Four answers, in order of strength: (i) even in situ that datum sits in clause 3's CODOMAIN, as an output factor, whereas Hickey's < is a PREMISE of the formation rule — a direction reversal no functor repairs; (ii) 'WellFounded_i(A;<)' still has no counterpart, and the clause is equation-free while Id is in the grammar and unused; (iii) reading clause 0's field into clause 3's formation fuses two clauses, which F-R4 voids, and the CREDITED family abstracts Var 2 to a free Type parameter Y so the relation structure is not part of the family at all; (iv) Hickey's premise 1 (A in U_i) still fails."
+          },
+          "confidence": "high",
+          "lead": "L1",
+          "lead_title": "Very dependent function types (Hickey, NuPRL) and Kopylov-style dependent intersections/records",
+          "lead_verdict": "no_name",
+          "targets_tried": [
+            {
+              "citations": [
+                "Jason J. Hickey, 'Formal Objects in Type Theory Using Very Dependent Types', FOOL 3, 1996 — Section 3 'Semantics 1' (clauses 1-4); Table 1 'Rules for very-dependent function with simple semantics'; Section 3 subtyping criterion",
+                "Jason J. Hickey, 'The MetaPRL Logical Programming Environment', PhD thesis, Cornell University, January 2001",
+                "Alexei Kopylov, 'Dependent Intersection: A New Way of Defining Records in Type Theory', LICS 2003, pp. 86-95 — Section 3.2.1, equations (11) and (12)"
+              ],
+              "defining_data": [
+                "A domain TYPE A, premise 'A in U_i'",
+                "A binary universe-valued relation '< in A -> A -> U_i'",
+                "A well-foundedness proof 'WellFounded_i(A; <)'",
+                "A codomain family B[g,y/f,x] depending on the argument x AND on the restriction of f itself to its <-predecessors — the characteristic datum",
+                "Membership as a fixed-point condition (Table 1, rule 'in')",
+                "Elimination (Table 1, Elim)",
+                "Extensional equality (Table 1, rule 'in (extensional)')",
+                "Subtyping law (Section 3)",
+                "Semantics 1 clause 3: relations gamma_a and beta_{g,a} by well-founded induction"
+              ],
+              "obstruction": "TWO independent defining data with no source counterpart. (a) The order datum '< in A -> A -> U_i' and the well-foundedness proof are premises 2 and 3 of BOTH the Typing and Form rules of Hickey's Table 1, and clause 2 of Semantics 1; Hickey states the semantics is only well-defined because of this restriction. The source clause is a singleton formation clause carrying no laws and no second datum. (b) The characteristic datum — the occurrence of f in B[f,x] — is mechanically absent: the Pi is certified non-dependent (Pi binder at level 5; Var 1 -> ambient X, Var 2 -> field of clause 0; reading-independent across admissible ambient arities 0,1,2). By Hickey's own Semantics 1 clause 4, when B mentions neither f nor x the type degenerates extensionally to the ordinary function type A -> B; so at best the source names 'non-dependent function type', and calling it a very dependent function type would name it by a constructor ALL of whose distinguishing data map to nothing — a resemblance, not a functor. (c) Premise 1, 'A in U_i', also fails: the kernel does not certify the domain as a type (elaborate.rs as_type coerces and counts coarse; Lam synthesizes to Fun(Neutral,Type); Pi binder gets El(Lam(Var 1))). NOT A POVERTY-OF-LANGUAGE ARTIFACT on four counts: (i) the order datum is literally present at stage 14 clause 0's first factor Pi(Var 1, Pi(Var 1, Univ)) = X -> X -> U, and clause 3 does not use it; (ii) codomain dependence on the Pi binder is expressible at exactly this position (Var 5); (iii) equations are expressible (Expr::Id is a grammar constructor) and the record carries zero Computation-role clauses; (iv) the universe-valued functional shape is available and used at stage 14 clause 8.",
+              "outcome": "obstruction",
+              "target": "Hickey's very dependent function type {f | x:A -> B[f,x]}",
+              "translation_attempt": "Map the source's outer Pi node to the constructor {_ | _ : _ -> _}; the domain slot Lam(Var 1) = the constant family lam_.X to the domain type A; the codomain Sigma(Var 1, Var 2) = X x Y to the codomain family B. Source parameter X -> a component of A and a factor of B; source parameter Y (in situ: field of clause 0) -> the second factor of B. Nothing maps to datum 2 (<), nothing to datum 3 (WellFounded(A;<)), and datum 4's f-occurrence has an empty preimage. The map is total on the source but not surjective onto the target's defining data, and target laws 5-8 have no source clauses to become theorems about."
+            },
+            {
+              "citations": [
+                "Alexei Kopylov, 'Dependent Intersection: A New Way of Defining Records in Type Theory', LICS 2003, pp. 86-95 — Section 2; Table 1 (five rules); Theorem 10; Theorem 11; Theorem 12; Remark 6; Example 7; Example 1; Section 5 Remark",
+                "Mario Coppo and Mariangiola Dezani-Ciancaglini, 'An extension of the basic functionality theory for the lambda-calculus', Notre Dame Journal of Formal Logic 21(4):685-693, 1980",
+                "Garrel Pottinger, 'A type assignment for the strongly normalizable lambda-terms', in To H. B. Curry, Academic Press, 1980"
+              ],
+              "defining_data": [
+                "A type A",
+                "A family B[x] functional over A",
+                "Membership law: a in A and a in B[a] imply a in (x:A n B[x]) — ONE AND THE SAME element inhabits both",
+                "Equality law: the PER on the intersection is the conjunction of the two component PERs, strictly finer than either",
+                "Elimination: a hypothesis is duplicated into x:A and y:B[x], both instantiated at u",
+                "Type equality",
+                "Associativity (Theorem 12)",
+                "Derived projections (Theorem 11)"
+              ],
+              "obstruction": "The MEMBERSHIP AND EQUALITY LAWS (Table 1 rules 3 and 4, Theorem 10) have no source counterpart. The whole content of dependent intersection is that a single element a inhabits A and B[a] simultaneously and that equality is the conjunction of both PERs; Kopylov's Example 1 exhibits id and abs equal in one component but unequal in the intersection precisely to make this point, and his Section 5 Remark rules out even the set-type surrogate as 'wrong!'. The kernel's Sigma is a pair former with two independently scoped components (normalize.rs normalizes the Sigma domain at scope_len and the codomain at scope_len+1, under a FRESH binder) — the Sigma discipline, not the shared-element discipline. Kopylov himself separates the constructors in Remark 6. Under M1 the obstruction is worse: the kernel's Pi is eliminated by application, whereas n is eliminated by duplicating one hypothesis into two typings. SECOND OBSTRUCTION: the dependence of B on x — by Example 7 the ONLY thing separating Kopylov's contribution from ordinary Coppo-Dezani/Pottinger intersection — is mechanically absent; the source Sigma is certified non-dependent. THIRD: associativity is a defining law; the source is equation-free. NOT A POVERTY ARTIFACT — the obstruction deliberately does NOT rest on the grammar's lack of an intersection former (which WOULD be a poverty artifact), but on (a) the dependence, expressible at exactly this position as Sigma(Var 1, Var 6), and (b) the coincidence law, statable via Expr::Id.",
+              "outcome": "obstruction",
+              "target": "Kopylov's dependent intersection x : A n B[x]",
+              "translation_attempt": "Two mappings tried. (M1) Source outer Pi -> n, domain slot Lam(Var 1) -> A, codomain Sigma(Var 1, Var 2) -> B[x]. (M2) Source inner Sigma(Var 1, Var 2) -> x:A n B[x], X -> A, Y -> B, leaving the outer Pi unmapped (already failing clause-preservation)."
+            },
+            {
+              "citations": [
+                "Alexei Kopylov, LICS 2003 — Section 3.1.1 equation (4); equations (5), (6); Section 3.1.2 equations (7), (8); Section 4.1.2; Table 2; Theorem 16; subtyping property (3); Section 1.2",
+                "Jason J. Hickey, FOOL 3, 1996 — Section 2.1 'Record encoding'; Section 3.1 'Dependent records'; Table 2",
+                "Robert Pollack, 'Dependently typed records for representing mathematical structure', TPHOLs 2000, LNCS 1869, pp. 461-478",
+                "Betarte and Tasistro, 'Extension of Martin-Lof's type theory with record types and subtyping', Twenty-Five Years of Constructive Type Theory, Oxford Logic Guides 36, 1998"
+              ],
+              "defining_data": [
+                "A type Label (Hickey: Atom) of field names with decidable equality",
+                "A label VALUE x in Label for each field",
+                "The singleton subset type {x} = {l : Label | l = x in Label}",
+                "The field types A_i",
+                "The single-field encoding {x:A} = {x} -> A: a non-dependent function type whose DOMAIN is the label singleton",
+                "The multi-field encoding l : Label -> Field[l], with a term-level label-dispatching family in CODOMAIN position",
+                "Selection r.x = r x and the reduction rules",
+                "The subtyping law (3) — per Section 1.2 the property essentially distinguishing records from products",
+                "Independence of field order",
+                "For dependent records, the self-reference"
+              ],
+              "obstruction": "TWO obstructions, the second structural and fatal to the whole target family. (a) THE LABEL DATUM HAS NO PREIMAGE. In eq. (8) the domain is a genuine TYPE carved out of Label by the set-type constructor, with exactly one element, determined by a label VALUE x in Label. The source's domain slot holds Lam(Var 1), which the kernel certifies is not any type (R-0.2: own beta-NF, no eta rule, zero Computation-role clauses, and of 99064 catalog expressions the only ones judgmentally equal to it are Lam-headed or beta-redexes reducing to it). Moreover lam_.X is the constant family AT THE CARRIER; a label singleton is a one-element type with no relation to X. And there is no source datum playing the role of the field name. (b) THE STRUCTURAL INVERSION. In EVERY presentation in this literature the term-level, computing object (Field[l], case l of ...) sits in the CODOMAIN, and the domain is always a genuine type (Label, Atom, or the singleton {x}). The source is exactly inverted: a Lam in the domain, a plain non-computing non-dependent Sigma in the codomain. Under the frozen kernel conventions the domain position is STRUCTURALLY NOT A FAMILY POSITION — elaborate.rs synthesizes the domain BEFORE pushing the binder onto locals — so a family placed in the domain has nothing to be indexed by. (c) The subtyping law (Section 1.2's 'essential difference') and the self-reference likewise have no source counterparts. NOT A POVERTY ARTIFACT: the codomain-family shape is expressible AND IS USED IN THIS VERY TELESCOPE — stage 14 clause 8 is Lam(Pi(Var 1, Univ)). The record demonstrably knows how to write a family; clause 3 puts one in the domain instead.",
+              "outcome": "obstruction",
+              "target": "Kopylov's/Hickey's record type encoded as a function type: {x1:A1;...;xn:An} = l:Label -> Field[l], with single-field {x:A} = {x} -> A",
+              "translation_attempt": "The most seductive target in the lead, because Kopylov's eq. (8) makes a one-field record type literally a NON-DEPENDENT Pi with an unusual domain — the same silhouette as the source. Map: source Pi -> the arrow of eq. (8); source domain Lam(Var 1) = lam_.X -> the label singleton {x}; source codomain Sigma(Var 1, Var 2) = X x Y -> the field type A. Reading: 'the one-field record whose field has type X x Y'."
+            },
+            {
+              "citations": [
+                "Jason J. Hickey, FOOL 3, 1996 — Section 2 equation (1); Section 4 'Object Interpretation'; Section 4.2; Table 3; Section 4.1 subtyping; Section 5 'Theories as Objects' (MonoidM, GroupM, CirclePointM)",
+                "Benjamin C. Pierce and David N. Turner, existential interpretation of objects (Hickey ref [23])",
+                "Martin Abadi and Luca Cardelli, A Theory of Objects (Hickey ref [1])"
+              ],
+              "defining_data": [
+                "A method description M : Type -> Type",
+                "The EXISTENTIAL quantifier 'exists Rep : Type' — the abstraction barrier",
+                "The record body {state: Rep; methods: M(Rep)}, requiring the APPLICATION of M to Rep",
+                "The introduction form object(s, l_1=m_1, ..., l_n=m_n)",
+                "The self-application method wrappers",
+                "Table 3 rules: typing, mem, sel_1, sel_2",
+                "The subtyping relation A <= B",
+                "For the algebraic instances, the EQUATIONAL fields (assoc, left_unit, right_unit, inverse, spec)"
+              ],
+              "obstruction": "FOUR independent obstructions; any one suffices. (a) M(Rep) IS AN APPLICATION AND THE CLAUSE HAS ZERO App NODES (probe: 'App nodes in clause 3 : 0'). The method description is never applied to the representation; T0 is a separate clause's field reached by a level reference. Hickey's Object constructor is definitionally a lambda that is APPLIED (Point = Object(PointM)). (b) 'exists Rep : Type' MAPS TO NOTHING. The source's outer former is Pi, eliminated by application; Hickey's is an existential eliminated by 'open o as r in ...'. The abstraction barrier — which Section 2 identifies as the entire point — has no source counterpart. (c) THE EQUATIONAL FIELDS. Every algebraic object Hickey builds in Section 5 carries its laws as record fields, and it is exactly those fields that make an object a theory. The source is a singleton formation clause with no laws. (d) THE SORT MISMATCH IS THE WRONG WAY ROUND. In Hickey's construction M is applied, so it is never asked to be a type; here lam_.X IS asked to be a type and the kernel refuses to certify it. NOT A POVERTY ARTIFACT: App is a grammar constructor appearing throughout the sealed corpus (steps 1,2,3,4,5,6,9,11,12,13; step 4 clause 2 is an actual beta-redex), so 'apply the description to the representation' is writable and the record does not write it. Sigma and Univ both appear at stage 14 clause 0, so an existential over types is writable here too. Id is available for the equational fields.",
+              "outcome": "obstruction",
+              "target": "Hickey's object type constructor Object = lam M. exists Rep:Type. {state: Rep; methods: M(Rep)}",
+              "translation_attempt": "Tried explicitly because the R-0.3 in-situ reading is its closest analogue in the lead: clause 3 in situ is Pi(lam_.X, X x T0) with T0 = (X->X->U) x X — the same silhouette as {state: Rep; methods: M(Rep)} with Rep = X and M = lam Rep.((Rep->Rep->U) x Rep), and the same genre as Hickey's Section 5 MonoidM. Map: Lam(Var 1) -> the method description M; Var 1 = X -> state:Rep; Var 2 = T0 -> methods: M(Rep); outer Pi -> exists Rep:Type."
+            }
+          ]
+        },
+        {
+          "analyst_notes": {
+            "access_disclosure": "Could not obtain full text of Pollack, FACS 13(3-5):386-402, 2002 (paywall) or Betarte-Tasistro 1998. Used Coquand-Pollack-Takeyama TLCA 2003 as representative of that line, plus Kopylov LICS 2003, Fu-Stump RTA-TLCA 2014, Stump JFP 27 e14 2017 and Luo TYPES 2008 in full text. Rule statements quoted in the target rows are read off those PDFs, not from memory. One correction to a common misattribution: in CDLE the construct iota x : T . T' is Kopylov's DEPENDENT INTERSECTION, not the self type of System S; the self type iota x . T is the earlier Fu-Stump 2014 construct. Different arities, different formation rules, tested as separate targets.",
+            "f_r5_compliance": "No target was refused to keep the export alive. Kopylov's {x} -> A and Luo's manifest field are the two expected to succeed, and each was given the strongest reading constructible before an obstruction was recorded; both fail on a datum-count fact (the target needs two data where the source supplies one) checkable in one line against the parameter list [Type, Type].",
+            "literature_side_finding": "CPT's core logical framework has types A,B ::= El M | fun A x.B | * — the standard literature already has a former that takes a TERM into a type position, El M, and it is the same idea the kernel implements as KernelTy::El(Expr). Its side condition is M : *. The source's domain is El(M) with M of the wrong kind: lam_.X is a type family, not an object of *, and CPT states in Section 6 that its system does not accept such expressions without adding a separate class of kinds. So the source's sort error is precisely nameable in the standard literature — but naming the ERROR is not naming the FAMILY, and F-R2 forbids treating 'the closest known theory rejects this formation' as a naming.",
+            "new_fact_contributed": "ClauseRole has five variants — Formation, Introduction, Elimination, PathAttach, Computation. The sealed corpus exports zero Elimination and zero Computation clauses across all fifteen entries, while stage 14 does export an Introduction clause. This upgrades 'the clause is equation-free' from an observation about clause 3 into a checkable anti-poverty rebuttal: eliminators, projections and reduction laws are expressible in the frozen alphabet and are simply absent. Every target in L2 carries at least one reduction law, so each fails on this ground INDEPENDENTLY of the domain-slot argument. Two independent kill-shots per target.",
+            "single_obstruction_disposing_of_the_lead": "In every self-referential or function-presented record type in this literature, the presenting family sits in the CODOMAIN slot and is APPLIED to the bound variable — Kopylov's Field[l], Kopylov's self.car, CPT's B[M.l], CDLE/Kopylov's [t/x]T', Fu-Stump's selfInst [t/x]T. Clause 3 has the family in the DOMAIN slot, contains ZERO App nodes, and its Pi binder (level 5) occurs nowhere in the codomain. So the application on which every L2 presentation depends is not present and cannot be produced: beta on App(Lam b, a) is the kernel's only oriented computation clause and the sealed corpus exports zero Computation-role clauses. Moving lam_.X to the codomain slot to recover the application is exactly the reinterpretation F-R4 voids.",
+            "strongest_counter_argument_registered": "I read Telescope::reference for all fifteen steps and NO CLAUSE ANYWHERE IN THE SEALED CORPUS EVER REFERENCES A BINDER-BOUND VARIABLE — every Var level in every clause lands at or below ambient + prior fields. So 'the family is non-dependent' is a corpus-wide stylistic property of the whole record, not a distinguishing feature of clause 3. An L2 defender can therefore say the record's dependency is simply never encoded at this granularity, and that judging L2 targets by their dependency datum is unfair. My answer, which the verifier should test: the translation standard asks whether the source's typed content maps onto the target's defining data, and a datum the source never carries cannot be mapped regardless of why it is missing; and the mismatch is not a notation artifact, because the kernel plainly supports binder references. But a verifier who rejects that reasoning would be rejecting it for L1, L3 and L4 too, so this is a campaign-level methods question, not an L2-specific one. [NOTE FROM THE COORDINATOR: this claim is FALSE as stated and is corrected by the R-0 addendum section B, which finds 5 binder-bound Var occurrences across 3 clauses, at steps 11 clause 0, 11 clause 1 and 12 clause 0. Analyst A independently found and verified step 11 clause 0. The correction strengthens L2's own rebuttal.]"
+          },
+          "confidence": "high",
+          "lead": "L2",
+          "lead_title": "Self-referential record-type presentations",
+          "lead_verdict": "no_name",
+          "targets_tried": [
+            {
+              "citations": [
+                "Alexei Kopylov, 'Dependent Intersection: A New Way of Defining Records in Type Theory', LICS 2003, pp. 86-95 (also Cornell TR2000-1809). Section 3.1.1 'Records as Dependent Functions', equations (4), (5), (6); the definition of Field[l] as the if-then-else cascade; the reduction rule in Section 3.1; the subtyping property (3)",
+                "Gustavo Betarte and Alvaro Tasistro, 'Extension of Martin-Loef's Type Theory with Record Types and Subtyping', in Twenty-Five Years of Constructive Type Theory, OUP, 1998"
+              ],
+              "defining_data": [
+                "a type Label carrying decidable equality",
+                "distinct labels x1,...,xn : Label",
+                "a field-type family Field : Label -> U given by an if-then-else cascade",
+                "the record type eq. (4): l : Label -> Field[l], i.e. Pi over Label of Field APPLIED to the bound label",
+                "record literals eq. (5)",
+                "field selection eq. (6) r.l = r l, with the reduction law",
+                "width subtyping (3)",
+                "field-order independence"
+              ],
+              "obstruction": "Two defining data have no source counterpart: the label type Label, and the application Field[l] of the field family to the bound label. The second is decisive: every record-as-function presentation is stated by applying the family to the bound label, and the kernel certifies clause 3 has ZERO App nodes and that the Pi binder does not occur in the codomain, so no application exists and none can be produced — beta on App(Lam b, a) is the kernel's only oriented computation clause and the sealed corpus exports zero Computation-role clauses. Recovering the application would require moving lam_.X from the domain slot to the codomain slot, exactly the reinterpretation F-R4 forbids. Not poverty: App is in the frozen alphabet and used in eight of the fifteen sealed telescopes; ClauseRole provides Elimination and Computation roles, and stage 14 itself exports an Introduction clause, so selection operators and reduction laws are expressible here and are simply absent for this family, which has zero instances anywhere in the register.",
+              "outcome": "obstruction",
+              "target": "Dependent record type presented as a dependent function over a label type: {x1:A1;...;xn:An} = Pi_{l:Label} Field[l]",
+              "translation_attempt": "Map the source's Pi-former to the target's Pi. The domain slot must receive Label; the source supplies Lam(Var 1), a term whose kernel classifier is Fun(Neutral,Type), admitted in the type position only by a counted coarse subsumption. The codomain slot must receive Field[l], an APPLICATION of the field family to the Pi-bound label; the source supplies Sigma(Var 1, Var 2), whose Vars resolve to levels 1 and 2, so the Pi binder at level 5 occurs nowhere in it, and clause 3 contains zero App nodes. The family datum is the only thing the source supplies — lam_.X is literally a family — but it sits in the DOMAIN slot where Label must go, and the target requires it in the codomain, applied. Only a single field's codomain type has any counterpart."
+            },
+            {
+              "citations": [
+                "Alexei Kopylov, LICS 2003, Section 3.1.2 'Records as Intersections', equation (8): {x : A} = {x} -> A, 'where {x} is the singleton subset of type Label'; equation (7); equation (9); Section 1.3 for the NuPRL set type constructor"
+              ],
+              "defining_data": [
+                "a type Label with decidable equality",
+                "a label term x : Label",
+                "the set/subset former {l : Label | l = x}, giving the singleton {x} — a type built from the term x",
+                "the single-field record type eq. (8)",
+                "the multi-field identity eq. (7) and the coincident-label identity eq. (9)",
+                "the literal and selection with the reduction {x = a}.x --> a"
+              ],
+              "obstruction": "The label type Label and the subset former have no source counterpart, so the target's domain datum {x} cannot be constructed: supplying it would mean declaring by fiat that the term Lam(Var 1) IS a singleton subset — precisely the coarse subsumption the kernel refuses to certify. Independently, the selection law and the identities (7)/(9) are equations, and the source is a singleton equation-free formation clause with zero instances — there is no record literal for a selection law to act on. Not poverty: the Elimination and Computation clause roles exist in the frozen alphabet and are used zero times across all fifteen sealed entries, so the absence is the record's choice, not the notation's limit.",
+              "outcome": "obstruction",
+              "target": "Single-field record type as a function from a label singleton: {x : A} = {x} -> A",
+              "translation_attempt": "The closest structural fit in the whole lead, because this is the one place in the record literature where a Pi-domain is manufactured from a TERM. Map source domain Lam(Var 1) -> {x}; source codomain Sigma(Var 1, Var 2) = X x Y -> A. The codomain map succeeds. The domain map fails on arity of data: {x} is built from TWO data, the ambient Label and the label term x, and the source's domain slot carries a single expression with no companion classifier. The credited family's parameters are exactly [Type, Type]; X is consumed by both the domain body and the codomain, Y by the codomain, and there is no third parameter left to be Label."
+            },
+            {
+              "citations": [
+                "Thierry Coquand, Randy Pollack, Makoto Takeyama, 'A Logical Framework with Dependently Typed Records', TLCA 2003, LNCS 2701, pp. 105-119 (revised 13 March 2003; journal version Fundamenta Informaticae 65(1-2):113-134, 2005). Section 5.1 (the extension of Definition 1); the object grammar; the dot-reduction rules; the derived formation/introduction/elimination rules; Definition 21 (syntactic subtyping, rules (8),(9),(10)); Section 5.3; Section 2.1 (core types A,B ::= El M | fun A x.B | *); Theorem 11",
+                "Robert Pollack, 'Dependently typed records in type theory', Formal Aspects of Computing 13(3-5):386-402, 2002"
+              ],
+              "defining_data": [
+                "the empty signature with proof-irrelevant equality",
+                "signature extension <l : A, x.B>: a label l, a TYPE A, and a family B",
+                "record extension objects with their introduction",
+                "projections M.l and M.k",
+                "dot-reduction",
+                "signature equality requiring l1 = l2, A1 = A2, B1 = B2",
+                "subtyping and manifest signature extension via singleton types"
+              ],
+              "obstruction": "The family B is certifiably constant in the source, and dot-reduction has no source counterpart. The family point is not poverty and is decisive: a constant B makes <l:A, x.B> the plain product A x B, and the frozen alphabet HAS a product former, Sigma, which stage 14 uses three times in this very telescope (clauses 0, 2, 4). If the intended content were a non-dependent two-field record, the record could and did write Sigma; clause 3 instead writes Pi with a term in the domain. The dot-reduction point is likewise not poverty: ClauseRole::Computation exists and the sealed corpus exports zero Computation-role clauses across all fifteen entries. Secondarily, the label has no counterpart at all, and CPT's signature equality is defined only up to l1 = l2, so the target's identity criterion cannot even be stated over the source's data.",
+              "outcome": "obstruction",
+              "target": "Dependently typed record / signature in the sense of Coquand-Pollack-Takeyama: the opaque signature extension <l : A, x.B>",
+              "translation_attempt": "The source's Pi(D, C) and the target's <l:A, x.B> agree on gross shape: both are two-slot binders whose second slot is checked in a context extended by the first. Map D -> A and C -> x.B. Slot 1 fails: A must satisfy A type. The only route by which a term becomes a type in CPT's core language is El M, and El M is a type exactly when M : *. Lam(Var 1) is not an object of * but a type family; CPT explicitly notes in Section 6 that its system does not accept such expressions without adding a separate class of kinds. So the TARGET THEORY'S OWN FORMATION RULE rejects the source's domain — the same fact the kernel records as coarse subsumption #2. Slot 2 fails: x.B must be a family, and the kernel certifies the Pi binder at level 5 and the codomain containing only levels 1 and 2, so B is constant."
+            },
+            {
+              "citations": [
+                "Alexei Kopylov, LICS 2003, Section 2 and Table 1; Theorem 10; Theorem 11; Section 3.2.2 'Dependent Records as Dependent Intersection' (SemigroupSig and Semigroup with the bound variable self); Theorem 12; Example 7",
+                "Aaron Stump, 'The Calculus of Dependent Lambda Eliminations', JFP 27, e14, 2017. Section 2 and Figure 1 (iota x : T . T', stated to be Kopylov's dependent intersection); Figure 3 (kinding); Figure 2 (introduction and the two eliminations)"
+              ],
+              "defining_data": [
+                "a first component T which is a TYPE",
+                "a second component T' which is a family over T in which the bound variable denotes THE RECORD ITSELF",
+                "formation: Gamma |- T : * and Gamma, x:T |- T' : *",
+                "introduction: one and the same term t inhabits T and [t/x]T'",
+                "elimination: from t : iota x:T.T' both t : T and t : [t/x]T'",
+                "associativity and the extensional equality criterion"
+              ],
+              "obstruction": "The defining datum of the whole lead — self, the occurrence of the bound variable in the second component — has no source counterpart. Mechanically certified: the Pi binder sits at level 5 and the codomain mentions only levels 1 and 2. NOT a poverty artifact, because the kernel's binding machinery for exactly this reference exists and was exercised in this very derivation: the Pi rule pushes the binder's classifier into locals precisely so the codomain may refer to it, ScopeRef::Local is a live resolution case, and a Var 5 written at that position would have resolved to Local{binder:1} and elaborated. The record simply never writes it. Second, independent obstruction: the source's former is Pi, and Pi and Sigma are distinct constructors with distinct elaboration rules; nothing in the source's typed content licenses reading Pi as an intersection, and doing so to fit the lead is F-R4.",
+              "outcome": "obstruction",
+              "target": "Self-referential record via dependent intersection: R = self : R0 inter B[self]",
+              "translation_attempt": "Gross shape matches exactly: a binary former whose second slot is elaborated under a binder for the first — the kernel's Pi rule pushes the binder classifier into locals before synthesizing the codomain, just as the target extends Gamma by x:T before checking T'. Map Lam(Var 1) -> T and Sigma(Var 1, Var 2) -> T'. Slot 1 fails: T must satisfy T : *, and the source's is a term whose classifier is Fun(Neutral,Type), accepted only by a counted coarse subsumption. Slot 2 fails: the kernel assigns the binder El(Lam(Var 1)) at level 5, and level 5 occurs nowhere in the codomain. With the self variable absent, iota x:T.T' degenerates to plain binary intersection (Kopylov Example 7), which is not a record presentation at all."
+            },
+            {
+              "citations": [
+                "Peng Fu and Aaron Stump, 'Self Types for Dependently Typed Lambda Encodings', RTA-TLCA 2014, LNCS 8560, pp. 224-239. Section 2; Section 3.1 syntax; Section 3.2 kinding rule Self; typing rules selfGen and selfInst; Definition 1 and Theorem 2",
+                "Aaron Stump, 'The Calculus of Dependent Lambda Eliminations', JFP 27, e14, 2017, Section 1.2"
+              ],
+              "defining_data": [
+                "a UNARY binder over a type body: iota x . T",
+                "the formation rule Self, in which the bound variable is classified by the very type being formed",
+                "selfGen and selfInst, a two-way rule pair mediated by the subject substitution",
+                "the intended content: T mentions x, so the type of a term may speak about that term"
+              ],
+              "obstruction": "The circular classifier in the Self formation rule — the bound variable typed by the type being formed — has no source counterpart: the kernel assigns the binder El(Lam(Var 1)), an unrelated object, verifiable directly in elaborate.rs. Compounding it, T does not refer to the subject (certified: binder level 5 absent from the codomain), so even granting the classifier the construct would carry none of its defining content. Not poverty: the self-reference iota demands is a binder occurrence, and binder occurrences are supported and resolvable in the frozen kernel. Additionally the arity is wrong — unary versus binary — and repairing that by discarding the domain slot is exactly the reinterpretation F-R4 voids.",
+              "outcome": "obstruction",
+              "target": "Self types iota x . T (System S / the Cedille line)",
+              "translation_attempt": "The source's Pi is a BINARY former; iota is unary. A translation must discard one slot, which is F-R4, so the most charitable non-discarding reading is taken: read Pi(D, C) as iota x . C with D as the binder's annotation. Then the formation rule demands that the binder's classifier be the whole type being formed. The kernel instead assigns El(Lam(Var 1)) — the elements of the DOMAIN expression — which is neither the formed type nor any type at all. The intended content fails outright: T = Sigma(Var 1, Var 2) contains only levels 1 and 2 and the binder is at level 5, so T does not mention the subject."
+            },
+            {
+              "citations": [
+                "Kim B. Bruce, Luca Cardelli, Benjamin C. Pierce, 'Comparing Object Encodings', Information and Computation 155(1-2):108-133, November 1999 (earlier version FOOL 3, July 1996; also LNCS 1281, 1997)",
+                "Alexei Kopylov, LICS 2003, Section 3.1 and Example 13, for the width-subtyping property distinguishing a record type from a bare product"
+              ],
+              "defining_data": [
+                "recursive-record: a record former with labelled fields plus width/depth subtyping",
+                "recursive-record: a recursive type former mu X . R with fold/unfold and the isomorphism",
+                "recursive-record: method invocation with its reduction",
+                "existential: a bound abstract state type X (state hiding), a state component, and a method suite M(X)",
+                "existential: pack/unpack with their law",
+                "both: a subtyping / behavioural-equivalence relation making the encoding an OBJECT encoding rather than a tuple"
+              ],
+              "obstruction": "The binding of the state type — exists X in the existential encoding, mu X in the recursive-record encoding — has no source counterpart: X is an ambient free parameter, resolved as Ambient{parameter:1}, not a bound variable, so there is no state hiding and no self-reference. Emphatically not poverty: Univ and Sigma are both in the frozen alphabet and both are used in this very telescope (clause 0 is Sigma(Pi(Var 1, Pi(Var 1, Univ)), Var 1)), so Sigma(Univ, ...) — the shape an existential encoding needs — was writable at zero cost and was not written. Independently, fold/unfold and pack/unpack are computation rules and the sealed corpus exports zero Computation-role clauses although ClauseRole::Computation exists. For the recursive-record reading, the family would have to occur inside itself: the role dossier records exactly one occurrence in the entire register, instances = [Generator], so it occurs inside nothing, and there is no mu in the alphabet.",
+              "outcome": "obstruction",
+              "target": "Object-as-record encodings: recursive-record mu X. {m1:T1(X),...} and the existential (Hofmann-Pierce-Turner) encoding exists X. (X x M(X))",
+              "translation_attempt": "The in-situ form Pi(lam_.X, X x T0) with T0 = Sigma(Pi(X,Pi(X,U)), X) is the most suggestive reading in the lead: the codomain looks like 'a state of type X paired with a method suite plus a distinguished vector'. Map X -> the state type, T0 -> the method suite, X x T0 -> the packed body. The binder then has to be the existential, which requires the outer former to be Sigma and the domain slot to be Univ. Source: the former is Pi and the domain is Lam(Var 1). Worse, X is not bound at all — it resolves to Ambient{parameter:1}, free in the family and abstracted in the credited presentation as a free Type parameter."
+            },
+            {
+              "citations": [
+                "Zhaohui Luo, 'Manifest Fields and Module Mechanisms in Intensional Type Theory', TYPES 2008, LNCS 5497, pp. 237-255, Springer, 2009. Section 1.1; the parameterised unit type declarations with the computation rule; Section 3 (intensional manifest field); Section 3.1 coercion rule (xi) and rule (d-Sigma); Proposition 1 (Coherence); Definition 1 (with-clause); Propositions 2 and 3; Section 4",
+                "Robert Pollack, 'Dependently typed records in type theory', FACS 13(3-5):386-402, 2002"
+              ],
+              "defining_data": [
+                "the parameterised unit type 1(A,a), whose formation requires BOTH A : Type and a : A",
+                "its introduction and eliminator with the computation rule",
+                "the coercion xi_{A,a} with xi_{A,a}(x) = a — the equation that is the entire content of 'manifest' — plus coherence",
+                "the ambient record / Sigma-type in which the manifest field sits, and the with-clause",
+                "Propositions 2 and 3 (the manifest record is a subtype of the abstract one)"
+              ],
+              "obstruction": "1(A,a) requires the pair (A : Type, a : A) and the source supplies only Lam(Var 1) with no classifying type anywhere in the family; the parameter budget [Type,Type] is fully consumed by X and Y. Independently, the coercion equation and the eliminator computation rule are the entire semantic content of a manifest field, and the source is an equation-free singleton formation clause with no eliminator and zero instances. Not poverty: ClauseRole::Elimination and ClauseRole::Computation exist in the frozen alphabet, the sealed corpus exports zero of either across all fifteen entries, and stage 14 does export an Introduction-role clause, so an introduction/eliminator/computation companion was expressible in the same telescope and was not written.",
+              "outcome": "obstruction",
+              "target": "Record type with a manifest field, presented intensionally: v ~ a : A abbreviating v : 1(A,a), in a labelled Sigma-type",
+              "translation_attempt": "The one target in the lead whose defining move is exactly 'a term appears where a type is demanded', so it deserved the strongest attempt: read the source's Pi-domain Lam(Var 1) as a manifest datum whose value is pinned to the term lam_.X. Fails on arity: 1(A,a) is doubly parameterised and the source's domain slot carries one expression with no classifying type. The credited family's parameters are exactly [Type, Type], fully consumed by X and Y, so there is no third datum available to play A. Fails on position: a manifest field must sit inside a record / Sigma-type, and the source's term sits in a Pi DOMAIN; the family's own Sigma is certified non-dependent, so it cannot carry a manifest constraint relating one field to another."
+            }
+          ]
+        },
+        {
+          "analyst_notes": {
+            "answers_to_the_lead_questions": "(a) The constant-family-vs-display-map distinction has no standard name because in the surveyed frameworks it is NOT a distinction: the constant family at a closed type X is precisely the weakening pi*X. Names attach to the one object: weakening functor pi*, dependent projection, and — for Pi along it — the SIMPLE PRODUCT (Jacobs Def 1.9.1). (b) Yes: Pi at a constant family with a constant codomain is exactly the simple product = the fibrewise exponential (X x Y)^X. And no, the source's sort error does NOT survive that identification — the identification is exactly what eliminates the abstraction, so it cannot both be made and leave the mismatch standing. (c) No such name exists. In every framework surveyed — Jacobs' comprehension and closed comprehension categories, Dybjer CwFs, Awodey natural models, Lumsdaine-Warren local universes, Martin-Lof/Hofmann Tarski universes, Seely LCCCs, Cartmell contextual categories — Pi's DOMAIN argument is a type: an object of the fibre, an element of Ty(Gamma), a map Gamma -> U, a display map, or a code in U. The one place a family-presented-as-a-function legitimately appears is the SECOND argument. The source is the transpose of the standard shape, in all of them.",
+            "citation_provenance_disclosure": "Awodey (arXiv:1406.3219v3) and Lumsdaine-Warren (arXiv:1411.1736) were read directly and their definition/proposition numbers quoted from the papers. Jacobs' Definition numbers 1.9.1, 10.4.1, 10.5.1 and the section titles come from the author's own book page plus secondary citation, not from the book text, which could not be obtained. Publication data verified. The Tarski Pi-code rule is quoted from nLab/Hofmann section 2.1.6 rather than from Martin-Lof 1984 directly. None of the five obstructions depends on a Jacobs definition NUMBER being right.",
+            "f_r5_disclosure": "I found the cheap, tidy naming and refused it. If one reads Lam(Var 1) as the type X, the family is immediately the exponential X -> X x Y, a coalgebra structure map for the endofunctor (-) x Y — the same shape as stage-14 clause 2, which the concordance already named 'coalgebra for the squaring endofunctor'. That naming would close the concordance at 32/32 and withdraw the export. I am not taking it, solely because it requires the identification R-0.2 mechanically certifies is impossible, and because the record itself distinguishes the two shapes: clause 2 IS the display-map form and costs 0 coarse subsumptions, clause 3 is judgmentally distinct from it and costs 2. Naming clause 3 as clause 2 collapses a distinction the kernel maintains — F-R4 verbatim. The verifier should attack exactly here: if the identification Lam(Var 1) = Var 1 can be justified, L3 delivers a name in one line.",
+            "new_fact_contributed": "elaborate.rs's app-el-pi rule fires only when the El'd expression is an Expr::Pi. Since the Pi-domain's classifier is El(Lam(Var 1)), an inhabitant of the source's Pi-domain has NO elimination form in the kernel at all; applications on it fall through to app-stuck. Independent mechanical confirmation that the domain is not functioning as a type. The converse is not claimed: the Pi ITSELF would be eliminable since El(Pi(...)) does match the rule; the record simply contains no such clause."
+          },
+          "confidence": "high",
+          "lead": "L3",
+          "lead_title": "Comprehension-category / CwF reading: Pi applied to a family presented by a section rather than by a display map",
+          "lead_verdict": "no_name",
+          "targets_tried": [
+            {
+              "citations": [
+                "B. Jacobs, Categorical Logic and Type Theory, Studies in Logic and the Foundations of Mathematics 141, North-Holland/Elsevier, 1999, section 1.9, Definition 1.9.1 (simple products/coproducts as right/left adjoints to reindexing along cartesian product projections, with Beck-Chevalley)",
+                "B. Jacobs, ibid., section 10.4, Definition 10.4.1 (comprehension category)",
+                "B. Jacobs, ibid., section 10.5, Definition 10.5.1 (closed comprehension categories)",
+                "R. A. G. Seely, 'Locally cartesian closed categories and type theory', Math. Proc. Camb. Phil. Soc. 95(1), 1984, pp. 33-48",
+                "P. LeFanu Lumsdaine and M. A. Warren, 'The local universes model', ACM TOCL 16(3), 2015, Definition 2.1.1, Definition 3.1.2"
+              ],
+              "defining_data": [
+                "a base category C with finite products and a comprehension category p : T -> C",
+                "the weakening (reindexing) functor pi_X* : T(Gamma) -> T(Gamma x X)",
+                "a right adjoint Pi_X to pi_X* — THE datum named 'simple product'",
+                "the unit eta (lambda-abstraction)",
+                "the counit epsilon (evaluation/application)",
+                "the two triangle identities",
+                "the Beck-Chevalley condition"
+              ],
+              "obstruction": "Two independent obstructions. (1) SORT OBSTRUCTION: the step 'Lam(Var 1) |-> pi_X* X' silently eliminates the abstraction — it asserts the domain expression IS the type X. R-0.2 certifies this is impossible: Lam(Var 1) normalizes in 0 beta steps to itself, beta is the only oriented computation clause, there is no eta rule and zero Computation-role clauses in the entire sealed corpus, and of 99064 catalog expressions the only ones judgmentally equal to Lam(Var 1) are Lam-headed or beta-redexes reducing to it. The kernel declines the identification: as_type does not certify it, it counts a coarse subsumption and proceeds; the Pi-binder then gets classifier El(Lam(Var 1)) — El applied to a function. Making the identification anyway is the F-R4 reinterpretation the brief forbids. NOT A POVERTY ARTIFACT: the grammar can write the display-map form and the record does — stage-14 clause 2 is literally Pi(Var 1, Sigma(Var 1, Var 1)) = Pi(X, X x X), and seven of the nine stage-14 clauses put a Type in Pi/Sigma domain position with coarse 0. The record was able to write Pi(X, X x Y) and instead wrote a judgmentally distinct expression costing it two coarse subsumptions, the highest at stage 14. (2) EQUATIONAL OBSTRUCTION: four of the seven defining data are equational — unit/counit, triangle identities, Beck-Chevalley. The source is a singleton equation-free Formation clause with no introduction, elimination or computation clause anywhere in its family (instances: one Generator, no specializations). Also not poverty: the corpus contains Introduction-role clauses (stage-14 clause 8) and a beta-redex clause (step 4 clause 2).",
+              "outcome": "obstruction",
+              "target": "Simple product along a cartesian (weakening) projection in a fibration / comprehension category, i.e. the right adjoint Pi_X to the weakening functor pi_X* — equivalently the fibrewise exponential (X x Y)^X",
+              "translation_attempt": "Take the ambient parameter X as the object X. Map the Pi-domain slot Lam(Var 1) to the weakening pi_X* X, i.e. the display map pi : Gamma x X -> Gamma. Map the codomain Sigma(Var 1, Var 2) — verified non-dependent — to the weakened object pi_X*(X x Y). The clause maps to Pi_X(pi_X*(X x Y)) = (X x Y)^X, i.e. a coalgebra structure map for the endofunctor (-) x Y. No source datum is left to map to the unit, counit, triangle identities or Beck-Chevalley."
+            },
+            {
+              "citations": [
+                "P. Dybjer, 'Internal type theory', TYPES 1995, LNCS 1158, Springer, 1996, pp. 120-134",
+                "S. Awodey, 'Natural models of homotopy type theory', MSCS 28(2), 2018, pp. 241-286 (arXiv:1406.3219): Definition 1, Proposition 2, Definition 3",
+                "S. Awodey, ibid., Proposition 6 (P(U) = Sum_{A:U} U^A classifies PAIRS 'Gamma |- A : type' and 'Gamma.A |- B : type'), equations (3), (7)",
+                "S. Awodey, ibid., Proposition 8 with diagram (13): lambda : P(U~) -> U~ and Pi : P(U) -> U forming a PULLBACK; rules (Pi-form), (Pi-intro), (Pi-elim), (Pi-comp beta)",
+                "M. Hofmann, 'Syntax and semantics of dependent types', in Semantics and Logics of Computation, CUP, 1997, section 2"
+              ],
+              "defining_data": [
+                "a category C of contexts with terminal object",
+                "a representable natural transformation p : U~ -> U of presheaves",
+                "context extension: for each A : Gamma -> U the chosen pullback Gamma.A -> Gamma",
+                "the polynomial endofunctor P(X) = Sum_{A:U} X^A, whose points are pairs (code A, family B)",
+                "Pi : P(U) -> U taking a pair (CODE-slot A, FAMILY-slot B) — the formation rule",
+                "lambda : P(U~) -> U~ — the introduction rule",
+                "the pullback requirement supplying elimination and the beta equation",
+                "stability under substitution"
+              ],
+              "obstruction": "There is no operation Pi : (family, type) -> type in any natural model or CwF. Pi is Pi : P(U) -> U and P(U) = Sum_{A:U} U^A has a CODE in its first component and a FAMILY in its second. The source is the transpose: family first, code second. Repairing it means either (i) reading Lam(Var 1) as the classifying map of X — the certified-impossible identification, i.e. F-R4; or (ii) swapping the two arguments — also F-R4. NOT A POVERTY ARTIFACT on two counts: (a) the kernel HAS Univ and uses it in this very telescope (clause 0 and clause 8), so a code/universe-valued domain was expressible and clause 3 declines it; (b) the kernel HAS the well-sorted Pi-formation and uses it seven times at stage 14 with coarse 0. Additionally the pullback condition is an equational package (beta, plus eta in Awodey's extensional reading) and the source is equation-free.",
+              "outcome": "obstruction",
+              "target": "Pi-structure on a category with families / natural model (the CwF Pi-formation rule Pi : P(U) -> U)",
+              "translation_attempt": "Set Gamma = the kernel's minimal ambient context (arity 1, containing X). Pi-form's first slot requires A in U(Gamma), a map Gamma -> U. The source supplies Lam(Var 1), whose kernel classifier is Fun(Neutral, Type) — an inhabitant of the sort in which Pi's SECOND argument lives (the B-component of P(U) = Sum_{A:U} U^A), not the first. The second slot requires Gamma.A |- B : type; the source supplies Sigma(Var 1, Var 2) with classifier Type, which does fit. Exactly one slot mismatches, by supplying a family where a code is demanded. Sharpening in the target's favour: in a natural model the constant map Gamma -> 1 -(X)-> U at a closed type X IS the weakening pi*X, so 'Pi at the constant family at X' and 'Pi at the display map of X' denote the SAME morphism and the distinction R-0 draws has no categorical content and therefore no separate name — but exploiting that coincidence requires first reading Lam(Var 1) as the classifying map of X, the same eliminated abstraction as target 1."
+            },
+            {
+              "citations": [
+                "P. Martin-Lof, Intuitionistic Type Theory, Bibliopolis, Naples, 1984 — universes a la Tarski",
+                "E. Palmgren, 'On universes in type theory', in Twenty-Five Years of Constructive Type Theory, OUP, 1998, pp. 191-204",
+                "M. Hofmann, 'Syntax and semantics of dependent types', CUP, 1997, section 2.1.6"
+              ],
+              "defining_data": [
+                "a type U of codes",
+                "a decoding family El : U -> Type",
+                "the Pi-code constructor: from a : U and b : El(a) -> U, a code pi(a,b) : U",
+                "the decoding EQUATION El(pi(a,b)) = Pi_{x : El(a)} El(b x)",
+                "the ordinary Pi rules on the decoded type",
+                "stability under substitution"
+              ],
+              "obstruction": "Three obstructions, any one fatal. (1) The mapping is argument-order-reversing: not a clause-preserving translation of the formation but a re-reading of which slot is which, producing a different object. That is F-R4. (2) Sorts fail even after the swap: Sigma(Var 1, Var 2) carries classifier Type, not membership in a universe — it is not a code, and the kernel does not identify Type with El-of-a-code. The record CAN write universe-valued content (Univ appears at stage-14 clauses 0 and 8), so this is not poverty; clause 3 simply contains no code. (3) The decoding equation is a defining EQUATION and the clause is equation-free — and here the kernel gives a positive confirmation rather than a mere absence: it assigns the Pi-binder the classifier El(Lam(Var 1)), applying the decoding operator to a FUNCTION, precisely the ill-formed instance; and the only rule that ever unfolds El (app-el-pi) fires solely when the El'd expression is a Pi, so the kernel has no decoding for El(Lam(Var 1)) at all. An inhabitant of the source's Pi-domain has no elimination behaviour in the kernel.",
+              "outcome": "obstruction",
+              "target": "Universe a la Tarski: the Pi-code constructor pi : (a : U) -> (El(a) -> U) -> U, where the SECOND argument is a family presented as a function/section",
+              "translation_attempt": "The closest literature match to L3's own phrasing 'Pi applied to a family presented by a section', because the code constructor's second argument b is literally a family given as a function into the universe. Attempted: Lam(Var 1) |-> b (a family-as-function; the kernel classifies it Fun(Neutral, Type), the closest analogue of El(a) -> U); Sigma(Var 1, Var 2) |-> a (a code in U). This sends the source's FIRST argument to the target's SECOND and vice versa, producing the code pi(Sigma(X,Y), lambda_.X), decoding to Pi_{z : El(Sigma(X,Y))} El(X) — an object with no relation to the source's stated content."
+            },
+            {
+              "citations": [
+                "P. LeFanu Lumsdaine and M. A. Warren, 'The local universes model: an overlooked coherence construction for dependent type theories', ACM TOCL 16(3), Article 23, 2015 (arXiv:1411.1736), Definition 2.1.1",
+                "Lumsdaine-Warren, ibid., Definition 3.1.1 (an object of T_! over Gamma is a TRIPLE (V_A, E_A, name(A)))",
+                "Lumsdaine-Warren, ibid., Definition 3.1.2, Definition 3.1.3, Proposition 3.1.4",
+                "Lumsdaine-Warren, ibid., section 3.4.2, Definitions 3.4.2.5 and 3.4.2.8, Lemma 2.4.3",
+                "J. Cartmell, 'Generalised algebraic theories and contextual categories', APAL 32, 1986, pp. 209-243"
+              ],
+              "defining_data": [
+                "a comprehension category satisfying condition (LF)",
+                "a type over Gamma is a TRIPLE (V_A, E_A, name(A)) — a local universe object, a type in T(V_A), and a classifying arrow Gamma -> V_A",
+                "comprehension giving the dependent projection Gamma.A -> Gamma",
+                "Pi[A,B] with app and lambda",
+                "the beta computation equation",
+                "strict stability of Pi, app and lambda under reindexing"
+              ],
+              "obstruction": "The presentation of a type in C_! is a TRIPLE, and the name map alone determines nothing: all the semantic content sits in V_A and E_A; name(A) only selects an instance out of the local universe. The source supplies exactly one expression and no second or third datum. Supplying V_A and E_A is inventing structure the record does not contain (F-R4), and the credited family's canonical presentation is fixed with parameters [Type, Type] — there is no free slot for them. Second: name(A) has codomain V_A, an object of the BASE category; the kernel's Lam(Var 1) has classifier Fun(Neutral, Type) — arrows of different kinds, and the kernel records the discrepancy as an uncertified coarse subsumption. Third: even in C_!, Pi's own arguments are TYPES on both sides. The name-map presentation governs how a type is GIVEN; it never changes what Pi's argument IS. So the target does not in fact contain a Pi whose domain argument is a map. Fourth: the beta equation and the strict-stability package — the entire point of the construction — have no counterpart in an equation-free singleton formation clause.",
+              "outcome": "obstruction",
+              "target": "Local universes model: a type presented by a 'name map' into a local universe, and its Pi-structure (Lumsdaine-Warren C_!)",
+              "translation_attempt": "The literal cash value of L3's 'presented by a section rather than by a display map': in C_! a type is given by an arrow name(A) : Gamma -> V_A, not by a display map. Attempted: Lam(Var 1) |-> name(A); the resulting display map plays the role of the Pi-domain; Sigma(Var 1, Var 2) |-> B in T(Gamma.A); the whole clause |-> Pi[A, B]."
+            },
+            {
+              "citations": [
+                "R. A. G. Seely, 'Locally cartesian closed categories and type theory', Math. Proc. Camb. Phil. Soc. 95(1), 1984, pp. 33-48",
+                "P. LeFanu Lumsdaine and M. A. Warren, op. cit., Definition 3.1.2 and section 2.1 p. 6 ('terms of a type A in context Gamma correspond to SECTIONS t : Gamma -> Gamma.A of the dependent projection')",
+                "B. Jacobs, Categorical Logic and Type Theory, North-Holland/Elsevier, 1999, section 10.5"
+              ],
+              "defining_data": [
+                "a category C with pullbacks",
+                "a morphism f : Y -> X",
+                "the pullback functor f* : C/X -> C/Y",
+                "a right adjoint Prod_f with the natural bijection",
+                "unit and counit satisfying the triangle identities",
+                "Beck-Chevalley"
+              ],
+              "obstruction": "A 'section' in this sense is a section OF a dependent projection, hence it presupposes a type A already given by a display map: the section is a TERM OF A, not a presentation of A. So Prod_s can never present the domain of a Pi; it presupposes the domain. Concretely the record supplies no display map for Lam(Var 1) to section and no clause declaring the type it would be a term of: R-0.3 records exactly one occurrence, instances = [{clause 3, Generator}], no specializations, and stage-14 clause 3 is the ONLY clause in the whole sealed signature with a Lam in a Pi/Sigma domain — there is nothing to section and nothing sectioned. Second: Prod_f's second input must be an object of C/Y, over the DOMAIN of f; the source's second argument is a Type over the ambient context and is certified not to depend on the Pi binder. So the source's two arguments are not even in the right slices. Third: the natural bijection is an equational datum, plus unit/counit and Beck-Chevalley; the clause is equation-free with no introduction, elimination or computation content, so three of six defining data have no source counterpart.",
+              "outcome": "obstruction",
+              "target": "Dependent product along an arbitrary morphism, Pi_f -| f*, specialised to f a section of a dependent projection",
+              "translation_attempt": "Read 'Pi applied to a family presented by a section' at face value: take Lam(Var 1) to be a section s : Gamma -> Gamma.A of some dependent projection, and read clause 3 as Prod_s applied to the object presented by Sigma(Var 1, Var 2)."
+            }
+          ]
+        },
+        {
+          "analyst_notes": {
+            "correction_to_the_lead_framing": "IMPORTANT — the next analyst and the verifier should not repeat the lead's premise uncritically. It is NOT true that the literature never places a term where a type is expected: in a Tarski-style universe a container/signature is standardly the pair (A : U, B : A -> U) with B a TERM of function type, an entirely orthodox presentation of exactly this data. So 'a term in that slot is precisely what containers were invented to avoid' is too strong and an adversarial verifier could break an obstruction resting on it. What IS universally required, in the term-presented presentation just as much as in the display-map presentation, is that the family have a named domain A and be APPLIED and DECODED — El(B a) — before anything can be exponentiated by it. The source omits both. The honest statement is therefore: the source is not a term-presented family in the recognised sense; it is an UNBASED, UNAPPLIED family in an exponent slot, which no presentation in this literature admits. The obstructions above are written in that sharper form.",
+            "naturality_caveat": "Dossier section 1.3's 'Naturality square (transposition (1 2)) closes judgmentally in 0 steps' was traced to typed_families.rs fn naturality_derivation, which transposes parameters 1 and 2 and then RE-CANONICALISES before comparing. Since canonicalisation relabels free levels by order of first use, the transposition is undone by the re-canonicalisation and the square closes for essentially any family. The struct's own doc comment is candid: it certifies that canonicalization is stable under bijective renamings. This is a stability-of-canonicalisation check and carries NO functoriality or naturality content in the category-theoretic sense. Flagged because L4 is precisely the lead that would be tempted to cite it as evidence that the family is a functor natural in X and Y. It is not evidence of that. (pen-type's separate issue_naturality_token is a different and genuinely substantive check about unary operator pairs, and clause 3 would fail its guard.) This is a caveat on how the sentence may be used, not a contradiction of it.",
+            "summary_of_the_obstruction": "Every notion in this lead — polynomial, polynomial functor, container, pushforward Pi_f, W-type, Poly's exponential — is built on the same two data: (i) a NAMED BASE for the position/exponent family (the object A, or the codomain of f : B -> A), and (ii) an APPLICATION of that family to a shape, so that the exponent is a fibre B_a rather than the family itself. The subject family has neither, and both absences are mechanically certified: the Lam binder is unannotated and the kernel types it Fun(Neutral, Type), pushing KernelTy::Neutral for the binder; and the probe records zero App nodes with R-0.2 certifying beta/eta-irreducibility. This is why the lead does not merely fail to fit — it fails at the first datum, uniformly, across all five targets.",
+            "what_would_overturn_me": "A citation to a presentation of polynomial functors or containers in which the exponent/position slot is legitimately occupied by an unapplied family with no named base object. Searched across Gambino-Kock, Gambino-Hyland, Abbott-Altenkirch-Ghani (both papers), Kock's Notes, the Niu-Spivak Poly line, Altenkirch-Morris indexed containers, and Hancock-Setzer interaction systems, and found none: in every one the position data is an arrow, a display map, an object of a slice, or a universe-valued family that is applied before use. Recorded explicitly that NO target in this lead fits, and that per F-R5 one would have been reported plainly had it fitted — target 4 in particular was pursued to the point where it produced a concrete object and was rejected only because that object is provably the beta-collapse the kernel forbids."
+          },
+          "confidence": "high",
+          "lead": "L4",
+          "lead_title": "Polynomial-functor reading: exponent given by a term rather than a type; the associated container literature",
+          "lead_verdict": "no_name",
+          "targets_tried": [
+            {
+              "citations": [
+                "N. Gambino and J. Kock, 'Polynomial functors and polynomial monads', Math. Proc. Cambridge Philos. Soc. 154 (2013) 153-192; para. 1.4, para. 1.5, para. 1.6(ii), Prop. 1.16, para. 1.18",
+                "N. Gambino and M. Hyland, 'Wellfounded trees and dependent polynomial functors', TYPES 2003, LNCS 3085, pp. 210-225; Definition 2 and eq. (1)",
+                "J. Kock, 'Notes on polynomial functors' (manuscript)",
+                "nLab, 'polynomial functor'"
+              ],
+              "defining_data": [
+                "a shape object A",
+                "a position object B",
+                "an ARROW f : B -> A, whose fibres B_a are the exponents",
+                "in the many-variable case, arrows s : B -> I and t : A -> J",
+                "the extension Sigma_t . Pi_f . Delta_s, i.e. X |-> Sigma_{a in A} X^{B_a}",
+                "the variance condition: the exponents are constant in the variable; equivalently the functor preserves connected limits / is familially representable"
+              ],
+              "obstruction": "Two independent obstructions. (1) NO SHAPE OBJECT AND NO APPLICATION. The exponent is required to be the FIBRE B_a, the value of the position family at a shape a in A. The source's Pi-domain holds the family itself, un-applied: zero App nodes in clause 3, and R-0.2 certifies beta/eta-irreducibility, so no application can be recovered. Worse, there is no A: the Lam binder is unannotated and the kernel types it Fun(Neutral, Type) with Neutral meaning opaque. Gambino-Hyland Def. 2 makes the arrow f : B -> A the entire datum of a polynomial; with neither codomain nor fibres there is no f, hence no polynomial. (2) VARIANCE. Under assignment (i) the putative functor is X |-> (X x Y)^X, contravariant in the exponent, so not an endofunctor of Set at all, a fortiori not preserving connected limits nor familially representable. Under (ii) the exponent is still lambda_.X, a term, not an object. NOT A POVERTY ARTIFACT: the polynomial nesting Sigma-outside-Pi is written by this very telescope at stage 14 clause 0, and the reverse nesting at clause 2. The grammar can write both; clause 3 uses the one that is not a polynomial's.",
+              "outcome": "obstruction",
+              "target": "Polynomial functor in one variable, and its formation datum ('a polynomial': the representing diagram / the arrow f : B -> A)",
+              "translation_attempt": "Read the outer Pi as exponentiation, so Pi(Lam(Var 1), Sigma(Var 1, Var 2)) reads as a base (X x Y) raised to an exponent (lambda_.X). Attempt: exponent slot Lam(Var 1) -> the fibre B_a; base Sigma(Var 1, Var 2) = X x Y -> the variable-carrying object X^{B_a}; parameters [Type, Type] -> the shape object A and the ambient index I. Two variable-assignments tried: (i) variable = X, giving X |-> (X x Y)^{lambda_.X}; (ii) variable = Y."
+            },
+            {
+              "citations": [
+                "M. Abbott, T. Altenkirch, N. Ghani, 'Containers: constructing strictly positive types', Theoretical Computer Science 342(1) (2005) 3-27; Definition 2.3, Definition 3.1, Definition 3.2, Theorem 3.4, Definition 2.8",
+                "M. Abbott, T. Altenkirch, N. Ghani, 'Categories of containers', FoSSaCS 2003, LNCS 2620, pp. 23-38",
+                "AAG TCS 2005, section 2.1 (terms are GLOBAL SECTIONS; types are OBJECTS of C/A with display map — the two sorts kept apart explicitly)",
+                "Gambino-Kock, op. cit., para. 2.18",
+                "T. Altenkirch, P. Morris, indexed containers"
+              ],
+              "defining_data": [
+                "a shape object A in C",
+                "a position family B in C/A, i.e. a display map over A; in the universe presentation, B : A -> U",
+                "the extension Sigma a:A. (Ba -> X), Sigma outermost, the function space innermost",
+                "morphisms (u : A -> C, f : u*D -> B)",
+                "Theorem 3.4: the extension functor is full and faithful, so the container IS the datum"
+              ],
+              "obstruction": "Four obstructions, the first decisive and the fourth blocking the escape hatch. (1) NO SHAPE OBJECT. Def. 3.1 requires the pair (A in C, B in (C/A)^I). The source's family has an unannotated binder typed Neutral; there is no A. 'B in C/A' is not merely unverified but unstateable, and with no A the morphism datum and Theorem 3.4 have nothing to range over. The kernel does not paper over this: it counts it as coarse subsumption (i) of two. (2) INVERTED NESTING. Def. 3.2 puts Sigma outermost and the function space innermost. The source is Pi outermost, Sigma innermost. Swapping them is F-R4. (3) X x Y IS NOT A SHAPE-POSITION PAIR. Def. 3.1's second component lives in the slice over the first; R-0 certifies the source's Sigma is NON-DEPENDENT, so Y is not a family over X. Sub-attempt (c) is a legitimate special case of Def. 3.1, but its extension is again Sigma-outermost and the source's Sigma is a factor of a Pi-CODOMAIN. (4) STRICT POSITIVITY BLOCKS THE COLLAPSED READING. If one illegally reads lambda_.X as X, the family becomes X -> (X x Y), placing the variable in a domain position; AAG Def. 2.8 admits K -> F only for K a CONSTANT type, so the collapsed reading exits the strictly-positive/container fragment the paper exists to characterise. NOT A POVERTY ARTIFACT: the container/signature type Sigma(S:U).(S -> U) is writable in this grammar — Univ is used as a term-former at stage 14 clauses 0 and 8, and Pi/Sigma codomains are genuine binders — and no clause in the sealed corpus writes it. The extension shape Sigma(A, Pi(B, X)) is literally clause 0's shape.",
+              "outcome": "obstruction",
+              "target": "Container (equivalently: signature) and container functor, in the sense of Abbott-Altenkirch-Ghani",
+              "translation_attempt": "Three sub-attempts. (a) Position-family reading: Lam(Var 1) -> the position family B, constant at X; the Pi -> the 'Ba -> X' factor; Sigma(Var 1, Var 2) -> the object being stored. (b) Shape-and-position-pair reading: Sigma(Var 1, Var 2) = X x Y -> the container pair (X |> Y); the outer Pi -> a map into the object of containers. (c) Constant-position container (X |> pi*Y), whose extension is X x (Y -> Z)."
+            },
+            {
+              "citations": [
+                "Gambino-Kock, op. cit., para. 1.1 (Sigma_f -| Delta_f -| Pi_f) and para. 1.2 (Beck-Chevalley; the distributive law)",
+                "Gambino-Hyland, op. cit., section 2.1 and section 2.3 eq. (1)",
+                "AAG TCS 2005, section 2.1 (display maps; terms as global sections, a separate sort)",
+                "R. A. G. Seely, 'Locally cartesian closed categories and type theory', Math. Proc. Camb. Phil. Soc. 95 (1984), Theorem 6.3"
+              ],
+              "defining_data": [
+                "an ARROW f : B -> A in a locally cartesian closed category",
+                "the pullback functor Delta_f",
+                "a right adjoint Pi_f with unit, counit and triangle identities",
+                "the Beck-Chevalley condition and the distributive law of Sigma over Pi",
+                "an argument object of E/B for Pi_f to be applied to"
+              ],
+              "obstruction": "Three obstructions. (1) f HAS NO CODOMAIN. The arrow's codomain I is exactly what the kernel refuses to supply: the Lam binder is unannotated and typed Neutral. No I, so no display map, so no f. (2) THE ARGUMENT IS NOT IN THE SLICE. Pi_f needs an object of E/B. R-0 certifies the Pi is NON-DEPENDENT, so the argument is a constant pulled back from the terminal object, and Pi_f Delta_B of a constant degenerates to a bare exponential — the pushforward structure, the target's whole content, is vacuous. (3) THE MISSING APPLICATION IS THE POINT, AND THE KERNEL SAYS SO. In every presentation the passage from a term-presented family to something Pi can be taken along is decoding-after-application, El(B a); that requires an App node. The source has zero App nodes, and the kernel instead assigns the Pi-bound variable the classifier El(Lam(Var 1)) — an element of a FUNCTION — and coerces the domain's classifier Fun(Neutral, Type) into the Type position via as_type, counting a coarse subsumption rather than certifying anything. So the source is not Pi_f; it is one application and one base object short of being able to be Pi_f. Reading the kernel's Pi-former as Pi_f anyway is F-R4.",
+              "outcome": "obstruction",
+              "target": "The dependent product / pushforward functor Pi_f along a map (the Pi of the Delta/Pi/Sigma factorization), right adjoint to pullback",
+              "translation_attempt": "Read the kernel's Pi(D, C) as Pi_f(C) where f is the display map of the family D = lambda_.X, i.e. the projection pr : I x X -> I; and C = X x Y as the object of E/B being pushed forward. This is the reading that most literally honours 'exponent given by a term': in a Tarski-style universe a family really is presented by a term B : A -> U, and Pi is then taken along the display map of El(B a)."
+            },
+            {
+              "citations": [
+                "N. Niu and D. I. Spivak, 'Polynomial Functors: A Mathematical Theory of Interaction', LMS Lecture Note Series 498, CUP; arXiv:2312.00990. Cited at chapter level: the statement and formula were confirmed from the literature but the numbered proposition could not be opened in the book itself",
+                "Gambino-Kock, op. cit., para. 1.6(ii): the constant functor with value A is polynomial, represented by I <- 0 -> A -> J",
+                "Niu-Spivak, op. cit.: the embedding of Set into Poly; a morphism of polynomials is a lens"
+              ],
+              "defining_data": [
+                "two polynomials p and q",
+                "an object q^p of Poly",
+                "an evaluation map q^p x p -> q",
+                "the universal property Poly(r x p, q) = Poly(r, q^p), natural in r",
+                "for the monomial/representable special cases: a shape set A and a direction set B"
+              ],
+              "obstruction": "THIS CANDIDATE IS THE FORBIDDEN BETA-COLLAPSE IN COSTUME, AND I SAY SO EXPLICITLY AS THE BRIEF REQUIRES. The map Set -> Poly, A |-> A y^0, is fully faithful: Poly(A y^0, B y^0) = Set(A, B). Under it, 'the constant family at X' and 'the type X' are THE SAME OBJECT of Poly. Hence the proposed translation assigns the identical target to Pi(Lam(Var 1), Sigma(Var 1, Var 2)) and to Pi(Var 1, Sigma(Var 1, Var 2)), which the R-0.2 certificate shows the kernel keeps apart. The one piece of content that distinguishes the subject family from its collapsed sibling — the abstraction — has no counterpart on the target side, so the mapping is not clause-preserving; it names a quotient of the family, not the family. F-R4; the row is void as a naming. The monomial reading fails identically: it requires the exponent I to be a set. INDEPENDENTLY: evaluation and the universal property have no source counterpart; the source is a single equation-free type-formation clause with no eval map, and an exponential object is defined by its adjunction, not by a formula. Not poverty for the collapse point: the register can write Pi(Var 1, Sigma(Var 1, Var 2)) — it writes the near-identical Pi(Var 1, Sigma(Var 1, Var 1)) as stage-14 clause 2.",
+              "outcome": "obstruction",
+              "target": "Exponential object q^p in Poly (Spivak-Niu), and the representable / monomial polynomials y^I and A y^B",
+              "translation_attempt": "The only target in the lead whose exponent slot genuinely holds something other than a type, so it deserved the most careful attempt. Map Lam(Var 1) -> the constant polynomial X y^0 (legitimate by GK 1.6(ii)); Sigma(Var 1, Var 2) -> the constant polynomial X x Y; the kernel's Pi -> the exponential-object former of Poly. Result: q^p with p = X y^0 and q = (X x Y) y^0. Also tried the monomial reading with Y as variable: Y |-> (X x Y)^I = X^I y^I, the container (X^I |> I)."
+            },
+            {
+              "citations": [
+                "Gambino-Hyland, op. cit., Definition 9, Theorem 10",
+                "AAG TCS 2005, Definition 2.2, Definition 2.4, Proposition 2.5, Definition 2.6"
+              ],
+              "defining_data": [
+                "a family Gamma, A |- B (equivalently an arrow f : B -> A)",
+                "the formed type W_A B",
+                "the constructor sup(a, f)",
+                "the eliminator wrec",
+                "the computation equation wrec_h(sup(a,f)) = h(a, wrec_h . f), a DEFINING datum",
+                "initiality"
+              ],
+              "obstruction": "(1) The same missing shape object A as targets 1-3: the datum is an arrow f : B -> A and the kernel supplies no A (unannotated Lam binder, typed Neutral). (2) The family carries no constructor, no eliminator and no computation equation. This one is weighted carefully rather than leaned on: the probe records 'sealed computation-role clauses (all 15 entries): 0', so NO family anywhere in the register carries equations, and an 'absence of equations' obstruction would, if used alone, also refute the 31 families the concordance named — its two credited stage-14 siblings are equally law-free. So the verdict does not rest on it. It is nonetheless a real gap for THIS target specifically, because for W-types the equation is constitutive, and the register demonstrably can carry constructors (stage-14 clause 8 has kernel role Introduction), so the absence of one for this family is a fact about the family, not about the language. The verdict rests on (1).",
+              "outcome": "obstruction",
+              "target": "W-type / initial algebra of a polynomial (container) functor",
+              "translation_attempt": "Map Lam(Var 1) -> the arity family B; the outer Pi -> the branching of a node; Sigma(Var 1, Var 2) -> the node payload. Look in the sealed stage-14 telescope for the accompanying constructor and eliminator that Def. 2.2 requires."
+            }
+          ]
+        },
+        {
+          "analyst_notes": {
+            "bearing_on_the_disposition": "Recorded neutrally per F-R5, not as advocacy. If NO-NAME is confirmed and the specification note is written, it must NOT describe the family's defining anomaly as novel. The coercion that admits it is de Bruijn's AUT-QE type inclusion, verbatim, instantiated at n=1, k=0. What is at most novel is the family formed UNDER that known rule by a kernel that, unlike Automath, does not identify lambda with Pi. Conversely, if the campaign were to decide that naming a coercion convention suffices, the family names out immediately as an AUT-QE quasi-expression — but that would be a relaxation of the translation standard, void under F-R2.",
+            "confidence_split": "Each individual obstruction is HIGH confidence: mechanical, citing kernel line numbers or verbatim target definitions, stated so a verifier can attack them directly. The negative existential — that NOTHING names this family — is MEDIUM, because L5 is by construction an unbounded search and exhaustiveness over all of mathematics cannot be claimed. Residual risk concentrates in the illative/Frege-structure neighbourhood and in operator-algebra targets sampled but not exhausted (POVMs, Gelfand triples, Riesz bases were surveyed and fail on the same equation-carrying grounds as the frame and RKHS rows).",
+            "new_datum_contributed": "THE CONSTANT FAMILY HAS NO RECORDED BASE — not in the R-0 dossier, and the single most load-bearing fact found. The elaborator pushes KernelTy::Neutral as the Lam binder's classifier and synthesizes Fun(Neutral, Type). 'Neutral' is the kernel's opaque marker, not an index type. The family's parameters are exactly [Type, Type] = X and Y; there is no index object anywhere in it, and since the Lam is irreducible none can be recovered. This kills the ENTIRE 'family/bundle/indexed-system over a base' class of targets at datum 1, before any equation argument is needed — bearing directly on L3 (display maps) and L4 (containers/polynomial functors) as well.",
+            "scope": "Seven targets across three of the four registered L5 directions (functional-analysis shell; the sort error as the named object; constant-family/weakening). Direction 4 (the uniqueness fact) was worked and returned EMPTY: no named structure was found that predicts exactly one object of this shape in a signature of this kind, recorded as a tried-and-failed direction rather than an untried one. No overlap with L1-L4.",
+            "second_new_datum": "Pi AND Sigma SHARE ONE ELABORATION PATH. The elaborator handles Expr::Pi(d,c) | Expr::Sigma(d,c) in a single arm; both push El(whnf(domain)) for the binder and both run as_type on the domain. The kernel therefore draws NO distinction between Pi and Sigma at formation. Any naming argument, for any lead, that leans on the kernel distinguishing them is unsupported.",
+            "where_the_verifier_should_attack": "Czajka's Definition 3.1 defines illative implication as IMPLIES = lambda x y. Xi (K x) (K y). The source family is LITERALLY Xi (K X) (K (X x Y)) — the domain Lam(Var 1) is exactly K X, and the certified-vacuous binder makes the codomain exactly K (X x Y). Every node maps. It is still recorded as an obstruction because the target is a formula rather than a structure with defining data, because the illative system's content is its rules (and Xi_i's side condition 'L t1' is precisely what the kernel refuses to certify), and because it needs X propositional while the kernel types X as the carrier. If any of the seven rows is going to break under adversarial pressure, it is this one.",
+            "why_everything_failed": "Every candidate's FIRST defining datum is an object (a base, an index set, a measure space, a Hilbert space, a type, a code). The source's first datum is a term that the kernel certifies is not judgmentally equal to any type-former presentation. A structure map whose source is not an object has no classical counterpart, and the two recurring killers are (i) no base exists and none can be recovered, (ii) the clause is equation-free while nearly every candidate target is defined BY its equations."
+          },
+          "confidence": "medium",
+          "lead": "L5",
+          "lead_title": "Open search driven by the R-0 role dossier",
+          "lead_verdict": "no_name",
+          "targets_tried": [
+            {
+              "citations": [
+                "B. Jacobs, Categorical Logic and Type Theory, Studies in Logic and the Foundations of Mathematics 141, Elsevier/North-Holland, 1999, section 1.3 and section 1.9 'Fibred products and coproducts' (p. 93)",
+                "F. W. Lawvere, 'Adjointness in Foundations', Dialectica 23 (1969), 281-296",
+                "R. A. G. Seely, 'Locally cartesian closed categories and type theory', Math. Proc. Camb. Phil. Soc. 95 (1984), 33-48"
+              ],
+              "defining_data": [
+                "a base category with finite products, or a fibration",
+                "the weakening/substitution functor pi*",
+                "a right adjoint Prod, i.e. a natural bijection — equivalently beta/eta for Pi",
+                "the Beck-Chevalley condition",
+                "'simple'-ness: the family quantified over is the constant/weakening one"
+              ],
+              "obstruction": "Three independent obstructions, any one fatal. (a) The adjunction bijection plus naturality IS an equation — the beta/eta laws of Pi. The source is a singleton formation clause carrying zero laws; the probe records 'sealed computation-role clauses (all 15 entries): 0' and the only beta-redex clause in the whole sealed corpus is step 4 clause 2. Not poverty: the grammar carries Id and the register exports Computation-role clauses as a category, so equations are expressible and this stage exports none. (b) Beck-Chevalley likewise has no source counterpart. (c) Decisive and kernel-checkable: the translation's first step needs El(lambda_.X) ~= X, since pi_X is determined by X. The kernel refuses exactly that identification — it pushes KernelTy::El(whnf(domain)) so the Pi-binder's classifier is literally El(Lam(Var 1)), and R-0.2 certifies Lam(Var 1) judgmentally distinct from Var 1 and from every non-Lam-headed presentation among 99064 catalog expressions. So the identification is refuted by the kernel, not merely unwitnessed. Performing it anyway collapses the family to Pi(Var 1, Sigma(Var 1, Var 2)), a different shape cognate to clause 2 — F-R4.",
+              "outcome": "obstruction",
+              "target": "Simple product / dependent product as right adjoint to weakening (simple fibration; Lawvere adjointness)",
+              "translation_attempt": "Map the domain slot lambda_.X -> the weakening projection pi_X (the constant family at X); map the Pi-former -> Prod_X; map the codomain X x Y, certified non-dependent, -> an object in the image of pi*, so Prod_X of it is the simple function space X => X x Y. No source datum found for the base category, the adjunction bijection, or Beck-Chevalley."
+            },
+            {
+              "citations": [
+                "J. Dixmier, Von Neumann Algebras, North-Holland Mathematical Library 27, 1981 (transl. of Les algebres d'operateurs dans l'espace hilbertien, 2nd ed., Gauthier-Villars 1969), Part II, Ch. 1",
+                "M. Takesaki, Theory of Operator Algebras I, Springer 1979, Ch. IV section 8"
+              ],
+              "defining_data": [
+                "a base measure space (Z, mu) — the index",
+                "a Hilbert space H, the constant fibre",
+                "the constant field z |-> H with its designated measurable vector fields",
+                "the direct integral with its inner product",
+                "completeness / the identification L^2(Z,mu;H) ~= L^2(Z,mu) tensor H"
+              ],
+              "obstruction": "The base has no source counterpart at all, and this is mechanically checkable rather than interpretive: the kernel elaborates Lam by pushing KernelTy::Neutral for the binder and synthesizing Fun(Neutral, Type). 'Neutral' is the kernel's opaque marker, not a base — it is precisely why coarse subsumption #1 is booked. The family's parameter list is exactly [Type, Type]; there is no index object anywhere in it, and none can be recovered, since the Lam is unannotated and irreducible. Not poverty: the Pi/Sigma domain slot takes a genuine type in the other seven formation clauses of this very telescope. A base could have been written and was not. Independently, the direct integral's inner product is an equation and the source is equation-free. NOTE FOR L3/L4: this obstruction — no base, ever — bears on every 'family over a base' target, including display maps and containers.",
+              "outcome": "obstruction",
+              "target": "Constant field of Hilbert spaces / trivial (product) bundle, and its space of sections (direct integral of a constant field)",
+              "translation_attempt": "Map lambda_.X -> the constant field z |-> X, i.e. the trivial bundle Z x X -> Z; map Pi(lambda_.X, -) -> the space of sections of that field; map the codomain X x T0 in situ -> the fibre datum. Searched the family for a counterpart to the base measure space and found none."
+            },
+            {
+              "citations": [
+                "S. T. Ali, J.-P. Antoine, J.-P. Gazeau, 'Continuous frames in Hilbert space', Annals of Physics 222 (1993), 1-37, section 2",
+                "R. J. Duffin, A. C. Schaeffer, 'A class of nonharmonic Fourier series', Trans. Amer. Math. Soc. 72 (1952), 341-366",
+                "O. Christensen, An Introduction to Frames and Riesz Bases, 2nd ed., Birkhauser 2016, Ch. 5, Def. 5.1.1"
+              ],
+              "defining_data": [
+                "a Hilbert space H",
+                "a measure space (Omega, mu)",
+                "a weakly measurable map F : Omega -> H",
+                "frame bounds: 0 < A <= B < infinity with the two-sided inequality",
+                "(tight case) the resolution of the identity"
+              ],
+              "obstruction": "Three obstructions. (a) The frame inequality is the entire content of the definition: a map Omega -> H with no bound is merely a family of vectors, which is not a named structure. The source is equation-free and, worse, order-free: the grammar has no norm, no measure, no reals, no <=. Not poverty: the stage's own grammar carries the universe-valued binary form (clause 0) so a functional-analytic law could have been stated as an Id-clause, and this stage exports zero equations. (b) The index measure space is missing, as in the previous row. (c) The codomain shape is wrong in a way no reading repairs: a frame or coherent-state map lands in H, i.e. Omega -> X. The source lands in X x T0 — it re-emits the whole inner-product-plus-vector datum alongside the vector. There is no frame-theoretic datum of that shape; in a frame the inner product is fixed structure of H, never part of the map's value. Discarding the T0 factor to fix this would be splitting the family, void under F-R4.",
+              "outcome": "obstruction",
+              "target": "Continuous frame / coherent-state map (resolution of the identity) in a Hilbert space",
+              "translation_attempt": "In situ the clause is Pi(lambda_.X, X x T0) with T0 = (X -> X -> U) x X, the inner-product-plus-vector datum. Map H -> X; map the inner product -> the Pi(X, Pi(X, U)) factor of T0; map Omega -> the domain lambda_.X; map the clause itself -> the coherent-state map F. Then sought counterparts for the frame bounds and the resolution of the identity."
+            },
+            {
+              "citations": [
+                "N. Aronszajn, 'Theory of reproducing kernels', Trans. Amer. Math. Soc. 68 (1950), 337-404, Part I section 2"
+              ],
+              "defining_data": [
+                "a set E",
+                "a Hilbert space H whose elements are functions on E",
+                "for each x in E a kernel section k_x in H",
+                "the reproducing property f(x) = <f, k_x>",
+                "K(x,y) = <k_y, k_x> is positive definite"
+              ],
+              "obstruction": "(a) The reproducing property is an equation and the source carries none. (b) The requirement that H be a space of functions ON E is a coherence between index and carrier, and the source has no such relation: the domain lambda_.X has value X, and there is no function-space link connecting an index to X. Not poverty: the grammar expresses function spaces over the carrier and does so at this very stage (clause 1 is Pi(Var 1, Var 1), clause 2 is Pi(Var 1, Sigma(Var 1, Var 1))). (c) Positive definiteness requires an order on the value sort; the value sort here is Univ, carrying no order and no laws. (d) The section 3.4 rebuttal registered in R-0 applies unchanged: the Univ-valued functional shape is available (clause 8) and clause 3 does not use it.",
+              "outcome": "obstruction",
+              "target": "Reproducing kernel Hilbert space; the evaluation (feature / kernel-section) map x |-> k_x",
+              "translation_attempt": "Map E -> the domain lambda_.X; map H -> X; map the inner product -> the Pi(X, Pi(X, U)) factor of T0; map the clause -> the kernel-section map k : E -> H, with the distinguished vector of T0 as a designated section."
+            },
+            {
+              "citations": [
+                "L. Czajka, 'Higher-order illative combinatory logic', Journal of Symbolic Logic 78(3):837-872, 2013 (revised version arXiv:1202.3672v10), Definition 3.1; rules Eq, H_i, Xi_e, Xi_i, Xi_H, F_L",
+                "H. B. Curry, R. Feys, W. Craig, Combinatory Logic Vol. I, North-Holland 1958, section 8A",
+                "H. Barendregt, M. Bunder, W. Dekkers, 'Systems of illative combinatory logic complete for first-order propositional and predicate calculus', JSL 58(3):769-788, 1993"
+              ],
+              "defining_data": [
+                "a type-free applicative structure of lambda-terms over constants containing Xi, L and base-type constants",
+                "abbreviations, notably K = lxy.x and IMPLIES = lxy.Xi(Kx)(Ky)",
+                "axioms: Gamma,t |- t; Gamma |- LH; Gamma |- LA_tau",
+                "rules Eq, H_i, Xi_e, Xi_i, Xi_H, F_L; in particular Xi_i with its side condition Gamma |- L t1",
+                "intended reading: Xi A B == forall x. A x IMPLIES B x; L A == 'A is a type / a range of quantification'"
+              ],
+              "obstruction": "Four obstructions; (a) and (b) are each decisive. (a) The target is a FORMULA, not a structure. The Layer-1 standard demands that the family's typed content map onto a classical structure's DEFINING DATA and that the laws among clauses become theorems on the target side. X -> (X AND Y) has no defining data and no laws — and is not even derivable (it needs Y). 'An instance of the definiens of IMPLIES' names nothing about the family. (b) The target's defining data are RULES and the source has none. Sharpest form: Xi_i carries the side condition Gamma |- L t1, 't1 is a type / a range of quantification'. For t1 = K X that is 'X is a proposition'. The source records the OPPOSITE: the kernel refuses to certify Lam(Var 1) as a type and books a coarse subsumption for the refusal. The single side condition the target's central rule requires is the one thing for which the source has a mechanical counter-witness. (c) The sort assignment is contradicted. The illative reading needs X propositional; the kernel classifies X as Type, and the corpus carries a separate Univ for the propositional/universe sort, used at this very stage in clauses 0 and 8. The R-0 section 3.4 rebuttal applies verbatim. (d) The reading requires globally recasting the sealed signature's Pi as Xi and Sigma as AND — reinterpretation reaching beyond the family — and under it clause 1, Pi(Var 1, Var 1), becomes Xi X X with X a predicate, contradicting (c) inside the same telescope.",
+              "outcome": "obstruction",
+              "target": "Curry's restricted generality Xi in illative combinatory logic — the family read as the definiens of implication, Xi(KX)(K(X x Y))",
+              "translation_attempt": "THE CLOSEST STRUCTURAL MATCH FOUND ANYWHERE IN THIS LEAD. Read the kernel's binary Pi(D, C) — C sitting under the binder — as Xi D (lambda x. C). Then: source domain Lam(Var 1) = lambda_.X = K X, exactly Czajka's K applied to X. Source codomain-as-function = lambda_.(X x Y) = K (X x Y), exactly — legitimate because R-0 mechanically certifies the Pi non-dependent, so the binder is vacuous. Hence the whole family is literally Xi (K X) (K (X x Y)), which by Definition 3.1 is the definiens of IMPLIES instantiated: X IMPLIES (X x Y), i.e. X -> (X AND Y) under propositions-as-types. Every syntactic node of the source has an image and no target node is unused."
+            },
+            {
+              "citations": [
+                "F. Wiedijk, 'A new implementation of Automath', Journal of Automated Reasoning 29(3-4):365-387, 2002, section 3.1: flag -a (p. 9) and flag -q (p. 10) 'Allow type inclusion. The AUT-QE language has type inclusion. An expression that has category [x1,A1]...[xn,An]TYPE, also is correct for category [x1,A1]...[xk,Ak]TYPE when k < n.'",
+                "N. G. de Bruijn, 'The mathematical language AUTOMATH, its usage, and some of its extensions', Symposium on Automatic Demonstration, LNM 125, Springer 1970, 29-61",
+                "R. P. Nederpelt, J. H. Geuvers, R. C. de Vrijer (eds.), Selected Papers on Automath, Studies in Logic and the Foundations of Mathematics 133, North-Holland 1994",
+                "F. Kamareddine, J. B. Wells, D. Ventura, 'Automath Type Inclusion in Barendregt's Cube', CSR 2015, LNCS 9139, Springer 2015"
+              ],
+              "defining_data": [
+                "Automath's degrees: objects (3), types (2), TYPE/PROP (1)",
+                "lambda and Pi written by the SAME binder [x,A]B, the degree of B disambiguating",
+                "abstractions of degree one are legal (flag -a)",
+                "type inclusion (flag -q): [x1,A1]...[xn,An]TYPE is also correct for [x1,A1]...[xk,Ak]TYPE when k < n",
+                "consequence acknowledged in the literature: a 2-expression no longer has a unique category"
+              ],
+              "obstruction": "The lift fails, and the failure is exactly the guard the brief sets. (a) What has been named is the KERNEL'S COERCION RULE, not the family: AUT-QE type inclusion is a language convention — a typing rule of a proof-checker language — with no target-side defining data for a clause to map onto and no laws to become theorems. A named convention is not a named structure. (b) The one historical formalism in which this exact shape is unremarkable is excluded by the frozen kernel. Automath identifies lambda with Pi, which is what makes [_:A]X simply the function type A -> X; the frozen kernel has DISTINCT Lam and Pi constructors and R-0.2 certifies Lam(Var 1) judgmentally distinct from Pi(Var 1, Var 1) and from Sigma(Var 1, Var 1). So the source cannot be read as an Automath quasi-expression without contradicting the kernel, and the sort mismatch exists precisely BECAUSE the kernel declines the lambda/Pi identification. (c) Kamareddine-Wells-Ventura's PTS formalization shows the rule's real content is a subtyping/coercion relation with its own metatheory (transitivity, congruence, subject reduction; and their headline result that types do not have the same instantiation right as functions) — none of which has a source counterpart in an equation-free singleton clause.",
+              "outcome": "obstruction",
+              "target": "AUT-QE type inclusion and quasi-expressions (de Bruijn's Automath) — an abstraction whose category is [x:A]TYPE accepted where TYPE is demanded",
+              "translation_attempt": "Direct and exact at the level of the KERNEL'S COERCION: clause 3's coarse subsumption #2 is the type-inclusion rule at n=1, k=0. The domain's synthesized classifier is Fun(Neutral, Type) — category [_:Neutral]TYPE — and as_type accepts it where TYPE is demanded, booking the subsumption. Attempted to lift this from a match on the coercion rule to a match on the FAMILY."
+            },
+            {
+              "citations": [
+                "P. Martin-Lof, Intuitionistic Type Theory, Bibliopolis, Napoli 1984, the universe rules in the Tarski style",
+                "P. Martin-Lof, 'An intuitionistic theory of types' (1972), repr. in Twenty-Five Years of Constructive Type Theory, OUP 1998",
+                "E. Palmgren, 'On universes in type theory', in Twenty-Five Years of Constructive Type Theory, OUP 1998",
+                "P. Dybjer, 'Internal type theory', TYPES 1995, LNCS 1158, Springer 1996"
+              ],
+              "defining_data": [
+                "a type U of codes",
+                "a family El : U -> Type (the decoding)",
+                "code constructors, e.g. pihat : (a:U) -> (El a -> U) -> U",
+                "decoding EQUATIONS, e.g. El(pihat a b) = Pi(El a, lambda x. El(b x))",
+                "Martin-Lof 1984's own convention that a family of types over A is the hypothetical judgment B(x) type (x:A) — a judgment, not a term"
+              ],
+              "obstruction": "(a) lambda_.X is not a code: its synthesized classifier is Fun(Neutral, Type), not Univ. The grammar HAS Univ and this clause does not use it, while clauses 0 and 8 of the same telescope do — not poverty. (b) The decoding equations are the entire mathematical content of a Tarski universe, and the source is equation-free. (c) Kernel-checkable and decisive: the source's El is NOT a decoding operator. The elaborator applies KernelTy::El uniformly to the whnf of whatever occupies the domain slot, for EVERY Pi and Sigma alike, with no U-membership test and no decoding equation. It is a formal wrapper the elaborator writes unconditionally, not a target-side El. Identifying the two would be a claim about the kernel that the kernel's own source refutes. (d) The target is in any case a convention of the metatheory attached to a whole theory, not a structure that one formation clause could be a lawful translation of; at best the family would be an ill-formed USE of a Tarski universe, which is not a naming.",
+              "outcome": "obstruction",
+              "target": "Tarski-style universe with decoding El : U -> Type; families-as-terms vs families-as-types; CwF universe",
+              "translation_attempt": "The kernel's Pi-binder classifier is literally El(Lam(Var 1)) — 'an element of a function'. Attempted: map that El to the decoding, and lambda_.X to a code in U, so the formation reads Pi over the decoded type El(code)."
+            }
+          ]
+        }
+      ],
+      "near_misses": [
+        "Coalgebra for (-) x Y (Rutten 2000 section 2): the cheapest tidy naming, which would have closed the concordance at 32/32. Killed because a coalgebra's structure map must have the carrier as its SOURCE, and the recorded source is El(Lam(Var 1)), not El(Var 1).",
+        "Illative Xi (K X) (K (X x Y)) (Czajka, JSL 78(3), Def. 3.1): every syntactic node maps. Killed because illative CL is type-free and has nothing to receive the source's sort content, and because Xi A B is a formula, not a structure with defining data.",
+        "Simple product / fibrewise exponential (Jacobs Def. 1.9.1): requires identifying lambda_.X with X, which R-0.2 certifies impossible.",
+        "Pi_g in an LCCC (Seely 1984): the only target natively admitting a MORPHISM where the record puts a term. Killed because Pi_g's argument must live in the slice C/X and the certified non-dependence means no display map exists."
+      ],
+      "poverty_of_language_control": "Edinburgh LF is the mainstream framework built around families-as-terms, and it FORBIDS this shape: its Pi-formation demands a type in the domain, and a family must be APPLIED first. Clause 3 has zero App nodes. This is the poverty-of-language rebuttal at the level of the literature rather than of this grammar.",
+      "standard": "A family is named only by a lawful translation in the book's Layer-1 sense: a mapping under which the family's typed content maps clause by clause onto a classical structure's defining data, and the laws among clauses become theorems on the target side - a functor, not a resemblance. Every naming carries the translation and its citations. NO-NAME is a first-class verdict.",
+      "why_everything_failed": "Every target's FIRST defining datum is an object - a base, a shape type, an index category, a measure space, a Hilbert space, a code, a finite cardinal, or the codomain of an arrow - and the source supplies a family over an UNTYPED binder."
+    },
+    "r2": {
+      "corrections_adopted": [
+        "The 'eta hinge' framing was a coordinator error and is struck: no published eta rule contracts lambda_.X to X, so a campaign ruling that eta-freeness is a presentation convention would change nothing. The verdict is as deep as the absence of any rule identifying a constant function with its value.",
+        "Analyst B's flip-condition was met by AUT-QE type inclusion and did not flip; it was mis-specified (a rule is not a structure).",
+        "R-0 dossier section 5 hard constraint 1 is amended from a standing constraint to a per-target observation; it proved too much and would have barred naming any family whose target carries laws.",
+        "Analyst B's wording fix to dossier section 2 item 4 is adopted (the argument proves the NORMAL FORM is Lam-headed, not the expression).",
+        "The 'no base object' obstruction is restated in the weaker, exactly sufficient form: the family carries no base and cannot be given one without changing the credited parameter telescope."
+      ],
+      "disposition": "no_name_confirmed",
+      "export_disposition": "withdrawn",
+      "honest_description_of_the_family": "No classical name, and the best available explanation of its shape is an authoring artifact in a hand-transcribed reference table - NOT a candidate novel mathematical object.",
+      "quorum": [
+        {
+          "confidence": "high",
+          "id": "A",
+          "role": "independent_armed_analyst",
+          "verdict": "no_name"
+        },
+        {
+          "confidence": "high",
+          "id": "B",
+          "role": "independent_armed_analyst",
+          "verdict": "no_name"
+        },
+        {
+          "confidence": "high",
+          "id": "V",
+          "role": "adversarial_verifier",
+          "verdict": "no_name"
+        }
+      ],
+      "specification_note_reason": "docs/df4feb52_specification_v1.md is deliberately NOT written. The plan makes it conditional on NO-NAME CONFIRMED, but its purpose is to specify a CANDIDATE NOVEL OBJECT, and writing it would assert exactly the provenance the R-1 provenance finding defeats. docs/xf0b2_provenance_finding_v2.md stands in its place.",
+      "specification_note_written": false,
+      "stability": "Eight independent contexts, ZERO flips, all five registered leads disposed. Contrast the parent concordance run, where two verdicts flipped at exactly this boundary. The one-family-thin margin that motivated this brief is now eight-context thick.",
+      "verifier": {
+        "attacks_mounted": [
+          {
+            "attack": "eta-collapse to a coalgebra for (-) x Y",
+            "outcome": "survives",
+            "reasoning": "THE ATTACK IS MISNAMED AND FAILS ON ITS OWN TERMS. The eta rule for Pi contracts lambda x.(f x) to f; its redex shape requires the body to be an APPLICATION of the bound variable. The body here is Var 1, the ambient parameter. So lambda_.X is not an eta-redex, and adding eta to the kernel would NOT collapse it. No published type theory identifies a constant function with its value. What three analysts and the coordinator's brief called 'the eta collapse' is binder ERASURE, not eta. Automath's route was run and even there [x:A]X read as a type is Pi x:A. X = A -> X, NOT X. CONSEQUENCE: analyst A's concession that 'the verdict is exactly one frozen convention deep' is WRONG; a kernel with full eta keeps this family exactly as distinct. The verdict is as deep as the absence of any rule identifying a constant function with its value."
+          },
+          {
+            "attack": "the illative match Xi (K X) (K (X x Y))",
+            "outcome": "survives",
+            "reasoning": "Attacked hardest; holds, with a sharper reason than L5 gave: illative combinatory logic is TYPE-FREE - no type/term distinction anywhere, only an applicative structure plus the predicate L. The source family's entire distinguishing typed content is a SORT COLLISION, and a type-free target has nothing to receive it. The map is shape-preserving, not content-preserving: resemblance, not functor, and F-R1 in its exact form since the match is a match of the GLOSS rather than of the elaboration. Two further kills: Xi A B is a formula, not a structure with defining data; and the global recasting makes the telescope contradict itself (clause 1 becomes Xi X X with X a predicate, while clause 0 types X as a carrier and reserves Univ for the propositional sort)."
+          },
+          {
+            "attack": "AUT-QE type inclusion pushed to a naming, and the hunt for analyst B's flip-citation",
+            "outcome": "survives",
+            "reasoning": "B's flip-condition is MET - AUT-QE type inclusion at n=1, k=0 is exactly 'a : A -> Type implies a : Type' with no intervening decoding, index or display map, and it is node-for-node the kernel's own coarse subsumption #2. The flip does not follow, so B's flip-condition was MIS-SPECIFIED. (1) A formation RULE is not a structure: no target-side defining data, no laws for clauses to become theorems; naming it names the kernel's coercion, not the family (F-R2). (2) Carried through, the licensed object is INDETERMINATE: because Automath identifies lambda with Pi, [x:A]X at category TYPE is A -> X, so the family is (A -> X) -> (X x Y) with A anonymous - not a parameter of the credited family and not suppliable without adding a datum (F-R4). (3) The lift contradicts the kernel, whose Lam and Pi are distinct constructors."
+          },
+          {
+            "attack": "break the 'no base object' obstruction (whose fall would take L1, L3, L4, L5 and A down together)",
+            "outcome": "survives",
+            "reasoning": "Lands on the phrasing, not the obstruction. An unannotated binder is the norm in Curry-style systems, where the base would be an inferred type variable - so the strong form 'unrepresentable, hence unnameable' should be softened. But a Curry-style inferred alpha is a metavariable of the inference algorithm, not an element of the family's defining data, and every target requires a DETERMINATE base. The obstruction holds in the form 'the family carries no base and cannot be given one without changing the credited parameter telescope [Type, Type]'. No row falls."
+          },
+          {
+            "attack": "do the obstructions prove too much? (audit of equation-freeness, per L4's self-flag)",
+            "outcome": "survives",
+            "reasoning": "Audited all seven reports target by target: no surviving obstruction rests on equation-freeness alone; every row carries an independent structural or sort kill. The correct distinction, which B drew: the objection is never 'the source has no equations' but 'THIS target is DEFINED by its equations'. TWO ITEMS MUST NEVERTHELESS BE FIXED: (i) R-0 dossier section 5 hard constraint 1 states equation-freeness as a STANDING constraint on all lawful translations, and in that form it does prove too much - it would forbid ever naming any family whose target carries laws, permanently, for the whole census. Must be demoted to a per-target observation. (ii) L2's upgrade of equation-freeness into a general anti-poverty rebuttal is the weakest argument in the corpus and must not be cited on its own."
+          },
+          {
+            "attack": "blast radius of L2's false corpus claim about binder-bound variables",
+            "outcome": "survives",
+            "reasoning": "Blast radius is ZERO and the correction runs the other way. L2 raised the false claim under 'strongest counter-argument registered' as a reason its OWN obstructions might be unfair, then answered it. The R-0 addendum section B removes the counter-argument entirely. Every obstruction touching binder dependence asserts the OPPOSITE of the false claim and is strengthened by the correction. Checked L1, L3, L4, L5, A and B for reliance on the false version: none."
+          },
+          {
+            "attack": "provenance-based attack on the naming verdict itself",
+            "outcome": "survives",
+            "reasoning": "Real, and pressed. Every report leans somewhere on 'the record COULD have written Y at coarse 0 and DECLINED to', which presupposes something was choosing; the provenance audit shows the sealed telescope is a hand-authored literal predating the search machinery, so that inference is weak. But in every report the anti-poverty rebuttal is AUXILIARY - it answers a hypothetical defence and never carries an obstruction. Every primary obstruction is 'defining datum D has no counterpart in the family's typed content', and under the standard a datum the source does not carry cannot be mapped regardless of why it is missing. The obstructions stand on the elaboration alone. What the attack DOES establish is that the coordinator's 'none of those grounds is disturbed' is too strong."
+          }
+        ],
+        "concurs_with_quorum": true,
+        "confidence": "high",
+        "obstruction_audit": "Seventeen obstructions audited across the seven reports. Sixteen HOLD. One FAILS: R-0 dossier section 5 hard constraint 1 (equation-freeness as a standing constraint) proves too much and is amended; no verdict rests on it.",
+        "residual_doubt": "Two. FIRST, the negative existential: eight contexts sweeping the same neighbourhoods are not eight independent samples; residual risk concentrates in the illative/Frege/Automath corner, where formation rules of this shape demonstrably exist. That B's flip-citation EXISTS and still does not flip is the strongest available evidence the corner has been reached, but it also shows the corner is real and that the distance between 'the rule exists' and 'the structure is named' is where the whole verdict now lives. SECOND, newly elevated by the provenance audit: the in-situ reading depends on the elaborator's ABSOLUTE-LEVEL convention, while Telescope::is_connected - in the same file as the hand-authored literal - reads Var as a RELATIVE index. Now that the literal is known to be hand-authored in telescope.rs before the elaborator's stage-14 path existed, the probability it was written under telescope.rs's own convention is materially higher than the dossier assumed. This would not change the shape anomaly, the credited family, or the verdict, but it would void the in-situ narrative. Must be settled before any document describes the family 'in situ'.",
+        "role": "adversarial_verifier",
+        "verdict": "no_name"
+      }
+    }
+  }
+}

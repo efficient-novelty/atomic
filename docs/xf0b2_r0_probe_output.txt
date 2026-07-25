@@ -1,0 +1,124 @@
+== R-0.1 elaboration of the sealed stage-14 telescope ==
+signature digest      : blake3:d51ffb32c2e6e18f45ee15a8c1af3edbf40759fda1696032ae6e97439c48f10a
+stage-14 candidate    : blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c
+minimal ambient arity : 1
+elaborated ambient    : 1
+derivation hash       : blake3:4f3ac3be5f217189cb193f4d13867cd8e92673062b70a957f9d3e3eba286d321
+
+clause  0 | role Formation -> Formation | ty Type | coarse 0 | beta 0 | stuck 0 | expr Sigma(Pi(Var(1), Pi(Var(1), Univ)), Var(1))
+           NF Sigma(Pi(Var(1), Pi(Var(1), Univ)), Var(1))
+clause  1 | role Formation -> Formation | ty Type | coarse 0 | beta 0 | stuck 0 | expr Pi(Var(1), Var(1))
+           NF Pi(Var(1), Var(1))
+clause  2 | role Formation -> Formation | ty Type | coarse 0 | beta 0 | stuck 0 | expr Pi(Var(1), Sigma(Var(1), Var(1)))
+           NF Pi(Var(1), Sigma(Var(1), Var(1)))
+clause  3 | role Formation -> Formation | ty Type | coarse 2 | beta 0 | stuck 0 | expr Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))
+           NF Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))
+clause  4 | role Formation -> Formation | ty Type | coarse 0 | beta 0 | stuck 0 | expr Sigma(Pi(Var(1), Var(1)), Pi(Var(1), Var(1)))
+           NF Sigma(Pi(Var(1), Var(1)), Pi(Var(1), Var(1)))
+clause  5 | role Formation -> Formation | ty Type | coarse 0 | beta 0 | stuck 0 | expr Pi(Lib(13), Var(1))
+           NF Pi(Lib(13), Var(1))
+clause  6 | role Formation -> Formation | ty Type | coarse 0 | beta 0 | stuck 0 | expr Pi(Lib(12), Var(1))
+           NF Pi(Lib(12), Var(1))
+clause  7 | role Formation -> Formation | ty Type | coarse 0 | beta 0 | stuck 0 | expr Pi(Lib(11), Var(1))
+           NF Pi(Lib(11), Var(1))
+clause  8 | role Introduction -> Introduction | ty Fun(Neutral, Type) | coarse 1 | beta 0 | stuck 0 | expr Lam(Pi(Var(1), Univ))
+           NF Lam(Pi(Var(1), Univ))
+
+== clause 3 derivation tree (verbatim) ==
+pi-form :: Type   [COARSE]
+  lam-intro :: Fun(Neutral, Type)   [COARSE]
+    ambient-param-1 :: Type
+  sigma-form :: Type
+    ambient-param-1 :: Type
+    field-ref-0 :: Type
+
+== R-0.1 scope resolution of clause 3 ==
+base scope at clause 3            : 4 (= ambient 1 + 3 prior fields)
+Pi binder level                   : 5
+Lam (domain abstraction) binder   : 5
+Sigma binder level (under Pi)     : 6
+occurrence Var 1 in Lam body      : Ambient parameter #1
+occurrence Var 1 in Sigma domain  : Ambient parameter #1
+occurrence Var 2 in Sigma codomain: Field of clause 0
+prior kernel roles                : [Formation, Formation, Formation]
+all admissible ambient readings (A = 0,1,2):
+  A=0: binders at levels 4 and 5; Var 1 -> Field of clause 0; Var 2 -> Field of clause 1; both free? true
+  A=1: binders at levels 5 and 6; Var 1 -> Ambient parameter #1; Var 2 -> Field of clause 0; both free? true
+  A=2: binders at levels 6 and 7; Var 1 -> Ambient parameter #1; Var 2 -> Ambient parameter #2; both free? true
+
+== R-0.2 irreducibility ==
+clause 3 beta steps to NF : 0
+NF equals the raw clause  : true
+domain Lam(Var 1) steps   : 0 (NF identical: true)
+App nodes in clause 3     : 0
+eta-redex present         : false
+  Lam(Var 1) == Var(1) ? false
+  Lam(Var 1) == Univ ? false
+  Lam(Var 1) == Lib(13) ? false
+  Lam(Var 1) == Pi(Var(1), Var(1)) ? false
+  Lam(Var 1) == Sigma(Var(1), Var(1)) ? false
+  Lam(Var 1) == App(Lam(Var(5)), Var(1)) ? false
+sealed computation-role clauses (all 15 entries): 0
+sealed beta-redex clauses: [(4, [2])]
+catalog at scope 4, <=5 nodes: 99064 expressions; 15 judgmentally equal to Lam(Var 1)
+  of those, presentations that are NOT syntactically Lam-headed: 7
+    App(Lam(Lam(Var(1))), Univ)
+    App(Lam(Lam(Var(1))), Var(1))
+    App(Lam(Lam(Var(1))), Var(2))
+    App(Lam(Lam(Var(1))), Var(3))
+    App(Lam(Lam(Var(1))), Var(4))
+    App(Lam(Lam(Var(1))), Lib(12))
+    App(Lam(Lam(Var(1))), Lib(13))
+
+== R-0.3 family identity and marginality ==
+predecessor signature digest (steps 1..13): blake3:098799481f6344c06c33e505ccac86eaf3a8fd3f5cb0843c37d186fc5538faac
+predecessor closure digest: blake3:963875e7d8eff61ce694f8d539a0ffd5fe8d8aff1d2d8404985232443fcc89ef (37 families)
+canonical NF   : Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))
+parameters     : [Type, Type]
+renaming       : RenamingMap { free_scope_len: 4, forward: [(1, 1), (2, 2)] }
+stage-14 families extracted: 9
+marginal family count      : 6
+     blake3:67134aea16914 | role Formation | instances 1 | marginal true
+     blake3:e4493f7dcf746 | role Formation | instances 1 | marginal true
+     blake3:4efc2e4dac7a8 | role Formation | instances 1 | marginal true
+  >> blake3:df4feb52882ec | role Formation | instances 1 | marginal true   <== TARGET df4feb52882e
+     canonical NF : Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))
+     parameters   : [Type, Type]
+     kernel ty    : Type
+     instances    : [InstanceRecord { clause_index: 3, kind: Generator }]
+     marginality  : MarginalNoClosurePreimage { closure_digest: "blake3:963875e7d8eff61ce694f8d539a0ffd5fe8d8aff1d2d8404985232443fcc89ef" }
+     naturality   : NaturalityDerivation { renaming_checked: [(1, 2), (2, 1)], square: EqualityWitness { scope_len: 2, left_normal_form: Pi(Lam(Var(1)), Sigma(Var(1), Var(2))), right_normal_form: Pi(Lam(Var(1)), Sigma(Var(1), Var(2))), left_steps: 0, right_steps: 0, equal: true } }
+     blake3:7b7909ceb5560 | role Formation | instances 1 | marginal false
+     blake3:8c9f56590ab4b | role Formation | instances 1 | marginal true
+     blake3:5e5a55e55a556 | role Formation | instances 1 | marginal false
+     blake3:0a7bdaaac1cf6 | role Formation | instances 1 | marginal true
+     blake3:00e4a99d677cf | role Introduction | instances 1 | marginal false
+
+== R-0.3 occurrences across the whole sealed signature ==
+  step 14 clause 3: Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))   <-- Lam in a Pi/Sigma domain
+
+== ADDENDUM A: is a binder-dependent codomain writable at this exact position? ==
+  the sealed clause                        ELABORATES | ty Type | coarse 2 | NF Pi(Lam(Var(1)), Sigma(Var(1), Var(2)))
+  Pi-binder-dependent codomain (Var 5)     ELABORATES | ty Type | coarse 3 | NF Pi(Lam(Var(1)), Sigma(Var(1), Var(5)))
+  Sigma-binder-dependent codomain (Var 6)  ELABORATES | ty Type | coarse 3 | NF Pi(Lam(Var(1)), Sigma(Var(1), Var(6)))
+  type domain + dependent codomain         ELABORATES | ty Type | coarse 1 | NF Pi(Var(1), Sigma(Var(1), Var(5)))
+
+== ADDENDUM B: does any sealed clause bind a Var to a local binder? ==
+  step 11 clause 0 (ambient 0, base 0): Pi(Lib(10), Pi(Var(1), Var(1))) -> binder levels [1, 1]
+  step 11 clause 1 (ambient 0, base 1): Lam(Pi(Var(1), Var(2))) -> binder levels [2]
+  step 12 clause 0 (ambient 0, base 0): Pi(Lib(11), Pi(Var(1), Var(1))) -> binder levels [1, 1]
+  total binder-bound Var occurrences in the sealed corpus: 5
+
+== ADDENDUM C: package recognition under perturbation of clause 3 ==
+built library of 13 entries (steps 1..13)
+  has_hilbert = true  | the sealed clause  Pi(Lam(Var 1), Sigma(Var 1, Var 2))
+  has_hilbert = false | eta-collapsed      Pi(Var 1, Sigma(Var 1, Var 2))
+  has_hilbert = false | second factor X    Pi(Lam(Var 1), Sigma(Var 1, Var 1))
+  has_hilbert = false | abstraction at Y   Pi(Lam(Var 2), Sigma(Var 1, Var 2))
+  has_hilbert = false | factors swapped    Pi(Lam(Var 1), Sigma(Var 2, Var 1))
+  has_hilbert = false | binder-dependent   Pi(Lam(Var 1), Sigma(Var 1, Var 5))
+
+  (has_hilbert is computed by matches_hilbert_functional_shell,
+   crates/pen-core/src/library.rs; the stage-14 admissibility gate
+   supports_hilbert_functional_clause_at_position, crates/pen-search/src/enumerate.rs,
+   carries the same per-position literals into the enumerator.)

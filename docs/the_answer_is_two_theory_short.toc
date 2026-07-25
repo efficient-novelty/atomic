@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {1}Theorem Roadmap}{3}{section.1}%
+\contentsline {section}{\numberline {2}Formal Setting and Primitive Roles}{5}{section.2}%
+\contentsline {section}{\numberline {3}Constitutive Law}{6}{section.3}%
+\contentsline {section}{\numberline {4}Selective Law and PEN}{7}{section.4}%
+\contentsline {section}{\numberline {5}Kinematic Scope and Reconstruction Target}{14}{section.5}%
+\contentsline {section}{\numberline {6}Exact Coherence Depth Two}{15}{section.6}%
+\contentsline {section}{\numberline {7}Affine Fibonacci Scaling}{17}{section.7}%
+\contentsline {section}{\numberline {8}Generative Calculus}{19}{section.8}%
+\contentsline {section}{\numberline {9}Genesis Sequence}{20}{section.9}%
+\contentsline {section}{\numberline {10}Runtime Ignition and Cosmogenesis}{26}{section.10}%
+\contentsline {section}{\numberline {11}Quantum Theory and Born Weights}{29}{section.11}%
+\contentsline {section}{\numberline {12}Spacetime, Gravity, and Gauge Structure}{34}{section.12}%
+\contentsline {section}{\numberline {13}Holography and Dark Sector}{46}{section.13}%
+\contentsline {section}{\numberline {14}Computation Hierarchy}{52}{section.14}%
+\contentsline {section}{\numberline {15}Mind and Active Context}{53}{section.15}%
+\contentsline {section}{\numberline {16}Consciousness and the Shared Branch}{54}{section.16}%
+\contentsline {section}{\numberline {17}Artificial Systems, Free Will, and Moral Status}{58}{section.17}%
+\contentsline {section}{\numberline {18}Predictions}{60}{section.18}%
+\contentsline {paragraph}{The active falsifier layer.}{60}{section*.2}%
+\contentsline {section}{\numberline {19}Formal and Executable Realizations}{66}{section.19}%
+\contentsline {section}{\numberline {A}Notation Index}{70}{appendix.A}%
+\contentsline {section}{\numberline {B}Genesis Ledger}{71}{appendix.B}%
+\contentsline {section}{\numberline {C}Dependency Graph}{73}{appendix.C}%
+\contentsline {section}{\numberline {D}Source Map}{74}{appendix.D}%
+\contentsline {section}{\numberline {E}Theorem Source Index}{76}{appendix.E}%
+\contentsline {section}{\numberline {F}Executable Theorem-Name Index}{79}{appendix.F}%

@@ -1,0 +1,362 @@
+# Free Environment Completion as Free Sealing: Derivation Attempt
+
+**Status:** partially derived. One premise open, and one dependency discovered
+that changes the shape of the reconstruction package.
+**Date:** 2026-07-25.
+**Context:** `docs/the_answer_is_two_theory_short.tex`, *Genesis
+operational-completion package*, target 3 (*No fundamental mixing*);
+`docs/bridge_candidate_triage_v1.md` §3 item 1.2;
+`docs/tier_c_free_sealing_2_law_conjecture.md`, whose method this reuses.
+**Method:** the tier-C template — identify the API, define the category of
+exact realizations under it, exhibit the initial object, check that the
+selection is a universal property and not a value quantity.
+**Verification:** no computation is required. Every mathematical claim below is
+either a short categorical argument given in full, or an attributed external
+result whose statement was fetched and is quoted verbatim in §6.
+
+---
+
+## 1. What lands if this works, and what does not
+
+Target 3 of the reconstruction package reads:
+
+> *No fundamental mixing:* prove that the mixed operational category is the free
+> environment completion of the pure Genesis category, hence every mixed state
+> has a pure dilation unique up to reversible environmental equivalence.
+
+Two things should be said before any mathematics, because the temptation to
+oversell this item is real.
+
+**It does not select quantum theory.** The synthesis lists four surviving
+countermodels, and target 3 disposes of exactly one of them — finite stochastic
+theory, which fails purification. Real quantum theory, quaternionic fragments
+and polyhedral GPTs are untouched by it. Anyone reporting a successful
+derivation here as progress toward complex Born quantum theory is
+overstating by a factor of four.
+
+**What it does deliver is better than that, and different.** The attempt below
+reaches a *dependency*: the free environment completion cannot be constructed
+without the dagger, because the unrestricted completion collapses to triviality
+(§4.2). Since the dagger is target 1's business, targets 1 and 3 are not
+independent premises. The reconstruction conjecture presently reads as four
+coordinate targets. It is not four coordinate targets. That is a structural
+correction to the package's own statement, and it is worth more than the
+purification result itself.
+
+---
+
+## 2. What is to be derived
+
+That the mixed layer is the *free* completion, so that purification is a
+**property of the free seal** rather than a postulate about states.
+
+The distinction matters and is easy to lose. "Every mixed state has a pure
+dilation" as an axiom is bridge content: it constrains the state space from
+outside. "The mixed layer is the free environment completion of the pure layer"
+is a realization-face statement: it says what the next sealed layer *is*.
+Purification then holds because every morphism of the completion is a dilation
+by construction. The first is a premise about physics; the second is free
+sealing doing its ordinary job.
+
+---
+
+## 3. What the Two Laws supply
+
+**Free sealing**, verbatim:
+
+> once an API is selected, the new layer is its least term-model completion,
+> containing **no unforced generators or equations** and **initial among exact
+> realizations of that selected API**
+
+The tier-C legality argument transfers unchanged: initiality is preserved under
+equivalence, ranks nothing, and compares nothing, so it is not a bar, an
+efficiency comparison, or a parsimony order, and the two-register acceptance
+clause does not exclude it from a guarded stage. Nothing below uses a minimum,
+a dimension count, or a cost.
+
+The standing warning also transfers, and here it bites harder than it did in
+tier-C: initiality is **relative to the selected API**. Almost all of the work
+is in §4.1.
+
+---
+
+## 4. The derivation
+
+Throughout, `P` is the sealed pure Genesis layer, taken as a symmetric monoidal
+category with unit `I`.
+
+### 4.1 The API — premise Q1
+
+What does the public interface add to `P`? Internal Record Actualization says a
+formal seal becomes a public event only through a stable decodable internal
+record. Public Confluence says compatible public records admit a joint
+nondemolition refinement, and that finite-capacity failure is "no common seal"
+rather than contradictory sealed facts.
+
+Both clauses presuppose an operation the pure layer does not have: **the ledger
+may fail to read a subsystem.** A record is public *of* something and silent
+*about* the rest; a refinement is joint over an overlap and blind outside it.
+That operation is discarding.
+
+> **Premise Q1 (the public interface is a discarding API).** The API selected at
+> the public interface is `P` together with
+>
+> **(a)** a *discarding clause* — a family `⌐_A : A → I`, one per object,
+> monoidal in the sense `⌐_I = id_I` and `⌐_{A⊗B} = ⌐_A ⊗ ⌐_B`; and
+>
+> **(b)** a *ledger-invariance clause* — `⌐ ∘ u = ⌐` for every isometry `u` of
+> the pure layer.
+
+Q1 is the analogue of tier-C's P1, and like P1 it is a reading rather than a
+new physical postulate — but it is a reading of two clauses rather than one, and
+(b) is doing more work than it looks like.
+
+Clause (a) is close to forced. Without a discard there is no "public record of
+a part", and Internal Record Actualization becomes unstatable.
+
+Clause (b) says: **embedding a record into a larger environment does not change
+what the ledger reads.** An isometry is an embedding that loses nothing and is
+reversible onto its image; if the ledger's verdict changed under it, two
+observers who had recorded the same process into environments of different
+size would hold different public facts about one overlap — which is exactly the
+failure mode Public Confluence forbids by name. So (b) is arguably Public
+Confluence specialized to the environment slot. That is the best case for it,
+and §5 records why it is not yet a citation.
+
+### 4.2 The unrestricted completion collapses — so the dagger is not optional
+
+Before restricting anything, try the obvious construction: let the environment
+range over all of `P`, and identify dilations that differ by *any* map on the
+environment.
+
+> **Proposition (collapse).** Let `P` be symmetric monoidal with a zero object
+> `0` such that `B ⊗ 0 ≅ 0` for every `B`. Define `P_naive` with the objects of
+> `P` and
+> ```
+> Hom(A,B) := colim_{E ∈ P} Hom_P(A, B ⊗ E),
+> ```
+> the colimit of the covariant functor `E ↦ Hom_P(A, B ⊗ E)`. Then every hom-set
+> of `P_naive` is a singleton.
+
+**Proof.** Since `0` is terminal there is a map `!_E : E → 0` for every `E`,
+so every pair `(E, f)` is identified with `(0, (id_B ⊗ !_E) ∘ f)`. Since
+`B ⊗ 0 ≅ 0` is terminal, `Hom_P(A, B ⊗ 0)` is a singleton. So every pair is
+identified with one and the same class. ∎
+
+The hypotheses hold in finite-dimensional Hilbert spaces: the zero-dimensional
+space is a zero object, and tensoring with it gives it back. So **the naive free
+environment completion of pure quantum theory is the trivial category**, in
+which purification holds vacuously and nothing else does.
+
+This is the load-bearing negative result of this note. It says the freedom in
+"free environment completion" must be constrained by *which maps on the
+environment are allowed to identify dilations*, and that the constraint is not
+a convenience — without it the construction returns nothing at all.
+
+The constraint that works is: **identify dilations only up to isometry on the
+environment.** Isometries are dagger-monics, `u† u = id`. They are unavailable
+until the dagger is sealed. Hence:
+
+> **Dependency.** Target 3 cannot be stated, let alone derived, over a pure
+> layer that lacks a dagger. Targets 1 and 3 of the reconstruction package are
+> ordered, not coordinate.
+
+### 4.3 The isometric completion, and what it delivers
+
+Let `Isom(P)` be the wide subcategory of dagger-monics of `P`. Define `P_⌐`:
+
+- **objects:** those of `P`;
+- **morphisms** `A → B`: pairs `(E, f : A → B ⊗ E)` modulo the equivalence
+  generated by `(E, f) ∼ (E′, (id_B ⊗ u) ∘ f)` for isometries `u : E → E′`;
+- **composition:** `[F, g] ∘ [E, f] := [F ⊗ E, (g ⊗ id_E) ∘ f]`;
+- **discarding:** `⌐_A := [A, id_A]`, the identity read as a dilation whose
+  entire output is environment.
+
+**Composition is well defined.** If `f′ = (id_B ⊗ u) ∘ f` then
+`(g ⊗ id_{E′}) ∘ f′ = (id_{C⊗F} ⊗ u) ∘ (g ⊗ id_E) ∘ f`, which is the required
+relation on the composite; the same computation on the other side is symmetric.
+So the relation is a congruence and `P_⌐` is a category. Monoidality of `⌐` is
+immediate from the definition.
+
+**Purification is now a construction, not an axiom.** Every morphism of `P_⌐`
+*is* a pair (pure process, environment), and the equivalence is exactly
+"unique up to reversible environmental equivalence" — the phrase target 3 uses.
+There is nothing left to postulate about mixed states, because there are no
+primitive mixed states: there are dilations, and the ledger's inability to read
+the second factor.
+
+**Sanity check on the intended model.** For `P = FdHilb`,
+`Hom_{P_⌐}(A, I)` is the set of maps `f : A → E` modulo `f ∼ u f`. Two such maps
+are identified precisely when `f† f = g† g` — polar decomposition supplies a
+partial isometry between them, and the environment can always be enlarged to
+extend it — so `Hom_{P_⌐}(A, I)` is the set of positive operators on `A`. That
+is the effect space, and the completion is the sub-causal (CPM) category rather
+than the causal one.
+
+**A fork worth recording.** Whether the completion lands on sub-causal CP maps
+or on causal channels is decided by which morphisms the *pure* layer seals. If
+the pure layer carries all pure maps, the completion is CPM and the unit is not
+terminal. If the pure layer carries only the causal pure maps — the isometries
+themselves — the completion is the category of channels and the unit is
+terminal. The theory's own reading favors the second: a sealed public event
+happens, so public processes are causal. This fork is not decided by free
+sealing; it is decided by what was sealed at the previous rung, and it should be
+looked up rather than chosen here.
+
+### 4.4 Concordance with the external record
+
+The isometry restriction was forced above by the collapse proposition, before
+any literature was consulted. It then turns out to be exactly the restriction
+the published completion theorem uses. Huot and Staton, *Quantum channels as a
+categorical completion* (LICS 2019, arXiv:1904.09600), state:
+
+> "The category of completely positive trace-preserving maps between
+> finite-dimensional C\*-algebras is a canonical completion of the category of
+> finite-dimensional vector spaces and isometries."
+
+Three observations, in decreasing order of confidence.
+
+1. **The concordance is on the constraint, not just the endpoint.** Independent
+   arrival at "complete over isometries" is worth more than agreement on the
+   answer, because the constraint is where the naive construction fails.
+2. **The completion's target is C\*-algebras, not Hilbert spaces.** So the free
+   completion introduces classical structure — direct sums, decoherence,
+   classical registers — alongside the quantum channels. This fits the theory's
+   own demand for *stable classical records* rather uncannily: the interface
+   that Internal Record Actualization requires is what the completion produces.
+   Recorded as concordance of endpoints, in the sense the ledger already uses
+   for the ℤ₆ agreement, and **not** as a derivation of classical record
+   structure.
+3. **The construction is not quantum-specific.** Heunen and Kaarsgaard's affine
+   completion of a monoidal restriction category covers Stinespring dilation and
+   Bennett's reversible classical computing in one construction. So the free
+   environment completion does not select quantum theory — it is the general
+   shape of "reversible dynamics on open systems," and its classical instance
+   yields deterministic computation. This confirms §1's warning quantitatively.
+
+The related characterizations of CPM by environment structures (Coecke; and the
+universal properties of CPM and CP\* treated by Cunningham and Heunen) are the
+nearest prior art to the framing in §4.1 and should be read before anything here
+is claimed as new.
+
+---
+
+## 5. The remaining gaps
+
+> Both gaps below are written up as a working problem statement — precise
+> targets, attack routes with assessments, success criteria and traps — in
+> `docs/260725_immediate_open_problems.md`.
+
+
+**Open premise Q1(b) — ledger-invariance under isometric embedding.** Clause (a)
+is close to forced. Clause (b) is not yet a citation. The argument in §4.1 —
+that a ledger whose verdict changed under isometric embedding would give two
+observers different public facts on one overlap — is the right shape, but
+Public Confluence as stated in the synthesis is a condition on *joint
+nondemolition refinement of compatible records*, not on the invariance of a
+discard under environment enlargement. Deriving (b) means showing the second
+follows from the first. That is a real lemma, not a paragraph, and it is the
+single item this attempt is blocked on.
+
+Note what Q1(b) is *not*: it is not a minimality condition. It says an
+enlargement is invisible, not that a small environment is preferable. This
+distinction is what keeps the whole attempt on the lawful side of the
+two-register acceptance clause, and it should be checked by anyone who
+reformulates the premise.
+
+**The dagger dependency** (§4.2) is not a gap in this derivation — it is a
+finding *about* the package. But it does mean target 3 cannot be worked
+independently of target 1, and the synthesis's presentation of four coordinate
+targets should be amended to record the ordering.
+
+**Distributivity.** The published completion is stated over distributive
+monoidal categories; the sealed pure layer must supply direct sums, or the
+completion must be shown to add them freely. Not adjudicated here.
+
+**Which pure-morphism class is sealed** — the fork in §4.3. Answerable by
+reading the Genesis record rather than by argument.
+
+---
+
+## 6. What this excludes, stated exactly
+
+**Excluded: finite stochastic theory as a mixed layer over a pure classical
+layer.** A nontrivial mixed distribution is not the marginal of a pure classical
+bipartite state, and the completion route explains why rather than merely
+recording it: free-completing a pure deterministic layer returns deterministic
+maps with garbage discarded — Bennett, not Bayes. Getting stochastic mixing
+requires random ancillas, which are already mixed, so the stochastic theory
+cannot be *the free* completion of any pure classical layer. This is one
+countermodel, and the one target 3 was always going to kill.
+
+**Not excluded: real quantum theory, quaternionic fragments, polyhedral GPTs.**
+Nothing above touches them. Real quantum theory in particular purifies
+perfectly well; it dies at local tomography, which is target 4.
+
+---
+
+## 7. Falsification
+
+- **The collapse proposition is wrong** if `P` lacks a zero object or if
+  `B ⊗ 0 ≇ 0`. Then the unrestricted completion may be nontrivial and the dagger
+  dependency in §4.2 does not follow. Kill by exhibiting a sealed pure layer with
+  those properties.
+- **`P_⌐` is not initial** among realizations of the Q1 API. Kill by exhibiting a
+  realization admitting two distinct comparison functors, or none. Note this
+  note *constructs* `P_⌐` and verifies it is a well-defined monoidal category
+  with discarding; the initiality itself is asserted on the strength of the
+  cited completion theorem and has **not** been reproved here for the general
+  `P`. That is the weakest link in the chain and is flagged as such.
+- **Q1(b) is false** — Public Confluence does not constrain the discard under
+  isometric enlargement. Then the equivalence relation is unmotivated, and
+  choosing isometries becomes a stipulation made to avoid the collapse, which is
+  reverse-engineering rather than derivation.
+- **The fork in §4.3 resolves the wrong way** relative to what the Genesis
+  record actually sealed, in which case the completion is the sub-causal
+  category and "public events happen" needs a separate account.
+
+---
+
+## 8. Verification status
+
+| Claim | Status |
+|---|---|
+| Collapse proposition (§4.2) | **proved here**, two lines, hypotheses stated |
+| `P_⌐` is a well-defined monoidal category with discarding (§4.3) | **checked here** (congruence computation given) |
+| `Hom_{P_⌐}(A,I)` = positive operators for FdHilb | **checked here**, via polar decomposition |
+| Isometry restriction is the right one | **derived here** from the collapse, then found to agree with Huot–Staton |
+| CPTP is the completion of fd vector spaces and isometries | **cited**, quoted verbatim, abstract fetched 2026-07-25 |
+| Affine completion covers Bennett as well as Stinespring | **cited**, from the same search; not independently checked |
+| `P_⌐` initial for general `P` | **not proved here** — see §7 |
+
+No code was written and none is needed. Nothing in this note was computed from,
+or checked against, any measured quantity; the item is verdict-blind by
+construction, since it produces no number.
+
+---
+
+## 9. Summary
+
+| item | status |
+|---|---|
+| Is purification derivable as free sealing? | **Yes in shape** — every morphism of the free completion is a dilation, so purification is constructional, not postulated |
+| Does it need a new primitive role? | **No** — it specializes free sealing, exactly as tier-C did |
+| Legal at a guarded stage? | **Yes** — initiality, not minimality; Q1(b) is an invariance, not a preference |
+| Does the naive completion work? | **No — it collapses to a point.** This is the note's sharpest content |
+| Consequence | targets 1 and 3 of the reconstruction package are **ordered, not coordinate**: no dagger, no environment completion |
+| Does it select quantum theory? | **No.** It kills one countermodel of four, and the same construction yields classical reversible computing |
+| Open | Q1(b) — derive ledger-invariance under isometric enlargement from Public Confluence; and reprove initiality for general `P` |
+
+The honest one-line verdict: **the derivation works up to one lemma, and on the
+way it shows the reconstruction package has an internal ordering the synthesis
+does not record.**
+
+---
+
+## Sources
+
+- [Quantum channels as a categorical completion — Huot & Staton, LICS 2019 (arXiv:1904.09600)](https://arxiv.org/abs/1904.09600)
+- [Axiomatic description of mixed states from Selinger's CPM-construction — Coecke](https://www.mathstat.dal.ca/~selinger/qpl2006/PDFS/01-Coecke.pdf)
+- [Axioms for the CP\*-construction — Cunningham & Heunen, QPL 2015](https://homepages.inf.ed.ac.uk/cheunen/publications/2015/cpstaraxioms/cpstaraxioms.pdf)
+- [Environment and Classical Channels in Categorical Quantum Mechanics — Coecke & Perdrix](https://link.springer.com/chapter/10.1007/978-3-642-15205-4_20)
+- [Bennett and Stinespring, Together at Last — Heunen & Kaarsgaard (arXiv:2102.08711)](https://arxiv.org/pdf/2102.08711)
