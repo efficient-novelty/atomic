@@ -85,6 +85,7 @@ pub mod motive_typed_open_specialization_v4;
 pub mod milestone_certificate_v1;
 pub mod narrative;
 pub mod naturality_orbit_transport;
+pub mod pa1_open_competition_v1;
 pub mod phase5b_history_certification;
 pub mod phase5b_reselection_v2;
 pub mod phase5b_reselection_v3;

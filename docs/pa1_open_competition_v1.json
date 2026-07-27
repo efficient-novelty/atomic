@@ -1,0 +1,1630 @@
+{
+  "schema": "pa1-open-competition-v1",
+  "date": "2026-07-27",
+  "question": "Does any certified run place real candidates before target-independent law, account for the complete outcome-relevant pool, and lawfully select a winner?",
+  "positive_criterion": [
+    "candidate_origin_is_actual_enumeration",
+    "admission_is_target_independent",
+    "full_surface_or_soundly_complete_pool",
+    "winner_is_unique_under_unpinned_law"
+  ],
+  "source_bindings": [
+    {
+      "path": "docs/pa1_provenance_audit_plan.md",
+      "role": "governing_pa1_brief",
+      "byte_length": 5538,
+      "blake3": "blake3:4aacf349ac07419cfd7e98d6db6bd2a447d12e3463843105bfe1ee5360043264"
+    },
+    {
+      "path": "docs/PA1B_EXECUTION_PLAN.md",
+      "role": "detailed_execution_plan",
+      "byte_length": 11017,
+      "blake3": "blake3:043501055859423f37e4c596af74aaeb0dc6b34e3cfa91292121092c24cabd63"
+    },
+    {
+      "path": "docs/provenance_disclosure_v1.md",
+      "role": "standing_disclosure_not_superseded",
+      "byte_length": 4307,
+      "blake3": "blake3:c4bcc733382423e70a4c2267d2c7fe612b5f3bbe6857414ef00a4bea059e90c2"
+    },
+    {
+      "path": "runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15/run.json",
+      "role": "claim_historical_run_metadata",
+      "byte_length": 1964,
+      "blake3": "blake3:ca8cc6650372ce131ec33ac5631e56d5dad38c081f4f1cb4ad058677477d3714"
+    },
+    {
+      "path": "runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15/config.toml",
+      "role": "claim_historical_config",
+      "byte_length": 1991,
+      "blake3": "blake3:066c211a714a40f9d4bab84340b571fc98d5f394e33589847efa7c1cafbcc23c"
+    },
+    {
+      "path": "runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15/claim-compare.json",
+      "role": "claim_comparison_certificate",
+      "byte_length": 8060,
+      "blake3": "blake3:89d0bb4a08f1bb11aa1681e3466bed72bde300414c44e94e9ddacee81e6d1087"
+    },
+    {
+      "path": "runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15/reports/steps/step-01-summary.json",
+      "role": "claim_step1_census",
+      "byte_length": 18067,
+      "blake3": "blake3:c538d0ff4a352edaf761909c228a9518ac2176a38fe600fc93f1e47c23603804"
+    },
+    {
+      "path": "runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15/reports/steps/step-15-summary.json",
+      "role": "claim_step15_census",
+      "byte_length": 20761,
+      "blake3": "blake3:1361a586c5d87601651578e95ed0a3fa9417978054b2114e5ad9e34144a35775"
+    },
+    {
+      "path": "docs/phase5b_reselection_program_v2.json",
+      "role": "v2_preregistered_program",
+      "byte_length": 3738,
+      "blake3": "blake3:eeb26ca4f64b16a536e67f7469ae68d34bef74f239a05b9050ce421483cadf36"
+    },
+    {
+      "path": "docs/phase5b_reselection_burn_v2.json",
+      "role": "v2_burned_census",
+      "byte_length": 27512,
+      "blake3": "blake3:e18da4d5902ba2bf540473da07ab067536d64a28953730437dff8e619bc3167e"
+    },
+    {
+      "path": "docs/phase5b_reselection_program_v3.json",
+      "role": "v3_preregistered_program",
+      "byte_length": 3707,
+      "blake3": "blake3:af1f7a0c339557ec76ca5214996a333e7238b56c1340845fcd6546fe2c6f438b"
+    },
+    {
+      "path": "docs/phase5b_reselection_burn_v3.json",
+      "role": "v3_burned_census",
+      "byte_length": 36931,
+      "blake3": "blake3:399ed3c499ecc79797ed09c89b81b3fcf963c09a391d221d657a7198d94bd643"
+    },
+    {
+      "path": "docs/t_bf1_prefix_v1.json",
+      "role": "t_bf1_direct_stage4_census",
+      "byte_length": 10479,
+      "blake3": "blake3:a332c9ca3b49bf7c511b3f4104ac20efcc2a9b2e324c318c3f811350f071f2fe"
+    },
+    {
+      "path": "docs/BI1_OPTION_A_SWEEP_V3_CERTIFICATE.json",
+      "role": "bi1_four_branch_manifest",
+      "byte_length": 7910,
+      "blake3": "blake3:1817a71fd5caca99bcafad66e3894640d45bf43b852f27c5720e2a7bb4c5f431"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_2016726758f3_CERTIFICATE.json",
+      "role": "bi1_enacted_branch",
+      "byte_length": 463064,
+      "blake3": "blake3:99c70276db9b15fe417c38a16af2c690dc945c9a954bba5e00de67b7ce204824"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_43a0ed707770_CERTIFICATE.json",
+      "role": "bi1_alternate_branch",
+      "byte_length": 170260,
+      "blake3": "blake3:efb07a882fe26e2f164def9f489b40e105c49a37d322d03e26299df06cf4fd6c"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_4b2211ecae25_CERTIFICATE.json",
+      "role": "bi1_alternate_branch",
+      "byte_length": 170263,
+      "blake3": "blake3:bfd7cf75c2d1e37450975ef38dd6a775b8462ee78ef61d9279ba591e7f99c38e"
+    },
+    {
+      "path": "docs/BI_BRANCH_V3_b4f821d9bb28_CERTIFICATE.json",
+      "role": "bi1_alternate_branch",
+      "byte_length": 171340,
+      "blake3": "blake3:d29dbd8f4bca0d14689646dc08e72474df5cd577d91c5fdb4f9181298d726938"
+    },
+    {
+      "path": "docs/BI1B_PREFIX_GENERAL_SWEEP_V1_CERTIFICATE.json",
+      "role": "bi1b_four_branch_manifest",
+      "byte_length": 6631,
+      "blake3": "blake3:32ac84eda7bfad2eda3fdf7311ea7032941ce7a11a0eab43c2ed9d6ca92d8d45"
+    },
+    {
+      "path": "docs/BI1B_REGRESSION_CERTIFICATE.json",
+      "role": "bi1b_current_reissue_drift_disclosure",
+      "byte_length": 33087,
+      "blake3": "blake3:0e8c9c0e86ed1c40aa424861a5850d5540716cd9faa5b5a05d2535b974e6d728"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_2016726758f3_CERTIFICATE.json",
+      "role": "bi1b_enacted_revalidation",
+      "byte_length": 3121,
+      "blake3": "blake3:14d748530cb46744b0c1d0403a6f2248a654c7dc65588efb1383029576f050db"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_43a0ed707770_CERTIFICATE.json",
+      "role": "bi1b_alternate_resume",
+      "byte_length": 377484,
+      "blake3": "blake3:08b6bba6d2b7d18091273ab959e715b4ca4479d2aabf8ed2094c64a0424ec8ac"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_4b2211ecae25_CERTIFICATE.json",
+      "role": "bi1b_alternate_resume",
+      "byte_length": 377490,
+      "blake3": "blake3:7073c84c2a4932aba9d2454d029e039957e61fa2df344fafd7750817fbd951d3"
+    },
+    {
+      "path": "docs/BI1B_BRANCH_b4f821d9bb28_CERTIFICATE.json",
+      "role": "bi1b_alternate_resume",
+      "byte_length": 377491,
+      "blake3": "blake3:04310e9819b9b6210dfbe2372e8fe9727bf1faec1e3b44ead9709fad4d1120ee"
+    },
+    {
+      "path": "docs/BI1B_CORRESPONDENCE_DIAGNOSTIC.json",
+      "role": "bi1b_24_row_correspondence",
+      "byte_length": 30999,
+      "blake3": "blake3:d909f54dfa91a187807428e16511d5f79e8b87b33f4cb3c421abdfbb09d2869b"
+    },
+    {
+      "path": "docs/halting_surface_diagnostics.json",
+      "role": "historical_step16_count_only_diagnostic",
+      "byte_length": 2236,
+      "blake3": "blake3:a6c2bc965e5b92fa1db509af41c0aa81bd068f4ef4d20270ea7295e9a57145a3"
+    },
+    {
+      "path": "docs/step16_semantic_exhaustion.json",
+      "role": "corrected_step16_exact_product_partition",
+      "byte_length": 1494,
+      "blake3": "blake3:a605240f4fcae53b438ef0db6cab559fc63d8ab32bc5a7a6603ba7e8db72c0fb"
+    },
+    {
+      "path": "docs/certified_halt_verification.json",
+      "role": "step16_four_witness_certificate",
+      "byte_length": 29967,
+      "blake3": "blake3:09c92c4685ca6a6cac0d7f133f9a969e4f60ac6841ae518c6dea2b5472461726"
+    },
+    {
+      "path": "docs/sh1_experiment_burned.json",
+      "role": "step16_named_seal_and_continue",
+      "byte_length": 205539,
+      "blake3": "blake3:1f2a903f65affc217aff15a77191f5d2af1fd9a0874105b92be958ae7a20b3bc"
+    },
+    {
+      "path": "crates/pen-search/src/engine.rs",
+      "role": "claim_search_and_pruning_paths",
+      "byte_length": 3804488,
+      "blake3": "blake3:c24c209d88a15d27ab6db3eeeb53af3e64acc0b5afcb75251e6835894aff6914"
+    },
+    {
+      "path": "crates/pen-search/src/enumerate.rs",
+      "role": "enumeration_and_position_gates",
+      "byte_length": 306632,
+      "blake3": "blake3:7f09d7a8cf4d287f1321848a6ba3c48ff2714b950a4334855cd4f2ac4d4bdb2c"
+    },
+    {
+      "path": "crates/pen-search/src/accept.rs",
+      "role": "legacy_exact_acceptance_rank",
+      "byte_length": 13689,
+      "blake3": "blake3:3971d050281bf10ac49b584dd54e867ba0136f80b94fa26fe5bb1b6ef7756b8a"
+    },
+    {
+      "path": "crates/pen-type/src/admissibility.rs",
+      "role": "admissibility_paths",
+      "byte_length": 130036,
+      "blake3": "blake3:f6950cdf457980fdfd2d286f71bfeba646e5f81fecb335dd8afdc1e077a3389b"
+    },
+    {
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "authored_reference_table",
+      "byte_length": 19443,
+      "blake3": "blake3:d9831c28c380d1fdc313f757b393e26e81df1505d87ae35291d3eb8f214cf545"
+    },
+    {
+      "path": "crates/pen-search/src/t_bf1_prefix.rs",
+      "role": "bar_free_stage4_direct_reenumeration",
+      "byte_length": 32142,
+      "blake3": "blake3:c521b1f45c119c75c90d96e09d95e5ae805401f334d58a0905a29640607c6a22"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance.rs",
+      "role": "bi1_guarded_branch_cones",
+      "byte_length": 105867,
+      "blake3": "blake3:fc1ce77dec9200f2f1151f630808f7e939b80e5c06e69a49b5da5f4daeee552c"
+    },
+    {
+      "path": "crates/pen-search/src/branch_invariance_resume_v1.rs",
+      "role": "bi1b_resume_cones",
+      "byte_length": 99821,
+      "blake3": "blake3:b819c9ab5a4911ec9d49cfe9d36dd502e99b2e77a985cb8918da4d1a03ce559e"
+    },
+    {
+      "path": "crates/pen-search/src/halting_probe.rs",
+      "role": "step16_adversarial_and_named_selection_paths",
+      "byte_length": 62262,
+      "blake3": "blake3:60a64b4d0558f8d91bec80ede7ecf24f11262b629638dc3f19f4e1d897b94ccc"
+    },
+    {
+      "path": "crates/pen-search/src/step16_automaton.rs",
+      "role": "step16_authored_four_witness_basis",
+      "byte_length": 44839,
+      "blake3": "blake3:024bcd5664c39089b741c84186605a03e50ea4df80540bb5f78bfba043d74168"
+    },
+    {
+      "path": "crates/pen-search/src/pa1_open_competition_v1.rs",
+      "role": "pa1b_audit_issuer_and_replay",
+      "byte_length": 84732,
+      "blake3": "blake3:1695d8566f83fe3a08dbebd6b7eba7c3d86eecd277f1f7009602607930bf9a2d"
+    }
+  ],
+  "chronology": {
+    "reference_table": "Telescope::reference(1..15): commit 5dd8447, 2026-03-13; the target sequence was predeclared earlier",
+    "early_admissibility_gates": "bootstrap and family gates follow on 2026-03-14/15 and later March commits",
+    "step1_raw_catalog": "step_one_demo_raw_catalog: commit a8a1935, 2026-03-18",
+    "t_bf1_and_bi_artifacts": "T-BF1 first lands 2026-07-22; BI-1/BI-1b v3 land 2026-07-24",
+    "consequence": "authored-reference-first, recognizing/enumerating machinery second; replay equality cannot establish discovery"
+  },
+  "exact_historical_claim_source_available": false,
+  "current_reissues_are_historical_replays": false,
+  "probes": {
+    "claim_step1": {
+      "step": 1,
+      "generated_raw_prefixes": "2144",
+      "well_formed_terminals": "1285",
+      "hard_admissible": "1",
+      "exact_pruned": "0",
+      "heuristic_dropped": "0",
+      "full_telescopes_evaluated": "1",
+      "winner_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+      "matches_stored_counts": true
+    },
+    "claim_step15": {
+      "attempted": true,
+      "valid": false,
+      "exact_historical_replay": false,
+      "summary": "two bounded current-source in-memory homologous Step-15 attempts exceeded their 2-minute and 3-minute audit bounds and were terminated without an artifact",
+      "errors": [
+        "the exact historical dirty source is unavailable; PA-1b therefore uses the sealed counters and code path rather than converting a resource-bound probe into evidence"
+      ]
+    },
+    "claim_step15_observed": null,
+    "phase5b_v2_replay": {
+      "attempted": true,
+      "valid": false,
+      "exact_historical_replay": false,
+      "summary": "bounded public replay executed during PA-1b failed closed before burn reissuance because the current upstream global E-4 v10 certificate differs from definition replay",
+      "errors": [
+        "current-definition prerequisite drift; immutable v2 program/burn retained as historical evidence"
+      ]
+    },
+    "phase5b_v3_replay": {
+      "attempted": true,
+      "valid": false,
+      "exact_historical_replay": false,
+      "summary": "bounded public replay executed during PA-1b failed closed transitively on the current v2/upstream prerequisite drift",
+      "errors": [
+        "current-definition prerequisite drift; immutable v3 program/burn retained as historical evidence"
+      ]
+    },
+    "t_bf1_reissue": {
+      "attempted": true,
+      "valid": false,
+      "exact_historical_replay": false,
+      "summary": "current T-BF1 reissue preserves the live four-way stop; exact certificate equality is recorded separately",
+      "errors": [
+        "certificate differs from independent current reissuance"
+      ]
+    },
+    "t_bf1_stage4_minimizers": "4",
+    "step16_semantic_exhaustion_artifact_complete": true,
+    "step16_adversarial_candidates": [
+      {
+        "name": "weave_max_r_kappa2",
+        "clause_kappa": 2,
+        "raw_surface_member": false,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 40,
+        "rho": "20/1"
+      },
+      {
+        "name": "weave_max_r_kappa3",
+        "clause_kappa": 3,
+        "raw_surface_member": false,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": false,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 87,
+        "rho": "29/1"
+      },
+      {
+        "name": "weave_max_r_kappa4",
+        "clause_kappa": 4,
+        "raw_surface_member": false,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": false,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 152,
+        "rho": "38/1"
+      },
+      {
+        "name": "axiomatic_single_l15_kappa3",
+        "clause_kappa": 3,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": true,
+        "nu_total": 107,
+        "rho": "107/3"
+      },
+      {
+        "name": "temporal_polymorphic_kappa2",
+        "clause_kappa": 2,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": true,
+        "nu_total": 32,
+        "rho": "16/1"
+      },
+      {
+        "name": "weave_surface_max_r2_kappa2",
+        "clause_kappa": 2,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": false,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 8,
+        "rho": "4/1"
+      },
+      {
+        "name": "axiomatic_inheritance_kappa3",
+        "clause_kappa": 3,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": true,
+        "nu_total": 108,
+        "rho": "36/1"
+      },
+      {
+        "name": "axiomatic_inheritance_kappa4",
+        "clause_kappa": 4,
+        "raw_surface_member": false,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": false,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 110,
+        "rho": "55/2"
+      },
+      {
+        "name": "hit_path_d1",
+        "clause_kappa": 2,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": false,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 6,
+        "rho": "3/1"
+      },
+      {
+        "name": "hit_path_d3",
+        "clause_kappa": 2,
+        "raw_surface_member": false,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": false,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 14,
+        "rho": "7/1"
+      },
+      {
+        "name": "hit_path_d4",
+        "clause_kappa": 2,
+        "raw_surface_member": false,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 21,
+        "rho": "21/2"
+      },
+      {
+        "name": "hit_path_d5",
+        "clause_kappa": 2,
+        "raw_surface_member": false,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 30,
+        "rho": "15/1"
+      },
+      {
+        "name": "hit_no_formation_d1",
+        "clause_kappa": 2,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": true,
+        "survives_all_gates_and_clears": true,
+        "nu_total": 19,
+        "rho": "19/2"
+      },
+      {
+        "name": "control_reproposal_step13",
+        "clause_kappa": 7,
+        "raw_surface_member": false,
+        "admitted": false,
+        "type_checks": true,
+        "connectivity_passes": false,
+        "semantically_minimal": true,
+        "clears_bar": false,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 0,
+        "rho": null
+      },
+      {
+        "name": "control_modal_rebuild_step10",
+        "clause_kappa": 4,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": false,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 0,
+        "rho": null
+      },
+      {
+        "name": "control_window_rereference",
+        "clause_kappa": 2,
+        "raw_surface_member": true,
+        "admitted": false,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": false,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 0,
+        "rho": "0/1"
+      },
+      {
+        "name": "control_bare_temporal_pair",
+        "clause_kappa": 2,
+        "raw_surface_member": true,
+        "admitted": true,
+        "type_checks": true,
+        "connectivity_passes": true,
+        "semantically_minimal": true,
+        "clears_bar": false,
+        "survives_all_gates_and_clears": false,
+        "nu_total": 2,
+        "rho": "1/1"
+      }
+    ],
+    "step16_raw_members": "9",
+    "step16_lawful_clearers": "4",
+    "certified_halt_replay": {
+      "attempted": true,
+      "valid": false,
+      "exact_historical_replay": true,
+      "summary": "combined Step-16 certificate replay",
+      "errors": [
+        "combined certificate differs from a fresh definition replay"
+      ]
+    },
+    "probes_in_memory_only": true
+  },
+  "surfaces": [
+    {
+      "audit_key": "claim_lane_step_1",
+      "record_path": "runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15/reports/steps/step-01-summary.json",
+      "historical_run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15",
+      "evidence_mode": "historical_artifact_and_homologous_probe",
+      "count_semantics": "generated is the 18x120-16 raw telescope catalog; hard-admitted and selected counts are downstream",
+      "stages": [
+        {
+          "stage": 1,
+          "generated_or_enumerated": "2144",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "disposition": "minimal_positive_overshoot"
+        }
+      ],
+      "candidate_origin": "real raw grammar cross-product added after the reference telescope",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "1,285 checker-valid/connected terminals reach a Step-1-specific bootstrap predicate; 1,284 are rejected by the post-reference `bootstrap_universe_shape` gate, leaving the authored universe pair alone",
+      "verdict": "pinned_before_competition",
+      "evidence": [
+        "stored counters: 2,144 raw; 384 malformed; 475 connectivity-pruned; 1,285 well formed; 1 admitted/evaluated/clearer",
+        "the reference table first appears 2026-03-13; the bootstrap predicate follows 2026-03-14/15; the 2,144 catalog follows 2026-03-18",
+        "the current in-memory homologous probe matches the stored Step-1 counts but cannot reconstruct the historical dirty source"
+      ]
+    },
+    {
+      "audit_key": "claim_lane_step_15",
+      "record_path": "runs/codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15/reports/steps/step-15-summary.json",
+      "historical_run_id": "codex-claim-release-full-aggregation-open-band-clause-accept-rank-facts-long-rerun-v15",
+      "evidence_mode": "historical_artifact_and_homologous_probe",
+      "count_semantics": "7,211 is a raw prefix-event counter, not 7,211 complete telescopes; the authored 3-choice-per-position cube has raw product 6,561",
+      "stages": [
+        {
+          "stage": 15,
+          "generated_or_enumerated": "7211",
+          "checker_valid_or_admitted": "261",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "disposition": "minimal_positive_overshoot"
+        }
+      ],
+      "candidate_origin": "claim-generic authored terminal cube with reference-aware path logic",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": false,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "261 terminals are reported hard-admissible, but 257 prefix groups are heuristically dropped, 553 prefixes are exact-pruned, three terminal ranks are incumbent-pruned, and only one telescope is fully evaluated",
+      "verdict": "incomplete_target_fenced_shadow",
+      "evidence": [
+        "the 5,000 value is a configured reporting floor, not an admitted-candidate count",
+        "the historical run is dirty_tree=true and its source diff/binary is absent, so current source cannot be represented as an exact replay",
+        "reference-root and claim-open-band special paths prevent this incomplete shadow from establishing an autonomous winner"
+      ]
+    },
+    {
+      "audit_key": "phase5b_reselection_v2_stages_1_3",
+      "record_path": "docs/phase5b_reselection_burn_v2.json",
+      "historical_run_id": null,
+      "evidence_mode": "historical_artifact",
+      "count_semantics": "complete Guarded cone enumeration / admission / legacy bar-clearer / scored candidate",
+      "stages": [
+        {
+          "stage": 1,
+          "generated_or_enumerated": "288",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:61631d63a5877aad1b32b1e71aa6f0e555317b65732f327e3f38e32c222e29e7",
+          "disposition": "legacy_exact_acceptance_rank_selected"
+        },
+        {
+          "stage": 2,
+          "generated_or_enumerated": "33",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:a2dfff0fb8ce1073119da3893e1d195247c234af66b9a7de17c85d5cf718f555",
+          "disposition": "legacy_exact_acceptance_rank_selected"
+        },
+        {
+          "stage": 3,
+          "generated_or_enumerated": "56",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:934b5599bb0f28abf0be9652982caec5e0ff6d7d204ddaa4e66f23c37155457e",
+          "disposition": "legacy_exact_acceptance_rank_selected"
+        }
+      ],
+      "candidate_origin": "Guarded early-family cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "the reported 288, 33, and 56 raw cones each collapse to one admitted candidate under Step-specific gates",
+      "verdict": "pinned_before_competition",
+      "evidence": [
+        "counts are respectively 288/1, 33/1, and 56/1 before the legacy selector"
+      ]
+    },
+    {
+      "audit_key": "phase5b_reselection_v2_stage_4",
+      "record_path": "docs/phase5b_reselection_burn_v2.json",
+      "historical_run_id": null,
+      "evidence_mode": "historical_artifact",
+      "count_semantics": "complete Guarded cone; all four admitted candidates clear the legacy bar and are ranked",
+      "stages": [
+        {
+          "stage": 4,
+          "generated_or_enumerated": "4",
+          "checker_valid_or_admitted": "4",
+          "selector_eligible": "4",
+          "fully_evaluated": "4",
+          "winner_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+          "disposition": "legacy_exact_acceptance_rank_selected"
+        }
+      ],
+      "candidate_origin": "real four-candidate former-eliminator cone",
+      "raw_competitors_real": true,
+      "admission_target_independent": true,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "all four candidates tie at (kappa, nu)=(3,5) under the adopted two-register/parsimony law; v2's reference winner comes from the older target-derived acceptance tuple, ending in canonical order",
+      "verdict": "open_cone_no_lawful_winner",
+      "evidence": [
+        "T-BF1 independently recomputes the same four hashes and lawfully stops with selected_hash=null",
+        "v2's selected reference is not a lawful winner under the audited two-register law"
+      ]
+    },
+    {
+      "audit_key": "phase5b_reselection_v2_stages_5_8",
+      "record_path": "docs/phase5b_reselection_burn_v2.json",
+      "historical_run_id": null,
+      "evidence_mode": "historical_artifact",
+      "count_semantics": "complete Guarded cone / admission / legacy bar-clearer / scored candidate",
+      "stages": [
+        {
+          "stage": 5,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "disposition": "legacy_exact_acceptance_rank_selected"
+        },
+        {
+          "stage": 6,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "disposition": "legacy_exact_acceptance_rank_selected"
+        },
+        {
+          "stage": 7,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "disposition": "legacy_exact_acceptance_rank_selected"
+        },
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "0",
+          "fully_evaluated": "1",
+          "winner_hash": null,
+          "disposition": "no_bar_clearer"
+        }
+      ],
+      "candidate_origin": "Guarded family cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "Stages 5-8 enumerate one admitted canonical candidate each; Stage 8 has no legacy bar clearer and no winner",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "the position recognizers and late-family None surface copy the authored family clauses"
+      ]
+    },
+    {
+      "audit_key": "phase5b_reselection_v3_stages_8_15",
+      "record_path": "docs/phase5b_reselection_burn_v3.json",
+      "historical_run_id": null,
+      "evidence_mode": "historical_artifact",
+      "count_semantics": "complete Guarded cone / admission / typed total discharger / assessed candidate",
+      "stages": [
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "disposition": "unique_guarded_total_discharger"
+        },
+        {
+          "stage": 9,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "disposition": "unique_guarded_total_discharger"
+        },
+        {
+          "stage": 10,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "disposition": "unique_guarded_total_discharger"
+        },
+        {
+          "stage": 11,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "disposition": "unique_guarded_total_discharger"
+        },
+        {
+          "stage": 12,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "disposition": "unique_guarded_total_discharger"
+        },
+        {
+          "stage": 13,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "disposition": "unique_guarded_total_discharger"
+        },
+        {
+          "stage": 14,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "disposition": "unique_guarded_total_discharger"
+        },
+        {
+          "stage": 15,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "disposition": "unique_guarded_total_discharger"
+        }
+      ],
+      "candidate_origin": "Guarded family cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "every recomputed stage is 1 enumerated / 1 admitted / 1 deduped / 1 total discharger",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "Guarded mode maps to LateFamilySurface::None",
+        "Stages 13-15 directly return one reference expression per slot; Stages 8-12 use exact slot recognizers"
+      ]
+    },
+    {
+      "audit_key": "t_bf1_stage_4",
+      "record_path": "docs/t_bf1_prefix_v1.json",
+      "historical_run_id": null,
+      "evidence_mode": "direct_reenumeration",
+      "count_semantics": "direct cone enumeration / strict admission / parsimony minimizer / evaluated candidate",
+      "stages": [
+        {
+          "stage": 4,
+          "generated_or_enumerated": "4",
+          "checker_valid_or_admitted": "4",
+          "selector_eligible": "4",
+          "fully_evaluated": "4",
+          "winner_hash": null,
+          "disposition": "stopped_equal_minimum_pair"
+        }
+      ],
+      "candidate_origin": "real 2x2 cross-product of two clause-0 and two clause-1 alternatives",
+      "raw_competitors_real": true,
+      "admission_target_independent": true,
+      "complete_selection_input": true,
+      "winner_selected": false,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "all four typed, admitted candidates have the same lawful minimum pair (3,5); the selector cannot read hash, canonical key, bit cost, reference, or diagnostic bar",
+      "verdict": "open_cone_no_lawful_winner",
+      "evidence": [
+        "selected_hash is null and the terminal decision is stopped_f_bf1_equal_minimum_pair",
+        "reissuance is certificate-gated to the frozen four-vector, so this proves multiplicity inside the certified cone, not openness to an unknown fifth shape"
+      ]
+    },
+    {
+      "audit_key": "bi1_stage_4_option_a_roots",
+      "record_path": "docs/BI1_OPTION_A_SWEEP_V3_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "four authorized Stage-4 branch roots; no root is selected",
+      "stages": [
+        {
+          "stage": 4,
+          "generated_or_enumerated": "4",
+          "checker_valid_or_admitted": "4",
+          "selector_eligible": "4",
+          "fully_evaluated": "4",
+          "winner_hash": null,
+          "disposition": "four_option_a_execution_branches"
+        }
+      ],
+      "candidate_origin": "the T-BF1 four-root cone",
+      "raw_competitors_real": true,
+      "admission_target_independent": true,
+      "complete_selection_input": true,
+      "winner_selected": false,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "Option A authorizes all four roots as branches; semantic nu is diagnostic and no enacted-root outcome is used as a selector",
+      "verdict": "open_cone_no_lawful_winner",
+      "evidence": [
+        "the enacted root is issued first operationally but is not selected as a Stage-4 winner"
+      ]
+    },
+    {
+      "audit_key": "bi1_enacted_2016726758f3_stages_5_15",
+      "record_path": "docs/BI_BRANCH_V3_2016726758f3_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "Guarded cone / admission / typed discharger / canonical singleton",
+      "stages": [
+        {
+          "stage": 5,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 6,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 7,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 9,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 10,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 11,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 12,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 13,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 14,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 15,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "disposition": "unique_typed_total_discharger"
+        }
+      ],
+      "candidate_origin": "branch-local Guarded family cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "Stages 5-15 are eleven successive 1/1/1 singleton cones",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "Guarded exact position recognizers admit no same-stage competitor",
+        "current BI-1 reissuance is blocked by upstream drift; frozen rows and code path are reported without claiming successful current replay"
+      ]
+    },
+    {
+      "audit_key": "bi1_alternate_43a0ed707770_stages_5_8",
+      "record_path": "docs/BI_BRANCH_V3_43a0ed707770_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "Guarded cone / admission / typed discharger / canonical singleton",
+      "stages": [
+        {
+          "stage": 5,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 6,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 7,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "0",
+          "fully_evaluated": "1",
+          "winner_hash": null,
+          "disposition": "singleton_unknown_no_discharger"
+        }
+      ],
+      "candidate_origin": "branch-local Guarded family cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "Stages 5-7 are singleton winners; the same singleton at Stage 8 has zero dischargers/Unknown and stops",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "Guarded exact position recognizers admit no same-stage competitor",
+        "current BI-1 reissuance is blocked by upstream drift; frozen rows and code path are reported without claiming successful current replay"
+      ]
+    },
+    {
+      "audit_key": "bi1_alternate_4b2211ecae25_stages_5_8",
+      "record_path": "docs/BI_BRANCH_V3_4b2211ecae25_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "Guarded cone / admission / typed discharger / canonical singleton",
+      "stages": [
+        {
+          "stage": 5,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 6,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 7,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "0",
+          "fully_evaluated": "1",
+          "winner_hash": null,
+          "disposition": "singleton_unknown_no_discharger"
+        }
+      ],
+      "candidate_origin": "branch-local Guarded family cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "Stages 5-7 are singleton winners; the same singleton at Stage 8 has zero dischargers/Unknown and stops",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "Guarded exact position recognizers admit no same-stage competitor",
+        "current BI-1 reissuance is blocked by upstream drift; frozen rows and code path are reported without claiming successful current replay"
+      ]
+    },
+    {
+      "audit_key": "bi1_alternate_b4f821d9bb28_stages_5_8",
+      "record_path": "docs/BI_BRANCH_V3_b4f821d9bb28_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "Guarded cone / admission / typed discharger / canonical singleton",
+      "stages": [
+        {
+          "stage": 5,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:043c7990d42d91f972544a3cbcae33ca65e48eaab82d605a15cb505ed0ad26d0",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 6,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:a2ff7bc69a678e8c257824465993f8aadf71c05676562887da12dce3ae6cfe1d",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 7,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:30f190b67aab5179a6de8dccee6c29c699b80c12bef676bf2e9f9377595a7906",
+          "disposition": "unique_typed_total_discharger"
+        },
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "0",
+          "fully_evaluated": "1",
+          "winner_hash": null,
+          "disposition": "singleton_unknown_no_discharger"
+        }
+      ],
+      "candidate_origin": "branch-local Guarded family cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "Stages 5-7 are singleton winners; the same singleton at Stage 8 has zero dischargers/Unknown and stops",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "Guarded exact position recognizers admit no same-stage competitor",
+        "current BI-1 reissuance is blocked by upstream drift; frozen rows and code path are reported without claiming successful current replay"
+      ]
+    },
+    {
+      "audit_key": "bi1b_enacted_2016726758f3_revalidation",
+      "record_path": "docs/BI1B_BRANCH_2016726758f3_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "zero newly resumed stages; the prior enacted Stage-15 halt is authenticated",
+      "stages": [],
+      "candidate_origin": "sealed BI-1 enacted branch replay",
+      "raw_competitors_real": false,
+      "admission_target_independent": false,
+      "complete_selection_input": false,
+      "winner_selected": false,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "BI-1b performs no new enacted-branch candidate competition",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "resumed_stage_count=0 and prior_enacted_halt_revalidated=true"
+      ]
+    },
+    {
+      "audit_key": "bi1b_alternate_43a0ed707770_stages_8_15",
+      "record_path": "docs/BI1B_BRANCH_43a0ed707770_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "sealed Stage-8 singleton consumption, then Guarded enumeration for Stages 9-15",
+      "stages": [
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 9,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 10,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 11,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 12,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 13,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 14,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 15,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        }
+      ],
+      "candidate_origin": "branch-local prefix-general classification over singleton cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "each stage is 1 enumerated / 1 admitted / 1 deduped / 1 discharger; Stage 8 is consumed from the sealed cone, not re-enumerated",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "all three never-enacted branches are listed separately",
+        "the 24-row correspondence records identical singleton candidates and winners across three branches x eight stages"
+      ]
+    },
+    {
+      "audit_key": "bi1b_alternate_4b2211ecae25_stages_8_15",
+      "record_path": "docs/BI1B_BRANCH_4b2211ecae25_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "sealed Stage-8 singleton consumption, then Guarded enumeration for Stages 9-15",
+      "stages": [
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 9,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 10,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 11,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 12,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 13,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 14,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 15,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        }
+      ],
+      "candidate_origin": "branch-local prefix-general classification over singleton cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "each stage is 1 enumerated / 1 admitted / 1 deduped / 1 discharger; Stage 8 is consumed from the sealed cone, not re-enumerated",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "all three never-enacted branches are listed separately",
+        "the 24-row correspondence records identical singleton candidates and winners across three branches x eight stages"
+      ]
+    },
+    {
+      "audit_key": "bi1b_alternate_b4f821d9bb28_stages_8_15",
+      "record_path": "docs/BI1B_BRANCH_b4f821d9bb28_CERTIFICATE.json",
+      "historical_run_id": null,
+      "evidence_mode": "frozen_testimony_and_code_path",
+      "count_semantics": "sealed Stage-8 singleton consumption, then Guarded enumeration for Stages 9-15",
+      "stages": [
+        {
+          "stage": 8,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e01de7b95b0dda56a1062add33387a37709e23d3d6ea6ce4efaf27adacb868c0",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 9,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:f57e3a5aa44003adb5f8054013e549e4f3065757d88922313478e8e445825491",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 10,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:93289041755cf4c4e0396029273822630028999d945359b10bb88e2376b9788e",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 11,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:03cc71839428ceab088e386e31e6c72b7ca4a1e12c9309557efc76826dcb88cd",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 12,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:0d06e3b14bfd7c1bd16d9f66039e016f84a6162ce85584f7c641753b833b1dcb",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 13,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:b09b3f832bef16953747c213e6b8a548f594339dc7db9148e7ae60a6c53a4cf1",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 14,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:1ff4820f2272c022a5fece1032aa9647e41167a3dd8f62765e84e22f5d90b19c",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        },
+        {
+          "stage": 15,
+          "generated_or_enumerated": "1",
+          "checker_valid_or_admitted": "1",
+          "selector_eligible": "1",
+          "fully_evaluated": "1",
+          "winner_hash": "blake3:e919c8419bbafde89e3e99ff25f348f3c8b679ed22685e84d3cdec634ebf90d4",
+          "disposition": "unique_typed_total_discharger_after_complete_classification"
+        }
+      ],
+      "candidate_origin": "branch-local prefix-general classification over singleton cones",
+      "raw_competitors_real": true,
+      "admission_target_independent": false,
+      "complete_selection_input": true,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "each stage is 1 enumerated / 1 admitted / 1 deduped / 1 discharger; Stage 8 is consumed from the sealed cone, not re-enumerated",
+      "verdict": "position_pinned_singletons",
+      "evidence": [
+        "all three never-enacted branches are listed separately",
+        "the 24-row correspondence records identical singleton candidates and winners across three branches x eight stages"
+      ]
+    },
+    {
+      "audit_key": "step16_unclamped_full_lane",
+      "record_path": "docs/halting_surface_diagnostics.json",
+      "historical_run_id": null,
+      "evidence_mode": "count_only",
+      "count_semantics": "each row is one kappa stratum: exact per-position raw product and checker-valid product; no telescope pool was materialized",
+      "stages": [
+        {
+          "stage": 16,
+          "generated_or_enumerated": "602707957488",
+          "checker_valid_or_admitted": "570853142244",
+          "selector_eligible": null,
+          "fully_evaluated": null,
+          "winner_hash": null,
+          "disposition": "kappa_2_counted_not_materialized"
+        },
+        {
+          "stage": 16,
+          "generated_or_enumerated": "727994066026945536",
+          "checker_valid_or_admitted": "673076956131917568",
+          "selector_eligible": null,
+          "fully_evaluated": null,
+          "winner_hash": null,
+          "disposition": "kappa_3_counted_not_materialized"
+        },
+        {
+          "stage": 16,
+          "generated_or_enumerated": "1135046124093383916890112",
+          "checker_valid_or_admitted": "1026033800388802217236224",
+          "selector_eligible": null,
+          "fully_evaluated": null,
+          "winner_hash": null,
+          "disposition": "kappa_4_counted_not_materialized"
+        }
+      ],
+      "candidate_origin": "generic Guarded open-band grammar with no focus family or historical anchor",
+      "raw_competitors_real": true,
+      "admission_target_independent": true,
+      "complete_selection_input": false,
+      "winner_selected": false,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "both full materializing attempts exhausted memory; the safe replacement counts the surface and classifies expression products but does not execute candidate selection",
+      "verdict": "open_surface_not_executed",
+      "evidence": [
+        "the older 2026-07-05 widest-scope diagnostic is retained as historical testimony; the exact position-specific products come from step16_semantic_exhaustion.json",
+        "an OOM/probe failure is not converted into a halt or winner verdict"
+      ]
+    },
+    {
+      "audit_key": "step16_corrected_adversarial_probe",
+      "record_path": "docs/certified_halt_verification.json",
+      "historical_run_id": null,
+      "evidence_mode": "authored_witness_replay",
+      "count_semantics": "17 authored shapes; 9 raw-surface members; 4 pass the complete gate conjunction and clear",
+      "stages": [
+        {
+          "stage": 16,
+          "generated_or_enumerated": "17",
+          "checker_valid_or_admitted": "9",
+          "selector_eligible": "4",
+          "fully_evaluated": "17",
+          "winner_hash": null,
+          "disposition": "membership_replay_no_selection"
+        }
+      ],
+      "candidate_origin": "hand-authored adversarial table replayed through the real gates",
+      "raw_competitors_real": true,
+      "admission_target_independent": true,
+      "complete_selection_input": false,
+      "winner_selected": false,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "the table is deliberately non-exhaustive and performs no winner selection",
+      "verdict": "authored_witnesses_no_full_selection",
+      "evidence": [
+        "four real raw-generable, admitted, typed, connected, minimal bar clearers are disclosed by name",
+        "five further raw expressions are lawfully rejected; eight diagnostic shapes are outside the raw lane"
+      ]
+    },
+    {
+      "audit_key": "step16_semantic_exhaustion_and_automaton",
+      "record_path": "docs/step16_semantic_exhaustion.json",
+      "historical_run_id": null,
+      "evidence_mode": "authored_witness_replay",
+      "count_semantics": "exhaustive expression-product partition plus an authored four-witness SAT basis",
+      "stages": [],
+      "candidate_origin": "dynamic-programming quotient counts and handcrafted witness membership",
+      "raw_competitors_real": true,
+      "admission_target_independent": true,
+      "complete_selection_input": false,
+      "winner_selected": false,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "the semantic partition does not materialize telescopes or rank candidates; the automaton explicitly has no exhaustive telescope quotient or certified global maximum",
+      "verdict": "authored_witnesses_no_full_selection",
+      "evidence": [
+        "the four-witness basis proves that lawful clearers exist, not which expression wins the full surface",
+        "the combined certified-halt replay remains a verification of its stated conditional boundary"
+      ]
+    },
+    {
+      "audit_key": "sh1_step16_named_seal_and_continue",
+      "record_path": "docs/sh1_experiment_burned.json",
+      "historical_run_id": null,
+      "evidence_mode": "authored_witness_replay",
+      "count_semantics": "selection from the 17-shape registered adversarial table, not the full raw catalog",
+      "stages": [
+        {
+          "stage": 16,
+          "generated_or_enumerated": "17",
+          "checker_valid_or_admitted": null,
+          "selector_eligible": null,
+          "fully_evaluated": "17",
+          "winner_hash": "name:hit_no_formation_d1",
+          "disposition": "designated_step16_survivor"
+        }
+      ],
+      "candidate_origin": "registered authored adversarial table",
+      "raw_competitors_real": true,
+      "admission_target_independent": true,
+      "complete_selection_input": false,
+      "winner_selected": true,
+      "winner_autonomous": false,
+      "pinning_or_incompleteness": "offset zero looks up `designated_step16_survivor` by name; acceptance-rank selection begins only on later continuation rounds",
+      "verdict": "explicitly_designated_winner",
+      "evidence": [
+        "the designated name is hit_no_formation_d1",
+        "no certificate proves that this witness beats the complete lawful Step-16 surface"
+      ]
+    }
+  ],
+  "qualifying_surface_count": 0,
+  "strongest_autonomy_evidence": null,
+  "strongest_gate_openness_evidence": [
+    "T-BF1 Stage 4: four real admitted typed co-minimizers, lawful stop, no winner",
+    "Step 16: generic open gate with four known lawful clearers, but no complete executed selection"
+  ],
+  "global_finding": "No certified run in the record contains a genuinely open competition with a lawful winner.",
+  "falsifier_compliance": {
+    "no_pa1c_grades_assigned": true,
+    "no_narrative_ground_used": true,
+    "sealed_inputs_written": false,
+    "every_requested_surface_explicit": true,
+    "disclosure_weakened_or_superseded": false
+  },
+  "result_digest": "blake3:53af941cd24dbcad9f94cad5315e90ef5c1985a16d38704dc73ca09455259bf7"
+}

@@ -1,0 +1,414 @@
+% Standalone insertion for the Two-Law technical synthesis.
+% Assumes the macros and theorem environments of the main manuscript.
+
+\section{Critical Boundary Actualization and Numerical Closure}
+\label{sec:critical-boundary-actualization}
+
+Primitive-Parameter Provenance says that a publicly inequivalent continuous coupling
+cannot remain a bare dial.  Reversible Determination and Isometric Ledger Invariance
+have now fixed the finite ordinary state and process arena, but they do not fix the
+numerical generator of motion.  The remaining freedom sits chiefly in the effective
+action and its vacuum: gauge kinetic coefficients, Yukawa eigenvalues, scalar
+self-couplings, and the scale at which their boundary conditions are imposed.
+
+The wider philosophy points to a specific next clause.  The Selective Law refuses an
+unrecorded preference between complete payments; the Constitutive Law refuses an
+unwitnessed distinction; and Public Confluence requires the stable public account to
+be compatible across contexts.  Applied to phases rather than presentations, the
+common content is:
+\begin{center}
+\emph{When complete phases satisfy the same inherited obligations and no prior
+public record distinguishes them, the fundamental law may not hide a phase bias.
+Their distinction must be actualized at a common stationary boundary.}
+\end{center}
+
+\begin{definition}[Unbiased public phases]
+Let $\Gamma_{\mathrm{eff}}[\phi;\mathbf c]$ be the complete renormalized public
+effective action of a selected physical API, with dimensionless couplings
+$\mathbf c$.  An \emph{unbiased public phase family} is a finite family of
+homogeneous configurations $\phi_i$ such that:
+\begin{enumerate}[label=\textup{B\arabic*},leftmargin=2.4em]
+\item each $\phi_i$ is a constitutively admissible stable or marginally stable
+      phase of the same API;
+\item every member discharges the same frozen structural and public-record
+      obligations;
+\item no inherited charge, boundary condition, topological sector, source,
+      environment label, or locked historical record privileges one member; and
+\item the comparison of their vacuum functionals is itself a lawful public record.
+\end{enumerate}
+The clauses are fixed before the numerical values of $\mathbf c$ are inspected.
+A phase is not allowed to issue the record that retrospectively licenses its own
+preference.
+\end{definition}
+
+\begin{axiom}[Critical Boundary Actualization]
+\label{ax:critical-boundary-actualization}
+For every unbiased public phase family in a completed fundamental realization,
+there is an endogenously certified matching scale $\mu_*$ at which the phases are
+stationary and have one common public vacuum functional:
+\[
+ \left.\frac{\delta\Gamma_{\mathrm{eff}}}{\delta\phi}\right|_{\phi_i,\mu_*}=0,
+ \qquad
+ \mathcal E_{\mathrm{vac}}(\phi_i;\mu_*)
+ =\mathcal E_{\mathrm{vac}}(\phi_j;\mu_*)
+ \quad\text{for all }i,j.
+\]
+The scale $\mu_*$ is not a new dial: it must be inherited from a locked record,
+fixed by a spectral or gravitational interface, or generated as an RG-invariant
+transmutation scale.  If no such placement certificate exists, the criticality
+condition is a relation without a completed physical location.
+\end{axiom}
+
+\begin{remark}[No optimizer and no universal claim of metastability]
+The axiom does not say that Nature maximizes stability, minimizes vacuum energy, or
+places every effective theory exactly at a transition.  It applies only when the
+competing phases are independently admitted and no prior public fact distinguishes
+them.  It then forbids an unrecorded relative bias.  Mathematically its simplest
+realization is the multiple-point criticality condition studied by Froggatt and
+Nielsen \cite{froggatt-nielsen-mpp}; the motivation and jurisdiction here are the
+Two-Law record and provenance clauses, not their proposed microscopic mechanism.
+\end{remark}
+
+\subsection{Higgs criticality conditions}
+
+\begin{theorem}[Two stationary degenerate Higgs phases]
+\label{thm:cba-higgs-double-zero}
+Suppose one unbiased phase is the electroweak vacuum and a second lies at a
+nonzero high field $h_*$ for which the RG-improved effective potential has the
+asymptotic form
+\[
+ V_{\mathrm{eff}}(h)
+ =\frac14\lambda_{\mathrm{eff}}(h)h^4,
+ \qquad h\gg v.
+\]
+After subtracting their common additive vacuum value, Critical Boundary
+Actualization implies
+\[
+ \boxed{
+ \lambda_{\mathrm{eff}}(h_*)=0,
+ \qquad
+ \beta_{\lambda_{\mathrm{eff}}}(h_*)=0.}
+\]
+At leading order in an $\overline{\mathrm{MS}}$ matching treatment these become
+$\lambda(\mu_*)=\beta_\lambda(\mu_*)=0$ with $\mu_*\simeq h_*$.
+\end{theorem}
+
+\begin{proofsketch}
+Degeneracy with the subtracted electroweak vacuum gives
+$V_{\mathrm{eff}}(h_*)=0$.  Since $h_*\ne0$, this gives
+$\lambda_{\mathrm{eff}}(h_*)=0$.  Differentiating with respect to $h$ gives
+\[
+ \frac{dV_{\mathrm{eff}}}{dh}
+ =h^3\left(\lambda_{\mathrm{eff}}
+       +\frac14\beta_{\lambda_{\mathrm{eff}}}\right).
+\]
+Stationarity at $h_*$ then gives the beta-function condition.  The value of the
+full effective potential at an extremum is the physical statement; identifying it
+with a running $\overline{\mathrm{MS}}$ quartic is a controlled matching
+approximation \cite{buttazzo-criticality}.
+\end{proofsketch}
+
+\begin{theorem}[Leading Standard Model critical sum rule]
+\label{thm:cba-sm-sum-rule}
+Use $g_1=\sqrt{5/3}\,g_Y$ and retain the top Yukawa as the dominant Yukawa.
+At one loop,
+\[
+\begin{aligned}
+16\pi^2\beta_\lambda
+={}&24\lambda^2-6y_t^4
+ +\left(12y_t^2-9g_2^2-\frac95g_1^2\right)\lambda\\
+&+\frac{27}{200}g_1^4
+ +\frac9{20}g_1^2g_2^2
+ +\frac98g_2^4.
+\end{aligned}
+\]
+Consequently the double-zero condition gives
+\[
+ \boxed{
+ y_t^4(\mu_*)
+ =\frac16\left(
+ \frac{27}{200}g_1^4
+ +\frac9{20}g_1^2g_2^2
+ +\frac98g_2^4
+ \right)_{\mu_*}.}
+\]
+This fixes one dimensionless Yukawa combination from the gauge couplings rather
+than inserting $y_t$ independently.
+\end{theorem}
+
+\begin{corollary}[Exact equal-trace critical ratio]
+\label{cor:cba-equal-trace-ratio}
+If the critical placement also obeys the already derived electroweak equal-trace
+normalization $g_1(\mu_*)=g_2(\mu_*)=:g_X$, then
+\[
+ \boxed{
+ \frac{y_t}{g_X}
+ =\left(\frac{57}{200}\right)^{1/4}
+ =0.7306530727\ldots .}
+\]
+In a vacuum in which both masses are generated by the same Higgs value,
+\[
+ \boxed{
+ \frac{m_t}{m_W}
+ =\sqrt2\frac{y_t}{g_2}
+ =1.033299485\ldots }
+\]
+at that same running scale.  This is a scale-local running-mass relation, not the
+ratio of present pole masses.
+\end{corollary}
+
+\subsection{Placement tests rather than post-hoc fitting}
+
+\begin{proposition}[The electroweak equal-trace crossing is not the critical scale]
+\label{prop:cba-crossing-killed}
+The existing two-loop audit gives
+\[
+ \mu_X=1.08939\times10^{13}\ \mathrm{GeV},
+ \qquad
+ g_1(\mu_X)=g_2(\mu_X)=0.545701,
+ \qquad
+ g_3(\mu_X)=0.580413
+\]
+\cite{lande-hopf-audit}.  Imposing the critical boundary there gives
+\[
+ y_t(\mu_X)=0.3987181124,
+ \qquad
+ \lambda(\mu_X)=0.
+\]
+A one-loop Standard Model run to $173$ GeV gives
+\[
+\begin{array}{c|ccccc}
+ &g_1&g_2&g_3&y_t&\lambda\\
+\hline
+173\ \mathrm{GeV}
+&0.463774&0.650835&1.144141&0.814431&0.071325
+\end{array}
+\]
+and the tree-level diagnostic values
+\[
+ m_t^{\overline{\mathrm{MS}}}\simeq141.80\ \mathrm{GeV},
+ \qquad
+ m_h\simeq93.00\ \mathrm{GeV}.
+\]
+The mismatch is much larger than a credible loop or scheme correction.  Therefore
+\[
+ \boxed{\mu_*\ne\mu_X}
+\]
+in the minimal Standard Model realization.  The attractive identification of the
+structural $g_1=g_2$ crossing with Higgs phase criticality is falsified rather than
+retained as numerology.
+\end{proposition}
+
+\begin{proofsketch}
+Integrate
+\[
+16\pi^2\beta_{g_i}=b_i g_i^3,
+\quad
+(b_1,b_2,b_3)=\left(\frac{41}{10},-\frac{19}{6},-7\right),
+\]
+\[
+16\pi^2\beta_{y_t}
+=y_t\left(\frac92y_t^2-\frac{17}{20}g_1^2-\frac94g_2^2-8g_3^2\right)
+\]
+together with the beta function in Theorem~\ref{thm:cba-sm-sum-rule}.  The complete
+reproduction is in \path{critical_boundary_actualization_calculations.py}.
+\end{proofsketch}
+
+\begin{theorem}[Strict Planck criticality benchmark]
+\label{thm:cba-planck-benchmark}
+Use the NNLO weak-scale matching and three-loop Standard Model extrapolation of
+Buttazzo et al. \cite{buttazzo-criticality}.  At their central Planck-scale gauge
+values
+\[
+ g_1(M_{\mathrm{Pl}})=0.6154,
+ \qquad
+ g_2(M_{\mathrm{Pl}})=0.5055,
+\]
+the leading critical sum rule gives
+\[
+ \boxed{y_t^{\mathrm{crit}}(M_{\mathrm{Pl}})=0.3882760941.}
+\]
+At the reference $\alpha_s(M_Z)=0.1184$, inverting their interpolation formulae
+for $y_t(M_{\mathrm{Pl}})$ and $\lambda(M_{\mathrm{Pl}})$ with
+$\lambda(M_{\mathrm{Pl}})=0$ gives
+\[
+ \boxed{
+ M_t^{\mathrm{crit}}=174.47\ \mathrm{GeV},
+ \qquad
+ M_h^{\mathrm{crit}}=132.66\ \mathrm{GeV},}
+\]
+and therefore
+\[
+ \boxed{\frac{M_h}{M_t}=0.760341.}
+\]
+These numbers define the strict no-threshold, pure-Standard-Model realization of
+the axiom at the Planck scale.
+\end{theorem}
+
+\begin{proofsketch}
+The critical Yukawa is the fourth root in
+Theorem~\ref{thm:cba-sm-sum-rule}.  The high-order interpolation used is
+\[
+ y_t(M_{\mathrm{Pl}})
+ =0.3825+0.0051(M_t-173.34)
+ -0.0021\frac{\alpha_s-0.1184}{0.0007},
+\]
+\[
+\begin{aligned}
+ \lambda(M_{\mathrm{Pl}})
+={}&-0.0143-0.0066(M_t-173.34)
+ +0.0018\frac{\alpha_s-0.1184}{0.0007}\\
+&+0.0029(M_h-125.15),
+\end{aligned}
+\]
+with masses in GeV.  Solve the first equation for $M_t$ and the second for $M_h$.
+The calculation is algebraic once the gauge boundary is specified.
+\end{proofsketch}
+
+\begin{proposition}[Empirical verdict on the strict realization]
+\label{prop:cba-strict-verdict}
+The 2026 Particle Data Group summary gives
+\[
+ M_h=125.13\pm0.11\ \mathrm{GeV},
+\]
+\[
+ M_t^{\mathrm{direct}}=172.60\pm0.27\ \mathrm{GeV},
+ \qquad
+ M_t^{\mathrm{pole\ from\ cross\ section}}=172.1\pm0.6\ \mathrm{GeV}
+\]
+\cite{pdg2026}.  The strict benchmark is high by $7.53$ GeV in the Higgs mass and
+by $1.87$ GeV relative to the direct top average; its predicted mass ratio
+$0.76034$ compares with $0.72497$ using the direct top value and $0.72708$ using
+the cross-section pole extraction.  The top comparison carries the familiar
+mass-definition ambiguity, but the Higgs discrepancy is decisive.  Hence:
+\[
+ \boxed{
+ \begin{gathered}
+ \text{Critical Boundary Actualization is not realized by the}\\
+ \text{threshold-free minimal Standard Model at }M_{\mathrm{Pl}}.
+ \end{gathered}}
+\]
+The axiom, if retained, predicts nonzero ultraviolet matching corrections rather
+than the measured masses directly from the minimal Standard Model.
+\end{proposition}
+
+\subsection{A quantitative ultraviolet target}
+
+\begin{theorem}[Required critical matching corrections]
+\label{thm:cba-threshold-target}
+Write the full ultraviolet matching at the certified gravity interface as
+\[
+ \lambda_{\mathrm{full}}
+ =\lambda_{\mathrm{SM}}+\Delta\lambda_*,
+ \qquad
+ y_{t,\mathrm{full}}
+ =y_{t,\mathrm{SM}}+\Delta y_{t,*},
+\]
+and, for this benchmark, retain the minimal-Standard-Model gauge extrapolation.
+At $\alpha_s(M_Z)=0.1184$, the PDG direct top average and Higgs mass imply
+\[
+ \lambda_{\mathrm{SM}}(M_{\mathrm{Pl}})=-0.009474,
+ \qquad
+ y_{t,\mathrm{SM}}(M_{\mathrm{Pl}})=0.378726.
+\]
+Criticality therefore requires
+\[
+ \boxed{
+ \Delta\lambda_*=+0.009474,
+ \qquad
+ \Delta y_{t,*}=+0.009550,}
+\]
+with the Yukawa correction equal to $2.52\%$ of the extrapolated value.
+Using instead the PDG cross-section pole value gives
+\[
+ \boxed{
+ \Delta\lambda_*=+0.006174,
+ \qquad
+ \Delta y_{t,*}=+0.012100,}
+\]
+a $3.22\%$ Yukawa correction.
+
+For
+\[
+ \Delta_\alpha
+ :=\frac{\alpha_s(M_Z)-0.1184}{0.0007},
+\]
+the direct-top targets become
+\[
+ \Delta\lambda_*
+ =0.009474-0.0018\Delta_\alpha,
+ \qquad
+ \Delta y_{t,*}
+ =0.009550+0.0021\Delta_\alpha.
+\]
+These signs and magnitudes are numerical predictions for a future explicit
+quantum-gravity or ultraviolet matching calculation, conditional on the axiom and
+on negligible gauge-coupling threshold shifts.
+\end{theorem}
+
+\begin{corollary}[Observed location relative to the stability boundary]
+At the reference strong coupling, the high-order Standard Model stability line is
+\[
+ M_h^{\mathrm{stab}}
+ \simeq129.6\ \mathrm{GeV}+2(M_t-173.34\ \mathrm{GeV})
+ \quad(\pm0.3\ \mathrm{GeV\ perturbative})
+\]
+\cite{buttazzo-criticality}.  It gives
+\[
+ M_h^{\mathrm{stab}}=128.12\ \mathrm{GeV}
+\]
+for the direct top average and $127.12$ GeV for the cross-section pole extraction.
+The measured $125.13$ GeV lies respectively $2.99$ GeV and $1.99$ GeV below these
+central boundaries.  Thus the observed minimal-Standard-Model trajectory lies on
+the metastable side but close enough that an order-$10^{-2}$ ultraviolet quartic
+matching correction would move it to exact criticality.
+\end{corollary}
+
+\begin{remark}[What has and has not been predicted]
+The new axiom produces genuine numerical content:
+\[
+ \lambda_*=0,
+ \qquad
+ y_t^4=\frac16\left(
+ \frac{27}{200}g_1^4+\frac9{20}g_1^2g_2^2+\frac98g_2^4\right),
+\]
+the exact equal-trace ratio $(57/200)^{1/4}$, a strict Planck benchmark, a killed
+$10^{13}$ GeV placement, and required ultraviolet threshold corrections.
+It does not yet determine the lighter Yukawa hierarchy, CKM or PMNS angles, the
+Koide high root, the absolute electroweak scale, Newton's constant, or the common
+additive cosmological constant.  Vacuum degeneracy fixes differences of vacuum
+functionals; it does not fix their common additive value.  Those remain separate
+provenance problems.
+\end{remark}
+
+\begin{remark}[Closure ledger after Critical Boundary Actualization]
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{l Y}
+\toprule
+Target & Status \\
+\midrule
+Higgs quartic at the critical interface
+& $\lambda_{\mathrm{eff}}=0$ and $\beta_{\lambda_{\mathrm{eff}}}=0$ derived. \\
+Top Yukawa combination
+& Fixed by the gauge-quartic critical sum rule. \\
+Equal-trace dimensionless ratio
+& $y_t/g_X=(57/200)^{1/4}=0.730653$ and $m_t/m_W=1.033299$ at the same critical scale. \\
+Critical-scale placement at $g_1=g_2$
+& Refuted by the one-loop low-energy diagnostic; $\mu_*\ne1.09\times10^{13}$ GeV in the minimal SM. \\
+Threshold-free Planck realization
+& Predicts $(M_t,M_h)=(174.47,132.66)$ GeV and fails the measured Higgs mass. \\
+Threshold-aware Planck realization
+& Requires positive matching corrections $\Delta\lambda_*\simeq0.0062$--$0.0095$ and $\Delta y_{t,*}\simeq0.0096$--$0.0121$ at the reference $\alpha_s$. \\
+Mass ratio
+& Strict benchmark $M_h/M_t=0.76034$; measured ratio is about $0.725$--$0.727$. \\
+Vacuum status
+& Minimal-SM trajectory lies on the metastable side of the stability boundary. \\
+Lighter masses and mixing
+& Not fixed; criticality gives a top-dominated trace relation rather than the flavor spectrum. \\
+Cosmological constant
+& Common additive vacuum value remains undetermined. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{remark}

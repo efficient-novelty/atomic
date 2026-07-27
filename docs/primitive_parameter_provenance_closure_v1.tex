@@ -1,0 +1,436 @@
+% Insertion-ready section for the_answer_is_two_theory_short.tex
+% Suggested placement: after "Kinematic Scope and Reconstruction Target"
+% and before "Exact Coherence Depth Two".
+
+\section{Primitive-Parameter Provenance and Physical Closure}
+\label{sec:parameter-provenance}
+
+The structural theory determines admissible APIs more strongly than it determines
+continuous physical coefficients.  The following axiom closes a specific part of
+that gap without restoring value-based selection at guarded stages.  It constrains
+the passage from a selected API to a determinate physical realization and therefore
+belongs to the actualization/integration face of the Selective Law.
+
+\begin{definition}[Public realization moduli]
+Let \(\mathcal S\) be a selected physical API over realized public history \(H\).
+Write \(\operatorname{ExactReal}_H(\mathcal S)\) for its exact internal
+realizations.  Two realizations are publicly equivalent,
+\(R\simeq_{\mathrm{pub}}R'\), when every admissible internal probe and every
+compatible public-event extractor gives the same retained public records, up to
+Public Confluence and the declared observer-code tolerance.  The public realization
+moduli type is
+\[
+ \mathfrak M_H(\mathcal S)
+ :=
+ \operatorname{ExactReal}_H(\mathcal S)/{\simeq_{\mathrm{pub}}}.
+\]
+A \emph{public parameter continuum} is a positive-dimensional connected family in
+\(\mathfrak M_H(\mathcal S)\); equivalently for the applications below, it is a
+family \(R_\lambda\), \(\lambda\in I\subset\mathbb R^k\) with \(I\) containing a
+nonempty open set, such that distinct parameter values are distinguished by some
+admissible public record.
+\end{definition}
+
+\begin{definition}[Endogenous provenance certificate]
+A parameter value has an endogenous provenance certificate when at least one of the
+following holds.
+\begin{enumerate}[label=\textup{P\arabic*},leftmargin=2.4em]
+\item \emph{Quotient:} the apparent variation is removed by
+      \(\simeq_{\mathrm{pub}}\), and hence is not a physical parameter.
+\item \emph{Inheritance:} restriction to an earlier locked public seal selects a
+      finite or contractible subfamily.
+\item \emph{Universal or spectral determination:} a universal property, canonical
+      normalization, quantization rule, or isolated spectrum selects a finite or
+      contractible subfamily.
+\item \emph{Dynamical determination:} parameter-independent sealed dynamics,
+      together with already certified boundary or initial records, has a finite or
+      contractible solution set for the parameter.
+\item \emph{State-record determination:} the parameter is represented by a
+      dynamical carrier inside the API and its value is actualized by an internal
+      stable record satisfying Internal Record Actualization.
+\end{enumerate}
+A numeral occurring in the very transition law that is supposed to generate its
+record is not a certificate for itself.  State-record determination is therefore
+available for contingent states and dynamically promoted moduli, not for an
+unrepresented bare coefficient of the law.
+\end{definition}
+
+\begin{axiom}[Primitive-Parameter Provenance]
+\label{ax:parameter-provenance}
+No completed physical seal contains a publicly inequivalent primitive continuum
+without an endogenous provenance certificate.  Equivalently, every
+positive-dimensional component of \(\mathfrak M_H(\mathcal S)\) must be removed by
+public equivalence, collapsed to a finite or contractible family by inheritance,
+universal structure, spectrum, or sealed dynamics, or represented as an actualized
+state variable by an internal record carrier.  If none of these occurs, the API may
+be formally realizable but is not yet a determinate public physical law.
+\end{axiom}
+
+\begin{remark}[No third primitive role and no guarded-stage minimization]
+The axiom does not add a third primitive explanatory role.  It constrains how a
+selected admissible API becomes an actual physical realization, so it lies on the
+Selective-Law side together with free sealing and Internal Record Actualization.
+Nor does it compare numerical values at a guarded stage.  It rejects an unresolved
+physical modulus after selection; it does not rank total dischargers by the value of
+their parameters.
+\end{remark}
+
+\begin{proposition}[Parameter-provenance trichotomy]
+\label{prop:parameter-trichotomy}
+Every continuous physical quantity is one of three kinds:
+\[
+ \text{presentation gauge},
+ \qquad
+ \text{law-derived quantity},
+ \qquad
+ \text{recorded state or historical datum}.
+\]
+In particular, an exact law constant cannot be an arbitrary real numeral.  It must
+have a finite constructive specification, an isolated universal or dynamical
+characterization, or a spectral certificate.  A historical continuum is admissible
+only to the precision carried by its internal record.
+\end{proposition}
+
+\begin{proofsketch}
+If the variation is not publicly distinguishable it is removed in the quotient.  If
+it changes the law and remains publicly distinguishable, state-record certification
+would be circular unless the parameter has first been promoted to a carrier governed
+by parameter-independent dynamics; hence it must instead be inherited or derived.
+If it changes only a state inside an already fixed law, Internal Record Actualization
+can certify it.  These cases exhaust Axiom~\ref{ax:parameter-provenance}.
+\end{proofsketch}
+
+\begin{theorem}[Locked-extension rigidity]
+\label{thm:locked-extension-rigidity}
+Let \(\mathcal S_0\subset\mathcal S_1\), let \(R_0\) be the locked public
+realization of \(\mathcal S_0\), and let \(R_\lambda\) be a connected family of
+exact realizations of \(\mathcal S_1\).  Assume:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item the restrictions \(R_\lambda|_{\mathcal S_0}\) are publicly inequivalent as
+      \(\lambda\) varies;
+\item \(\mathcal S_1\) introduces no internal transition record declaring a change
+      of the old public interface; and
+\item the equation
+      \(R_\lambda|_{\mathcal S_0}\simeq_{\mathrm{pub}}R_0\) has a finite or
+      contractible solution set \(K\).
+\end{enumerate}
+Then every admissible extension lies in \(K\).  If \(K=\{\lambda_0\}\), the
+extension parameter is forced to be \(\lambda_0\).
+\end{theorem}
+
+\begin{proofsketch}
+Internal Record Actualization locks \(R_0\) into later admissibility.  A parameter
+outside \(K\) silently overwrites that record.  Since the new API contains no record
+of such a transition, the variation has neither an inheritance certificate nor a
+state-record certificate and is excluded by
+Axiom~\ref{ax:parameter-provenance}.  Values in \(K\) preserve the prior seal.
+\end{proofsketch}
+
+\begin{corollary}[Sequential hypercharge rigidity]
+\label{cor:sequential-hypercharge-rigidity}
+Suppose the charged six-slot matter--Higgs representation is sealed before the
+right-handed-neutrino extension.  The simultaneous seven-slot equations admit
+\[
+ Y_\epsilon=Y+\epsilon(B-L).
+\]
+Because \(B-L\) acts nontrivially on the already sealed charged slots, distinct
+\(\epsilon\) change their public charges.  No transition record authorizes such a
+retuning.  Locked-extension rigidity therefore forces \(\epsilon=0\).  The
+neutrino Yukawa equation, mixed gravitational anomaly, and cubic anomaly then reduce
+respectively to \(Y_{\nu^c}\), \(Y_{\nu^c}\), and \(Y_{\nu^c}^3\), so
+\[
+ \boxed{Y_{\nu^c}=0},
+ \qquad
+ \boxed{q_\nu=0}.
+\]
+\end{corollary}
+
+\begin{remark}[What remains of the sealing-order premise]
+The provenance axiom rejects the simultaneous \(Y+\epsilon(B-L)\) family as an
+uncompleted physical seal and derives non-retroactivity once a prior charged layer
+exists.  One finite question remains: prove that the charged six-slot layer followed
+by \(\nu^c\) is the unique admissible staging, up to public equivalence, among all
+well-typed decompositions of the matter API.  Thus the former continuous
+sealing-order ambiguity is reduced to a finite dependency-order census.
+\end{remark}
+
+\begin{theorem}[No bare action moduli]
+\label{thm:no-bare-action-moduli}
+Let a primitive action presentation contain linearly independent public operators
+\(\mathcal O_a\) with coefficients \(\lambda_a\):
+\[
+ S_\lambda=S_0+\sum_{a=1}^r\lambda_a\mathcal O_a .
+\]
+Assume varying \(\lambda\) changes some admissible public record after quotienting
+field redefinitions, units, total derivatives, and gauge.  Then the coefficient
+vector may enter a completed physical law only if it has an inheritance, universal,
+spectral, or dynamical certificate.  It may not be licensed merely by measuring the
+world generated by \(S_\lambda\).
+\end{theorem}
+
+\begin{proofsketch}
+The coefficient space gives a public realization continuum.  A later measurement is
+circular as a law certificate because the map from states to records already depends
+on \(\lambda\).  Axiom~\ref{ax:parameter-provenance} therefore requires an
+independent certificate.  If \(\mathcal O_a\) is not forced by the selected minimal
+complete API and has no certificate, relative free sealing omits the operator; in the
+displayed basis its primitive coefficient is zero.
+\end{proofsketch}
+
+\begin{corollary}[Dynamical promotion of couplings and Yukawas]
+The gauge couplings, Higgs-potential coefficients, and Yukawa matrices cannot remain
+bare real or complex input data.  Each must be one of:
+\begin{enumerate}[label=\textup{(\alph*)},leftmargin=2.2em]
+\item a canonical trace or spectral normalization;
+\item an isolated point of a sealed renormalization-group or boundary-value problem;
+\item a quantized value; or
+\item the settled value of an explicit dynamical carrier whose state is internally
+      recorded.
+\end{enumerate}
+In particular, the current framework's Yukawa matrices are not parameter-closed
+until the proposed flavor-settling dynamics produces a finite or contractible
+realization quotient.
+\end{corollary}
+
+\begin{proposition}[One-loop gauge fixed-point attempt]
+\label{prop:one-loop-fixed-point-attempt}
+For the declared one-Higgs Standard Model matter content,
+\[
+ \beta_i(g_i)=\frac{b_i}{16\pi^2}g_i^3+\cdots,
+ \qquad
+ (b_1,b_2,b_3)=\left(\frac{41}{10},-\frac{19}{6},-7\right).
+\]
+At one loop the only common fixed point is Gaussian, \(g_1=g_2=g_3=0\).  The
+positive \(b_1\) means a nonzero hypercharge coupling runs away from the Gaussian
+point toward the ultraviolet.  Hence the simplest certificate --- an isolated
+nonzero ultraviolet fixed point of the minimal one-loop matter theory --- fails.
+Parameter closure requires additional fixed dynamics, a finite-scale spectral
+boundary condition with a derived placement, or a promoted coupling carrier.
+\end{proposition}
+
+\begin{proofsketch}
+Since every displayed \(b_i\) is nonzero, \(\beta_i=0\) implies \(g_i=0\) at this
+order.  The integrated equation
+\[
+ \frac1{g_i^2(\mu)}
+ =
+ \frac1{g_i^2(\mu_0)}
+ -\frac{b_i}{8\pi^2}\log\frac{\mu}{\mu_0}
+\]
+shows that \(b_1>0\) moves a nonzero \(g_1\) away from zero as \(\mu\) increases.
+The proposition is a failed closure attempt, not a no-go against interacting fixed
+points once further certified dynamics is added.
+\end{proofsketch}
+
+\begin{definition}[Cauchy-public completeness]
+A local physical sector is Cauchy-publicly complete when every continuous datum that
+can change a future public record is either determined by the active two-layer public
+interface or is carried by an explicitly selected additional field or record.  No
+future-distinguishing hidden jet coordinate is left outside the public state API.
+\end{definition}
+
+\begin{theorem}[Depth-two exclusion of nondegenerate higher-jet dynamics]
+\label{thm:depth-two-cauchy}
+Assume Cauchy-public completeness and identify the two-layer chronological interface
+in the continuum limit with configuration data and its first normal comparison.
+For a local Lagrangian sector that is nondegenerate in its highest time derivative,
+fundamental equations are at most second order unless extra selected carriers record
+the additional Cauchy data.
+\end{theorem}
+
+\begin{proofsketch}
+A nondegenerate Lagrangian depending on derivatives through order \(N\) has
+Euler--Lagrange equations of order \(2N\) and requires \(2N\) independent initial
+jet data.  For \(N>1\), the data beyond configuration and first normal comparison
+form a continuous family that changes future records.  If the API has no extra
+carrier for those jets, this is a publicly inequivalent primitive continuum and is
+excluded by Axiom~\ref{ax:parameter-provenance}.  Degenerate higher-derivative
+presentations survive only when constraints derive the apparent extra jets or when
+they are equivalent to a lower-order system with explicit additional carriers; they
+do not furnish hidden unrecorded higher-order data.
+\end{proofsketch}
+
+\begin{corollary}[Partial closure of the Einstein--Hilbert premise set]
+\label{cor:eh-partial-closure}
+In a four-dimensional, local, metric-only, diffeomorphism-covariant,
+divergence-free gravitational sector whose public state is Cauchy-complete and has
+no extra gravitational carrier, Theorem~\ref{thm:depth-two-cauchy} supplies the
+previously assumed second-order premise.  Lovelock uniqueness then gives
+\[
+ G_{\mu\nu}+\Lambda g_{\mu\nu}=8\pi G\,T_{\mu\nu},
+ \qquad
+ S=\frac1{16\pi G}\int(R-2\Lambda)\sqrt{-g}\,d^4x .
+\]
+The provenance axiom does not by itself derive the metric-only premise or the
+numerical values of \(G\) and \(\Lambda\).
+\end{corollary}
+
+\begin{proposition}[Primitive cosmological term]
+\label{prop:primitive-lambda}
+At the primitive API level, if no vacuum-energy carrier, boundary condition, or
+spectral certificate demands the zero-derivative volume term, minimal completeness
+and relative free sealing omit it.  In that restricted sense,
+\[
+ \Lambda_{\mathrm{primitive}}=0.
+\]
+An effective cosmological term generated by a certified quantum state, boundary
+record, anomaly, or coarse-grained gravitational dynamics is not excluded; its value
+must be derived from that certificate.  This proposition therefore removes an
+unprovenanced bare dial but does not calculate the observed late-time acceleration.
+\end{proposition}
+
+\begin{theorem}[Canonical state on a transitive public center]
+\label{thm:canonical-center}
+Let
+\[
+ \mathcal Z=\bigoplus_{a=1}^k\mathbb C P_a
+\]
+be the center of a settled public record after all carrier ranks and within-sector
+coordinates have been retained in separate records.  Suppose a group \(G\) of public
+presentation equivalences acts transitively on the primitive central projectors and
+no sealed clause or record distinguishes their labels.  Then the unique canonical
+actualized state on \(\mathcal Z\) is
+\[
+ \boxed{\omega(P_a)=\frac1k\quad(1\le a\le k)}.
+\]
+\end{theorem}
+
+\begin{proofsketch}
+The normalized states on \(\mathcal Z\) form a simplex, hence a public continuum.
+An arbitrary point has no provenance.  Equivalence-invariance requires
+\(\omega\circ g=\omega\) for every \(g\in G\).  Transitivity makes all
+\(\omega(P_a)\) equal, and normalization fixes them to \(1/k\).  Thus the
+provenance axiom and Constitutive canonicity select the unique fixed point rather than
+postulating an equipartition value.
+\end{proofsketch}
+
+\begin{corollary}[Koide central-weight closure, conditional only on rank separation]
+\label{cor:koide-provenance}
+Assume the flavor record factorizes so that the ranks and internal coordinates of
+\(U\) and \(W\) are recorded separately, while its residual radial center is
+\[
+ \mathcal Z=\mathbb C P_U\oplus\mathbb C P_W
+\]
+with the public exchange \(P_U\leftrightarrow P_W\).  Then
+Theorem~\ref{thm:canonical-center} gives
+\[
+ \omega(P_U)=\omega(P_W)=\frac12.
+\]
+Under the state--sector-norm identification
+\[
+ \omega(P)=\frac{\|Pv\|^2}{\|v\|^2},
+\]
+one obtains
+\[
+ \|P_Uv\|^2=\|P_Wv\|^2,
+ \qquad
+ \boxed{Q_N=\frac2N},
+ \qquad
+ \boxed{Q_3=\frac23}.
+\]
+Thus Rank-Blind Central Actualization need not remain a separate numerical axiom if
+the rank-separation and public-exchange lemma is proved.  A charged-lepton mass
+prediction still requires a positive spectral mass seal, jurisdiction over Yukawa
+settling, and selection between the two finite positive roots; the provenance axiom
+does not choose a finite root pair.
+\end{corollary}
+
+\begin{proposition}[Primitive topological-phase exclusion]
+\label{prop:theta-exclusion}
+Suppose a selected gauge sector has integer topological charge \(Q\) and a proposed
+primitive sector weighting
+\[
+ \chi_\theta(Q)=e^{i\theta Q},
+ \qquad \theta\in\mathbb R/2\pi\mathbb Z.
+\]
+If distinct \(\theta\) are detected by admitted public probes, they form a public
+continuum.  If the selected API contains no topological-phase carrier, no prior
+orientation record, and no universal or dynamical equation fixing \(\theta\), that
+continuum is inadmissible.  The relative free seal of the API without a character
+generator uses the trivial character,
+\[
+ \boxed{\theta_{\mathrm{primitive}}=0}.
+\]
+If no admitted probe detects the weighting, it is removed instead by public
+equivalence.
+\end{proposition}
+
+\begin{remark}[Strong-CP boundary]
+Proposition~\ref{prop:theta-exclusion} removes an unprovenanced bare Yang--Mills
+angle.  It is not yet a complete proof that the physical QCD combination
+\(\bar\theta\) vanishes, because chiral phases of the quark mass seal can contribute
+to that invariant combination.  Full closure requires a gauge-invariant phase or
+determinant theorem for the settled quark mass operators and control of derived
+radiative contributions.  A positive spectral mass seal is a natural candidate, but
+that result is not presently established.
+\end{remark}
+
+\begin{proposition}[What the axiom does not select]
+\label{prop:finite-choice-boundary}
+Primitive-Parameter Provenance excludes unresolved positive-dimensional public
+moduli.  It does not by itself choose among a finite set.  Consequently it does not,
+without additional structure, determine:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.2em]
+\item the global gauge quotient
+      \(G_0/\Gamma\) for
+      \(\Gamma\in\{1,\mathbb Z_2,\mathbb Z_3,\mathbb Z_6\}\);
+\item one versus two or more rigid Higgs multiplets;
+\item three versus four or more rigid generations; or
+\item the high versus low positive Koide root.
+\end{enumerate}
+Each is a discrete ambiguity and admits models with no unresolved continuous
+parameter.  Complete-probe effectivity, No Unpaid Multiplicity, a derived orientation
+obligation, and a spectral-ordering theorem remain separate candidate closures.
+\end{proposition}
+
+\begin{corollary}[Restriction on extended Higgs and flavor sectors]
+Although the axiom does not prove \(N_H=1\) or \(N_{\mathrm{gen}}=3\), it excludes a
+generic extra Higgs or flavor sector whose new mixing angles, phases, masses, and
+couplings are inserted as bare parameters.  Any such extension must provide a
+certificate fixing or dynamically recording every new public modulus.  Hence the
+remaining multiplicity question is sharply finite: whether a rigid, fully certified
+extra carrier is demanded by an independent public obligation.
+\end{corollary}
+
+\begin{proposition}[Extractor and clock consequences]
+For a fixed observer, publicly inequivalent POVMs, tolerances, sufficient statistics,
+or clock calibrations cannot be primitive dials.  They must be quotiented as
+operationally equivalent, uniquely derived from the sealed observer dynamics, or
+carried by an explicit calibration record.  Thus
+Axiom~\ref{ax:parameter-provenance} does not universalize \(\mathcal Q_p\) or choose
+seconds from the Genesis ledger; it upgrades both gaps into mandatory provenance
+obligations.  The seven-cell thermal-repetition observer satisfies the requirement
+model-wise because its dynamics derives the Hamming-weight statistic and optimal
+error floor.
+\end{proposition}
+
+\begin{remark}[Closure ledger after adopting the axiom]
+The immediate disposition is:
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{l Y}
+\toprule
+Target & Status after Primitive-Parameter Provenance \\
+\midrule
+Bare continuous law parameters
+& Excluded; every coupling, Yukawa entry, phase, and matching scale needs an endogenous certificate. \\
+Simultaneous \(Y+\epsilon(B-L)\)
+& Excluded; append-only rigidity forces \(\epsilon=0\) once the charged layer is sealed.  Unique staging remains to be enumerated. \\
+\(q_\nu=0\)
+& Derived conditional only on the finite charged-before-singlet staging lemma. \\
+Einstein--Hilbert form
+& Second-order premise derived under Cauchy-public completeness and no extra carrier; metric-only remains open. \\
+Bare \(\Lambda\)
+& Absent at the primitive minimal seal if no vacuum certificate is selected; observed effective value not derived. \\
+Koide \(Q_3=2/3\)
+& Equal central weights derived from canonicity once rank separation and public exchange are proved; mass seal and finite root choice remain. \\
+Primitive gauge \(\theta\)
+& Trivial under free sealing without a topological-phase certificate; full \(\bar\theta\) closure remains conditional on the quark mass-phase seal. \\
+Global gauge form, \(N_H\), \(N_{\mathrm{gen}}\)
+& Not selected by a continuum axiom; separate finite-choice principles or theorems remain necessary. \\
+Numerical gauge and Yukawa values
+& No value derived.  The minimal one-loop fixed-point attempt fails, defining a concrete RG/spectral closure problem. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{remark}

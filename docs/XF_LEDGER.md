@@ -40,7 +40,25 @@ export WITHDRAWN, see event 007); XF-1 Hopf-bridge audit v1 of SSRN 6975959
 (EXECUTED — Koide test vacuous, EFT matching has no solution, S⁹ census
 succeeds verdict-blind under three declared premises and reaches the ℤ₆ group
 by a second route, but the paper's own nested shell tower does not realise
-SU(3)×SU(2) at all, see event 008).
+SU(3)×SU(2) at all, see event 008); free environment completion (EXECUTED —
+realization half derived, selection half independent by countermodel;
+**ledger invariance** enters as a counted bridge premise, see event 009).
+
+**Standing disclosure (constrains how the whole record is read):** the certified
+fifteen-stage register is a hand-authored literal table whose recognizing search
+gates postdate it. Four framings are SUSPENDED pending the PA-1 provenance
+audit — autonomous recovery, the uniqueness census *as law*, non-circularity of
+the recreation claim, and the halt *as a law-property* (event 010). Items
+resting only on the Selective Law's realization face are unaffected.
+
+**Counted bridge premises** (not predictions; each must be discharged or
+declared before anything downstream is claimed): ledger invariance (event 009 —
+a derivation route now exists via the self-paired layer and target 1's dagger
+fragment, `docs/target1_ledger_invariance_joint_v1.md`; premise still counted,
+status unchanged); O4 fixing the hypercharge scale and the ambient simple
+`su(5)` trace form (event 008 — the third premise of that trio, the tier-C
+free-sealing clause, was discharged in event 011); the four XF-C Koide premises
+C1–C4; and the sealing-order premise behind `q_ν = 0`.
 
 ## Event log (append-only)
 
@@ -480,3 +498,233 @@ before recording (`scripts/xf1_hopf_bridge_audit/a5_addendum.py`):
   `D(2)−D(1) = 3.603534014` and `D(3)−D(1) = 9.615217254` — **without being told
   `m_τ`**. This is the one calculation that would flip the audit. No row
   suppressed (F-XF4).
+
+### 009 — 2026-07-25 — Free environment completion: realization derived; ledger invariance registered as a counted bridge premise
+
+Target 3 of the Genesis operational-completion package (*No fundamental
+mixing*) worked by the tier-C free-sealing template — identify the API, define
+the category of exact realizations under it, exhibit the initial object, check
+that the selection is a universal property and not a value quantity. Artifacts:
+`docs/free_environment_completion_attempt_v1.md` /
+`blake3:21f9e51385fad537dffaa5b59e5d7aa1a51a7be2d70a717aa95e6f3e4e917cda`;
+`docs/260725_immediate_open_problems.md` /
+`blake3:da61d30610022462827ac36378e915b6e2143e792901ec490cebb6d070999ee2`;
+`docs/260725_immediate_open_problems_solution.md` /
+`blake3:0245f90372ab133525736c6ab7ad6ffee536b72e0362fc06216f2c941704cc9a`.
+These are research notes, not sealed artifacts: there is no replay example and
+no result digest, and they are cited by file digest only.
+
+- **Realization half — DERIVED.** For an essentially small strict symmetric
+  monoidal `P` and a wide symmetric monoidal class `J ⊆ P` of environment
+  embeddings, the category `Env_J(P)` — objects those of `P`, morphisms
+  `(E, f : A → B ⊗ E)` modulo `(E,f) ∼ (E′,(id_B ⊗ u)f)` for `u ∈ J`,
+  composition `[D,g][E,f] = [D⊗E,(g⊗id_E)f]`, discard `ε_A = [A,id_A]` — is
+  **initial** among exact `J`-realizations. Every morphism is a dilation by
+  construction, so purification is a property of the free seal and not a
+  postulate about states. Two qualifications recorded rather than absorbed:
+  outside the strict lane the realization functor's tensorator and unit map must
+  additionally be required causal, with an explicit counterexample showing the
+  unqualified statement false; and the equivalence on dilations is in general a
+  **zigzag** of embeddings, not a single reversible map, absent a filtered or
+  common-cocone hypothesis. The synthesis's target-3 phrase "unique up to
+  reversible environmental equivalence" is corrected accordingly.
+- **Non-vacuity — the unrestricted completion collapses.** If environments are
+  identified along *all* maps of `P`, then whenever `P` has a zero object with
+  `B ⊗ 0 ≅ 0` every hom-set of the completion is a singleton and purification
+  holds vacuously with nothing else surviving. An embedding class is therefore
+  mandatory, not a convenience. The intended class `J = Isom(P)` is unavailable
+  until the dagger is sealed, so **targets 1 and 3 of the reconstruction package
+  are ordered, not coordinate** — the package is not four independent targets,
+  and the synthesis is amended to say so.
+- **Selection half — INDEPENDENT. New counted bridge premise: LEDGER
+  INVARIANCE**, `ε_{E′} u = ε_E` for every isometry `u`. It is **not entailed**
+  by Internal Record Actualization, Public Confluence, monoidal discarding and
+  free sealing. Countermodel: nonnegative real matrices under Kronecker product
+  with transpose as dagger, `ε_n = (1,…,1)`, and `u = 2^{-1/2}(1,1)ᵀ : 1 → 2`,
+  for which `u†u = 1` while `ε₂u = √2 ≠ 1 = ε₁`; arithmetic independently
+  recomputed. The near-miss is closed deliberately rather than by omission:
+  every **unitary** of that category is a permutation matrix, so its discard is
+  invariant under all unitary recoding and only isometric *enlargement*
+  separates the two notions. The failure is exactly a mismatch between
+  dagger-losslessness and ledger-losslessness. Public Confluence cannot repair
+  it for a structural reason worth recording: PC is a conditional whose
+  antecedent is a model-chosen compatibility relation and whose failure mode is
+  the designated disjunct "no common seal"; an axiom of that shape cannot force
+  an equation, so no strengthening of its consequent helps.
+- **Scope of the negative, stated at the careful grade.** Independence is from
+  the clauses **as abstractly stated**. Whether the specific sealed pure layer
+  satisfies ledger invariance by a theorem using its own structure is untouched
+  and open. The one identified route to a positive result: derive the dagger and
+  the discard from a single record structure, in which case the mismatch the
+  countermodel exploits is structurally unavailable — a joint target-1/target-3
+  derivation rather than two separate ones.
+- **Verdict-blindness.** The item produces no number and no measured quantity
+  was consulted; F-XF2 is satisfied by construction. One trap is recorded and
+  was avoided: Stinespring uniqueness is a theorem about Hilbert spaces and must
+  not be used as an input here, since that would derive the abstract premise
+  from the intended model. The isometry class was forced by the collapse
+  argument **first** and only then checked against the external record.
+- **External concordance, not an input.** Huot and Staton, *Quantum channels as
+  a categorical completion* (LICS 2019, arXiv:1904.09600), complete
+  finite-dimensional vector spaces and **isometries** to CPTP maps between
+  finite-dimensional C\*-algebras. The agreement is on the *constraint*, not
+  merely the endpoint. Recorded as concordance in the sense already used for the
+  ℤ₆ endpoints in event 008 — it is not a second derivation and must not be
+  cited as one.
+- **Register independence.** This item does not consume the certified
+  fifteen-stage register. It uses the Selective Law's realization face and the
+  abstract structure of the pure layer only. The standing provenance disclosure
+  (`docs/provenance_disclosure_v1.md`) therefore does not bear on it, and PA-1's
+  outcome will not re-grade it.
+- **Registered consequences.** (i) Target 3 is **conditionally derived**: ledger
+  invariance is one counted bridge premise, and conditional on it the
+  environment completion is a theorem of free sealing. This is the disposition
+  the reconstruction conjecture's own falsifier clause prescribes for a target
+  that resists derivation. (ii) The reconstruction package is ordered, not
+  coordinate. (iii) No registered prediction changes status. **XF-A3**
+  (complex-versus-Jordan discriminator) remains named and unregistered; this
+  item concerns target 3 and supplies no part of XF-A3's derivation route. (iv)
+  A separate ledger event remains owed for `docs/provenance_disclosure_v1.md`,
+  which directs that the XF ledger carry it; it is not folded into this event.
+  No row suppressed (F-XF4).
+
+### 010 — 2026-07-25 — Standing provenance disclosure carried; synthesis swept for suspended claims
+
+The disclosure directs that "the XF ledger carries this disclosure as an event."
+It is carried here. `docs/provenance_disclosure_v1.md` /
+`blake3:c4bcc733382423e70a4c2267d2c7fe612b5f3bbe6857414ef00a4bea059e90c2`.
+Recorded late relative to its own date; the delay is disclosed rather than
+backdated, and this event is appended in append order, not chronological order.
+
+- **What the disclosure establishes** (from XF-0b2, event 007): the fifteen
+  sealed telescopes sourcing the certified register are a hand-authored literal
+  table committed in the first implementation step; the recognizing search gates
+  postdate it and their position arms are syntactic singletons; Step 14 is
+  pre-declared in the initial commit. Consequence, unsoftened: **no search in
+  this repository has been shown to have found any sealed telescope clause.**
+- **Four framings suspended** pending the PA-1 provenance audit, to be read as
+  unproved and not as false: autonomous recovery; the uniqueness census *as a
+  property of the laws*, including the Stage-4 "exactly four"; non-circularity
+  of the recreation claim; and the halt *as a law-property*. The certified forms
+  that stand are the corresponding statements about the sealed library.
+- **Sweep executed.** The disclosure states that no downstream document may cite
+  a suspended claim without citing the notice, and that silence is a violation
+  of the constitution's suppression clause applied to the program itself. The
+  synthesis was cited-in-full at five sites and repaired: the abstract (which
+  carried both the uniqueness census and "the halt is therefore a theorem of the
+  laws rather than of the enacted choice" unqualified); roadmap items on the
+  Genesis chain and on foreclosure past Step 15; the terminality proof sketch;
+  and the Halt-status proposition. A standing disclosure remark now precedes the
+  formal spine and each site refers to it. **Finding worth recording: the two
+  most prominent suspended claims in the whole document were in its abstract.**
+- **Scope of the sweep.** Editorial only; no theorem, certificate, or sealed
+  artifact was altered, and no claim was deleted — each is restated in its
+  certified form with the stronger reading marked suspended. Items resting only
+  on the Selective Law's realization face are explicitly excluded from the
+  suspension, since free sealing and its initiality arguments do not consume the
+  register; event 009 is the worked example.
+- **Registered consequences.** (i) PA-1 is the outstanding gate on the program's
+  spine; until it reports, "derived from two laws" framings that consume the
+  register are to be read as "derived from the sealed library." (ii) No
+  prediction status changes: the registered predictions rest on representation
+  facts of the sealed content plus stated bridges, which the disclosure leaves
+  standing. (iii) XF-0 remains untouched, having been blind by construction. No
+  row suppressed (F-XF4).
+
+### 011 — 2026-07-25 — Tier-C free-sealing clause DERIVED; the S⁹ census uniqueness ceases to be a declared premise
+
+Status change to a premise registered in event 008. That event recorded three
+premises for the S⁹ census, all to be frozen before anything is claimed: the
+tier-C free-sealing clause, O4 fixing the hypercharge scale, and the ambient
+simple `su(5)` trace form. The first is now derived.
+`docs/tier_c_free_sealing_2_law_conjecture.md` /
+`blake3:40205b0daa76fea728fe082098d0fdc548510741e6be515e877923482d8f04dd`
+(note: that artifact still records its premise P1 as open and is stale on that
+point; the closure is in the synthesis, not in the note).
+
+- **What was derived.** The Local alphabet theorem selects its factors *with*
+  their division-algebra carriers — now a lemma in the synthesis with a proof,
+  which is exactly the premise P1 the note left open. Given it, the category of
+  exact realizations of the carrier-bearing alphabet has `V₃ ⊕ V₂ ≅ C⁵` as
+  initial object, so the free seal of the alphabet in a complex arena is `C⁵`,
+  whence `n★ = 4`, `S¹ → S⁹ → CP⁴`, `G(H₄) = U(5)`. The complex rung contributes
+  no summand, being typed as a scalar-action clause; had it required one, the
+  coproduct would be `C⁶` and the shell `S¹ → S¹¹ → CP⁵`.
+- **The `argmin` fallback recorded in event 008 was never lawfully available.**
+  That event stated that without the tier-C clause the census returns an
+  `argmin` and a monotone cost `κ(H_n)` must be justified independently. A
+  monotone cost is a value quantity, and no value quantity legislates at a
+  guarded stage. The lawful trichotomy is: free sealing derivable, and `n★ = 4`
+  is selected; not derivable, and the discharging set is a **certified cone**; a
+  cost, and the move is **forbidden**. Corrected in the synthesis.
+- **Residue, stated rather than buried.** One interpretive claim carries the
+  result: that initiality is a universal property and not a value quantity. It
+  is invariant under equivalence, ranks nothing, and compares nothing, so the
+  reading is defensible — but it is the theory's own to adjudicate, and if it
+  fails the census returns a cone rather than a selection. Note also that the
+  same value/universal-property distinction shows a dimension-minimum route
+  reaching the same `C⁵`; that route is **illegal** at a guarded stage, so the
+  carrier lemma buys not the value but the entitlement to assert it.
+- **Register independence.** Like event 009, this item consumes the realization
+  face only and not the certified register; the standing disclosure of event 010
+  does not bear on it.
+- **Registered consequences.** (i) Of the three premises registered in event 008,
+  **one is discharged**; O4 and the ambient trace form remain declared. (ii)
+  XF-B3 is not upgraded: the ℤ₆ identification remains textbook and reached by a
+  second route, exactly as event 008 scoped it, and this changes nothing there.
+  (iii) The census's own open items are unchanged — O4–O6 and O8 are still not
+  adjudicated structurally, and O5 in particular still finds nothing equal to
+  three in any invariant of `CP⁴` computed so far. (iv) A companion editorial
+  sweep removed six sites at which the synthesis selected by comparing `κ` or
+  `ρ` — empty desert, proton stability, the dark sector, no-cloning,
+  Einstein–Hilbert, and the Step-15 extension — each restated as an
+  unforced-generator, evidentiary-standard, initiality, or premise-based
+  argument. No row suppressed (F-XF4).
+
+### 012 — 2026-07-27 — PA-1b open-competition audit executed; no certified autonomous winner
+
+PA-1b of the provenance audit is executed and registered. Artifacts:
+`docs/PA1B_EXECUTION_PLAN.md` /
+`blake3:043501055859423f37e4c596af74aaeb0dc6b34e3cfa91292121092c24cabd63`;
+`docs/pa1_open_competition_v1.json` /
+`blake3:51cc36babf9e638e97fe212932eefcba61b4bed5551e8fb38f97607e28012141`
+(internal result digest
+`blake3:53af941cd24dbcad9f94cad5315e90ef5c1985a16d38704dc73ca09455259bf7`);
+`docs/PA1_OPEN_COMPETITION_RESULT.md` /
+`blake3:feb06501fd37631928a2f80858338be35974dae50e1d6d9965e7ba6dd33109d5`.
+
+- **Question and rule.** The audit asks whether any certified run actually
+  enumerated a target-independent, outcome-complete competition and then
+  selected a unique winner under a law that did not pin that winner in advance.
+  All four conditions are conjunctive; raw breadth, singleton completeness,
+  authored witness sets, and target-derived deterministic tie breaks do not
+  qualify.
+- **Global finding.** **No certified run in the record contains a genuinely
+  open competition with a lawful winner.** The certificate contains 20 explicit
+  surface rows and zero qualifying rows. PA-1b therefore identifies no
+  "strongest autonomy evidence."
+- **Positive openness evidence retained.** T-BF1 Stage 4 is a real, typed,
+  admitted four-way cone whose candidates are co-minimal under the audited
+  `(κ, ν)` law; it correctly selects none. The generic Step-16 gate is open, and
+  the corrected 17-shape adversarial table contains four lawful bar clearers,
+  but the table is authored and non-exhaustive and performs no full selection.
+  These are the strongest gate-openness facts, not autonomous discoveries.
+- **Negative cells retained.** Claim Step 1 reduces 2,144 raw expressions to a
+  target-gated singleton; its special catalog and gate postdate the reference.
+  Claim Step 15's 7,211 count is prefix-event telemetry, with heuristic and
+  incumbent-rank drops and one full evaluation, not a complete competition.
+  Phase-5b v2's apparent Stage-4 winner uses distinctions forbidden by the
+  later two-register law. Phase-5b v3 and the BI-1/BI-1b successor lanes expose
+  position-pinned singleton cones. SH-1 names its Step-16 survivor explicitly.
+- **Replay and bounded failures.** A fresh-process replay reproduced the
+  certificate and report hashes and the zero-row result. Nine focused PA-1b,
+  claim, T-BF1, Step-16, semantic-exhaustion, and halt tests passed. The legacy
+  BI branch-cone regression failed closed at the already recorded current-vs-
+  frozen v3 reissuance drift and is disclosed as such. Two bounded current
+  Step-15 attempts emitted no artifact; the known multi-gigabyte Step-16 OOM
+  materialization was not repeated. Neither resource outcome is promoted to a
+  halt, census, or winner claim.
+- **Scope.** This event records PA-1b only. It assigns no PA-1c provenance
+  grades, changes no prediction status, edits no sealed input, and does not
+  weaken or supersede the standing disclosure in event 010. No row suppressed
+  (F-PA4/F-XF4).

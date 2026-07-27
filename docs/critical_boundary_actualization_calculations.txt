@@ -1,0 +1,63 @@
+{
+  "PDG_2026_comparisons": {
+    "higgs_GeV": 125.13,
+    "higgs_to_top_direct_ratio": 0.7249710312862109,
+    "higgs_to_top_pole_ratio": 0.7270772806507845,
+    "top_cross_section_pole_GeV": 172.1,
+    "top_direct_GeV": 172.6
+  },
+  "equal_trace_crossing_one_loop_diagnostic": {
+    "at_173_GeV": {
+      "g1": 0.46377421508314826,
+      "g2": 0.6508349082943355,
+      "g3": 1.1441410527543776,
+      "lambda": 0.07132545693983108,
+      "mh_tree_GeV": 92.99521570255214,
+      "mt_MSbar_tree_GeV": 141.7955390154561,
+      "yt": 0.8144308925337558
+    },
+    "g1_star": 0.545701,
+    "g2_star": 0.545701,
+    "g3_star": 0.580413,
+    "lambda_star": 0.0,
+    "mu_star_GeV": 10893900000000.0,
+    "yt_star": 0.3987181124088875
+  },
+  "exact_equal_trace_relation": {
+    "mt_over_mW_same_scale": 1.0332994847589596,
+    "yt_over_g": 0.7306530726696259
+  },
+  "planck_no_threshold_benchmark": {
+    "g1_MPl": 0.6154,
+    "g2_MPl": 0.5055,
+    "lambda_critical_MPl": 0.0,
+    "predicted_higgs_pole_GeV": 132.65860182860774,
+    "predicted_higgs_to_top_ratio": 0.7603407444056045,
+    "predicted_top_pole_GeV": 174.47256747014583,
+    "yt_critical_MPl": 0.3882760940977437
+  },
+  "threshold_targets_at_alpha_s_0p1184": {
+    "using_PDG_cross_section_pole_top": {
+      "critical_stability_higgs_GeV": 127.11999999999998,
+      "delta_lambda_required": 0.00617399999999997,
+      "delta_yt_required": 0.012100094097743763,
+      "lambda_SM_MPl": -0.00617399999999997,
+      "mh_input_GeV": 125.13,
+      "mt_input_GeV": 172.1,
+      "relative_delta_yt": 0.03216604487724832,
+      "yt_SM_MPl": 0.37617599999999995
+    },
+    "using_PDG_direct_top": {
+      "critical_stability_higgs_GeV": 128.11999999999998,
+      "delta_lambda_required": 0.00947399999999997,
+      "delta_yt_required": 0.009550094097743766,
+      "lambda_SM_MPl": -0.00947399999999997,
+      "mh_input_GeV": 125.13,
+      "mt_input_GeV": 172.6,
+      "relative_delta_yt": 0.025216367763881455,
+      "yt_SM_MPl": 0.37872599999999995
+    }
+  }
+}
+
+Wrote /mnt/data/critical_boundary_actualization_results.json

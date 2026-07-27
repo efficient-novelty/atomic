@@ -1,0 +1,125 @@
+{
+  "curvature_coefficients_at_g_pair": {
+    "alpha_C": -0.5037113766515953,
+    "g_star": 0.545701,
+    "tau_E": 0.30782361906486383,
+    "tau_E_over_alpha_C": -0.6111111111111113,
+    "xi0": 0.08333333333333333
+  },
+  "exact_CSC_CBA_compatibility": {
+    "reason": "CSC gives lambda=4 g^2 B/A^2 > 0, while CBA gives lambda=0.",
+    "same_scale_threshold_free_nontrivial_Yukawa_sector": false
+  },
+  "exact_spectral_relations": {
+    "equal_top_neutrino_lambda_over_g2": 1.0,
+    "equal_top_neutrino_mt_over_MW": 1.4142135623730951,
+    "quartic_lower_coefficient_lambda_over_g2": 0.16666666666666666,
+    "tau_E_over_alpha_C": -0.6111111111111112,
+    "top_dominance_lambda_over_g2": 1.3333333333333333,
+    "top_dominance_mt_over_MW": 1.632993161855452,
+    "top_dominance_yt_over_g": 1.1547005383792517,
+    "xi0": 0.08333333333333333
+  },
+  "one_loop_gauge_diagnostic": {
+    "g1_equals_g2": {
+      "g1": 0.5437435171439031,
+      "g2": 0.543743517143903,
+      "g3": 0.582939204827049,
+      "lambda": -0.023841995311566735,
+      "mu_GeV": 11355766677672.084,
+      "yt": 0.4900316021996139
+    },
+    "g1_equals_g3": {
+      "g1": 0.5572831943293045,
+      "g2": 0.5339359457444531,
+      "g3": 0.5572831943293046,
+      "lambda": -0.02663426997948183,
+      "mu_GeV": 258869248631209.12,
+      "yt": 0.46655083255796787
+    },
+    "g2_equals_g3": {
+      "g1": 0.5859915794905388,
+      "g2": 0.5167146889628642,
+      "g3": 0.5167146889628642,
+      "lambda": -0.028936332012725417,
+      "mu_GeV": 9.70774391547793e+16,
+      "yt": 0.42794671427189956
+    },
+    "least_squares_inverse_coupling_scale": {
+      "common_g_from_mean_inverse_squared": 0.5500333990999601,
+      "deviations_from_mean_inverse_squared": [
+        -0.06420163657956879,
+        0.1859056085304056,
+        -0.12170397195083638
+      ],
+      "g1": 0.5554542430711708,
+      "g2": 0.5351888818502893,
+      "g3": 0.5604479901892739,
+      "inverse_squared_couplings": [
+        3.241182032145492,
+        3.4912892772554662,
+        3.1836796967742242
+      ],
+      "lambda": -0.026341151288143138,
+      "mu_GeV": 171965840925956.7,
+      "yt": 0.46948327900756
+    }
+  },
+  "one_loop_yukawa_quartic_diagnostic": {
+    "equal_top_neutrino_Yukawa_sum_crossing": {
+      "g1": 0.5100540975013177,
+      "g2": 0.5748829360194375,
+      "g3": 0.6812472838423292,
+      "lambda": -0.006274644399284298,
+      "lambda_spectral_equal_top_nu": 0.3304903901263287,
+      "lambda_spectral_minimum": 0.05508173168772145,
+      "mu_GeV": 1566475206.8542125,
+      "yt": 0.5748829360194375
+    },
+    "minimal_one_Higgs_Dirac_common_intersection_found": false,
+    "minimum_spectral_quartic_crossing": {
+      "g1": 0.47353336428563786,
+      "g2": 0.6261983167645395,
+      "g2_squared_over_6": 0.06535405531979042,
+      "g3": 0.9519913357258617,
+      "lambda": 0.06535405531979042,
+      "mu_GeV": 11089.256085021454,
+      "yt": 0.782613692308052
+    },
+    "top_dominance_Yukawa_sum_crossing": {
+      "A_top": 1.491340526526295,
+      "four_g2_squared": 1.491340526526295,
+      "g1": 0.4828718867270696,
+      "g2": 0.6106022695925505,
+      "g3": 0.8466500574872262,
+      "lambda": 0.035871894216402495,
+      "lambda_spectral_minimum": 0.06213918860526229,
+      "lambda_spectral_top": 0.49711350884209826,
+      "mu_GeV": 297588.67273847514,
+      "top_spectral_to_SM_lambda_factor": 13.858022267884369,
+      "yt": 0.705062769434111
+    }
+  },
+  "two_loop_pair_crossing_threshold": {
+    "delta_inverse_g3_squared": 0.3896531875286038,
+    "f0_from_pair": 16.571440066264547,
+    "f0_from_strong": 14.648578658999146,
+    "f0_relative_mismatch": -0.11603465960570825,
+    "g1_equals_g2": 0.545701,
+    "g3": 0.580413,
+    "g3_above_pair_fraction": 0.06360992558195777,
+    "g3_reduction_fraction": -0.05980569008619718,
+    "mu_X_GeV": 10893900000000.0
+  },
+  "weak_scale_inputs": {
+    "Mh_GeV": 125.13,
+    "Mt_GeV": 172.6,
+    "alpha_s_MZ": 0.1184,
+    "g1_GUT_normalized": 0.46245822403391207,
+    "g2": 0.6477604,
+    "g3": 1.1669404,
+    "lambda": 0.12602839999999998,
+    "mu_GeV": 172.6,
+    "yt": 0.9327855999999999
+  }
+}

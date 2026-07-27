@@ -11,6 +11,41 @@ either order, though A is worth more.
 
 ---
 
+> ## RESOLVED — see `docs/260725_immediate_open_problems_solution.md`
+>
+> Both problems have been answered, and this statement is retained as the
+> specification they were answered against. Two corrections land on the text
+> below and are recorded here rather than silently patched.
+>
+> **Problem A — resolved NEGATIVELY.** An explicit countermodel — nonnegative
+> real matrices `Mat_{ℝ≥0}` with `ε_n = (1,…,1)` and the isometry
+> `u = 2^{-1/2}(1,1)ᵀ` — satisfies Q1(a), Internal Record Actualization and
+> Public Confluence while violating Q1(b) (`ε₂u = √2 ≠ 1 = ε₁`). Arithmetic
+> independently verified. It also dodges A.6 trap 2 explicitly: every *unitary*
+> of that category is a permutation matrix, so unitary-invariance holds and only
+> isometry-invariance fails. Q1(b) is therefore counted bridge content, and
+> A.7's outcome 1 is the operative one. The countermodel's mechanism is an
+> **ℓ²-dagger / ℓ¹-discard mismatch** — see the audit note in §3 below.
+>
+> **Problem B — resolved POSITIVELY, and §B.1 as written was false.** The
+> statement below suppresses monoidal coherence maps: it is correct for strict
+> symmetric monoidal categories and strict realization functors, but for
+> *strong* functors a normalization condition (N) requiring the tensorator and
+> unit map to be causal is **necessary**, with an explicit counterexample. The
+> corrected theorem is more general than asked — initiality holds for any wide
+> symmetric monoidal class `J` of environment embeddings, with the dagger needed
+> only to pick out `J = Isom(P)`. Of the five hypotheses conjectured in §B.3,
+> only smallness, symmetric monoidal structure and the wide class `J` are
+> needed; filteredness, distributivity and the zero-object item are **not**.
+>
+> **One scoping caveat on A.** The countermodel establishes independence *from
+> the clauses as abstractly stated*. Whether the specific sealed Genesis pure
+> layer satisfies Q1(b) by a theorem using its own structure is untouched. The
+> solution document says this in its §3.3 but states it more flatly in its
+> executive table and conclusion; the careful form is the correct one.
+
+---
+
 ## 0. Where these sit
 
 The attempt derives purification as free sealing: the mixed layer is the free

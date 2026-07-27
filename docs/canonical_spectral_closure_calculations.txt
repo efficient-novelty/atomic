@@ -1,0 +1,28 @@
+Canonical Spectral Closure calculation record
+=============================================
+
+Top-dominance y_t/g = 1.154700538379
+Top-dominance m_t/M_W = 1.632993161855
+Equal top-neutrino m_t/M_W = 1.414213562373
+
+Two-loop manuscript pair crossing: mu = 1.089390e+13 GeV
+  g1=g2=0.545701; g3=0.580413
+  g3 excess = 6.360993%
+  required g3 reduction = -5.980569%
+  Delta(1/g3^2) = 0.389653188
+  f0(pair)=16.57144007; f0(strong)=14.64857866
+
+Minimum spectral quartic bound crossing: 1.108926e+04 GeV
+Top-dominance Yukawa-sum crossing: 2.975887e+05 GeV
+  lambda_SM=0.035871894
+  lambda_spectral_top=0.497113509
+  mismatch factor=13.858022
+Equal top-neutrino crossing: 1.566475e+09 GeV
+  lambda_SM=-0.006274644
+  lambda_spectral=0.330490390
+
+Curvature coefficients at g*=0.545701: alpha_C=-0.503711377, tau_E=0.307823619
+  tau_E/alpha_C=-0.611111111111; xi0=0.083333333333
+
+Verdict: no threshold-free common one-loop spectral matching scale exists for the
+current minimal one-Higgs Dirac Standard Model diagnostic.
