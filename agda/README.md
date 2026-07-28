@@ -14,6 +14,21 @@ The hand-written baseline support modules are:
 - `CertifiedHalt.agda` (proof-carrying amplification boundary and support-local Step-16 bound)
 - `StepWitness.agda`
 
+The separate `LawV2/H3Compatibility.agda` module is an
+`ORACLE_ONLY_PROVISIONAL` compatibility experiment. It hand-encodes the
+anonymous H3 boundary and, under explicit probe-local assumptions, defines a
+dependent-core family with the proposed unit-use shape. Constructor
+completeness and computation mode are encoded inputs, not derived history
+evidence; GSC birth, fixed-type, and parameter-projection support remain
+unassigned. The module does not execute an exact or adopted GSC compiler.
+
+Its direct eliminator and beta proof use Agda's separate host datatype
+`One`/`star`; the module proves no bridge from that datatype to registered
+`g2`/`g3`. These definitions are therefore an analogous shape model, not a
+typed registered-H3 response or GF2 discharge certificate. The module is not
+copied by `pen-cli export-agda`, is not part of the production GF2 backend, and
+confers no GSC or Law-V2 authority.
+
 `CountingLemmas.agda` proves the equations `1 + d²` and `2κ + r²` from
 explicit schema/basis isomorphisms.  The isomorphisms are hypotheses: the
 current MBTT AST has no cubical `coe`/`hcom` semantics or fibration witness

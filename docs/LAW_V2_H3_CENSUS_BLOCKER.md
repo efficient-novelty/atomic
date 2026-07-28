@@ -1,7 +1,7 @@
 # Law V2 H3-to-Stage-4 census blocker
 
 **Date:** 2026-07-28
-**Status:** `architecture_proposal_written_blocked_pending_exact_manifests_and_capabilities`
+**Status:** `h3_probe_blocked_before_descriptor_authority`
 
 The registered Law-V2A three-act bootstrap now replays successfully, and an
 architecture-level candidate for the history-demand operator has been
@@ -30,6 +30,7 @@ See:
 - [the future-hole adjudication](future_hole_definition_adjudication.md);
 - [the operational-domain adjudication](schema2_operational_domain_adjudication.md);
 - [the proposed GSC V1 definition](LAW_V2_GENESIS_SCHEME_CALCULUS_V1.md);
+- [the oracle-only H3 compatibility probe](LAW_V2_H3_COMPATIBILITY_PROBE_RESULT.md);
 - [the digest-bound coherence artifact replay](LAW_V2_CEXT_ARTIFACT_REPLAY_V1.md);
 - [the executable plan](autonomous_genesis_plan.md); and
 - [the certificate boundary](LAW_V2_CERTIFICATE_BOUNDARY.md).
@@ -164,6 +165,62 @@ finiteness, typed-normalization totality, and natural-family quotient
 decidability/finiteness as false, and
 [T-D2-2 v2](T_D2_2_OPERATIONAL_SURJECTIVITY_V2_RESULT.md) stops before
 surjectivity.
+
+## H3 compatibility probe refinement
+
+The oracle-only conditional probe has now been run without changing GSC or any
+production dependency. Its
+[result](LAW_V2_H3_COMPATIBILITY_PROBE_RESULT.md) stops before the proposed
+Outcome A/B/C split.
+
+Literal GSC descriptor extraction is `Unknown` because GSC V1 and its exact
+semantic manifest are unadopted. If the proposal's missing-token rule were
+adopted unchanged, its conditional disposition would be `OutsideFragment`:
+the registered bootstrap has no closed-constructor-diagram token, event export
+index, or computation-mode certificate, and the proposal forbids
+reconstructing those facts from a type and inhabitant.
+
+Under a separately visible, non-normative matcher that provisionally treats
+the exact `UnitType`/`Unit` pair as one closed nullary former, a hand-authored
+dependent-core projection with the proposed `compile_use` shape is ordinary
+dependent unit elimination:
+
+```text
+P : Π (z : g2). g1
+m : P g3
+u : Π (z : g2). P z
+```
+
+Constructor completeness and judgmental computation mode are assumptions of
+that local encoding, not derived history facts. Birth support, fixed type
+support, and parameter-support projections remain `Unknown`. The native kernel
+separately checks formation of the displayed context and output type; those
+checks are not verification that an adopted compiler emitted the family or
+satisfied its compiler goals.
+
+The conditional projection is not a Pi/Sigma contextual-internalization
+demand. The native kernel accepts the direct recursor type and a bodyless
+opaque head as a syntactic signature extension, then type-checks its
+conditional use-port application. That does not provide GF2 grammar admission,
+an eliminator body, or a beta equation. Direct beta, demand-connectedness, and
+quotient status therefore remain `Unknown` at Law level.
+
+Host Agda constructs the analogous shape for its own `One`/`star` datatype. It
+provides no formal bridge from that host datatype to registered `g2`/`g3`, so
+its eliminator and beta proof are not imported GF2 or registered-H3 authority.
+
+The four archived representatives remain `Unknown` at the typed comparison
+boundary. Their exact hashes and legacy elaborations replay, but those
+elaborations use `Neutral` classifiers and coarse assumptions, leave the
+application clause stuck, and contain no formation-role clause. They are
+shallow `pen_core::Telescope` rows against a different legacy prefix; no
+adapter turns them into registered-H3 GF2 APIs or GSC discharge certificates.
+Consequently neither the historical four-way cone nor an additional direct
+quotient class has been established.
+
+A public contextual-internalization/adjoint principle is only one candidate
+repair if Pi/Sigma is intended. The probe proves neither its necessity nor its
+sufficiency.
 
 ## Exact condition for resuming
 

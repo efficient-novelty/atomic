@@ -579,6 +579,9 @@ name = "pen-oracle"
 version = "0.1.0"
 dependencies = [
  "pen-core",
+ "pen-kernel",
+ "pen-law",
+ "pen-type",
  "schemars",
  "serde",
  "serde_json",

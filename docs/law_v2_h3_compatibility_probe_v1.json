@@ -1,0 +1,1995 @@
+{
+  "schema": "law-v2-h3-compatibility-probe-v1",
+  "date": "2026-07-28",
+  "authority": "ORACLE_ONLY_PROVISIONAL_NON_NORMATIVE",
+  "source_bindings": [
+    {
+      "path": "Cargo.toml",
+      "role": "workspace feature and dependency configuration",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 1069,
+      "blake3": "blake3:ae28d252bdab6a64276b6fbaefa787cc8ac128c08e226c5a3bba81a726ae0efd"
+    },
+    {
+      "path": "Cargo.lock",
+      "role": "locked verifier dependency versions",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 27071,
+      "blake3": "blake3:2dbf7e55f4e3349984f590ac3847571ee28cecee5ac07114a301b74c934a4c0c"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "role": "pinned Rust toolchain channel and components",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 115,
+      "blake3": "blake3:b6d40f605c2db58eb650797b413d5eefb90d0b0574f430155f09a99a2007dce7"
+    },
+    {
+      "path": "crates/pen-core/Cargo.toml",
+      "role": "legacy syntax dependency configuration",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 250,
+      "blake3": "blake3:31a74970ca9616e7b41a1dc7a99635a58bfba6783584eda2b3941acd4aa34be8"
+    },
+    {
+      "path": "crates/pen-core/src/clause.rs",
+      "role": "legacy clause roles and serialized clause representation",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 567,
+      "blake3": "blake3:1721eba5d51a304482b74ffbe78f49c78841197fa4c423b778c52d6c07580378"
+    },
+    {
+      "path": "crates/pen-core/src/expr.rs",
+      "role": "legacy expression grammar and serialized expression representation",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 10207,
+      "blake3": "blake3:37d3bb9f392e5da1339e61369dcf8194b9cd6e9efb17030b7973d1f7927a96fd"
+    },
+    {
+      "path": "crates/pen-core/src/hash.rs",
+      "role": "BLAKE3 helper used by legacy candidate hashes and report digests",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 179,
+      "blake3": "blake3:46fa44660ee6c9828d5a9a3a2829614d9ee479a19ae70d2b8e9bc5f715d9bb7f"
+    },
+    {
+      "path": "crates/pen-core/src/stats.rs",
+      "role": "legacy structural-statistics implementation used by elaboration",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 2346,
+      "blake3": "blake3:3f3e025724d746bfdc02cd151a87091b6cd91c466a6244a7e49562d046217b78"
+    },
+    {
+      "path": "crates/pen-core/src/telescope.rs",
+      "role": "legacy Telescope structure and structural statistics",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 19443,
+      "blake3": "blake3:d9831c28c380d1fdc313f757b393e26e81df1505d87ae35291d3eb8f214cf545"
+    },
+    {
+      "path": "crates/pen-kernel/Cargo.toml",
+      "role": "dependent-kernel dependency configuration",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 488,
+      "blake3": "blake3:a582e063637f5bd5cbc856b314e8ad9913061837bed031f21fe3aa42b0bafbff"
+    },
+    {
+      "path": "crates/pen-kernel/src/lib.rs",
+      "role": "dependent-kernel public module surface",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 1288,
+      "blake3": "blake3:746a866205671ffeb29f550b36f5485e74d0e0e188905268145029897b83b5bf"
+    },
+    {
+      "path": "crates/pen-kernel/src/checker.rs",
+      "role": "dependent-core formation, typing, equality, and extension verifier",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 49469,
+      "blake3": "blake3:c8d233f170cf51a9e4349a4668c2470d2a77733d97302aee9162d9373d2c90a3"
+    },
+    {
+      "path": "crates/pen-kernel/src/dependency_graph.rs",
+      "role": "reviewed production dependency graph consulted by the kernel",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 17472,
+      "blake3": "blake3:2e537b81b0f023bf82245c0f18542f30a9cdc99c71b89146bbb723ec8fc1f8dd"
+    },
+    {
+      "path": "crates/pen-kernel/src/syntax.rs",
+      "role": "dependent-core term, judgment, and signature representation",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 6575,
+      "blake3": "blake3:62cccc543254600b75718744ce1a56215e2c13d3e29df7af45235a419e08f3b1"
+    },
+    {
+      "path": "crates/pen-kernel/src/digest.rs",
+      "role": "dependent-kernel identifier and signature digest rules",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 5960,
+      "blake3": "blake3:1ff177ebae8298176cded52635300660ab856ed85b54219fcc706a77a0bd16a0"
+    },
+    {
+      "path": "crates/pen-law/Cargo.toml",
+      "role": "registered-bootstrap dependency configuration",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 472,
+      "blake3": "blake3:c2efb9e57300f801b34a6f75603061ba938b7600a3f747814e9d35b0d64b006a"
+    },
+    {
+      "path": "crates/pen-law/assets/law_v2a_registered_bootstrap_v1.json",
+      "role": "exact registered H3 wire artifact",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 5107,
+      "blake3": "blake3:f62e7503fa834800455ad67ccd02f6997476d17f85db5250293136cf0f0ef4d9"
+    },
+    {
+      "path": "crates/pen-law/src/registered_bootstrap.rs",
+      "role": "registered bootstrap verifier and exact source constructor",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 29704,
+      "blake3": "blake3:c4eebba0168406e6584d83251c2e28d83618e10654a977db2c9c96f1540b0754"
+    },
+    {
+      "path": "crates/pen-type/Cargo.toml",
+      "role": "legacy elaborator dependency configuration",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 335,
+      "blake3": "blake3:6e5f573a6ad8843341d4da377e08aaa79d8a6684b42ca8d5d42f7a4def4150c4"
+    },
+    {
+      "path": "crates/pen-type/src/elaborate.rs",
+      "role": "legacy candidate hashing, elaboration, and typed-token attempt",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 102010,
+      "blake3": "blake3:3069feaa5d134d65a3d529da046041f70a348ef32a1771075fc6fca7a1edfd51"
+    },
+    {
+      "path": "crates/pen-type/src/equality.rs",
+      "role": "legacy elaborator judgmental-equality procedure",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 4757,
+      "blake3": "blake3:7c1ed7386c35aa7e5196e044b194f63e61204e431c3837018305977fbcee6c31"
+    },
+    {
+      "path": "crates/pen-type/src/normalize.rs",
+      "role": "legacy elaborator normalization and binding convention",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 17962,
+      "blake3": "blake3:8b8089f38fab15923ab92521f45c79fe16d64d6ef2c59a70ac11d74a4004ae9d"
+    },
+    {
+      "path": "crates/pen-oracle/Cargo.toml",
+      "role": "oracle/example dependency configuration",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 483,
+      "blake3": "blake3:85960cd7b18b1a4e68aeda392f0cd64e53dc6ca9a551fc138521301594cc701a"
+    },
+    {
+      "path": "crates/pen-oracle/src/lib.rs",
+      "role": "legacy reference-prefix constructor",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 22061,
+      "blake3": "blake3:f2dd04ddc7dd2e28c385a88481e9e98ea9a0dfd4cf7a5c18a2efccd0e2acd817"
+    },
+    {
+      "path": "docs/stage4_semantic_parsimony_v3.json",
+      "role": "archived four-root Stage-4 oracle surface",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 73000,
+      "blake3": "blake3:2425f0867e914c02cefde356d943a1623561d5fe3c57a6ff9277f914f662984c"
+    },
+    {
+      "path": "docs/LAW_V2_GENESIS_SCHEME_CALCULUS_V1.md",
+      "role": "non-adopted GSC architecture under test",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 49461,
+      "blake3": "blake3:967ce3e37479bdef193165797c609273646d967dfcb81297eaf659aa90b59e0d"
+    },
+    {
+      "path": "agda/LawV2/H3Compatibility.agda",
+      "role": "safe host-Agda conditional theorem experiment",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 13930,
+      "blake3": "blake3:e4229cc94dea60e9d5590ff0f2ceb5838eddd28e1f5c079878d064f9b7560a0a"
+    },
+    {
+      "path": "crates/pen-oracle/examples/law_v2_h3_compatibility_probe.rs",
+      "role": "oracle-only executable probe",
+      "hash_basis": "text bytes with CRLF canonicalized to LF",
+      "canonical_byte_length": 44735,
+      "blake3": "blake3:82e15b3b9f85e1814ad8213dcfd00aafb18ca02eeff946c64a73e5d139b33e61"
+    }
+  ],
+  "h3_boundary": {
+    "bootstrap_artifact_digest": "blake3:25daebe285111af4dc5751b2a771924aaacb0cb727a66ea667309b9abc100020",
+    "final_boundary_digest": "blake3:4ca5ab35cee3dd5b4773370648fdf5b02fb65a697ac7dee2603ad2ac3c4705d4",
+    "declarations": [
+      {
+        "slot": "g1",
+        "id": "blake3:838297f428b3d2b9b1cbd2206c55c0e2e5c35d7f10937d5753c022393073f276",
+        "ty": {
+          "form": "sort",
+          "level": 1
+        },
+        "body": {
+          "form": "sort",
+          "level": 0
+        }
+      },
+      {
+        "slot": "g2",
+        "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a",
+        "ty": {
+          "form": "sort",
+          "level": 0
+        },
+        "body": {
+          "form": "unit_type"
+        }
+      },
+      {
+        "slot": "g3",
+        "id": "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200",
+        "ty": {
+          "form": "unit_type"
+        },
+        "body": {
+          "form": "unit"
+        }
+      }
+    ],
+    "exact_registered_shape_replayed": true
+  },
+  "literal_gsc_descriptor_extraction": {
+    "verdict": "unknown",
+    "reason": "no adopted semantic manifest, VerifiedHistory, public export index, group enumeration, or authoritative extractor exists"
+  },
+  "shape_only_extraction_under_proposed_token_rule": {
+    "verdict": "outside_fragment",
+    "reason": "conditionally, a token-requiring GSC V1 extractor would reject the current flat boundary because it carries no closed-constructor-diagram token"
+  },
+  "probe_local_descriptor": {
+    "authority": "explicit probe stipulation matched against exact normalized H3 bytes; not GSC authority",
+    "law_level_status": {
+      "verdict": "unknown",
+      "reason": "no adopted descriptor manifest, VerifiedHistory, export index, group code, or extractor exists"
+    },
+    "probe_assumptions": [
+      "g2 is a closed former",
+      "g3 is its sole nullary, nonrecursive introduction",
+      "the constructor code is complete",
+      "computation mode is judgmental"
+    ],
+    "owner": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a",
+    "parameter_context": [],
+    "introduction_ports": [
+      "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+    ],
+    "assumed_constructor_code": "one_nullary_nonrecursive_former",
+    "assumed_recursive_position_masks": [
+      []
+    ],
+    "assumed_computation_mode": "judgmental",
+    "matched_source_declarations": [
+      "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a",
+      "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+    ],
+    "matcher_equality": {
+      "verdict": "proven",
+      "reason": "the probe matcher returns its stipulated descriptor for the exact g1/g2/g3 bytes; this proves no Law-level classification or completeness theorem"
+    }
+  },
+  "dependent_core_projection": {
+    "projection_id": "oracle-only-h3-one-nullary-dependent-core-projection-v1",
+    "authority": "conditional one-nullary dependent-core projection; not CanonicalDemandFamily and not exact GSC compile_use",
+    "parameter_context": [
+      {
+        "form": "pi",
+        "parameter": {
+          "form": "global",
+          "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a"
+        },
+        "body": {
+          "form": "global",
+          "id": "blake3:838297f428b3d2b9b1cbd2206c55c0e2e5c35d7f10937d5753c022393073f276"
+        }
+      },
+      {
+        "form": "apply",
+        "function": {
+          "form": "var",
+          "index": 0
+        },
+        "argument": {
+          "form": "global",
+          "id": "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+        }
+      }
+    ],
+    "premise_refs": [],
+    "term_output_ports": [
+      {
+        "port_name": "unit_use",
+        "ty": {
+          "form": "pi",
+          "parameter": {
+            "form": "global",
+            "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a"
+          },
+          "body": {
+            "form": "apply",
+            "function": {
+              "form": "var",
+              "index": 2
+            },
+            "argument": {
+              "form": "var",
+              "index": 0
+            }
+          }
+        },
+        "role": "probe owner-specific use shape for blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a; no full GSC UsePort code"
+      }
+    ],
+    "equation_output_ports": [],
+    "kernel_checks_performed": [
+      {
+        "judgment": "type_formation",
+        "context": [
+          {
+            "form": "pi",
+            "parameter": {
+              "form": "global",
+              "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a"
+            },
+            "body": {
+              "form": "global",
+              "id": "blake3:838297f428b3d2b9b1cbd2206c55c0e2e5c35d7f10937d5753c022393073f276"
+            }
+          }
+        ],
+        "term": {
+          "form": "apply",
+          "function": {
+            "form": "var",
+            "index": 0
+          },
+          "argument": {
+            "form": "global",
+            "id": "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+          }
+        }
+      },
+      {
+        "judgment": "type_formation",
+        "context": [
+          {
+            "form": "pi",
+            "parameter": {
+              "form": "global",
+              "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a"
+            },
+            "body": {
+              "form": "global",
+              "id": "blake3:838297f428b3d2b9b1cbd2206c55c0e2e5c35d7f10937d5753c022393073f276"
+            }
+          },
+          {
+            "form": "apply",
+            "function": {
+              "form": "var",
+              "index": 0
+            },
+            "argument": {
+              "form": "global",
+              "id": "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+            }
+          }
+        ],
+        "term": {
+          "form": "pi",
+          "parameter": {
+            "form": "global",
+            "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a"
+          },
+          "body": {
+            "form": "apply",
+            "function": {
+              "form": "var",
+              "index": 2
+            },
+            "argument": {
+              "form": "var",
+              "index": 0
+            }
+          }
+        }
+      }
+    ],
+    "gsc_support_assignment": {
+      "verdict": "unknown",
+      "reason": "birth, fixed-type, and parameter-projection support require the unadopted VerifiedHistory and family_and_support_encoding; native normalization unfolds g1/g2/g3"
+    },
+    "omitted_gsc_components": [
+      "principal_sources",
+      "canonical output port identifiers and contexts",
+      "full UsePort owner/operation-shape/footprint/action codes",
+      "sequential clause telescope",
+      "manifest-defined verification judgments",
+      "canonical family identity"
+    ],
+    "literal_gsc_compile_use_authority": {
+      "verdict": "unknown",
+      "reason": "GSC semantic manifest and exact compiler equations remain unadopted"
+    },
+    "probe_local_kernel_projection_well_formed": {
+      "verdict": "proven",
+      "reason": "pen-kernel checks the parameter context and output type over registered H3"
+    },
+    "law_level_computation_family_status": {
+      "verdict": "unknown",
+      "reason": "the exact GSC computation compiler and equation grammar are unadopted"
+    },
+    "current_kernel_equation_extension_feature": {
+      "verdict": "outside_fragment",
+      "reason": "pen-kernel has no fresh-head equation-extension syntax or verifier"
+    }
+  },
+  "direct_eliminator": {
+    "submitted_global_referencing_head_type": {
+      "form": "pi",
+      "parameter": {
+        "form": "pi",
+        "parameter": {
+          "form": "global",
+          "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a"
+        },
+        "body": {
+          "form": "global",
+          "id": "blake3:838297f428b3d2b9b1cbd2206c55c0e2e5c35d7f10937d5753c022393073f276"
+        }
+      },
+      "body": {
+        "form": "pi",
+        "parameter": {
+          "form": "apply",
+          "function": {
+            "form": "var",
+            "index": 0
+          },
+          "argument": {
+            "form": "global",
+            "id": "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+          }
+        },
+        "body": {
+          "form": "pi",
+          "parameter": {
+            "form": "global",
+            "id": "blake3:63a3893cd4dc3b57aeb1f970e34745002e37162dc3e8d8c57209d7a67b42987a"
+          },
+          "body": {
+            "form": "apply",
+            "function": {
+              "form": "var",
+              "index": 2
+            },
+            "argument": {
+              "form": "var",
+              "index": 0
+            }
+          }
+        }
+      }
+    },
+    "kernel_stored_normalized_head_type": {
+      "form": "pi",
+      "parameter": {
+        "form": "pi",
+        "parameter": {
+          "form": "unit_type"
+        },
+        "body": {
+          "form": "sort",
+          "level": 0
+        }
+      },
+      "body": {
+        "form": "pi",
+        "parameter": {
+          "form": "apply",
+          "function": {
+            "form": "var",
+            "index": 0
+          },
+          "argument": {
+            "form": "unit"
+          }
+        },
+        "body": {
+          "form": "pi",
+          "parameter": {
+            "form": "unit_type"
+          },
+          "body": {
+            "form": "apply",
+            "function": {
+              "form": "var",
+              "index": 2
+            },
+            "argument": {
+              "form": "var",
+              "index": 0
+            }
+          }
+        }
+      }
+    },
+    "use_filler_under_family_context": {
+      "form": "apply",
+      "function": {
+        "form": "apply",
+        "function": {
+          "form": "global",
+          "id": "blake3:e641a3bef39aeec87d847e3eece534533659984c38df3ed0f31aea67ffcb65e8"
+        },
+        "argument": {
+          "form": "var",
+          "index": 1
+        }
+      },
+      "argument": {
+        "form": "var",
+        "index": 0
+      }
+    },
+    "beta_left": {
+      "form": "apply",
+      "function": {
+        "form": "apply",
+        "function": {
+          "form": "apply",
+          "function": {
+            "form": "global",
+            "id": "blake3:e641a3bef39aeec87d847e3eece534533659984c38df3ed0f31aea67ffcb65e8"
+          },
+          "argument": {
+            "form": "var",
+            "index": 1
+          }
+        },
+        "argument": {
+          "form": "var",
+          "index": 0
+        }
+      },
+      "argument": {
+        "form": "global",
+        "id": "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+      }
+    },
+    "beta_right": {
+      "form": "var",
+      "index": 0
+    },
+    "beta_type": {
+      "form": "apply",
+      "function": {
+        "form": "var",
+        "index": 1
+      },
+      "argument": {
+        "form": "global",
+        "id": "blake3:e69a4377e57e9b85f0040f2699750225431ac5291df9dae86c1923d5c360b200"
+      }
+    },
+    "kernel_head_type_formation": {
+      "verdict": "proven",
+      "reason": "closed recursor Pi type forms over the registered H3 signature"
+    },
+    "bodyless_fresh_head_extension": {
+      "verdict": "proven",
+      "reason": "current pen-kernel accepts an opaque syntactic declaration of that type; this proves no CL admission, realization, conservativity, or free sealing"
+    },
+    "use_port_filler_typing": {
+      "verdict": "proven",
+      "reason": "conditional on the opaque head, r Var1 Var0 has the probe-local projection output type"
+    },
+    "lambda_p_m_z_to_m_definition": {
+      "verdict": "refuted",
+      "reason": "pen-kernel returns TypeMismatch because P g3 is not definitionally P z"
+    },
+    "fresh_head_beta_in_current_kernel": {
+      "verdict": "outside_fragment",
+      "reason": "pen-kernel has no equation-extension syntax or verifier"
+    },
+    "host_agda_shape_model_source": {
+      "verdict": "proven",
+      "reason": "the bound source contract contains an analogous host One/star eliminator, a refl beta witness, and no postulate token; this is source-shape evidence only"
+    },
+    "host_agda_external_typecheck": {
+      "verdict": "unknown",
+      "reason": "artifact replay binds and inspects source but does not invoke or attest an Agda executable, version, flags, imports, or result"
+    },
+    "syntactic_self_equality": {
+      "verdict": "proven",
+      "reason": "the submitted direct presentation is syntactically equal to itself; this is not quotient membership or equivalence"
+    },
+    "raw_public_clause_shape": "one fresh head plus one beta clause",
+    "comparison_with_legacy_kappa": {
+      "verdict": "unknown",
+      "reason": "two typed public clauses and three legacy shallow clauses have no adopted common irreducibility measure"
+    }
+  },
+  "archived_representatives": [
+    {
+      "candidate_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "canonical_key": "0e9aa132",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                },
+                {
+                  "Var": 3
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "legacy_candidate_hash_recomputed": true,
+      "legacy_elaboration": {
+        "ambient_parameters": 2,
+        "clauses": [
+          {
+            "beta_steps": 0,
+            "clause_index": 0,
+            "coarse_assumptions": 1,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-2"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "pi-form"
+                }
+              ],
+              "coarse": true,
+              "kernel_ty": {
+                "Fun": [
+                  "Neutral",
+                  "Type"
+                ]
+              },
+              "rule": "lam-intro"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": {
+              "Fun": [
+                "Neutral",
+                "Type"
+              ]
+            },
+            "normal_form": {
+              "Lam": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            },
+            "stuck_applications": []
+          },
+          {
+            "beta_steps": 0,
+            "clause_index": 1,
+            "coarse_assumptions": 0,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-2"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Neutral",
+                  "rule": "app-stuck"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Neutral",
+                  "rule": "field-ref-0"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Neutral",
+              "rule": "app-stuck"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": "Neutral",
+            "normal_form": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                },
+                {
+                  "Var": 3
+                }
+              ]
+            },
+            "stuck_applications": [
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              },
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "beta_steps": 1,
+            "clause_index": 2,
+            "coarse_assumptions": 1,
+            "declared_role": "elimination",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    }
+                  ],
+                  "coarse": true,
+                  "kernel_ty": {
+                    "Fun": [
+                      "Neutral",
+                      "Type"
+                    ]
+                  },
+                  "rule": "lam-intro"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-2"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-1"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Type",
+              "rule": "app-beta"
+            },
+            "is_beta_redex_clause": true,
+            "kernel_role": "elimination",
+            "kernel_ty": "Type",
+            "normal_form": {
+              "Var": 1
+            },
+            "stuck_applications": []
+          }
+        ],
+        "derivation_hash": "blake3:7e9630461d79f48dd56acf4f615f97dcd47e1a05db1fd0f1d5e2b1c4f173f7ba",
+        "fuel": {
+          "max_fuel_observed": 2,
+          "static_bound": 39,
+          "total_fuel_observed": 2,
+          "within_bound": true
+        },
+        "signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+        "subject_hash": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+        "visible_library": 3
+      },
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "legacy_typed_eliminator_token": {
+        "verdict": "refuted",
+        "reason": "legacy issue_typed_eliminator_token returns NoFormationClause"
+      },
+      "gf2_typed_elaboration": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "h3_use_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "h3_beta_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      }
+    },
+    {
+      "candidate_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "canonical_key": "4ede818c",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 3
+                    }
+                  ]
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "legacy_candidate_hash_recomputed": true,
+      "legacy_elaboration": {
+        "ambient_parameters": 2,
+        "clauses": [
+          {
+            "beta_steps": 0,
+            "clause_index": 0,
+            "coarse_assumptions": 1,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-2"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "pi-form"
+                }
+              ],
+              "coarse": true,
+              "kernel_ty": {
+                "Fun": [
+                  "Neutral",
+                  "Type"
+                ]
+              },
+              "rule": "lam-intro"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": {
+              "Fun": [
+                "Neutral",
+                "Type"
+              ]
+            },
+            "normal_form": {
+              "Lam": {
+                "Pi": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            },
+            "stuck_applications": []
+          },
+          {
+            "beta_steps": 0,
+            "clause_index": 1,
+            "coarse_assumptions": 0,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Neutral",
+                      "rule": "field-ref-0"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Neutral",
+                  "rule": "app-stuck"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-2"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Neutral",
+              "rule": "app-stuck"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": "Neutral",
+            "normal_form": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 3
+                    }
+                  ]
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            },
+            "stuck_applications": [
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              },
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "beta_steps": 1,
+            "clause_index": 2,
+            "coarse_assumptions": 1,
+            "declared_role": "elimination",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    }
+                  ],
+                  "coarse": true,
+                  "kernel_ty": {
+                    "Fun": [
+                      "Neutral",
+                      "Type"
+                    ]
+                  },
+                  "rule": "lam-intro"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-2"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-1"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Type",
+              "rule": "app-beta"
+            },
+            "is_beta_redex_clause": true,
+            "kernel_role": "elimination",
+            "kernel_ty": "Type",
+            "normal_form": {
+              "Var": 1
+            },
+            "stuck_applications": []
+          }
+        ],
+        "derivation_hash": "blake3:0dc68fac5920c22441b04ab8f82a6efcbb86751b3002f9f457df6ba723fff26e",
+        "fuel": {
+          "max_fuel_observed": 2,
+          "static_bound": 39,
+          "total_fuel_observed": 2,
+          "within_bound": true
+        },
+        "signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+        "subject_hash": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+        "visible_library": 3
+      },
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "legacy_typed_eliminator_token": {
+        "verdict": "refuted",
+        "reason": "legacy issue_typed_eliminator_token returns NoFormationClause"
+      },
+      "gf2_typed_elaboration": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "h3_use_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "h3_beta_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      }
+    },
+    {
+      "candidate_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "canonical_key": "d860242f",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 3
+                    }
+                  ]
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "legacy_candidate_hash_recomputed": true,
+      "legacy_elaboration": {
+        "ambient_parameters": 2,
+        "clauses": [
+          {
+            "beta_steps": 0,
+            "clause_index": 0,
+            "coarse_assumptions": 1,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-2"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "sigma-form"
+                }
+              ],
+              "coarse": true,
+              "kernel_ty": {
+                "Fun": [
+                  "Neutral",
+                  "Type"
+                ]
+              },
+              "rule": "lam-intro"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": {
+              "Fun": [
+                "Neutral",
+                "Type"
+              ]
+            },
+            "normal_form": {
+              "Lam": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            },
+            "stuck_applications": []
+          },
+          {
+            "beta_steps": 0,
+            "clause_index": 1,
+            "coarse_assumptions": 0,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Neutral",
+                      "rule": "field-ref-0"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Neutral",
+                  "rule": "app-stuck"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-2"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Neutral",
+              "rule": "app-stuck"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": "Neutral",
+            "normal_form": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 3
+                    }
+                  ]
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            },
+            "stuck_applications": [
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              },
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "beta_steps": 1,
+            "clause_index": 2,
+            "coarse_assumptions": 1,
+            "declared_role": "elimination",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    }
+                  ],
+                  "coarse": true,
+                  "kernel_ty": {
+                    "Fun": [
+                      "Neutral",
+                      "Type"
+                    ]
+                  },
+                  "rule": "lam-intro"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-2"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-1"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Type",
+              "rule": "app-beta"
+            },
+            "is_beta_redex_clause": true,
+            "kernel_role": "elimination",
+            "kernel_ty": "Type",
+            "normal_form": {
+              "Var": 1
+            },
+            "stuck_applications": []
+          }
+        ],
+        "derivation_hash": "blake3:545f39392e6f75089089b9de586a5c4ffd1d0e74e91288365e9d2dcc007acf53",
+        "fuel": {
+          "max_fuel_observed": 2,
+          "static_bound": 39,
+          "total_fuel_observed": 2,
+          "within_bound": true
+        },
+        "signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+        "subject_hash": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+        "visible_library": 3
+      },
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "legacy_typed_eliminator_token": {
+        "verdict": "refuted",
+        "reason": "legacy issue_typed_eliminator_token returns NoFormationClause"
+      },
+      "gf2_typed_elaboration": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "h3_use_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "h3_beta_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      }
+    },
+    {
+      "candidate_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "canonical_key": "b516ff09",
+      "telescope": {
+        "clauses": [
+          {
+            "role": "introduction",
+            "expr": {
+              "Lam": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "introduction",
+            "expr": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                },
+                {
+                  "Var": 3
+                }
+              ]
+            }
+          },
+          {
+            "role": "elimination",
+            "expr": {
+              "App": [
+                {
+                  "Lam": {
+                    "Var": 1
+                  }
+                },
+                {
+                  "Var": 2
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "legacy_candidate_hash_recomputed": true,
+      "legacy_elaboration": {
+        "ambient_parameters": 2,
+        "clauses": [
+          {
+            "beta_steps": 0,
+            "clause_index": 0,
+            "coarse_assumptions": 1,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-2"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "sigma-form"
+                }
+              ],
+              "coarse": true,
+              "kernel_ty": {
+                "Fun": [
+                  "Neutral",
+                  "Type"
+                ]
+              },
+              "rule": "lam-intro"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": {
+              "Fun": [
+                "Neutral",
+                "Type"
+              ]
+            },
+            "normal_form": {
+              "Lam": {
+                "Sigma": [
+                  {
+                    "Var": 1
+                  },
+                  {
+                    "Var": 2
+                  }
+                ]
+              }
+            },
+            "stuck_applications": []
+          },
+          {
+            "beta_steps": 0,
+            "clause_index": 1,
+            "coarse_assumptions": 0,
+            "declared_role": "introduction",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    },
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-2"
+                    }
+                  ],
+                  "coarse": false,
+                  "kernel_ty": "Neutral",
+                  "rule": "app-stuck"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Neutral",
+                  "rule": "field-ref-0"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Neutral",
+              "rule": "app-stuck"
+            },
+            "is_beta_redex_clause": false,
+            "kernel_role": "introduction",
+            "kernel_ty": "Neutral",
+            "normal_form": {
+              "App": [
+                {
+                  "App": [
+                    {
+                      "Var": 1
+                    },
+                    {
+                      "Var": 2
+                    }
+                  ]
+                },
+                {
+                  "Var": 3
+                }
+              ]
+            },
+            "stuck_applications": [
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              },
+              {
+                "clause_index": 1,
+                "head": {
+                  "AmbientParameter": {
+                    "parameter": 1
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "beta_steps": 1,
+            "clause_index": 2,
+            "coarse_assumptions": 1,
+            "declared_role": "elimination",
+            "derivation": {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "coarse": false,
+                      "kernel_ty": "Type",
+                      "rule": "ambient-param-1"
+                    }
+                  ],
+                  "coarse": true,
+                  "kernel_ty": {
+                    "Fun": [
+                      "Neutral",
+                      "Type"
+                    ]
+                  },
+                  "rule": "lam-intro"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-2"
+                },
+                {
+                  "children": [],
+                  "coarse": false,
+                  "kernel_ty": "Type",
+                  "rule": "ambient-param-1"
+                }
+              ],
+              "coarse": false,
+              "kernel_ty": "Type",
+              "rule": "app-beta"
+            },
+            "is_beta_redex_clause": true,
+            "kernel_role": "elimination",
+            "kernel_ty": "Type",
+            "normal_form": {
+              "Var": 1
+            },
+            "stuck_applications": []
+          }
+        ],
+        "derivation_hash": "blake3:b62b04f56ae6952a84ba69e2bd05799c386fcb8080ce56a320f6054c9c324c55",
+        "fuel": {
+          "max_fuel_observed": 2,
+          "static_bound": 39,
+          "total_fuel_observed": 2,
+          "within_bound": true
+        },
+        "signature_digest": "blake3:4bdef8bb889e05f6ff2df384795098086e583dd00f6b5585daaabd35242a81c3",
+        "subject_hash": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+        "visible_library": 3
+      },
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "legacy_typed_eliminator_token": {
+        "verdict": "refuted",
+        "reason": "legacy issue_typed_eliminator_token returns NoFormationClause"
+      },
+      "gf2_typed_elaboration": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "h3_use_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "h3_beta_discharge": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      }
+    }
+  ],
+  "discharge_equivalence_matrix": [
+    {
+      "response": "sealed_h3_library",
+      "historical_grammar_admission": {
+        "verdict": "outside_fragment",
+        "reason": "library derivability is not a legacy candidate"
+      },
+      "gf2_grammar_admission": {
+        "verdict": "unknown",
+        "reason": "no complete public-operational derivability saturation exists"
+      },
+      "typed_head_formation": {
+        "verdict": "unknown",
+        "reason": "the sealed boundary contains no public unit-eliminator head"
+      },
+      "use_port_fill": {
+        "verdict": "unknown",
+        "reason": "host Agda elimination cannot be imported as a sealed-library capability"
+      },
+      "beta_port_fill": {
+        "verdict": "unknown",
+        "reason": "the boundary has no equation-extension registry"
+      },
+      "full_downward_dag_discharge": {
+        "verdict": "unknown",
+        "reason": "library-only typed saturation is not implemented"
+      },
+      "demand_connectedness": {
+        "verdict": "outside_fragment",
+        "reason": "demand-connectedness is a candidate-response property"
+      },
+      "quotient_equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no typed library realization or quotient theorem exists"
+      },
+      "raw_public_clause_shape": "no_candidate_shape"
+    },
+    {
+      "response": "blake3:2016726758f30ee3f1dc73b5e89388f2c5d0f6059cd2c3a82aaa01f2b89a3407",
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "gf2_grammar_admission": {
+        "verdict": "unknown",
+        "reason": "the prospective typed GF2 candidate grammar is not implemented"
+      },
+      "typed_head_formation": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "use_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "beta_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "full_downward_dag_discharge": {
+        "verdict": "unknown",
+        "reason": "the typed discharge DAG is not implemented"
+      },
+      "demand_connectedness": {
+        "verdict": "unknown",
+        "reason": "demand-connectedness is not defined for legacy Telescope rows"
+      },
+      "quotient_equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      },
+      "raw_public_clause_shape": "legacy_three_clause_telescope"
+    },
+    {
+      "response": "blake3:43a0ed7077700a3c4a917d9ac9e327f5b91d3d3c9d87048ce60b58f86b493308",
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "gf2_grammar_admission": {
+        "verdict": "unknown",
+        "reason": "the prospective typed GF2 candidate grammar is not implemented"
+      },
+      "typed_head_formation": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "use_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "beta_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "full_downward_dag_discharge": {
+        "verdict": "unknown",
+        "reason": "the typed discharge DAG is not implemented"
+      },
+      "demand_connectedness": {
+        "verdict": "unknown",
+        "reason": "demand-connectedness is not defined for legacy Telescope rows"
+      },
+      "quotient_equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      },
+      "raw_public_clause_shape": "legacy_three_clause_telescope"
+    },
+    {
+      "response": "blake3:4b2211ecae25f3afbb1187f3a4a1b644edfc6adbd3512b9ca27c64a7b731265b",
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "gf2_grammar_admission": {
+        "verdict": "unknown",
+        "reason": "the prospective typed GF2 candidate grammar is not implemented"
+      },
+      "typed_head_formation": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "use_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "beta_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "full_downward_dag_discharge": {
+        "verdict": "unknown",
+        "reason": "the typed discharge DAG is not implemented"
+      },
+      "demand_connectedness": {
+        "verdict": "unknown",
+        "reason": "demand-connectedness is not defined for legacy Telescope rows"
+      },
+      "quotient_equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      },
+      "raw_public_clause_shape": "legacy_three_clause_telescope"
+    },
+    {
+      "response": "blake3:b4f821d9bb28366d8ae37adc7c1cb3e28c8a0de60f05c81e9ad75ba4f8b0edd4",
+      "historical_grammar_admission": {
+        "verdict": "proven",
+        "reason": "archived live Stage-4 cone member under the legacy pen-core grammar"
+      },
+      "gf2_grammar_admission": {
+        "verdict": "unknown",
+        "reason": "the prospective typed GF2 candidate grammar is not implemented"
+      },
+      "typed_head_formation": {
+        "verdict": "unknown",
+        "reason": "no pen-core Telescope to registered-H3 GF2 exact-extension adapter exists"
+      },
+      "use_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed owner-specific UsePort filler has been constructed"
+      },
+      "beta_port_fill": {
+        "verdict": "unknown",
+        "reason": "no typed fresh-head equation clause has been constructed"
+      },
+      "full_downward_dag_discharge": {
+        "verdict": "unknown",
+        "reason": "the typed discharge DAG is not implemented"
+      },
+      "demand_connectedness": {
+        "verdict": "unknown",
+        "reason": "demand-connectedness is not defined for legacy Telescope rows"
+      },
+      "quotient_equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "no common typed API or adopted quotient theorem exists"
+      },
+      "raw_public_clause_shape": "legacy_three_clause_telescope"
+    },
+    {
+      "response": "direct_unit_eliminator",
+      "historical_grammar_admission": {
+        "verdict": "outside_fragment",
+        "reason": "pen-core Expr has no owner-specific UnitType/global/equation API"
+      },
+      "gf2_grammar_admission": {
+        "verdict": "unknown",
+        "reason": "the prospective typed GF2 candidate and equation grammars are not implemented"
+      },
+      "typed_head_formation": {
+        "verdict": "proven",
+        "reason": "pen-kernel verifies the exact closed dependent Pi type"
+      },
+      "use_port_fill": {
+        "verdict": "proven",
+        "reason": "conditional on a fresh opaque head, r Var1 Var0 has the probe-local projection output type"
+      },
+      "beta_port_fill": {
+        "verdict": "unknown",
+        "reason": "Law-level equation admission is unadopted; current pen-kernel separately lacks an equation-extension verifier"
+      },
+      "full_downward_dag_discharge": {
+        "verdict": "unknown",
+        "reason": "beta admission, candidate grammar, and coherent DAG discharge remain open"
+      },
+      "demand_connectedness": {
+        "verdict": "unknown",
+        "reason": "would be direct under the proposed owner/fresh-head grammar, which is not adopted"
+      },
+      "quotient_equivalence_to_direct": {
+        "verdict": "unknown",
+        "reason": "candidate admission and beta discharge are unresolved, so no response-quotient element exists to compare"
+      },
+      "raw_public_clause_shape": "one_head_plus_one_beta"
+    }
+  ],
+  "conclusion": {
+    "outcome_classification": "blocked_before_A_B_C",
+    "earliest_blocker": "no authoritative ClosedFormerFrame for registered H3",
+    "conditional_compile_use_result": "under the explicit one-nullary assumptions, the probe-local dependent-core projection has ordinary dependent-unit-elimination shape; this is not an exact GSC compile_use result",
+    "historical_stage4_compatibility": {
+      "verdict": "unknown",
+      "reason": "all four archived rows lack typed GF2 APIs and H3 discharge certificates"
+    },
+    "direct_extra_quotient_class": {
+      "verdict": "unknown",
+      "reason": "direct head/use typing is proven, but candidate admission, beta extension, complete cone, and quotient are unavailable"
+    },
+    "contextual_internalization_implication": "a public context-projection/adjoint bridge is a candidate repair if an authoritative census later establishes Outcome C; this probe does not prove it is required",
+    "next_required_capabilities": [
+      "adopted semantic descriptor/compiler manifest",
+      "VerifiedHistory plus event-time public export index",
+      "typed legacy-Telescope to GF2 candidate adapter or new typed representatives",
+      "restricted fresh-head equation-extension verifier",
+      "finite operational derivability/discharge DAG",
+      "origin-cutoff quotient/equivalence registry"
+    ]
+  },
+  "result_digest": "blake3:21206c6bc40cb5f123b9d6bc6db6a93d7111a2b13ae4c05230e09ad5445c5a53"
+}

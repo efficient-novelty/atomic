@@ -1446,3 +1446,36 @@ deterministic goal compilers, and a typed relative-census adapter are required
 before the next law-level code step. Equation outputs also require individual
 and jointly ordered exact-extension equation verifiers with conservativity
 and normalization proofs. Production remains fail-closed with `Unknown`.
+
+The subsequent oracle-only
+[H3 compatibility probe](LAW_V2_H3_COMPATIBILITY_PROBE_RESULT.md) has now
+refined that stop. The literal descriptor result is `Unknown`, because GSC V1
+and its exact semantic/compiler manifest are unadopted. Conditional on adopting
+the proposal's current missing-token rule, the registered bootstrap would be
+`OutsideFragment` because the required structured group/export capability is
+absent.
+
+Under an explicit non-normative one-nullary-former matcher, a hand-authored
+probe-local dependent-core projection has the shape of dependent unit
+elimination. It is not an exact or adopted `compile_use` result. Constructor
+completeness and computation mode are assumptions of that encoding, not
+derived history facts. Birth, fixed-type, and parameter-projection support
+remain `Unknown`. Kernel formation checks for its context and output are
+separate from the still-missing compiler verification goals.
+
+A direct recursor type and its application through a bodyless opaque head
+type-check in the core. That is only a kernel-accepted syntactic extension, not
+GF2 candidate admission or an eliminator implementation. Its beta,
+demand-connectedness, and quotient status remain `Unknown` at Law level. The
+safe Agda module supplies only an analogous `One`/`star` host model and no
+bridge to registered `g2`/`g3`.
+
+The four historical Stage-4 telescopes have no typed GF2/H3 adapter. Their
+legacy elaboration is coarse, includes stuck neutral applications, and has no
+formation-role clause, so their discharge and equivalence cells remain
+`Unknown`. A contextual-internalization/adjoint principle is one possible
+repair if Pi/Sigma is intended, not a consequence or uniquely established
+remedy of this probe. The next lawful step is therefore adopted
+descriptor/history authority, derived support and completeness evidence, exact
+compiler verification goals, and a typed response adapter—not GSC adoption or
+response-cone selection.
