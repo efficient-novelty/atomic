@@ -131,7 +131,9 @@ impl Kernel {
 
     /// Reproducible digest of the trusted kernel crate sources, its
     /// self-contained Cargo/toolchain inputs, and the canonical resolved
-    /// production dependency graph available at build time.
+    /// production dependency graph available at build time. All textual
+    /// inputs are bound as canonical UTF-8/LF bytes so Git checkout line-ending
+    /// conversion cannot change the protocol identity.
     ///
     /// This is source provenance, not a binary or build-environment
     /// attestation. The workspace manifest is deliberately excluded: its
@@ -140,40 +142,40 @@ impl Kernel {
     /// must exactly match the reviewed kernel-only dependency snapshot.
     pub fn kernel_protocol_digest(&self) -> Digest {
         let dependency_graph = reviewed_production_dependency_graph();
-        Digest::of_domain_chunks(
-            "kernel-trusted-source-v2",
+        trusted_text_protocol_digest(
+            "kernel-trusted-source-v3",
             &[
-                include_bytes!("lib.rs"),
-                include_bytes!("syntax.rs"),
-                include_bytes!("checker.rs"),
-                include_bytes!("certificate.rs"),
-                include_bytes!("dependency_graph.rs"),
-                include_bytes!("digest.rs"),
-                include_bytes!("../Cargo.toml"),
+                include_bytes!("lib.rs").as_slice(),
+                include_bytes!("syntax.rs").as_slice(),
+                include_bytes!("checker.rs").as_slice(),
+                include_bytes!("certificate.rs").as_slice(),
+                include_bytes!("dependency_graph.rs").as_slice(),
+                include_bytes!("digest.rs").as_slice(),
+                include_bytes!("../Cargo.toml").as_slice(),
                 dependency_graph.as_slice(),
-                include_bytes!("../../../rust-toolchain.toml"),
-                include_bytes!("../../../.cargo/config.toml"),
+                include_bytes!("../../../rust-toolchain.toml").as_slice(),
+                include_bytes!("../../../.cargo/config.toml").as_slice(),
             ],
         )
     }
 
     /// Reproducible source digest for the syntax/checker normalization slice,
     /// the crate-resolved Cargo/toolchain inputs, and the canonical resolved
-    /// production dependency graph. This is not a binary or
-    /// build-environment attestation.
+    /// production dependency graph. Text is canonicalized to UTF-8/LF. This
+    /// is not a binary or build-environment attestation.
     pub fn normalizer_protocol_digest(&self) -> Digest {
         let dependency_graph = reviewed_production_dependency_graph();
-        Digest::of_domain_chunks(
-            "normalizer-trusted-source-v2",
+        trusted_text_protocol_digest(
+            "normalizer-trusted-source-v3",
             &[
-                include_bytes!("lib.rs"),
-                include_bytes!("syntax.rs"),
-                include_bytes!("checker.rs"),
-                include_bytes!("dependency_graph.rs"),
-                include_bytes!("../Cargo.toml"),
+                include_bytes!("lib.rs").as_slice(),
+                include_bytes!("syntax.rs").as_slice(),
+                include_bytes!("checker.rs").as_slice(),
+                include_bytes!("dependency_graph.rs").as_slice(),
+                include_bytes!("../Cargo.toml").as_slice(),
                 dependency_graph.as_slice(),
-                include_bytes!("../../../rust-toolchain.toml"),
-                include_bytes!("../../../.cargo/config.toml"),
+                include_bytes!("../../../rust-toolchain.toml").as_slice(),
+                include_bytes!("../../../.cargo/config.toml").as_slice(),
             ],
         )
     }
@@ -435,6 +437,27 @@ fn verify_open_judgment_with_budget(
             })
         }
     }
+}
+
+fn trusted_text_protocol_digest(domain: &str, chunks: &[&[u8]]) -> Digest {
+    let canonical = chunks
+        .iter()
+        .map(|chunk| {
+            canonical_trusted_text(chunk)
+                .unwrap_or_else(|error| panic!("invalid trusted protocol source: {error}"))
+        })
+        .collect::<Vec<_>>();
+    let canonical_chunks = canonical.iter().map(Vec::as_slice).collect::<Vec<_>>();
+    Digest::of_domain_chunks(domain, &canonical_chunks)
+}
+
+fn canonical_trusted_text(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let text = std::str::from_utf8(bytes).map_err(|_| "source is not UTF-8")?;
+    let canonical = text.replace("\r\n", "\n");
+    if canonical.contains('\r') {
+        return Err("source contains a bare carriage return");
+    }
+    Ok(canonical.into_bytes())
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -1162,7 +1185,10 @@ fn shift(
 
 #[cfg(test)]
 mod tests {
-    use super::{Kernel, KernelError, KernelLimits, MAX_SAFE_RECURSION_DEPTH, ResourceKind};
+    use super::{
+        Kernel, KernelError, KernelLimits, MAX_SAFE_RECURSION_DEPTH, ResourceKind,
+        canonical_trusted_text,
+    };
     use crate::{
         Declaration, DependentContext, Digest, GlobalId, OpenJudgment, Term, UncheckedSignature,
     };
@@ -1173,6 +1199,16 @@ mod tests {
 
     fn kernel() -> Kernel {
         Kernel::new(KernelLimits::default()).expect("valid limits")
+    }
+
+    #[test]
+    fn trusted_source_identity_is_line_ending_portable() {
+        assert_eq!(
+            canonical_trusted_text(b"first\nsecond\n").expect("LF source"),
+            canonical_trusted_text(b"first\r\nsecond\r\n").expect("CRLF source")
+        );
+        assert!(canonical_trusted_text(b"first\rsecond\n").is_err());
+        assert!(canonical_trusted_text(&[0xff]).is_err());
     }
 
     #[test]

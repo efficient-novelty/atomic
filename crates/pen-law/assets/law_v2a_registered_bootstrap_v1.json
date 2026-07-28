@@ -2,8 +2,8 @@
   "binding": {
     "schema_version": 1,
     "codec_version": 1,
-    "kernel_digest": "blake3:8de41671c78c93860142e62a72257fa144142d5205fe6fbd8c0db6f9a290b742",
-    "normalizer_digest": "blake3:6f915ea4b11e782d7456526f7cf050a3a91bc844d9c14c2bd0adcabbaddedd75",
+    "kernel_digest": "blake3:ba7e649ef9417ef05bf7f99f91b89e0df03a3175e23f1864c5289a7c4639d2c5",
+    "normalizer_digest": "blake3:e65f39a60404cb732834f2c3c9d2401810c969addd1aa5d615b08fcb1c4025c9",
     "bootstrap_contract_digest": "blake3:75a0b7aa0b009e4963b0503f0d0642ddc7b7e406cdbb22c4ddaa42bd78f9929e"
   },
   "initial_checked_boundary_digest": "blake3:09822457c2dfccbe989c073f3c0fdb6eaf441f437619d485425a3f094b1151c1",
@@ -12,7 +12,7 @@
       "ordinal": 1,
       "predecessor_checked_boundary_digest": "blake3:09822457c2dfccbe989c073f3c0fdb6eaf441f437619d485425a3f094b1151c1",
       "source_identity": "blake3:2a04920c2b4aebed8878ea36b37c79eeda80746d7f0f12a0372b15e4660ca086",
-      "binding_identity": "blake3:998a7d2439daa81ee441e3f1b9db33bcc7e642b6f63f252dca96b96d122d19e3",
+      "binding_identity": "blake3:64a948edd06ced0eba41ca08abaa29e75835cbdcdaa83a321a9e37b072b02cd6",
       "extension": {
         "declarations": [
           {
@@ -49,7 +49,7 @@
       "ordinal": 2,
       "predecessor_checked_boundary_digest": "blake3:b0871acd346025359509814315c139c052547d2f202724dbbddcdca0a691a97b",
       "source_identity": "blake3:7b8b4e5abd231c0e96b33ba96df8d7e2e358568bb7e15daf44180f3544e6575a",
-      "binding_identity": "blake3:61aaee6593e57e4db306f3b0db077efcc47884cf5a18db3c95a28734696e598c",
+      "binding_identity": "blake3:1e78eb88949bba35fe4a9c1bd3a7938938b74eb560bc0b2bc4fe011554a5bb16",
       "extension": {
         "declarations": [
           {
@@ -84,7 +84,7 @@
       "ordinal": 3,
       "predecessor_checked_boundary_digest": "blake3:a95f110e6ee0fe93ff2529ea140d600b9499262f29790b3f08576577b4da4b5f",
       "source_identity": "blake3:bad60ccb974015b3ae80e37c80ceec7f2486bb0a8ff4406376e1e9b068d826ad",
-      "binding_identity": "blake3:a988d3f5e31098c314e34d3e8d370bbb8b99a2b77ea4be93696ffa1217c37e6d",
+      "binding_identity": "blake3:8095f75f53f91b4427c23bf5fd29db2c42f980162704a434ba7e1f64a625ad94",
       "extension": {
         "declarations": [
           {
@@ -150,5 +150,5 @@
     ]
   },
   "final_checked_boundary_digest": "blake3:4ca5ab35cee3dd5b4773370648fdf5b02fb65a697ac7dee2603ad2ac3c4705d4",
-  "claimed_artifact_digest": "blake3:faa407350bb81a52164ec7f93a147e64d22487cc7ada6a75e91ad4a6dd4e0d86"
+  "claimed_artifact_digest": "blake3:25daebe285111af4dc5751b2a771924aaacb0cb727a66ea667309b9abc100020"
 }
