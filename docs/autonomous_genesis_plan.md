@@ -1408,15 +1408,41 @@ lawful closure also contains:
 None of these is the GF2 closure theorem. The checker probe has no
 caller-source theorem API; the scheme slice has no full generator or
 universal total-specialization proof; and the registered prefix has no
-Law-V2B leastness claim. The next implementation move is therefore to freeze
-the actual finite GF2 carrier and scheme calculus, implement the restricted
-GF2-to-Cubical-Agda translation, and prove generator/response closure before
-attempting the absolute first guarded cone.
+Law-V2B leastness claim.
 
-Execution stopped at the
-[H3-to-Stage-4 census blocker](LAW_V2_H3_CENSUS_BLOCKER.md): the adopted
-records bound the intended schema carrier but do not define the complete
-stage-generic scheme-generation relation \(C(S_n,S_{n-1})\). Implementing
-that relation now would choose new formal semantics. A versioned adoption of
-the scheme calculus and its induction principle is required before the next
-law-level code step.
+The missing history-demand architecture has now been isolated as
+[GSC V1](LAW_V2_GENESIS_SCHEME_CALCULUS_V1.md). It is explicitly a proposal,
+not an adopted law. It separates manifest-indexed anchored
+\(C^{\mathcal M}_{B_H}(A)\), whose live instance is
+\(C^{\mathcal M}_{B_H}(W_H)\), from the candidate-local `Act/Cmp/Horn`
+sealing trace; specifies a rank-two finite carrier of canonical rule
+derivations; separates
+birth jurisdiction from symbolic type support; and states total
+specialization, equivariance, weakening, locality, and expiration as adoption
+gates. The exact finite code grammars, matcher/compiler equations, ordering,
+normalizer, quotient, and derivability manifests remain a normative choice.
+
+In parallel, the archived coherence-depth artifact was independently
+extracted and replayed. The
+[digest-bound replay report](LAW_V2_CEXT_ARTIFACT_REPLAY_V1.md) records the
+archive, source tree, toolchain, checker transcript, warnings, and theorem
+surface. The replay passed, but inspection confirms that several key
+sealing/adequacy facts are supplied as abstract fields. The artifact receives
+no Law-V2 authority until a GF2-to-\(C_{\mathrm{ext}}\) adequacy bridge is
+proved.
+
+Execution now stops at the refined
+[H3-to-Stage-4 census blocker](LAW_V2_H3_CENSUS_BLOCKER.md). A versioned
+adoption must first freeze those manifests, GSC support, quotient, and
+induction principles. The verified registered bootstrap supplies an exact
+final signature and chain digests, but no authoritative verified
+history/anchor view, origin-cutoff theorem registry, or generic
+descriptor-bearing group capability. Current kernel-facing syntax also lacks
+a first-class multi-output open-family and typed derivability/discharge DAG,
+and cannot intrinsically certify complete constructor, operation, cell,
+comparison, and mate-problem frames. Adopted history/anchor, open-family,
+theorem-registry, and descriptor capabilities, a syntax-directed extractor,
+deterministic goal compilers, and a typed relative-census adapter are required
+before the next law-level code step. Equation outputs also require individual
+and jointly ordered exact-extension equation verifiers with conservativity
+and normalization proofs. Production remains fail-closed with `Unknown`.
