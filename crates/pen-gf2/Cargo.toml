@@ -1,24 +1,21 @@
 [package]
-name = "pen-engine"
+name = "pen-gf2"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
-description = "Oracle-free orchestration shell for the two-law v2 lane"
+description = "Oracle-free finite-fragment contract and verifier adapter"
 
 [dependencies]
 pen-kernel = { path = "../pen-kernel" }
-pen-law = { path = "../pen-law" }
 schemars.workspace = true
 serde.workspace = true
-serde_json.workspace = true
 thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
 
 [package.metadata.law-v2]
 role = "production"
 oracle_access = false
 diagnostic_access = false
-
-[[bin]]
-name = "pen-law-v2"
-path = "src/main.rs"

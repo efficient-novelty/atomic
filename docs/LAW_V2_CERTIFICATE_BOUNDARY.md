@@ -179,14 +179,29 @@ for replay. The kernel and normalizer fields are taken directly from
 reproducible, domain-separated digests over the byte sequences explicitly
 enumerated by `kernel_protocol_digest` and `normalizer_protocol_digest`.
 The kernel digest covers `src/lib.rs`, `src/syntax.rs`, `src/checker.rs`,
-`src/certificate.rs`, `src/digest.rs`, the crate and workspace
-`Cargo.toml` files, workspace `Cargo.lock`, `rust-toolchain.toml`, and
-`.cargo/config.toml`. The normalizer digest covers `src/lib.rs`,
-`src/syntax.rs`, and `src/checker.rs` plus those same five
-build/configuration files. This is exact source/resolved-input identity for
-those enumerated bytes, not binary, compiler, operating-system, dependency
-source, or environment attestation; callers cannot supply alternate values
-for those two fields.
+`src/certificate.rs`, `src/dependency_graph.rs`, `src/digest.rs`, the
+self-contained `crates/pen-kernel/Cargo.toml`, the reviewed
+`crates/pen-kernel/production-dependency-graph.lock`, `rust-toolchain.toml`,
+and `.cargo/config.toml`. The normalizer digest covers `src/lib.rs`,
+`src/syntax.rs`, `src/checker.rs`, and `src/dependency_graph.rs` plus those
+same build/configuration and dependency-graph inputs.
+
+The minimized dependency graph is not copied blindly from the aggregate
+lockfile. The kernel parser selects only normal and build dependencies from
+its own manifest, resolves their complete transitive closure in the active
+`Cargo.lock`, and canonicalizes every root, package name/version/source,
+registry checksum, and dependency edge. That canonical form must byte-match
+the reviewed snapshot before either protocol digest can be constructed.
+Dev-only dependencies are not roots. Registry packages without checksums and
+source-less transitive production packages fail closed. The ordinary and
+physical-isolation workspaces may therefore have different membership and
+unrelated lock records while producing the same kernel identity when—and only
+when—the kernel dependency closure is identical.
+
+This is exact source/protocol and resolved dependency-graph identity for the
+enumerated inputs, not binary, compiler, operating-system, installed package
+bytes, or environment attestation; callers cannot supply alternate values for
+those two fields.
 The law, grammar, scheme, history, and contract identities remain explicit
 trusted caller inputs. A certificate cannot choose its own trusted scope
 merely by embedding internally consistent hashes.
@@ -322,7 +337,8 @@ The following are outside this trusted fragment and must fail closed or remain
 - the relative-initial or universal property of free sealing;
 - proof that an extension contains all and only law-forced equations;
 - history integration and derivation-basis update;
-- total specialization of registered future-hole schemes;
+- a universal total-specialization theorem for the full registered
+  future-hole scheme calculus;
 - any full `CLCertificate`, including constructive realization,
   equivalence invariance, depth-two local satisfiability, sealing canonicity,
   and demand-connectedness;
@@ -336,7 +352,8 @@ The following are outside this trusted fragment and must fail closed or remain
 
 Accordingly, this implementation is a strict subset of Phase 2 in
 `docs/autonomous_genesis_plan.md`. It does not satisfy that phase's complete
-exit gate, because full CL and ambient equivalence verification are absent.
+exit gate, because full CL and authoritative finite-fragment equivalence
+verification are absent.
 
 ## 9. Open source and theorem tensions
 
@@ -350,16 +367,24 @@ certificate fragment or satisfy any theorem gate.
 
 ### 9.2 Stage-4 quotient cardinality
 
-The normative appendix describes four genuinely distinct Stage-4 classes
-under the full quotient, but later leaves the relevant Pi/Sigma act
-equivalence open and says its resolution determines whether the cone has four
-worlds or two. Until a versioned adjudication supplies the missing typed
-equivalence or obstruction, neither post-quotient cardinality is an
-executable theorem.
+The repaired normative appendix distinguishes four archived normalized
+representative slots from the classes of the full adopted quotient. Once
+individual representative certificates and the order-axis obstruction replay,
+the conditional bound is `2 <= |Q4| <= 4`. The present repository has not
+issued those Law V2 certificates. The Pi/Sigma former-axis equivalence remains
+open, so an executable run unable to settle the required quotient must return
+`Unknown(UnknownQuotient)` rather than an exact cardinality.
 
 The kernel must therefore not contain an expected cone cardinality, and its
 definitional-equivalence handle must not be used as evidence that the open
 univalent equivalence exists or fails to exist.
+
+`pen-law` now exposes versioned `UncheckedQuotientStatus`,
+`UncheckedFiniteFragmentOutcome`, and `UncheckedBootstrapStatus` wire records.
+They distinguish unresolved from claimed-complete quotients, proof/refutation
+claims from fragment escape and resource exhaustion, and registered Law V2A
+from claimed-derived Law V2B. Constructing or deserializing them grants no
+verified capability; `pen-engine` maps every current variant to `Unknown`.
 
 ## 10. Implemented relative census and remaining Phase-3 boundary
 
@@ -370,13 +395,23 @@ explicit finite rule relation from explicit library seeds, and returns either
 `CompleteRelative` or `Unknown`. Its certificate verifier recomputes that
 calculation and returns a private `VerifiedRelativeCensus` handle.
 
-This is not the Phase-3 exit gate. Family membership, instance membership,
-the rule relation, and library seeds are relative inputs rather than
-generation, specialization, naturality, or derivability-completeness
-theorems. The certificate binds the verified signature and finite census
-inputs, but it does not yet bind a verified history, derivation basis, law,
-grammar, scheme calculus, or event-based active window, and it provides no
-weakening or expiration proof.
+`pen-demand` also implements three native intrinsic scheme constructors:
+type formation, typed term use, and definitional computation closure.
+Registration rechecks the dependent context and open judgment. Each complete,
+ordered closed assignment is replayed through the kernel's resource-bounded
+specializer and yields a private `VerifiedClosedSpecialization` capability.
+Malformed work is `Unknown(Unsupported)` and budget failure is
+`Unknown(ResourceExhausted)`; neither is refutation evidence.
+
+This remains short of the Phase-3 exit gate. The intrinsic slice proves
+particular native registrations and particular complete assignments, not the
+universal total-specialization theorem or exhaustive generation for the full
+GF2 scheme calculus. Family membership, instance membership, the relative
+rule relation, and library seeds are still caller inputs. The census
+certificate binds the verified signature and finite inputs, but it does not
+yet bind a verified history, derivation basis, law, grammar, complete scheme
+calculus, or event-based active window, and it provides no weakening or
+expiration proof.
 
 The remaining authoritative layer must:
 
@@ -399,3 +434,55 @@ dependencies or certificate premises. Neither the relative primitive nor the
 eventual authoritative layer may claim the final instance census, a unique
 live orbit, an empty final live set, discharge, CL, response-cone
 completeness, or halt until their later certificate gates close.
+
+## 11. GF2, checker readiness, and registered bootstrap boundaries
+
+`pen-gf2` now validates a versioned, canonically ordered manifest containing
+the required finite feature families and hard resource limits. Its
+`LawDecision` distinguishes `Proven`, `Refuted`, `OutsideFragment`, and
+`ResourceExhausted`. The native adapter can mint a positive handle only by
+replaying a supported `pen-kernel` judgment. It has no native refutation
+constructor, and checker rejection is therefore never promoted to
+`Refuted`. Listed but unsupported sums, path, cubical, and other artifacts
+fail closed.
+
+The resulting `VerifiedFiniteFragment` capability proves structural manifest
+validation and native backend binding. It does not prove that an inventory is
+semantically sound, exhaustive, or closed.
+
+`pen-gf2-agda` separately probes one exact external checker environment:
+Agda 2.8.0, `cubical-0.9` commit
+`b150186d2544e7efeddd31e5d14a8b9ecbb100f7`, its reviewed canonical source
+tree, exact library flags, and a fixed postulate-free smoke module under
+explicit safe/cubical options. Before invoking either tool, it requires the
+observed Agda and Git
+bytes to match independently supplied trusted digest pins. The evidence binds
+both configured and observed executable identities, the reviewed Cubical
+canonical source manifest, the independently reviewed Agda primitive-runtime
+manifest supplied by trusted configuration for that exact distribution,
+source, checkout, command, output, and manifest digest. Text members must be
+UTF-8; CRLF is canonicalized to LF and a bare carriage return is rejected.
+Primitive `.agdai` members are bound and copied as raw bytes. Those canonical
+members are materialized in a private scratch snapshot; Agda checks only that
+snapshot with Cubical interfaces ignored and the snapshot selected as its data
+directory. The repository fixes the reviewed Cubical canonical tree digest.
+The exported `AGDA_REFERENCE_PRIMITIVE_TREE_DIGEST` constant records only the
+local integration fixture; it is a reproducibility aid and not a production
+authenticity anchor. Git runs with system/global configuration suppressed,
+paging and filesystem monitors disabled, and hooks disabled. It is used only
+for fixed, non-content `rev-parse` probes; no `status` or attribute/filter
+path is executed. Canonical source manifests before and after the check, not
+Git cleanliness output, bind the checked source state.
+Every child runs in a process group or Windows Job that is terminated even
+after nominal leader success, and scratch cleanup must succeed before the
+private readiness capability is returned. Self-pinning the executable bytes
+being inspected proves reproducibility only, not tool authenticity. The probe
+accepts no caller-supplied source and verifies no GF2 theorem.
+
+Finally, `pen-law` embeds a strict anonymous Law-V2A three-act registration.
+The verifier checks the exact universe/type/witness source, every normalized
+one-declaration extension, predecessor and boundary chain, kernel and
+normalizer identity, and the final artifact digest. This proves only that the
+disclosed initial condition is exact and well typed in the native fragment.
+It proves neither free-sealing initiality nor Law-V2B derivation, leastness, or
+uniqueness.

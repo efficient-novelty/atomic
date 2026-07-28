@@ -1,10 +1,13 @@
-> Starting from the empty public context, an anonymous syntactic basis, the two laws, and window width (2), enumerate all and only certified extensions. Produce a four-branch cone at the first guarded act, a unique continuation on every later guarded branch, and halt—without knowing the number fifteen—when every branch carries a complete certificate that its next obligation profile is empty.
+> Under Law V2A, start from a disclosed registered three-act bootstrap, an anonymous syntactic basis, the two laws, window width \(2\), and a versioned finite Genesis Fragment of depth two (GF2). Enumerate four normalized Stage-4 representative slots, certify and fully quotient them, retain the resulting \(2\) to \(4\) classes without preference, and halt—without knowing the number fifteen—only when every surviving branch carries a GF2-complete certificate that its next obligation profile is empty. Law V2B's derivation of the bootstrap from the empty public context is a later theorem.
 
 However, the algorithm should not be built as a stronger version of the current bar-optimizing search. The mature two-law formulation in the attached appendix changes the executable target:
 
 * At guarded stages, a candidate is accepted because it **totally discharges the live typed obligation**, not because it clears a numerical threshold.
 * If several genuinely distinct candidates discharge the obligation, the result is a **cone**, not a deterministic winner.
-* The Step-4 fork must therefore produce four branches, rather than silently select one.
+* The Step-4 search must preserve four normalized representative slots through
+  certification. A decided full quotient yields between two and four classes;
+  until the Pi/Sigma equivalence is constructed or obstructed, the engine
+  returns `Unknown(UnknownQuotient)`.
 * The halt must be triggered by a certified empty obligation profile (O(16)=\varnothing), not by reaching a configured step count and not primarily by failing to clear a bar. 
 * The windowed bar can remain as a downstream diagnostic, but the adopted formalization explicitly says that it “gates nothing.” 
 
@@ -34,7 +37,8 @@ The production engine may see only:
 3. The Constitutive and Selective Laws.
 4. Window width (w=2).
 5. Free sealing and equivalence rules.
-6. Resource limits that may cause `Unknown/ResourceExhausted`, but never a false halt.
+6. A versioned finite GF2 carrier delimiting completeness claims.
+7. Fragment or resource limits that may cause `Unknown/OutsideFragment` or `Unknown/ResourceExhausted`, but never a false halt.
 
 ## Forbidden inputs
 
@@ -133,10 +137,10 @@ The blind engine must instead run until one of three proof-relevant outcomes occ
 \mathsf{Halt}.
 ]
 
-A resource limit may produce only
+A fragment or resource limit may produce only
 
 [
-\mathsf{Unknown}(\text{resource exhausted}).
+\mathsf{Unknown}(\text{outside fragment or resource exhausted}).
 ]
 
 ## 2.6 Obsolete numerical register
@@ -174,18 +178,22 @@ Let:
 * (G) be a fixed anonymous normalized constructor basis;
 * (\mathcal R_2) be a stage-generic registered calculus of depth-two open demand schemes;
 * (w=2);
-* (H_0=\varnothing).
+* \(H_3\) be the disclosed Law-V2A registered three-act bootstrap; and
+* \(\mathfrak F_{\mathrm{GF2}}^{\le2}\) be the versioned finite Genesis
+  Fragment delimiting executable completeness.
 
 Then the executable procedure `BlindGenesis`:
 
-1. computes the least constitutive bootstrap;
-2. at every guarded history (H_n), computes the complete obligation profile
+1. validates and loads the Law-V2A registered bootstrap without claiming
+   derivation or uniqueness;
+2. at every guarded history (H_n), computes the GF2-complete obligation profile
    [
    O(n+1)=C(S_n,S_{n-1})\setminus D(B_n);
    ]
 3. enumerates every equivalence class of Constitutively admissible total dischargers;
 4. freely seals each class, branching when several classes survive;
-5. produces one four-way fork at the first guarded stage and singleton continuation classes thereafter;
+5. preserves four normalized Stage-4 representatives through certification
+   and reports the \(2\) to \(4\) classes that survive the full quotient;
 6. produces branch-equivalent fifteen-stage histories;
 7. terminates only when every branch has a complete empty-debt certificate;
 8. does so equivariantly under renaming and presentation changes of (G).
@@ -203,16 +211,16 @@ That separation is important. The discovery engine should not know what it has d
 The new engine should be a **typed obligation solver**, not primarily a telescope scorer.
 
 ```text
-empty public context
+Law-V2A registered three-act bootstrap
         │
         ▼
-least constitutive bootstrap
+validated initial history (no uniqueness claim)
         │
         ▼
 last-two-stage window
         │
         ▼
-complete typed demand census
+GF2-complete typed demand census
         │
         ├── all demands derivable ──► HALT CERTIFICATE
         │
@@ -220,7 +228,7 @@ complete typed demand census
 live obligation orbits
         │
         ▼
-complete response-cone synthesis
+GF2-complete response-cone synthesis
         │
         ▼
 CL checks + total-discharge proofs + semantic audit
@@ -372,7 +380,8 @@ This reduction must be generic. It must never ask whether the resulting orbit �
 
 The existing engine largely enumerates telescopes and then asks whether they look admissible. The new engine should invert that process:
 
-> Start from the exact typed outputs the world owes, and synthesize every minimal demand-connected API that provides them.
+> Start from the exact typed outputs the world owes, and synthesize every
+> GF2-admitted demand-connected API that provides them.
 
 ## 6.1 Response skeletons
 
@@ -419,16 +428,22 @@ where:
 
 “Nothing without demand” must exclude (x_{\mathrm{unowed}}) as a simultaneous continuation. This turns terminal-SCC pruning into a sound **factorization operation**, not a value-based minimality preference.
 
+After the one-time Law-V2A initialization, every positive-cost clause must
+lie in the typed dependency closure of a pre-existing live obligation;
+candidate-induced obligations cannot bootstrap their own authority. If
+\(O=\varnothing\), no positive-cost candidate is admissible. Zero-cost theorem
+readouts append no event.
+
 Until this theorem is proved, “exactly one total discharger” is vulnerable to arbitrary supersets.
 
-## 6.3 Finite response bound
+## 6.3 Finite GF2 response bound
 
 A blind engine cannot declare uniqueness merely because it has not yet found another candidate. It needs a stage-generic completeness bound.
 
-Define a finite response graph:
+Define a finite response graph inside the versioned Genesis Fragment:
 
 [
-\mathsf{Resp}_2(H,O)
+\mathsf{Resp}_{\mathrm{GF2}}(H,O)
 ]
 
 containing every canonical clause role reachable from:
@@ -440,24 +455,31 @@ containing every canonical clause role reachable from:
 
 Then prove:
 
-### Response-bound theorem
+### GF2 closure and response-bound theorem
 
-Every Constitutively admissible demand-connected total discharger over ((H,O)) has a canonical representative whose irreducible public clauses occur in (\mathsf{Resp}_2(H,O)).
+Every positive-cost, Constitutively admissible, demand-connected total
+discharger admitted by GF2 over \((H,O)\) has a canonical representative whose
+irreducible public clauses occur in
+\(\mathsf{Resp}_{\mathrm{GF2}}(H,O)\).
 
 Consequently,
 
 [
-\kappa_H(x)\le K_2(H,O)
-:=\left|\mathsf{Resp}_2(H,O)\right|.
+\kappa_H(x)\le K_{\mathrm{GF2}}(H,O)
+:=\left|\mathsf{Resp}_{\mathrm{GF2}}(H,O)\right|.
 ]
 
 The bound is computed from the obligation profile. It is not taken from the expected winner’s (\kappa).
 
-This theorem is the point at which an empirical enumerator becomes a complete algorithm.
+This theorem is the point at which an empirical enumerator becomes complete
+relative to GF2. It makes no unrestricted ambient completeness claim.
+Unrestricted recursion, higher-order unification, and arbitrary equivalence
+search are outside GF2 and return `Unknown(OutsideFragment)`. The theorem and
+its verifier are targets, not current repository results.
 
 ## 6.4 Exact synthesis
 
-Within the finite response graph:
+Within the finite GF2 response graph:
 
 1. Enumerate typed clause candidates by role.
 2. Canonically deduplicate individual clauses.
@@ -570,7 +592,9 @@ There must be no dependency in the opposite direction.
 
 # 9. Guarded selection and the cone
 
-After complete enumeration:
+This section runs only when the verified live obligation profile is nonempty.
+An authoritative empty profile goes directly to the debt-free halt rule.
+After GF2-complete enumeration:
 
 ```rust
 let classes = full_equivalence_quotient(certified_total_dischargers);
@@ -580,8 +604,10 @@ Then:
 
 * `classes.len() == 0`:
 
-  * if enumeration is complete, emit `Blocked` and a theory-or-basis refutation;
-  * if enumeration is incomplete, emit `Unknown`, never halt.
+  * if enumeration is GF2-complete, emit `Blocked` and a fragment-relative
+    theory-or-basis refutation;
+  * if enumeration is incomplete, outside GF2, or resource exhausted, emit
+    `Unknown`, never halt.
 * `classes.len() == 1`:
 
   * freely seal the unique class.
@@ -599,13 +625,18 @@ The quotient ladder must be:
 4. confluence test;
 5. only then record genuine plurality.
 
-This should rediscover the Step-4 (2\times2) cone rather than choose the familiar enacted branch. The formal result says all four branches later heal, become byte-identical from Step 8, and halt in the same way. 
+The Stage-4 milestone has four normalized representative slots before the
+full quotient. The current repository has not certified those representatives.
+Once they and the order-axis obstruction replay, the quotient may contain only
+\(2\) to \(4\) classes until the Pi/Sigma former-axis equivalence is
+constructed or obstructed. Archived healing comparisons concern the four
+representative continuations, not four proved worlds.
 
 A single displayed Genesis sequence is then an external branch index:
 
 ```text
-lawful output: four-branch cone
-book display:  one indexically chosen branch
+lawful output: full quotient with 2–4 Stage-4 classes
+book display:  one representative-indexed presentation
 ```
 
 ---
@@ -637,11 +668,17 @@ At the beginning of each prospective extension:
 
 ```rust
 let census = extract_and_decide_demands(history.last_two(), &history.library)?;
+let census = verify_complete_gf2_census(census)?;
 
 if census.live_orbits.is_empty() {
-    return StageOutcome::Halt(build_halt_certificate(census));
+    let exclusion = certify_no_positive_cost_continuation(census)?;
+    return StageOutcome::Halt(build_halt_certificate(census, exclusion));
 }
 ```
+
+`verify_complete_gf2_census` returns `Unknown(OutsideFragment)` or
+`Unknown(ResourceExhausted)` rather than an empty census whenever its
+completeness premises cannot be established.
 
 A `HaltCertificate` should contain:
 
@@ -658,7 +695,8 @@ struct HaltCertificate {
     live_orbit_count: usize,       // must be zero
     f1_exclusion: FalsifierCert,
 
-    provenance_bound: OpenBandBoundCert,
+    gf2_fragment_digest: Digest,
+    no_positive_cost_continuation: DemandConnectednessCert,
 }
 ```
 
@@ -668,7 +706,7 @@ For the expected run, the independent oracle should find:
 * all 89 prospective Step-16 demand instances derivable;
 * zero live obligation orbits;
 * no demanded-but-underdetermined F1 instance;
-* the same result on every Step-4 branch. 
+* the same result on every class that survives a certified Stage-4 quotient.
 
 The engine must distinguish four outcomes:
 
@@ -677,7 +715,13 @@ enum RunOutcome {
     Advanced(Cone),
     Halted(HaltCertificate),
     Blocked(UnpaidDemandCertificate),
-    Unknown(ResourceExhausted),
+    Unknown(UnknownReason),
+}
+
+enum UnknownReason {
+    OutsideFragment,
+    ResourceExhausted,
+    UnknownQuotient,
 }
 ```
 
@@ -693,7 +737,7 @@ fn blind_genesis(
     grammar: &AnonymousGrammar,
     scheme_calculus: &DemandSchemeCalculus,
 ) -> RunOutcome {
-    let initial = least_constitutive_bootstrap(kernel, grammar)?;
+    let initial = validate_registered_v2a_bootstrap(kernel)?;
     let mut cone = Cone::singleton(initial);
 
     loop {
@@ -708,10 +752,12 @@ fn blind_genesis(
                 history.derivation_basis(),
             )?;
 
-            verify_demand_census(&census)?;
+            let census = verify_complete_gf2_census(&census)?;
 
             if census.live_orbits().is_empty() {
-                halts.push(build_halt_certificate(history, census)?);
+                let exclusion =
+                    certify_no_positive_cost_continuation(history, &census)?;
+                halts.push(build_halt_certificate(history, census, exclusion)?);
                 continue;
             }
 
@@ -796,18 +842,19 @@ The attached formalization says that Steps 1–3 are **registered founding acts*
 
 That means the current theory does not yet literally prove “two laws alone derive all fifteen” in the same sense for every step. A genuinely blind implementation needs one of two honest contracts.
 
-## Contract A: registered bootstrap
+## Law V2A: registered three-act bootstrap
 
-Treat a stage-generic founding rule as part of the machine’s public specification:
+Treat a disclosed, versioned three-act founding prefix as input to the
+machine's public specification:
 
-1. establish the least live typed arena;
-2. establish the least closed type in that arena;
-3. establish its least witness;
+1. validate the three registered acts as well-typed sealed input;
+2. record their exact digest in the run manifest;
+3. make no derivation, leastness, or uniqueness claim; and
 4. transfer jurisdiction when the first live demand appears.
 
-This is already much better than loading three target telescopes, because the rule describes logical preconditions rather than expected syntax.
+This is an honest initial-condition contract, not an empty-context theorem.
 
-## Contract B: bootstrap uniqueness theorem
+## Law V2B: least-arena derivation and uniqueness theorem
 
 Prove that the least fixed point of constitutive arena formation from the empty context has, up to equivalence:
 
@@ -817,7 +864,8 @@ Prove that the least fixed point of constitutive arena formation from the empty 
 
 and that the first exported obligation appears exactly after the witness.
 
-This is the stronger target. Until that theorem is proved, the precise claim should be:
+This is the stronger target and is not a current theorem. Until it is proved,
+the precise claim is:
 
 > The registered constitutive bootstrap supplies Steps 1–3; the blind two-law discharge engine autonomously derives the guarded cone from Step 4 onward.
 
@@ -1064,17 +1112,19 @@ Initially run it against frozen known prefixes, but do not give it expected next
 * no use of stage number or expected family in extraction;
 * an empty live set after the final sealed shell.
 
-## Phase 4 — Prove and implement the finite response cone
+## Phase 4 — Prove and implement the finite GF2 response cone
 
 Implement:
 
 * demand-connected response graphs,
 * candidate-factorization checking,
-* (K_2(H,O)) response bounds,
-* complete clause enumeration,
+* \(K_{\mathrm{GF2}}(H,O)\) response bounds,
+* GF2-complete clause enumeration,
 * proof-producing prefix pruning.
 
-**Exit gate:** Enlarging operational search caps cannot introduce a previously omitted legal response, because the response-bound certificate is already complete.
+**Exit gate:** Enlarging operational search caps cannot introduce a previously
+omitted in-fragment legal response. Outside-fragment work and resource
+exhaustion return `Unknown`, and the GF2 closure theorem replays independently.
 
 ## Phase 5 — Replace acceptance with total discharge
 
@@ -1097,7 +1147,10 @@ Run from the registered bootstrap.
 
 **Exit gate:**
 
-* four genuine classes at the first guarded stage;
+* four individually certified normalized representatives at the first guarded
+  stage;
+* a certified full quotient yielding between two and four classes, or
+  `Unknown(UnknownQuotient)` if the quotient cannot be decided;
 * no deterministic branch selection;
 * one acceptable class at each later guarded stage on each branch;
 * confluence/healing certificates matching the formal claims;
@@ -1107,7 +1160,10 @@ Run from the registered bootstrap.
 
 Implement the act-local marginal-family audit and provenance injection.
 
-**Exit gate:** The post-run audit reproduces the semantic vector, with the appropriate branch-indexed Step-4 distinction, without consulting archived scores. The current structural `103` remains available only under a legacy register tag.
+**Exit gate:** The post-run audit reproduces the semantic vector, with the
+appropriate representative-indexed Stage-4 distinction, without consulting
+archived scores. The current structural `103` remains available only under a
+legacy register tag.
 
 ## Phase 8 — Autonomous halt certification
 
@@ -1156,7 +1212,8 @@ Run:
 | Conservative syntax sugar  | Add aliases and definable primitives.                                                        | Same post-quotient cone.                                                                   |
 | Irrelevant distractors     | Add coherent but demand-disconnected primitives.                                             | They do not become simultaneous continuations.                                             |
 | Missing grammar capability | Remove a primitive needed to discharge a later obligation.                                   | Engine reports a live unpaid demand or enters grammar synthesis; it does not falsely halt. |
-| Step-4 freedom             | Randomize discovery order of the four acts.                                                  | All four appear; none is privileged.                                                       |
+| Step-4 freedom             | Randomize discovery order of the four representative slots and replay every quotient rung.  | All four representatives appear; the certified quotient yields 2–4 classes or `Unknown(UnknownQuotient)`; none is privileged. |
+| Fragment escape            | Inject an input outside GF2 and separately exhaust a resource budget.                         | `Unknown(OutsideFragment)` or `Unknown(ResourceExhausted)`; never uniqueness, blockage, or halt. |
 | Halt falsifier             | Inject one synthetic demanded-but-underdetermined scheme.                                    | Halt fails and F1 is reported.                                                             |
 | Step-16 completeness       | Independently replay the census.                                                             | All expected instances have valid derivations and zero live orbits.                        |
 
@@ -1278,7 +1335,15 @@ The most efficient sequence of actual repository changes is:
 
 Before bootstrap derivation and grammar generation, the honest strong claim would be:
 
-> From a disclosed anonymous fixed basis, a registered stage-generic depth-two scheme calculus, the two laws, and window width two, the engine autonomously reconstructs the complete four-branch Genesis cone and halts after fifteen sealed acts because the next certified obligation profile is empty. No target step, semantic name, expected score, numerical selector, or future-viability criterion participates in acceptance.
+> Under Law V2A, from a disclosed registered three-act bootstrap, anonymous
+> fixed basis, registered stage-generic depth-two scheme calculus, the two
+> laws, window width two, and GF2, the engine certifies four normalized
+> Stage-4 representatives and computes the full quotient with between two and
+> four classes (or returns `Unknown(UnknownQuotient)`). It halts after fifteen
+> sealed acts only if the next GF2-complete obligation profile is certified
+> empty and demand-connectedness excludes every positive-cost continuation.
+> No target step, semantic name, expected score, numerical selector, novelty
+> criterion, or future-viability criterion participates in acceptance.
 
 After the bootstrap uniqueness theorem:
 
@@ -1307,12 +1372,51 @@ The decisive conceptual changes are:
 
 1. replace target-shaped structural debt with complete typed demand extraction;
 2. replace arbitrary telescope scoring with proof-directed hole filling;
-3. prove a finite response bound so uniqueness is certified;
+3. prove the finite GF2 closure and response bound so in-fragment completeness
+   is certified;
 4. accept by total discharge, not by bar;
-5. return the Step-4 cone rather than choosing a branch;
+5. certify four Stage-4 representatives, then return the certified quotient
+   with two to four classes or `Unknown(UnknownQuotient)`;
 6. halt from an empty certified obligation profile, not from `until_step`;
 7. isolate every target fixture and semantic decoder outside the production dependency graph;
-8. derive, rather than silently register, the bootstrap and the demand-scheme calculus;
+8. disclose the Law-V2A registered bootstrap, and keep Law-V2B least-arena
+   derivation and uniqueness as a separate later theorem;
 9. treat the final temporal-cohesive shell as fully realized only when the filtered DCT witness is mechanized.
 
-The first implementation move should therefore be the **oracle firewall and executable-law split**, not another attempt to widen or repair the current Step-15 bar-screened claim lane.
+## Execution checkpoint — 2026-07-28
+
+The oracle firewall and executable-law split are now implemented. The current
+lawful closure also contains:
+
+* a versioned GF2 feature/limit manifest and four-way decision boundary;
+* a native adapter that proves only supported dependent-core judgments and
+  fails closed on unsupported fragment features;
+* an Agda 2.8.0 / `cubical-0.9` fixed-source readiness probe with
+  independently supplied trusted Agda and Git executable-digest pins,
+  a repository-reviewed canonical Cubical tree and an independently reviewed
+  primitive-runtime pin supplied by trusted configuration for the exact Agda
+  distribution, sanitized Git/process execution, and private canonical checker
+  snapshots. Text sources are UTF-8 with CRLF canonicalized to LF and bare
+  carriage returns rejected; primitive `.agdai` members remain raw. The local
+  primitive reference digest is a reproducibility aid, not an authenticity
+  anchor;
+* a strict anonymous, kernel-replayed Law-V2A three-act registration; and
+* native intrinsic registrations for type formation, typed terms, and
+  definitional computation, with resource-bounded replay of particular
+  complete assignments.
+
+None of these is the GF2 closure theorem. The checker probe has no
+caller-source theorem API; the scheme slice has no full generator or
+universal total-specialization proof; and the registered prefix has no
+Law-V2B leastness claim. The next implementation move is therefore to freeze
+the actual finite GF2 carrier and scheme calculus, implement the restricted
+GF2-to-Cubical-Agda translation, and prove generator/response closure before
+attempting the absolute first guarded cone.
+
+Execution stopped at the
+[H3-to-Stage-4 census blocker](LAW_V2_H3_CENSUS_BLOCKER.md): the adopted
+records bound the intended schema carrier but do not define the complete
+stage-generic scheme-generation relation \(C(S_n,S_{n-1})\). Implementing
+that relation now would choose new formal semantics. A versioned adoption of
+the scheme calculus and its induction principle is required before the next
+law-level code step.

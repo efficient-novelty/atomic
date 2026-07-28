@@ -15,7 +15,8 @@ import tomllib
 
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
-PRODUCTION_ROOTS = ("pen-law", "pen-engine")
+ISOLATION_LOCKFILE = REPO / "scripts" / "law-v2-isolation.Cargo.lock"
+PRODUCTION_ROOTS = ("pen-law", "pen-engine", "pen-gf2", "pen-gf2-agda")
 ALLOWED_WORKSPACE_PACKAGES = frozenset(
     (*PRODUCTION_ROOTS, "pen-kernel", "pen-demand")
 )
@@ -48,6 +49,12 @@ FORBIDDEN_SOURCE_FRAGMENTS = (
     "step_index",
     "target_stage",
     "target_length",
+    "stage4",
+    "stage_4",
+    "stage-4",
+    "step4",
+    "step_4",
+    "step-4",
     "requires_temporal_shell_package",
     "circle",
     "hopf",
@@ -62,6 +69,23 @@ FORBIDDEN_SOURCE_PATTERNS = (
         re.compile(rb"\b(if|match)\s+[^{}\r\n]*(stage|step)", re.IGNORECASE),
         "stage-index control flow",
     ),
+)
+ISOLATION_TEST_COMMAND = (
+    "cargo",
+    "test",
+    "--locked",
+    "--workspace",
+    "--all-targets",
+)
+ISOLATION_RUN_COMMAND = (
+    "cargo",
+    "run",
+    "--locked",
+    "--quiet",
+    "-p",
+    "pen-engine",
+    "--bin",
+    "pen-law-v2",
 )
 
 
@@ -205,18 +229,21 @@ def isolated_build(packages: dict[str, pathlib.Path], closure: set[str]) -> None
                 )
                 lines.append(f"{key} = {{ {fields} }}")
         (isolated / "Cargo.toml").write_text("\n".join(lines) + "\n", encoding="utf-8")
-        shutil.copy2(REPO / "Cargo.lock", isolated / "Cargo.lock")
+        # The full-workspace lock contains non-lawful workspace members. Cargo
+        # would have to prune those members in this reduced workspace, so the
+        # isolation lane has its own reviewed lock and can run with --locked.
+        shutil.copy2(ISOLATION_LOCKFILE, isolated / "Cargo.lock")
         shutil.copy2(REPO / "rust-toolchain.toml", isolated / "rust-toolchain.toml")
         (isolated / ".cargo").mkdir()
         shutil.copy2(REPO / ".cargo" / "config.toml", isolated / ".cargo" / "config.toml")
 
         subprocess.run(
-            ["cargo", "test", "--workspace", "--all-targets"],
+            ISOLATION_TEST_COMMAND,
             cwd=isolated,
             check=True,
         )
         completed = subprocess.run(
-            ["cargo", "run", "--quiet", "-p", "pen-engine", "--bin", "pen-law-v2"],
+            ISOLATION_RUN_COMMAND,
             cwd=isolated,
             check=True,
             capture_output=True,

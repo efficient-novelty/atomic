@@ -1,3 +1,4 @@
+use crate::dependency_graph::reviewed_production_dependency_graph;
 use crate::{Declaration, DependentContext, Digest, OpenJudgment, Term, UncheckedSignature};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -128,42 +129,49 @@ impl Kernel {
         self.limits
     }
 
-    /// Reproducible digest of the trusted kernel crate sources and the
-    /// repository-resolved Cargo/toolchain inputs available at build time.
+    /// Reproducible digest of the trusted kernel crate sources, its
+    /// self-contained Cargo/toolchain inputs, and the canonical resolved
+    /// production dependency graph available at build time.
     ///
     /// This is source provenance, not a binary or build-environment
-    /// attestation.
+    /// attestation. The workspace manifest is deliberately excluded: its
+    /// unrelated membership list and aggregate lockfile change in the
+    /// oracle-free isolation build. A canonical filter over the active lock
+    /// must exactly match the reviewed kernel-only dependency snapshot.
     pub fn kernel_protocol_digest(&self) -> Digest {
+        let dependency_graph = reviewed_production_dependency_graph();
         Digest::of_domain_chunks(
-            "kernel-trusted-source-v1",
+            "kernel-trusted-source-v2",
             &[
                 include_bytes!("lib.rs"),
                 include_bytes!("syntax.rs"),
                 include_bytes!("checker.rs"),
                 include_bytes!("certificate.rs"),
+                include_bytes!("dependency_graph.rs"),
                 include_bytes!("digest.rs"),
                 include_bytes!("../Cargo.toml"),
-                include_bytes!("../../../Cargo.toml"),
-                include_bytes!("../../../Cargo.lock"),
+                dependency_graph.as_slice(),
                 include_bytes!("../../../rust-toolchain.toml"),
                 include_bytes!("../../../.cargo/config.toml"),
             ],
         )
     }
 
-    /// Reproducible source digest for the syntax/checker normalization slice
-    /// and the repository-resolved Cargo/toolchain inputs available at build
-    /// time. This is not a binary or build-environment attestation.
+    /// Reproducible source digest for the syntax/checker normalization slice,
+    /// the crate-resolved Cargo/toolchain inputs, and the canonical resolved
+    /// production dependency graph. This is not a binary or
+    /// build-environment attestation.
     pub fn normalizer_protocol_digest(&self) -> Digest {
+        let dependency_graph = reviewed_production_dependency_graph();
         Digest::of_domain_chunks(
-            "normalizer-trusted-source-v1",
+            "normalizer-trusted-source-v2",
             &[
                 include_bytes!("lib.rs"),
                 include_bytes!("syntax.rs"),
                 include_bytes!("checker.rs"),
+                include_bytes!("dependency_graph.rs"),
                 include_bytes!("../Cargo.toml"),
-                include_bytes!("../../../Cargo.toml"),
-                include_bytes!("../../../Cargo.lock"),
+                dependency_graph.as_slice(),
                 include_bytes!("../../../rust-toolchain.toml"),
                 include_bytes!("../../../.cargo/config.toml"),
             ],
@@ -321,6 +329,21 @@ impl Kernel {
     pub(crate) fn validate_certificate_terms(&self, terms: &[Term]) -> Result<(), KernelError> {
         let mut budget = Budget::new(self.limits);
         charge_terms(terms, &mut budget, 0)
+    }
+
+    /// Compute and recheck one complete closed specialization.
+    ///
+    /// The returned wire judgment is a normalized replay result, not a proof
+    /// capability and not a theorem that every assignment specializes. A
+    /// caller that needs proof authority must still submit the result through
+    /// `verify_closed_specialization_certificate`.
+    pub fn normalize_closed_specialization(
+        &self,
+        signature: &VerifiedSignature,
+        open: &OpenJudgment,
+        assignments: &[Term],
+    ) -> Result<OpenJudgment, KernelError> {
+        self.replay_closed_specialization(signature, open, assignments)
     }
 
     pub(crate) fn replay_closed_specialization(

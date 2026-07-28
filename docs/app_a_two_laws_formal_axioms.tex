@@ -1,13 +1,14 @@
 \chapter[Formal Two-Law Schema]{\titlesplit{The Two Laws}{Formal Axioms and Schema}}\label{app:two-laws}
 
-This appendix fixes the technical contract used by the later appendices, in
-the form the law holds after the completed adjudication ledger and the
-cone-level certification campaign. Two laws govern realized history: the
-\emph{Constitutive Law} (nothing without demand) determines admissibility, and
-the \emph{Selective Law} operates in two registers --- obligation gates the
-guarded stages, certified value gates only the debt-free open band. Numerical
-thresholds gate nothing anywhere; where the laws are silent among genuinely
-distinct admissible continuations, the silence is real and history is a cone.
+This appendix fixes the technical contract used by the later appendices.
+Two laws govern realized history: the \emph{Constitutive Law} (nothing without
+demand) determines positive-cost admissibility, and the \emph{Selective Law}
+retains every fully certified total discharger at guarded stages. A certified
+empty obligation profile admits no positive-cost continuation; zero-cost
+theorem readouts do not extend history. Numerical value, novelty, efficiency,
+and threshold diagnostics gate nothing anywhere. Where the laws are silent
+among genuinely distinct admissible continuations, the silence is real and
+history is a cone.
 The previous formulation of this appendix, which encoded the enacted engine's
 bar-clearing selection as law, is retained unedited as
 \texttt{app\_a\_two\_laws\_formal\_axioms\_old.tex}; under the audit results
@@ -17,6 +18,21 @@ All definitions are relative to a fixed ambient CCHM-style cubical extension
 calculus \(\mathfrak{C}\), equipped with cumulative universes, \(\Pi\)- and
 \(\Sigma\)-types, finite sums, path types, univalence, Kan composition,
 normalized public signatures, and sealed opaque extensions.
+
+\paragraph{Finite executable completeness boundary.}
+The ambient calculus supplies the mathematical typing semantics, but no
+executable completeness claim below ranges over all of
+\(\mathfrak C\). The first executable completeness target is a versioned finite fragment
+\(\mathfrak F_{\mathrm{GF2}}^{\le2}\), the finite Genesis Fragment of
+depth two. Its artifact must carry the complete finite syntax and rule
+inventory, canonical ordering, and digest. Completeness means completeness
+only relative to that artifact. An input outside the declared carrier yields
+\(\mathsf{Unknown}(\mathsf{OutsideFragment})\); exhaustion of a certified
+resource budget yields
+\(\mathsf{Unknown}(\mathsf{ResourceExhausted})\). Neither result may be
+converted into inequivalence, blockage, uniqueness, or halt. This paragraph
+specifies a milestone; the present repository does not yet contain a
+verifier certifying \(\mathfrak F_{\mathrm{GF2}}^{\le2}\).
 
 \paragraph{Register discipline (mandatory for this book).}
 Every numerical value of an extension carries a register tag.
@@ -75,11 +91,13 @@ realization of its API --- the quotient of
 \(\mathrm{Term}_{\mathfrak C}(H;\mathcal S_x)\) by the least congruence
 containing the old judgmental equalities and the equations forced by
 \(\mathcal S_x\), with no additional generator or equation. Integration seals
-it: \(H^+ = I(H,x) := \mathrm{Seal}_{\mathfrak C}(F_x(H))\). Relative
-free-sealing initiality (\(F_x(H)\) initial among lawful exact realizations of
-the selected API over \(H\)) holds as in the previous formulation; the
-universal property governs realization \emph{after} selection and is not a
-selection principle.
+it: \(H^+ = I(H,x) := \mathrm{Seal}_{\mathfrak C}(F_x(H))\). A conforming
+implementation must carry a generic GF2 theorem certificate that
+\(F_x(H)\) is initial among lawful exact realizations of the selected API over
+\(H\). This universal property is not presently established by reference to
+the previous formulation. The current syntactic exact-extension verifier does
+not prove it. Once proved, initiality governs realization \emph{after}
+selection and is not a selection principle.
 \end{definition}
 
 \section{The Constitutive Law}
@@ -108,7 +126,18 @@ constitutive depth bound \(d_{\mathrm{obl}}=2\)
 \item \textbf{Canonicity under sealing.} Every closed exported construction in
 \(\partial I(H,x)\) normalizes to a canonical public value, path, computation
 rule, or opaque constant.
+\item \textbf{Demand-connectedness at positive cost.} If
+\(\mathsf K_H(x)\neq\varnothing\), every irreducible public clause of \(x\)
+lies in the typed dependency closure of a discharge proof for a live orbit in
+\(\mathsf{LiveOrb}(H)\). A simultaneous component that contributes no
+required output is unowed and makes \(x\) inadmissible.
 \end{enumerate}
+Consequently, if \(\mathsf{LiveOrb}(H)=\varnothing\), no positive-cost
+candidate satisfies \(\mathrm{CL}_H\). A construction with
+\(\mathsf K_H(x)=\varnothing\) is a theorem readout, not a candidate, and
+does not invoke integration or append a history event. The registered
+bootstrap below is an explicit initial-condition contract, not an exception
+that may recur at a later debt-free stage.
 \end{definition}
 
 \begin{definition}[Demand window and obligation profile]
@@ -171,40 +200,58 @@ two-term recursion is the numerical shadow of the width-two window. A field is
 \emph{debt-free} when \(O = \varnothing\).
 \end{definition}
 
-\begin{definition}[Constitutive bootstrap]
-A stage whose window exports no demand is a \emph{constitutive, arena-founding
-act}: it is registered, not selected, and no selective clause applies to it.
-The demand chain begins with the first exported obligation. (In the certified
-Genesis trace the bootstrap comprises stages 1--3, with the recorded stage-3
-wrinkle: a demand exported before any lane has jurisdiction.)
+\begin{definition}[Law-V2A: registered three-act bootstrap]
+Law-V2A begins from a disclosed, versioned sequence of exactly three
+registered arena-founding acts. They are validated as well-typed sealed input,
+not inferred, selected, ranked, or claimed unique by the two laws. Their
+registration may occur only at initialization; jurisdiction transfers to the
+guarded law when the first live demand is exported. A Law-V2A result therefore
+begins from the registered three-act prefix, not from the empty public
+context.
+\end{definition}
+
+\begin{definition}[Law-V2B: least-arena derivation]
+Law-V2B is the stronger future contract: starting from the empty public
+context, derive a least arena-founding closure, prove that it is unique up to
+the adopted equivalence, and prove that its three sealed acts agree with the
+Law-V2A prefix. No such leastness or uniqueness theorem is currently
+established. Law-V2A registration supplies no evidence for Law-V2B.
 \end{definition}
 
 \section{The Semantic Register}\label{sec:semantic-register}
 
-\begin{definition}[Typed operational schema audit]
-For a history \(H\), \(\mathsf{RawSch}_2(H)\) is the set of well-typed raw
-derivation-schema judgements of the fixed depth-two closure fragment. Write
+\begin{definition}[Finite-fragment typed operational schema audit]
+For a history \(H\),
+\(\mathsf{RawSch}^{\mathrm{GF2}}_2(H)\) is the finite set of well-typed raw
+derivation-schema judgements admitted by the versioned fragment
+\(\mathfrak F_{\mathrm{GF2}}^{\le2}\). Write
 \(\approx_H\) for the least equivalence generated by judgmental equality and
 transport along univalent equivalences of normalized public signatures,
 preserving conclusions and all substitution and naturality squares. An
 operational audit supplies a terminating typed normalizer
 \(\mathrm{nf}_H\) with certificates of type preservation, soundness, and
 completeness (\(\mathrm{nf}_H(D)=\mathrm{nf}_H(E) \Leftrightarrow D\approx_H
-E\)); absent these certificates the audit fails closed.
+E\)) for \(D,E\) inside that finite carrier. Outside-fragment inputs and
+resource exhaustion return the corresponding \(\mathsf{Unknown}\) result;
+they are not negative equivalence decisions. No completeness claim for the
+unrestricted ambient calculus follows.
 \end{definition}
 
 \begin{definition}[Schema family and instance]
 \label{def:schema-family-instance}
 A semantic schema family over \(H\) is a typed normal schema varying naturally
-in its declared parameters; \(\mathsf{Sch}_2(H)\) is the finite set of family
+in its declared parameters; \(\mathsf{Sch}^{\mathrm{GF2}}_2(H)\) is the
+finite set of admitted GF2 family
 classes. For a family \(\sigma\) and well-typed substitution \(\theta\), the
 term \(\sigma[\theta]\) is an \emph{instance}, not a second family; uniform
-specializations never enter \(\mathsf{Sch}_2(H)\) directly. The boundary
+specializations never enter \(\mathsf{Sch}^{\mathrm{GF2}}_2(H)\) directly. The boundary
 inclusion induces typed weakening
-\(\mathrm{wk}_x:\mathsf{Sch}_2(H)\to\mathsf{Sch}_2(I(H,x))\), and the marginal
+\(\mathrm{wk}_x:\mathsf{Sch}^{\mathrm{GF2}}_2(H)\to
+\mathsf{Sch}^{\mathrm{GF2}}_2(I(H,x))\), and the marginal
 families of \(x\) are
 \(\operatorname{Marg}_2(H;x) :=
-\mathsf{Sch}_2(I(H,x))\setminus\operatorname{im}(\mathrm{wk}_x)\).
+\mathsf{Sch}^{\mathrm{GF2}}_2(I(H,x))
+\setminus\operatorname{im}(\mathrm{wk}_x)\).
 \end{definition}
 
 \begin{definition}[The semantic-family register]
@@ -256,15 +303,17 @@ Every certified candidate satisfies
 \]
 On a debt-free field the demand summand is empty, giving
 \(\nu_H(x)\le 4\kappa_H(x)\) and \(\rho_H(x)\le 4\) for the efficiency ratio
-of Definition~\ref{def:diagnostics}. This bound is the open band's
-foreclosing wall.
+of Definition~\ref{def:diagnostics}. This is a register-safe diagnostic bound
+on any counterfactual audited extension. It supplies no admissibility,
+selection, continuation, or halt premise.
 \end{proposition}
 
 \paragraph{Status of the historical re-audit.}
-The re-audit obligation of the previous formulation has been executed and its
-outcome is the register split above. The act-local extraction is complete
-(zero residuals: every role a proved family or a theorem-backed
-impossibility), and it \emph{refutes} score preservation: the audited
+The archived re-audit of the previous formulation records the register split
+above. Within that historical audit surface it reports zero residuals (every
+role a proved family or a theorem-backed impossibility), but this testimony is
+not a GF2 executable-completeness certificate. It \emph{refutes} score
+preservation: the audited
 semantic-family vector of the enacted Genesis is
 \[
 [\,1,0,1,3,6,3,1,1,0,4,1,0,2,3,6\,], \qquad \textstyle\sum\nu = 32
@@ -279,7 +328,7 @@ sealed testimony of the enacted engine and lawful diagnostics, nothing more.
 No extraction law may ever be changed on grounds that reference the archived
 totals.
 
-\section{The Selective Law: Two Registers}
+\section{The Selective Law and Debt-Free Termination}
 
 \begin{definition}[Guarded and open stages]
 Stage \(n+1\) is \emph{guarded} when \(O(n+1)\neq\varnothing\) and \emph{open}
@@ -317,90 +366,87 @@ against \emph{proof}: a certified equivalence collapsing apparent
 alternatives destroys no choice, because none existed.
 \end{definition}
 
-\begin{definition}[Selective Law, open register]
+\begin{definition}[Debt-free termination; no open-band selector]
 \label{def:open-register}
-On the open band (\(O=\varnothing\)), acceptance requires \emph{certified
-clearing}: an acceptance must carry a complete certified audit whose valued
-novelty justifies extension. An unrankable candidate --- one whose required
-evidence is not constructible --- cannot be accepted. By
-Proposition~\ref{prop:provenance-bound} every certified debt-free candidate
-has \(\rho\le 4\); the open band forecloses.
+When an extraction-, derivability-, and expiration-complete census proves
+\(O=\varnothing\), Constitutive-Law demand-connectedness admits no
+positive-cost continuation. A zero-cost theorem readout is not integrated and
+does not extend history. There is no novelty, value, efficiency, open-band, or
+fallback selection rule. If the census is outside the certified finite
+fragment or exhausts resources, the result is \(\mathsf{Unknown}\), not halt.
 \end{definition}
 
-\begin{theorem}[Halt at debt-freedom; cone-level]
+\begin{theorem}[Conditional halt at certified debt-freedom; cone-level]
 \label{thm:halt}
-The Genesis sequence ends where debt ends. On every branch of the lawful
-cone: the demand ladder runs one live obligation per stage from the first
-exported demand to stage 15; the completed library is debt-free
-(\(O(16)=\varnothing\), proved at full instance granularity, \(89/89\)
-instances of the stage-16 window decided); and the falsifier F1 --- a
-demanded-but-underdetermined instance, the one refutation channel of the
-fifteen-link claim --- has been executed and excluded. The Constitutive Law
-alone forecloses continuation (no demand, no admissibility); the open-band
-envelope \(\rho\le4\) stands as independent corroborating wall, not premise.
-These claims are \emph{cone-level}: theorems of the laws, not of the enacted
-choice.
+If every branch carries a finite-fragment certificate that its prospective
+obligation profile is empty, with extraction, derivability, and expiration
+complete in the declared fragment and with neither
+\(\mathsf{OutsideFragment}\) nor \(\mathsf{ResourceExhausted}\), then the
+Constitutive Law forecloses every positive-cost continuation and the cone
+halts. The historical claims of fifteen sealed acts, a prospective
+\(89/89\) instance census, and F1 exclusion remain execution milestones until
+their Law-V2 certificates replay. The diagnostic inequality \(\rho\le4\)
+plays no role in the halt proof.
 \end{theorem}
 
 \section{The Cone}\label{sec:cone}
 
-\begin{definition}[The Stage-4 cone]
-The first guarded stage of the certified trace (stage 4, demand
-\(\mathsf{former\_eliminator}\)) admits exactly four acceptable acts,
-genuinely distinct under the full quotient: a \(2\times2\) of former
-\(\{\Pi,\Sigma\}\) against application order. This is the only multiplicity
-in the lawful landscape --- every other guarded stage, on every branch, has a
-unique acceptable discharger. The lawful world-structure is therefore a
-four-branch cone rooted at stage 4.
+\begin{definition}[Stage-4 representatives and quotient]
+The archived Stage-4 surface contains four normalized representative
+presentations, a \(2\times2\) of former \(\{\Pi,\Sigma\}\) against application
+order. A conforming Law-V2 artifact must certify each representative
+individually before quotienting; the present repository has not yet issued
+those four Law-V2 certificates. Four normalized representatives are not four
+worlds. Let \(Q_4\) be their image under the full presentation,
+natural-family, univalent, and confluence quotient.
 \end{definition}
 
-\begin{proposition}[Certified cone structure]
+\begin{proposition}[Conditional Stage-4 quotient bound]
 \label{prop:cone-structure}
-The following are certificate-backed. (i) The \emph{order axis} is structure:
-typed transport obstructions exist between the two application orders, and
-the semantic register separates them
-(\(\nu = 2\) at order one, \(\nu = 3\) at order two --- the enacted act is
-nonminimal, a diagnostic fact with no legal weight). (ii) The \emph{former
-axis} is value-invisible (\(\Pi\) and \(\Sigma\) tie at each order) and
-successor-scheme-invisible at the deepest key; whether it is act-level gauge
-is the one open identity question (the unattempted act-equivalence
-\(B_4^{\Pi}\simeq B_4^{\Sigma}\)). (iii) \emph{Healing of acts}: winners on
-all four branches are byte-identical from stage 8 to the halt, and identical
-modulo relabeling of stage-4 references at stages 5--7; per-stage
-\((\kappa,\nu)\) ledgers agree from stage 5 onward. (iv) \emph{Permanent
-trace}: cumulative quantities (\(\sum\nu\), all cumulative bar trajectories)
-and at least one live demand's scheme presentation differ across branches
-forever. The fork is real in value, silent in consequence, and remembered
-only by unbounded-memory description.
+Once the four representative certificates and the order-axis obstruction
+certificate replay, the full quotient satisfies
+\[
+2\le |Q_4|\le4.
+\]
+The lower bound records the two obstructed application orders; the upper bound
+comes from the four normalized representatives. The former-axis
+\(\Pi/\Sigma\) act equivalence is open. Constructing it may identify
+representatives; obstructing it may separate them. Until one of those proof
+objects replays, no exact post-quotient Stage-4 cardinality is a theorem.
+An executable run unable to construct either proof returns
+\(\mathsf{Unknown}(\mathsf{UnknownQuotient})\); it does not emit an
+indeterminate cone as a certified result.
+Archived healing, ledger, and trajectory comparisons may be reported for the
+four representative continuations, but they do not prove that those
+representatives are four quotient classes.
 \end{proposition}
 
 \paragraph{Claim quantifiers.}
 Every law-level claim in this book is either \emph{cone-level} (quantified
-over all four branches: the demand ladder, the halt, \(O(16)=\varnothing\),
-F1 exclusion, per-stage ledgers from stage 5) or \emph{branch-indexed}
-(naming its branch: the stage-4 act and its value, cumulative sums, bar
-trajectories, windowed tables, provenance identities). Silence is not a
-disposition; unindexed cumulative claims are invalid.
+over every class that survives the certified full quotient) or
+\emph{representative-indexed} (naming one of the four normalized Stage-4
+representatives and its continuation). Quantification over four
+representatives must not be restated as quantification over four worlds.
+Silence is not a disposition; unindexed cumulative claims are invalid.
 
 \section{Diagnostics (Register-Tagged, Gating Nothing)}
 \label{def:diagnostics}
 
 \begin{definition}[Efficiency ratio]
 For \(\kappa_H(x)>0\) under a certified audit,
-\(\rho_H(x)=\nu_H(x)/\kappa_H(x)\). Diagnostic at guarded stages; law-relevant
-only through the open-band envelope of
-Proposition~\ref{prop:provenance-bound}.
+\(\rho_H(x)=\nu_H(x)/\kappa_H(x)\). It is diagnostic at every stage and has no
+admissibility, selection, continuation, or halt authority.
 \end{definition}
 
 \begin{definition}[Cumulative bar --- structural testimony]
 The enacted engine's threshold was
 \(\mathrm{Bar}_n=\Phi_n\,\Omega_{n-1}\) with
 \(\Omega_{n-1}=\sum_{i<n}\nu_i/\sum_{i<n}\kappa_i\) and
-\(\Phi_n=\Delta_n/\Delta_{n-1}\). Every audit of the certified trace found it
-did no selection work: the sole discharger at each guarded stage either
-cleared it incidentally or (at the semantic stage 8) failed it and advanced by
-the guarded rule. Its trajectories are structural-register, branch-indexed
-testimony, permanently.
+\(\Phi_n=\Delta_n/\Delta_{n-1}\). The archived enacted representative
+continuation records that this threshold did no selection work: each enacted
+winner either cleared it incidentally or (at the semantic stage 8) failed it
+and advanced under the guarded rule. This is representative-indexed
+structural testimony, not proof of uniqueness or quotient cardinality.
 \end{definition}
 
 \begin{definition}[Two-step memory bar --- intrinsic descriptive form]
@@ -413,15 +459,16 @@ The \emph{windowed bar} is the trailing density of the demand window:
 \]
 undefined on the bootstrap --- its jurisdiction begins exactly where the
 demand chain does. It carries the window's own memory depth, and with it the
-\emph{forgetting horizon}: since per-stage ledgers agree across branches from
-stage 5, \(\widehat{\mathrm{Bar}}_n\) is branch-independent for \(n\ge 7\) ---
-memory-two description forgets the stage-4 fork on the same horizon as the
-world itself, while the cumulative form above remembers it forever. Golden
+\emph{forgetting horizon}: the archived four representative continuations
+have matching per-stage ledgers from stage 5, so their windowed diagnostics
+agree for \(n\ge 7\). This representative-level observation does not establish
+the number of full-quotient worlds. Golden
 growth is not an input here: two-step memory \emph{is} the Fibonacci
 recursion shape, and \(\varphi\) its fixed point; dressing
 \(\widehat{\mathrm{Bar}}_n\) with \(\Phi_n\) double-counts the window.
 Status: descriptive; registered hypothesis (shadow versus co-determinant)
-with its selectivity test still unexecuted; gates nothing.
+whose replay may be compared with other diagnostics; every selectivity
+interpretation is excluded. It gates nothing.
 \end{definition}
 
 \section{Legacy Engine Encoding (Testimony)}
@@ -430,12 +477,11 @@ The enacted engine realized selection as: enumerate within a cost horizon;
 filter by \(\mathrm{CL}\); audit; exclude composites (terminal-SCC
 primeness); accept the minimal bar-clearing candidate by least sufficient
 overshoot, ties broken by a deterministic presentation key. This encoding is
-\emph{enactment-conservative testimony}: on the certified trace every sealed
-winner was also the unique acceptable discharger of
-Definition~\ref{def:guarded-register}, so no enacted outcome depended on the
-bar or the key --- but the key itself (a presentation order) is inadmissible
-as law at every rung of the tie ladder, and the stage-4 winner it enacted is
-precisely the choice the adopted law records as free. Horizon dynamics,
+\emph{enactment-conservative testimony}: it records one enacted
+representative continuation, but does not prove that its winners were unique
+acceptable classes or that the Stage-4 presentation survived as a distinct
+full-quotient world. The key itself (a presentation order) is inadmissible as
+law at every rung of the tie ladder. Horizon dynamics,
 primeness, and overshoot ranking are retained in the engine as search
 mechanics; none is a clause of the two laws.
 
@@ -496,10 +542,11 @@ The necessity-level architecture:
 \mathcal{A}(H)\longrightarrow
 \{\text{total dischargers}\}
 \quad\text{(unique }\Rightarrow\text{ selected; else cone)},\\
-\text{Selective Law, open}
+\text{Debt-free termination}
 &:\quad
-O=\varnothing\;\Longrightarrow\;\text{certified clearing required; }
-\rho\le4\text{ forecloses --- halt},\\
+O=\varnothing\;\Longrightarrow\;
+\text{no positive-cost admissible continuation; theorem readouts do not
+extend history --- halt},\\
 \text{free integration}
 &:\quad
 x^\star\longrightarrow H^+=I(H,x^\star),\\
@@ -511,16 +558,19 @@ x^\star\longrightarrow H^+=I(H,x^\star),\\
 
 \paragraph{Open obligations (explicit; silence is not disposition).}
 (i) The former-axis act equivalence \(B_4^{\Pi}\simeq B_4^{\Sigma}\) ---
-whether the cone is four worlds or two --- constructed or obstructed.
-(ii) The windowed bar's shadow replay and selectivity test, and the
+the exact quotient cardinality within \(2\le|Q_4|\le4\) --- constructed or
+obstructed.
+(ii) The windowed bar's diagnostic shadow replay, and the
 common-root derivation (width-two demand \(\Rightarrow\) Fibonacci debt
 \(\Rightarrow\) \(\varphi\) as window fixed point).
 (iii) The interpretation of zero-value commanded acts (stages with
 \(\nu=0\) in the semantic vector). (iv) A measure, or a proof that none is
-required, on the four-branch cone. (v) The external frontier: no
+required, on the certified quotient cone. (v) The external frontier: no
 parameter-free quantity of this theory has yet been exposed to measurement,
 and the physical identifications of the Genesis strata remain names, not
-derivations.
+derivations. (vi) The finite
+\(\mathfrak F_{\mathrm{GF2}}^{\le2}\) carrier, checker, and completeness
+certificate are specified but not implemented.
 
 \hyperref[app:genesis-table]{Appendix~\ref*{app:genesis-table}} records the
 Genesis trace; its numerical columns are structural-register testimony unless

@@ -60619,12 +60619,13 @@ mod tests {
         ]
         .into_iter()
         .collect::<BTreeMap<_, _>>();
-        let expected_delta = Some(&(
+        let expected_delta_value = (
             expected_removed_captures,
             BTreeMap::new(),
             expected_removed_pruned,
             BTreeMap::new(),
-        ));
+        );
+        let expected_delta = Some(&expected_delta_value);
 
         assert_eq!(
             deltas.get("active_window"),

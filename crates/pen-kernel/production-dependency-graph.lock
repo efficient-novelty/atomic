@@ -1,0 +1,79 @@
+schema	pen-kernel-production-dependency-graph-v1
+root	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index
+root	schemars	1.2.1	registry+https://github.com/rust-lang/crates.io-index
+root	serde	1.0.228	registry+https://github.com/rust-lang/crates.io-index
+root	thiserror	2.0.18	registry+https://github.com/rust-lang/crates.io-index
+package	arrayref	0.3.9	registry+https://github.com/rust-lang/crates.io-index	76a2e8124351fda1ef8aaaa3bbd7ebbcb486bbcd4225aca0aa0d84bb2db8fecb
+package	arrayvec	0.7.6	registry+https://github.com/rust-lang/crates.io-index	7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50
+package	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index	2468ef7d57b3fb7e16b576e8377cdbde2320c60e1491e961d11da40fc4f02a2d
+package	cc	1.2.56	registry+https://github.com/rust-lang/crates.io-index	aebf35691d1bfb0ac386a69bac2fde4dd276fb618cf8bf4f5318fe285e821bb2
+package	cfg-if	1.0.4	registry+https://github.com/rust-lang/crates.io-index	9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801
+package	constant_time_eq	0.4.2	registry+https://github.com/rust-lang/crates.io-index	3d52eff69cd5e647efe296129160853a42795992097e8af39800e1060caeea9b
+package	cpufeatures	0.2.17	registry+https://github.com/rust-lang/crates.io-index	59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280
+package	dyn-clone	1.0.20	registry+https://github.com/rust-lang/crates.io-index	d0881ea181b1df73ff77ffaaf9c7544ecc11e82fba9b5f27b262a3c73a332555
+package	find-msvc-tools	0.1.9	registry+https://github.com/rust-lang/crates.io-index	5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582
+package	itoa	1.0.17	registry+https://github.com/rust-lang/crates.io-index	92ecc6618181def0457392ccd0ee51198e065e016d1d527a7ac1b6dc7c1f09d2
+package	libc	0.2.183	registry+https://github.com/rust-lang/crates.io-index	b5b646652bf6661599e1da8901b3b9522896f01e736bad5f723fe7a3a27f899d
+package	memchr	2.8.0	registry+https://github.com/rust-lang/crates.io-index	f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79
+package	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index	8fd00f0bb2e90d81d1044c2b32617f68fcb9fa3bb7640c23e9c748e53fb30934
+package	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index	41f2619966050689382d2b44f664f4bc593e129785a36d6ee376ddf37259b924
+package	ref-cast	1.0.25	registry+https://github.com/rust-lang/crates.io-index	f354300ae66f76f1c85c5f84693f0ce81d747e2c3f21a45fef496d89c960bf7d
+package	ref-cast-impl	1.0.25	registry+https://github.com/rust-lang/crates.io-index	b7186006dcb21920990093f30e3dea63b7d6e977bf1256be20c3563a5db070da
+package	schemars	1.2.1	registry+https://github.com/rust-lang/crates.io-index	a2b42f36aa1cd011945615b92222f6bf73c599a102a300334cd7f8dbeec726cc
+package	schemars_derive	1.2.1	registry+https://github.com/rust-lang/crates.io-index	7d115b50f4aaeea07e79c1912f645c7513d81715d0420f8bc77a18c6260b307f
+package	serde	1.0.228	registry+https://github.com/rust-lang/crates.io-index	9a8e94ea7f378bd32cbbd37198a4a91436180c5bb472411e48b5ec2e2124ae9e
+package	serde_core	1.0.228	registry+https://github.com/rust-lang/crates.io-index	41d385c7d4ca58e59fc732af25c3983b67ac852c1a25000afe1175de458b67ad
+package	serde_derive	1.0.228	registry+https://github.com/rust-lang/crates.io-index	d540f220d3187173da220f885ab66608367b6574e925011a9353e4badda91d79
+package	serde_derive_internals	0.29.1	registry+https://github.com/rust-lang/crates.io-index	18d26a20a969b9e3fdf2fc2d9f21eda6c40e2de84c9408bb5d3b05d499aae711
+package	serde_json	1.0.149	registry+https://github.com/rust-lang/crates.io-index	83fc039473c5595ace860d8c4fafa220ff474b3fc6bfdb4293327f1a37e94d86
+package	shlex	1.3.0	registry+https://github.com/rust-lang/crates.io-index	0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64
+package	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index	e665b8803e7b1d2a727f4023456bbbbe74da67099c585258af0ad9c5013b9b99
+package	thiserror	2.0.18	registry+https://github.com/rust-lang/crates.io-index	4288b5bcbc7920c07a1149a35cf9590a2aa808e0bc1eafaade0b80947865fbc4
+package	thiserror-impl	2.0.18	registry+https://github.com/rust-lang/crates.io-index	ebc4ee7f67670e9b64d05fa4253e753e016c6c95ff35b89b7941d6b856dec1d5
+package	unicode-ident	1.0.24	registry+https://github.com/rust-lang/crates.io-index	e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75
+package	zmij	1.0.21	registry+https://github.com/rust-lang/crates.io-index	b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa
+dependency	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index	arrayref	0.3.9	registry+https://github.com/rust-lang/crates.io-index
+dependency	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index	arrayvec	0.7.6	registry+https://github.com/rust-lang/crates.io-index
+dependency	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index	cc	1.2.56	registry+https://github.com/rust-lang/crates.io-index
+dependency	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index	cfg-if	1.0.4	registry+https://github.com/rust-lang/crates.io-index
+dependency	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index	constant_time_eq	0.4.2	registry+https://github.com/rust-lang/crates.io-index
+dependency	blake3	1.8.3	registry+https://github.com/rust-lang/crates.io-index	cpufeatures	0.2.17	registry+https://github.com/rust-lang/crates.io-index
+dependency	cc	1.2.56	registry+https://github.com/rust-lang/crates.io-index	find-msvc-tools	0.1.9	registry+https://github.com/rust-lang/crates.io-index
+dependency	cc	1.2.56	registry+https://github.com/rust-lang/crates.io-index	shlex	1.3.0	registry+https://github.com/rust-lang/crates.io-index
+dependency	cpufeatures	0.2.17	registry+https://github.com/rust-lang/crates.io-index	libc	0.2.183	registry+https://github.com/rust-lang/crates.io-index
+dependency	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index	unicode-ident	1.0.24	registry+https://github.com/rust-lang/crates.io-index
+dependency	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index
+dependency	ref-cast	1.0.25	registry+https://github.com/rust-lang/crates.io-index	ref-cast-impl	1.0.25	registry+https://github.com/rust-lang/crates.io-index
+dependency	ref-cast-impl	1.0.25	registry+https://github.com/rust-lang/crates.io-index	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index
+dependency	ref-cast-impl	1.0.25	registry+https://github.com/rust-lang/crates.io-index	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index
+dependency	ref-cast-impl	1.0.25	registry+https://github.com/rust-lang/crates.io-index	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars	1.2.1	registry+https://github.com/rust-lang/crates.io-index	dyn-clone	1.0.20	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars	1.2.1	registry+https://github.com/rust-lang/crates.io-index	ref-cast	1.0.25	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars	1.2.1	registry+https://github.com/rust-lang/crates.io-index	schemars_derive	1.2.1	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars	1.2.1	registry+https://github.com/rust-lang/crates.io-index	serde	1.0.228	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars	1.2.1	registry+https://github.com/rust-lang/crates.io-index	serde_json	1.0.149	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars_derive	1.2.1	registry+https://github.com/rust-lang/crates.io-index	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars_derive	1.2.1	registry+https://github.com/rust-lang/crates.io-index	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars_derive	1.2.1	registry+https://github.com/rust-lang/crates.io-index	serde_derive_internals	0.29.1	registry+https://github.com/rust-lang/crates.io-index
+dependency	schemars_derive	1.2.1	registry+https://github.com/rust-lang/crates.io-index	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde	1.0.228	registry+https://github.com/rust-lang/crates.io-index	serde_core	1.0.228	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde	1.0.228	registry+https://github.com/rust-lang/crates.io-index	serde_derive	1.0.228	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_core	1.0.228	registry+https://github.com/rust-lang/crates.io-index	serde_derive	1.0.228	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_derive	1.0.228	registry+https://github.com/rust-lang/crates.io-index	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_derive	1.0.228	registry+https://github.com/rust-lang/crates.io-index	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_derive	1.0.228	registry+https://github.com/rust-lang/crates.io-index	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_derive_internals	0.29.1	registry+https://github.com/rust-lang/crates.io-index	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_derive_internals	0.29.1	registry+https://github.com/rust-lang/crates.io-index	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_derive_internals	0.29.1	registry+https://github.com/rust-lang/crates.io-index	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_json	1.0.149	registry+https://github.com/rust-lang/crates.io-index	itoa	1.0.17	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_json	1.0.149	registry+https://github.com/rust-lang/crates.io-index	memchr	2.8.0	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_json	1.0.149	registry+https://github.com/rust-lang/crates.io-index	serde	1.0.228	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_json	1.0.149	registry+https://github.com/rust-lang/crates.io-index	serde_core	1.0.228	registry+https://github.com/rust-lang/crates.io-index
+dependency	serde_json	1.0.149	registry+https://github.com/rust-lang/crates.io-index	zmij	1.0.21	registry+https://github.com/rust-lang/crates.io-index
+dependency	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index
+dependency	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index
+dependency	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index	unicode-ident	1.0.24	registry+https://github.com/rust-lang/crates.io-index
+dependency	thiserror	2.0.18	registry+https://github.com/rust-lang/crates.io-index	thiserror-impl	2.0.18	registry+https://github.com/rust-lang/crates.io-index
+dependency	thiserror-impl	2.0.18	registry+https://github.com/rust-lang/crates.io-index	proc-macro2	1.0.106	registry+https://github.com/rust-lang/crates.io-index
+dependency	thiserror-impl	2.0.18	registry+https://github.com/rust-lang/crates.io-index	quote	1.0.45	registry+https://github.com/rust-lang/crates.io-index
+dependency	thiserror-impl	2.0.18	registry+https://github.com/rust-lang/crates.io-index	syn	2.0.117	registry+https://github.com/rust-lang/crates.io-index

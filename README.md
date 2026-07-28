@@ -1,15 +1,52 @@
 # pen-atomic
 
-`pen-atomic` is a deterministic strict-only Rust workspace for rediscovering
-the current 15-step PEN genesis sequence from anonymous MBTT structure. Rust
-owns the hot path: search, evaluation, storage, resume, telemetry, and
-reporting. Cubical Agda remains an observational export and verification
-sidecar.
+`pen-atomic` contains a deterministic legacy search/replay engine and a
+separate, proof-gated Law V2 implementation in progress. The legacy lane
+replays the archived 15-step PEN corpus; it is oracle testimony and a
+performance laboratory, not evidence that the repaired two laws derive that
+trace autonomously.
 
 ## Project status
 
+### Law V2 lane
+
+The lawful `pen-engine` binary currently returns only `Unknown`. This is the
+correct result while the authoritative demand calculus, GF2 closure theorem,
+response cone, adopted quotient, Constitutive-Law composition, and
+free-sealing universal property remain open.
+
+Implemented foundations include:
+
+- an oracle/source firewall with clean isolation builds;
+- an independent bounded dependent-core kernel and private replay
+  capabilities;
+- a finite relative demand census;
+- a versioned structural GF2 manifest and fail-closed four-way decisions;
+- native kernel-checked scheme registration and particular closed
+  specialization replay;
+- a strict anonymous, registered Law-V2A three-act bootstrap artifact; and
+- an Agda 2.8.0 / `cubical-0.9` fixed-source readiness probe that requires
+  independently trusted Agda and Git executable-digest pins, verifies reviewed
+  Cubical and Agda-primitive trees, and checks private canonical snapshots
+  under a sanitized process environment. Text sources are UTF-8 with CRLF
+  canonicalized to LF and bare carriage returns rejected; primitive `.agdai`
+  files remain raw bytes. The Cubical tree has a repository-reviewed canonical
+  digest. The primitive-runtime digest is supplied independently by trusted
+  configuration for the exact Agda distribution; the exported local reference
+  digest is only a reproducibility aid, not an authenticity anchor.
+
+The Agda probe establishes checker readiness only. It accepts no arbitrary
+proof source and there is not yet a reviewed GF2-to-Agda theorem translator or
+closure proof. See
+[docs/LAW_V2_EXECUTABLE_SPEC.md](docs/LAW_V2_EXECUTABLE_SPEC.md) and
+[docs/LAW_V2_ABSOLUTE_STAGE4_MILESTONE.md](docs/LAW_V2_ABSOLUTE_STAGE4_MILESTONE.md)
+for the exact claim boundary. The current stopping point is recorded in
+[docs/LAW_V2_H3_CENSUS_BLOCKER.md](docs/LAW_V2_H3_CENSUS_BLOCKER.md).
+
+### Legacy lane
+
 - `strict_canon_guarded` remains the authoritative live lane and recovers the
-  full 15-step corpus
+  full 15-step corpus within the legacy replay contract
 - `realistic_frontier_shadow` is a broader comparison-backed lane that
   preserves the same accepted 15-step sequence while exposing genuine late-step
   competition and prefix-frontier retention
@@ -27,6 +64,10 @@ sidecar.
 - Agda export is observational only and cannot influence acceptance
 - optional acceleration scaffolding is outside the authoritative acceptance
   contract
+
+References below to an “authoritative” guarded lane are scoped to that legacy
+contract. They do not promote its target length, bar, scores, labels, or
+reference telescopes into the Law V2 production closure.
 
 Rollout, parity hardening, and honesty-boundary closeout are tracked in
 [overall_plan.md](overall_plan.md). Workstream 4 is complete. The guarded

@@ -11,6 +11,7 @@
 
 mod certificate;
 mod checker;
+mod dependency_graph;
 mod digest;
 mod syntax;
 

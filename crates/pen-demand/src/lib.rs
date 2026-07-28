@@ -10,6 +10,7 @@
 mod census;
 mod certificate;
 mod model;
+mod scheme;
 
 #[cfg(test)]
 mod tests;
@@ -23,4 +24,11 @@ pub use model::{
     FamilyId, FiniteDemandDomain, FiniteRule, InstanceId, LibrarySeeds, OpaqueWindow,
     RegisteredFamily, RegisteredInstance, RelativeCensus, RelativeCensusOutcome, StructuralSupport,
     UnknownReason,
+};
+pub use scheme::{
+    INTRINSIC_SCHEME_SCHEMA_VERSION, IntrinsicScheme, IntrinsicSchemeOutcome,
+    IntrinsicSchemeUnknown, SchemeRule, UncheckedIntrinsicSchemeCertificate,
+    VerifiedIntrinsicScheme, VerifiedIntrinsicSpecialization, claim_intrinsic_scheme_certificate,
+    intrinsic_scheme_source_digest, register_intrinsic_scheme, specialize_intrinsic_scheme,
+    verify_intrinsic_scheme_certificate,
 };

@@ -1,10 +1,11 @@
 # Blindness contract
 
-Status: the PR-1 dependency/source firewall and conservative PR-2 verifier
-slice are implemented for the Law V2 closure. A finite relative closure/replay
-primitive is implemented in `pen-demand` and re-exported by `pen-law`; it is
-not integrated into `pen-engine`, and the Phase-3 exit gate remains unmet.
-Later theorem and perturbation controls remain open.
+Status: the dependency/source firewall, conservative verifier slice,
+structural GF2 contract, exact checker-readiness probe, and anonymous
+registered-bootstrap replay are implemented for the Law V2 closure. The
+relative census and native intrinsic scheme slice remain unintegrated with
+`pen-engine`, and the Phase-3 exit gate is unmet. Later theorem and
+perturbation controls remain open.
 
 This contract defines what information the Law V2 production lane may
 observe. It applies to source dependencies, generated code, build scripts,
@@ -49,8 +50,10 @@ A B2 lawful run may observe only:
 3. a stage-generic depth-two demand-scheme calculus;
 4. the Constitutive and Selective Laws;
 5. window width two;
-6. free-sealing and equivalence rules; and
-7. resource budgets.
+6. free-sealing and equivalence rules;
+7. a versioned finite Genesis Fragment of depth two (GF2) delimiting every
+   executable completeness claim; and
+8. resource budgets.
 
 The run manifest must bind these inputs by digest. Changing any one creates a
 different run.
@@ -70,7 +73,8 @@ The lawful lane must not observe, directly or indirectly:
 - named progression predicates such as
   `requires_temporal_shell_package`;
 - branches on a semantic stage index;
-- bar clearance, overshoot, or efficiency as guarded acceptance;
+- bar clearance, overshoot, `rho`, efficiency, or semantic novelty as
+  admissibility, continuation, selection, or halt authority;
 - deterministic hash or presentation-order tie-breaking;
 - next-step viability against the expected future;
 - baseline parity as acceptance evidence; or
@@ -95,6 +99,23 @@ diagnostics -X-> kernel/demand/synthesis/audit/law/engine
 ledgers, and expected step counts. It may be used by tests, development
 oracles, and post-run decoders. It is never a production dependency of the
 lawful binary or any crate on the lawful binary's transitive dependency path.
+
+`pen-gf2-agda` may inspect only its fixed postulate-free smoke source, the
+explicit checker paths and independently trusted executable-digest pins
+supplied for a readiness probe, the pinned Cubical checkout, and the
+Agda-2.8.0 primitive runtime directory reported by the pinned executable.
+Text members of both imported trees must be UTF-8; CRLF is canonicalized to LF
+and any remaining bare carriage return is rejected. Primitive `.agdai` members
+are retained as raw bytes. These canonical members are copied into a private
+scratch snapshot, and only that snapshot is exposed to the smoke checker. The
+Cubical manifest must match the repository-reviewed canonical tree digest. The
+Agda primitive-runtime manifest must match an independently reviewed digest
+supplied by trusted configuration for the exact executable distribution. The
+local reference primitive digest and a self-derived executable digest are
+reproducibility evidence, not authenticity anchors. The crate exposes no
+arbitrary-source checker API and receives no history, target candidate, label,
+cardinality, score, or future event. Its readiness capability is not theorem
+evidence.
 
 Diagnostics may inspect already sealed artifacts. They may not return a
 selector, pruning hint, demand, certificate premise, or halt decision to the
@@ -130,10 +151,16 @@ synthesis, semantic-family auditing, or acceptance.
 Compliance requires replacing event identifiers with random opaque values and
 obtaining the same result up to identifier renaming.
 
-The registered bootstrap is a disclosed exception in scope, not a hidden
-stage-index policy. Until bootstrap uniqueness is proved, the run manifest
-must state that stages 1 through 3 were supplied by the registered founding
-rule.
+Law V2A's registered three-act bootstrap is a disclosed initial condition, not
+a hidden stage-index policy. Its run manifest must say that the three acts
+were supplied and must not claim empty-context derivation or uniqueness.
+Law V2B is a distinct future claim requiring a least-arena derivation and
+uniqueness proof from the empty public context.
+
+The current embedded registration contains only three anonymous
+kernel-normalized one-declaration acts and their provenance chain. Its strict
+wire schema rejects downstream annotations. Replaying it proves registration
+integrity and typing, not autonomous discovery.
 
 ## 7. Semantic names and decoding
 
@@ -152,13 +179,15 @@ syntax resembles the target.
 ## 8. Resource semantics
 
 Resource budgets are allowed to affect completion time and the result
-`Unknown(ResourceExhausted)`. They must not affect the mathematical cone.
+`Unknown(ResourceExhausted)`. An input outside GF2 yields
+`Unknown(OutsideFragment)`. Neither result may affect or be restated as the
+mathematical cone.
 
 Across worker counts, schedules, memory limits, and operational caps, a run
 must yield either:
 
 - the same certified result up to adopted equivalence; or
-- `Unknown`.
+- `Unknown(ResourceExhausted)` or `Unknown(OutsideFragment)`.
 
 A different winner, a smaller cone, `Blocked`, or `Halted` under tighter
 resources is a blindness/completeness failure.
@@ -196,6 +225,7 @@ production dependency graph
 kernel digest
 grammar digest
 scheme-calculus digest
+GF2 fragment digest
 law digest
 window width
 bootstrap contract
@@ -240,14 +270,15 @@ closure.
 
 ## 12. Known blockers
 
-- The normative appendix simultaneously describes four fully quotiented
-  Stage-4 classes and leaves a Pi/Sigma act equivalence open that could reduce
-  the cone to two. Blind search must not encode either cardinality as a hidden
-  expected answer while that tension is unresolved.
-- The current repository has not yet established the complete,
-  independently defined depth-two response domain required to certify
-  uniqueness or exhaustiveness. Lack of a second result is not evidence of
-  uniqueness.
+- Four normalized Stage-4 representative slots are required before
+  quotienting, but the repository has not yet certified those representatives
+  under Law V2. Even after certification, the full quotient has only the
+  conditional bound `2 <= count <= 4` until the Pi/Sigma former-axis
+  equivalence is constructed or obstructed; an undecidable quotient returns
+  `Unknown(UnknownQuotient)`.
+- The current repository has not implemented GF2 or its closure/completeness
+  verifier. An outside-fragment input must remain `Unknown`; lack of a second
+  result is not uniqueness evidence.
 - Complete physical relocation of legacy target fixtures is coupled to
   versioning the historical source-bound certificates; the current PR-1
   guarantee is the independently built, oracle-free Law V2 closure.

@@ -9,11 +9,15 @@
 #![forbid(unsafe_code)]
 
 mod certificates;
+mod contract_status;
 mod register;
+mod registered_bootstrap;
 
 pub use certificates::*;
+pub use contract_status::*;
 pub use pen_kernel::{Digest, DigestError};
 pub use register::{LegacyStructuralValue, SemanticFamilyValue, ValueRegister};
+pub use registered_bootstrap::*;
 
 /// Phase-3a census complete only relative to an explicit finite registry.
 pub mod relative_census {

@@ -1,24 +1,21 @@
 [package]
-name = "pen-engine"
+name = "pen-gf2-agda"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
-description = "Oracle-free orchestration shell for the two-law v2 lane"
+description = "Pinned, oracle-free Cubical Agda backend readiness probe for the Genesis Fragment"
 
 [dependencies]
-pen-kernel = { path = "../pen-kernel" }
-pen-law = { path = "../pen-law" }
-schemars.workspace = true
+blake3.workspace = true
+command-group = "=5.0.1"
 serde.workspace = true
-serde_json.workspace = true
 thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
 
 [package.metadata.law-v2]
 role = "production"
 oracle_access = false
 diagnostic_access = false
-
-[[bin]]
-name = "pen-law-v2"
-path = "src/main.rs"

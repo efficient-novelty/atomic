@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: 1.85.0
+          toolchain: 1.88.0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -22,6 +22,6 @@ jobs:
       - name: Verify legacy testimony freeze bindings
         run: python scripts/check_legacy_bar_v1_freeze.py
       - name: Test quarantined oracle testimony
-        run: cargo test -p pen-oracle
+        run: cargo test --locked -p pen-oracle
       - name: Test lawful packages in the full workspace
-        run: cargo test -p pen-kernel -p pen-demand -p pen-law -p pen-engine
+        run: cargo test --locked -p pen-kernel -p pen-gf2 -p pen-gf2-agda -p pen-demand -p pen-law -p pen-engine
