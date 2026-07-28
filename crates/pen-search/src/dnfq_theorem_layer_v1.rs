@@ -6,18 +6,18 @@
 //! substitution, or naturality theorem.
 
 use crate::e5_future_hole_finale_v2::{
-    replay_e5_future_hole_finale_v2_certificate, E5FutureHoleFinaleV2Certificate,
+    E5FutureHoleFinaleV2Certificate, replay_e5_future_hole_finale_v2_certificate,
 };
 use crate::naturality_orbit_transport::{
-    replay_naturality_orbit_transport_certificate, A3TransportedInstance,
-    NaturalityOrbitTransportCertificate,
+    A3TransportedInstance, NaturalityOrbitTransportCertificate,
+    replay_naturality_orbit_transport_certificate,
 };
 use crate::t_bi_nu1_regression_v5::replay_t_bi_nu1_regression_v5_json;
 use crate::t_bi_nu1_regression_v6::replay_t_bi_nu1_regression_v6_json;
 use crate::t_d2_1_operational_domain_v2::{
-    derive_t_d2_1_contextual_membership_v2, replay_t_d2_1_operational_domain_v2,
     Td21OperationalDomainV2Certificate, Td21V2KernelClassifier, Td21V2OperationalNode,
-    Td21V2ParameterTelescope, Td21V2SyntaxNumber,
+    Td21V2ParameterTelescope, Td21V2SyntaxNumber, derive_t_d2_1_contextual_membership_v2,
+    replay_t_d2_1_operational_domain_v2,
 };
 use pen_core::expr::Expr;
 use pen_core::hash::blake3_hex;
@@ -25,13 +25,13 @@ use pen_eval::a3_rule_inventory_exhaustiveness::replay_historical_a3_rule_invent
 use pen_type::equality::univalent_equality;
 use pen_type::normalize::normalize;
 use pen_type::substitution::{
-    issue_structural_substitution, replay_structural_substitution, SortedParameterContext,
-    SubstitutionImage,
+    SortedParameterContext, SubstitutionImage, issue_structural_substitution,
+    replay_structural_substitution,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::collections::BTreeMap;
-use std::fs::{read, read_to_string, remove_file, OpenOptions};
+use std::fs::{OpenOptions, read, read_to_string, remove_file};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
@@ -1713,7 +1713,9 @@ No concrete row or proof hash was promoted to a universal theorem. T-D2-2 reopen
         certificate
             .concrete_squares
             .iter()
-            .filter(|square| square.exact_substitution_replayed && square.normalization_square_replayed)
+            .filter(
+                |square| square.exact_substitution_replayed && square.normalization_square_replayed
+            )
             .count(),
         certificate.concrete_square_count,
         certificate.direct_square_count,

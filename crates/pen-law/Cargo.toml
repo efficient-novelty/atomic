@@ -1,0 +1,21 @@
+[package]
+name = "pen-law"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Oracle-free executable contract for the two-law v2 lane"
+
+[dependencies]
+pen-demand = { path = "../pen-demand" }
+pen-kernel = { path = "../pen-kernel" }
+schemars.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[package.metadata.law-v2]
+role = "production"
+oracle_access = false
+diagnostic_access = false

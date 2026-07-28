@@ -1,0 +1,77 @@
+{
+  "schema_version": "legacy-bar-freeze-manifest-v1",
+  "status": "partial",
+  "register": "legacy_structural_v1",
+  "source": {
+    "commit": "924133af85f81c41cd4aa23b660febbcb13b99fa",
+    "tracked_baseline_blobs": {
+      "Cargo.lock": "git-sha1:b378bbc8f91e964db29a0905448588220877535f",
+      "configs/strict_canon_guarded.toml": "git-sha1:263202fa2ba125f3cb6cf81a546bec838f528b7d",
+      "crates/pen-core/src/telescope.rs": "git-sha1:182d6e6366cc3062f2cc10794f99c651329ca156",
+      "crates/pen-type/src/elaborate.rs": "git-sha1:5ec60ec7db3d86d7d9aee21fdd9d68ddb63593e0",
+      "crates/pen-search/src/config.rs": "git-sha1:c487a3adc14548056a661504b21af355b40b8577"
+    },
+    "untracked_normative_inputs_excluded_from_historical_baseline": [
+      "docs/autonomous_genesis_plan.md",
+      "docs/app_a_two_laws_formal_axioms.tex"
+    ]
+  },
+  "historical_law": {
+    "path": "docs/app_a_two_laws_formal_axioms_old.tex",
+    "sha256": "75aa7e45edd8bb2e19d53acfa535f1eea3e0fdb88ea8956e64f5010bf6fbc443",
+    "recovery_status": "recovered-byte-identical",
+    "recovered_from_repository": "book",
+    "recovered_from_path": "appendices/app_a_two_laws_formal_axioms_old.tex",
+    "recovered_source_sha256": "75aa7e45edd8bb2e19d53acfa535f1eea3e0fdb88ea8956e64f5010bf6fbc443"
+  },
+  "profile": {
+    "path": "configs/legacy_bar_v1.toml",
+    "sha256": "7e840104afbd874624e552c1df17a73983d592e38f8e596e1cfb1717049261f2",
+    "source_profile_path": "configs/strict_canon_guarded.toml",
+    "source_profile_sha256": "342c7ecc97f832eff9199ae388c27ed69ea4601739d8eefc497e42ca95aa2a7c",
+    "search_profile": "strict_canon_guarded",
+    "grammar_profile": "canonical_mbtt_v1",
+    "configured_endpoint": 15,
+    "window_depth": 2,
+    "selector": "minimal_positive_overshoot"
+  },
+  "oracle_quarantine": {
+    "path": "crates/pen-oracle/src/lib.rs",
+    "sha256": "30aa78bc20cbad7da7b338bf69bfcd7221811f0c312f9dc3133ccf06ec659667",
+    "reference_trajectory_path": "tests/fixtures/trajectory/reference_steps_until_15.json",
+    "reference_trajectory_sha256": "9889f0d8c6936a8eab519211c980a0cf0183586e2262dc772f337f5325de6c04",
+    "legacy_structural_nu_sum_disposition": {
+      "checkpoint_vector_sum": 359,
+      "normative_appendix_corrected_sum": 358,
+      "status": "disclosed_unreconciled_testimony"
+    }
+  },
+  "toolchain_observed": {
+    "rustc": "1.94.0 (4a4ef493e 2026-03-02)",
+    "cargo": "1.94.0 (85eff7c80 2026-01-15)",
+    "host": "x86_64-pc-windows-msvc"
+  },
+  "baseline_validation": {
+    "compile": {
+      "command": "cargo check -p pen-core -p pen-type -p pen-eval -p pen-search --lib",
+      "status": "pass"
+    },
+    "focused_smoke_tests": {
+      "status": "pass",
+      "passed": 68,
+      "failed": 0
+    },
+    "known_failure": {
+      "command": "cargo test -p pen-search --lib bi0_semantic_register_v6::tests::capability_replays_without_a_full_bi0_argument_and_omits_registers -- --exact",
+      "status": "fail",
+      "reason": "frozen v3 artifact differs from independent reissuance"
+    }
+  },
+  "incomplete_requirements": [
+    "full clean-checkout replay",
+    "checkpoint/resume replay",
+    "complete artifact-directory binding",
+    "dependency graph archive",
+    "platform-variance archive"
+  ]
+}

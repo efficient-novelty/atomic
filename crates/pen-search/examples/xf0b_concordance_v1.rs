@@ -14,7 +14,7 @@
 
 use pen_core::hash::blake3_hex;
 use pen_search::milestone_certificate_v1::replay_milestone_certificate_v1_json;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
 
@@ -62,17 +62,19 @@ fn seal(docs: &Path) -> Result<(), Box<dyn std::error::Error>> {
 fn replay(docs: &Path) -> Result<(), Box<dyn std::error::Error>> {
     // 1. Digest integrity: any mutated verdict/translation/citation/join row
     //    changes the canonical serialization and fails here.
-    let artifact: Value = serde_json::from_slice(&fs::read(docs.join("xf0b_concordance_v1.json"))?)?;
-    let sealed = artifact.get("sealed").ok_or("artifact has no `sealed` value")?;
+    let artifact: Value =
+        serde_json::from_slice(&fs::read(docs.join("xf0b_concordance_v1.json"))?)?;
+    let sealed = artifact
+        .get("sealed")
+        .ok_or("artifact has no `sealed` value")?;
     let recorded = artifact["result_digest"]
         .as_str()
         .ok_or("artifact has no result_digest")?;
     let recomputed = sealed_digest(sealed)?;
     if recorded != recomputed {
-        return Err(format!(
-            "mutation detected: recorded {recorded}, recomputed {recomputed}"
-        )
-        .into());
+        return Err(
+            format!("mutation detected: recorded {recorded}, recomputed {recomputed}").into(),
+        );
     }
 
     // 2. Foundation: MS-1 replays and carries the frozen result digest; the
@@ -121,7 +123,9 @@ fn replay(docs: &Path) -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
             Some("no_name") => {
-                let attempts = row["attempts"].as_array().ok_or("no_name row without attempts")?;
+                let attempts = row["attempts"]
+                    .as_array()
+                    .ok_or("no_name row without attempts")?;
                 if attempts.len() < 3 {
                     return Err(format!(
                         "NO-NAME discipline violation in stage {stage}: fewer than three recorded attempts"
@@ -153,7 +157,9 @@ fn replay(docs: &Path) -> Result<(), Box<dyn std::error::Error>> {
         .ok_or("inverse join missing")?;
     for entry in inverse {
         let stage = entry["stage"].as_u64().ok_or("inverse row without stage")?;
-        let datum = entry["blind_datum"].as_str().ok_or("inverse row without datum")?;
+        let datum = entry["blind_datum"]
+            .as_str()
+            .ok_or("inverse row without datum")?;
         let found = census_rows.iter().any(|row| {
             row["stratum"].as_u64() == Some(stage)
                 && row["enumeration"].as_array().map_or(false, |data| {

@@ -32,6 +32,8 @@ Desktop.ini
 *~
 .idea/
 .vscode/
+__pycache__/
+*.py[cod]
 
 # Generated runtime artifacts
 /runs/*

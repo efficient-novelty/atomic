@@ -1,0 +1,19 @@
+[package]
+name = "pen-oracle"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+pen-core = { path = "../pen-core" }
+schemars.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[package.metadata.law-v2]
+role = "oracle"
+production_dependency = false

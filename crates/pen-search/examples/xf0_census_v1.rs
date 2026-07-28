@@ -14,7 +14,7 @@
 
 use pen_core::hash::blake3_hex;
 use pen_search::milestone_certificate_v1::replay_milestone_certificate_v1_json;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
 
@@ -31,8 +31,8 @@ const CALIBRATION_STRATA: [u64; 3] = [8, 9, 12];
 const BLIND_SINGLE_STRATA: [u64; 11] = [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15];
 
 fn file_digest(path: &Path) -> Result<(Vec<u8>, String), Box<dyn std::error::Error>> {
-    let bytes = fs::read(path)
-        .map_err(|error| format!("cannot read {}: {error}", path.display()))?;
+    let bytes =
+        fs::read(path).map_err(|error| format!("cannot read {}: {error}", path.display()))?;
     let digest = format!("blake3:{}", blake3_hex(&bytes));
     Ok((bytes, digest))
 }
@@ -109,7 +109,9 @@ fn run_census(docs: &Path) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // 4. Row inventory must be exactly the frozen partition.
-    let rows = column["rows"].as_array().ok_or("physics column has no rows")?;
+    let rows = column["rows"]
+        .as_array()
+        .ok_or("physics column has no rows")?;
     if rows.len() != 15 {
         return Err(format!("physics column has {} rows, expected 15", rows.len()).into());
     }

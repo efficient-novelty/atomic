@@ -1,6 +1,11 @@
 [workspace]
 members = [
     "crates/pen-core",
+    "crates/pen-oracle",
+    "crates/pen-kernel",
+    "crates/pen-demand",
+    "crates/pen-law",
+    "crates/pen-engine",
     "crates/pen-schema",
     "crates/pen-type",
     "crates/pen-eval",

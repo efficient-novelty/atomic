@@ -1,0 +1,27 @@
+name: law-v2 firewall
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  oracle-free:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.85.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify dependency and source firewall
+        run: python scripts/check_law_v2_firewall.py --isolation-build --json
+      - name: Test firewall bypass detection
+        run: python -m unittest discover -s scripts -p "test_check_law_v2_firewall.py"
+      - name: Verify legacy testimony freeze bindings
+        run: python scripts/check_legacy_bar_v1_freeze.py
+      - name: Test quarantined oracle testimony
+        run: cargo test -p pen-oracle
+      - name: Test lawful packages in the full workspace
+        run: cargo test -p pen-kernel -p pen-demand -p pen-law -p pen-engine

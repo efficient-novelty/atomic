@@ -6,16 +6,16 @@
 //! not make it valid.
 
 use crate::dnfq_theorem_layer_v1::{
-    issue_dnf4_corpus_projection_v1, replay_dnf4_corpus_projection_v1, DnfRunStatus,
+    DnfRunStatus, issue_dnf4_corpus_projection_v1, replay_dnf4_corpus_projection_v1,
 };
 use crate::t_d2_1_operational_domain_v3::{
-    issue_t_d2_1_operational_domain_v3, replay_t_d2_1_operational_domain_v3, Td21V3RunStatus,
+    Td21V3RunStatus, issue_t_d2_1_operational_domain_v3, replay_t_d2_1_operational_domain_v3,
 };
 use pen_core::hash::blake3_hex;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::collections::BTreeMap;
-use std::fs::{remove_file, OpenOptions};
+use std::fs::{OpenOptions, remove_file};
 use std::io::Write;
 use std::path::Path;
 use std::sync::OnceLock;
@@ -778,7 +778,7 @@ fn build_claims(
             _ => {
                 return Err(Ms1Error::Input(format!(
                     "unknown BI-4 disposition status {status}"
-                )))
+                )));
             }
         };
         claims.push(claim(
@@ -1094,12 +1094,42 @@ fn build_certificate() -> Result<MilestoneCertificateV1, Ms1Error> {
         &sources,
     )?;
     let open_items = vec![
-        open_item("U_T2", "The Pi/Sigma act equivalence; the cone's one open identity.", "milestone_brief", &sources)?,
-        open_item("WB1_WT1_WT2", "WB-1's W-T1 and W-T2 remain open.", "wb1_program", &sources)?,
-        open_item("OBSERVATIONAL_UNIVALENCE", "The observational-univalence conjecture remains parked.", "milestone_brief", &sources)?,
-        open_item("R2_INJECTIVE_JOIN", "The R2 occurrence-to-action injective join remains open.", "milestone_brief", &sources)?,
-        open_item("BRIDGE_CHAIN", "T-D2-2 -> BC1 -> 431-gap rerun -> M-3 v2 -> M-4 remains specified and closed behind KM.", "bridge_brief", &sources)?,
-        open_item("EXTERNAL_FALSIFIER_FRONTIER", "A derived parameter-free quantity exposed to measurement is the declared next front.", "mainline_brief", &sources)?,
+        open_item(
+            "U_T2",
+            "The Pi/Sigma act equivalence; the cone's one open identity.",
+            "milestone_brief",
+            &sources,
+        )?,
+        open_item(
+            "WB1_WT1_WT2",
+            "WB-1's W-T1 and W-T2 remain open.",
+            "wb1_program",
+            &sources,
+        )?,
+        open_item(
+            "OBSERVATIONAL_UNIVALENCE",
+            "The observational-univalence conjecture remains parked.",
+            "milestone_brief",
+            &sources,
+        )?,
+        open_item(
+            "R2_INJECTIVE_JOIN",
+            "The R2 occurrence-to-action injective join remains open.",
+            "milestone_brief",
+            &sources,
+        )?,
+        open_item(
+            "BRIDGE_CHAIN",
+            "T-D2-2 -> BC1 -> 431-gap rerun -> M-3 v2 -> M-4 remains specified and closed behind KM.",
+            "bridge_brief",
+            &sources,
+        )?,
+        open_item(
+            "EXTERNAL_FALSIFIER_FRONTIER",
+            "A derived parameter-free quantity exposed to measurement is the declared next front.",
+            "mainline_brief",
+            &sources,
+        )?,
     ];
 
     let uc1 = &values["uc1"];
@@ -1244,7 +1274,11 @@ MS-1 binds existing evidence and proves no new mathematical content. M-3 v1 rema
         certificate.date,
         certificate.law_count.decimal,
         certificate.certified_chain.len(),
-        certificate.claim_bindings.iter().filter(|claim| claim.claim_id.starts_with("bi4::")).count(),
+        certificate
+            .claim_bindings
+            .iter()
+            .filter(|claim| claim.claim_id.starts_with("bi4::"))
+            .count(),
         vector,
         certificate.semantic_sum.decimal,
         certificate.dnf4_gap_row_count.decimal,

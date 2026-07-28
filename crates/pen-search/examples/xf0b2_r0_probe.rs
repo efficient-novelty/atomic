@@ -9,12 +9,12 @@ use pen_core::expr::Expr;
 use pen_core::library::{Library, LibraryEntry};
 use pen_core::telescope::Telescope;
 use pen_eval::typed_families::{
-    clause_presentation, extract_candidate_families, predecessor_closure,
-    CandidateExtractionOutcome,
+    CandidateExtractionOutcome, clause_presentation, extract_candidate_families,
+    predecessor_closure,
 };
-use pen_search::enumerate::{enumerate_exprs, EnumerationContext, LateFamilySurface};
+use pen_search::enumerate::{EnumerationContext, LateFamilySurface, enumerate_exprs};
 use pen_type::elaborate::{
-    elaborate_single_clause, elaborate_telescope, minimal_ambient_parameters, SealedSignature,
+    SealedSignature, elaborate_single_clause, elaborate_telescope, minimal_ambient_parameters,
 };
 use pen_type::equality::univalent_equality;
 use pen_type::normalize::normalize;
@@ -27,7 +27,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("== R-0.1 elaboration of the sealed stage-14 telescope ==");
     println!("signature digest      : {}", signature.digest());
-    println!("stage-14 candidate    : {}", signature.entry(14).unwrap().candidate_hash);
+    println!(
+        "stage-14 candidate    : {}",
+        signature.entry(14).unwrap().candidate_hash
+    );
     let ambient = minimal_ambient_parameters(&t14);
     println!("minimal ambient arity : {ambient}");
 
@@ -60,14 +63,32 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("== R-0.1 scope resolution of clause 3 ==");
     // Scope at clause 3 = [ambient params (A)] ++ [fields of clauses 0,1,2].
     let base = elaboration.ambient_parameters + 3;
-    println!("base scope at clause 3            : {base} (= ambient {} + 3 prior fields)", elaboration.ambient_parameters);
+    println!(
+        "base scope at clause 3            : {base} (= ambient {} + 3 prior fields)",
+        elaboration.ambient_parameters
+    );
     println!("Pi binder level                   : {}", base + 1);
     println!("Lam (domain abstraction) binder   : {}", base + 1);
     println!("Sigma binder level (under Pi)     : {}", base + 2);
-    println!("occurrence Var 1 in Lam body      : {}", describe(1, elaboration.ambient_parameters, 3));
-    println!("occurrence Var 1 in Sigma domain  : {}", describe(1, elaboration.ambient_parameters, 3));
-    println!("occurrence Var 2 in Sigma codomain: {}", describe(2, elaboration.ambient_parameters, 3));
-    println!("prior kernel roles                : {:?}", elaboration.clauses[..3].iter().map(|c| c.kernel_role).collect::<Vec<_>>());
+    println!(
+        "occurrence Var 1 in Lam body      : {}",
+        describe(1, elaboration.ambient_parameters, 3)
+    );
+    println!(
+        "occurrence Var 1 in Sigma domain  : {}",
+        describe(1, elaboration.ambient_parameters, 3)
+    );
+    println!(
+        "occurrence Var 2 in Sigma codomain: {}",
+        describe(2, elaboration.ambient_parameters, 3)
+    );
+    println!(
+        "prior kernel roles                : {:?}",
+        elaboration.clauses[..3]
+            .iter()
+            .map(|c| c.kernel_role)
+            .collect::<Vec<_>>()
+    );
     // Independence of the ambient reading: check every admissible ambient.
     println!("all admissible ambient readings (A = 0,1,2):");
     for a in 0u32..=2 {
@@ -91,7 +112,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // The domain in isolation.
     let domain = Expr::Lam(Box::new(Expr::Var(1)));
     let dnf = normalize(&domain, base, 256)?;
-    println!("domain Lam(Var 1) steps   : {} (NF identical: {})", dnf.steps, dnf.expr == domain);
+    println!(
+        "domain Lam(Var 1) steps   : {} (NF identical: {})",
+        dnf.steps,
+        dnf.expr == domain
+    );
     // Is there any beta redex anywhere in the clause? (App node count)
     println!("App nodes in clause 3     : {}", count_apps(c3_expr));
     // eta: kernel equality is beta-NF equality; test the eta-expansion/contraction pair.
@@ -105,7 +130,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Expr::Lib(13),
         Expr::Pi(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
         Expr::Sigma(Box::new(Expr::Var(1)), Box::new(Expr::Var(1))),
-        Expr::App(Box::new(Expr::Lam(Box::new(Expr::Var(base + 1)))), Box::new(Expr::Var(1))),
+        Expr::App(
+            Box::new(Expr::Lam(Box::new(Expr::Var(base + 1)))),
+            Box::new(Expr::Var(1)),
+        ),
     ] {
         let witness = univalent_equality(&domain, &probe, base, 256)?;
         println!("  Lam(Var 1) == {:?} ? {}", probe, witness.equal);
@@ -168,7 +196,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .iter()
         .filter(|e| !matches!(e, Expr::Lam(_)))
         .collect();
-    println!("  of those, presentations that are NOT syntactically Lam-headed: {}", non_lam.len());
+    println!(
+        "  of those, presentations that are NOT syntactically Lam-headed: {}",
+        non_lam.len()
+    );
     for e in &non_lam {
         println!("    {e:?}");
     }
@@ -179,9 +210,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // (steps 1..13), as recorded in the semantic provenance package.
     let prefix: Vec<(u32, Telescope)> = (1..=13).map(|s| (s, Telescope::reference(s))).collect();
     let prefix_signature = SealedSignature::from_telescopes(prefix);
-    println!("predecessor signature digest (steps 1..13): {}", prefix_signature.digest());
+    println!(
+        "predecessor signature digest (steps 1..13): {}",
+        prefix_signature.digest()
+    );
     let closure = predecessor_closure(&prefix_signature)?;
-    println!("predecessor closure digest: {} ({} families)", closure.digest, closure.families.len());
+    println!(
+        "predecessor closure digest: {} ({} families)",
+        closure.digest,
+        closure.families.len()
+    );
 
     let prior_roles: Vec<ClauseRole> = elaboration.clauses.iter().map(|c| c.kernel_role).collect();
     let presentation = clause_presentation(
@@ -197,7 +235,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match extract_candidate_families(&prefix_signature, &closure, &t14, 13) {
         CandidateExtractionOutcome::Extracted(extraction) => {
             println!("stage-14 families extracted: {}", extraction.families.len());
-            println!("marginal family count      : {}", extraction.marginal_family_count);
+            println!(
+                "marginal family count      : {}",
+                extraction.marginal_family_count
+            );
             for family in &extraction.families {
                 let hit = family.id.as_str() == TARGET;
                 println!(
@@ -207,10 +248,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     family.generator_role,
                     family.instances.len(),
                     family.marginality.is_marginal(),
-                    if hit { "   <== TARGET df4feb52882e" } else { "" }
+                    if hit {
+                        "   <== TARGET df4feb52882e"
+                    } else {
+                        ""
+                    }
                 );
                 if hit {
-                    println!("     canonical NF : {:?}", family.presentation.canonical_normal_form);
+                    println!(
+                        "     canonical NF : {:?}",
+                        family.presentation.canonical_normal_form
+                    );
                     println!("     parameters   : {:?}", family.presentation.parameters);
                     println!("     kernel ty    : {:?}", family.generator_kernel_ty);
                     println!("     instances    : {:?}", family.instances);
@@ -243,7 +291,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ---------------------------------------------------------------------
     println!();
     println!("== ADDENDUM A: is a binder-dependent codomain writable at this exact position? ==");
-    let prior = [ClauseRole::Formation, ClauseRole::Formation, ClauseRole::Formation];
+    let prior = [
+        ClauseRole::Formation,
+        ClauseRole::Formation,
+        ClauseRole::Formation,
+    ];
     let variants: [(&str, Expr); 4] = [
         (
             "the sealed clause                       ",
@@ -374,7 +426,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!();
     println!("  (has_hilbert is computed by matches_hilbert_functional_shell,");
     println!("   crates/pen-core/src/library.rs; the stage-14 admissibility gate");
-    println!("   supports_hilbert_functional_clause_at_position, crates/pen-search/src/enumerate.rs,");
+    println!(
+        "   supports_hilbert_functional_clause_at_position, crates/pen-search/src/enumerate.rs,"
+    );
     println!("   carries the same per-position literals into the enumerator.)");
 
     Ok(())

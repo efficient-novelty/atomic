@@ -1,0 +1,20 @@
+[package]
+name = "pen-demand"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Relative finite demand census for the oracle-free Law V2 lane"
+
+[dependencies]
+pen-kernel = { path = "../pen-kernel" }
+schemars.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[package.metadata.law-v2]
+role = "production"
+oracle_access = false
+diagnostic_access = false

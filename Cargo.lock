@@ -474,6 +474,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "pen-demand"
+version = "0.1.0"
+dependencies = [
+ "pen-kernel",
+ "schemars",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "pen-engine"
+version = "0.1.0"
+dependencies = [
+ "pen-law",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
 name = "pen-eval"
 version = "0.1.0"
 dependencies = [
@@ -485,6 +506,38 @@ dependencies = [
  "serde_json",
  "sha2",
  "thiserror",
+]
+
+[[package]]
+name = "pen-kernel"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "pen-law"
+version = "0.1.0"
+dependencies = [
+ "pen-demand",
+ "pen-kernel",
+ "schemars",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "pen-oracle"
+version = "0.1.0"
+dependencies = [
+ "pen-core",
+ "schemars",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

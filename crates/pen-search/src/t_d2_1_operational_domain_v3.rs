@@ -4,19 +4,19 @@
 //! into membership.  It consumes only `Projected` DNF-4 dispositions.
 
 use crate::dnfq_theorem_layer_v1::{
-    issue_dnf1_canonical_contexts_v1, issue_dnf2_unified_judgments_v1,
-    issue_dnf3_naturality_closure_v1, issue_dnf4_corpus_projection_v1,
-    replay_dnf1_canonical_contexts_v1, replay_dnf2_unified_judgments_v1,
-    replay_dnf3_naturality_closure_v1, replay_dnf4_corpus_projection_v1, Dnf4ProjectionDisposition,
-    DnfRunStatus,
+    Dnf4ProjectionDisposition, DnfRunStatus, issue_dnf1_canonical_contexts_v1,
+    issue_dnf2_unified_judgments_v1, issue_dnf3_naturality_closure_v1,
+    issue_dnf4_corpus_projection_v1, replay_dnf1_canonical_contexts_v1,
+    replay_dnf2_unified_judgments_v1, replay_dnf3_naturality_closure_v1,
+    replay_dnf4_corpus_projection_v1,
 };
 use crate::t_d2_1_operational_domain_v2::{
-    issue_t_d2_1_operational_domain_v2, replay_t_d2_1_operational_domain_v2, Td21V2BoundCitation,
-    Td21V2BoundSnapshot, Td21V2RunStatus, Td21V2SourceBinding,
+    Td21V2BoundCitation, Td21V2BoundSnapshot, Td21V2RunStatus, Td21V2SourceBinding,
+    issue_t_d2_1_operational_domain_v2, replay_t_d2_1_operational_domain_v2,
 };
 use pen_core::hash::blake3_hex;
 use serde::{Deserialize, Serialize};
-use std::fs::{read_to_string, remove_file, OpenOptions};
+use std::fs::{OpenOptions, read_to_string, remove_file};
 use std::io::Write;
 use std::path::Path;
 use std::sync::OnceLock;
@@ -405,8 +405,8 @@ fn expected() -> Result<&'static Td21OperationalDomainV3Certificate, Td21V3Error
     }
 }
 
-pub fn issue_t_d2_1_operational_domain_v3(
-) -> Result<Td21OperationalDomainV3Certificate, Td21V3Error> {
+pub fn issue_t_d2_1_operational_domain_v3()
+-> Result<Td21OperationalDomainV3Certificate, Td21V3Error> {
     expected().cloned()
 }
 
@@ -474,7 +474,9 @@ T-D2-2 prerequisite: `{}`. BC1 opened: `{}`. 431-gap bridge rerun executed: `{}`
         certificate.result_digest,
         certificate.frozen_bound_snapshot.public_entry_count,
         certificate.frozen_bound_snapshot.public_clause_count,
-        certificate.frozen_bound_snapshot.maximum_ambient_parameter_count,
+        certificate
+            .frozen_bound_snapshot
+            .maximum_ambient_parameter_count,
         certificate.frozen_bound_snapshot.maximum_free_scope_length,
         certificate.frozen_bound_snapshot.maximum_binder_nesting,
         certificate.frozen_bound_snapshot.maximum_path_dimension,

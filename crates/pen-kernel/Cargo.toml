@@ -1,0 +1,21 @@
+[package]
+name = "pen-kernel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Small oracle-free verifier kernel for Law V2 proof artifacts"
+
+[dependencies]
+blake3.workspace = true
+schemars.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[package.metadata.law-v2]
+role = "production"
+oracle_access = false
+diagnostic_access = false

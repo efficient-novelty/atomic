@@ -30,12 +30,12 @@ use pen_core::expr::Expr;
 use pen_core::hash::blake3_hex;
 use pen_core::telescope::Telescope;
 use pen_eval::typed_families::{
-    extract_candidate_families, predecessor_closure, CandidateExtractionOutcome,
+    CandidateExtractionOutcome, extract_candidate_families, predecessor_closure,
 };
 use pen_search::milestone_certificate_v1::replay_milestone_certificate_v1_json;
-use pen_type::elaborate::{elaborate_telescope, minimal_ambient_parameters, SealedSignature};
+use pen_type::elaborate::{SealedSignature, elaborate_telescope, minimal_ambient_parameters};
 use pen_type::normalize::normalize;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
 
@@ -136,7 +136,7 @@ fn derive_r0() -> Fallible<DerivedR0> {
     let extraction = match extract_candidate_families(&prefix_signature, &closure, &t14, 13) {
         CandidateExtractionOutcome::Extracted(extraction) => extraction,
         CandidateExtractionOutcome::KernelInvalid { failure } => {
-            return Err(format!("stage 14 is kernel-invalid: {failure}").into())
+            return Err(format!("stage 14 is kernel-invalid: {failure}").into());
         }
     };
     let family = extraction
@@ -218,8 +218,7 @@ fn emit_r0() -> Fallible<()> {
 
 fn replay(docs: &Path) -> Fallible<()> {
     // 1. Digest integrity.
-    let artifact: Value =
-        serde_json::from_slice(&fs::read(docs.join("xf0b2_df4feb52_v1.json"))?)?;
+    let artifact: Value = serde_json::from_slice(&fs::read(docs.join("xf0b2_df4feb52_v1.json"))?)?;
     let sealed = artifact
         .get("sealed")
         .ok_or("artifact has no `sealed` value")?;
@@ -261,12 +260,20 @@ fn replay(docs: &Path) -> Fallible<()> {
         "predecessor_closure_digest",
         &derived.predecessor_closure_digest,
     )?;
-    check_str(r0, "stage14_candidate_hash", &derived.stage14_candidate_hash)?;
+    check_str(
+        r0,
+        "stage14_candidate_hash",
+        &derived.stage14_candidate_hash,
+    )?;
     check_str(r0, "clause_expr", &derived.clause_expr)?;
     check_str(r0, "clause_normal_form", &derived.clause_normal_form)?;
     check_str(r0, "family_id", &derived.family_id)?;
     check_str(r0, "canonical_normal_form", &derived.canonical_normal_form)?;
-    check_u64(r0, "ambient_parameters", u64::from(derived.ambient_parameters))?;
+    check_u64(
+        r0,
+        "ambient_parameters",
+        u64::from(derived.ambient_parameters),
+    )?;
     check_u64(
         r0,
         "beta_steps_to_normal_form",
@@ -298,7 +305,9 @@ fn replay(docs: &Path) -> Fallible<()> {
     )?;
     // The irreducibility certificate is not decoration: it must still hold.
     if derived.app_nodes != 0 || derived.beta_steps_to_normal_form != 0 {
-        return Err("R-0.2 irreducibility certificate no longer holds: the clause has a redex".into());
+        return Err(
+            "R-0.2 irreducibility certificate no longer holds: the clause has a redex".into(),
+        );
     }
     if derived.sealed_computation_role_clauses != 0 {
         return Err(
@@ -357,7 +366,7 @@ fn replay(docs: &Path) -> Fallible<()> {
                     return Err(format!(
                         "a target under lead {lead} has an outcome outside {{named, obstruction}}"
                     )
-                    .into())
+                    .into());
                 }
             }
         }
@@ -406,7 +415,9 @@ fn replay(docs: &Path) -> Fallible<()> {
     // 6. Parent binding: the study this one re-examines, and its subject row.
     let parent: Value = serde_json::from_slice(&fs::read(docs.join("xf0b_concordance_v1.json"))?)?;
     if parent["result_digest"].as_str() != Some(PARENT_CONCORDANCE_DIGEST) {
-        return Err("the XF-0b concordance no longer carries the digest this study re-examines".into());
+        return Err(
+            "the XF-0b concordance no longer carries the digest this study re-examines".into(),
+        );
     }
     let parent_row = parent["sealed"]["rows"]
         .as_array()
@@ -415,7 +426,9 @@ fn replay(docs: &Path) -> Fallible<()> {
         .find(|row| row["family_short_id"].as_str() == Some(SUBJECT))
         .ok_or("the subject family is absent from the parent concordance")?;
     if parent_row["verdict"].as_str() != Some("no_name") {
-        return Err("the parent concordance's subject row is no longer the NO-NAME survivor".into());
+        return Err(
+            "the parent concordance's subject row is no longer the NO-NAME survivor".into(),
+        );
     }
 
     println!(
