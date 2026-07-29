@@ -10,14 +10,18 @@
 
 mod certificates;
 mod contract_status;
+mod history;
 mod register;
 mod registered_bootstrap;
+mod registered_bootstrap_export;
 
 pub use certificates::*;
 pub use contract_status::*;
+pub use history::*;
 pub use pen_kernel::{Digest, DigestError};
 pub use register::{LegacyStructuralValue, SemanticFamilyValue, ValueRegister};
 pub use registered_bootstrap::*;
+pub use registered_bootstrap_export::*;
 
 /// Phase-3a census complete only relative to an explicit finite registry.
 pub mod relative_census {

@@ -7,6 +7,8 @@ rust-version.workspace = true
 description = "Oracle-free orchestration shell for the two-law v2 lane"
 
 [dependencies]
+pen-demand = { path = "../pen-demand" }
+pen-gf2 = { path = "../pen-gf2" }
 pen-kernel = { path = "../pen-kernel" }
 pen-law = { path = "../pen-law" }
 schemars.workspace = true

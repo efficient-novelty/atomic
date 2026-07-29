@@ -6,6 +6,10 @@
 
 #![forbid(unsafe_code)]
 
+mod h3_inductive_completion;
+
+pub use h3_inductive_completion::*;
+
 use pen_kernel::{Kernel, KernelError, KernelLimits};
 use pen_law::{
     DEMAND_WINDOW_WIDTH, Digest, RegisteredBootstrapError, UncheckedBootstrapStatus,
