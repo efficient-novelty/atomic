@@ -104,6 +104,7 @@ name = "pen-kernel-synthesis"
 version = "0.1.0"
 dependencies = [
  "pen-kernel",
+ "serde",
  "thiserror",
 ]
 

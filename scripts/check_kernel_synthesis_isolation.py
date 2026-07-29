@@ -17,7 +17,8 @@ SYNTHESIS_ROOT = REPO / "crates" / "pen-kernel-synthesis"
 SYNTHESIS_MANIFEST = SYNTHESIS_ROOT / "Cargo.toml"
 SYNTHESIS_LOCK = SYNTHESIS_ROOT / "Cargo.lock"
 
-ALLOWED_DEPENDENCIES = {"pen-kernel", "thiserror"}
+ALLOWED_DEPENDENCIES = {"pen-kernel", "serde", "thiserror"}
+ALLOWED_DEV_DEPENDENCIES = {"serde_json"}
 FORBIDDEN_SOURCE_MARKERS = {
     "law_v2_h3_inductive_completion_v1",
     "law_v2_h4_continuation_v1",
@@ -69,6 +70,12 @@ def audit() -> dict:
     unexpected = sorted(dependencies - ALLOWED_DEPENDENCIES)
     if unexpected:
         errors.append(f"unexpected dependencies: {', '.join(unexpected)}")
+    dev_dependencies = set(manifest.get("dev-dependencies", {}))
+    unexpected_dev = sorted(dev_dependencies - ALLOWED_DEV_DEPENDENCIES)
+    if unexpected_dev:
+        errors.append(
+            f"unexpected dev-dependencies: {', '.join(unexpected_dev)}"
+        )
     kernel = manifest.get("dependencies", {}).get("pen-kernel")
     if not isinstance(kernel, dict) or kernel.get("path") != "../pen-kernel":
         errors.append("pen-kernel must be the exact ../pen-kernel path dependency")

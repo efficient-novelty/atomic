@@ -20,6 +20,9 @@ pub mod manifest;
 pub mod model;
 pub mod normalizer;
 pub mod ordinary_beta;
+pub mod production_inventory_bridge;
+pub mod production_refinement;
+pub mod production_refinement_theorem;
 pub mod provenance;
 pub mod quotient;
 pub mod rewrite_inventory;
@@ -101,6 +104,48 @@ pub use normalizer::{
 pub use ordinary_beta::{
     VerifiedOrdinaryBetaDerivationV1, VerifiedOrdinaryBetaReductionStepV1,
     VerifiedSequentialSubstitutionV1, verify_ordinary_beta_derivation_v1,
+};
+pub use production_inventory_bridge::{
+    EXACT_FAMILY_CONSTRUCTOR_SHAPES_V1, EXACT_PRODUCTION_FAMILY_RULE_INVENTORY_V1,
+    EXACT_V3_Q0_RULE_INVENTORY_V1, FamilyConstructorShapeV1, ProductionFamilyCodeV1,
+    ProductionInventoryBridgeFailureV1, ProductionInventoryKindV1, ProductionQ0CategoryV1,
+    VerifiedFamilyProductionMappingV1, VerifiedNoExtraNoMissingInventoryV1,
+    VerifiedProductionInventoryBridgeV1, VerifiedQ0ProductionClassificationV1,
+    diagnose_production_inventory_bridge_v1, family_constructor_shape_v1,
+    production_family_code_for_derivation_rule_v1, production_family_code_for_shape_v1,
+    production_family_code_v1, production_q0_category_v1, verify_production_inventory_bridge_v1,
+};
+pub use production_refinement::{
+    GlobalSlotV1, LAMBDA_UNIT_INFERRED_PUBLIC_SORT_SUCCESSOR_LEVELS_V1,
+    LAMBDA_UNIT_PUBLIC_AND_INFERRED_SORT_LEVELS_V1, LAMBDA_UNIT_PUBLIC_UNIVERSE_LEVELS_V1,
+    PRODUCTION_REFINEMENT_SCHEMA_VERSION_V1, ProductionRefinementFailureV1,
+    VerifiedGlobalDependencySlotV1, VerifiedGlobalSlotEntryV1, VerifiedGlobalSlotTableV1,
+    VerifiedLambdaUnitPublicSortSuccessorsV1, VerifiedUniverseSuccessorV1,
+    diagnose_global_slot_table_v1, verify_global_slot_table_v1,
+    verify_lambda_unit_public_sort_successors_v1,
+};
+pub use production_refinement_theorem::{
+    LAMBDA_UNIT_PRODUCTION_REFINEMENT_SCHEMA_VERSION_V1, LambdaUnitProductionRefinementFailureV1,
+    PRODUCTION_REFINEMENT_CORRESPONDENCE_FRONTIER_V1,
+    PRODUCTION_REFINEMENT_EXCLUDED_DOWNSTREAM_OBLIGATION_V1,
+    PredecessorPublicDeltaPolicyBindingFailureV1,
+    ProductionRefinementExcludedDownstreamObligationV1, ProductionRefinementFrontierV1,
+    ProductionRefinementObligationV1, ProductionSynthesisProtocolIdentityFailureV1,
+    V3PredecessorPublicDeltaPolicyBindingFailureV1, VerifiedFiniteContextCorrespondenceV1,
+    VerifiedKernelBaseConversionCorrespondenceV1, VerifiedLambdaUnitProductionRefinementV1,
+    VerifiedPredecessorPublicDeltaPolicyBindingV1, VerifiedProductionRefinementAgdaFoundationV1,
+    VerifiedProductionSynthesisProtocolIdentityV2, VerifiedSynthesisCodeCorrespondenceV1,
+    VerifiedV3InventoryCorrespondenceV1, VerifiedV3PredecessorPublicDeltaPolicyBindingV1,
+    diagnose_lambda_unit_production_refinement_v1,
+    diagnose_lambda_unit_production_refinement_with_delta_policy_v1,
+    diagnose_pinned_production_refinement_agda_foundation_v1,
+    diagnose_predecessor_public_delta_policy_binding_v1,
+    diagnose_production_synthesis_protocol_identity_v2,
+    diagnose_v3_predecessor_public_delta_policy_binding_v1,
+    verify_lambda_unit_production_refinement_v1,
+    verify_pinned_production_refinement_agda_foundation_v1,
+    verify_predecessor_public_delta_policy_binding_v1,
+    verify_v3_predecessor_public_delta_policy_binding_v1,
 };
 pub use provenance::{
     FamilyDependencySupportV1, ProvenanceCertificateV1, derive_family_dependency_support_v1,

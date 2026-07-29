@@ -13,6 +13,10 @@ use pen_kernel::{
 };
 use thiserror::Error;
 
+mod v2;
+
+pub use v2::*;
+
 pub const SYNTHESIS_SCHEMA_VERSION_V1: u16 = 1;
 pub const SYNTHESIS_PROTOCOL_ID_V1: &str = "pen-kernel-synthesis/lambda-unit/v1";
 
