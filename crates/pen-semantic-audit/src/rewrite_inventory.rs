@@ -6,8 +6,15 @@
 //! inventory.  The inventory now exposes a verified projection census but no
 //! projection reduction theorem, so only its verified-empty case is accepted.
 
+use crate::fragment::{
+    LambdaUnitSyntaxViolation, lambda_unit_context_syntax_violation,
+    lambda_unit_judgment_syntax_violation, lambda_unit_term_syntax_violation,
+};
 use crate::inventory::{DemandPortKeyV1, VerifiedPublicAuditInventoryV1, VerifiedPublicEquationV1};
-use crate::manifest::{AuditDecision, AuditUnknownReason};
+use crate::manifest::{
+    AuditDecision, AuditUnknownReason, OutsideFragmentReason,
+    SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1, VerifiedSemanticAuditManifestV1,
+};
 use crate::model::{EquationIdV1, GenericJudgmentV1};
 use crate::normalizer::{
     RestrictedQ0CertificateScopeV1, VerifiedFreshConstructorComputationV1,
@@ -244,6 +251,109 @@ pub fn compile_typed_rewrite_inventory_v1(
         Err(reason) => return AuditDecision::Unknown(reason),
     };
     AuditDecision::Proven(finish_typed_rewrite_inventory(fresh, projections))
+}
+
+/// Compile the exact typed rewrite inventory for the projection-free
+/// lambda/unit successor profile.
+///
+/// The broader prototype keeps a missing-projection-theorem blocker.  In this
+/// independently versioned fragment a nonempty projection census is instead a
+/// positive outside-fragment disposition.
+pub fn compile_typed_rewrite_inventory_lambda_unit_v1(
+    manifest: &VerifiedSemanticAuditManifestV1,
+    inventory: &VerifiedPublicAuditInventoryV1,
+    fresh_program: &VerifiedFreshConstructorComputationV1,
+) -> AuditDecision<VerifiedTypedRewriteInventoryV1> {
+    if manifest.manifest().profile_id != SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1
+        || inventory.manifest_digest() != manifest.candidate_digest()
+        || fresh_program.manifest_digest() != manifest.candidate_digest()
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    if !inventory.forced_projections().is_empty()
+        || inventory.coverage().forced_projection_count() != 0
+        || !inventory.forced_projection_origins().is_empty()
+    {
+        return AuditDecision::OutsideFragment(OutsideFragmentReason::DescriptorProjection);
+    }
+    if let Some(violation) = lambda_unit_rewrite_inventory_syntax_violation(
+        inventory,
+        fresh_program,
+        &manifest.manifest().universe_levels,
+    ) {
+        return AuditDecision::OutsideFragment(violation.outside_reason());
+    }
+    compile_typed_rewrite_inventory_v1(inventory, fresh_program)
+}
+
+fn lambda_unit_rewrite_inventory_syntax_violation(
+    inventory: &VerifiedPublicAuditInventoryV1,
+    fresh_program: &VerifiedFreshConstructorComputationV1,
+    universe_levels: &[u16],
+) -> Option<LambdaUnitSyntaxViolation> {
+    inventory
+        .declarations()
+        .iter()
+        .filter_map(|declaration| {
+            [
+                lambda_unit_term_syntax_violation(&declaration.source().ty, universe_levels),
+                declaration
+                    .source()
+                    .body
+                    .as_ref()
+                    .and_then(|body| lambda_unit_term_syntax_violation(body, universe_levels)),
+                lambda_unit_term_syntax_violation(&declaration.normalized().ty, universe_levels),
+                declaration
+                    .normalized()
+                    .body
+                    .as_ref()
+                    .and_then(|body| lambda_unit_term_syntax_violation(body, universe_levels)),
+            ]
+            .into_iter()
+            .flatten()
+            .max()
+        })
+        .chain(inventory.equations().iter().filter_map(|equation| {
+            [
+                lambda_unit_judgment_syntax_violation(equation.source(), universe_levels),
+                lambda_unit_judgment_syntax_violation(equation.normalized(), universe_levels),
+            ]
+            .into_iter()
+            .flatten()
+            .max()
+        }))
+        .chain(
+            inventory
+                .predecessor_demand_contracts()
+                .iter()
+                .filter_map(|demand| {
+                    [
+                        lambda_unit_judgment_syntax_violation(
+                            demand.source_requirement(),
+                            universe_levels,
+                        ),
+                        lambda_unit_judgment_syntax_violation(
+                            demand.normalized_requirement(),
+                            universe_levels,
+                        ),
+                    ]
+                    .into_iter()
+                    .flatten()
+                    .max()
+                }),
+        )
+        .chain(fresh_program.rules().iter().filter_map(|rule| {
+            [
+                lambda_unit_context_syntax_violation(rule.context(), universe_levels),
+                lambda_unit_term_syntax_violation(rule.left(), universe_levels),
+                lambda_unit_term_syntax_violation(rule.right(), universe_levels),
+                lambda_unit_term_syntax_violation(rule.ty(), universe_levels),
+            ]
+            .into_iter()
+            .flatten()
+            .max()
+        }))
+        .max()
 }
 
 /// Deliberately incomplete final theorem gate.

@@ -1,5 +1,7 @@
+use crate::fragment::lambda_unit_judgment_syntax_violation;
 use crate::manifest::{
-    AuditDecision, AuditUnknownReason, OutsideFragmentReason, VerifiedSemanticAuditManifestV1,
+    AuditDecision, AuditUnknownReason, OutsideFragmentReason,
+    SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1, VerifiedSemanticAuditManifestV1,
 };
 use crate::model::{
     ContextWitnessIdV1, FamilyConstructorV1, GenericJudgmentV1, HeadPresentationV1, LocalRoleV1,
@@ -171,6 +173,116 @@ impl CanonicalEncode for VerifiedSemanticSeedV1 {
     }
 }
 
+/// Verifier-minted source seed used before any Q0 rewrite authority exists.
+///
+/// The capability retains only the source judgment.  A caller-supplied
+/// `claimed_normalized` value is replaced by the source judgment before the
+/// seed identity is minted, so it cannot suppress or merge a raw derivation.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct VerifiedPreQ0SemanticSeedV1 {
+    id: SeedIdV1,
+    seed: SemanticSchemaSeedV1,
+    source_judgment: GenericJudgmentV1,
+    derived_role: LocalRoleV1,
+}
+
+impl VerifiedPreQ0SemanticSeedV1 {
+    pub fn id(&self) -> &SeedIdV1 {
+        &self.id
+    }
+
+    pub fn seed(&self) -> &SemanticSchemaSeedV1 {
+        &self.seed
+    }
+
+    pub fn source_judgment(&self) -> &GenericJudgmentV1 {
+        &self.source_judgment
+    }
+
+    pub fn derived_role(&self) -> LocalRoleV1 {
+        self.derived_role
+    }
+}
+
+impl CanonicalEncode for VerifiedPreQ0SemanticSeedV1 {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        self.id.encode_canonical(encoder);
+        self.seed.encode_canonical(encoder);
+        self.source_judgment.encode_canonical(encoder);
+        self.derived_role.encode_canonical(encoder);
+    }
+}
+
+/// Complete syntactic rank-0/1/2 carrier before Q0 normalization or
+/// deduplication.
+///
+/// Fields are private and the capability deliberately has no `Deserialize`
+/// implementation.  Kernel checking establishes formation/typing only; it
+/// does not treat a fresh public equation as definitional equality.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct PreQ0RawCarrierCertificateV1 {
+    manifest_digest: Digest,
+    signature_digest: Digest,
+    kernel_protocol_digest: Digest,
+    q3_registry_verified_empty: bool,
+    verified_seeds: Vec<VerifiedPreQ0SemanticSeedV1>,
+    context_witnesses: Vec<ContextAmalgamationWitnessV1>,
+    tuple_dispositions: Vec<CarrierTupleDispositionV1>,
+    raw_families: Vec<RawFamilyV1>,
+    digest: Digest,
+}
+
+impl PreQ0RawCarrierCertificateV1 {
+    pub fn manifest_digest(&self) -> &Digest {
+        &self.manifest_digest
+    }
+
+    pub fn signature_digest(&self) -> &Digest {
+        &self.signature_digest
+    }
+
+    pub fn kernel_protocol_digest(&self) -> &Digest {
+        &self.kernel_protocol_digest
+    }
+
+    pub fn q3_registry_verified_empty(&self) -> bool {
+        self.q3_registry_verified_empty
+    }
+
+    pub fn verified_seeds(&self) -> &[VerifiedPreQ0SemanticSeedV1] {
+        &self.verified_seeds
+    }
+
+    pub fn context_witnesses(&self) -> &[ContextAmalgamationWitnessV1] {
+        &self.context_witnesses
+    }
+
+    pub fn tuple_dispositions(&self) -> &[CarrierTupleDispositionV1] {
+        &self.tuple_dispositions
+    }
+
+    pub fn raw_families(&self) -> &[RawFamilyV1] {
+        &self.raw_families
+    }
+
+    pub fn digest(&self) -> &Digest {
+        &self.digest
+    }
+}
+
+impl CanonicalEncode for PreQ0RawCarrierCertificateV1 {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        self.manifest_digest.encode_canonical(encoder);
+        self.signature_digest.encode_canonical(encoder);
+        self.kernel_protocol_digest.encode_canonical(encoder);
+        encoder.tag(u8::from(self.q3_registry_verified_empty));
+        encoder.sequence(&self.verified_seeds);
+        encoder.sequence(&self.context_witnesses);
+        encoder.sequence(&self.tuple_dispositions);
+        encoder.sequence(&self.raw_families);
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct CarrierCertificateV1 {
     pub(crate) manifest_digest: Digest,
@@ -319,12 +431,10 @@ pub fn verify_semantic_seed_with_q0_v1(
     {
         return AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted);
     }
-    if let Err(reason) = validate_supported_judgment(&judgment.source, &limits.universe_levels) {
+    if let Err(reason) = validate_supported_judgment(&judgment.source, manifest) {
         return AuditDecision::OutsideFragment(reason);
     }
-    if let Err(reason) =
-        validate_supported_judgment(&judgment.claimed_normalized, &limits.universe_levels)
-    {
+    if let Err(reason) = validate_supported_judgment(&judgment.claimed_normalized, manifest) {
         return AuditDecision::OutsideFragment(reason);
     }
 
@@ -343,6 +453,123 @@ pub fn verify_semantic_seed_with_q0_v1(
         normalized_judgment: normalized,
         derived_role,
     })
+}
+
+/// Verify a seed for syntactic carrier generation without granting Q0
+/// normalization authority.
+///
+/// Term seeds are kernel-checked at their stated type.  Equation seeds check
+/// both sides at the stated type but deliberately do not ask the kernel to
+/// accept the candidate equation as definitional equality.
+pub fn verify_pre_q0_semantic_seed_v1(
+    kernel: &Kernel,
+    signature: &VerifiedSignature,
+    manifest: &VerifiedSemanticAuditManifestV1,
+    seed: &SemanticSchemaSeedV1,
+) -> AuditDecision<VerifiedPreQ0SemanticSeedV1> {
+    let canonical_seed = canonical_pre_q0_seed(seed);
+    let limits = manifest.manifest();
+    let (judgment, claimed_role, derived_role) = match &canonical_seed {
+        SemanticSchemaSeedV1::PublicHead(seed) => {
+            if !signature
+                .declarations()
+                .iter()
+                .any(|declaration| declaration.id == seed.declaration)
+                || !matches!(seed.judgment.source, GenericJudgmentV1::Term { .. })
+            {
+                return AuditDecision::Unknown(AuditUnknownReason::MalformedInput);
+            }
+            if let HeadPresentationV1::TransparentAlias {
+                target,
+                availability,
+            } = &seed.presentation
+                && let Err(failure) = validate_alias_availability(target, availability)
+            {
+                return failure.into_decision();
+            }
+            (
+                &seed.judgment.source,
+                seed.claimed_role,
+                LocalRoleV1::KernelHead,
+            )
+        }
+        SemanticSchemaSeedV1::PublicEquation(seed) => {
+            if !signature
+                .declarations()
+                .iter()
+                .any(|declaration| declaration.id == seed.owner_head)
+                || !matches!(seed.judgment.source, GenericJudgmentV1::Equation { .. })
+            {
+                return AuditDecision::Unknown(AuditUnknownReason::MalformedInput);
+            }
+            (
+                &seed.judgment.source,
+                seed.claimed_role,
+                LocalRoleV1::Coherence,
+            )
+        }
+        SemanticSchemaSeedV1::PublicUniversalInterface { .. } => {
+            return AuditDecision::OutsideFragment(OutsideFragmentReason::UniversalInterface);
+        }
+    };
+    if claimed_role != derived_role {
+        return AuditDecision::Unknown(AuditUnknownReason::RoleMismatch);
+    }
+    if judgment.context().0.len() > usize::from(limits.maximum_context_entries) {
+        return AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted);
+    }
+    if let Err(reason) = validate_supported_judgment(judgment, manifest) {
+        return AuditDecision::OutsideFragment(reason);
+    }
+
+    let checked = match judgment {
+        GenericJudgmentV1::Term { .. } => kernel
+            .verify_open_judgment(signature, &generic_to_open(judgment))
+            .map(|_| ()),
+        GenericJudgmentV1::Equation {
+            context,
+            left,
+            right,
+            ty,
+        } => {
+            let left = OpenJudgment::HasType {
+                context: context.clone(),
+                term: left.clone(),
+                ty: ty.clone(),
+            };
+            let right = OpenJudgment::HasType {
+                context: context.clone(),
+                term: right.clone(),
+                ty: ty.clone(),
+            };
+            kernel
+                .verify_open_judgments(signature, &[&left, &right])
+                .map(|_| ())
+        }
+    };
+    if let Err(error) = checked {
+        return kernel_error_failure(error).into_decision();
+    }
+
+    let id = semantic_seed_id(&canonical_seed);
+    let source_judgment = judgment.clone();
+    AuditDecision::Proven(VerifiedPreQ0SemanticSeedV1 {
+        id,
+        seed: canonical_seed,
+        source_judgment,
+        derived_role,
+    })
+}
+
+fn canonical_pre_q0_seed(seed: &SemanticSchemaSeedV1) -> SemanticSchemaSeedV1 {
+    let mut seed = seed.clone();
+    let judgment = match &mut seed {
+        SemanticSchemaSeedV1::PublicHead(seed) => &mut seed.judgment,
+        SemanticSchemaSeedV1::PublicEquation(seed) => &mut seed.judgment,
+        SemanticSchemaSeedV1::PublicUniversalInterface { judgment, .. } => judgment,
+    };
+    judgment.claimed_normalized = judgment.source.clone();
+    seed
 }
 
 /// Exhaust the seed, application, and equation-action carrier through rank 2.
@@ -412,130 +639,18 @@ pub fn enumerate_raw_families_with_q0_v1(
         return AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted);
     }
 
-    let mut context_witnesses = BTreeMap::new();
-    let mut tuple_dispositions = Vec::new();
     let build_context = CarrierBuildContext {
         kernel,
         signature,
         manifest,
         fresh,
+        normalization_mode: CarrierNormalizationMode::AuthorizedQ0,
     };
-    for rank in 1..=limits.maximum_rank {
-        let sources = raw_families.clone();
-        for left in &sources {
-            for right in &sources {
-                if 1 + left.rank.max(right.rank) != rank {
-                    continue;
-                }
-                let witnesses = match enumerate_context_witnesses(
-                    kernel,
-                    signature,
-                    limits.maximum_context_entries,
-                    left.generic_judgment.context(),
-                    right.generic_judgment.context(),
-                    remaining_tuple_budget(limits.maximum_tuple_dispositions, &tuple_dispositions),
-                ) {
-                    Ok(witnesses) => witnesses,
-                    Err(failure) => return failure.into_decision(),
-                };
-                for witness in witnesses {
-                    context_witnesses
-                        .entry(witness.id.clone())
-                        .or_insert_with(|| witness.clone());
-                    match build_application(&build_context, left, right, &witness, rank) {
-                        Ok(Some(family)) => {
-                            if !push_disposition(
-                                &mut tuple_dispositions,
-                                limits.maximum_tuple_dispositions,
-                                CarrierTupleDispositionV1 {
-                                    rank,
-                                    rule: CarrierRuleV1::GenericPublicApplication,
-                                    left: left.id.clone(),
-                                    right: right.id.clone(),
-                                    context_witness: witness.id.clone(),
-                                    hole_ordinal: None,
-                                    outcome: CarrierTupleOutcomeV1::Applicable {
-                                        family: family.id.clone(),
-                                    },
-                                },
-                            ) {
-                                return AuditDecision::Unknown(
-                                    AuditUnknownReason::ResourceExhausted,
-                                );
-                            }
-                            if raw_families.len() >= limits.maximum_raw_derivations as usize {
-                                return AuditDecision::Unknown(
-                                    AuditUnknownReason::ResourceExhausted,
-                                );
-                            }
-                            raw_families.push(family);
-                        }
-                        Ok(None) => {
-                            unreachable!("inapplicable applications carry a typed reason")
-                        }
-                        Err(BuildDisposition::CertifiedInapplicable(reason)) => {
-                            if !push_disposition(
-                                &mut tuple_dispositions,
-                                limits.maximum_tuple_dispositions,
-                                CarrierTupleDispositionV1 {
-                                    rank,
-                                    rule: CarrierRuleV1::GenericPublicApplication,
-                                    left: left.id.clone(),
-                                    right: right.id.clone(),
-                                    context_witness: witness.id.clone(),
-                                    hole_ordinal: None,
-                                    outcome: CarrierTupleOutcomeV1::CertifiedInapplicable {
-                                        reason,
-                                    },
-                                },
-                            ) {
-                                return AuditDecision::Unknown(
-                                    AuditUnknownReason::ResourceExhausted,
-                                );
-                            }
-                        }
-                        Err(BuildDisposition::Abort(failure)) => return failure.into_decision(),
-                    }
-
-                    let equation_dispositions =
-                        match build_equation_actions(&build_context, left, right, &witness, rank) {
-                            Ok(dispositions) => dispositions,
-                            Err(failure) => return failure.into_decision(),
-                        };
-                    for (hole_ordinal, result) in equation_dispositions {
-                        let outcome = match result {
-                            Ok(family) => {
-                                let id = family.id.clone();
-                                if raw_families.len() >= limits.maximum_raw_derivations as usize {
-                                    return AuditDecision::Unknown(
-                                        AuditUnknownReason::ResourceExhausted,
-                                    );
-                                }
-                                raw_families.push(family);
-                                CarrierTupleOutcomeV1::Applicable { family: id }
-                            }
-                            Err(reason) => CarrierTupleOutcomeV1::CertifiedInapplicable { reason },
-                        };
-                        if !push_disposition(
-                            &mut tuple_dispositions,
-                            limits.maximum_tuple_dispositions,
-                            CarrierTupleDispositionV1 {
-                                rank,
-                                rule: CarrierRuleV1::GenericEquationAction,
-                                left: left.id.clone(),
-                                right: right.id.clone(),
-                                context_witness: witness.id.clone(),
-                                hole_ordinal,
-                                outcome,
-                            },
-                        ) {
-                            return AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    let (context_witnesses, tuple_dispositions, raw_families) =
+        match enumerate_family_closure(&build_context, raw_families) {
+            Ok(result) => result,
+            Err(failure) => return failure.into_decision(),
+        };
 
     AuditDecision::Proven(CarrierCertificateV1 {
         manifest_digest: manifest.candidate_digest().clone(),
@@ -544,10 +659,86 @@ pub fn enumerate_raw_families_with_q0_v1(
         fresh_program_digest: fresh.map(|program| program.program_digest().clone()),
         q3_registry_verified_empty: true,
         verified_seeds,
-        context_witnesses: context_witnesses.into_values().collect(),
+        context_witnesses,
         tuple_dispositions,
         raw_families,
     })
+}
+
+/// Exhaust the syntactic seed/application/equation-action carrier through
+/// rank two before any Q0 normalization or Q0-based deduplication.
+pub fn enumerate_pre_q0_raw_families_v1(
+    kernel: &Kernel,
+    signature: &VerifiedSignature,
+    manifest: &VerifiedSemanticAuditManifestV1,
+    seeds: &[SemanticSchemaSeedV1],
+    q3_origin_cutoff_edges: &[Digest],
+) -> AuditDecision<PreQ0RawCarrierCertificateV1> {
+    let limits = manifest.manifest();
+    if !q3_origin_cutoff_edges.is_empty() {
+        return AuditDecision::OutsideFragment(OutsideFragmentReason::NonEmptyQ3Registry);
+    }
+    if seeds.len() > usize::from(limits.maximum_seeds) {
+        return AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted);
+    }
+    if limits.maximum_rank != 2 {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+
+    let mut verified_seeds = Vec::with_capacity(seeds.len());
+    for seed in seeds {
+        match verify_pre_q0_semantic_seed_v1(kernel, signature, manifest, seed) {
+            AuditDecision::Proven(seed) => verified_seeds.push(seed),
+            AuditDecision::OutsideFragment(reason) => {
+                return AuditDecision::OutsideFragment(reason);
+            }
+            AuditDecision::Unknown(reason) => return AuditDecision::Unknown(reason),
+        }
+    }
+    verified_seeds.sort_by(|left, right| left.id.cmp(&right.id));
+    if verified_seeds
+        .windows(2)
+        .any(|pair| pair[0].id == pair[1].id)
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::MalformedInput);
+    }
+
+    let raw_families = verified_seeds
+        .iter()
+        .map(|seed| pre_q0_seed_raw_family(manifest, seed))
+        .collect::<Vec<_>>();
+    if raw_families.len() > limits.maximum_raw_derivations as usize {
+        return AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted);
+    }
+    let build_context = CarrierBuildContext {
+        kernel,
+        signature,
+        manifest,
+        fresh: None,
+        normalization_mode: CarrierNormalizationMode::PreQ0Syntactic,
+    };
+    let (context_witnesses, tuple_dispositions, raw_families) =
+        match enumerate_family_closure(&build_context, raw_families) {
+            Ok(result) => result,
+            Err(failure) => return failure.into_decision(),
+        };
+
+    let mut certificate = PreQ0RawCarrierCertificateV1 {
+        manifest_digest: manifest.candidate_digest().clone(),
+        signature_digest: signature.digest().clone(),
+        kernel_protocol_digest: kernel.kernel_protocol_digest(),
+        q3_registry_verified_empty: true,
+        verified_seeds,
+        context_witnesses,
+        tuple_dispositions,
+        raw_families,
+        digest: Digest::of_bytes(b"pending-pre-q0-raw-carrier"),
+    };
+    certificate.digest = Digest::of_canonical(
+        "pen-semantic-audit/verified-pre-q0-raw-carrier/v1",
+        &certificate,
+    );
+    AuditDecision::Proven(certificate)
 }
 
 fn validate_alias_availability(
@@ -628,6 +819,58 @@ fn seed_raw_family(
     }
 }
 
+fn pre_q0_seed_raw_family(
+    manifest: &VerifiedSemanticAuditManifestV1,
+    seed: &VerifiedPreQ0SemanticSeedV1,
+) -> RawFamilyV1 {
+    let constructor = match &seed.seed {
+        SemanticSchemaSeedV1::PublicHead(_) => FamilyConstructorV1::PublicHeadSeed {
+            seed: seed.id.clone(),
+        },
+        SemanticSchemaSeedV1::PublicEquation(_) => FamilyConstructorV1::PublicEquationSeed {
+            seed: seed.id.clone(),
+        },
+        SemanticSchemaSeedV1::PublicUniversalInterface { .. } => {
+            unreachable!("universal-interface seeds fail before carrier construction")
+        }
+    };
+    let (support, source_clause, demand_anchor) = match &seed.seed {
+        SemanticSchemaSeedV1::PublicHead(seed) => (
+            seed.public_support.clone(),
+            seed.source_clause.clone(),
+            None,
+        ),
+        SemanticSchemaSeedV1::PublicEquation(seed) => (
+            seed.public_support.clone(),
+            seed.source_clause.clone(),
+            seed.demand_anchor.clone(),
+        ),
+        SemanticSchemaSeedV1::PublicUniversalInterface { .. } => unreachable!(),
+    };
+    let judgment = seed.source_judgment.clone();
+    let action = substitution_action_digest(&judgment, seed.derived_role);
+    let id = raw_family_id(
+        manifest.candidate_digest(),
+        0,
+        &constructor,
+        &judgment,
+        seed.derived_role,
+        &support,
+        &action,
+    );
+    RawFamilyV1 {
+        id,
+        rank: 0,
+        constructor,
+        generic_judgment: judgment,
+        role: seed.derived_role,
+        public_support: support,
+        source_clause,
+        demand_anchor,
+        substitution_action_digest: action,
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum AuditFailure {
     Outside(OutsideFragmentReason),
@@ -653,6 +896,145 @@ struct CarrierBuildContext<'a> {
     signature: &'a VerifiedSignature,
     manifest: &'a VerifiedSemanticAuditManifestV1,
     fresh: Option<&'a VerifiedFreshConstructorComputationV1>,
+    normalization_mode: CarrierNormalizationMode,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum CarrierNormalizationMode {
+    PreQ0Syntactic,
+    AuthorizedQ0,
+}
+
+type CarrierClosureV1 = (
+    Vec<ContextAmalgamationWitnessV1>,
+    Vec<CarrierTupleDispositionV1>,
+    Vec<RawFamilyV1>,
+);
+
+fn enumerate_family_closure(
+    build: &CarrierBuildContext<'_>,
+    mut raw_families: Vec<RawFamilyV1>,
+) -> Result<CarrierClosureV1, AuditFailure> {
+    let limits = build.manifest.manifest();
+    let mut context_witnesses = BTreeMap::new();
+    let mut tuple_dispositions = Vec::new();
+    for rank in 1..=limits.maximum_rank {
+        let sources = raw_families.clone();
+        for left in &sources {
+            for right in &sources {
+                if 1 + left.rank.max(right.rank) != rank {
+                    continue;
+                }
+                let witnesses = enumerate_context_witnesses(
+                    build.kernel,
+                    build.signature,
+                    limits.maximum_context_entries,
+                    left.generic_judgment.context(),
+                    right.generic_judgment.context(),
+                    remaining_tuple_budget(limits.maximum_tuple_dispositions, &tuple_dispositions),
+                )?;
+                for witness in witnesses {
+                    context_witnesses
+                        .entry(witness.id.clone())
+                        .or_insert_with(|| witness.clone());
+                    match build_application(build, left, right, &witness, rank) {
+                        Ok(Some(family)) => {
+                            if !push_disposition(
+                                &mut tuple_dispositions,
+                                limits.maximum_tuple_dispositions,
+                                CarrierTupleDispositionV1 {
+                                    rank,
+                                    rule: CarrierRuleV1::GenericPublicApplication,
+                                    left: left.id.clone(),
+                                    right: right.id.clone(),
+                                    context_witness: witness.id.clone(),
+                                    hole_ordinal: None,
+                                    outcome: CarrierTupleOutcomeV1::Applicable {
+                                        family: family.id.clone(),
+                                    },
+                                },
+                            ) {
+                                return Err(AuditFailure::Unknown(
+                                    AuditUnknownReason::ResourceExhausted,
+                                ));
+                            }
+                            if raw_families.len() >= limits.maximum_raw_derivations as usize {
+                                return Err(AuditFailure::Unknown(
+                                    AuditUnknownReason::ResourceExhausted,
+                                ));
+                            }
+                            raw_families.push(family);
+                        }
+                        Ok(None) => {
+                            unreachable!("inapplicable applications carry a typed reason")
+                        }
+                        Err(BuildDisposition::CertifiedInapplicable(reason)) => {
+                            if !push_disposition(
+                                &mut tuple_dispositions,
+                                limits.maximum_tuple_dispositions,
+                                CarrierTupleDispositionV1 {
+                                    rank,
+                                    rule: CarrierRuleV1::GenericPublicApplication,
+                                    left: left.id.clone(),
+                                    right: right.id.clone(),
+                                    context_witness: witness.id.clone(),
+                                    hole_ordinal: None,
+                                    outcome: CarrierTupleOutcomeV1::CertifiedInapplicable {
+                                        reason,
+                                    },
+                                },
+                            ) {
+                                return Err(AuditFailure::Unknown(
+                                    AuditUnknownReason::ResourceExhausted,
+                                ));
+                            }
+                        }
+                        Err(BuildDisposition::Abort(failure)) => return Err(failure),
+                    }
+
+                    let equation_dispositions =
+                        build_equation_actions(build, left, right, &witness, rank)?;
+                    for (hole_ordinal, result) in equation_dispositions {
+                        let outcome = match result {
+                            Ok(family) => {
+                                let id = family.id.clone();
+                                if raw_families.len() >= limits.maximum_raw_derivations as usize {
+                                    return Err(AuditFailure::Unknown(
+                                        AuditUnknownReason::ResourceExhausted,
+                                    ));
+                                }
+                                raw_families.push(family);
+                                CarrierTupleOutcomeV1::Applicable { family: id }
+                            }
+                            Err(reason) => CarrierTupleOutcomeV1::CertifiedInapplicable { reason },
+                        };
+                        if !push_disposition(
+                            &mut tuple_dispositions,
+                            limits.maximum_tuple_dispositions,
+                            CarrierTupleDispositionV1 {
+                                rank,
+                                rule: CarrierRuleV1::GenericEquationAction,
+                                left: left.id.clone(),
+                                right: right.id.clone(),
+                                context_witness: witness.id.clone(),
+                                hole_ordinal,
+                                outcome,
+                            },
+                        ) {
+                            return Err(AuditFailure::Unknown(
+                                AuditUnknownReason::ResourceExhausted,
+                            ));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Ok((
+        context_witnesses.into_values().collect(),
+        tuple_dispositions,
+        raw_families,
+    ))
 }
 
 fn build_application(
@@ -724,24 +1106,25 @@ fn build_application(
             return Err(BuildDisposition::Abort(kernel_error_failure(error)));
         }
     };
-    let normalized = match normalize_generated_judgment_v1(
-        build.manifest,
-        build.kernel,
-        build.signature,
-        &ordinary,
-        build.fresh,
-    ) {
-        AuditDecision::Proven(normalized) => normalized,
-        AuditDecision::OutsideFragment(reason) => {
-            return Err(BuildDisposition::Abort(AuditFailure::Outside(reason)));
-        }
-        AuditDecision::Unknown(reason) => {
-            return Err(BuildDisposition::Abort(AuditFailure::Unknown(reason)));
-        }
+    let normalized = match build.normalization_mode {
+        CarrierNormalizationMode::PreQ0Syntactic => candidate,
+        CarrierNormalizationMode::AuthorizedQ0 => match normalize_generated_judgment_v1(
+            build.manifest,
+            build.kernel,
+            build.signature,
+            &ordinary,
+            build.fresh,
+        ) {
+            AuditDecision::Proven(normalized) => normalized,
+            AuditDecision::OutsideFragment(reason) => {
+                return Err(BuildDisposition::Abort(AuditFailure::Outside(reason)));
+            }
+            AuditDecision::Unknown(reason) => {
+                return Err(BuildDisposition::Abort(AuditFailure::Unknown(reason)));
+            }
+        },
     };
-    if let Err(reason) =
-        validate_supported_judgment(&normalized, &build.manifest.manifest().universe_levels)
-    {
+    if let Err(reason) = validate_supported_judgment(&normalized, build.manifest) {
         return Err(BuildDisposition::Abort(AuditFailure::Outside(reason)));
     }
     let constructor = FamilyConstructorV1::GenericPublicApplication {
@@ -870,25 +1253,27 @@ fn build_equation_actions(
             .verify_open_judgments(build.signature, &[&left_judgment, &right_judgment])
         {
             Ok(_) => {
-                let normalized = match normalize_generated_judgment_v1(
-                    build.manifest,
-                    build.kernel,
-                    build.signature,
-                    &candidate,
-                    build.fresh,
-                ) {
-                    AuditDecision::Proven(normalized) => normalized,
-                    AuditDecision::OutsideFragment(reason) => {
-                        return Err(AuditFailure::Outside(reason));
-                    }
-                    AuditDecision::Unknown(reason) => {
-                        return Err(AuditFailure::Unknown(reason));
+                let normalized = match build.normalization_mode {
+                    CarrierNormalizationMode::PreQ0Syntactic => candidate,
+                    CarrierNormalizationMode::AuthorizedQ0 => {
+                        match normalize_generated_judgment_v1(
+                            build.manifest,
+                            build.kernel,
+                            build.signature,
+                            &candidate,
+                            build.fresh,
+                        ) {
+                            AuditDecision::Proven(normalized) => normalized,
+                            AuditDecision::OutsideFragment(reason) => {
+                                return Err(AuditFailure::Outside(reason));
+                            }
+                            AuditDecision::Unknown(reason) => {
+                                return Err(AuditFailure::Unknown(reason));
+                            }
+                        }
                     }
                 };
-                if let Err(reason) = validate_supported_judgment(
-                    &normalized,
-                    &build.manifest.manifest().universe_levels,
-                ) {
+                if let Err(reason) = validate_supported_judgment(&normalized, build.manifest) {
                     return Err(AuditFailure::Outside(reason));
                 }
                 let constructor = FamilyConstructorV1::GenericEquationAction {
@@ -926,7 +1311,12 @@ fn build_equation_actions(
                     }),
                 ));
             }
-            Err(KernelError::TypeMismatch) => dispositions.push((
+            Err(
+                KernelError::ExpectedType
+                | KernelError::ExpectedFunction
+                | KernelError::ExpectedPair
+                | KernelError::TypeMismatch,
+            ) => dispositions.push((
                 Some(hole_ordinal),
                 Err(CertifiedInapplicableReasonV1::HoleIsNotTypedForEquation),
             )),
@@ -1171,10 +1561,19 @@ fn common_option<T: Clone + Eq>(left: &Option<T>, right: &Option<T>) -> Option<T
 
 fn validate_supported_judgment(
     judgment: &GenericJudgmentV1,
-    universe_levels: &[u16],
+    manifest: &VerifiedSemanticAuditManifestV1,
 ) -> Result<(), OutsideFragmentReason> {
+    if manifest.manifest().profile_id == SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1 {
+        return match lambda_unit_judgment_syntax_violation(
+            judgment,
+            &manifest.manifest().universe_levels,
+        ) {
+            Some(violation) => Err(violation.outside_reason()),
+            None => Ok(()),
+        };
+    }
     for term in judgment_terms(judgment) {
-        validate_supported_term(term, universe_levels)?;
+        validate_supported_term(term, &manifest.manifest().universe_levels, false)?;
     }
     Ok(())
 }
@@ -1182,6 +1581,7 @@ fn validate_supported_judgment(
 fn validate_supported_term(
     term: &Term,
     universe_levels: &[u16],
+    projection_free_lambda_unit: bool,
 ) -> Result<(), OutsideFragmentReason> {
     match term {
         Term::Sort { level } => {
@@ -1193,19 +1593,22 @@ fn validate_supported_term(
         }
         Term::Var { .. } | Term::Global { .. } | Term::UnitType | Term::Unit => Ok(()),
         Term::Pi { parameter, body } => {
-            validate_supported_term(parameter, universe_levels)?;
-            validate_supported_term(body, universe_levels)
+            validate_supported_term(parameter, universe_levels, projection_free_lambda_unit)?;
+            validate_supported_term(body, universe_levels, projection_free_lambda_unit)
         }
         Term::Lambda {
             parameter_type,
             body,
         } => {
-            validate_supported_term(parameter_type, universe_levels)?;
-            validate_supported_term(body, universe_levels)
+            validate_supported_term(parameter_type, universe_levels, projection_free_lambda_unit)?;
+            validate_supported_term(body, universe_levels, projection_free_lambda_unit)
         }
         Term::Apply { function, argument } => {
-            validate_supported_term(function, universe_levels)?;
-            validate_supported_term(argument, universe_levels)
+            validate_supported_term(function, universe_levels, projection_free_lambda_unit)?;
+            validate_supported_term(argument, universe_levels, projection_free_lambda_unit)
+        }
+        Term::First { .. } | Term::Second { .. } if projection_free_lambda_unit => {
+            Err(OutsideFragmentReason::DescriptorProjection)
         }
         Term::Sigma { .. } | Term::Pair { .. } | Term::First { .. } | Term::Second { .. } => {
             Err(OutsideFragmentReason::UnsupportedTerm)
@@ -1792,14 +2195,20 @@ fn encode_u32_slice(encoder: &mut CanonicalEncoder, values: &[u32]) {
 
 #[cfg(test)]
 mod tests {
-    use super::{enumerate_raw_families_v1, generic_to_open};
+    use super::{
+        CarrierRuleV1, CarrierTupleOutcomeV1, CertifiedInapplicableReasonV1,
+        enumerate_pre_q0_raw_families_v1, enumerate_raw_families_v1, generic_to_open,
+        validate_supported_term, verify_pre_q0_semantic_seed_v1,
+    };
     use crate::manifest::{
-        AuditDecision, OutsideFragmentReason, proposed_semantic_audit_manifest_v1,
+        AuditDecision, OutsideFragmentReason, proposed_semantic_audit_lambda_unit_manifest_v1,
+        proposed_semantic_audit_manifest_v1, verify_semantic_audit_lambda_unit_manifest_v1,
         verify_semantic_audit_manifest_v1,
     };
     use crate::model::{
-        EventIdV1, GenericJudgmentV1, HeadPresentationV1, LocalRoleV1, PublicHeadSeedV1,
-        PublicSupportV1, SemanticSchemaSeedV1, SourceNormalizedJudgmentV1,
+        EquationIdV1, EventIdV1, GenericJudgmentV1, HeadPresentationV1, LocalRoleV1,
+        PublicEquationSeedV1, PublicHeadSeedV1, PublicSupportV1, SemanticSchemaSeedV1,
+        SourceNormalizedJudgmentV1,
     };
     use pen_kernel::{
         Declaration, DependentContext, Digest, GlobalId, Kernel, KernelLimits, Term,
@@ -1942,5 +2351,258 @@ mod tests {
             "ty":{"form":"unit_type"}
         }"#;
         assert!(serde_json::from_str::<GenericJudgmentV1>(json).is_err());
+    }
+
+    #[test]
+    fn pre_q0_carrier_retains_raw_source_and_ignores_claimed_normal_form() {
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let head = id(b"raw-head");
+        let signature = kernel
+            .verify_signature(&UncheckedSignature {
+                declarations: vec![Declaration {
+                    id: head.clone(),
+                    ty: Term::UnitType,
+                    body: None,
+                }],
+            })
+            .expect("signature");
+        let raw = GenericJudgmentV1::Term {
+            context: DependentContext::default(),
+            term: Term::Apply {
+                function: Box::new(Term::Lambda {
+                    parameter_type: Box::new(Term::UnitType),
+                    body: Box::new(Term::Var { index: 0 }),
+                }),
+                argument: Box::new(Term::Unit),
+            },
+            ty: Term::UnitType,
+        };
+        let forged_claim = GenericJudgmentV1::Term {
+            context: DependentContext::default(),
+            term: Term::Global { id: head.clone() },
+            ty: Term::UnitType,
+        };
+        let seed = SemanticSchemaSeedV1::PublicHead(PublicHeadSeedV1 {
+            declaration: head,
+            origin_event: event(b"raw-event"),
+            judgment: SourceNormalizedJudgmentV1 {
+                source_identity: Digest::of_bytes(b"raw-source"),
+                source: raw.clone(),
+                claimed_normalized: forged_claim,
+            },
+            presentation: HeadPresentationV1::Opaque,
+            claimed_role: LocalRoleV1::KernelHead,
+            public_support: PublicSupportV1::default(),
+            source_clause: None,
+        });
+        let AuditDecision::Proven(manifest) =
+            verify_semantic_audit_manifest_v1(&proposed_semantic_audit_manifest_v1())
+        else {
+            panic!("manifest");
+        };
+        let AuditDecision::Proven(carrier) =
+            enumerate_pre_q0_raw_families_v1(&kernel, &signature, &manifest, &[seed], &[])
+        else {
+            panic!("pre-Q0 carrier");
+        };
+        assert_eq!(carrier.raw_families()[0].generic_judgment, raw);
+        let SemanticSchemaSeedV1::PublicHead(stored) = carrier.verified_seeds()[0].seed() else {
+            panic!("head seed");
+        };
+        assert_eq!(stored.judgment.claimed_normalized, stored.judgment.source);
+    }
+
+    #[test]
+    fn pre_q0_equation_checks_typing_without_assuming_rewrite_authority() {
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let operation = id(b"opaque-operation");
+        let signature = kernel
+            .verify_signature(&UncheckedSignature {
+                declarations: vec![Declaration {
+                    id: operation.clone(),
+                    ty: Term::Pi {
+                        parameter: Box::new(Term::UnitType),
+                        body: Box::new(Term::UnitType),
+                    },
+                    body: None,
+                }],
+            })
+            .expect("signature");
+        let equation = GenericJudgmentV1::Equation {
+            context: DependentContext(vec![Term::UnitType]),
+            left: Term::Apply {
+                function: Box::new(Term::Global {
+                    id: operation.clone(),
+                }),
+                argument: Box::new(Term::Var { index: 0 }),
+            },
+            right: Term::Var { index: 0 },
+            ty: Term::UnitType,
+        };
+        let seed = SemanticSchemaSeedV1::PublicEquation(PublicEquationSeedV1 {
+            equation: EquationIdV1(Digest::of_bytes(b"fresh-equation")),
+            owner_head: operation,
+            origin_event: event(b"equation-event"),
+            judgment: SourceNormalizedJudgmentV1 {
+                source_identity: Digest::of_bytes(b"equation-source"),
+                source: equation.clone(),
+                claimed_normalized: equation.clone(),
+            },
+            claimed_role: LocalRoleV1::Coherence,
+            public_support: PublicSupportV1::default(),
+            source_clause: None,
+            demand_anchor: None,
+        });
+        let AuditDecision::Proven(manifest) =
+            verify_semantic_audit_manifest_v1(&proposed_semantic_audit_manifest_v1())
+        else {
+            panic!("manifest");
+        };
+        let AuditDecision::Proven(verified) =
+            verify_pre_q0_semantic_seed_v1(&kernel, &signature, &manifest, &seed)
+        else {
+            panic!("typed fresh equation should enter the raw carrier");
+        };
+        assert_eq!(verified.source_judgment(), &equation);
+    }
+
+    #[test]
+    fn pre_q0_ill_typed_equation_hole_is_a_certified_negative() {
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let constructor = id(b"pre-q0-hole-constructor");
+        let operation = id(b"pre-q0-hole-operation");
+        let operation_type = Term::Pi {
+            parameter: Box::new(Term::UnitType),
+            body: Box::new(Term::Pi {
+                parameter: Box::new(Term::UnitType),
+                body: Box::new(Term::UnitType),
+            }),
+        };
+        let signature = kernel
+            .verify_signature(&UncheckedSignature {
+                declarations: vec![
+                    Declaration {
+                        id: constructor.clone(),
+                        ty: Term::UnitType,
+                        body: None,
+                    },
+                    Declaration {
+                        id: operation.clone(),
+                        ty: operation_type.clone(),
+                        body: None,
+                    },
+                ],
+            })
+            .expect("signature");
+        let source_judgment = |term, ty, label: &[u8]| {
+            let source = GenericJudgmentV1::Term {
+                context: DependentContext::default(),
+                term,
+                ty,
+            };
+            SourceNormalizedJudgmentV1 {
+                source_identity: Digest::of_bytes(label),
+                source: source.clone(),
+                claimed_normalized: source,
+            }
+        };
+        let equation = GenericJudgmentV1::Equation {
+            context: DependentContext(vec![Term::UnitType]),
+            left: Term::Apply {
+                function: Box::new(Term::Apply {
+                    function: Box::new(Term::Global {
+                        id: operation.clone(),
+                    }),
+                    argument: Box::new(Term::Var { index: 0 }),
+                }),
+                argument: Box::new(Term::Global {
+                    id: constructor.clone(),
+                }),
+            },
+            right: Term::Var { index: 0 },
+            ty: Term::UnitType,
+        };
+        let seeds = vec![
+            SemanticSchemaSeedV1::PublicHead(PublicHeadSeedV1 {
+                declaration: constructor.clone(),
+                origin_event: event(b"pre-q0-hole-predecessor"),
+                judgment: source_judgment(
+                    Term::Global {
+                        id: constructor.clone(),
+                    },
+                    Term::UnitType,
+                    b"pre-q0-hole-constructor-source",
+                ),
+                presentation: HeadPresentationV1::Opaque,
+                claimed_role: LocalRoleV1::KernelHead,
+                public_support: PublicSupportV1::default(),
+                source_clause: None,
+            }),
+            SemanticSchemaSeedV1::PublicHead(PublicHeadSeedV1 {
+                declaration: operation.clone(),
+                origin_event: event(b"pre-q0-hole-successor"),
+                judgment: source_judgment(
+                    Term::Global {
+                        id: operation.clone(),
+                    },
+                    operation_type,
+                    b"pre-q0-hole-operation-source",
+                ),
+                presentation: HeadPresentationV1::Opaque,
+                claimed_role: LocalRoleV1::KernelHead,
+                public_support: PublicSupportV1::default(),
+                source_clause: None,
+            }),
+            SemanticSchemaSeedV1::PublicEquation(PublicEquationSeedV1 {
+                equation: EquationIdV1(Digest::of_bytes(b"pre-q0-hole-equation")),
+                owner_head: operation,
+                origin_event: event(b"pre-q0-hole-successor"),
+                judgment: SourceNormalizedJudgmentV1 {
+                    source_identity: Digest::of_bytes(b"pre-q0-hole-equation-source"),
+                    source: equation.clone(),
+                    claimed_normalized: equation,
+                },
+                claimed_role: LocalRoleV1::Coherence,
+                public_support: PublicSupportV1::default(),
+                source_clause: None,
+                demand_anchor: None,
+            }),
+        ];
+        let AuditDecision::Proven(manifest) = verify_semantic_audit_lambda_unit_manifest_v1(
+            &proposed_semantic_audit_lambda_unit_manifest_v1(),
+        ) else {
+            panic!("lambda/unit manifest");
+        };
+        let AuditDecision::Proven(carrier) =
+            enumerate_pre_q0_raw_families_v1(&kernel, &signature, &manifest, &seeds, &[])
+        else {
+            panic!("ill-typed hole must not abort the complete carrier");
+        };
+        assert!(carrier.tuple_dispositions().iter().any(|disposition| {
+            disposition.rank == 2
+                && disposition.rule == CarrierRuleV1::GenericEquationAction
+                && disposition.hole_ordinal == Some(1)
+                && matches!(
+                    &disposition.outcome,
+                    CarrierTupleOutcomeV1::CertifiedInapplicable {
+                        reason: CertifiedInapplicableReasonV1::HoleIsNotTypedForEquation
+                    }
+                )
+        }));
+    }
+
+    #[test]
+    fn lambda_unit_projection_syntax_has_the_exact_outside_reason() {
+        let projection = Term::First {
+            pair: Box::new(Term::Unit),
+        };
+        assert_eq!(
+            validate_supported_term(&projection, &[0, 1], true),
+            Err(OutsideFragmentReason::DescriptorProjection)
+        );
+        assert_eq!(
+            validate_supported_term(&projection, &[0, 1], false),
+            Err(OutsideFragmentReason::UnsupportedTerm)
+        );
     }
 }

@@ -1699,3 +1699,64 @@ and the registered Window Audit replay all passed. The separately launched
 legacy all-workspace suite remained actively computing in `pen_search` when
 its 15-minute timeout expired and emitted no failure diagnostic; this is
 recorded as legacy runtime latency, not theorem evidence or a Law-V2 blocker.
+
+## Execution checkpoint — projection-free lambda/unit theorem prototype, 2026-07-29
+
+The next generic critical-path layer has now been explored under separately
+versioned, unfrozen successor proposals:
+
+```text
+gf2-semantic-audit-lambda-unit-v1
+gf2-kernel-cost-lambda-unit-v2
+```
+
+The broader semantic and V2 cost proposals remain unchanged. The successors
+exclude records and projections, omit `DescriptorForcedProjection` from
+their Q0 and cost-free manifests, and recursively reject projection syntax as
+`OutsideFragment(DescriptorProjection)`. They have no Profile A access and
+issue no live value.
+
+The isolated prototype now supplies verifier-minted ambient public-export
+classes, exact ordinary delta/beta derivations, and a syntactic pre-Q0
+rank-0/1/2 carrier. Ambient first exports are class-valued and order
+independent; predecessor re-exports remain distinct. Ordinary beta binds the
+definition, equation, sequential substitution, result type, and replayed
+reduction path. The pre-Q0 carrier does not normalize or deduplicate by Q0 and
+records typed negative equation-hole dispositions.
+
+The finite rewrite attempt has reached a new definition-and-theorem blocker.
+Embedding-lift and forced-newest substitutions do not have a finite syntactic
+closure under unrestricted composition: a small generic vector generates
+ever-growing endomorphism images and exhausts the manifest bound. Truncation
+would turn omitted substitutions into false negative evidence. In addition,
+the diagnostic graph still lacks recursively typed subterm/binder-local rule
+instances, an independently reconstructed predecessor node universe, and an
+explicit census of every same-position, nested, and disjoint immediate-edge
+pair.
+
+The public finite-rewrite entry point therefore validates manifest bindings,
+exact seed term subjects, and the complete lambda/unit fragment boundary, and
+then deliberately returns:
+
+```text
+Unknown(MissingRewriteAdmissibilityTheorem)
+```
+
+No `VerifiedRewriteSystemV1` can currently be minted. Full semantic seed
+authority is also still absent: the public inventory alone cannot derive cost
+clause identities, demand-orbit anchors, or historical predecessor
+presentations from caller-independent evidence. These blockers keep Q0,
+Q1/Q2/Q3 quotient completion, the cost basis, weakening, marginals, SR2,
+Rust/safe-Agda transcript agreement, adoption/freeze, and the Profile A
+adapter downstream.
+
+The detailed generic result is recorded in
+[LAW_V2_LAMBDA_UNIT_FINITE_THEOREM_PROTOTYPE_RESULT.md](LAW_V2_LAMBDA_UNIT_FINITE_THEOREM_PROTOTYPE_RESULT.md).
+The isolated workspace reports 107 tests passed, none failed, and one pinned
+live-Agda test ignored by default; formatting, clippy with warnings denied,
+the isolation checker, and its unit tests also pass.
+
+The issued H3/H4 artifacts, Profile Registry, Window Audit V1, V1 cost
+artifact, and prior V2 public-inventory result remain unchanged. The Window
+Audit V1 outcome remains `UndefinedAudit`; no provisional \(\kappa\),
+\(\nu\), ratio, or productivity result is introduced.

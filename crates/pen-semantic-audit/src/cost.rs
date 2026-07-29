@@ -5,9 +5,20 @@
 //! by its verified cost manifest.  The checker is exhaustive under the
 //! manifest bounds: it never turns failed proof search into irreducibility.
 
+use crate::ambient::{
+    AmbientExportDispositionV1, AmbientPrimitiveExportMemberKindV1,
+    VerifiedAmbientPrimitiveExportCensusV1, verify_ambient_primitive_export_census_v1,
+};
+use crate::finite_rewrite::VerifiedRewriteSystemV1;
+use crate::fragment::{
+    LambdaUnitSyntaxViolation, lambda_unit_context_syntax_violation,
+    lambda_unit_judgment_syntax_violation, lambda_unit_term_syntax_violation,
+};
 use crate::manifest::{
     AuditDecision, AuditUnknownReason, FreeCompletionRuleV1, FreeCompletionRuleV2,
-    OutsideFragmentReason, VerifiedCostManifestV1, VerifiedCostManifestV2,
+    KERNEL_COST_LAMBDA_UNIT_PROFILE_ID_V2, KERNEL_COST_PROFILE_ID_V2, OutsideFragmentReason,
+    SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1, VerifiedCostManifestV1, VerifiedCostManifestV2,
+    VerifiedSemanticAuditManifestV1,
 };
 use crate::model::{
     ClauseCostDispositionV1, ClauseIdV1, DemandOutputIdV1, EquationIdV1, GenericJudgmentV1,
@@ -15,7 +26,7 @@ use crate::model::{
 };
 use crate::{
     DemandPortKeyV1, PublicSubjectV1, VerifiedPublicAuditInventoryV1, VerifiedPublicDeclarationV1,
-    VerifiedPublicEquationV1,
+    VerifiedPublicEquationV1, ordinary_beta::VerifiedOrdinaryBetaDerivationV1,
 };
 use pen_kernel::{CanonicalEncode, CanonicalEncoder, DependentContext, Digest, GlobalId, Term};
 use serde::{Deserialize, Serialize};
@@ -29,12 +40,19 @@ use std::collections::{BTreeMap, BTreeSet};
 #[serde(rename_all = "snake_case")]
 pub enum SourceToNormalDerivationV1 {
     Reflexivity,
+    /// Untrusted marker selecting a verifier-minted ordinary-beta path.
+    ///
+    /// V1 rejects this marker.  Public V2 accepts it only when the source and
+    /// normal pair exactly match the verified inventory and an opaque
+    /// `VerifiedOrdinaryBetaDerivationV1` is supplied separately.
+    VerifierReplayedOrdinaryBeta,
 }
 
 impl CanonicalEncode for SourceToNormalDerivationV1 {
     fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
         match self {
             Self::Reflexivity => encoder.tag(0),
+            Self::VerifierReplayedOrdinaryBeta => encoder.tag(1),
         }
     }
 }
@@ -747,6 +765,7 @@ pub struct KernelCostAuditInputV2 {
 pub enum VerifiedReconstructionProofV2 {
     OrdinaryBetaOfVerifiedDeclaration {
         owner_head: GlobalId,
+        derivation_digest: Digest,
     },
     PriorPublicTransparentAlias {
         declaration: ClauseIdV1,
@@ -764,14 +783,27 @@ pub enum VerifiedReconstructionProofV2 {
     DuplicatePresentationDeletion {
         original: ClauseIdV1,
     },
+    PriorPublicAmbientReexport {
+        declaration: ClauseIdV1,
+        primitive_class_digest: Digest,
+        predecessor_class_digest: Digest,
+    },
+    AmbientFirstExportClassDuplicate {
+        primitive_class_digest: Digest,
+        peer: ClauseIdV1,
+    },
 }
 
 impl CanonicalEncode for VerifiedReconstructionProofV2 {
     fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
         match self {
-            Self::OrdinaryBetaOfVerifiedDeclaration { owner_head } => {
+            Self::OrdinaryBetaOfVerifiedDeclaration {
+                owner_head,
+                derivation_digest,
+            } => {
                 encoder.tag(0);
                 owner_head.encode_canonical(encoder);
+                derivation_digest.encode_canonical(encoder);
             }
             Self::PriorPublicTransparentAlias {
                 declaration,
@@ -802,6 +834,24 @@ impl CanonicalEncode for VerifiedReconstructionProofV2 {
             Self::DuplicatePresentationDeletion { original } => {
                 encoder.tag(4);
                 original.encode_canonical(encoder);
+            }
+            Self::PriorPublicAmbientReexport {
+                declaration,
+                primitive_class_digest,
+                predecessor_class_digest,
+            } => {
+                encoder.tag(5);
+                declaration.encode_canonical(encoder);
+                primitive_class_digest.encode_canonical(encoder);
+                predecessor_class_digest.encode_canonical(encoder);
+            }
+            Self::AmbientFirstExportClassDuplicate {
+                primitive_class_digest,
+                peer,
+            } => {
+                encoder.tag(6);
+                primitive_class_digest.encode_canonical(encoder);
+                peer.encode_canonical(encoder);
             }
         }
     }
@@ -849,9 +899,99 @@ pub struct ClauseDispositionCertificateV1 {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct ClauseDispositionCertificateV2 {
     clause: ClauseIdV1,
-    disposition: ClauseCostDispositionV1,
+    disposition: ClauseCostDispositionV2,
     closure_round: u32,
     reconstructions: Vec<VerifiedReconstructionDerivationV2>,
+}
+
+/// A V2 cost disposition.
+///
+/// The ambient-first-export case is deliberately class-valued.  Simultaneous
+/// direct exports are interchangeable representatives of one Q2 class, so a
+/// certificate must not turn a class digest into a caller-controlled
+/// [`ClauseIdV1`] and thereby select one declaration as the "original".
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum ClauseCostDispositionV2 {
+    FirstIrreducible,
+    TransparentAlias { target: GlobalId },
+    ForcedDefinitionalCompletion,
+    ForcedProjection,
+    DuplicatePresentation { original: ClauseIdV1 },
+    AmbientFirstExportClassMember { primitive_class_digest: Digest },
+    AmbientPriorPublicReexport { predecessor_class_digest: Digest },
+}
+
+impl ClauseCostDispositionV2 {
+    /// Convert dispositions shared with V1; class-valued V2 dispositions have
+    /// no representative-selecting V1 equivalent.
+    pub fn legacy_v1(&self) -> Option<ClauseCostDispositionV1> {
+        match self {
+            Self::FirstIrreducible => Some(ClauseCostDispositionV1::FirstIrreducible),
+            Self::TransparentAlias { target } => Some(ClauseCostDispositionV1::TransparentAlias {
+                target: target.clone(),
+            }),
+            Self::ForcedDefinitionalCompletion => {
+                Some(ClauseCostDispositionV1::ForcedDefinitionalCompletion)
+            }
+            Self::ForcedProjection => Some(ClauseCostDispositionV1::ForcedProjection),
+            Self::DuplicatePresentation { original } => {
+                Some(ClauseCostDispositionV1::DuplicatePresentation {
+                    original: original.clone(),
+                })
+            }
+            Self::AmbientFirstExportClassMember { .. }
+            | Self::AmbientPriorPublicReexport { .. } => None,
+        }
+    }
+}
+
+impl From<ClauseCostDispositionV1> for ClauseCostDispositionV2 {
+    fn from(disposition: ClauseCostDispositionV1) -> Self {
+        match disposition {
+            ClauseCostDispositionV1::FirstIrreducible => Self::FirstIrreducible,
+            ClauseCostDispositionV1::TransparentAlias { target } => {
+                Self::TransparentAlias { target }
+            }
+            ClauseCostDispositionV1::ForcedDefinitionalCompletion => {
+                Self::ForcedDefinitionalCompletion
+            }
+            ClauseCostDispositionV1::ForcedProjection => Self::ForcedProjection,
+            ClauseCostDispositionV1::DuplicatePresentation { original } => {
+                Self::DuplicatePresentation { original }
+            }
+        }
+    }
+}
+
+impl CanonicalEncode for ClauseCostDispositionV2 {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        match self {
+            Self::FirstIrreducible => encoder.tag(0),
+            Self::TransparentAlias { target } => {
+                encoder.tag(1);
+                target.encode_canonical(encoder);
+            }
+            Self::ForcedDefinitionalCompletion => encoder.tag(2),
+            Self::ForcedProjection => encoder.tag(3),
+            Self::DuplicatePresentation { original } => {
+                encoder.tag(4);
+                original.encode_canonical(encoder);
+            }
+            Self::AmbientFirstExportClassMember {
+                primitive_class_digest,
+            } => {
+                encoder.tag(5);
+                primitive_class_digest.encode_canonical(encoder);
+            }
+            Self::AmbientPriorPublicReexport {
+                predecessor_class_digest,
+            } => {
+                encoder.tag(6);
+                predecessor_class_digest.encode_canonical(encoder);
+            }
+        }
+    }
 }
 
 impl ClauseDispositionCertificateV2 {
@@ -859,7 +999,7 @@ impl ClauseDispositionCertificateV2 {
         &self.clause
     }
 
-    pub fn disposition(&self) -> &ClauseCostDispositionV1 {
+    pub fn disposition(&self) -> &ClauseCostDispositionV2 {
         &self.disposition
     }
 
@@ -1106,8 +1246,8 @@ struct PreparedAuditV2 {
     clause_ids: Vec<ClauseIdV1>,
     rules: Vec<VerifiedReconstructionDerivationV2>,
     negative: BTreeMap<(ClauseIdV1, BTreeSet<ClauseIdV1>), CompleteNegativeEvidenceV2>,
-    class_root: BTreeMap<ClauseIdV1, ClauseIdV1>,
-    class_members: BTreeMap<ClauseIdV1, BTreeSet<ClauseIdV1>>,
+    class_root: BTreeMap<ClauseIdV1, PresentationClassRootV2>,
+    class_members: BTreeMap<PresentationClassRootV2, BTreeSet<ClauseIdV1>>,
     inventory_digest: Digest,
     exact_api_digest: Digest,
     dependency_components: Vec<DependencyComponentV1>,
@@ -1123,7 +1263,7 @@ struct CertifiedBasis {
 #[derive(Clone)]
 struct CertifiedBasisV2 {
     seeds: BTreeSet<ClauseIdV1>,
-    signature: BTreeSet<ClauseIdV1>,
+    signature: BTreeSet<PresentationClassRootV2>,
     independence: Vec<BasisIndependenceCertificateV2>,
 }
 
@@ -1155,9 +1295,42 @@ impl InventoryBindingV2<'_> {
     }
 }
 
+#[derive(Clone, Copy)]
+struct CostAuthoritiesV2<'a> {
+    semantic_manifest: Option<&'a VerifiedSemanticAuditManifestV1>,
+    ambient_export_census: Option<&'a VerifiedAmbientPrimitiveExportCensusV1>,
+    ordinary_beta_derivations: &'a [VerifiedOrdinaryBetaDerivationV1],
+}
+
+impl CostAuthoritiesV2<'_> {
+    fn none() -> Self {
+        Self {
+            semantic_manifest: None,
+            ambient_export_census: None,
+            ordinary_beta_derivations: &[],
+        }
+    }
+}
+
 struct PresentationClasses {
     roots: BTreeMap<ClauseIdV1, ClauseIdV1>,
     members: BTreeMap<ClauseIdV1, BTreeSet<ClauseIdV1>>,
+}
+
+/// A disjoint V2 quotient identity.
+///
+/// In particular, `AmbientFirstExport(d)` is never equal to
+/// `Clause(ClauseIdV1(d))`, even when a caller deliberately chooses that
+/// clause identifier.
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum PresentationClassRootV2 {
+    Clause(ClauseIdV1),
+    AmbientFirstExport(Digest),
+}
+
+struct PresentationClassesV2 {
+    roots: BTreeMap<ClauseIdV1, PresentationClassRootV2>,
+    members: BTreeMap<PresentationClassRootV2, BTreeSet<ClauseIdV1>>,
 }
 
 #[derive(Clone, Debug)]
@@ -1194,10 +1367,237 @@ pub fn audit_kernel_cost_v2(
     inventory: &VerifiedPublicAuditInventoryV1,
     input: &KernelCostAuditInputV2,
 ) -> AuditDecision<CostAuditCertificateV2> {
-    match audit_kernel_cost_inner_v2(manifest, InventoryBindingV2::Verified(inventory), input) {
+    if manifest.manifest().profile_id != KERNEL_COST_PROFILE_ID_V2 {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    match audit_kernel_cost_inner_v2(
+        manifest,
+        InventoryBindingV2::Verified(inventory),
+        CostAuthoritiesV2::none(),
+        input,
+    ) {
         Ok(certificate) => AuditDecision::Proven(certificate),
         Err(failure) => failure.decision(),
     }
+}
+
+/// Audit the projection-free lambda/unit successor with verifier-minted
+/// rewrite-system and ordinary-beta authority.
+///
+/// This successor is generic and unfrozen.  It does not expose Profile A or
+/// authorize any live value. Projection-bearing inventories and clauses are
+/// positively outside this fragment. Because the rewrite verifier currently
+/// fails closed, no caller can yet obtain the capability required here.
+pub fn audit_kernel_cost_lambda_unit_v2(
+    cost_manifest: &VerifiedCostManifestV2,
+    semantic_manifest: &VerifiedSemanticAuditManifestV1,
+    inventory: &VerifiedPublicAuditInventoryV1,
+    rewrite_system: &VerifiedRewriteSystemV1,
+    ordinary_beta_derivations: &[VerifiedOrdinaryBetaDerivationV1],
+    input: &KernelCostAuditInputV2,
+) -> AuditDecision<CostAuditCertificateV2> {
+    if rewrite_system.manifest_digest() != semantic_manifest.candidate_digest()
+        || rewrite_system.inventory_digest() != inventory.digest()
+        || rewrite_system.signature_digest() != inventory.successor_boundary().digest()
+        || rewrite_system.normalizer_protocol_digest() != inventory.normalizer_protocol_digest()
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    audit_kernel_cost_lambda_unit_components_v2(
+        cost_manifest,
+        semantic_manifest,
+        inventory,
+        ordinary_beta_derivations,
+        input,
+    )
+}
+
+/// Non-authorizing component integration retained for generic unit tests.
+///
+/// Only the public wrapper above can expose a cost certificate outside this
+/// module, and it requires an exact verified rewrite-system capability.
+fn audit_kernel_cost_lambda_unit_components_v2(
+    cost_manifest: &VerifiedCostManifestV2,
+    semantic_manifest: &VerifiedSemanticAuditManifestV1,
+    inventory: &VerifiedPublicAuditInventoryV1,
+    ordinary_beta_derivations: &[VerifiedOrdinaryBetaDerivationV1],
+    input: &KernelCostAuditInputV2,
+) -> AuditDecision<CostAuditCertificateV2> {
+    if cost_manifest.manifest().profile_id != KERNEL_COST_LAMBDA_UNIT_PROFILE_ID_V2
+        || semantic_manifest.manifest().profile_id != SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1
+        || inventory.manifest_digest() != semantic_manifest.candidate_digest()
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    if !inventory.forced_projections().is_empty()
+        || inventory.coverage().forced_projection_count() != 0
+        || !inventory.forced_projection_origins().is_empty()
+        || input.clauses.iter().any(|clause| {
+            matches!(
+                clause.clause,
+                RawPublicClauseKindV1::ForcedProjectionClause { .. }
+            )
+        })
+    {
+        return AuditDecision::OutsideFragment(OutsideFragmentReason::DescriptorProjection);
+    }
+    if let Some(violation) = lambda_unit_cost_syntax_violation(
+        inventory,
+        input,
+        &semantic_manifest.manifest().universe_levels,
+    ) {
+        return AuditDecision::OutsideFragment(violation.outside_reason());
+    }
+    let ambient_export_census = match verify_ambient_primitive_export_census_v1(inventory) {
+        AuditDecision::Proven(census) => census,
+        AuditDecision::OutsideFragment(reason) => {
+            return AuditDecision::OutsideFragment(reason);
+        }
+        AuditDecision::Unknown(reason) => return AuditDecision::Unknown(reason),
+    };
+    match audit_kernel_cost_inner_v2(
+        cost_manifest,
+        InventoryBindingV2::Verified(inventory),
+        CostAuthoritiesV2 {
+            semantic_manifest: Some(semantic_manifest),
+            ambient_export_census: Some(&ambient_export_census),
+            ordinary_beta_derivations,
+        },
+        input,
+    ) {
+        Ok(certificate) => AuditDecision::Proven(certificate),
+        Err(failure) => failure.decision(),
+    }
+}
+
+fn lambda_unit_cost_syntax_violation(
+    inventory: &VerifiedPublicAuditInventoryV1,
+    input: &KernelCostAuditInputV2,
+    universe_levels: &[u16],
+) -> Option<LambdaUnitSyntaxViolation> {
+    input
+        .clauses
+        .iter()
+        .filter_map(|clause| raw_clause_lambda_unit_syntax_violation(clause, universe_levels))
+        .chain(inventory.declarations().iter().filter_map(|declaration| {
+            [
+                lambda_unit_term_syntax_violation(&declaration.source().ty, universe_levels),
+                declaration
+                    .source()
+                    .body
+                    .as_ref()
+                    .and_then(|body| lambda_unit_term_syntax_violation(body, universe_levels)),
+                lambda_unit_term_syntax_violation(&declaration.normalized().ty, universe_levels),
+                declaration
+                    .normalized()
+                    .body
+                    .as_ref()
+                    .and_then(|body| lambda_unit_term_syntax_violation(body, universe_levels)),
+            ]
+            .into_iter()
+            .flatten()
+            .max()
+        }))
+        .chain(inventory.equations().iter().filter_map(|equation| {
+            [
+                lambda_unit_judgment_syntax_violation(equation.source(), universe_levels),
+                lambda_unit_judgment_syntax_violation(equation.normalized(), universe_levels),
+            ]
+            .into_iter()
+            .flatten()
+            .max()
+        }))
+        .chain(
+            inventory
+                .predecessor_demand_contracts()
+                .iter()
+                .filter_map(|contract| {
+                    [
+                        lambda_unit_judgment_syntax_violation(
+                            contract.source_requirement(),
+                            universe_levels,
+                        ),
+                        lambda_unit_judgment_syntax_violation(
+                            contract.normalized_requirement(),
+                            universe_levels,
+                        ),
+                    ]
+                    .into_iter()
+                    .flatten()
+                    .max()
+                }),
+        )
+        .max()
+}
+
+fn raw_clause_lambda_unit_syntax_violation(
+    clause: &RawPublicClauseV1,
+    universe_levels: &[u16],
+) -> Option<LambdaUnitSyntaxViolation> {
+    match &clause.clause {
+        RawPublicClauseKindV1::PublicDeclaration {
+            pair,
+            equation_free_descriptors,
+            ..
+        } => declaration_pair_lambda_unit_syntax_violation(pair, universe_levels).max(
+            equation_free_descriptors
+                .iter()
+                .filter_map(lambda_unit_descriptor_syntax_violation)
+                .max(),
+        ),
+        RawPublicClauseKindV1::ForcedProjectionClause { pair, .. } => {
+            declaration_pair_lambda_unit_syntax_violation(pair, universe_levels)
+        }
+        RawPublicClauseKindV1::PublicEquation { pair, .. } => [
+            lambda_unit_context_syntax_violation(&pair.source_context, universe_levels),
+            lambda_unit_term_syntax_violation(&pair.source_left, universe_levels),
+            lambda_unit_term_syntax_violation(&pair.source_right, universe_levels),
+            lambda_unit_term_syntax_violation(&pair.source_type, universe_levels),
+            lambda_unit_context_syntax_violation(&pair.normalized_context, universe_levels),
+            lambda_unit_term_syntax_violation(&pair.normalized_left, universe_levels),
+            lambda_unit_term_syntax_violation(&pair.normalized_right, universe_levels),
+            lambda_unit_term_syntax_violation(&pair.normalized_type, universe_levels),
+        ]
+        .into_iter()
+        .flatten()
+        .max(),
+    }
+}
+
+fn lambda_unit_descriptor_syntax_violation(
+    descriptor: &EquationFreeDescriptorV1,
+) -> Option<LambdaUnitSyntaxViolation> {
+    match &descriptor.descriptor {
+        EquationFreeDescriptorKindV1::OperationRole { .. } => None,
+        EquationFreeDescriptorKindV1::RecordField { .. } => {
+            Some(LambdaUnitSyntaxViolation::DescriptorProjection)
+        }
+        EquationFreeDescriptorKindV1::Former { .. }
+        | EquationFreeDescriptorKindV1::FreshComputationContract { .. } => {
+            Some(LambdaUnitSyntaxViolation::UnsupportedTerm)
+        }
+    }
+}
+
+fn declaration_pair_lambda_unit_syntax_violation(
+    pair: &SourceNormalizedDeclarationV1,
+    universe_levels: &[u16],
+) -> Option<LambdaUnitSyntaxViolation> {
+    [
+        lambda_unit_context_syntax_violation(&pair.source_context, universe_levels),
+        lambda_unit_term_syntax_violation(&pair.source_type, universe_levels),
+        pair.source_body
+            .as_ref()
+            .and_then(|body| lambda_unit_term_syntax_violation(body, universe_levels)),
+        lambda_unit_context_syntax_violation(&pair.normalized_context, universe_levels),
+        lambda_unit_term_syntax_violation(&pair.normalized_type, universe_levels),
+        pair.normalized_body
+            .as_ref()
+            .and_then(|body| lambda_unit_term_syntax_violation(body, universe_levels)),
+    ]
+    .into_iter()
+    .flatten()
+    .max()
 }
 
 #[cfg(test)]
@@ -1205,7 +1605,12 @@ fn audit_kernel_cost_v2_fixture(
     manifest: &VerifiedCostManifestV2,
     input: &KernelCostAuditInputV2,
 ) -> AuditDecision<CostAuditCertificateV2> {
-    match audit_kernel_cost_inner_v2(manifest, InventoryBindingV2::FixtureOnly, input) {
+    match audit_kernel_cost_inner_v2(
+        manifest,
+        InventoryBindingV2::FixtureOnly,
+        CostAuthoritiesV2::none(),
+        input,
+    ) {
         Ok(certificate) => AuditDecision::Proven(certificate),
         Err(failure) => failure.decision(),
     }
@@ -1379,6 +1784,7 @@ fn audit_kernel_cost_inner(
 fn audit_kernel_cost_inner_v2(
     manifest: &VerifiedCostManifestV2,
     inventory: InventoryBindingV2<'_>,
+    authorities: CostAuthoritiesV2<'_>,
     input: &KernelCostAuditInputV2,
 ) -> CostResult<CostAuditCertificateV2> {
     let limits = manifest.manifest();
@@ -1396,7 +1802,7 @@ fn audit_kernel_cost_inner_v2(
         return Err(CostFailure::Unknown(AuditUnknownReason::ResourceExhausted));
     }
 
-    let prepared = prepare_audit_v2(manifest, inventory, input)?;
+    let prepared = prepare_audit_v2(manifest, inventory, authorities, input)?;
     let all: BTreeSet<_> = prepared.clause_ids.iter().cloned().collect();
     let mut certified = Vec::new();
     let mut incomplete_candidate = false;
@@ -1492,7 +1898,30 @@ fn audit_kernel_cost_inner_v2(
             AuditUnknownReason::IncompleteEnumeration,
         ))?;
 
-    let canonical_seed = signature.clone();
+    // Replay from actual clause identifiers only. Ordinary quotient roots
+    // have their canonical clause as a seed; an ambient first-export class
+    // contributes all of its interchangeable direct members. Seeding the
+    // whole ambient class is intentionally non-minimal: it is used only to
+    // produce a representative-free disposition replay after the minimal
+    // bases have already been certified.
+    let mut canonical_seed = BTreeSet::new();
+    for root in &signature {
+        match root {
+            PresentationClassRootV2::Clause(clause) => {
+                canonical_seed.insert(clause.clone());
+            }
+            PresentationClassRootV2::AmbientFirstExport(_) => {
+                canonical_seed.extend(
+                    prepared
+                        .class_members
+                        .get(root)
+                        .ok_or(CostFailure::Unknown(AuditUnknownReason::UnknownQuotient))?
+                        .iter()
+                        .cloned(),
+                );
+            }
+        }
+    }
     let closure = saturate(
         &canonical_seed,
         &prepared.rules,
@@ -1618,10 +2047,11 @@ fn prepare_audit(
 fn prepare_audit_v2(
     manifest: &VerifiedCostManifestV2,
     inventory: InventoryBindingV2<'_>,
+    authorities: CostAuthoritiesV2<'_>,
     input: &KernelCostAuditInputV2,
 ) -> CostResult<PreparedAuditV2> {
     if let Some(verified) = inventory.verified() {
-        reject_unrepresented_ordinary_beta_v2(verified)?;
+        reject_unrepresented_ordinary_beta_v2(verified, authorities)?;
     }
     let mut clauses = BTreeMap::new();
     let mut public_heads = BTreeMap::new();
@@ -1653,7 +2083,13 @@ fn prepare_audit_v2(
 
     let equation_demand_ports = collect_equation_demand_ports_v2(&input.equation_demand_ports)?;
     if let Some(verified) = inventory.verified() {
-        verify_cost_inventory_coverage_v2(&clauses, input, &equation_demand_ports, verified)?;
+        verify_cost_inventory_coverage_v2(
+            &clauses,
+            input,
+            &equation_demand_ports,
+            verified,
+            authorities,
+        )?;
     } else {
         validate_public_dependency_dag(&clauses, &input.public_dependency_dag)?;
         validate_fixture_equation_demand_ports_v2(&clauses, &equation_demand_ports)?;
@@ -1676,13 +2112,19 @@ fn prepare_audit_v2(
                 &clauses,
                 &equation_demand_ports,
                 inventory.verified(),
+                authorities,
                 manifest,
             )
         })
         .collect::<CostResult<Vec<_>>>()?;
     if let Some(verified) = inventory.verified() {
-        let derived =
-            derive_inventory_reconstructions_v2(&clauses, &public_heads, verified, manifest)?;
+        let derived = derive_inventory_reconstructions_v2(
+            &clauses,
+            &public_heads,
+            verified,
+            manifest,
+            authorities,
+        )?;
         rules.extend(derived);
     }
     sort_canonical(
@@ -1707,6 +2149,7 @@ fn prepare_audit_v2(
         &presentation_equivalences,
         &equation_demand_ports,
         inventory.verified(),
+        authorities,
     )?;
 
     let mut negative = BTreeMap::new();
@@ -1735,7 +2178,20 @@ fn prepare_audit_v2(
 
 fn reject_unrepresented_ordinary_beta_v2(
     inventory: &VerifiedPublicAuditInventoryV1,
+    authorities: CostAuthoritiesV2<'_>,
 ) -> CostResult<()> {
+    if !authorities.ordinary_beta_derivations.is_empty() && authorities.semantic_manifest.is_none()
+    {
+        return Err(CostFailure::Unknown(AuditUnknownReason::ManifestMismatch));
+    }
+    if let Some(semantic_manifest) = authorities.semantic_manifest
+        && (semantic_manifest.manifest().profile_id != SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1
+            || inventory.manifest_digest() != semantic_manifest.candidate_digest())
+    {
+        return Err(CostFailure::Unknown(AuditUnknownReason::ManifestMismatch));
+    }
+
+    let mut required = BTreeSet::new();
     for equation in inventory
         .equations()
         .iter()
@@ -1754,10 +2210,51 @@ fn reject_unrepresented_ordinary_beta_v2(
             )
         });
         if requires_definition_reduction {
-            return Err(CostFailure::Unknown(
-                AuditUnknownReason::MissingOrdinaryBetaDerivation,
-            ));
+            required.insert(equation.equation().clone());
+            let matches = authorities
+                .ordinary_beta_derivations
+                .iter()
+                .filter(|derivation| {
+                    derivation.inventory_digest() == inventory.digest()
+                        && derivation.manifest_digest() == inventory.manifest_digest()
+                        && derivation.normalizer_protocol_digest()
+                            == inventory.normalizer_protocol_digest()
+                        && derivation.successor_boundary_digest()
+                            == inventory.successor_boundary().digest()
+                        && derivation.equation() == equation.equation()
+                        && derivation.equation_source_identity() == equation.source_identity()
+                        && derivation.owner_head() == equation.owner_head()
+                        && derivation.owner_source_identity() == owner.source_identity()
+                        && derivation.reconstructed_source() == equation.source()
+                        && derivation.replayed_normalized() == equation.normalized()
+                })
+                .count();
+            if matches == 0 {
+                return Err(CostFailure::Unknown(
+                    AuditUnknownReason::MissingOrdinaryBetaDerivation,
+                ));
+            }
+            if matches != 1 {
+                return Err(CostFailure::Unknown(
+                    AuditUnknownReason::ProvenanceCollision,
+                ));
+            }
         }
+    }
+    let supplied = authorities
+        .ordinary_beta_derivations
+        .iter()
+        .map(|derivation| derivation.equation().clone())
+        .collect::<BTreeSet<_>>();
+    if supplied.len() != authorities.ordinary_beta_derivations.len() {
+        return Err(CostFailure::Unknown(
+            AuditUnknownReason::ProvenanceCollision,
+        ));
+    }
+    if supplied != required {
+        return Err(CostFailure::Unknown(
+            AuditUnknownReason::IncompleteEnumeration,
+        ));
     }
     Ok(())
 }
@@ -1833,7 +2330,16 @@ fn validate_raw_clause_v2(clause: &RawPublicClauseV1) -> CostResult<()> {
             reject_canonical_duplicates(&descriptors, "pen-semantic-audit/descriptor-sort/v2")?;
         }
         RawPublicClauseKindV1::PublicEquation { pair, .. } => {
-            validate_equation_pair(pair)?;
+            match pair.source_to_normal_derivation {
+                SourceToNormalDerivationV1::Reflexivity => validate_equation_pair(pair)?,
+                SourceToNormalDerivationV1::VerifierReplayedOrdinaryBeta => {
+                    if pair.source_context != pair.normalized_context {
+                        return Err(CostFailure::Unknown(
+                            AuditUnknownReason::NormalizationFailure,
+                        ));
+                    }
+                }
+            }
         }
         RawPublicClauseKindV1::ForcedProjectionClause { pair, .. } => {
             validate_declaration_pair(pair)?;
@@ -1854,6 +2360,7 @@ fn validate_declaration_pair(pair: &SourceNormalizedDeclarationV1) -> CostResult
         SourceToNormalDerivationV1::Reflexivity => Err(CostFailure::Unknown(
             AuditUnknownReason::NormalizationFailure,
         )),
+        SourceToNormalDerivationV1::VerifierReplayedOrdinaryBeta => malformed(),
     }
 }
 
@@ -1869,6 +2376,9 @@ fn validate_equation_pair(pair: &SourceNormalizedEquationV1) -> CostResult<()> {
         }
         SourceToNormalDerivationV1::Reflexivity => Err(CostFailure::Unknown(
             AuditUnknownReason::NormalizationFailure,
+        )),
+        SourceToNormalDerivationV1::VerifierReplayedOrdinaryBeta => Err(CostFailure::Unknown(
+            AuditUnknownReason::MissingOrdinaryBetaDerivation,
         )),
     }
 }
@@ -2020,6 +2530,7 @@ fn verify_cost_inventory_coverage_v2(
     input: &KernelCostAuditInputV2,
     equation_demand_ports: &BTreeMap<EquationIdV1, Option<DemandPortKeyV1>>,
     inventory: &VerifiedPublicAuditInventoryV1,
+    authorities: CostAuthoritiesV2<'_>,
 ) -> CostResult<()> {
     let expected_declarations = inventory
         .exact_extension()
@@ -2088,7 +2599,8 @@ fn verify_cost_inventory_coverage_v2(
                     .ok_or(CostFailure::Unknown(
                         AuditUnknownReason::IncompleteEnumeration,
                     ))?;
-                let expected_presentation = inventory_presentation_v2(head, verified, inventory)?;
+                let expected_presentation =
+                    inventory_presentation_v2(head, verified, inventory, authorities)?;
                 if verified.group() != public_group
                     || presentation != &expected_presentation
                     || !declaration_pair_matches_inventory(pair, verified)
@@ -2197,6 +2709,7 @@ fn inventory_presentation_v2(
     head: &GlobalId,
     declaration: &VerifiedPublicDeclarationV1,
     inventory: &VerifiedPublicAuditInventoryV1,
+    authorities: CostAuthoritiesV2<'_>,
 ) -> CostResult<HeadPresentationV1> {
     let presentation = match declaration.normalized().body.as_ref() {
         None => HeadPresentationV1::Opaque,
@@ -2210,13 +2723,53 @@ fn inventory_presentation_v2(
                 availability,
             }
         }
-        // The verified public inventory does not yet carry a census proving
-        // that this is the first public export of an ambient primitive.
-        // Body shape alone cannot distinguish a first export from a repeat.
         Some(Term::Sort { .. } | Term::UnitType | Term::Unit) => {
-            return Err(CostFailure::Unknown(
-                AuditUnknownReason::MissingAmbientFirstExportInventory,
-            ));
+            let census = authorities
+                .ambient_export_census
+                .ok_or(CostFailure::Unknown(
+                    AuditUnknownReason::MissingAmbientFirstExportInventory,
+                ))?;
+            if census.inventory_digest() != inventory.digest()
+                || census.predecessor_boundary_digest() != inventory.predecessor_boundary().digest()
+                || census.successor_boundary_digest() != inventory.successor_boundary().digest()
+            {
+                return Err(CostFailure::Unknown(AuditUnknownReason::ManifestMismatch));
+            }
+            let class =
+                census
+                    .class_for_successor_declaration(head)
+                    .ok_or(CostFailure::Unknown(
+                        AuditUnknownReason::MissingAmbientFirstExportInventory,
+                    ))?;
+            let member = class
+                .successor_new_member(head)
+                .ok_or(CostFailure::Unknown(
+                    AuditUnknownReason::MissingAmbientFirstExportInventory,
+                ))?;
+            match member.presentation() {
+                AmbientPrimitiveExportMemberKindV1::TransparentAlias {
+                    immediate_target, ..
+                } => {
+                    let availability = inventory
+                        .declaration_availability(head, immediate_target)
+                        .cloned()
+                        .ok_or(CostFailure::Unknown(AuditUnknownReason::IncompleteSupport))?;
+                    HeadPresentationV1::TransparentAlias {
+                        target: immediate_target.clone(),
+                        availability,
+                    }
+                }
+                AmbientPrimitiveExportMemberKindV1::Direct => match class.disposition() {
+                    AmbientExportDispositionV1::FirstPublicExportClass => {
+                        HeadPresentationV1::AmbientPrimitiveFirstExport {
+                            primitive: class.primitive().clone(),
+                        }
+                    }
+                    AmbientExportDispositionV1::PriorPublicReexport { .. } => {
+                        HeadPresentationV1::TransparentDefinition
+                    }
+                },
+            }
         }
         Some(_) => HeadPresentationV1::TransparentDefinition,
     };
@@ -2420,6 +2973,7 @@ fn validate_reconstruction_v2(
     clauses: &BTreeMap<ClauseIdV1, RawPublicClauseV1>,
     equation_demand_ports: &BTreeMap<EquationIdV1, Option<DemandPortKeyV1>>,
     inventory: Option<&VerifiedPublicAuditInventoryV1>,
+    authorities: CostAuthoritiesV2<'_>,
     manifest: &VerifiedCostManifestV2,
 ) -> CostResult<VerifiedReconstructionDerivationV2> {
     if !clauses.contains_key(&reconstruction.output)
@@ -2437,23 +2991,62 @@ fn validate_reconstruction_v2(
 
     let (expected, proof) = match &reconstruction.proof {
         ReconstructionProofV2::OrdinaryBetaOfBodyfulDefinition { definition } => {
-            if inventory.is_some() {
-                return Err(CostFailure::Unknown(
-                    AuditUnknownReason::MissingOrdinaryBetaDerivation,
-                ));
+            if inventory.is_none() {
+                validate_ordinary_beta(&reconstruction.output, definition, clauses)?;
             }
-            validate_ordinary_beta(&reconstruction.output, definition, clauses)?;
-            let owner_head = match &clauses
+            let (equation, owner_head) = match &clauses
                 .get(&reconstruction.output)
                 .ok_or(CostFailure::Unknown(AuditUnknownReason::MalformedInput))?
                 .clause
             {
-                RawPublicClauseKindV1::PublicEquation { owner_head, .. } => owner_head.clone(),
+                RawPublicClauseKindV1::PublicEquation {
+                    equation,
+                    owner_head,
+                    ..
+                } => (equation.clone(), owner_head.clone()),
                 _ => return malformed(),
+            };
+            let definition_head = match &clauses
+                .get(definition)
+                .ok_or(CostFailure::Unknown(AuditUnknownReason::MalformedInput))?
+                .clause
+            {
+                RawPublicClauseKindV1::PublicDeclaration { head, .. } => head,
+                _ => return malformed(),
+            };
+            if definition_head != &owner_head {
+                return malformed();
+            }
+            let derivation_digest = if let Some(inventory) = inventory {
+                let matches = authorities
+                    .ordinary_beta_derivations
+                    .iter()
+                    .filter(|derivation| {
+                        derivation.inventory_digest() == inventory.digest()
+                            && derivation.equation() == &equation
+                            && derivation.owner_head() == &owner_head
+                    })
+                    .collect::<Vec<_>>();
+                let [derivation] = matches.as_slice() else {
+                    return Err(if matches.is_empty() {
+                        CostFailure::Unknown(AuditUnknownReason::MissingOrdinaryBetaDerivation)
+                    } else {
+                        CostFailure::Unknown(AuditUnknownReason::ProvenanceCollision)
+                    });
+                };
+                derivation.derivation_digest().clone()
+            } else {
+                Digest::of_domain_bytes(
+                    "pen-semantic-audit/kernel-cost-v2-fixture-ordinary-beta",
+                    b"fixture-only-no-authority",
+                )
             };
             (
                 singleton(definition.clone()),
-                VerifiedReconstructionProofV2::OrdinaryBetaOfVerifiedDeclaration { owner_head },
+                VerifiedReconstructionProofV2::OrdinaryBetaOfVerifiedDeclaration {
+                    owner_head,
+                    derivation_digest,
+                },
             )
         }
         ReconstructionProofV2::DescriptorForcedProjection {
@@ -2520,9 +3113,37 @@ fn derive_inventory_reconstructions_v2(
     public_heads: &BTreeMap<GlobalId, ClauseIdV1>,
     inventory: &VerifiedPublicAuditInventoryV1,
     manifest: &VerifiedCostManifestV2,
+    authorities: CostAuthoritiesV2<'_>,
 ) -> CostResult<Vec<VerifiedReconstructionDerivationV2>> {
     let mut derived = Vec::new();
     for clause in clauses.values() {
+        if let (Some(census), RawPublicClauseKindV1::PublicDeclaration { head, .. }) =
+            (authorities.ambient_export_census, &clause.clause)
+            && let Some(class) = census.class_for_successor_declaration(head)
+            && let Some(member) = class.successor_new_member(head)
+            && member.presentation().is_direct()
+            && let AmbientExportDispositionV1::PriorPublicReexport {
+                predecessor_q2_class_digest,
+            } = class.disposition()
+        {
+            if !manifest
+                .manifest()
+                .free_completion_rules
+                .contains(&FreeCompletionRuleV2::DuplicatePresentationDeletion)
+            {
+                return malformed();
+            }
+            derived.push(VerifiedReconstructionDerivationV2 {
+                output: clause.id.clone(),
+                premises: BTreeSet::new(),
+                proof: VerifiedReconstructionProofV2::PriorPublicAmbientReexport {
+                    declaration: clause.id.clone(),
+                    primitive_class_digest: class.digest().clone(),
+                    predecessor_class_digest: predecessor_q2_class_digest.clone(),
+                },
+            });
+        }
+
         match &clause.clause {
             RawPublicClauseKindV1::PublicDeclaration {
                 head,
@@ -2600,6 +3221,51 @@ fn derive_inventory_reconstructions_v2(
                 }
             }
             _ => {}
+        }
+    }
+
+    if let Some(census) = authorities.ambient_export_census {
+        for class in census.classes() {
+            if !matches!(
+                class.disposition(),
+                AmbientExportDispositionV1::FirstPublicExportClass
+            ) {
+                continue;
+            }
+            let members = class
+                .successor_new_direct_members()
+                .map(|member| {
+                    public_heads
+                        .get(member.declaration())
+                        .cloned()
+                        .ok_or(CostFailure::Unknown(
+                            AuditUnknownReason::IncompleteEnumeration,
+                        ))
+                })
+                .collect::<CostResult<Vec<_>>>()?;
+            if members.len() > 1
+                && !manifest
+                    .manifest()
+                    .free_completion_rules
+                    .contains(&FreeCompletionRuleV2::DuplicatePresentationDeletion)
+            {
+                return malformed();
+            }
+            for output in &members {
+                for peer in &members {
+                    if output == peer {
+                        continue;
+                    }
+                    derived.push(VerifiedReconstructionDerivationV2 {
+                        output: output.clone(),
+                        premises: singleton(peer.clone()),
+                        proof: VerifiedReconstructionProofV2::AmbientFirstExportClassDuplicate {
+                            primitive_class_digest: class.q2_duplicate_class_digest().clone(),
+                            peer: peer.clone(),
+                        },
+                    });
+                }
+            }
         }
     }
     Ok(derived)
@@ -3326,6 +3992,7 @@ fn require_structural_reconstructions_v2(
                         &rule.proof,
                         VerifiedReconstructionProofV2::OrdinaryBetaOfVerifiedDeclaration {
                             owner_head: actual,
+                            ..
                         } if actual == owner_head
                     )
             }) {
@@ -3503,6 +4170,7 @@ fn validate_presentation_equivalences(
         }
         roots.insert(clause.clone(), current);
     }
+
     let ordered = clauses.values().collect::<Vec<_>>();
     for (left_index, left) in ordered.iter().enumerate() {
         for right in ordered.iter().skip(left_index + 1) {
@@ -3529,7 +4197,8 @@ fn validate_presentation_equivalences_v2(
     equivalences: &[PresentationEquivalenceV2],
     equation_demand_ports: &BTreeMap<EquationIdV1, Option<DemandPortKeyV1>>,
     inventory: Option<&VerifiedPublicAuditInventoryV1>,
-) -> CostResult<PresentationClasses> {
+    authorities: CostAuthoritiesV2<'_>,
+) -> CostResult<PresentationClassesV2> {
     let expected_equivalences = rules
         .iter()
         .filter_map(|rule| match &rule.proof {
@@ -3634,8 +4303,52 @@ fn validate_presentation_equivalences_v2(
             }
             current = next.clone();
         }
-        roots.insert(clause.clone(), current);
+        roots.insert(clause.clone(), PresentationClassRootV2::Clause(current));
     }
+
+    if let Some(census) = authorities.ambient_export_census {
+        let head_clauses = clauses
+            .values()
+            .filter_map(|clause| match &clause.clause {
+                RawPublicClauseKindV1::PublicDeclaration { head, .. } => {
+                    Some((head.clone(), clause.id.clone()))
+                }
+                _ => None,
+            })
+            .collect::<BTreeMap<_, _>>();
+        for class in census.classes() {
+            if !matches!(
+                class.disposition(),
+                AmbientExportDispositionV1::FirstPublicExportClass
+            ) {
+                continue;
+            }
+            let direct_members = class
+                .successor_new_direct_members()
+                .map(|member| {
+                    head_clauses
+                        .get(member.declaration())
+                        .cloned()
+                        .ok_or(CostFailure::Unknown(
+                            AuditUnknownReason::IncompleteEnumeration,
+                        ))
+                })
+                .collect::<CostResult<Vec<_>>>()?;
+            if direct_members.len() < 2 {
+                continue;
+            }
+            let class_root = PresentationClassRootV2::AmbientFirstExport(
+                class.q2_duplicate_class_digest().clone(),
+            );
+            for member in direct_members {
+                if roots.get(&member) != Some(&PresentationClassRootV2::Clause(member.clone())) {
+                    return Err(CostFailure::Unknown(AuditUnknownReason::NonUniqueBasis));
+                }
+                roots.insert(member, class_root.clone());
+            }
+        }
+    }
+
     let ordered = clauses.values().collect::<Vec<_>>();
     for (left_index, left) in ordered.iter().enumerate() {
         for right in ordered.iter().skip(left_index + 1) {
@@ -3648,14 +4361,14 @@ fn validate_presentation_equivalences_v2(
             }
         }
     }
-    let mut members = BTreeMap::<ClauseIdV1, BTreeSet<ClauseIdV1>>::new();
+    let mut members = BTreeMap::<PresentationClassRootV2, BTreeSet<ClauseIdV1>>::new();
     for (clause, root) in &roots {
         members
             .entry(root.clone())
             .or_default()
             .insert(clause.clone());
     }
-    Ok(PresentationClasses { roots, members })
+    Ok(PresentationClassesV2 { roots, members })
 }
 
 fn validate_negative_evidence(
@@ -3790,7 +4503,7 @@ fn build_dispositions(
 
 fn build_dispositions_v2(
     prepared: &PreparedAuditV2,
-    signature: &BTreeSet<ClauseIdV1>,
+    signature: &BTreeSet<PresentationClassRootV2>,
     closure: &Closure,
 ) -> CostResult<Vec<ClauseDispositionCertificateV2>> {
     let mut dispositions = Vec::with_capacity(prepared.clause_ids.len());
@@ -3803,21 +4516,40 @@ fn build_dispositions_v2(
             AuditUnknownReason::IncompleteEnumeration,
         ))?;
 
-        if signature.contains(clause) {
+        if let PresentationClassRootV2::AmbientFirstExport(primitive_class_digest) = root
+            && signature.contains(root)
+        {
+            if closure_round != 0 {
+                return Err(CostFailure::Unknown(AuditUnknownReason::UnknownQuotient));
+            }
             dispositions.push(ClauseDispositionCertificateV2 {
                 clause: clause.clone(),
-                disposition: ClauseCostDispositionV1::FirstIrreducible,
+                disposition: ClauseCostDispositionV2::AmbientFirstExportClassMember {
+                    primitive_class_digest: primitive_class_digest.clone(),
+                },
                 closure_round,
                 reconstructions: Vec::new(),
             });
             continue;
         }
-        if root != clause && signature.contains(root) {
+        if signature.contains(&PresentationClassRootV2::Clause(clause.clone())) {
+            dispositions.push(ClauseDispositionCertificateV2 {
+                clause: clause.clone(),
+                disposition: ClauseCostDispositionV2::FirstIrreducible,
+                closure_round,
+                reconstructions: Vec::new(),
+            });
+            continue;
+        }
+        if let PresentationClassRootV2::Clause(original) = root
+            && original != clause
+            && signature.contains(root)
+        {
             let reconstructions = grounded_reconstructions_v2(clause, closure, &prepared.rules);
             dispositions.push(ClauseDispositionCertificateV2 {
                 clause: clause.clone(),
-                disposition: ClauseCostDispositionV1::DuplicatePresentation {
-                    original: root.clone(),
+                disposition: ClauseCostDispositionV2::DuplicatePresentation {
+                    original: original.clone(),
                 },
                 closure_round,
                 reconstructions,
@@ -4000,7 +4732,43 @@ fn grounded_reconstructions_v2(
 
 fn disposition_from_rules_v2(
     rules: &[VerifiedReconstructionDerivationV2],
-) -> CostResult<ClauseCostDispositionV1> {
+) -> CostResult<ClauseCostDispositionV2> {
+    let ambient_first_export_classes = rules
+        .iter()
+        .filter_map(|rule| match &rule.proof {
+            VerifiedReconstructionProofV2::AmbientFirstExportClassDuplicate {
+                primitive_class_digest,
+                ..
+            } => Some(primitive_class_digest.clone()),
+            _ => None,
+        })
+        .collect::<BTreeSet<_>>();
+    let ambient_originals = rules
+        .iter()
+        .filter_map(|rule| match &rule.proof {
+            VerifiedReconstructionProofV2::PriorPublicAmbientReexport {
+                predecessor_class_digest,
+                ..
+            } => Some(predecessor_class_digest.clone()),
+            _ => None,
+        })
+        .collect::<BTreeSet<_>>();
+    if ambient_first_export_classes.len() > 1
+        || ambient_originals.len() > 1
+        || (!ambient_first_export_classes.is_empty() && !ambient_originals.is_empty())
+    {
+        return Err(CostFailure::Unknown(AuditUnknownReason::UnknownQuotient));
+    }
+    if let Some(primitive_class_digest) = ambient_first_export_classes.into_iter().next() {
+        return Ok(ClauseCostDispositionV2::AmbientFirstExportClassMember {
+            primitive_class_digest,
+        });
+    }
+    if let Some(predecessor_class_digest) = ambient_originals.into_iter().next() {
+        return Ok(ClauseCostDispositionV2::AmbientPriorPublicReexport {
+            predecessor_class_digest,
+        });
+    }
     let duplicate_originals = rules
         .iter()
         .filter_map(|rule| match &rule.proof {
@@ -4014,7 +4782,7 @@ fn disposition_from_rules_v2(
         return Err(CostFailure::Unknown(AuditUnknownReason::UnknownQuotient));
     }
     if let Some(original) = duplicate_originals.into_iter().next() {
-        return Ok(ClauseCostDispositionV1::DuplicatePresentation { original });
+        return Ok(ClauseCostDispositionV2::DuplicatePresentation { original });
     }
     if rules.iter().any(|rule| {
         matches!(
@@ -4022,7 +4790,7 @@ fn disposition_from_rules_v2(
             VerifiedReconstructionProofV2::DescriptorForcedProjection { .. }
         )
     }) {
-        return Ok(ClauseCostDispositionV1::ForcedProjection);
+        return Ok(ClauseCostDispositionV2::ForcedProjection);
     }
     let alias_targets = rules
         .iter()
@@ -4038,7 +4806,7 @@ fn disposition_from_rules_v2(
         return malformed();
     }
     if let Some(target) = alias_targets.into_iter().next() {
-        return Ok(ClauseCostDispositionV1::TransparentAlias { target });
+        return Ok(ClauseCostDispositionV2::TransparentAlias { target });
     }
     if rules.iter().any(|rule| {
         matches!(
@@ -4046,7 +4814,7 @@ fn disposition_from_rules_v2(
             VerifiedReconstructionProofV2::OrdinaryBetaOfVerifiedDeclaration { .. }
         )
     }) {
-        return Ok(ClauseCostDispositionV1::ForcedDefinitionalCompletion);
+        return Ok(ClauseCostDispositionV2::ForcedDefinitionalCompletion);
     }
     Err(CostFailure::Unknown(
         AuditUnknownReason::MissingTupleDisposition,
@@ -4303,6 +5071,55 @@ fn malformed<T>() -> CostResult<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn audit_kernel_cost_lambda_unit_v2(
+        cost_manifest: &VerifiedCostManifestV2,
+        semantic_manifest: &VerifiedSemanticAuditManifestV1,
+        inventory: &VerifiedPublicAuditInventoryV1,
+        ordinary_beta_derivations: &[VerifiedOrdinaryBetaDerivationV1],
+        input: &KernelCostAuditInputV2,
+    ) -> AuditDecision<CostAuditCertificateV2> {
+        audit_kernel_cost_lambda_unit_components_v2(
+            cost_manifest,
+            semantic_manifest,
+            inventory,
+            ordinary_beta_derivations,
+            input,
+        )
+    }
+
+    #[test]
+    fn lambda_unit_metadata_allows_operation_roles_but_not_record_fields() {
+        let owner = GlobalId(Digest::of_bytes(b"lambda-unit-metadata-owner"));
+        let clause = ClauseIdV1(Digest::of_bytes(b"lambda-unit-metadata-clause"));
+        let operation_role = EquationFreeDescriptorV1 {
+            owner: owner.clone(),
+            source_clause: clause.clone(),
+            descriptor: EquationFreeDescriptorKindV1::OperationRole {
+                role: LocalRoleV1::KernelHead,
+            },
+            public_support: BTreeSet::new(),
+        };
+        assert_eq!(
+            lambda_unit_descriptor_syntax_violation(&operation_role),
+            None
+        );
+
+        let record_field = EquationFreeDescriptorV1 {
+            owner: owner.clone(),
+            source_clause: clause,
+            descriptor: EquationFreeDescriptorKindV1::RecordField {
+                record: owner.clone(),
+                field_ordinal: 0,
+                field_type: owner,
+            },
+            public_support: BTreeSet::new(),
+        };
+        assert_eq!(
+            lambda_unit_descriptor_syntax_violation(&record_field),
+            Some(LambdaUnitSyntaxViolation::DescriptorProjection)
+        );
+    }
     use crate::inventory::{
         DemandContractIdV1, DemandFamilyIdV1, DemandPortKeyV1, ORIGIN_CUTOFF_Q3_SCHEMA_VERSION,
         PUBLIC_AUDIT_INVENTORY_SCHEMA_VERSION, UncheckedOriginCutoffQ3RegistryV1,
@@ -4313,10 +5130,14 @@ mod tests {
         UncheckedSourceNormalizedDeclarationV1, verify_public_audit_inventory_v1,
     };
     use crate::manifest::{
-        proposed_kernel_cost_manifest_v1, proposed_kernel_cost_manifest_v2,
-        verify_core_manifests_v1, verify_kernel_cost_manifest_v1, verify_kernel_cost_manifest_v2,
+        proposed_kernel_cost_lambda_unit_manifest_v2, proposed_kernel_cost_manifest_v1,
+        proposed_kernel_cost_manifest_v2, proposed_semantic_audit_lambda_unit_manifest_v1,
+        verify_core_manifests_v1, verify_kernel_cost_lambda_unit_manifest_v2,
+        verify_kernel_cost_manifest_v1, verify_kernel_cost_manifest_v2,
+        verify_semantic_audit_lambda_unit_manifest_v1,
     };
     use crate::model::{AmbientPrimitiveV1, EquationIdV1, EventIdV1, SourceNormalizedJudgmentV1};
+    use crate::ordinary_beta::verify_ordinary_beta_derivation_v1;
     use pen_kernel::{Declaration, Kernel, KernelLimits, UncheckedSignature};
 
     fn digest(label: &str) -> Digest {
@@ -4399,12 +5220,253 @@ mod tests {
         equation_clause: ClauseIdV1,
         duplicate_clause: Option<ClauseIdV1>,
         predecessor_equation: EquationIdV1,
+        successor_equation: EquationIdV1,
+    }
+
+    struct AmbientCostFixture {
+        inventory: VerifiedPublicAuditInventoryV1,
+        input: KernelCostAuditInputV2,
+        class_digest: Digest,
+        q2_class_digest: Digest,
+        predecessor_q2_class_digest: Option<Digest>,
+    }
+
+    fn ambient_declaration(label: &str, body: Term) -> Declaration {
+        Declaration {
+            id: global(label),
+            ty: Term::Sort { level: 0 },
+            body: Some(body),
+        }
+    }
+
+    fn ambient_cost_fixture(
+        semantic_manifest: &VerifiedSemanticAuditManifestV1,
+        cost_manifest: &VerifiedCostManifestV2,
+        predecessor: Vec<Declaration>,
+        successor_new: Vec<Declaration>,
+        clause_ids: Vec<ClauseIdV1>,
+    ) -> AmbientCostFixture {
+        assert!(!successor_new.is_empty());
+        assert_eq!(successor_new.len(), clause_ids.len());
+
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let predecessor_event = event_id("ambient-cost/predecessor");
+        let successor_event = event_id("ambient-cost/successor");
+        let predecessor_group = global("ambient-cost/group/predecessor");
+        let successor_group = global("ambient-cost/group/successor");
+        let predecessor_boundary = UncheckedSignature {
+            declarations: predecessor.clone(),
+        };
+        let mut all_declarations = predecessor.clone();
+        all_declarations.extend(successor_new.clone());
+        let successor_boundary = UncheckedSignature {
+            declarations: all_declarations.clone(),
+        };
+        let normalized_successor = kernel
+            .verify_signature(&successor_boundary)
+            .expect("ambient cost signature verifies")
+            .normalized_wire();
+        let normalized_by_id = normalized_successor
+            .declarations
+            .iter()
+            .map(|declaration| (declaration.id.clone(), declaration))
+            .collect::<BTreeMap<_, _>>();
+        let predecessor_ids = predecessor
+            .iter()
+            .map(|declaration| declaration.id.clone())
+            .collect::<BTreeSet<_>>();
+        let successor_ids = successor_new
+            .iter()
+            .map(|declaration| declaration.id.clone())
+            .collect::<BTreeSet<_>>();
+
+        let mut declaration_groups = Vec::new();
+        if !predecessor_ids.is_empty() {
+            declaration_groups.push(UncheckedPublicGroupV1 {
+                group: predecessor_group.clone(),
+                origin: predecessor_event.clone(),
+                declarations: predecessor_ids.iter().cloned().collect(),
+            });
+        }
+        declaration_groups.push(UncheckedPublicGroupV1 {
+            group: successor_group.clone(),
+            origin: successor_event.clone(),
+            declarations: successor_ids.iter().cloned().collect(),
+        });
+
+        let declarations = all_declarations
+            .iter()
+            .map(|declaration| {
+                let is_predecessor = predecessor_ids.contains(&declaration.id);
+                UncheckedPublicDeclarationV1 {
+                    declaration: declaration.id.clone(),
+                    origin: if is_predecessor {
+                        predecessor_event.clone()
+                    } else {
+                        successor_event.clone()
+                    },
+                    group: if is_predecessor {
+                        predecessor_group.clone()
+                    } else {
+                        successor_group.clone()
+                    },
+                    source_to_normal: UncheckedSourceNormalizedDeclarationV1 {
+                        source_identity: Digest::of_canonical(
+                            "pen-semantic-audit/inventory-source-declaration/v1",
+                            declaration,
+                        ),
+                        source: declaration.clone(),
+                        claimed_normalized: (*normalized_by_id
+                            .get(&declaration.id)
+                            .expect("normalized ambient declaration"))
+                        .clone(),
+                    },
+                }
+            })
+            .collect::<Vec<_>>();
+        let predecessor_history = if predecessor_ids.is_empty() {
+            Vec::new()
+        } else {
+            vec![UncheckedPublicHistoryStepV1 {
+                census: UncheckedPublicEventCensusV1 {
+                    event: predecessor_event.clone(),
+                    added_groups: vec![predecessor_group],
+                    added_declarations: predecessor_ids.iter().cloned().collect(),
+                    added_equations: Vec::new(),
+                    added_forced_projections: Vec::new(),
+                    added_demand_contracts: Vec::new(),
+                },
+                successor_boundary: predecessor_boundary.clone(),
+            }]
+        };
+        let wire = UncheckedPublicAuditInventoryV1 {
+            schema_version: PUBLIC_AUDIT_INVENTORY_SCHEMA_VERSION,
+            predecessor_history,
+            predecessor_boundary,
+            successor_event: UncheckedPublicEventCensusV1 {
+                event: successor_event,
+                added_groups: vec![successor_group],
+                added_declarations: successor_ids.iter().cloned().collect(),
+                added_equations: Vec::new(),
+                added_forced_projections: Vec::new(),
+                added_demand_contracts: Vec::new(),
+            },
+            successor_boundary,
+            declaration_groups,
+            declarations,
+            equations: Vec::new(),
+            forced_projections: Vec::new(),
+            predecessor_demand_contracts: Vec::new(),
+            public_availability: Vec::new(),
+            dependency_dag: UncheckedPublicDependencyDagV1 { edges: Vec::new() },
+            q3_registry: UncheckedOriginCutoffQ3RegistryV1 {
+                schema_version: ORIGIN_CUTOFF_Q3_SCHEMA_VERSION,
+                origin_cutoff: (!predecessor_ids.is_empty()).then_some(predecessor_event),
+                entries: Vec::new(),
+            },
+        };
+        let AuditDecision::Proven(inventory) =
+            verify_public_audit_inventory_v1(semantic_manifest, &kernel, &wire)
+        else {
+            panic!("ambient cost inventory verifies");
+        };
+        let AuditDecision::Proven(census) = verify_ambient_primitive_export_census_v1(&inventory)
+        else {
+            panic!("ambient export census verifies");
+        };
+        let class = census
+            .class_for_successor_declaration(&successor_new[0].id)
+            .expect("successor declaration has an ambient class");
+        let class_digest = class.digest().clone();
+        let q2_class_digest = class.q2_duplicate_class_digest().clone();
+        let predecessor_q2_class_digest =
+            class.disposition().predecessor_q2_class_digest().cloned();
+
+        let clauses = successor_new
+            .iter()
+            .zip(&clause_ids)
+            .map(|(declaration, clause_id)| {
+                let verified = inventory
+                    .public_declaration(&declaration.id)
+                    .expect("successor declaration is public");
+                let member = class
+                    .successor_new_member(&declaration.id)
+                    .expect("successor declaration belongs to the class");
+                assert!(member.presentation().is_direct());
+                let presentation = match class.disposition() {
+                    AmbientExportDispositionV1::FirstPublicExportClass => {
+                        HeadPresentationV1::AmbientPrimitiveFirstExport {
+                            primitive: class.primitive().clone(),
+                        }
+                    }
+                    AmbientExportDispositionV1::PriorPublicReexport { .. } => {
+                        HeadPresentationV1::TransparentDefinition
+                    }
+                };
+                RawPublicClauseV1 {
+                    id: clause_id.clone(),
+                    semantic_dependencies: BTreeSet::new(),
+                    clause: RawPublicClauseKindV1::PublicDeclaration {
+                        head: declaration.id.clone(),
+                        pair: SourceNormalizedDeclarationV1 {
+                            source_identity: verified.source_identity().clone(),
+                            source_context: DependentContext::default(),
+                            source_type: verified.source().ty.clone(),
+                            source_body: verified.source().body.clone(),
+                            normalized_context: DependentContext::default(),
+                            normalized_type: verified.normalized().ty.clone(),
+                            normalized_body: verified.normalized().body.clone(),
+                            source_to_normal_derivation: SourceToNormalDerivationV1::Reflexivity,
+                        },
+                        presentation,
+                        public_group: verified.group().clone(),
+                        equation_free_descriptors: Vec::new(),
+                    },
+                }
+            })
+            .collect::<Vec<_>>();
+        let negative_evidence = if matches!(
+            class.disposition(),
+            AmbientExportDispositionV1::FirstPublicExportClass
+        ) {
+            clause_ids
+                .iter()
+                .cloned()
+                .map(|target| CompleteNegativeEvidenceV2 {
+                    target,
+                    against: BTreeSet::new(),
+                    realized: BTreeSet::new(),
+                    checked_rules: cost_manifest.manifest().free_completion_rules.clone(),
+                })
+                .collect()
+        } else {
+            Vec::new()
+        };
+
+        AmbientCostFixture {
+            inventory,
+            input: KernelCostAuditInputV2 {
+                clauses,
+                negative_evidence,
+                ..KernelCostAuditInputV2::default()
+            },
+            class_digest,
+            q2_class_digest,
+            predecessor_q2_class_digest,
+        }
     }
 
     fn public_equation_fixture(mode: PublicEquationFixtureMode) -> PublicV2Fixture {
         let AuditDecision::Proven((semantic_manifest, _)) = verify_core_manifests_v1() else {
             panic!("generic semantic manifest verifies");
         };
+        public_equation_fixture_for_manifest(mode, &semantic_manifest)
+    }
+
+    fn public_equation_fixture_for_manifest(
+        mode: PublicEquationFixtureMode,
+        semantic_manifest: &VerifiedSemanticAuditManifestV1,
+    ) -> PublicV2Fixture {
         let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
         let equation_only = matches!(mode, PublicEquationFixtureMode::PredecessorOwnerDuplicate);
         let duplicate_mode = matches!(
@@ -4655,7 +5717,8 @@ mod tests {
             owner_head: successor_equation_owner.clone(),
             origin: event_successor.clone(),
             source_to_normal: successor_source_to_normal.clone(),
-            demand_port: Some(demand_port.clone()),
+            demand_port: (!matches!(mode, PublicEquationFixtureMode::BodyfulBeta))
+                .then_some(demand_port.clone()),
         }];
         if duplicate_mode {
             successor_equations.push(UncheckedPublicEquationV1 {
@@ -4778,7 +5841,7 @@ mod tests {
             },
         };
         let inventory_decision =
-            verify_public_audit_inventory_v1(&semantic_manifest, &kernel, &wire);
+            verify_public_audit_inventory_v1(semantic_manifest, &kernel, &wire);
         let AuditDecision::Proven(inventory) = inventory_decision else {
             panic!("public cost inventory fixture verifies: {inventory_decision:?}");
         };
@@ -4796,33 +5859,45 @@ mod tests {
             normalized_body: declaration_successor.body.clone(),
             source_to_normal_derivation: SourceToNormalDerivationV1::Reflexivity,
         };
-        let equation_source_identity = inventory
+        let verified_successor_equation = inventory
             .equations()
             .iter()
             .find(|equation| equation.equation() == &successor_equation)
-            .expect("successor equation is in the verified inventory")
-            .source_identity()
-            .clone();
+            .expect("successor equation is in the verified inventory");
+        let equation_source_identity = verified_successor_equation.source_identity().clone();
         let GenericJudgmentV1::Equation {
-            context,
-            left,
-            right,
-            ty,
-        } = paid_equation
+            context: source_context,
+            left: source_left,
+            right: source_right,
+            ty: source_type,
+        } = verified_successor_equation.source()
+        else {
+            unreachable!();
+        };
+        let GenericJudgmentV1::Equation {
+            context: normalized_context,
+            left: normalized_left,
+            right: normalized_right,
+            ty: normalized_type,
+        } = verified_successor_equation.normalized()
         else {
             unreachable!();
         };
         let equation_pair = SourceNormalizedEquationV1 {
             source_identity: equation_source_identity,
-            source_context: context.clone(),
-            source_left: left.clone(),
-            source_right: right.clone(),
-            source_type: ty.clone(),
-            normalized_context: context,
-            normalized_left: left,
-            normalized_right: right,
-            normalized_type: ty,
-            source_to_normal_derivation: SourceToNormalDerivationV1::Reflexivity,
+            source_context: source_context.clone(),
+            source_left: source_left.clone(),
+            source_right: source_right.clone(),
+            source_type: source_type.clone(),
+            normalized_context: normalized_context.clone(),
+            normalized_left: normalized_left.clone(),
+            normalized_right: normalized_right.clone(),
+            normalized_type: normalized_type.clone(),
+            source_to_normal_derivation: if matches!(mode, PublicEquationFixtureMode::BodyfulBeta) {
+                SourceToNormalDerivationV1::VerifierReplayedOrdinaryBeta
+            } else {
+                SourceToNormalDerivationV1::Reflexivity
+            },
         };
         let head_raw = RawPublicClauseV1 {
             id: head_clause.clone(),
@@ -4861,9 +5936,10 @@ mod tests {
                 singleton(head_clause.clone())
             },
             clause: RawPublicClauseKindV1::PublicEquation {
-                equation: successor_equation,
+                equation: successor_equation.clone(),
                 owner_head: successor_equation_owner.clone(),
-                demand_output: Some(demand_output.clone()),
+                demand_output: (!matches!(mode, PublicEquationFixtureMode::BodyfulBeta))
+                    .then_some(demand_output.clone()),
                 pair: equation_pair.clone(),
             },
         };
@@ -4914,7 +5990,8 @@ mod tests {
                 .cloned()
                 .map(|equation| EquationDemandPortBindingV2 {
                     equation,
-                    demand_port: Some(demand_port.clone()),
+                    demand_port: (!matches!(mode, PublicEquationFixtureMode::BodyfulBeta))
+                        .then_some(demand_port.clone()),
                 })
                 .collect(),
             ..KernelCostAuditInputV2::default()
@@ -5031,6 +6108,7 @@ mod tests {
             equation_clause,
             duplicate_clause: duplicate_clause_option,
             predecessor_equation,
+            successor_equation,
         }
     }
 
@@ -5048,6 +6126,15 @@ mod tests {
             verify_kernel_cost_manifest_v2(&proposed_kernel_cost_manifest_v2())
         else {
             panic!("proposed generic V2 manifest must verify");
+        };
+        manifest
+    }
+
+    fn verified_lambda_unit_manifest_v2() -> VerifiedCostManifestV2 {
+        let AuditDecision::Proven(manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("proposed lambda/unit V2 manifest must verify");
         };
         manifest
     }
@@ -5634,6 +6721,14 @@ mod tests {
     #[test]
     fn v2_public_paid_equation_binds_exact_inventory() {
         let fixture = public_equation_fixture(PublicEquationFixtureMode::Paid);
+        assert!(matches!(
+            audit_kernel_cost_v2(
+                &verified_lambda_unit_manifest_v2(),
+                &fixture.inventory,
+                &fixture.input
+            ),
+            AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch)
+        ));
         let AuditDecision::Proven(certificate) =
             audit_kernel_cost_v2(&verified_manifest_v2(), &fixture.inventory, &fixture.input)
         else {
@@ -5709,6 +6804,515 @@ mod tests {
         assert!(matches!(
             audit_kernel_cost_v2(&verified_manifest_v2(), &beta.inventory, &beta.input),
             AuditDecision::Unknown(AuditUnknownReason::MissingOrdinaryBetaDerivation)
+        ));
+    }
+
+    #[test]
+    fn lambda_unit_cost_accepts_only_inventory_minted_ordinary_beta() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let mut fixture = public_equation_fixture_for_manifest(
+            PublicEquationFixtureMode::BodyfulBeta,
+            &semantic_manifest,
+        );
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let AuditDecision::Proven(beta) = verify_ordinary_beta_derivation_v1(
+            &semantic_manifest,
+            &kernel,
+            &fixture.inventory,
+            &fixture.successor_equation,
+        ) else {
+            panic!("ordinary beta capability");
+        };
+        fixture.input.reconstructions = vec![ReconstructionDerivationV2 {
+            output: fixture.equation_clause.clone(),
+            premises: singleton(fixture.head_clause.clone()),
+            proof: ReconstructionProofV2::OrdinaryBetaOfBodyfulDefinition {
+                definition: fixture.head_clause.clone(),
+            },
+        }];
+        fixture.input.negative_evidence = vec![negative_v2(
+            fixture.head_clause.clone(),
+            BTreeSet::new(),
+            BTreeSet::new(),
+        )];
+        fixture.input.negative_evidence[0].checked_rules =
+            cost_manifest.manifest().free_completion_rules.clone();
+
+        assert!(matches!(
+            audit_kernel_cost_lambda_unit_v2(
+                &cost_manifest,
+                &semantic_manifest,
+                &fixture.inventory,
+                &[],
+                &fixture.input,
+            ),
+            AuditDecision::Unknown(AuditUnknownReason::MissingOrdinaryBetaDerivation)
+        ));
+
+        let decision = audit_kernel_cost_lambda_unit_v2(
+            &cost_manifest,
+            &semantic_manifest,
+            &fixture.inventory,
+            std::slice::from_ref(&beta),
+            &fixture.input,
+        );
+        let AuditDecision::Proven(certificate) = decision else {
+            panic!("inventory-minted ordinary beta should close the cost rule: {decision:?}");
+        };
+        assert_eq!(certificate.kernel_cost(), 1);
+        assert_eq!(
+            disposition_v2(&certificate, &fixture.equation_clause),
+            ClauseCostDispositionV1::ForcedDefinitionalCompletion
+        );
+
+        assert!(matches!(
+            audit_kernel_cost_lambda_unit_v2(
+                &cost_manifest,
+                &semantic_manifest,
+                &fixture.inventory,
+                &[beta.clone(), beta],
+                &fixture.input,
+            ),
+            AuditDecision::Unknown(AuditUnknownReason::ProvenanceCollision)
+        ));
+    }
+
+    #[test]
+    fn lambda_unit_cost_derives_first_ambient_export_from_complete_census() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let mut fixture = public_equation_fixture_for_manifest(
+            PublicEquationFixtureMode::AmbientBody,
+            &semantic_manifest,
+        );
+        for evidence in &mut fixture.input.negative_evidence {
+            evidence.checked_rules = cost_manifest.manifest().free_completion_rules.clone();
+        }
+
+        let AuditDecision::Proven(certificate) = audit_kernel_cost_lambda_unit_v2(
+            &cost_manifest,
+            &semantic_manifest,
+            &fixture.inventory,
+            &[],
+            &fixture.input,
+        ) else {
+            panic!("complete ambient census should close first-export classification");
+        };
+        assert_eq!(certificate.kernel_cost(), 2);
+        assert_eq!(
+            disposition_v2(&certificate, &fixture.head_clause),
+            ClauseCostDispositionV1::FirstIrreducible
+        );
+    }
+
+    #[test]
+    fn lambda_unit_cost_quotients_simultaneous_ambient_exports_without_a_representative() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let first = ambient_declaration("ambient-cost/simultaneous-a", Term::UnitType);
+        let second = ambient_declaration("ambient-cost/simultaneous-b", Term::UnitType);
+        let first_clause = clause_id("ambient-cost/simultaneous-a");
+        let second_clause = clause_id("ambient-cost/simultaneous-b");
+        let fixture = ambient_cost_fixture(
+            &semantic_manifest,
+            &cost_manifest,
+            Vec::new(),
+            vec![first, second],
+            vec![first_clause.clone(), second_clause.clone()],
+        );
+
+        let AuditDecision::Proven(forward) = audit_kernel_cost_lambda_unit_v2(
+            &cost_manifest,
+            &semantic_manifest,
+            &fixture.inventory,
+            &[],
+            &fixture.input,
+        ) else {
+            panic!("simultaneous first-export class should have a proven quotient");
+        };
+        assert_eq!(forward.kernel_cost(), 1);
+        assert_eq!(
+            forward.basis_classes(),
+            &[[first_clause.clone(), second_clause.clone()]
+                .into_iter()
+                .collect()]
+        );
+        assert_eq!(forward.basis_representatives().len(), 2);
+        assert!(
+            forward
+                .basis_representatives()
+                .contains(&singleton(first_clause.clone()))
+        );
+        assert!(
+            forward
+                .basis_representatives()
+                .contains(&singleton(second_clause.clone()))
+        );
+        for clause in [&first_clause, &second_clause] {
+            let disposition = forward
+                .dispositions()
+                .iter()
+                .find(|entry| entry.clause() == clause)
+                .expect("both direct exports have a disposition");
+            assert_eq!(
+                disposition.disposition(),
+                &ClauseCostDispositionV2::AmbientFirstExportClassMember {
+                    primitive_class_digest: fixture.q2_class_digest.clone(),
+                }
+            );
+            assert_eq!(disposition.closure_round(), 0);
+            assert!(disposition.reconstructions().is_empty());
+        }
+
+        let mut reversed_input = fixture.input.clone();
+        reversed_input.clauses.reverse();
+        reversed_input.negative_evidence.reverse();
+        let AuditDecision::Proven(reversed) = audit_kernel_cost_lambda_unit_v2(
+            &cost_manifest,
+            &semantic_manifest,
+            &fixture.inventory,
+            &[],
+            &reversed_input,
+        ) else {
+            panic!("caller declaration order must not affect the quotient");
+        };
+        assert_eq!(forward, reversed);
+        assert_eq!(forward.certificate_digest(), reversed.certificate_digest());
+    }
+
+    #[test]
+    fn ambient_class_digest_clause_id_collisions_do_not_select_a_representative() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let first = ambient_declaration("ambient-cost/collision-a", Term::UnitType);
+        let second = ambient_declaration("ambient-cost/collision-b", Term::UnitType);
+        let probe = ambient_cost_fixture(
+            &semantic_manifest,
+            &cost_manifest,
+            Vec::new(),
+            vec![first.clone(), second.clone()],
+            vec![
+                clause_id("ambient-cost/collision-probe-a"),
+                clause_id("ambient-cost/collision-probe-b"),
+            ],
+        );
+
+        for colliding_digest in [probe.q2_class_digest, probe.class_digest] {
+            let colliding_clause = ClauseIdV1(colliding_digest);
+            let peer_clause = clause_id("ambient-cost/collision-peer");
+            assert_ne!(colliding_clause, peer_clause);
+            let fixture = ambient_cost_fixture(
+                &semantic_manifest,
+                &cost_manifest,
+                Vec::new(),
+                vec![first.clone(), second.clone()],
+                vec![colliding_clause.clone(), peer_clause.clone()],
+            );
+            let AuditDecision::Proven(certificate) = audit_kernel_cost_lambda_unit_v2(
+                &cost_manifest,
+                &semantic_manifest,
+                &fixture.inventory,
+                &[],
+                &fixture.input,
+            ) else {
+                panic!("a caller ClauseId/digest collision must not change the quotient");
+            };
+
+            assert_eq!(certificate.kernel_cost(), 1);
+            assert_eq!(certificate.basis_representatives().len(), 2);
+            for clause in [&colliding_clause, &peer_clause] {
+                let disposition = certificate
+                    .dispositions()
+                    .iter()
+                    .find(|entry| entry.clause() == clause)
+                    .expect("both peers have a disposition");
+                assert_eq!(
+                    disposition.disposition(),
+                    &ClauseCostDispositionV2::AmbientFirstExportClassMember {
+                        primitive_class_digest: fixture.q2_class_digest.clone(),
+                    }
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn prior_ambient_reexport_keeps_predecessor_digest_out_of_clause_id_space() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let predecessor = ambient_declaration("ambient-cost/prior-predecessor", Term::UnitType);
+        let successor = ambient_declaration("ambient-cost/prior-successor", Term::UnitType);
+        let probe = ambient_cost_fixture(
+            &semantic_manifest,
+            &cost_manifest,
+            vec![predecessor.clone()],
+            vec![successor.clone()],
+            vec![clause_id("ambient-cost/prior-probe")],
+        );
+        let predecessor_class_digest = probe
+            .predecessor_q2_class_digest
+            .expect("prior reexport carries its predecessor class digest");
+        let colliding_clause = ClauseIdV1(predecessor_class_digest.clone());
+        let fixture = ambient_cost_fixture(
+            &semantic_manifest,
+            &cost_manifest,
+            vec![predecessor],
+            vec![successor],
+            vec![colliding_clause.clone()],
+        );
+        let AuditDecision::Proven(certificate) = audit_kernel_cost_lambda_unit_v2(
+            &cost_manifest,
+            &semantic_manifest,
+            &fixture.inventory,
+            &[],
+            &fixture.input,
+        ) else {
+            panic!("prior ambient reexport should remain freely replayable");
+        };
+
+        assert_eq!(certificate.kernel_cost(), 0);
+        let disposition = certificate
+            .dispositions()
+            .iter()
+            .find(|entry| entry.clause() == &colliding_clause)
+            .expect("prior reexport has a disposition");
+        assert_eq!(
+            disposition.disposition(),
+            &ClauseCostDispositionV2::AmbientPriorPublicReexport {
+                predecessor_class_digest: predecessor_class_digest.clone(),
+            }
+        );
+        assert!(disposition.reconstructions().iter().any(|rule| {
+            matches!(
+                rule.proof(),
+                VerifiedReconstructionProofV2::PriorPublicAmbientReexport {
+                    predecessor_class_digest: actual,
+                    ..
+                } if actual == &predecessor_class_digest
+            )
+        }));
+    }
+
+    #[test]
+    fn lambda_unit_cost_rejects_nested_descriptor_projection_before_inner_validation() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let projected_unit_type = Term::First {
+            pair: Box::new(Term::Pair {
+                sigma_type: Box::new(Term::Sigma {
+                    parameter: Box::new(Term::Sort { level: 0 }),
+                    body: Box::new(Term::Sort { level: 0 }),
+                }),
+                first: Box::new(Term::UnitType),
+                second: Box::new(Term::UnitType),
+            }),
+        };
+        let declaration =
+            ambient_declaration("ambient-cost/projection-inventory", projected_unit_type);
+        let fixture = ambient_cost_fixture(
+            &semantic_manifest,
+            &cost_manifest,
+            Vec::new(),
+            vec![declaration],
+            vec![clause_id("ambient-cost/projection-inventory")],
+        );
+
+        assert!(matches!(
+            audit_kernel_cost_lambda_unit_v2(
+                &cost_manifest,
+                &semantic_manifest,
+                &fixture.inventory,
+                &[],
+                &fixture.input,
+            ),
+            AuditDecision::OutsideFragment(OutsideFragmentReason::DescriptorProjection)
+        ));
+
+        let mut raw_projection = public_equation_fixture_for_manifest(
+            PublicEquationFixtureMode::Paid,
+            &semantic_manifest,
+        );
+        for evidence in &mut raw_projection.input.negative_evidence {
+            evidence.checked_rules = cost_manifest.manifest().free_completion_rules.clone();
+        }
+        let RawPublicClauseKindV1::PublicEquation { pair, .. } = &mut raw_projection
+            .input
+            .clauses
+            .iter_mut()
+            .find(|clause| clause.id == raw_projection.equation_clause)
+            .expect("equation clause")
+            .clause
+        else {
+            unreachable!();
+        };
+        pair.normalized_right = Term::Apply {
+            function: Box::new(Term::Lambda {
+                parameter_type: Box::new(Term::UnitType),
+                body: Box::new(Term::First {
+                    pair: Box::new(Term::Var { index: 0 }),
+                }),
+            }),
+            argument: Box::new(Term::Unit),
+        };
+        assert!(matches!(
+            audit_kernel_cost_lambda_unit_v2(
+                &cost_manifest,
+                &semantic_manifest,
+                &raw_projection.inventory,
+                &[],
+                &raw_projection.input,
+            ),
+            AuditDecision::OutsideFragment(OutsideFragmentReason::DescriptorProjection)
+        ));
+    }
+
+    #[test]
+    fn lambda_unit_cost_rejects_plain_sigma_from_verified_inventory() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let predecessor = Declaration {
+            id: global("lambda-unit-outside/plain-sigma"),
+            ty: Term::Sigma {
+                parameter: Box::new(Term::UnitType),
+                body: Box::new(Term::UnitType),
+            },
+            body: None,
+        };
+        let successor = ambient_declaration("lambda-unit-outside/sigma-successor", Term::UnitType);
+        let fixture = ambient_cost_fixture(
+            &semantic_manifest,
+            &cost_manifest,
+            vec![predecessor],
+            vec![successor],
+            vec![clause_id("lambda-unit-outside/sigma-successor")],
+        );
+
+        assert!(matches!(
+            audit_kernel_cost_lambda_unit_v2(
+                &cost_manifest,
+                &semantic_manifest,
+                &fixture.inventory,
+                &[],
+                &fixture.input,
+            ),
+            AuditDecision::OutsideFragment(OutsideFragmentReason::UnsupportedTerm)
+        ));
+    }
+
+    #[test]
+    fn lambda_unit_cost_rejects_plain_pair_from_raw_clause() {
+        let AuditDecision::Proven(semantic_manifest) =
+            verify_semantic_audit_lambda_unit_manifest_v1(
+                &proposed_semantic_audit_lambda_unit_manifest_v1(),
+            )
+        else {
+            panic!("lambda/unit semantic manifest");
+        };
+        let AuditDecision::Proven(cost_manifest) = verify_kernel_cost_lambda_unit_manifest_v2(
+            &proposed_kernel_cost_lambda_unit_manifest_v2(),
+        ) else {
+            panic!("lambda/unit cost manifest");
+        };
+        let mut fixture = public_equation_fixture_for_manifest(
+            PublicEquationFixtureMode::Paid,
+            &semantic_manifest,
+        );
+        let RawPublicClauseKindV1::PublicEquation { pair, .. } = &mut fixture
+            .input
+            .clauses
+            .iter_mut()
+            .find(|clause| clause.id == fixture.equation_clause)
+            .expect("equation clause")
+            .clause
+        else {
+            unreachable!();
+        };
+        pair.normalized_right = Term::Pair {
+            sigma_type: Box::new(Term::UnitType),
+            first: Box::new(Term::Unit),
+            second: Box::new(Term::Unit),
+        };
+
+        assert!(matches!(
+            audit_kernel_cost_lambda_unit_v2(
+                &cost_manifest,
+                &semantic_manifest,
+                &fixture.inventory,
+                &[],
+                &fixture.input,
+            ),
+            AuditDecision::OutsideFragment(OutsideFragmentReason::UnsupportedTerm)
         ));
     }
 
@@ -6186,6 +7790,7 @@ mod tests {
             .find(|entry| entry.clause() == clause)
             .expect("every raw clause must have one V2 disposition")
             .disposition()
-            .clone()
+            .legacy_v1()
+            .expect("test helper requires a disposition shared with V1")
     }
 }

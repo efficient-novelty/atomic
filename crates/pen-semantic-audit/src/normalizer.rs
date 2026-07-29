@@ -7,9 +7,10 @@
 //! scrutinee.  Callers provide no left- or right-hand rewrite terms; both are
 //! reconstructed here and checked by `pen-kernel`.
 
+use crate::fragment::lambda_unit_term_syntax_violation;
 use crate::manifest::{
     AuditDecision, AuditUnknownReason, OutsideFragmentReason, Q0RuleV1,
-    VerifiedSemanticAuditManifestV1,
+    SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1, VerifiedSemanticAuditManifestV1,
 };
 use crate::model::{GenericJudgmentV1, SourceNormalizedJudgmentV1};
 use pen_kernel::{
@@ -939,6 +940,13 @@ fn check_term_fragment(
     depth: u16,
 ) -> AuditResult<()> {
     work.enter(depth)?;
+    if depth == 0
+        && manifest.manifest().profile_id == SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1
+        && let Some(violation) =
+            lambda_unit_term_syntax_violation(term, &manifest.manifest().universe_levels)
+    {
+        return Err(AuditFailure::Outside(violation.outside_reason()));
+    }
     let child = depth
         .checked_add(1)
         .ok_or(AuditFailure::Unknown(AuditUnknownReason::ResourceExhausted))?;
@@ -965,6 +973,13 @@ fn check_term_fragment(
         Term::Apply { function, argument } => {
             check_term_fragment(function, manifest, work, child)?;
             check_term_fragment(argument, manifest, work, child)?;
+        }
+        Term::First { .. } | Term::Second { .. }
+            if manifest.manifest().profile_id == SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1 =>
+        {
+            return Err(AuditFailure::Outside(
+                OutsideFragmentReason::DescriptorProjection,
+            ));
         }
         Term::Sigma { .. } | Term::Pair { .. } | Term::First { .. } | Term::Second { .. } => {
             return Err(AuditFailure::Outside(
@@ -1373,12 +1388,14 @@ impl WorkBudget {
 #[cfg(test)]
 mod tests {
     use super::{
-        FreshConstructorClauseV1, FreshConstructorComputationRequestV1,
-        verify_fresh_constructor_computation_v1, verify_source_normalized_judgment_v1,
+        AuditFailure, FreshConstructorClauseV1, FreshConstructorComputationRequestV1, WorkBudget,
+        check_term_fragment, verify_fresh_constructor_computation_v1,
+        verify_source_normalized_judgment_v1,
     };
     use crate::manifest::{
         AuditDecision, AuditUnknownReason, OutsideFragmentReason,
-        proposed_semantic_audit_manifest_v1, verify_semantic_audit_manifest_v1,
+        proposed_semantic_audit_lambda_unit_manifest_v1, proposed_semantic_audit_manifest_v1,
+        verify_semantic_audit_lambda_unit_manifest_v1, verify_semantic_audit_manifest_v1,
     };
     use crate::model::{GenericJudgmentV1, SourceNormalizedJudgmentV1};
     use pen_kernel::{
@@ -1408,6 +1425,28 @@ mod tests {
             source,
             claimed_normalized: normalized,
         }
+    }
+
+    #[test]
+    fn lambda_unit_nested_projection_has_projection_precedence() {
+        let AuditDecision::Proven(lambda_manifest) = verify_semantic_audit_lambda_unit_manifest_v1(
+            &proposed_semantic_audit_lambda_unit_manifest_v1(),
+        ) else {
+            panic!("lambda/unit manifest");
+        };
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let term = Term::Sigma {
+            parameter: Box::new(Term::UnitType),
+            body: Box::new(Term::First {
+                pair: Box::new(Term::Var { index: 0 }),
+            }),
+        };
+        assert!(matches!(
+            check_term_fragment(&term, &lambda_manifest, &mut WorkBudget::new(&kernel), 0),
+            Err(AuditFailure::Outside(
+                OutsideFragmentReason::DescriptorProjection
+            ))
+        ));
     }
 
     #[test]

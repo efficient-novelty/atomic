@@ -7,6 +7,8 @@ pub const KERNEL_COST_SCHEMA_VERSION_V2: u16 = 2;
 pub const SEMANTIC_AUDIT_PROFILE_ID: &str = "gf2-semantic-audit-core-v1";
 pub const KERNEL_COST_PROFILE_ID: &str = "gf2-kernel-cost-core-v1";
 pub const KERNEL_COST_PROFILE_ID_V2: &str = "gf2-kernel-cost-core-v2";
+pub const SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1: &str = "gf2-semantic-audit-lambda-unit-v1";
+pub const KERNEL_COST_LAMBDA_UNIT_PROFILE_ID_V2: &str = "gf2-kernel-cost-lambda-unit-v2";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum AuditDecision<T> {
@@ -40,6 +42,7 @@ pub enum OutsideFragmentReason {
     NonEmptyQ3Registry,
     UnregisteredFamilyConstructor,
     UnregisteredProjection,
+    DescriptorProjection,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -497,6 +500,34 @@ pub fn proposed_kernel_cost_manifest_v2() -> KernelCostManifestV2 {
     }
 }
 
+/// Projection-free successor of the broader semantic-audit proposal.
+///
+/// This remains a generic, unfrozen proposal.  The successor changes only the
+/// manifest-indexed fragment boundary: records and descriptor-forced
+/// projections are outside the lambda/unit fragment rather than pending
+/// theorem obligations inside it.
+pub fn proposed_semantic_audit_lambda_unit_manifest_v1() -> SemanticAuditManifestV1 {
+    let mut manifest = proposed_semantic_audit_manifest_v1();
+    manifest.profile_id = SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1.to_owned();
+    manifest
+        .q0_rules
+        .retain(|rule| *rule != Q0RuleV1::DescriptorForcedProjection);
+    manifest
+}
+
+/// Projection-free successor of the broader V2 kernel-cost proposal.
+pub fn proposed_kernel_cost_lambda_unit_manifest_v2() -> KernelCostManifestV2 {
+    let mut manifest = proposed_kernel_cost_manifest_v2();
+    manifest.profile_id = KERNEL_COST_LAMBDA_UNIT_PROFILE_ID_V2.to_owned();
+    manifest
+        .ordered_dispositions
+        .retain(|kind| *kind != ClauseDispositionKindV1::ForcedProjection);
+    manifest
+        .free_completion_rules
+        .retain(|rule| *rule != FreeCompletionRuleV2::DescriptorForcedProjection);
+    manifest
+}
+
 pub fn verify_semantic_audit_manifest_v1(
     manifest: &SemanticAuditManifestV1,
 ) -> AuditDecision<VerifiedSemanticAuditManifestV1> {
@@ -536,6 +567,36 @@ pub fn verify_kernel_cost_manifest_v2(
     AuditDecision::Proven(VerifiedCostManifestV2 {
         candidate_digest: Digest::of_canonical(
             "pen-semantic-audit/proposed-cost-manifest/v2",
+            manifest,
+        ),
+        manifest: manifest.clone(),
+    })
+}
+
+pub fn verify_semantic_audit_lambda_unit_manifest_v1(
+    manifest: &SemanticAuditManifestV1,
+) -> AuditDecision<VerifiedSemanticAuditManifestV1> {
+    if manifest != &proposed_semantic_audit_lambda_unit_manifest_v1() {
+        return AuditDecision::Unknown(AuditUnknownReason::MalformedManifest);
+    }
+    AuditDecision::Proven(VerifiedSemanticAuditManifestV1 {
+        candidate_digest: Digest::of_canonical(
+            "pen-semantic-audit/proposed-semantic-lambda-unit-manifest/v1",
+            manifest,
+        ),
+        manifest: manifest.clone(),
+    })
+}
+
+pub fn verify_kernel_cost_lambda_unit_manifest_v2(
+    manifest: &KernelCostManifestV2,
+) -> AuditDecision<VerifiedCostManifestV2> {
+    if manifest != &proposed_kernel_cost_lambda_unit_manifest_v2() {
+        return AuditDecision::Unknown(AuditUnknownReason::MalformedManifest);
+    }
+    AuditDecision::Proven(VerifiedCostManifestV2 {
+        candidate_digest: Digest::of_canonical(
+            "pen-semantic-audit/proposed-cost-lambda-unit-manifest/v2",
             manifest,
         ),
         manifest: manifest.clone(),
@@ -641,10 +702,12 @@ canonical_tags!(FreeCompletionRuleV2, {
 #[cfg(test)]
 mod tests {
     use super::{
-        AuditDecision, AuditUnknownReason, FreeCompletionRuleV2, proposed_kernel_cost_manifest_v1,
-        proposed_kernel_cost_manifest_v2, proposed_semantic_audit_manifest_v1,
-        verify_core_manifests_v1, verify_kernel_cost_manifest_v2,
-        verify_semantic_audit_manifest_v1,
+        AuditDecision, AuditUnknownReason, ClauseDispositionKindV1, FreeCompletionRuleV2, Q0RuleV1,
+        proposed_kernel_cost_lambda_unit_manifest_v2, proposed_kernel_cost_manifest_v1,
+        proposed_kernel_cost_manifest_v2, proposed_semantic_audit_lambda_unit_manifest_v1,
+        proposed_semantic_audit_manifest_v1, verify_core_manifests_v1,
+        verify_kernel_cost_lambda_unit_manifest_v2, verify_kernel_cost_manifest_v2,
+        verify_semantic_audit_lambda_unit_manifest_v1, verify_semantic_audit_manifest_v1,
     };
 
     #[test]
@@ -704,6 +767,66 @@ mod tests {
         changed.rewrite_admissibility_separate_from_cost = false;
         assert!(matches!(
             verify_kernel_cost_manifest_v2(&changed),
+            AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
+        ));
+    }
+
+    #[test]
+    fn lambda_unit_successors_are_projection_free_and_have_no_live_authority() {
+        let semantic = proposed_semantic_audit_lambda_unit_manifest_v1();
+        assert_eq!(semantic.profile_id, "gf2-semantic-audit-lambda-unit-v1");
+        assert!(!semantic.frozen);
+        assert!(!semantic.live_profile_a_access);
+        assert!(
+            !semantic
+                .q0_rules
+                .contains(&Q0RuleV1::DescriptorForcedProjection)
+        );
+        let AuditDecision::Proven(verified_semantic) =
+            verify_semantic_audit_lambda_unit_manifest_v1(&semantic)
+        else {
+            panic!("exact lambda/unit semantic successor should verify");
+        };
+
+        let cost = proposed_kernel_cost_lambda_unit_manifest_v2();
+        assert_eq!(cost.profile_id, "gf2-kernel-cost-lambda-unit-v2");
+        assert!(!cost.frozen);
+        assert!(!cost.live_profile_a_access);
+        assert!(
+            !cost
+                .ordered_dispositions
+                .contains(&ClauseDispositionKindV1::ForcedProjection)
+        );
+        assert!(
+            !cost
+                .free_completion_rules
+                .contains(&FreeCompletionRuleV2::DescriptorForcedProjection)
+        );
+        let AuditDecision::Proven(verified_cost) =
+            verify_kernel_cost_lambda_unit_manifest_v2(&cost)
+        else {
+            panic!("exact lambda/unit cost successor should verify");
+        };
+        assert_ne!(
+            verified_semantic.candidate_digest(),
+            verified_cost.candidate_digest()
+        );
+    }
+
+    #[test]
+    fn lambda_unit_successor_manifests_are_closed() {
+        let mut semantic = proposed_semantic_audit_lambda_unit_manifest_v1();
+        semantic.q0_rules.push(Q0RuleV1::DescriptorForcedProjection);
+        assert!(matches!(
+            verify_semantic_audit_lambda_unit_manifest_v1(&semantic),
+            AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
+        ));
+
+        let mut cost = proposed_kernel_cost_lambda_unit_manifest_v2();
+        cost.free_completion_rules
+            .push(FreeCompletionRuleV2::DescriptorForcedProjection);
+        assert!(matches!(
+            verify_kernel_cost_lambda_unit_manifest_v2(&cost),
             AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
         ));
     }
