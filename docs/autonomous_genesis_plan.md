@@ -1636,3 +1636,66 @@ predecessor/public-inventory and exact free-completion theorem blocker. The
 non-adopted generic contextual track may continue independently under its
 existing restrictions, but neither this prototype nor that track may be used
 for a live Profile A valuation or continuation.
+
+## Execution checkpoint — kernel-cost V2 and generic inventory, 2026-07-29
+
+The unadopted V1 fresh-equation cost proposal has now been superseded, as a
+proposal only, by
+[`gf2-kernel-cost-core-v2`](LAW_V2_KERNEL_COST_ADJUDICATION_V2.md). A
+separately sealed equation owned by a bodyless fresh head is a separate paid
+public clause unless its exact normalized equation is predecessor-public or a
+complete Q2 witness proves it is a duplicate. Demand specification, compiler
+generation, and role metadata do not make the equation cost-free.
+
+The isolated generic workspace now mints a private
+`VerifiedPublicAuditInventoryV1` by replay. Relative to its supplied ledger it
+checks exact predecessor and successor boundaries, cumulative event censuses,
+group/declaration/equation/demand coverage, source-normal pairs, strict-prior
+exact `PortKey` associations, dependency-derived availability, a canonical
+dependency DAG, a verified-empty supplied Q3 registry, and a typed
+forced-projection census. The inventory binds full contents and the kernel
+normalizer protocol into its coverage identity. It has no live Profile A
+access.
+
+The public V2 cost entry point now requires that opaque inventory. Caller
+availability labels and predecessor-equation claims are replayed from it,
+closure for negative evidence is recomputed, and V2 duplicate evidence is
+schema-separated from V1. The generic bodyless-head/fresh-equation vector can
+therefore charge the two clauses separately without invoking the removed V1
+free-completion theorem. Descriptor-driven projection reconstruction remains
+fail-closed until a verified descriptor and projection-reduction theorem
+exists. Inventory-backed ordinary beta likewise requires verifier-minted
+reduction provenance, and an ambient-shaped declaration requires an
+authoritative first-export census; those paths now return explicit `Unknown`
+reasons rather than silently charging a clause.
+
+Q0-aware carrier/quotient replay and kernel-checked family specialization have
+also been connected. A private `VerifiedTypedRewriteInventoryV1` requires an
+exact one-to-one match between successor-new sealed equations and the
+restricted, reconstructed fresh rules. It accepts only a verified-empty
+projection census and deliberately does not mint rewrite-system authority.
+
+Execution now stops at the next ordered theorem gate:
+`Unknown(MissingRewriteAdmissibilityTheorem)`. Local shape checks do not prove
+substitution stability, combined termination/confluence and critical-pair
+closure, predecessor conservativity, or independent safe-Agda transcript
+agreement. A separate demand-specialization theorem is likewise required
+before a strict-prior `PortKey` association can be treated as semantic
+realization or discharge.
+
+The generic ledger is not an issued-history oracle. A later, separately locked
+Profile A adapter must independently anchor it to the issued H3/H4 history and
+the authoritative Q3 registry, after the generic profiles and transcript
+agreement are complete and frozen. Until then, the registered H3/H4 results,
+the debt-free halt, and the Window Audit V1 `UndefinedAudit` outcome remain
+unchanged, and no \((\kappa,\nu)\) value is issued.
+
+At this checkpoint the isolated semantic workspace reports 70 tests passed,
+none failed, and one pinned-runtime test ignored by default; its explicit
+pinned Agda example passed with the unchanged reference digest. Formatting,
+clippy, semantic/contextual isolation, the contextual 12-test suite, the
+firewall isolation build, 15 Law-V2 checker tests, the 7-test oracle suite,
+and the registered Window Audit replay all passed. The separately launched
+legacy all-workspace suite remained actively computing in `pen_search` when
+its 15-minute timeout expired and emitted no failure diagnostic; this is
+recorded as legacy runtime latency, not theorem evidence or a Law-V2 blocker.

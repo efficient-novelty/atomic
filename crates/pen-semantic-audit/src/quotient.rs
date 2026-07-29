@@ -1,5 +1,5 @@
 use crate::carrier::{
-    CarrierCertificateV1, curry_judgment, generic_to_open, rename_judgment_by_permutation,
+    CarrierCertificateV1, curry_judgment, rename_judgment_by_permutation,
     substitution_action_digest,
 };
 use crate::manifest::{
@@ -10,9 +10,9 @@ use crate::model::{
     PublicAvailabilityV1, PublicHeadSeedV1, PublicSupportV1, RawFamilyIdV1, RawFamilyV1, SeedIdV1,
     SemanticSchemaSeedV1,
 };
+use crate::normalizer::{VerifiedFreshConstructorComputationV1, normalize_generated_judgment_v1};
 use pen_kernel::{
-    CanonicalEncode, CanonicalEncoder, DependentContext, Digest, Kernel, KernelError, Term,
-    VerifiedSignature,
+    CanonicalEncode, CanonicalEncoder, DependentContext, Digest, Kernel, Term, VerifiedSignature,
 };
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
@@ -185,9 +185,45 @@ pub fn quotient_families_v1(
     manifest: &VerifiedSemanticAuditManifestV1,
     carrier: &CarrierCertificateV1,
 ) -> AuditDecision<QuotientCertificateV1> {
+    quotient_families_with_q0_v1(kernel, signature, manifest, carrier, None)
+}
+
+/// Compute the finite Q1/Q2 component quotient while replaying every fixed
+/// vertex through the same restricted Q0 program that minted the carrier.
+///
+/// This entry point binds an already verifier-minted fresh program to the
+/// manifest, successor signature, and carrier program digest. It establishes
+/// only exact per-vertex replay for this finite carrier. It does not prove the
+/// still-open generic termination, confluence, substitution-stability,
+/// conservativity, or Rust/Agda agreement theorems for the rewrite system.
+pub fn quotient_families_with_q0_v1(
+    kernel: &Kernel,
+    signature: &VerifiedSignature,
+    manifest: &VerifiedSemanticAuditManifestV1,
+    carrier: &CarrierCertificateV1,
+    fresh: Option<&VerifiedFreshConstructorComputationV1>,
+) -> AuditDecision<QuotientCertificateV1> {
     if carrier.manifest_digest != *manifest.candidate_digest()
         || carrier.signature_digest != *signature.digest()
         || carrier.normalizer_protocol_digest != kernel.normalizer_protocol_digest()
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    let supplied_fresh_digest = fresh.map(|program| program.program_digest().clone());
+    if carrier.fresh_program_digest != supplied_fresh_digest {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    if let Some(program) = fresh
+        && (program.manifest_digest() != manifest.candidate_digest()
+            || program.extended_signature().digest() != signature.digest()
+            || program
+                .termination_certificate()
+                .kernel_normalizer_protocol_digest()
+                != &kernel.normalizer_protocol_digest()
+            || program
+                .confluence_certificate()
+                .kernel_normalizer_protocol_digest()
+                != &kernel.normalizer_protocol_digest())
     {
         return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
     }
@@ -200,13 +236,20 @@ pub fn quotient_families_v1(
         if !vertex_ids.insert(vertex.id.clone()) {
             return AuditDecision::Unknown(AuditUnknownReason::ProvenanceCollision);
         }
-        let normalized = match kernel
-            .verify_open_judgment(signature, &generic_to_open(&vertex.generic_judgment))
-        {
-            Ok(normalized) => normalized,
-            Err(error) => return kernel_failure(error),
+        let normalized = match normalize_generated_judgment_v1(
+            manifest,
+            kernel,
+            signature,
+            &vertex.generic_judgment,
+            fresh,
+        ) {
+            AuditDecision::Proven(normalized) => normalized,
+            AuditDecision::OutsideFragment(reason) => {
+                return AuditDecision::OutsideFragment(reason);
+            }
+            AuditDecision::Unknown(reason) => return AuditDecision::Unknown(reason),
         };
-        if generic_to_open(&vertex.generic_judgment) != normalized {
+        if vertex.generic_judgment != normalized {
             return AuditDecision::Unknown(AuditUnknownReason::NormalizationFailure);
         }
     }
@@ -876,15 +919,6 @@ fn checked_factorial(value: usize) -> Option<usize> {
     (1..=value).try_fold(1_usize, |accumulator, item| accumulator.checked_mul(item))
 }
 
-fn kernel_failure<T>(error: KernelError) -> AuditDecision<T> {
-    match error {
-        KernelError::ResourceExhausted(_) => {
-            AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted)
-        }
-        _ => AuditDecision::Unknown(AuditUnknownReason::KernelCouldNotCertify),
-    }
-}
-
 #[derive(Clone, Debug)]
 struct UnionFind {
     parent: Vec<usize>,
@@ -925,18 +959,23 @@ impl UnionFind {
 
 #[cfg(test)]
 mod tests {
-    use super::quotient_families_v1;
-    use crate::carrier::enumerate_raw_families_v1;
+    use super::{quotient_families_v1, quotient_families_with_q0_v1};
+    use crate::carrier::{enumerate_raw_families_v1, enumerate_raw_families_with_q0_v1};
     use crate::manifest::{
-        AuditDecision, Q2RuleV1, proposed_semantic_audit_manifest_v1,
+        AuditDecision, AuditUnknownReason, Q2RuleV1, proposed_semantic_audit_manifest_v1,
         verify_semantic_audit_manifest_v1,
     };
     use crate::model::{
-        EventIdV1, FamilyConstructorV1, GenericJudgmentV1, HeadPresentationV1, LocalRoleV1,
-        PublicHeadSeedV1, PublicSupportV1, SemanticSchemaSeedV1, SourceNormalizedJudgmentV1,
+        EquationIdV1, EventIdV1, FamilyConstructorV1, GenericJudgmentV1, HeadPresentationV1,
+        LocalRoleV1, PublicEquationSeedV1, PublicHeadSeedV1, PublicSupportV1, SemanticSchemaSeedV1,
+        SourceNormalizedJudgmentV1,
+    };
+    use crate::normalizer::{
+        FreshConstructorClauseV1, FreshConstructorComputationRequestV1,
+        verify_fresh_constructor_computation_v1,
     };
     use pen_kernel::{
-        Declaration, DependentContext, Digest, GlobalId, Kernel, KernelLimits, Term,
+        Declaration, DependentContext, Digest, GlobalId, Kernel, KernelLimits, OpenJudgment, Term,
         UncheckedSignature,
     };
 
@@ -1082,5 +1121,154 @@ mod tests {
                 )
                 && disposition.left != disposition.right
         }));
+    }
+
+    #[test]
+    fn admitted_fresh_equation_reaches_quotient_only_with_its_bound_q0_program() {
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let constructor = id(b"fresh-equation-constructor");
+        let other_constructor = id(b"other-fresh-equation-constructor");
+        let head = id(b"fresh-equation-head");
+        let boundary = kernel
+            .verify_signature(&UncheckedSignature {
+                declarations: vec![
+                    Declaration {
+                        id: constructor.clone(),
+                        ty: Term::UnitType,
+                        body: None,
+                    },
+                    Declaration {
+                        id: other_constructor.clone(),
+                        ty: Term::UnitType,
+                        body: None,
+                    },
+                ],
+            })
+            .expect("boundary");
+        let AuditDecision::Proven(manifest) =
+            verify_semantic_audit_manifest_v1(&proposed_semantic_audit_manifest_v1())
+        else {
+            panic!("manifest");
+        };
+        let fresh_declaration = Declaration {
+            id: head.clone(),
+            ty: Term::Pi {
+                parameter: Box::new(Term::UnitType),
+                body: Box::new(Term::Pi {
+                    parameter: Box::new(Term::UnitType),
+                    body: Box::new(Term::UnitType),
+                }),
+            },
+            body: None,
+        };
+        let request = |constructor: GlobalId| FreshConstructorComputationRequestV1 {
+            fresh_declaration: fresh_declaration.clone(),
+            clauses: vec![FreshConstructorClauseV1 {
+                constructor,
+                scrutinee_parameter_ordinal: 1,
+            }],
+        };
+        let AuditDecision::Proven(program) = verify_fresh_constructor_computation_v1(
+            &manifest,
+            &kernel,
+            &boundary,
+            &request(constructor.clone()),
+        ) else {
+            panic!("fresh program");
+        };
+        let AuditDecision::Proven(other_program) = verify_fresh_constructor_computation_v1(
+            &manifest,
+            &kernel,
+            &boundary,
+            &request(other_constructor),
+        ) else {
+            panic!("other fresh program");
+        };
+        let signature = program.extended_signature().clone();
+        assert_eq!(
+            signature.digest(),
+            other_program.extended_signature().digest()
+        );
+        assert_ne!(program.program_digest(), other_program.program_digest());
+
+        let context = DependentContext(vec![Term::UnitType]);
+        let source_left = Term::Apply {
+            function: Box::new(Term::Apply {
+                function: Box::new(Term::Global { id: head.clone() }),
+                argument: Box::new(Term::Var { index: 0 }),
+            }),
+            argument: Box::new(Term::Global {
+                id: constructor.clone(),
+            }),
+        };
+        let source = GenericJudgmentV1::Equation {
+            context: context.clone(),
+            left: source_left.clone(),
+            right: Term::Var { index: 0 },
+            ty: Term::UnitType,
+        };
+        assert!(
+            kernel
+                .verify_open_judgment(
+                    &signature,
+                    &OpenJudgment::DefinitionallyEqual {
+                        context: context.clone(),
+                        left: source_left,
+                        right: Term::Var { index: 0 },
+                        ty: Term::UnitType,
+                    },
+                )
+                .is_err(),
+            "the base kernel must not silently know the admitted rewrite"
+        );
+        let normalized = GenericJudgmentV1::Equation {
+            context,
+            left: Term::Var { index: 0 },
+            right: Term::Var { index: 0 },
+            ty: Term::UnitType,
+        };
+        let seed = SemanticSchemaSeedV1::PublicEquation(PublicEquationSeedV1 {
+            equation: EquationIdV1(Digest::of_bytes(b"fresh-equation")),
+            owner_head: head,
+            origin_event: EventIdV1(Digest::of_bytes(b"fresh-equation-event")),
+            judgment: SourceNormalizedJudgmentV1 {
+                source_identity: Digest::of_bytes(b"fresh-equation-source"),
+                source,
+                claimed_normalized: normalized,
+            },
+            claimed_role: LocalRoleV1::Coherence,
+            public_support: PublicSupportV1::default(),
+            source_clause: None,
+            demand_anchor: None,
+        });
+        let AuditDecision::Proven(carrier) = enumerate_raw_families_with_q0_v1(
+            &kernel,
+            &signature,
+            &manifest,
+            &[seed],
+            &[],
+            Some(&program),
+        ) else {
+            panic!("q0-aware carrier");
+        };
+
+        assert!(matches!(
+            quotient_families_with_q0_v1(&kernel, &signature, &manifest, &carrier, Some(&program),),
+            AuditDecision::Proven(_)
+        ));
+        assert!(matches!(
+            quotient_families_with_q0_v1(
+                &kernel,
+                &signature,
+                &manifest,
+                &carrier,
+                Some(&other_program),
+            ),
+            AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch)
+        ));
+        assert!(matches!(
+            quotient_families_v1(&kernel, &signature, &manifest, &carrier),
+            AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch)
+        ));
     }
 }
