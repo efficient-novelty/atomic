@@ -6,6 +6,7 @@ projection-free successors:
 
 ```text
 gf2-semantic-audit-lambda-unit-v1
+gf2-semantic-audit-lambda-unit-v2
 gf2-kernel-cost-lambda-unit-v2
 ```
 
@@ -37,15 +38,20 @@ shape. Relative to a verifier-minted generic public inventory, the head and
 equation are separate paid clauses unless exact predecessor-public replay or a
 complete duplicate proof applies.
 
-The lambda/unit successor now has verifier-minted ambient first-export and
-ordinary-beta capabilities and a syntactic pre-Q0 rank-0/1/2 carrier.
-Rewrite admissibility remains independent. The public finite-rewrite entry
-point validates its bindings, exact seed term subjects, and fragment boundary,
-then deliberately returns
-`Unknown(MissingRewriteAdmissibilityTheorem)`. No diagnostic graph can enter
-authoritative Q0 normalization. The public lambda/unit cost entry point
-requires the matching rewrite-system capability, so it cannot mint a cost
-certificate while this gate remains open.
+The V1 lambda/unit lane retains its verifier-minted ambient first-export and
+ordinary-beta capabilities and syntactic pre-Q0 rank-0/1/2 carrier. Its public
+finite-rewrite entry point still returns
+`Unknown(MissingRewriteAdmissibilityTheorem)`.
+
+The V2 semantic successor removes the false requirement that a finite set of
+substitution generators be closed under arbitrary composition. It enumerates
+only derivation-local construction witnesses and assigns arbitrary
+substitution algebra, typing, reduction stability, and family naturality to a
+generic theorem package. It also adds verifier-minted public-clause authority,
+an empty demand-anchor base, a V2 seed census for compatible empty-demand
+inventories, binder-local typed occurrences, and an empty historical rewrite
+base. None of these partial capabilities enters authoritative Q0
+normalization.
 
 The inventory capability proves exact replay and internal census closure only
 relative to its supplied generic event ledger. It deliberately does not prove
@@ -53,16 +59,20 @@ that the ledger is the issued Profile A history. That later authority binding
 belongs in the separately isolated Profile A adapter and may occur only after
 the generic profiles are frozen.
 
-The principal open gates are:
+The principal V2 open gates are:
 
-- a genuinely finite or canonically quotiented substitution carrier: the
-  current embedding/forced-newest generators have unbounded syntactic closure
-  under composition even on a small generic vector;
-- recursively typed subterm and binder-local rule-instance closure;
-- an independently reconstructed predecessor universe and historical rewrite
-  authority, plus an exhaustive same/nested/disjoint edge-pair report;
-- complete semantic seed authority for public-clause and demand-anchor
-  identities, rather than caller-supplied support metadata;
+- the dependent typing substitution lemma and typed Q0 stability (the pinned
+  Agda package currently proves raw substitution algebra and scope, not
+  dependent typing);
+- demand-orbit equivalence and kernel-replayed typed demand realizations for a
+  nonempty predecessor demand inventory;
+- a native V2 rank-inductive carrier reconstructed from V2 seed identities,
+  rather than a relative direct-witness census over the V1 carrier;
+- kernel-supported synthesis of binder-local variable/function types needed
+  for a complete typed-occurrence census;
+- an issued historical rewrite theorem for every nonempty predecessor;
+- edge-local rule matching, complete reduction graphs, exhaustive
+  same/nested/disjoint overlap joins, and weakening-image conservativity;
 - structural typed family weakening and its restriction retraction;
 - complete carrier, quotient, cost-basis, marginal, and SR2 theorem
   capabilities composed from the verified inventory;
@@ -81,4 +91,8 @@ and the successor
 [V2 inventory prototype result](../../docs/LAW_V2_KERNEL_COST_V2_PUBLIC_INVENTORY_PROTOTYPE_RESULT.md)
 and
 [lambda/unit finite-theorem prototype result](../../docs/LAW_V2_LAMBDA_UNIT_FINITE_THEOREM_PROTOTYPE_RESULT.md)
+and the
+[lambda/unit V2 adjudication](../../docs/LAW_V2_SEMANTIC_AUDIT_LAMBDA_UNIT_ADJUDICATION_V2.md)
+and
+[lambda/unit V2 prototype result](../../docs/LAW_V2_SEMANTIC_AUDIT_LAMBDA_UNIT_V2_PROTOTYPE_RESULT.md)
 for their respective authority boundaries and stop conditions.

@@ -2,12 +2,14 @@ use pen_kernel::{CanonicalEncode, CanonicalEncoder, Digest};
 use serde::{Deserialize, Serialize};
 
 pub const SEMANTIC_AUDIT_SCHEMA_VERSION: u16 = 1;
+pub const SEMANTIC_AUDIT_SCHEMA_VERSION_V2: u16 = 2;
 pub const KERNEL_COST_SCHEMA_VERSION: u16 = 1;
 pub const KERNEL_COST_SCHEMA_VERSION_V2: u16 = 2;
 pub const SEMANTIC_AUDIT_PROFILE_ID: &str = "gf2-semantic-audit-core-v1";
 pub const KERNEL_COST_PROFILE_ID: &str = "gf2-kernel-cost-core-v1";
 pub const KERNEL_COST_PROFILE_ID_V2: &str = "gf2-kernel-cost-core-v2";
 pub const SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1: &str = "gf2-semantic-audit-lambda-unit-v1";
+pub const SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V2: &str = "gf2-semantic-audit-lambda-unit-v2";
 pub const KERNEL_COST_LAMBDA_UNIT_PROFILE_ID_V2: &str = "gf2-kernel-cost-lambda-unit-v2";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -64,6 +66,15 @@ pub enum AuditUnknownReason {
     MissingFreeCompletionTheorem,
     MissingOrdinaryBetaDerivation,
     MissingRewriteAdmissibilityTheorem,
+    MissingSubstitutionMetatheory,
+    MissingDemandOrbitAuthority,
+    MissingDemandRealizationAuthority,
+    MissingSemanticSeedCensus,
+    MissingRankInductiveCarrierTheorem,
+    MissingTypedOccurrenceCensus,
+    MissingHistoricalRewriteAuthority,
+    MissingOverlapCensus,
+    MissingWeakeningImageConservativity,
     NonUniqueBasis,
     FailedRetraction,
     IncompleteSupport,
@@ -108,6 +119,77 @@ pub enum ContextCarrierRuleV1 {
 pub enum SubstitutionCarrierRuleV1 {
     EmbeddingLift,
     ForcedNewestArgument,
+}
+
+/// Direct substitutions consumed by finite rank-at-most-two constructors.
+///
+/// This is deliberately not a presentation of every typed substitution and
+/// has no global composite constructor.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ConstructionSubstitutionRuleV2 {
+    ContextEmbedding,
+    ForcedNewestArgument,
+    OneHoleInstantiation,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SubstitutionCensusScopeV2 {
+    DirectConstructionWitnessesOnly,
+}
+
+/// Generic laws required of arbitrary well-typed simultaneous
+/// substitutions. They are theorem obligations, not members of a finite
+/// substitution census.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GenericSubstitutionTheoremV2 {
+    Identity,
+    Composition,
+    Associativity,
+    PiBinderLifting,
+    LambdaBinderLifting,
+    Weakening,
+    LiftingCompositionCommutation,
+    CaptureAvoidance,
+    TypingPreservation,
+    OrdinaryBetaStability,
+    ProvenancePreservingDeltaStability,
+    UnitStability,
+    InventoriedFreshEquationStability,
+    GenericPublicApplicationNaturality,
+    GenericEquationActionNaturality,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum FreshRuleMatchingProtocolV2 {
+    EdgeLocalTypedLeftLinear,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TypedOccurrenceCensusProtocolV2 {
+    BinderLocalTermsAndJudgmentTypes,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum HistoricalRewriteProtocolV2 {
+    IndependentSubjectsWithVerifiedHistory,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ConservativityProtocolV2 {
+    WeakeningImage,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OverlapCensusProtocolV2 {
+    ExhaustiveImmediateEdgePairs,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -230,6 +312,76 @@ impl CanonicalEncode for SemanticAuditManifestV1 {
     }
 }
 
+/// Projection-free semantic successor that separates finite construction
+/// witnesses from the generic metatheory of arbitrary typed substitutions.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct SemanticAuditManifestV2 {
+    pub schema_version: u16,
+    pub profile_id: String,
+    pub authority: ManifestAuthority,
+    pub frozen: bool,
+    pub live_profile_a_access: bool,
+    pub universe_levels: Vec<u16>,
+    pub maximum_rank: u16,
+    pub supported_seed_kinds: Vec<SeedKind>,
+    pub ordered_derivation_rules: Vec<DerivationRuleV1>,
+    pub context_carrier_rules: Vec<ContextCarrierRuleV1>,
+    pub substitution_census_scope: SubstitutionCensusScopeV2,
+    pub construction_substitution_rules: Vec<ConstructionSubstitutionRuleV2>,
+    pub generic_substitution_theorems: Vec<GenericSubstitutionTheoremV2>,
+    pub fresh_rule_matching_protocol: FreshRuleMatchingProtocolV2,
+    pub typed_occurrence_census_protocol: TypedOccurrenceCensusProtocolV2,
+    pub historical_rewrite_protocol: HistoricalRewriteProtocolV2,
+    pub conservativity_protocol: ConservativityProtocolV2,
+    pub overlap_census_protocol: OverlapCensusProtocolV2,
+    pub q0_rules: Vec<Q0RuleV1>,
+    pub q0_eta_registry_empty: bool,
+    pub q2_rules: Vec<Q2RuleV1>,
+    pub q3_rule: Q3RuleV1,
+    pub maximum_seeds: u16,
+    pub maximum_context_entries: u16,
+    pub maximum_raw_derivations: u32,
+    pub maximum_tuple_dispositions: u32,
+    pub maximum_q2_pair_witnesses: u32,
+}
+
+impl CanonicalEncode for SemanticAuditManifestV2 {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        encoder.u16(self.schema_version);
+        encoder.text(&self.profile_id);
+        self.authority.encode_canonical(encoder);
+        encoder.tag(u8::from(self.frozen));
+        encoder.tag(u8::from(self.live_profile_a_access));
+        encoder.u64(self.universe_levels.len() as u64);
+        for level in &self.universe_levels {
+            encoder.u16(*level);
+        }
+        encoder.u16(self.maximum_rank);
+        encoder.sequence(&self.supported_seed_kinds);
+        encoder.sequence(&self.ordered_derivation_rules);
+        encoder.sequence(&self.context_carrier_rules);
+        self.substitution_census_scope.encode_canonical(encoder);
+        encoder.sequence(&self.construction_substitution_rules);
+        encoder.sequence(&self.generic_substitution_theorems);
+        self.fresh_rule_matching_protocol.encode_canonical(encoder);
+        self.typed_occurrence_census_protocol
+            .encode_canonical(encoder);
+        self.historical_rewrite_protocol.encode_canonical(encoder);
+        self.conservativity_protocol.encode_canonical(encoder);
+        self.overlap_census_protocol.encode_canonical(encoder);
+        encoder.sequence(&self.q0_rules);
+        encoder.tag(u8::from(self.q0_eta_registry_empty));
+        encoder.sequence(&self.q2_rules);
+        self.q3_rule.encode_canonical(encoder);
+        encoder.u16(self.maximum_seeds);
+        encoder.u16(self.maximum_context_entries);
+        encoder.u32(self.maximum_raw_derivations);
+        encoder.u32(self.maximum_tuple_dispositions);
+        encoder.u32(self.maximum_q2_pair_witnesses);
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct KernelCostManifestV1 {
@@ -333,6 +485,24 @@ impl VerifiedSemanticAuditManifestV1 {
 
     /// Candidate identity for generic development. This is not an adopted or
     /// frozen Law-V2 semantic digest.
+    pub fn candidate_digest(&self) -> &Digest {
+        &self.candidate_digest
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct VerifiedSemanticAuditManifestV2 {
+    manifest: SemanticAuditManifestV2,
+    candidate_digest: Digest,
+}
+
+impl VerifiedSemanticAuditManifestV2 {
+    pub fn manifest(&self) -> &SemanticAuditManifestV2 {
+        &self.manifest
+    }
+
+    /// Candidate identity for generic development. This is not an adopted or
+    /// frozen Law-V2 semantic digest and has no live Profile-A authority.
     pub fn candidate_digest(&self) -> &Digest {
         &self.candidate_digest
     }
@@ -515,6 +685,92 @@ pub fn proposed_semantic_audit_lambda_unit_manifest_v1() -> SemanticAuditManifes
     manifest
 }
 
+/// Projection-free semantic successor with finite direct construction
+/// witnesses and a separate generic substitution theorem.
+///
+/// The construction census is not the category of all typed substitutions:
+/// arbitrary identity, composition, lifting, typing, reduction stability, and
+/// family naturality are governed by the theorem obligations below.
+pub fn proposed_semantic_audit_lambda_unit_manifest_v2() -> SemanticAuditManifestV2 {
+    SemanticAuditManifestV2 {
+        schema_version: SEMANTIC_AUDIT_SCHEMA_VERSION_V2,
+        profile_id: SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V2.to_owned(),
+        authority: ManifestAuthority::GenericPrototypeOnly,
+        frozen: false,
+        live_profile_a_access: false,
+        universe_levels: vec![0, 1],
+        maximum_rank: 2,
+        supported_seed_kinds: vec![
+            SeedKind::PublicHead,
+            SeedKind::PublicEquation,
+            SeedKind::PublicUniversalInterfaceReserved,
+        ],
+        ordered_derivation_rules: vec![
+            DerivationRuleV1::Seed,
+            DerivationRuleV1::GenericPublicApplication,
+            DerivationRuleV1::GenericEquationAction,
+        ],
+        context_carrier_rules: vec![
+            ContextCarrierRuleV1::SeedTelescope,
+            ContextCarrierRuleV1::IdenticalTelescope,
+            ContextCarrierRuleV1::DependencyRespectingDisjointInterleaving,
+        ],
+        substitution_census_scope: SubstitutionCensusScopeV2::DirectConstructionWitnessesOnly,
+        construction_substitution_rules: vec![
+            ConstructionSubstitutionRuleV2::ContextEmbedding,
+            ConstructionSubstitutionRuleV2::ForcedNewestArgument,
+            ConstructionSubstitutionRuleV2::OneHoleInstantiation,
+        ],
+        generic_substitution_theorems: vec![
+            GenericSubstitutionTheoremV2::Identity,
+            GenericSubstitutionTheoremV2::Composition,
+            GenericSubstitutionTheoremV2::Associativity,
+            GenericSubstitutionTheoremV2::PiBinderLifting,
+            GenericSubstitutionTheoremV2::LambdaBinderLifting,
+            GenericSubstitutionTheoremV2::Weakening,
+            GenericSubstitutionTheoremV2::LiftingCompositionCommutation,
+            GenericSubstitutionTheoremV2::CaptureAvoidance,
+            GenericSubstitutionTheoremV2::TypingPreservation,
+            GenericSubstitutionTheoremV2::OrdinaryBetaStability,
+            GenericSubstitutionTheoremV2::ProvenancePreservingDeltaStability,
+            GenericSubstitutionTheoremV2::UnitStability,
+            GenericSubstitutionTheoremV2::InventoriedFreshEquationStability,
+            GenericSubstitutionTheoremV2::GenericPublicApplicationNaturality,
+            GenericSubstitutionTheoremV2::GenericEquationActionNaturality,
+        ],
+        fresh_rule_matching_protocol: FreshRuleMatchingProtocolV2::EdgeLocalTypedLeftLinear,
+        typed_occurrence_census_protocol:
+            TypedOccurrenceCensusProtocolV2::BinderLocalTermsAndJudgmentTypes,
+        historical_rewrite_protocol:
+            HistoricalRewriteProtocolV2::IndependentSubjectsWithVerifiedHistory,
+        conservativity_protocol: ConservativityProtocolV2::WeakeningImage,
+        overlap_census_protocol: OverlapCensusProtocolV2::ExhaustiveImmediateEdgePairs,
+        q0_rules: vec![
+            Q0RuleV1::DeBruijn,
+            Q0RuleV1::SequentialSubstitution,
+            Q0RuleV1::Beta,
+            Q0RuleV1::ProvenancePreservingDelta,
+            Q0RuleV1::Unit,
+            Q0RuleV1::TelescopeFlattening,
+            Q0RuleV1::FreshNonrecursiveConstructorComputation,
+        ],
+        q0_eta_registry_empty: true,
+        q2_rules: vec![
+            Q2RuleV1::BinderRenaming,
+            Q2RuleV1::IndependentDeclarationExchange,
+            Q2RuleV1::ExplicitTelescopeCurryIsomorphism,
+            Q2RuleV1::PriorPublicTransparentAlias,
+            Q2RuleV1::DuplicateTransparentField,
+        ],
+        q3_rule: Q3RuleV1::VerifiedEmptyOriginCutoffRegistry,
+        maximum_seeds: 64,
+        maximum_context_entries: 32,
+        maximum_raw_derivations: 16_384,
+        maximum_tuple_dispositions: 262_144,
+        maximum_q2_pair_witnesses: 262_144,
+    }
+}
+
 /// Projection-free successor of the broader V2 kernel-cost proposal.
 pub fn proposed_kernel_cost_lambda_unit_manifest_v2() -> KernelCostManifestV2 {
     let mut manifest = proposed_kernel_cost_manifest_v2();
@@ -582,6 +838,21 @@ pub fn verify_semantic_audit_lambda_unit_manifest_v1(
     AuditDecision::Proven(VerifiedSemanticAuditManifestV1 {
         candidate_digest: Digest::of_canonical(
             "pen-semantic-audit/proposed-semantic-lambda-unit-manifest/v1",
+            manifest,
+        ),
+        manifest: manifest.clone(),
+    })
+}
+
+pub fn verify_semantic_audit_lambda_unit_manifest_v2(
+    manifest: &SemanticAuditManifestV2,
+) -> AuditDecision<VerifiedSemanticAuditManifestV2> {
+    if manifest != &proposed_semantic_audit_lambda_unit_manifest_v2() {
+        return AuditDecision::Unknown(AuditUnknownReason::MalformedManifest);
+    }
+    AuditDecision::Proven(VerifiedSemanticAuditManifestV2 {
+        candidate_digest: Digest::of_canonical(
+            "pen-semantic-audit/proposed-semantic-lambda-unit-manifest/v2",
             manifest,
         ),
         manifest: manifest.clone(),
@@ -656,6 +927,46 @@ canonical_tags!(SubstitutionCarrierRuleV1, {
     SubstitutionCarrierRuleV1::EmbeddingLift => 0,
     SubstitutionCarrierRuleV1::ForcedNewestArgument => 1
 });
+canonical_tags!(ConstructionSubstitutionRuleV2, {
+    ConstructionSubstitutionRuleV2::ContextEmbedding => 0,
+    ConstructionSubstitutionRuleV2::ForcedNewestArgument => 1,
+    ConstructionSubstitutionRuleV2::OneHoleInstantiation => 2
+});
+canonical_tags!(SubstitutionCensusScopeV2, {
+    SubstitutionCensusScopeV2::DirectConstructionWitnessesOnly => 0
+});
+canonical_tags!(GenericSubstitutionTheoremV2, {
+    GenericSubstitutionTheoremV2::Identity => 0,
+    GenericSubstitutionTheoremV2::Composition => 1,
+    GenericSubstitutionTheoremV2::Associativity => 2,
+    GenericSubstitutionTheoremV2::PiBinderLifting => 3,
+    GenericSubstitutionTheoremV2::LambdaBinderLifting => 4,
+    GenericSubstitutionTheoremV2::Weakening => 5,
+    GenericSubstitutionTheoremV2::LiftingCompositionCommutation => 6,
+    GenericSubstitutionTheoremV2::CaptureAvoidance => 7,
+    GenericSubstitutionTheoremV2::TypingPreservation => 8,
+    GenericSubstitutionTheoremV2::OrdinaryBetaStability => 9,
+    GenericSubstitutionTheoremV2::ProvenancePreservingDeltaStability => 10,
+    GenericSubstitutionTheoremV2::UnitStability => 11,
+    GenericSubstitutionTheoremV2::InventoriedFreshEquationStability => 12,
+    GenericSubstitutionTheoremV2::GenericPublicApplicationNaturality => 13,
+    GenericSubstitutionTheoremV2::GenericEquationActionNaturality => 14
+});
+canonical_tags!(FreshRuleMatchingProtocolV2, {
+    FreshRuleMatchingProtocolV2::EdgeLocalTypedLeftLinear => 0
+});
+canonical_tags!(TypedOccurrenceCensusProtocolV2, {
+    TypedOccurrenceCensusProtocolV2::BinderLocalTermsAndJudgmentTypes => 0
+});
+canonical_tags!(HistoricalRewriteProtocolV2, {
+    HistoricalRewriteProtocolV2::IndependentSubjectsWithVerifiedHistory => 0
+});
+canonical_tags!(ConservativityProtocolV2, {
+    ConservativityProtocolV2::WeakeningImage => 0
+});
+canonical_tags!(OverlapCensusProtocolV2, {
+    OverlapCensusProtocolV2::ExhaustiveImmediateEdgePairs => 0
+});
 canonical_tags!(Q0RuleV1, {
     Q0RuleV1::DeBruijn => 0,
     Q0RuleV1::SequentialSubstitution => 1,
@@ -702,12 +1013,16 @@ canonical_tags!(FreeCompletionRuleV2, {
 #[cfg(test)]
 mod tests {
     use super::{
-        AuditDecision, AuditUnknownReason, ClauseDispositionKindV1, FreeCompletionRuleV2, Q0RuleV1,
+        AuditDecision, AuditUnknownReason, ClauseDispositionKindV1, ConservativityProtocolV2,
+        ConstructionSubstitutionRuleV2, FreeCompletionRuleV2, FreshRuleMatchingProtocolV2,
+        GenericSubstitutionTheoremV2, HistoricalRewriteProtocolV2, OverlapCensusProtocolV2,
+        Q0RuleV1, Q3RuleV1, SubstitutionCensusScopeV2, TypedOccurrenceCensusProtocolV2,
         proposed_kernel_cost_lambda_unit_manifest_v2, proposed_kernel_cost_manifest_v1,
         proposed_kernel_cost_manifest_v2, proposed_semantic_audit_lambda_unit_manifest_v1,
-        proposed_semantic_audit_manifest_v1, verify_core_manifests_v1,
-        verify_kernel_cost_lambda_unit_manifest_v2, verify_kernel_cost_manifest_v2,
-        verify_semantic_audit_lambda_unit_manifest_v1, verify_semantic_audit_manifest_v1,
+        proposed_semantic_audit_lambda_unit_manifest_v2, proposed_semantic_audit_manifest_v1,
+        verify_core_manifests_v1, verify_kernel_cost_lambda_unit_manifest_v2,
+        verify_kernel_cost_manifest_v2, verify_semantic_audit_lambda_unit_manifest_v1,
+        verify_semantic_audit_lambda_unit_manifest_v2, verify_semantic_audit_manifest_v1,
     };
 
     #[test]
@@ -829,5 +1144,156 @@ mod tests {
             verify_kernel_cost_lambda_unit_manifest_v2(&cost),
             AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
         ));
+    }
+
+    #[test]
+    fn lambda_unit_v2_separates_direct_witnesses_from_generic_substitution() {
+        let proposed = proposed_semantic_audit_lambda_unit_manifest_v2();
+        assert_eq!(proposed.profile_id, "gf2-semantic-audit-lambda-unit-v2");
+        assert_eq!(proposed.schema_version, 2);
+        assert!(!proposed.frozen);
+        assert!(!proposed.live_profile_a_access);
+        assert_eq!(
+            proposed.substitution_census_scope,
+            SubstitutionCensusScopeV2::DirectConstructionWitnessesOnly
+        );
+        assert_eq!(
+            proposed.construction_substitution_rules,
+            vec![
+                ConstructionSubstitutionRuleV2::ContextEmbedding,
+                ConstructionSubstitutionRuleV2::ForcedNewestArgument,
+                ConstructionSubstitutionRuleV2::OneHoleInstantiation,
+            ]
+        );
+        assert_eq!(
+            proposed.generic_substitution_theorems,
+            vec![
+                GenericSubstitutionTheoremV2::Identity,
+                GenericSubstitutionTheoremV2::Composition,
+                GenericSubstitutionTheoremV2::Associativity,
+                GenericSubstitutionTheoremV2::PiBinderLifting,
+                GenericSubstitutionTheoremV2::LambdaBinderLifting,
+                GenericSubstitutionTheoremV2::Weakening,
+                GenericSubstitutionTheoremV2::LiftingCompositionCommutation,
+                GenericSubstitutionTheoremV2::CaptureAvoidance,
+                GenericSubstitutionTheoremV2::TypingPreservation,
+                GenericSubstitutionTheoremV2::OrdinaryBetaStability,
+                GenericSubstitutionTheoremV2::ProvenancePreservingDeltaStability,
+                GenericSubstitutionTheoremV2::UnitStability,
+                GenericSubstitutionTheoremV2::InventoriedFreshEquationStability,
+                GenericSubstitutionTheoremV2::GenericPublicApplicationNaturality,
+                GenericSubstitutionTheoremV2::GenericEquationActionNaturality,
+            ]
+        );
+        assert_eq!(
+            proposed.fresh_rule_matching_protocol,
+            FreshRuleMatchingProtocolV2::EdgeLocalTypedLeftLinear
+        );
+        assert_eq!(
+            proposed.typed_occurrence_census_protocol,
+            TypedOccurrenceCensusProtocolV2::BinderLocalTermsAndJudgmentTypes
+        );
+        assert_eq!(
+            proposed.historical_rewrite_protocol,
+            HistoricalRewriteProtocolV2::IndependentSubjectsWithVerifiedHistory
+        );
+        assert_eq!(
+            proposed.conservativity_protocol,
+            ConservativityProtocolV2::WeakeningImage
+        );
+        assert_eq!(
+            proposed.overlap_census_protocol,
+            OverlapCensusProtocolV2::ExhaustiveImmediateEdgePairs
+        );
+        assert_eq!(
+            proposed.q3_rule,
+            Q3RuleV1::VerifiedEmptyOriginCutoffRegistry
+        );
+        assert!(
+            !proposed
+                .q0_rules
+                .contains(&Q0RuleV1::DescriptorForcedProjection)
+        );
+
+        let AuditDecision::Proven(verified_v2) =
+            verify_semantic_audit_lambda_unit_manifest_v2(&proposed)
+        else {
+            panic!("exact lambda/unit V2 semantic successor should verify");
+        };
+        let AuditDecision::Proven(verified_v1) = verify_semantic_audit_lambda_unit_manifest_v1(
+            &proposed_semantic_audit_lambda_unit_manifest_v1(),
+        ) else {
+            panic!("preserved lambda/unit V1 semantic successor should verify");
+        };
+        assert_ne!(
+            verified_v2.candidate_digest(),
+            verified_v1.candidate_digest()
+        );
+    }
+
+    #[test]
+    fn lambda_unit_v2_manifest_is_closed() {
+        let mut changed = proposed_semantic_audit_lambda_unit_manifest_v2();
+        changed.generic_substitution_theorems.pop();
+        assert!(matches!(
+            verify_semantic_audit_lambda_unit_manifest_v2(&changed),
+            AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
+        ));
+
+        let mut changed = proposed_semantic_audit_lambda_unit_manifest_v2();
+        changed.q0_rules.push(Q0RuleV1::DescriptorForcedProjection);
+        assert!(matches!(
+            verify_semantic_audit_lambda_unit_manifest_v2(&changed),
+            AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
+        ));
+    }
+
+    #[test]
+    fn lambda_unit_v2_fail_closed_reasons_have_stable_wire_names() {
+        let cases = [
+            (
+                AuditUnknownReason::MissingSubstitutionMetatheory,
+                "\"missing_substitution_metatheory\"",
+            ),
+            (
+                AuditUnknownReason::MissingDemandOrbitAuthority,
+                "\"missing_demand_orbit_authority\"",
+            ),
+            (
+                AuditUnknownReason::MissingDemandRealizationAuthority,
+                "\"missing_demand_realization_authority\"",
+            ),
+            (
+                AuditUnknownReason::MissingSemanticSeedCensus,
+                "\"missing_semantic_seed_census\"",
+            ),
+            (
+                AuditUnknownReason::MissingRankInductiveCarrierTheorem,
+                "\"missing_rank_inductive_carrier_theorem\"",
+            ),
+            (
+                AuditUnknownReason::MissingTypedOccurrenceCensus,
+                "\"missing_typed_occurrence_census\"",
+            ),
+            (
+                AuditUnknownReason::MissingHistoricalRewriteAuthority,
+                "\"missing_historical_rewrite_authority\"",
+            ),
+            (
+                AuditUnknownReason::MissingOverlapCensus,
+                "\"missing_overlap_census\"",
+            ),
+            (
+                AuditUnknownReason::MissingWeakeningImageConservativity,
+                "\"missing_weakening_image_conservativity\"",
+            ),
+        ];
+
+        for (reason, expected) in cases {
+            assert_eq!(
+                serde_json::to_string(&reason).expect("unknown reason should serialize"),
+                expected
+            );
+        }
     }
 }

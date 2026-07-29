@@ -229,6 +229,60 @@ pub struct VerifiedAgdaReferenceV1 {
     digest: Digest,
 }
 
+/// One compile-time-fixed source in an additive safe-Agda package.
+///
+/// This is crate-private so untrusted callers cannot submit theorem text to
+/// the checker and turn successful type checking of a different proposition
+/// into authority for a built-in capability.
+#[derive(Clone, Copy, Debug)]
+pub(crate) struct FixedAgdaSourceV1 {
+    pub(crate) relative_path: &'static str,
+    pub(crate) module_name: &'static str,
+    pub(crate) bytes: &'static [u8],
+}
+
+/// Pinned checker result for one compile-time-fixed multi-source package.
+///
+/// The semantic meaning of the package is deliberately supplied by the
+/// consuming private verifier. This handle establishes only exact source,
+/// checker, primitive-tree, argument, and transcript identity.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct VerifiedFixedAgdaPackageV1 {
+    source_tree_digest: Digest,
+    executable_digest: Digest,
+    primitive_tree_digest: Digest,
+    checker_argument_protocol_digest: Digest,
+    checker_stdout_digest: Digest,
+    checker_stderr_digest: Digest,
+    digest: Digest,
+}
+
+impl VerifiedFixedAgdaPackageV1 {
+    pub(crate) fn source_tree_digest(&self) -> &Digest {
+        &self.source_tree_digest
+    }
+
+    pub(crate) fn checker_stdout_digest(&self) -> &Digest {
+        &self.checker_stdout_digest
+    }
+
+    pub(crate) fn digest(&self) -> &Digest {
+        &self.digest
+    }
+}
+
+impl CanonicalEncode for VerifiedFixedAgdaPackageV1 {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        self.source_tree_digest.encode_canonical(encoder);
+        self.executable_digest.encode_canonical(encoder);
+        self.primitive_tree_digest.encode_canonical(encoder);
+        self.checker_argument_protocol_digest
+            .encode_canonical(encoder);
+        self.checker_stdout_digest.encode_canonical(encoder);
+        self.checker_stderr_digest.encode_canonical(encoder);
+    }
+}
+
 impl VerifiedAgdaReferenceV1 {
     pub fn source_digest(&self) -> &Digest {
         &self.source_digest
@@ -308,6 +362,303 @@ pub fn diagnose_pinned_agda_reference_v1() -> Result<VerifiedAgdaReferenceV1, Ag
         return Err(AgdaReferenceFailureV1::ScratchCleanupFailed);
     }
     result
+}
+
+/// Check an additive, compile-time-fixed safe-Agda package under the same
+/// executable and primitive-source pins as the V1 reference gate.
+///
+/// The source list must be in the checker's exact expected reporting order,
+/// beginning with `entry_relative_path`. Imported files are checked with
+/// interfaces disabled, so every source must appear exactly once.
+pub(crate) fn diagnose_pinned_fixed_agda_package_v1(
+    sources: &[FixedAgdaSourceV1],
+    entry_relative_path: &str,
+) -> Result<VerifiedFixedAgdaPackageV1, AgdaReferenceFailureV1> {
+    let reference = diagnose_pinned_agda_reference_v1()?;
+    if sources.is_empty()
+        || sources[0].relative_path != entry_relative_path
+        || !valid_fixed_package_sources(sources)
+    {
+        return Err(AgdaReferenceFailureV1::SourceWriteFailed);
+    }
+
+    let executable = resolve_agda_executable().ok_or(AgdaReferenceFailureV1::ExecutableNotFound)?;
+    let executable_before =
+        fs::read(&executable).map_err(|_| AgdaReferenceFailureV1::ExecutableUnreadable)?;
+    let executable_digest = Digest::of_bytes(&executable_before);
+    if &executable_digest != reference.executable_digest() {
+        return Err(AgdaReferenceFailureV1::ExecutableDigestMismatch {
+            observed: executable_digest.as_str().to_owned(),
+        });
+    }
+
+    let scratch =
+        create_scratch_directory().ok_or(AgdaReferenceFailureV1::ScratchDirectoryUnavailable)?;
+    let result = verify_fixed_package_in_scratch(
+        &executable,
+        &executable_before,
+        executable_digest,
+        sources,
+        entry_relative_path,
+        &scratch,
+    );
+    if fs::remove_dir_all(&scratch).is_err() {
+        return Err(AgdaReferenceFailureV1::ScratchCleanupFailed);
+    }
+    result
+}
+
+fn valid_fixed_package_sources(sources: &[FixedAgdaSourceV1]) -> bool {
+    let mut paths = std::collections::BTreeSet::new();
+    let mut modules = std::collections::BTreeSet::new();
+    sources.iter().all(|source| {
+        let path = Path::new(source.relative_path);
+        !source.relative_path.contains('\\')
+            && !source.relative_path.contains('\0')
+            && !source.module_name.is_empty()
+            && !source
+                .module_name
+                .chars()
+                .any(|character| matches!(character, '\r' | '\n' | '(' | ')'))
+            && path.is_relative()
+            && path.extension().and_then(|value| value.to_str()) == Some("agda")
+            && path
+                .components()
+                .all(|component| matches!(component, std::path::Component::Normal(_)))
+            && !source.bytes.is_empty()
+            && paths.insert(source.relative_path)
+            && modules.insert(source.module_name)
+    })
+}
+
+fn verify_fixed_package_in_scratch(
+    executable: &Path,
+    executable_before: &[u8],
+    executable_digest: Digest,
+    sources: &[FixedAgdaSourceV1],
+    entry_relative_path: &str,
+    scratch: &Path,
+) -> Result<VerifiedFixedAgdaPackageV1, AgdaReferenceFailureV1> {
+    fs::create_dir(scratch.join("agda-app"))
+        .map_err(|_| AgdaReferenceFailureV1::ScratchSetupFailed)?;
+
+    let data_output = run_command(
+        sanitized_command(executable, Some(scratch), None).arg("--print-agda-data-dir"),
+        CHECKER_TIMEOUT,
+    )
+    .map_err(|failure| match failure {
+        RunCommandFailure::Spawn => AgdaReferenceFailureV1::DataDirectoryProbeSpawnFailed,
+        RunCommandFailure::Timeout => AgdaReferenceFailureV1::DataDirectoryProbeTimedOut,
+        RunCommandFailure::Wait => {
+            AgdaReferenceFailureV1::DataDirectoryProbeFailed { exit_code: None }
+        }
+    })?;
+    let data_stdout = canonical_output(&data_output.stdout)
+        .ok_or(AgdaReferenceFailureV1::DataDirectoryProbeNonCanonicalOutput)?;
+    let data_stderr = canonical_output(&data_output.stderr)
+        .ok_or(AgdaReferenceFailureV1::DataDirectoryProbeNonCanonicalOutput)?;
+    if !data_output.status.success() {
+        return Err(AgdaReferenceFailureV1::DataDirectoryProbeFailed {
+            exit_code: data_output.status.code(),
+        });
+    }
+    if !data_stderr.is_empty() {
+        return Err(AgdaReferenceFailureV1::DataDirectoryProbeStderr {
+            digest: Digest::of_bytes(data_stderr.as_bytes()).as_str().to_owned(),
+        });
+    }
+    let data_directory =
+        one_absolute_directory(&data_stdout).ok_or(AgdaReferenceFailureV1::DataDirectoryInvalid)?;
+    let primitive_root = fs::canonicalize(data_directory.join(AGDA_PRIMITIVE_RELATIVE_ROOT))
+        .ok()
+        .filter(|path| path.is_dir())
+        .ok_or(AgdaReferenceFailureV1::PrimitiveTreeUnreadable)?;
+    let tree_before = collect_primitive_tree(&primitive_root)
+        .ok_or(AgdaReferenceFailureV1::PrimitiveTreeUnreadable)?;
+    if tree_before.digest.as_str() != AGDA_PRIMITIVE_TREE_DIGEST_PIN {
+        return Err(AgdaReferenceFailureV1::PrimitiveTreeDigestMismatch {
+            observed: tree_before.digest.as_str().to_owned(),
+        });
+    }
+
+    let snapshot_data_directory = scratch.join(AGDA_DATA_SNAPSHOT_DIRECTORY);
+    fs::create_dir(&snapshot_data_directory)
+        .map_err(|_| AgdaReferenceFailureV1::PrimitiveSnapshotFailed)?;
+    let snapshot_primitive_root = snapshot_data_directory.join(AGDA_PRIMITIVE_RELATIVE_ROOT);
+    let materialized = materialize_primitive_tree(&primitive_root, &snapshot_primitive_root)
+        .ok_or(AgdaReferenceFailureV1::PrimitiveSnapshotFailed)?;
+    let snapshot_before = collect_primitive_tree(&snapshot_primitive_root)
+        .ok_or(AgdaReferenceFailureV1::PrimitiveSnapshotFailed)?;
+    if materialized != tree_before || snapshot_before != tree_before {
+        return Err(AgdaReferenceFailureV1::PrimitiveSnapshotMismatch);
+    }
+
+    let mut source_paths = Vec::with_capacity(sources.len());
+    for source in sources {
+        let path = scratch.join(source.relative_path);
+        let parent = path
+            .parent()
+            .ok_or(AgdaReferenceFailureV1::SourceWriteFailed)?;
+        fs::create_dir_all(parent).map_err(|_| AgdaReferenceFailureV1::SourceWriteFailed)?;
+        write_new_file(&path, source.bytes).ok_or(AgdaReferenceFailureV1::SourceWriteFailed)?;
+        source_paths.push(path);
+    }
+    let entry_path = scratch.join(entry_relative_path);
+
+    let mut checker = sanitized_command(
+        executable,
+        Some(scratch),
+        Some(snapshot_data_directory.as_path()),
+    );
+    checker
+        .args([
+            "--no-libraries",
+            "--ignore-interfaces",
+            "--safe",
+            "--without-K",
+            "-i",
+        ])
+        .arg(scratch)
+        .arg(&entry_path);
+    let output = run_command(&mut checker, CHECKER_TIMEOUT).map_err(|failure| match failure {
+        RunCommandFailure::Spawn => AgdaReferenceFailureV1::CheckerSpawnFailed,
+        RunCommandFailure::Timeout => AgdaReferenceFailureV1::CheckerTimedOut,
+        RunCommandFailure::Wait => AgdaReferenceFailureV1::CheckerFailed {
+            exit_code: None,
+            stdout_digest: Digest::of_bytes(b"").as_str().to_owned(),
+            stderr_digest: Digest::of_bytes(b"").as_str().to_owned(),
+        },
+    })?;
+    let stdout = canonical_output(&output.stdout)
+        .ok_or(AgdaReferenceFailureV1::CheckerNonCanonicalOutput)?;
+    let stderr = canonical_output(&output.stderr)
+        .ok_or(AgdaReferenceFailureV1::CheckerNonCanonicalOutput)?;
+    if !output.status.success() {
+        return Err(AgdaReferenceFailureV1::CheckerFailed {
+            exit_code: output.status.code(),
+            stdout_digest: Digest::of_bytes(stdout.as_bytes()).as_str().to_owned(),
+            stderr_digest: Digest::of_bytes(stderr.as_bytes()).as_str().to_owned(),
+        });
+    }
+    let canonical_transcript = canonical_fixed_package_transcript(&stdout, sources, &source_paths)
+        .ok_or_else(|| AgdaReferenceFailureV1::CheckerStdoutMismatch {
+            observed_digest: Digest::of_bytes(stdout.as_bytes()).as_str().to_owned(),
+        })?;
+    if !stderr.is_empty() {
+        return Err(AgdaReferenceFailureV1::CheckerStderr {
+            digest: Digest::of_bytes(stderr.as_bytes()).as_str().to_owned(),
+        });
+    }
+
+    for (source, path) in sources.iter().zip(&source_paths) {
+        if fs::read(path).ok().as_deref() != Some(source.bytes) {
+            return Err(AgdaReferenceFailureV1::SourceMutated);
+        }
+    }
+    if fs::read(executable).ok().as_deref() != Some(executable_before) {
+        return Err(AgdaReferenceFailureV1::ExecutableMutated);
+    }
+    let installed_after = collect_primitive_tree(&primitive_root)
+        .ok_or(AgdaReferenceFailureV1::InstalledPrimitiveTreeMutated)?;
+    if installed_after != tree_before {
+        return Err(AgdaReferenceFailureV1::InstalledPrimitiveTreeMutated);
+    }
+    let snapshot_after = collect_primitive_tree(&snapshot_primitive_root)
+        .ok_or(AgdaReferenceFailureV1::SnapshotPrimitiveTreeMutated)?;
+    if snapshot_after != snapshot_before {
+        return Err(AgdaReferenceFailureV1::SnapshotPrimitiveTreeMutated);
+    }
+
+    let source_tree_digest = fixed_package_source_tree_digest(sources);
+    let checker_argument_protocol_digest =
+        fixed_package_checker_argument_protocol_digest(entry_relative_path);
+    let checker_stdout_digest = Digest::of_bytes(canonical_transcript.as_bytes());
+    let checker_stderr_digest = Digest::of_bytes(stderr.as_bytes());
+    let mut verified = VerifiedFixedAgdaPackageV1 {
+        source_tree_digest,
+        executable_digest,
+        primitive_tree_digest: tree_before.digest,
+        checker_argument_protocol_digest,
+        checker_stdout_digest,
+        checker_stderr_digest,
+        digest: Digest::of_bytes(b"pending fixed Agda package"),
+    };
+    verified.digest = Digest::of_canonical(
+        "pen-semantic-audit/verified-fixed-agda-package/v1",
+        &verified,
+    );
+    Ok(verified)
+}
+
+fn canonical_fixed_package_transcript(
+    stdout: &str,
+    sources: &[FixedAgdaSourceV1],
+    source_paths: &[PathBuf],
+) -> Option<String> {
+    let lines = stdout.lines().collect::<Vec<_>>();
+    if lines.len() != sources.len() || source_paths.len() != sources.len() {
+        return None;
+    }
+    let mut canonical = String::new();
+    for ((line, source), expected_path) in lines.iter().zip(sources).zip(source_paths) {
+        let line = line.trim_start();
+        let prefix = format!("Checking {} (", source.module_name);
+        let reported = line.strip_prefix(&prefix)?.strip_suffix(").")?;
+        let reported = Path::new(reported);
+        if !reported.is_absolute()
+            || fs::canonicalize(reported).ok()? != fs::canonicalize(expected_path).ok()?
+        {
+            return None;
+        }
+        canonical.push_str("Checking ");
+        canonical.push_str(source.module_name);
+        canonical.push_str(" (<private-source>).\n");
+    }
+    Some(canonical)
+}
+
+fn fixed_package_source_tree_digest(sources: &[FixedAgdaSourceV1]) -> Digest {
+    let mut ordered = sources.to_vec();
+    ordered.sort_by_key(|source| source.relative_path);
+    let mut encoder = CanonicalEncoder::new();
+    encoder.u16(1);
+    encoder.u64(ordered.len() as u64);
+    for source in ordered {
+        encoder.text(source.relative_path);
+        encoder.text(source.module_name);
+        encoder.bytes(source.bytes);
+    }
+    Digest::of_domain_bytes(
+        "pen-semantic-audit/fixed-agda-source-tree/v1",
+        encoder.as_bytes(),
+    )
+}
+
+fn fixed_package_checker_argument_protocol_digest(entry_relative_path: &str) -> Digest {
+    let mut encoder = CanonicalEncoder::new();
+    encoder.u16(1);
+    for argument in [
+        "--no-libraries",
+        "--ignore-interfaces",
+        "--safe",
+        "--without-K",
+        "-i",
+        "<private-scratch>",
+        entry_relative_path,
+    ] {
+        encoder.text(argument);
+    }
+    encoder.text("environment=cleared");
+    encoder.text("preserve-if-present=SystemRoot,WINDIR,ComSpec,PATHEXT");
+    encoder.text(
+        "private=HOME,USERPROFILE,XDG_CONFIG_HOME,APPDATA,LOCALAPPDATA,TMP,TEMP,TMPDIR,AGDA_DIR",
+    );
+    encoder.text("locale=LC_ALL:C.UTF-8,LANG:C.UTF-8");
+    encoder.text("Agda_datadir=private-pinned-primitive-snapshot");
+    Digest::of_domain_bytes(
+        "pen-semantic-audit/fixed-agda-checker-argument-protocol/v1",
+        encoder.as_bytes(),
+    )
 }
 
 fn verify_in_scratch(
