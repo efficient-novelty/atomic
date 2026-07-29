@@ -17,7 +17,12 @@ AUDIT_ROOT = REPO / "crates" / "pen-semantic-audit"
 AUDIT_MANIFEST = AUDIT_ROOT / "Cargo.toml"
 AUDIT_LOCK = AUDIT_ROOT / "Cargo.lock"
 
-ALLOWED_DEPENDENCIES = {"pen-kernel", "serde", "thiserror"}
+ALLOWED_DEPENDENCIES = {
+    "pen-kernel",
+    "pen-kernel-synthesis",
+    "serde",
+    "thiserror",
+}
 FORBIDDEN_SOURCE_MARKERS = {
     "law_v2_h3_inductive_completion_v1",
     "law_v2_h4_continuation_v1",
@@ -70,6 +75,15 @@ def audit() -> dict:
     kernel = manifest.get("dependencies", {}).get("pen-kernel")
     if not isinstance(kernel, dict) or kernel.get("path") != "../pen-kernel":
         errors.append("pen-kernel must be the exact outgoing ../pen-kernel path dependency")
+    synthesis = manifest.get("dependencies", {}).get("pen-kernel-synthesis")
+    if (
+        not isinstance(synthesis, dict)
+        or synthesis.get("path") != "../pen-kernel-synthesis"
+    ):
+        errors.append(
+            "pen-kernel-synthesis must be the exact outgoing "
+            "../pen-kernel-synthesis path dependency"
+        )
 
     source_files = sorted((AUDIT_ROOT / "src").glob("*.rs"))
     if not source_files:

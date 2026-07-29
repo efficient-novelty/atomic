@@ -24,9 +24,12 @@ pub mod provenance;
 pub mod quotient;
 pub mod rewrite_inventory;
 pub mod semantic_authority;
+pub mod semantic_authority_v3;
 pub mod specialization;
 pub mod substitution_metatheory;
 pub mod typed_occurrence;
+pub mod typed_occurrence_v3;
+pub mod typing_metatheory;
 pub mod weakening;
 
 pub use agda_gate::{VerifiedAgdaReferenceV1, verify_pinned_agda_reference_v1};
@@ -72,15 +75,20 @@ pub use inventory_compatibility::{
 };
 pub use manifest::{
     AuditDecision, AuditUnknownReason, ConservativityProtocolV2, ConstructionSubstitutionRuleV2,
-    FreshRuleMatchingProtocolV2, GenericSubstitutionTheoremV2, HistoricalRewriteProtocolV2,
-    OutsideFragmentReason, OverlapCensusProtocolV2, SemanticAuditManifestV2,
-    SubstitutionCensusScopeV2, TypedOccurrenceCensusProtocolV2, VerifiedCostManifestV1,
-    VerifiedCostManifestV2, VerifiedSemanticAuditManifestV1, VerifiedSemanticAuditManifestV2,
-    proposed_kernel_cost_lambda_unit_manifest_v2, proposed_kernel_cost_manifest_v2,
-    proposed_semantic_audit_lambda_unit_manifest_v1,
-    proposed_semantic_audit_lambda_unit_manifest_v2, verify_core_manifests_v1,
+    DemandProvenanceProtocolV3, EquationPortMetadataProtocolV3, FreshRuleMatchingProtocolV2,
+    GenericSubstitutionTheoremV2, HistoricalAuthorityProtocolV3, HistoricalRewriteProtocolV2,
+    OutsideFragmentReason, OverlapCensusProtocolV2, SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V3,
+    SEMANTIC_AUDIT_SCHEMA_VERSION_V3, SemanticAuditManifestV2, SemanticAuditManifestV3,
+    SemanticAuthorityStageV3, SemanticIdentityProtocolV3, SubstitutionCensusScopeV2,
+    TypedOccurrenceCensusProtocolV2, VerifiedCostManifestV1, VerifiedCostManifestV2,
+    VerifiedSemanticAuditManifestV1, VerifiedSemanticAuditManifestV2,
+    VerifiedSemanticAuditManifestV3, proposed_kernel_cost_lambda_unit_manifest_v2,
+    proposed_kernel_cost_manifest_v2, proposed_semantic_audit_lambda_unit_manifest_v1,
+    proposed_semantic_audit_lambda_unit_manifest_v2,
+    proposed_semantic_audit_lambda_unit_manifest_v3, verify_core_manifests_v1,
     verify_kernel_cost_lambda_unit_manifest_v2, verify_kernel_cost_manifest_v2,
     verify_semantic_audit_lambda_unit_manifest_v1, verify_semantic_audit_lambda_unit_manifest_v2,
+    verify_semantic_audit_lambda_unit_manifest_v3,
 };
 pub use model::*;
 pub use normalizer::{
@@ -110,6 +118,11 @@ pub use semantic_authority::{
     VerifiedPublicClauseIdentityV1, VerifiedSemanticSeedCensusV2, demand_anchor_blockers_v1,
     verify_demand_anchor_census_v1, verify_public_clause_census_v1, verify_semantic_seed_census_v2,
 };
+pub use semantic_authority_v3::{
+    PublicSemanticSeedSubjectV3, SeedIdV3, VerifiedBoundEquationPortMetadataV3,
+    VerifiedPreQ0SemanticSeedV3, VerifiedSemanticSeedBaseCensusV3, VerifiedStructuralSupportV1,
+    verify_semantic_seed_base_census_v3,
+};
 pub use specialization::{VerifiedFamilyInstanceV1, verify_family_instance_v1};
 pub use substitution_metatheory::{
     SubstitutionMetatheoryFailureV1, TypedSimultaneousSubstitutionV1,
@@ -124,5 +137,20 @@ pub use typed_occurrence::{
     TypedOccurrenceIdV1, TypedOccurrencePathComponentV1, TypedOccurrencePathV1,
     TypedOccurrenceRootIdV1, TypedOccurrenceRootRequestV1, VerifiedTypedOccurrenceCensusV1,
     VerifiedTypedOccurrenceRootV1, VerifiedTypedOccurrenceV1, verify_typed_occurrence_census_v2,
+};
+pub use typed_occurrence_v3::{
+    SYNTHESIS_BACKED_OCCURRENCE_BATCH_SCHEMA_VERSION_V1,
+    SYNTHESIS_BACKED_OCCURRENCE_CENSUS_PREREQUISITES_V3,
+    SynthesisBackedOccurrenceCensusPrerequisiteV3, TypedOccurrenceIdV2, TypedOccurrencePathV2,
+    TypedOccurrenceRootIdV2, VerifiedSynthesisBackedOccurrenceBatchV1,
+    VerifiedTypedOccurrenceRootV2, VerifiedTypedOccurrenceV2,
+    diagnose_synthesis_backed_typed_occurrence_census_v3,
+    verify_synthesis_backed_occurrence_batch_v1,
+};
+pub use typing_metatheory::{
+    LambdaUnitTypingMetatheoryFailureV1, TYPING_PRODUCTION_CORRESPONDENCE_FRONTIER_V1,
+    TypingProductionCorrespondenceObligationV1, VerifiedLambdaUnitTypingFoundationV1,
+    VerifiedLambdaUnitTypingMetatheoryV1, diagnose_lambda_unit_typing_metatheory_v1,
+    verify_lambda_unit_typing_metatheory_v1, verify_pinned_lambda_unit_typing_foundation_v1,
 };
 pub use weakening::{WeakeningCertificateV1, verify_weakening_and_marginals_v1};

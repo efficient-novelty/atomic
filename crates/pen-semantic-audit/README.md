@@ -7,6 +7,7 @@ projection-free successors:
 ```text
 gf2-semantic-audit-lambda-unit-v1
 gf2-semantic-audit-lambda-unit-v2
+gf2-semantic-audit-lambda-unit-v3
 gf2-kernel-cost-lambda-unit-v2
 ```
 
@@ -53,6 +54,41 @@ inventories, binder-local typed occurrences, and an empty historical rewrite
 base. None of these partial capabilities enters authoritative Q0
 normalization.
 
+The additive V3 semantic successor corrects the authority ordering without
+changing V1 or V2. Rank-zero seed and family identity is demand-neutral:
+verifier-derived event/declaration structural support participates in identity,
+while exact equation `PortKey` associations remain separately bound metadata
+with no orbit, realization, marginal, SR2, or novelty authority. Nonempty
+demand provenance is therefore deferred until after the family quotient,
+weakening, and marginal identification.
+
+V3 also adds the isolated `pen-kernel-synthesis` workspace. Its
+syntax-directed sort/unit/variable/global/`Pi`/lambda/application derivations
+are replayed through the unchanged kernel before an opaque synthesis
+capability is returned. An additive fixed safe-Agda package proves synthesis
+soundness/completeness for its conversion-free abstract calculus, dependent
+simultaneous substitution, binder lifting, and typed beta/closed-delta/fresh
+schema stability. `VerifiedLambdaUnitTypingFoundationV1` can be minted from
+that package.
+
+The stronger `VerifiedLambdaUnitTypingMetatheoryV1` remains unminted until four
+exact correspondences are proved:
+
+- abstract variables and contexts to oldest-first finite de Bruijn contexts;
+- the declarative calculus to kernel conversion and normalization;
+- Agda terms/derivations to the exact Rust synthesis codes; and
+- abstract typed reductions/families to the exact Q0 and family inventories.
+
+Synthesis-backed binder-local traversal is positive for fixed supplied roots,
+including a variable-headed application. Each occurrence retains the full
+opaque synthesis capability and binds it to an independent unchanged-kernel
+replay. That does not prove a complete occurrence census: only the future
+production metatheory and native carrier can supply and close the
+authoritative finite root domain. Consequently V3 does not yet mint its native
+rank-0/1/2 carrier, complete synthesis-backed occurrence census, base rewrite
+system, Q0/family quotient, weakening/marginals, demand realizations, SR2,
+transcript agreement, adoption, freeze, or Profile A adapter.
+
 The inventory capability proves exact replay and internal census closure only
 relative to its supplied generic event ledger. It deliberately does not prove
 that the ledger is the issued Profile A history. That later authority binding
@@ -95,4 +131,8 @@ and the
 [lambda/unit V2 adjudication](../../docs/LAW_V2_SEMANTIC_AUDIT_LAMBDA_UNIT_ADJUDICATION_V2.md)
 and
 [lambda/unit V2 prototype result](../../docs/LAW_V2_SEMANTIC_AUDIT_LAMBDA_UNIT_V2_PROTOTYPE_RESULT.md)
+and the
+[lambda/unit V3 adjudication](../../docs/LAW_V2_SEMANTIC_AUDIT_LAMBDA_UNIT_ADJUDICATION_V3.md)
+and
+[lambda/unit V3 prototype result](../../docs/LAW_V2_SEMANTIC_AUDIT_LAMBDA_UNIT_V3_PROTOTYPE_RESULT.md)
 for their respective authority boundaries and stop conditions.

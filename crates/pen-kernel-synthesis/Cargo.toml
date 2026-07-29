@@ -1,10 +1,10 @@
 [package]
-name = "pen-semantic-audit"
+name = "pen-kernel-synthesis"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 rust-version = "1.88"
-description = "Isolated finite manifest-indexed GF2 semantic audit prototype"
+description = "Isolated proof-carrying synthesis successor for the pen-kernel lambda/unit fragment"
 publish = false
 
 [workspace]
@@ -12,15 +12,10 @@ resolver = "2"
 
 [dependencies]
 pen-kernel = { path = "../pen-kernel" }
-pen-kernel-synthesis = { path = "../pen-kernel-synthesis" }
-serde = { version = "=1.0.228", features = ["derive"] }
 thiserror = "=2.0.18"
 
-[dev-dependencies]
-serde_json = "=1.0.149"
-
 [package.metadata.law-v2]
-role = "proposed-generic-audit"
+role = "proposed-kernel-synthesis-successor"
 oracle_access = false
 diagnostic_access = false
 live_profile_a_access = false

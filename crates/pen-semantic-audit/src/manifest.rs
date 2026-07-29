@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 pub const SEMANTIC_AUDIT_SCHEMA_VERSION: u16 = 1;
 pub const SEMANTIC_AUDIT_SCHEMA_VERSION_V2: u16 = 2;
+pub const SEMANTIC_AUDIT_SCHEMA_VERSION_V3: u16 = 3;
 pub const KERNEL_COST_SCHEMA_VERSION: u16 = 1;
 pub const KERNEL_COST_SCHEMA_VERSION_V2: u16 = 2;
 pub const SEMANTIC_AUDIT_PROFILE_ID: &str = "gf2-semantic-audit-core-v1";
@@ -10,6 +11,7 @@ pub const KERNEL_COST_PROFILE_ID: &str = "gf2-kernel-cost-core-v1";
 pub const KERNEL_COST_PROFILE_ID_V2: &str = "gf2-kernel-cost-core-v2";
 pub const SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V1: &str = "gf2-semantic-audit-lambda-unit-v1";
 pub const SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V2: &str = "gf2-semantic-audit-lambda-unit-v2";
+pub const SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V3: &str = "gf2-semantic-audit-lambda-unit-v3";
 pub const KERNEL_COST_LAMBDA_UNIT_PROFILE_ID_V2: &str = "gf2-kernel-cost-lambda-unit-v2";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -75,6 +77,18 @@ pub enum AuditUnknownReason {
     MissingHistoricalRewriteAuthority,
     MissingOverlapCensus,
     MissingWeakeningImageConservativity,
+    MissingLambdaUnitTypingMetatheory,
+    MissingDemandNeutralSemanticSeedCensus,
+    MissingNativeRankInductiveCarrierV3,
+    MissingSynthesisBackedTypedOccurrenceCensus,
+    MissingRewriteSystemV3,
+    MissingFamilyQuotientV3,
+    MissingWeakeningMarginalAuthority,
+    MissingDemandOrbitCensusV2,
+    MissingDemandRealizationCensusV2,
+    MissingSr2ProvenanceAssignment,
+    MissingIssuedPriorRewriteSystemV3,
+    DemandAuthorityEnteredStructuralIdentity,
     NonUniqueBasis,
     FailedRetraction,
     IncompleteSupport,
@@ -190,6 +204,56 @@ pub enum ConservativityProtocolV2 {
 #[serde(rename_all = "snake_case")]
 pub enum OverlapCensusProtocolV2 {
     ExhaustiveImmediateEdgePairs,
+}
+
+/// Exact V3 source of semantic seed and raw-family support.
+///
+/// Demand contracts, orbits, outputs, and realizations are intentionally
+/// absent: they are provenance evidence assigned only after quotienting and
+/// marginal-family identification.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SemanticIdentityProtocolV3 {
+    DemandNeutralStructuralSupport,
+}
+
+/// Authority carried by an inventoried equation port before SR2.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EquationPortMetadataProtocolV3 {
+    BoundNonAuthoritative,
+}
+
+/// Stage at which typed demand evidence becomes semantic authority.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DemandProvenanceProtocolV3 {
+    PostQuotientWeakeningMarginalSr2Only,
+}
+
+/// Historical authority admitted by the V3 rewrite construction.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum HistoricalAuthorityProtocolV3 {
+    EmptyBaseOrExactIssuedPriorRewriteSystem,
+}
+
+/// Closed V3 authority order. The sequence is part of the candidate digest.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SemanticAuthorityStageV3 {
+    PublicClauseCensus,
+    DemandNeutralSemanticSeedCensus,
+    LambdaUnitTypingAndSynthesisMetatheory,
+    NativeRankInductiveCarrier,
+    SynthesisBackedTypedOccurrenceCensus,
+    RewriteSystem,
+    FamilyQuotient,
+    WeakeningAndRestriction,
+    MarginalFamilySet,
+    DemandOrbitCensus,
+    DemandRealizationCensus,
+    Sr2ProvenanceAssignment,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -382,6 +446,90 @@ impl CanonicalEncode for SemanticAuditManifestV2 {
     }
 }
 
+/// Demand-neutral successor of the lambda/unit V2 semantic proposal.
+///
+/// V3 preserves the projection-free rank-at-most-two construction and rewrite
+/// surface, while correcting the authority order: structural support defines
+/// seeds and families; demand provenance is attached only downstream at SR2.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct SemanticAuditManifestV3 {
+    pub schema_version: u16,
+    pub profile_id: String,
+    pub authority: ManifestAuthority,
+    pub frozen: bool,
+    pub live_profile_a_access: bool,
+    pub universe_levels: Vec<u16>,
+    pub maximum_rank: u16,
+    pub supported_seed_kinds: Vec<SeedKind>,
+    pub ordered_derivation_rules: Vec<DerivationRuleV1>,
+    pub context_carrier_rules: Vec<ContextCarrierRuleV1>,
+    pub substitution_census_scope: SubstitutionCensusScopeV2,
+    pub construction_substitution_rules: Vec<ConstructionSubstitutionRuleV2>,
+    pub generic_substitution_theorems: Vec<GenericSubstitutionTheoremV2>,
+    pub fresh_rule_matching_protocol: FreshRuleMatchingProtocolV2,
+    pub typed_occurrence_census_protocol: TypedOccurrenceCensusProtocolV2,
+    pub historical_rewrite_protocol: HistoricalRewriteProtocolV2,
+    pub conservativity_protocol: ConservativityProtocolV2,
+    pub overlap_census_protocol: OverlapCensusProtocolV2,
+    pub semantic_identity_protocol: SemanticIdentityProtocolV3,
+    pub equation_port_metadata_protocol: EquationPortMetadataProtocolV3,
+    pub demand_provenance_protocol: DemandProvenanceProtocolV3,
+    pub historical_authority_protocol: HistoricalAuthorityProtocolV3,
+    pub authority_order: Vec<SemanticAuthorityStageV3>,
+    pub q0_rules: Vec<Q0RuleV1>,
+    pub q0_eta_registry_empty: bool,
+    pub q2_rules: Vec<Q2RuleV1>,
+    pub q3_rule: Q3RuleV1,
+    pub maximum_seeds: u16,
+    pub maximum_context_entries: u16,
+    pub maximum_raw_derivations: u32,
+    pub maximum_tuple_dispositions: u32,
+    pub maximum_q2_pair_witnesses: u32,
+}
+
+impl CanonicalEncode for SemanticAuditManifestV3 {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        encoder.u16(self.schema_version);
+        encoder.text(&self.profile_id);
+        self.authority.encode_canonical(encoder);
+        encoder.tag(u8::from(self.frozen));
+        encoder.tag(u8::from(self.live_profile_a_access));
+        encoder.u64(self.universe_levels.len() as u64);
+        for level in &self.universe_levels {
+            encoder.u16(*level);
+        }
+        encoder.u16(self.maximum_rank);
+        encoder.sequence(&self.supported_seed_kinds);
+        encoder.sequence(&self.ordered_derivation_rules);
+        encoder.sequence(&self.context_carrier_rules);
+        self.substitution_census_scope.encode_canonical(encoder);
+        encoder.sequence(&self.construction_substitution_rules);
+        encoder.sequence(&self.generic_substitution_theorems);
+        self.fresh_rule_matching_protocol.encode_canonical(encoder);
+        self.typed_occurrence_census_protocol
+            .encode_canonical(encoder);
+        self.historical_rewrite_protocol.encode_canonical(encoder);
+        self.conservativity_protocol.encode_canonical(encoder);
+        self.overlap_census_protocol.encode_canonical(encoder);
+        self.semantic_identity_protocol.encode_canonical(encoder);
+        self.equation_port_metadata_protocol
+            .encode_canonical(encoder);
+        self.demand_provenance_protocol.encode_canonical(encoder);
+        self.historical_authority_protocol.encode_canonical(encoder);
+        encoder.sequence(&self.authority_order);
+        encoder.sequence(&self.q0_rules);
+        encoder.tag(u8::from(self.q0_eta_registry_empty));
+        encoder.sequence(&self.q2_rules);
+        self.q3_rule.encode_canonical(encoder);
+        encoder.u16(self.maximum_seeds);
+        encoder.u16(self.maximum_context_entries);
+        encoder.u32(self.maximum_raw_derivations);
+        encoder.u32(self.maximum_tuple_dispositions);
+        encoder.u32(self.maximum_q2_pair_witnesses);
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct KernelCostManifestV1 {
@@ -494,6 +642,24 @@ impl VerifiedSemanticAuditManifestV1 {
 pub struct VerifiedSemanticAuditManifestV2 {
     manifest: SemanticAuditManifestV2,
     candidate_digest: Digest,
+}
+
+#[derive(Clone, Debug)]
+pub struct VerifiedSemanticAuditManifestV3 {
+    manifest: SemanticAuditManifestV3,
+    candidate_digest: Digest,
+}
+
+impl VerifiedSemanticAuditManifestV3 {
+    pub fn manifest(&self) -> &SemanticAuditManifestV3 {
+        &self.manifest
+    }
+
+    /// Candidate identity for generic development. This is not an adopted or
+    /// frozen Law-V2 semantic digest and has no live Profile-A authority.
+    pub fn candidate_digest(&self) -> &Digest {
+        &self.candidate_digest
+    }
 }
 
 impl VerifiedSemanticAuditManifestV2 {
@@ -771,6 +937,60 @@ pub fn proposed_semantic_audit_lambda_unit_manifest_v2() -> SemanticAuditManifes
     }
 }
 
+/// Demand-neutral V3 successor preserving the exact V2 lambda/unit surface.
+pub fn proposed_semantic_audit_lambda_unit_manifest_v3() -> SemanticAuditManifestV3 {
+    let v2 = proposed_semantic_audit_lambda_unit_manifest_v2();
+    SemanticAuditManifestV3 {
+        schema_version: SEMANTIC_AUDIT_SCHEMA_VERSION_V3,
+        profile_id: SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V3.to_owned(),
+        authority: v2.authority,
+        frozen: false,
+        live_profile_a_access: false,
+        universe_levels: v2.universe_levels,
+        maximum_rank: v2.maximum_rank,
+        supported_seed_kinds: v2.supported_seed_kinds,
+        ordered_derivation_rules: v2.ordered_derivation_rules,
+        context_carrier_rules: v2.context_carrier_rules,
+        substitution_census_scope: v2.substitution_census_scope,
+        construction_substitution_rules: v2.construction_substitution_rules,
+        generic_substitution_theorems: v2.generic_substitution_theorems,
+        fresh_rule_matching_protocol: v2.fresh_rule_matching_protocol,
+        typed_occurrence_census_protocol: v2.typed_occurrence_census_protocol,
+        historical_rewrite_protocol: v2.historical_rewrite_protocol,
+        conservativity_protocol: v2.conservativity_protocol,
+        overlap_census_protocol: v2.overlap_census_protocol,
+        semantic_identity_protocol: SemanticIdentityProtocolV3::DemandNeutralStructuralSupport,
+        equation_port_metadata_protocol: EquationPortMetadataProtocolV3::BoundNonAuthoritative,
+        demand_provenance_protocol:
+            DemandProvenanceProtocolV3::PostQuotientWeakeningMarginalSr2Only,
+        historical_authority_protocol:
+            HistoricalAuthorityProtocolV3::EmptyBaseOrExactIssuedPriorRewriteSystem,
+        authority_order: vec![
+            SemanticAuthorityStageV3::PublicClauseCensus,
+            SemanticAuthorityStageV3::DemandNeutralSemanticSeedCensus,
+            SemanticAuthorityStageV3::LambdaUnitTypingAndSynthesisMetatheory,
+            SemanticAuthorityStageV3::NativeRankInductiveCarrier,
+            SemanticAuthorityStageV3::SynthesisBackedTypedOccurrenceCensus,
+            SemanticAuthorityStageV3::RewriteSystem,
+            SemanticAuthorityStageV3::FamilyQuotient,
+            SemanticAuthorityStageV3::WeakeningAndRestriction,
+            SemanticAuthorityStageV3::MarginalFamilySet,
+            SemanticAuthorityStageV3::DemandOrbitCensus,
+            SemanticAuthorityStageV3::DemandRealizationCensus,
+            SemanticAuthorityStageV3::Sr2ProvenanceAssignment,
+        ],
+        q0_rules: v2.q0_rules,
+        q0_eta_registry_empty: v2.q0_eta_registry_empty,
+        q2_rules: v2.q2_rules,
+        q3_rule: v2.q3_rule,
+        maximum_seeds: v2.maximum_seeds,
+        maximum_context_entries: v2.maximum_context_entries,
+        maximum_raw_derivations: v2.maximum_raw_derivations,
+        maximum_tuple_dispositions: v2.maximum_tuple_dispositions,
+        maximum_q2_pair_witnesses: v2.maximum_q2_pair_witnesses,
+    }
+}
+
 /// Projection-free successor of the broader V2 kernel-cost proposal.
 pub fn proposed_kernel_cost_lambda_unit_manifest_v2() -> KernelCostManifestV2 {
     let mut manifest = proposed_kernel_cost_manifest_v2();
@@ -853,6 +1073,21 @@ pub fn verify_semantic_audit_lambda_unit_manifest_v2(
     AuditDecision::Proven(VerifiedSemanticAuditManifestV2 {
         candidate_digest: Digest::of_canonical(
             "pen-semantic-audit/proposed-semantic-lambda-unit-manifest/v2",
+            manifest,
+        ),
+        manifest: manifest.clone(),
+    })
+}
+
+pub fn verify_semantic_audit_lambda_unit_manifest_v3(
+    manifest: &SemanticAuditManifestV3,
+) -> AuditDecision<VerifiedSemanticAuditManifestV3> {
+    if manifest != &proposed_semantic_audit_lambda_unit_manifest_v3() {
+        return AuditDecision::Unknown(AuditUnknownReason::MalformedManifest);
+    }
+    AuditDecision::Proven(VerifiedSemanticAuditManifestV3 {
+        candidate_digest: Digest::of_canonical(
+            "pen-semantic-audit/proposed-semantic-lambda-unit-manifest/v3",
             manifest,
         ),
         manifest: manifest.clone(),
@@ -967,6 +1202,32 @@ canonical_tags!(ConservativityProtocolV2, {
 canonical_tags!(OverlapCensusProtocolV2, {
     OverlapCensusProtocolV2::ExhaustiveImmediateEdgePairs => 0
 });
+canonical_tags!(SemanticIdentityProtocolV3, {
+    SemanticIdentityProtocolV3::DemandNeutralStructuralSupport => 0
+});
+canonical_tags!(EquationPortMetadataProtocolV3, {
+    EquationPortMetadataProtocolV3::BoundNonAuthoritative => 0
+});
+canonical_tags!(DemandProvenanceProtocolV3, {
+    DemandProvenanceProtocolV3::PostQuotientWeakeningMarginalSr2Only => 0
+});
+canonical_tags!(HistoricalAuthorityProtocolV3, {
+    HistoricalAuthorityProtocolV3::EmptyBaseOrExactIssuedPriorRewriteSystem => 0
+});
+canonical_tags!(SemanticAuthorityStageV3, {
+    SemanticAuthorityStageV3::PublicClauseCensus => 0,
+    SemanticAuthorityStageV3::DemandNeutralSemanticSeedCensus => 1,
+    SemanticAuthorityStageV3::LambdaUnitTypingAndSynthesisMetatheory => 2,
+    SemanticAuthorityStageV3::NativeRankInductiveCarrier => 3,
+    SemanticAuthorityStageV3::SynthesisBackedTypedOccurrenceCensus => 4,
+    SemanticAuthorityStageV3::RewriteSystem => 5,
+    SemanticAuthorityStageV3::FamilyQuotient => 6,
+    SemanticAuthorityStageV3::WeakeningAndRestriction => 7,
+    SemanticAuthorityStageV3::MarginalFamilySet => 8,
+    SemanticAuthorityStageV3::DemandOrbitCensus => 9,
+    SemanticAuthorityStageV3::DemandRealizationCensus => 10,
+    SemanticAuthorityStageV3::Sr2ProvenanceAssignment => 11
+});
 canonical_tags!(Q0RuleV1, {
     Q0RuleV1::DeBruijn => 0,
     Q0RuleV1::SequentialSubstitution => 1,
@@ -1015,14 +1276,17 @@ mod tests {
     use super::{
         AuditDecision, AuditUnknownReason, ClauseDispositionKindV1, ConservativityProtocolV2,
         ConstructionSubstitutionRuleV2, FreeCompletionRuleV2, FreshRuleMatchingProtocolV2,
-        GenericSubstitutionTheoremV2, HistoricalRewriteProtocolV2, OverlapCensusProtocolV2,
-        Q0RuleV1, Q3RuleV1, SubstitutionCensusScopeV2, TypedOccurrenceCensusProtocolV2,
+        GenericSubstitutionTheoremV2, HistoricalAuthorityProtocolV3, HistoricalRewriteProtocolV2,
+        OverlapCensusProtocolV2, Q0RuleV1, Q3RuleV1, SemanticAuthorityStageV3,
+        SemanticIdentityProtocolV3, SubstitutionCensusScopeV2, TypedOccurrenceCensusProtocolV2,
         proposed_kernel_cost_lambda_unit_manifest_v2, proposed_kernel_cost_manifest_v1,
         proposed_kernel_cost_manifest_v2, proposed_semantic_audit_lambda_unit_manifest_v1,
-        proposed_semantic_audit_lambda_unit_manifest_v2, proposed_semantic_audit_manifest_v1,
+        proposed_semantic_audit_lambda_unit_manifest_v2,
+        proposed_semantic_audit_lambda_unit_manifest_v3, proposed_semantic_audit_manifest_v1,
         verify_core_manifests_v1, verify_kernel_cost_lambda_unit_manifest_v2,
         verify_kernel_cost_manifest_v2, verify_semantic_audit_lambda_unit_manifest_v1,
-        verify_semantic_audit_lambda_unit_manifest_v2, verify_semantic_audit_manifest_v1,
+        verify_semantic_audit_lambda_unit_manifest_v2,
+        verify_semantic_audit_lambda_unit_manifest_v3, verify_semantic_audit_manifest_v1,
     };
 
     #[test]
@@ -1246,6 +1510,116 @@ mod tests {
             verify_semantic_audit_lambda_unit_manifest_v2(&changed),
             AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
         ));
+    }
+
+    #[test]
+    fn lambda_unit_v3_is_demand_neutral_closed_and_has_no_live_authority() {
+        let proposed = proposed_semantic_audit_lambda_unit_manifest_v3();
+        assert_eq!(proposed.profile_id, "gf2-semantic-audit-lambda-unit-v3");
+        assert_eq!(proposed.schema_version, 3);
+        assert!(!proposed.frozen);
+        assert!(!proposed.live_profile_a_access);
+        assert_eq!(
+            proposed.semantic_identity_protocol,
+            SemanticIdentityProtocolV3::DemandNeutralStructuralSupport
+        );
+        assert_eq!(
+            proposed.historical_authority_protocol,
+            HistoricalAuthorityProtocolV3::EmptyBaseOrExactIssuedPriorRewriteSystem
+        );
+        assert_eq!(
+            proposed.authority_order,
+            vec![
+                SemanticAuthorityStageV3::PublicClauseCensus,
+                SemanticAuthorityStageV3::DemandNeutralSemanticSeedCensus,
+                SemanticAuthorityStageV3::LambdaUnitTypingAndSynthesisMetatheory,
+                SemanticAuthorityStageV3::NativeRankInductiveCarrier,
+                SemanticAuthorityStageV3::SynthesisBackedTypedOccurrenceCensus,
+                SemanticAuthorityStageV3::RewriteSystem,
+                SemanticAuthorityStageV3::FamilyQuotient,
+                SemanticAuthorityStageV3::WeakeningAndRestriction,
+                SemanticAuthorityStageV3::MarginalFamilySet,
+                SemanticAuthorityStageV3::DemandOrbitCensus,
+                SemanticAuthorityStageV3::DemandRealizationCensus,
+                SemanticAuthorityStageV3::Sr2ProvenanceAssignment,
+            ]
+        );
+
+        let AuditDecision::Proven(verified) =
+            verify_semantic_audit_lambda_unit_manifest_v3(&proposed)
+        else {
+            panic!("exact V3 proposal should verify");
+        };
+        assert!(!verified.manifest().frozen);
+        assert!(!verified.manifest().live_profile_a_access);
+
+        let mut changed = proposed;
+        changed.authority_order.swap(1, 9);
+        assert!(matches!(
+            verify_semantic_audit_lambda_unit_manifest_v3(&changed),
+            AuditDecision::Unknown(AuditUnknownReason::MalformedManifest)
+        ));
+    }
+
+    #[test]
+    fn lambda_unit_v3_fail_closed_reasons_have_stable_wire_names() {
+        let cases = [
+            (
+                AuditUnknownReason::MissingLambdaUnitTypingMetatheory,
+                "\"missing_lambda_unit_typing_metatheory\"",
+            ),
+            (
+                AuditUnknownReason::MissingDemandNeutralSemanticSeedCensus,
+                "\"missing_demand_neutral_semantic_seed_census\"",
+            ),
+            (
+                AuditUnknownReason::MissingNativeRankInductiveCarrierV3,
+                "\"missing_native_rank_inductive_carrier_v3\"",
+            ),
+            (
+                AuditUnknownReason::MissingSynthesisBackedTypedOccurrenceCensus,
+                "\"missing_synthesis_backed_typed_occurrence_census\"",
+            ),
+            (
+                AuditUnknownReason::MissingRewriteSystemV3,
+                "\"missing_rewrite_system_v3\"",
+            ),
+            (
+                AuditUnknownReason::MissingFamilyQuotientV3,
+                "\"missing_family_quotient_v3\"",
+            ),
+            (
+                AuditUnknownReason::MissingWeakeningMarginalAuthority,
+                "\"missing_weakening_marginal_authority\"",
+            ),
+            (
+                AuditUnknownReason::MissingDemandOrbitCensusV2,
+                "\"missing_demand_orbit_census_v2\"",
+            ),
+            (
+                AuditUnknownReason::MissingDemandRealizationCensusV2,
+                "\"missing_demand_realization_census_v2\"",
+            ),
+            (
+                AuditUnknownReason::MissingSr2ProvenanceAssignment,
+                "\"missing_sr2_provenance_assignment\"",
+            ),
+            (
+                AuditUnknownReason::MissingIssuedPriorRewriteSystemV3,
+                "\"missing_issued_prior_rewrite_system_v3\"",
+            ),
+            (
+                AuditUnknownReason::DemandAuthorityEnteredStructuralIdentity,
+                "\"demand_authority_entered_structural_identity\"",
+            ),
+        ];
+
+        for (reason, expected) in cases {
+            assert_eq!(
+                serde_json::to_string(&reason).expect("unknown reason should serialize"),
+                expected
+            );
+        }
     }
 
     #[test]
