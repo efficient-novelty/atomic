@@ -1552,3 +1552,43 @@ Any experiment intended to continue further now requires a separately
 motivated, versioned, and pre-frozen structure-producing principle. Adding
 contextual internalization, action, comparison, mate, horn, or any other rule
 to the completed H3/H4 profile after observing this halt is prohibited.
+
+## Execution checkpoint — window-register audit, 2026-07-29
+
+The completed H3/H4 experiment is now registered as immutable Profile A:
+owner-specific `G-Use`/`G-Compute` constitutive demand, total discharge, a
+unique direct eliminator, and then `HaltedDebtFree`. The
+[profile registry](LAW_V2_PROFILE_REGISTRY.md) pins both semantic digests and
+both result digests, reserves the contextual and productive profiles as
+`proposed_not_adopted`, and exports the typed
+`StructuralRunTermination` vocabulary. No registry entry exports a privileged
+candidate fixture.
+
+The required
+[Acts 1–4 semantic-register audit](LAW_V2_WINDOW_REGISTER_AUDIT_V1.md) binds
+the exact registered events, checked boundary extensions, Act-4 free seal,
+typed demand families, response quotient, provenance digests, and halt
+certificate. It consumes no legacy structural vector or archived result.
+
+Its outcome is `UndefinedAudit`. The checked kernel and demand evidence does
+not contain the distinct proof objects required to issue any
+\((\kappa_i,\nu_i)\) pair: first-irreducible kernel bases, complete pre/post
+GF2 semantic-family carriers, typed family weakening, SR2 provenance
+injections, and the family-versus-instance quotient all remain open. The
+formal appendix itself records the finite GF2 schema carrier, checker, and
+completeness certificate as unimplemented. Therefore both the previous-window
+bar and the direct act's efficiency remain undefined, and no productivity
+experiment is authorized.
+
+In parallel, the requested
+[self-containment adjudication](LAW_V2_CONSTITUTIVE_SELF_CONTAINMENT_ADJUDICATION_V1.md)
+has been drafted without adoption or implementation. It recommends testing
+two-sided anonymous universal completion
+\(L\dashv\pi^\ast\dashv R\), retains the local `G-Use`/`G-Compute` debt,
+specifies generic non-Genesis tests and falsifiers, and requires independent
+review, complete contextual infrastructure, Rust/Agda agreement, and a
+pre-run semantic freeze before the registered prefix may be exposed.
+
+Execution stops at the window-audit blocker set. The non-adopted contextual
+draft may be reviewed in parallel, but neither a productivity-gated run nor a
+live contextual H3 run is lawful from the current evidence.

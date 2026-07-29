@@ -11,6 +11,7 @@
 mod certificates;
 mod contract_status;
 mod history;
+mod profile_registry;
 mod register;
 mod registered_bootstrap;
 mod registered_bootstrap_export;
@@ -19,6 +20,7 @@ pub use certificates::*;
 pub use contract_status::*;
 pub use history::*;
 pub use pen_kernel::{Digest, DigestError};
+pub use profile_registry::*;
 pub use register::{LegacyStructuralValue, SemanticFamilyValue, ValueRegister};
 pub use registered_bootstrap::*;
 pub use registered_bootstrap_export::*;

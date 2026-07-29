@@ -18,7 +18,9 @@ jobs:
       - name: Verify dependency and source firewall
         run: python scripts/check_law_v2_firewall.py --isolation-build --json
       - name: Test firewall bypass detection
-        run: python -m unittest discover -s scripts -p "test_check_law_v2_firewall.py"
+        run: python -m unittest discover -s scripts -p "test_check_law_v2*.py"
+      - name: Verify frozen profile and window-audit bindings
+        run: python scripts/check_law_v2_window_register_audit_v1.py
       - name: Test quarantined oracle testimony
         run: cargo test --locked -p pen-oracle
       - name: Test lawful packages in the full workspace

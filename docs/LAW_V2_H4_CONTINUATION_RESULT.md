@@ -4,6 +4,8 @@
 
 **Status:** `HALTED`
 
+**Structural termination:** `HaltedDebtFree`
+
 **Profile:** `law-v2-owner-specific-inductive-continuation-v1`
 
 **Continuation semantic digest:** `blake3:00d97ce3446442d91b8572557c16dd0576f7281260b5c000e64f41323323c7e2`
