@@ -9,6 +9,7 @@
 #![forbid(unsafe_code)]
 
 mod adapter;
+mod continuation;
 mod contract;
 mod operational;
 mod quotient;
@@ -28,6 +29,15 @@ pub use adapter::{
     FragmentValidationError, LawDecision, LawKernel, NativeKernelAdapter, NativeVerifiedProof,
     NativeVerifiedRefutation, OutsideFragment, OutsideReason, ResourceExhausted,
     VerifiedFiniteFragment,
+};
+pub use continuation::{
+    ContinuationExpirationRule, ContinuationExtractionRule, ContinuationHaltRule,
+    ContinuationIntegrationRule, ContinuationLibraryRule,
+    LAW_V2_CONTINUATION_SEMANTIC_MANIFEST_SCHEMA_VERSION, LawV2ContinuationSemanticManifestV1,
+    VerifiedH4CensusV1, VerifiedH4DemandDecisionV1, VerifiedH4HaltCertificateV1,
+    VerifiedLawV2ContinuationSemanticManifestV1, VerifiedOneNullaryFreeSealV1,
+    continue_one_nullary_inductive_completion_v1, frozen_law_v2_continuation_semantic_manifest_v1,
+    verify_law_v2_continuation_semantic_manifest_v1,
 };
 pub use contract::{
     CANONICAL_ORDER_VERSION, CanonicalOrder, DECISION_CLAIM_SCHEMA_VERSION,

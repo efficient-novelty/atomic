@@ -1522,3 +1522,33 @@ not an H3 implementation gap: either the Genesis sequence must accept this
 profile-relative revision, or a separately motivated, versioned, and frozen
 `ContextualInternalization` profile must be authorized. The completed H3
 manifest cannot lawfully be changed after observing its result.
+
+## Execution checkpoint — revised Act 4 continuation, 2026-07-29
+
+The direct eliminator has now been accepted as the revised fourth act. Before
+running its prospective successor census, the
+[H4 continuation adjudication](LAW_V2_H4_CONTINUATION_ADJUDICATION_V1.md)
+froze an additive transition profile at
+`blake3:00d97ce3446442d91b8572557c16dd0576f7281260b5c000e64f41323323c7e2`.
+It changes no H3 rule and introduces no new demand generator. It specifies
+only exact singleton free sealing, active-window extraction, cumulative
+derivability, expiration, and debt-free halt.
+
+The resulting
+[H4 continuation certificate](LAW_V2_H4_CONTINUATION_RESULT.md) has result
+digest
+`blake3:20f8940f305a71802728af3c9206b7f0d0c126c4528459e9274f878a7dd324b8`.
+The fourth event adds exactly the bodyless direct eliminator and its generated
+constructor equation. In the new width-two window, the exhaustive prospective
+Step-5 inventory contains the same `G-Use` and `G-Compute` ports. Both replay
+as `Derived`; extraction, derivability, and expiration are complete; and the
+live-orbit count is zero.
+
+Consequently, the revised owner-specific `G-Use`/`G-Compute` sequence halts
+after four sealed acts. No fifth structure is generated. This supersedes the
+historical expectation of autonomous continuation to fifteen only for this
+explicitly frozen narrow profile; it makes no unrestricted semantic claim.
+Any experiment intended to continue further now requires a separately
+motivated, versioned, and pre-frozen structure-producing principle. Adding
+contextual internalization, action, comparison, mate, horn, or any other rule
+to the completed H3/H4 profile after observing this halt is prohibited.

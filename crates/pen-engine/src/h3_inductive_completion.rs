@@ -33,9 +33,11 @@ use serde::{Deserialize, Serialize};
 
 pub const LAW_V2_H3_INDUCTIVE_COMPLETION_REPORT_SCHEMA_VERSION: u16 = 1;
 pub const LAW_V2_H3_INDUCTIVE_COMPLETION_PROFILE_ID: &str = "gsc-inductive-completion-core-v1";
-const REGISTERED_BOOTSTRAP_ASSET_CANONICAL_LF_DIGEST: &str =
+const ISSUED_H3_RESULT_DIGEST_V1: &str =
+    "blake3:f43acaf6f0b0b9e51dc9a55829eedbc1fb2f7cf1090260ac2d244d1616a27d03";
+pub(crate) const REGISTERED_BOOTSTRAP_ASSET_CANONICAL_LF_DIGEST: &str =
     "blake3:f62e7503fa834800455ad67ccd02f6997476d17f85db5250293136cf0f0ef4d9";
-const REGISTERED_BOOTSTRAP_ASSET_BYTES: &[u8] =
+pub(crate) const REGISTERED_BOOTSTRAP_ASSET_BYTES: &[u8] =
     include_bytes!("../../pen-law/assets/law_v2a_registered_bootstrap_v1.json");
 
 #[derive(Clone, Debug, Deserialize, Eq, JsonSchema, PartialEq, Serialize)]
@@ -1190,7 +1192,7 @@ fn report_body_digest(body: &LawV2H3InductiveCompletionReportBodyV1) -> Option<D
     ))
 }
 
-fn encode_canonical_json(value: &serde_json::Value, encoder: &mut CanonicalEncoder) {
+pub(crate) fn encode_canonical_json(value: &serde_json::Value, encoder: &mut CanonicalEncoder) {
     match value {
         serde_json::Value::Null => encoder.tag(0),
         serde_json::Value::Bool(value) => {
@@ -1234,9 +1236,67 @@ pub fn replay_law_v2_h3_inductive_completion_report_v1(
     match run_law_v2_h3_inductive_completion_v1() {
         LawV2H3InductiveCompletionOutcomeV1::Proven { report: expected } => {
             report == expected.as_ref()
+                || (report.result_digest.as_str() == ISSUED_H3_RESULT_DIGEST_V1
+                    && h3_semantic_projection_matches(report, &expected))
         }
         LawV2H3InductiveCompletionOutcomeV1::Unknown { .. } => false,
     }
+}
+
+/// Verifier identity is intentionally not part of the frozen mathematics.
+///
+/// The issued V1 artifact remains replayable after an additive verifier
+/// successor only when its exact historical result digest is known and every
+/// proof-relevant semantic field is reproduced by the current live run.  The
+/// current verifier manifest and the verifier-bound aggregate slice digest are
+/// excluded; no other field is.
+fn h3_semantic_projection_matches(
+    issued: &LawV2H3InductiveCompletionReportV1,
+    current: &LawV2H3InductiveCompletionReportV1,
+) -> bool {
+    let left = &issued.body;
+    let right = &current.body;
+    left.schema_version == right.schema_version
+        && left.profile_id == right.profile_id
+        && left.authority == right.authority
+        && left.semantic_manifest == right.semantic_manifest
+        && left.semantic_manifest_digest == right.semantic_manifest_digest
+        && left.bootstrap == right.bootstrap
+        && left.history == right.history
+        && left.active_demand_inventory == right.active_demand_inventory
+        && left.registered_frame == right.registered_frame
+        && left.use_family == right.use_family
+        && left.compute_families == right.compute_families
+        && left.pre_response == right.pre_response
+        && left.equation_extension == right.equation_extension
+        && left.response == right.response
+        && left.candidate_carrier == right.candidate_carrier
+        && left.quotient == right.quotient
+        && left.conclusion.live_profile_issued == right.conclusion.live_profile_issued
+        && left
+            .conclusion
+            .direct_eliminator_is_unique_class_relative_to_frozen_profile
+            == right
+                .conclusion
+                .direct_eliminator_is_unique_class_relative_to_frozen_profile
+        && left
+            .conclusion
+            .current_owner_specific_profile_recovers_archived_four_way_result
+            == right
+                .conclusion
+                .current_owner_specific_profile_recovers_archived_four_way_result
+        && left.conclusion.contextual_internalization_was_adopted
+            == right.conclusion.contextual_internalization_was_adopted
+        && left.conclusion.archived_candidate_inputs_loaded
+            == right.conclusion.archived_candidate_inputs_loaded
+        && left.conclusion.broader_semantic_claim_made
+            == right.conclusion.broader_semantic_claim_made
+        && left.conclusion.disposition == right.conclusion.disposition
+        && left.conclusion.semantic_manifest_digest == right.conclusion.semantic_manifest_digest
+        && left.conclusion.active_demand_inventory_binding_digest
+            == right.conclusion.active_demand_inventory_binding_digest
+        && left.conclusion.registered_frame_binding_digest
+            == right.conclusion.registered_frame_binding_digest
 }
 
 pub fn law_v2_h3_inductive_completion_json_pretty_v1() -> String {
@@ -1290,7 +1350,7 @@ fn law_v2_h3_engine_source_digest() -> Option<Digest> {
     )
 }
 
-fn canonical_source_digest(domain: &str, chunks: &[&[u8]]) -> Option<Digest> {
+pub(crate) fn canonical_source_digest(domain: &str, chunks: &[&[u8]]) -> Option<Digest> {
     let canonical = chunks
         .iter()
         .map(|chunk| {
@@ -1303,7 +1363,7 @@ fn canonical_source_digest(domain: &str, chunks: &[&[u8]]) -> Option<Digest> {
     Some(Digest::of_domain_chunks(domain, &slices))
 }
 
-fn canonical_lf_text_digest(bytes: &[u8]) -> Option<Digest> {
+pub(crate) fn canonical_lf_text_digest(bytes: &[u8]) -> Option<Digest> {
     let text = std::str::from_utf8(bytes).ok()?;
     let normalized = text.replace("\r\n", "\n");
     if normalized.contains('\r') {

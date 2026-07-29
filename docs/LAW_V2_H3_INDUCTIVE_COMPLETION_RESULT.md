@@ -107,3 +107,11 @@ Adding contextual internalization or any other rule to this H3 manifest after
 seeing the result is prohibited by the freeze. Broader operation/cell-bearing
 history machinery remains a later gate, but it cannot resolve this immediate
 semantic choice.
+
+## Accepted continuation
+
+The direct eliminator was subsequently accepted as the revised fourth act
+under a separately frozen, additive continuation profile. The complete
+prospective Step-5 census is debt-free, so that profile halts after Act 4
+without generating another structure. See
+[`LAW_V2_H4_CONTINUATION_RESULT.md`](LAW_V2_H4_CONTINUATION_RESULT.md).

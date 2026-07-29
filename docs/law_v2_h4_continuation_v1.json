@@ -1,0 +1,266 @@
+{
+  "status": "halted",
+  "report": {
+    "schema_version": 1,
+    "profile_id": "law-v2-owner-specific-inductive-continuation-v1",
+    "authority": "accepted_h3_semantic_components_plus_versioned_free_seal_and_complete_h4_census",
+    "base_semantic_manifest": {
+      "schema_version": 1,
+      "profile": "closed_inductive_completion_core_v1",
+      "semantic_limits": {
+        "max_code_nodes": 65536,
+        "max_code_term_depth": 64,
+        "max_universe_level": 256,
+        "max_parameters": 64,
+        "max_indices": 64,
+        "max_constructors": 256,
+        "max_constructor_arguments": 256,
+        "max_boundary_ports": 256,
+        "max_family_premises": 256,
+        "max_family_outputs": 256,
+        "max_verification_judgments": 512
+      },
+      "declaration_group_grammar": "finite_strictly_positive_v1",
+      "port_grammar": "typed_term_and_generated_equation_v2",
+      "history_rule_grammar": "use_then_compute_v1",
+      "compiler_equations": "structural_eliminator_and_constructor_computation_v1",
+      "support_semantics": "principal_birth_and_normalized_type_support_v1",
+      "canonical_order": "rule_source_port_digest_v1",
+      "q0_rewrites": "dependent_core_and_admitted_fresh_computation_v1",
+      "q2_presentations": "binder_telescope_and_transparent_alias_v1",
+      "q3_edges": "empty_origin_cutoff_v1",
+      "equation_extension_grammar": "fresh_nonrecursive_constructor_computation_v1",
+      "response_candidate_grammar": {
+        "schema_version": 1,
+        "live_use_family_shape": "every_live_single_term_output_use_family_v1",
+        "fresh_head_grammar": "one_bodyless_head_closed_over_canonical_use_context_v1",
+        "filler_grammar": "head_applied_to_all_context_variables_in_binder_order_v1",
+        "generated_equation_coverage": "every_compute_equation_referencing_exact_use_port_v1",
+        "fresh_head_identity": "semantic_boundary_frame_use_port_ordered_compute_ports_and_closed_type_v1",
+        "canonical_order": "use_family_use_port_then_compute_family_output_port_digest_v1",
+        "max_live_use_families": 256,
+        "max_compute_families_per_use": 256,
+        "max_equations_per_candidate": 256,
+        "max_response_candidates": 256
+      },
+      "derivability_grammar": {
+        "schema_version": 1,
+        "goal_universe": "ports_verification_public_compiler_registry_and_structural_subgoals_v1",
+        "ordered_rules": [
+          "public_exact",
+          "q0_conversion",
+          "context_weakening",
+          "checked_substitution",
+          "lambda_introduction",
+          "application",
+          "pair_introduction",
+          "first_projection",
+          "second_projection",
+          "equation_replay",
+          "quotient_transport"
+        ],
+        "ground_rule_disposition": "applicable_certified_inapplicable_or_unknown_v1",
+        "saturation_order": "goal_digest_then_rule_inventory_then_premise_digest_v1",
+        "max_goals": 65536,
+        "max_grounded_rule_instances": 262144,
+        "max_rule_premises": 256,
+        "max_fixed_point_rounds": 65536
+      },
+      "reference_vector_suite": {
+        "schema_version": 1,
+        "spec_token": "gsc-inductive-core-generic-four-v1/two-nullary=proven-supported;nonrecursive=proven-supported;recursive=proven-generated-recursive-call-beta;path=unknown-unsupported-computation-mode",
+        "ordered_cases": [
+          {
+            "vector": "two_nullary_constructors",
+            "expected_disposition": "proven_supported"
+          },
+          {
+            "vector": "one_nonrecursive_argument",
+            "expected_disposition": "proven_supported"
+          },
+          {
+            "vector": "one_recursive_argument_generated_call_beta",
+            "expected_disposition": "proven_generated_recursive_call_beta"
+          },
+          {
+            "vector": "path_computation_mode",
+            "expected_disposition": "unknown_unsupported_computation_mode"
+          }
+        ]
+      },
+      "family_schema": "multi_output_exact_premise_v2",
+      "context_map_grammar": "identity_only_v1"
+    },
+    "base_semantic_manifest_digest": "blake3:d61458ebd47036861e48af9ef458df1b2b3dc890194069958ef2f14d4afdd11e",
+    "continuation_semantic_manifest": {
+      "schema_version": 1,
+      "base_gsc_semantic_manifest_digest": "blake3:d61458ebd47036861e48af9ef458df1b2b3dc890194069958ef2f14d4afdd11e",
+      "demand_window_width": 2,
+      "integration_rule": "exact_singleton_fresh_head_and_generated_equations_v1",
+      "extraction_rule": "registered_families_whose_birth_support_touches_active_window_v1",
+      "library_rule": "cumulative_boundary_and_sealed_generated_equations_v1",
+      "expiration_rule": "prior_live_ports_remain_derived_under_exact_cumulative_weakening_v1",
+      "halt_rule": "complete_extracted_all_derived_and_zero_live_forbids_positive_cost_v1"
+    },
+    "continuation_semantic_manifest_digest": "blake3:00d97ce3446442d91b8572557c16dd0576f7281260b5c000e64f41323323c7e2",
+    "accepted_h3": {
+      "result_digest": "blake3:f43acaf6f0b0b9e51dc9a55829eedbc1fb2f7cf1090260ac2d244d1616a27d03",
+      "semantic_manifest_digest": "blake3:d61458ebd47036861e48af9ef458df1b2b3dc890194069958ef2f14d4afdd11e",
+      "active_demand_inventory_binding_digest": "blake3:3373e6a168e258a39384bef307c2fc91dbf257040e35ccef5450ccca1de04150",
+      "registered_frame_binding_digest": "blake3:e23a5a4f86992163d0ad8ea7cc302c372cb5917156499856603c3cb108f7ac8f",
+      "pre_response_certificate_digest": "blake3:7266d46172a975b00911c9608548e74b013738d82ba12b9e2544c0612215a15b",
+      "equation_set_digest": "blake3:6c680a188c72efd47a1f4a0a7cfa1b88018c3f345b09bd7eaa39d79dda0ecdc3",
+      "response_digest": "blake3:6670fc8f9477dfd7dda71cc539bcb5763c895bd0e3c5381fabe180c0ff19828d",
+      "candidate_carrier_digest": "blake3:b98385b8405a06e2e76cc9412129fe2139f5f4a738abe199f829dfa308ea01cb",
+      "quotient_digest": "blake3:758d478c94a4b1b9b8ac4ae17cf0017590df6077852697c4f565ac981acff950",
+      "semantic_components_replayed": true
+    },
+    "verifier": {
+      "demand_verifier_manifest_digest": "blake3:6ed4877eaf1126a0ac7a0d23ce8aea09dd262ad31020c6b84e76a4a0500747cc",
+      "gf2_slice_verifier_manifest": {
+        "schema_version": 1,
+        "semantic_manifest_digest": "blake3:d61458ebd47036861e48af9ef458df1b2b3dc890194069958ef2f14d4afdd11e",
+        "demand_verifier_manifest_digest": "blake3:6ed4877eaf1126a0ac7a0d23ce8aea09dd262ad31020c6b84e76a4a0500747cc",
+        "kernel_protocol_digest": "blake3:ba7e649ef9417ef05bf7f99f91b89e0df03a3175e23f1864c5289a7c4639d2c5",
+        "normalizer_protocol_digest": "blake3:e65f39a60404cb732834f2c3c9d2401810c969addd1aa5d615b08fcb1c4025c9",
+        "operational_grammar_digest": "blake3:9dcab9520a2b91257c42e955202794b3aca00e1ea881252ad8b981ae235fd91e",
+        "verifier_source_digest": "blake3:b738da0bb0796f3a6f2ec38becdd9b4c417c138796f13089d975027b1e053f9a",
+        "toolchain_digest": "blake3:80f3934a0d46393c91343a44f54784dbba98332a44cbe995a8812f4c7f384353"
+      },
+      "gf2_slice_verifier_manifest_digest": "blake3:e854b211ce47494f6e93dd88d13e778a5622b3a0590f7bc30685a97a5eb9ad38",
+      "continuation_verifier_source_digest": "blake3:c3f561f685cb3a7f0e0fe15602f3ec1448fe7e07979e5844e75da43c0a362a89",
+      "kernel_protocol_digest": "blake3:ba7e649ef9417ef05bf7f99f91b89e0df03a3175e23f1864c5289a7c4639d2c5",
+      "normalizer_protocol_digest": "blake3:e65f39a60404cb732834f2c3c9d2401810c969addd1aa5d615b08fcb1c4025c9",
+      "workspace_manifest_digest": "blake3:ae28d252bdab6a64276b6fbaefa787cc8ac128c08e226c5a3bba81a726ae0efd",
+      "workspace_lock_digest": "blake3:7393a76e7af7c9cfa798df50f669a3ec2c55ffd6568cd97ed2ff4c28951152d1",
+      "production_isolation_lock_digest": "blake3:2f3425231dfcf77c9c136dcfe6c5cfa7cb58d55012ed323f4f6e7d4c08635d3a",
+      "composite_provenance_digest": "blake3:43ea6f5bbabcd0bafa86453788049313bfe0d266bac6d966addc7ebe3e96775a"
+    },
+    "free_seal": {
+      "ordinal": 4,
+      "predecessor": "blake3:09421cfe5e88907303660a479eccd42289e02116644261a047a8f1975a3ccecb",
+      "event_id": "blake3:343557e3c78ce3d8990e6c5507328969feb492d7d9696a29e0b1ca9ec788e640",
+      "pre_history_digest": "blake3:5b8a6bd22fd77519b3287ca7d67a3fc5e3f73c29a17e5e74584a3cba119ec172",
+      "post_history_digest": "blake3:65d7e9de83ca67aaab669b4d29727dfc7504c928d8f5df056cb91689663cbb22",
+      "pre_boundary_digest": "blake3:4ca5ab35cee3dd5b4773370648fdf5b02fb65a697ac7dee2603ad2ac3c4705d4",
+      "post_boundary_digest": "blake3:43fc674809cb88a77248b6d5f32447b1bba39dbfd3cd50572accda3132c897af",
+      "extension": {
+        "id": "blake3:b8a64785e598ba37c009fc3b769516c228cbcb9dba62f5ed8080d44031015241",
+        "ty": {
+          "form": "pi",
+          "parameter": {
+            "form": "pi",
+            "parameter": {
+              "form": "unit_type"
+            },
+            "body": {
+              "form": "sort",
+              "level": 0
+            }
+          },
+          "body": {
+            "form": "pi",
+            "parameter": {
+              "form": "apply",
+              "function": {
+                "form": "var",
+                "index": 0
+              },
+              "argument": {
+                "form": "unit"
+              }
+            },
+            "body": {
+              "form": "pi",
+              "parameter": {
+                "form": "unit_type"
+              },
+              "body": {
+                "form": "apply",
+                "function": {
+                  "form": "var",
+                  "index": 2
+                },
+                "argument": {
+                  "form": "var",
+                  "index": 0
+                }
+              }
+            }
+          }
+        },
+        "body": null
+      },
+      "extension_digest": "blake3:6b84db708eb4452549e56e0cb95592de8c6bdf0443e9f50403923272e828ace0",
+      "source_identity": "blake3:b5f55eaec64dcfe474613606665c68eb2bd4dcc39e7f4e29c6d0e71487d1efda",
+      "binding_identity": "blake3:cbd347fe7066e57336d98b194637301d24060d654ed8119767a31b99896f9042",
+      "event_export_digest": "blake3:4c04a9545b8d8dd540ad94e59f27294a132d4258106e86f9264502ad4a7d6c7e",
+      "activated_closed_former_group_count": 0,
+      "equation_set_digest": "blake3:6c680a188c72efd47a1f4a0a7cfa1b88018c3f345b09bd7eaa39d79dda0ecdc3",
+      "response_digest": "blake3:6670fc8f9477dfd7dda71cc539bcb5763c895bd0e3c5381fabe180c0ff19828d",
+      "quotient_digest": "blake3:758d478c94a4b1b9b8ac4ae17cf0017590df6077852697c4f565ac981acff950",
+      "active_anchor_digest": "blake3:f8b33fdc0ac8b7053c52b8210033685edba3a3ad4ff967fad17c6d9c27289f8f",
+      "empty_q3_registry_digest": "blake3:6dbd1cb4460c9692671dc3b07c199cfef2968f9b96d6f6c9d02b865a4c49b674",
+      "initiality_certificate_digest": "blake3:3d331a218a1cd2ed3eafba7f255dd699c0c47060f015b7bf0fde5a66ff7c286f",
+      "free_seal_digest": "blake3:b6339802d5b18fa5843dc4ab97147551b196d3298f62d8e1b96749f45e8ab207",
+      "exact_old_boundary_prefix_preserved": true,
+      "exact_one_bodyless_generator": true,
+      "exact_one_generated_equation": true,
+      "no_additional_generator_or_equation": true
+    },
+    "prospective_census": {
+      "active_older": "blake3:09421cfe5e88907303660a479eccd42289e02116644261a047a8f1975a3ccecb",
+      "active_newer": "blake3:343557e3c78ce3d8990e6c5507328969feb492d7d9696a29e0b1ca9ec788e640",
+      "active_anchor_digest": "blake3:f8b33fdc0ac8b7053c52b8210033685edba3a3ad4ff967fad17c6d9c27289f8f",
+      "registered_inventory_binding_digest": "blake3:3373e6a168e258a39384bef307c2fc91dbf257040e35ccef5450ccca1de04150",
+      "continuation_inventory_binding_digest": "blake3:245e959129b26d455e6af727c033941eb7761b39cfe72513ce78873252542486",
+      "active_frame_binding_digests": [
+        "blake3:e23a5a4f86992163d0ad8ea7cc302c372cb5917156499856603c3cb108f7ac8f"
+      ],
+      "decisions": [
+        {
+          "family_id": "blake3:8b013de648b7776703e2394effda151f33d4f4758915ec4fcbe686970422c3c9",
+          "rule": "use",
+          "port": {
+            "family_id": "blake3:8b013de648b7776703e2394effda151f33d4f4758915ec4fcbe686970422c3c9",
+            "output_port_id": "blake3:176a97f4c01797f38a117cf8b02818dbe737a36c069b502ab698e81a9f8ebbf0"
+          },
+          "disposition": "derived",
+          "evidence_digest": "blake3:10795ff2469a875b5b1ef5435741da607399d3ca4aec5e6797cc10128df92080"
+        },
+        {
+          "family_id": "blake3:4836eb9e224b7a8f1876ac9ed05dd4ac9e6abc149a3ec58c6c6356db6501c8db",
+          "rule": "compute",
+          "port": {
+            "family_id": "blake3:4836eb9e224b7a8f1876ac9ed05dd4ac9e6abc149a3ec58c6c6356db6501c8db",
+            "output_port_id": "blake3:b4f411c785c4b3d903b77be5266d45cbf816c608738a73f1f2cc2ece7b1884d3"
+          },
+          "disposition": "derived",
+          "evidence_digest": "blake3:6c680a188c72efd47a1f4a0a7cfa1b88018c3f345b09bd7eaa39d79dda0ecdc3"
+        }
+      ],
+      "extracted_family_count": 2,
+      "extracted_port_count": 2,
+      "derived_port_count": 2,
+      "live_orbit_count": 0,
+      "extraction_complete": true,
+      "derivability_complete": true,
+      "expiration_complete": true,
+      "cumulative_weakening_replay_digest": "blake3:c1943a9fcb74ebaff164cc6e234d548493d81fdd487947496485eadee734f5dd",
+      "extraction_digest": "blake3:1a7209bb4411d7f1e4aeea054a5957aef0229af212337a61b4c5b7e777dcd0f9",
+      "derivability_digest": "blake3:b54b2d070951f1cf1ee6f0e108bbbe44a97a36369dd8177bd830c23ffe6bec99",
+      "expiration_digest": "blake3:5dcbf6e69a3d2a58720da7fda30eab879edcd7033dbd3662432b8d7561404d04",
+      "census_digest": "blake3:430734fef2d50ed397f06f509b8a7804c354dabcfc59fc1dd1400af69dd80516"
+    },
+    "halt": {
+      "halted_after_sealed_act_count": 4,
+      "prospective_stage_ordinal": 5,
+      "positive_cost_exclusion_digest": "blake3:118a8c9a99da121847e8c9c4c144b867c69ea702be6c99d3c7dab16777ac719a",
+      "halt_certificate_digest": "blake3:f0a0e3af6de0f25e8a1bba1bc080a25341b72e5e99c8b083942ff0dd1fb5af72",
+      "no_new_structure_generated": true,
+      "disposition": "halted_complete_empty_live_obligation_profile",
+      "scope": "relative_to_frozen_owner_specific_g_use_g_compute_continuation_profile"
+    },
+    "result_digest": "blake3:20f8940f305a71802728af3c9206b7f0d0c126c4528459e9274f878a7dd324b8"
+  }
+}
