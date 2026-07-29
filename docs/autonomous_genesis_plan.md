@@ -1592,3 +1592,47 @@ pre-run semantic freeze before the registered prefix may be exposed.
 Execution stops at the window-audit blocker set. The non-adopted contextual
 draft may be reviewed in parallel, but neither a productivity-gated run nor a
 live contextual H3 run is lawful from the current evidence.
+
+## Execution checkpoint — semantic-audit core prototype closeout, 2026-07-29
+
+The definition-and-theorem blocker identified by the window-register audit has
+now been explored only through an isolated generic prototype. The
+[prototype result](LAW_V2_SEMANTIC_AUDIT_CORE_V1_PROTOTYPE_RESULT.md) records
+the current `pen-semantic-audit` surface and validation snapshot. Both
+semantic and cost manifests remain unfrozen and `proposed_not_adopted`; the
+crate has no live Profile A adapter and has issued no Acts 1--4 values.
+
+The prototype does not yet supply the proof objects required for adoption.
+In particular, the repaired fresh-constructor cost path now returns
+`Unknown(MissingFreeCompletionTheorem)` pending an exact free-completion
+theorem bound to a verified predecessor/public inventory and a pre-existing
+typed demand contract. Complete public-inventory coverage, typed family
+weakening and restriction, a digest-bound verified-empty Q3 registry,
+replayable carrier/quotient evidence, and executable Rust/safe-Agda agreement
+also remain open.
+
+At this documentation checkpoint, the generic Rust tests reported 31 passes
+with the independently pinned live Agda check ignored; clippy with warnings
+denied passed; and the nested-workspace isolation checker and its two unit
+tests passed. The ignored-by-default live gate was also invoked explicitly and
+passed with reference digest
+`blake3:33f78fa03eac42a22950a209fb8669ccdeec325c799473b01606115bab3f4c32`,
+and a separate direct safe-Agda typecheck passed. These are prototype
+regression, fixed-reference, pinning, and isolation facts only; they do not
+establish Rust/Agda output agreement, theorem completion, or manifest freeze.
+
+The parallel isolated contextual prototype reported 12 Rust tests passed,
+with formatting, clippy, isolation, and its two isolation unit tests also
+passing. It remains a bounded generic falsification fixture with no registered
+prefix access or adopted semantic authority.
+
+The issued Profile A H3 result, H4 continuation and halt result, and
+`LAW_V2_WINDOW_REGISTER_AUDIT_V1` remain unchanged. Its outcome is still
+`UndefinedAudit`, and no provisional \((\kappa,\nu)\), ratio, or Selective-Law
+benchmark is introduced.
+
+Execution on the critical path therefore stops at the verified
+predecessor/public-inventory and exact free-completion theorem blocker. The
+non-adopted generic contextual track may continue independently under its
+existing restrictions, but neither this prototype nor that track may be used
+for a live Profile A valuation or continuation.
