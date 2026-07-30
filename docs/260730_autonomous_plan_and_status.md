@@ -50,9 +50,15 @@ generically decodes the complete eleven-section bundle with Rust-equivalent
 resource bounds and structurally checks it against the exact `validate.rs`
 invariants; one genuine Rust-encoded bundle byte vector is accepted
 end-to-end by refl, and pinned mutation vectors are rejected at the same
-boundaries as Rust. The next genuine blockers are the finite context/global
-correspondence, kernel-level conversion/synthesis soundness checking in
-Agda, independent Rust replay, and exact common transcript agreement.
+boundaries as Rust. The Phase D finite context/global correspondence is
+also now proven at the theorem level: scoped wire terms, oldest-first
+contexts, and the chronological slot table decode faithfully onto the
+intrinsic `PTm`/`PCtx` layer with both round trips, the exact
+variable-lookup ordinal and shift-distance equations, strict-prior global
+lookup, and a first cross-language decoded-surface transcript agreed
+byte-for-byte. The next genuine blockers are kernel-level
+conversion/synthesis soundness checking in Agda, independent Rust replay,
+and exact common transcript agreement.
 
 ## 1. Objective hierarchy
 
@@ -395,11 +401,59 @@ schema version before the universe lists. The committed parser would have
 rejected every genuine Rust manifest. The cross-language byte vector now
 pins the corrected order.
 
-### 2.12 Current validation snapshot
+### 2.12 Phase D context/global correspondence implemented on 2026-07-30
+
+`LawV2/Wire/ContextCorrespondenceV1.agda` proves the finite
+context/global correspondence between the decoded wire surface and the
+intrinsic production syntax, organized around the four theorem families
+named by the reserved Rust capability:
+
+- structural round trip: scoped wire terms decode totally onto
+  `PTm` (`wire-to-ptm`) and erase back exactly, in both directions
+  (`wire-round-trip`, `ptm-round-trip`), with proof irrelevance in the
+  scope evidence; oldest-first contexts build `PCtx` and the
+  chronological slot table builds a strict-prior signature mirror `PSig`
+  with the erasure-direction round trip plus injectivity of erasure
+  (`pctx-to-wire-injective`, `psig-to-wire-injective`), which pins the
+  order universally and determines every intrinsic context/signature
+  uniquely from its wire bytes — a faithful embedding, with the
+  intrinsic-direction identity recoverable entry-wise;
+- variable-lookup correspondence: for every context and variable, the
+  intrinsic in-context type `lookup-pctx` erases to exactly the raw wire
+  entry at oldest-first position `locals - suc index`, shifted
+  `suc index` times — the intrinsic content of the synthesis checker's
+  `context_ordinal` and `shift_distance` equations — and every global
+  slot's strict-prior declaration (type and body) is the chronological
+  list entry at its ordinal, with global weakening erasing to the
+  identity;
+- extension correspondence: appending one scoped entry to a wire context
+  builds exactly a `psnoc`, and decodes to `extend-context` in the
+  abstract calculus; and
+- shift/substitution correspondence: intrinsic weakening erases to the
+  exact de Bruijn shift on wire terms (`erasure-pweaken` via a
+  cutoff-general renaming spec), and intrinsic single substitution
+  decodes to `instantiate` (`decode-pinstantiate`).
+
+`LawV2/Wire/ContextTranscriptTestV1.agda` plus the extended
+`cross_language_vectors.rs` pin the first cross-language decoded-surface
+transcript: Rust renders strict-prior global declarations and
+shift-computed variable lookups from the fixture; Agda independently
+renders the same surface from `lookup-psig-type`/`lookup-pctx` erasure;
+the 123 transcript bytes agree by refl. An adversarial audit found the
+original fixture degenerate for this purpose (its only non-empty context
+had one closed entry, so wrong ordinal, selection, or shift conventions
+would have produced identical bytes); the fixture now includes a
+discriminating context whose variable and under-binder Pi entries make
+the ordinal formula, the oldest-first selection, the shift iteration
+count, and the under-binder shift cutoff all byte-visible. Capability
+minting remains deferred to the Phase H factory; nothing here is
+authority.
+
+### 2.13 Current validation snapshot
 
 At this checkpoint:
 
-- `pen-production-wire`: 7 unit and 2 cross-language pinning tests passed;
+- `pen-production-wire`: 7 unit and 3 cross-language pinning tests passed;
 - `pen-semantic-audit --lib`: 166 passed, 6 ignored, 0 failed;
 - the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`, and
   `BundleDecodeTestV1` entry points and all transitive wire modules
@@ -475,20 +529,38 @@ canonicality theorems are additive.
 
 ### Phase D — Prove finite context/global correspondence
 
-Status: structural preconditions implemented; theorem bridge incomplete.
+Status: theorem layer complete as of 2026-07-30; capability minting
+remains deferred to the Phase H factory.
 
-Work:
+Completed:
 
-- map wire terms to `PTm global-count local-count`;
-- map oldest-first wire contexts to `PCtx`;
-- prove variable index, oldest-first ordinal, and shift-distance equations;
-- prove chronological global-slot decoding and strict-prior lookup;
-- transport context extension, renaming, weakening, and simultaneous
-  substitution through the decoder; and
-- compare exact Rust and Agda decoded context/global transcript bytes.
+- wire terms map totally onto `PTm global-count local-count` under the
+  minimal scope predicate, with erasure round trips in both directions
+  and proof irrelevance;
+- oldest-first wire contexts build `PCtx` with an erasure round trip,
+  injectivity of erasure, and a `psnoc` extension correspondence
+  (including the abstract `extend-context` transport);
+- the variable index, oldest-first ordinal (`locals - suc index`), and
+  shift-distance (`suc index`, realized as iterated intrinsic weakening)
+  equations are proven as `variable-lookup-correspondence`;
+- the chronological slot table builds a strict-prior signature mirror
+  `PSig` with erasure round trips for declaration types and bodies,
+  injectivity of the joint erasure, and strict-prior lookup
+  correspondences at the exact chronological list ordinal, with global
+  weakening erasing to the identity;
+- weakening transports through the decoder as an exact wire-level
+  de Bruijn shift, and single substitution decodes to `instantiate`
+  (renaming/simultaneous substitution transport is inherited from the
+  existing `ProductionDecodingV1` layer through the faithful `PTm`
+  representation); and
+- a first Rust/Agda decoded context/global transcript agrees
+  byte-for-byte on the fixture (development pin, not the Phase G
+  versioned transcript).
 
-Exit gate: mint `VerifiedFiniteContextCorrespondenceV1` only through the
-private factory.
+Remaining for this phase's exit gate: `VerifiedFiniteContextCorrespondenceV1`
+is minted only by the private factory once Phases E–G supply the other
+correspondence legs; the 32-byte `GlobalId`-to-slot binding stays in the
+verified Rust slot table and is bound at the capability, not in `PSig`.
 
 ### Phase E — Implement the combined conversion/synthesis checker
 
@@ -805,16 +877,17 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. finite context/global correspondence;
-3. combined conversion/synthesis checking;
-4. exact Q0/fresh/family correspondence;
-5. independent Rust replay;
-6. canonical transcript agreement; and
-7. the single private minting factory.
+2. combined conversion/synthesis checking (Phase E), now able to consume
+   the Phase D context/global correspondence;
+3. exact Q0/fresh/family correspondence;
+4. independent Rust replay;
+5. canonical transcript agreement; and
+6. the single private minting factory.
 
-Item 1 is additive; items 2–7 remain the ordered theorem frontier. Complete
-safe Agda decoding and structural checking for sections 5–11 was discharged
-on 2026-07-30.
+Item 1 is additive; items 2–6 remain the ordered theorem frontier.
+Complete safe Agda decoding and structural checking for sections 5–11,
+and the Phase D finite context/global correspondence theorem layer, were
+discharged on 2026-07-30.
 
 The work must stop before native carrier construction or live-profile
 authority if any of those gates remains unavailable.

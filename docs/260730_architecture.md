@@ -624,6 +624,10 @@ ContextChecker  BundleChecker.agda
                 BundleDecodeTestV1.agda
 
 ProductionBundleV1.agda → BundleEncode.agda
+ProductionBundleV1.agda + ContextChecker + BundleChecker
+   + LambdaUnit.ProductionSyntaxV1/ProductionDecodingV1
+   → ContextCorrespondenceV1.agda
+   → ContextTranscriptTestV1.agda
 ```
 
 #### `Bytes.agda`
@@ -724,6 +728,43 @@ witnesses mirror the shared recursion budget. Complete for identifiers,
 terms, reduction steps, synthesis codes, generic counted lists, and the
 context, Q0, and family-inventory section payloads; the record-shaped
 payloads and the whole-envelope composition remain open.
+
+#### `ContextCorrespondenceV1.agda`
+
+The Phase D theorem layer bridging the decoded wire surface to the
+intrinsic `PTm`/`PCtx` production syntax:
+
+- total scoped decode `wire-to-ptm` with erasure `ptm-to-wire` and
+  structural round trips in both directions (plus proof irrelevance and
+  injectivity of erasure);
+- oldest-first context building onto `PCtx` with an erasure round trip,
+  injectivity of erasure, a `psnoc` extension correspondence, and the
+  abstract `extend-context` transport;
+- `variable-lookup-correspondence`: the intrinsic in-context type of
+  every variable is the raw wire entry at oldest-first position
+  `locals - suc index` shifted `suc index` times, grounding the
+  synthesis `context_ordinal`/`shift_distance` metadata;
+- a strict-prior signature mirror `PSig` built from the chronological
+  slot table, with type/body erasure round trips, joint-erasure
+  injectivity, and chronological lookup correspondences under
+  identity-erasing global weakening; and
+- weakening-as-wire-shift and single-substitution-as-`instantiate`
+  transports.
+
+It consumes checker evidence and mints nothing.
+
+#### `ContextTranscriptTestV1.agda`
+
+Pins the first cross-language decoded-surface transcript: the Rust side
+renders strict-prior global declarations and shift-computed variable
+lookups from the fixture; this module independently renders the same
+surface from `lookup-psig-type`/`lookup-pctx` erasure and proves the
+transcript bytes identical by refl. The fixture includes a
+discriminating context (a variable entry and an under-binder Pi entry)
+so the ordinal formula, oldest-first entry selection, shift iteration
+count, and under-binder shift cutoff are all byte-visible rather than
+degenerately pinned. A development pin, not the Phase G versioned
+transcript codec.
 
 ### 7.3 Generated input boundary
 
@@ -909,8 +950,10 @@ The wire tests cover:
 
 An integration test additionally pins the cross-language vectors: it
 re-derives the canonical fixture bytes, requires exact equality with the
-byte literal committed in `BundleDecodeTestV1.agda`, and re-asserts the
-Rust rejection of every pinned mutation.
+byte literal committed in `BundleDecodeTestV1.agda`, re-asserts the Rust
+rejection of every pinned mutation, and renders the context/global
+lookup transcript for exact comparison with the literal committed in
+`ContextTranscriptTestV1.agda`.
 
 ### 11.2 Semantic audit
 
@@ -935,6 +978,15 @@ agda --safe --without-K --ignore-interfaces `
 bundle, context-checker, and bundle-checker modules, and forces the
 embedded Rust byte vector through the full decode/check surface at
 type-check time. `BundleEncode` checks the round-trip theorem layer.
+`ContextTranscriptTestV1` transitively checks the Phase D correspondence
+module and forces the cross-language transcript agreement at type-check
+time:
+
+```powershell
+agda --safe --without-K --ignore-interfaces `
+  -i crates/pen-semantic-audit/agda `
+  crates/pen-semantic-audit/agda/LawV2/Wire/ContextTranscriptTestV1.agda
+```
 
 Generated `.agdai`, `.orig`, and `.rej` files are build/edit artifacts and
 must not enter the source protocol or commits.
@@ -943,7 +995,7 @@ must not enter the source protocol or commits.
 
 As of this document:
 
-- production wire: 7 unit and 2 cross-language pinning tests passed;
+- production wire: 7 unit and 3 cross-language pinning tests passed;
 - semantic-audit library: 166 passed, 6 ignored;
 - safe Agda wire, context-checker, bundle-checker, encode, and
   cross-language vector modules: passed, including refl acceptance of the
@@ -1022,11 +1074,17 @@ Implemented:
   synthesis codes, counted lists, and the context/Q0/family-inventory
   payloads.
 
+- the Phase D finite context/global correspondence theorem layer
+  (`ContextCorrespondenceV1.agda`): faithful wire-to-`PTm`/`PCtx`/`PSig`
+  decoding with round trips, the variable-lookup ordinal/shift
+  equations, strict-prior global lookup, extension and
+  weakening/substitution transports, and a byte-agreed context/global
+  transcript pin.
+
 Not yet implemented:
 
 - round trips for the record-shaped payloads and the whole-envelope
   canonical-encode composition;
-- full finite context/global correspondence to `PTm`/`PCtx`;
 - binder-local conversion checking;
 - complete synthesis soundness for decoded payloads;
 - Q0/fresh/family payload correspondence;

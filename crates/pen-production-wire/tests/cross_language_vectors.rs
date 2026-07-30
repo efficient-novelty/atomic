@@ -20,6 +20,19 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
     let one_local = ProductionContextWireV1 {
         entries_oldest_first: vec![WireTermV1::UnitType],
     };
+    // Discriminating context: a variable entry and an under-binder Pi
+    // entry make the transcript's oldest-first ordinal formula, entry
+    // selection, shift iteration count, and shift cutoff byte-visible.
+    let discriminating = ProductionContextWireV1 {
+        entries_oldest_first: vec![
+            WireTermV1::UnitType,
+            WireTermV1::Variable { index: 0 },
+            WireTermV1::Pi {
+                parameter: Box::new(WireTermV1::Variable { index: 1 }),
+                body: Box::new(WireTermV1::Variable { index: 0 }),
+            },
+        ],
+    };
     let common = WireTermV1::Unit;
     ProductionRefinementBundleV1 {
         header: WireHeaderV1::canonical(),
@@ -65,7 +78,7 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
                 },
             ],
         },
-        contexts: vec![empty.clone(), one_local.clone()],
+        contexts: vec![empty.clone(), one_local.clone(), discriminating],
         conversions: vec![ConversionCertificateWireV1 {
             conversion_id: id(5),
             context: empty.clone(),
@@ -172,19 +185,23 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
     }
 }
 
-/// The committed safe Agda vector module, resolved relative to this crate.
+/// The committed safe Agda vector modules, resolved relative to this crate.
 const AGDA_VECTOR_MODULE: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/../pen-semantic-audit/agda/LawV2/Wire/BundleDecodeTestV1.agda"
 );
+const AGDA_TRANSCRIPT_MODULE: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../pen-semantic-audit/agda/LawV2/Wire/ContextTranscriptTestV1.agda"
+);
 
-fn committed_agda_vector() -> Vec<u8> {
-    let source = std::fs::read_to_string(AGDA_VECTOR_MODULE)
+fn committed_agda_literal(path: &str, header: &str) -> Vec<u8> {
+    let source = std::fs::read_to_string(path)
         .expect("committed Agda vector module must be readable");
     let mut bytes = Vec::new();
     let mut in_literal = false;
     for line in source.lines() {
-        if line.trim_end() == "canonical-vector-v1 =" {
+        if line.trim_end() == header {
             in_literal = true;
             continue;
         }
@@ -206,8 +223,12 @@ fn committed_agda_vector() -> Vec<u8> {
             );
         }
     }
-    assert!(in_literal, "canonical-vector-v1 literal not found");
+    assert!(in_literal, "Agda byte literal not found: {header}");
     bytes
+}
+
+fn committed_agda_vector() -> Vec<u8> {
+    committed_agda_literal(AGDA_VECTOR_MODULE, "canonical-vector-v1 =")
 }
 
 /// The pinned length-preserving mutations mirrored by the Agda module.
@@ -217,14 +238,14 @@ const PINNED_MUTATIONS: [(&str, usize, u8); 6] = [
     ("manifest-frozen", 105, 1),
     ("public-universe-level", 226, 2),
     ("unknown-term-tag", 478, 255),
-    ("synthesis-variable-scope", 752, 1),
-    ("q0-swap-first", 787, 1),
+    ("synthesis-variable-scope", 777, 1),
+    ("q0-swap-first", 812, 1),
 ];
 
 #[test]
 fn canonical_vector_matches_committed_agda_literal() {
     let bytes = encode_bundle_v1(&canonical_bundle()).expect("fixture encodes");
-    assert_eq!(bytes.len(), 1258, "pinned vector length");
+    assert_eq!(bytes.len(), 1283, "pinned vector length");
     assert_eq!(
         bytes,
         committed_agda_vector(),
@@ -251,13 +272,122 @@ fn pinned_mutations_are_rejected_by_rust() {
 
     // The Q0 swap is a two-byte mutation: rules 0 and 1 exchanged.
     let mut q0 = bytes.clone();
-    assert_eq!((q0[787], q0[788]), (0, 1));
-    q0[787] = 1;
-    q0[788] = 0;
+    assert_eq!((q0[812], q0[813]), (0, 1));
+    q0[812] = 1;
+    q0[813] = 0;
     assert!(decode_bundle_v1(&q0).is_err());
 
     // Truncation by one byte, mirrored by `drop-last` in Agda.
     let mut truncated = bytes;
     truncated.pop();
     assert!(decode_bundle_v1(&truncated).is_err());
+}
+
+fn shift_term(cutoff: u32, term: &WireTermV1) -> WireTermV1 {
+    match term {
+        WireTermV1::Sort { level } => WireTermV1::Sort { level: *level },
+        WireTermV1::Variable { index } => WireTermV1::Variable {
+            index: if *index < cutoff { *index } else { index + 1 },
+        },
+        WireTermV1::GlobalSlot { slot } => WireTermV1::GlobalSlot { slot: *slot },
+        WireTermV1::Pi { parameter, body } => WireTermV1::Pi {
+            parameter: Box::new(shift_term(cutoff, parameter)),
+            body: Box::new(shift_term(cutoff + 1, body)),
+        },
+        WireTermV1::Lambda { parameter, body } => WireTermV1::Lambda {
+            parameter: Box::new(shift_term(cutoff, parameter)),
+            body: Box::new(shift_term(cutoff + 1, body)),
+        },
+        WireTermV1::Apply { function, argument } => WireTermV1::Apply {
+            function: Box::new(shift_term(cutoff, function)),
+            argument: Box::new(shift_term(cutoff, argument)),
+        },
+        WireTermV1::UnitType => WireTermV1::UnitType,
+        WireTermV1::Unit => WireTermV1::Unit,
+    }
+}
+
+fn encode_term(term: &WireTermV1, out: &mut Vec<u8>) {
+    match term {
+        WireTermV1::Sort { level } => {
+            out.push(0);
+            out.extend_from_slice(&level.to_le_bytes());
+        }
+        WireTermV1::Variable { index } => {
+            out.push(1);
+            out.extend_from_slice(&index.to_le_bytes());
+        }
+        WireTermV1::GlobalSlot { slot } => {
+            out.push(2);
+            out.extend_from_slice(&slot.to_le_bytes());
+        }
+        WireTermV1::Pi { parameter, body } => {
+            out.push(3);
+            encode_term(parameter, out);
+            encode_term(body, out);
+        }
+        WireTermV1::Lambda { parameter, body } => {
+            out.push(4);
+            encode_term(parameter, out);
+            encode_term(body, out);
+        }
+        WireTermV1::Apply { function, argument } => {
+            out.push(5);
+            encode_term(function, out);
+            encode_term(argument, out);
+        }
+        WireTermV1::UnitType => out.push(6),
+        WireTermV1::Unit => out.push(7),
+    }
+}
+
+/// The Rust view of the context/global lookup transcript: strict-prior
+/// stored declarations for globals, and shift-computed in-context types
+/// for every variable of every context, with the oldest-first ordinal
+/// and shift-distance metadata. `ContextTranscriptTestV1.agda` proves by
+/// refl that the intrinsic Agda view renders identical bytes.
+fn context_global_transcript(bundle: &ProductionRefinementBundleV1) -> Vec<u8> {
+    let mut out = Vec::new();
+    let globals = &bundle.global_slot_table.entries;
+    out.extend_from_slice(&(globals.len() as u64).to_le_bytes());
+    for entry in globals {
+        out.extend_from_slice(&entry.slot.to_le_bytes());
+        encode_term(&entry.declaration_type, &mut out);
+        match &entry.declaration_body {
+            None => out.push(0),
+            Some(body) => {
+                out.push(1);
+                encode_term(body, &mut out);
+            }
+        }
+    }
+    out.extend_from_slice(&(bundle.contexts.len() as u64).to_le_bytes());
+    for context in &bundle.contexts {
+        let entries = &context.entries_oldest_first;
+        let count = entries.len() as u32;
+        out.extend_from_slice(&(entries.len() as u64).to_le_bytes());
+        for index in 0..count {
+            let oldest = count - 1 - index;
+            let shift = index + 1;
+            out.extend_from_slice(&index.to_le_bytes());
+            out.extend_from_slice(&oldest.to_le_bytes());
+            out.extend_from_slice(&shift.to_le_bytes());
+            let mut looked_up = entries[oldest as usize].clone();
+            for _ in 0..shift {
+                looked_up = shift_term(0, &looked_up);
+            }
+            encode_term(&looked_up, &mut out);
+        }
+    }
+    out
+}
+
+#[test]
+fn context_transcript_matches_committed_agda_literal() {
+    let transcript = context_global_transcript(&canonical_bundle());
+    assert_eq!(
+        transcript,
+        committed_agda_literal(AGDA_TRANSCRIPT_MODULE, "context-transcript-v1 ="),
+        "the committed Agda transcript literal must equal the Rust rendering"
+    );
 }
