@@ -88,8 +88,32 @@ components' subjects in a shared context, equation actions preserve
 their source's type — with the wire tag equal to the abstract family
 code and naturality transported through the decoding. Structurally
 valid vectors that are semantically, typing-wise, or inventory-wise
-wrong are rejected exactly at their layer. The next genuine blockers
-are independent Rust replay and exact common transcript agreement.
+wrong are rejected exactly at their layer.
+
+Phase G is now also implemented. The canonical vector is genuinely
+builder-derived: the complete verified-input chain (kernel signature,
+verified global-slot table, exact V3 manifest, production inventory
+bridge, ledger-relative predecessor-public delta policy transported
+into V3, and the synthesis protocol identity) is constructed and
+`build_canonical_production_bundle_v1` reproduces the committed bytes
+exactly. An independent Rust replay consumes only the canonical bytes
+and replays everything through the unchanged kernel and synthesis
+protocol V2 checker — including the binder-local supplement replay
+with derived contexts and exactly-one premise coverage, which
+discharges the `NestedCongruenceReplayFrontierV2` contract on the Rust
+side, and the full Phase F inventory discipline with every judgment
+through `Kernel::verify_open_judgment`. A versioned canonical
+transcript (magic `PEN-PROD-TRAN-V1`) is rendered independently by
+Rust from the unchanged-kernel replay artifacts and by safe Agda from
+its own replay layers, and the two renderings agree byte-for-byte by
+refl. The three bridge capabilities now have deterministic
+constructors: `VerifiedRustProductionReplayV1` from the replay,
+`VerifiedAgdaProductionAcceptanceV1` from a pinned Agda 2.8.0 run over
+a generated package whose acceptance entry forces all four semantic
+verdicts and the transcript agreement at type-check time, and
+`VerifiedProductionTranscriptAgreementV1` from actual byte comparisons
+with digests recorded only afterwards. The remaining frontier is the
+single private correspondence factory (Phase H).
 
 ## 1. Objective hierarchy
 
@@ -749,25 +773,111 @@ seed type merely convertible to the declared type, application
 subject mismatch, application context mismatch, and action type
 change — each with all four verdicts proven by refl.
 
-### 2.16 Current validation snapshot
+### 2.16 Phase G independent replay and transcript agreement implemented on 2026-07-30
+
+The Phase G layer closes the cross-language trust gap named by the
+bridge contract, in five parts.
+
+The canonical bundle is genuinely builder-derived. A new
+`canonical_bundle_vectors.rs` harness constructs the complete
+verified-input chain — the kernel `VerifiedSignature` for the four
+fixture declarations under genuine `GlobalId` digests, the verified
+global-slot table, the exact V3 manifest, the production inventory
+bridge, the ledger-relative predecessor-public delta policy (the
+bodyful unit value is the sole predecessor-public declaration, so the
+all-and-only-bodyful-predecessor policy is exactly `[slot 0]`)
+transported into V3, and the synthesis protocol identity — and
+`build_canonical_production_bundle_v1` reproduces the committed
+canonical vector byte-for-byte. The six digest fields of sections 1–2
+are now capability-derived values, not placeholders.
+
+`production_wire_replay.rs` is the independent Rust replay. It
+consumes only canonical bytes and trusts no wire field: the slot table
+must round-trip through `Kernel::verify_signature`,
+`verify_global_slot_table_v1`, and `derive_global_slot_table_wire_v1`
+to byte-identical wire entries; conversions and synthesis certificates
+are rebuilt as protocol V2 codes (conversion identifiers spliced to
+inline certificates, `GlobalId`s recovered from the slot table) and
+verified by the unchanged `verify_base_q0_conversion_code_v2` and
+`verify_synthesis_code_v2`; binder-local supplements are replayed
+against derived binder-local contexts resolved from step paths, with
+subject binding, formation-level recovery, full V2 typed replay of
+both certificates, and exactly-one premise coverage — the Rust-side
+discharge of the `NestedCongruenceReplayFrontierV2` contract — and the
+Phase F inventory discipline is recomputed with every judgment through
+`Kernel::verify_open_judgment`. Formation levels are recovered by a
+deterministic kernel sort probe. The replay accepts the canonical
+vector and rejects all nineteen committed structurally-valid mutants.
+
+`production_transcript.rs` defines the versioned canonical transcript
+(magic `PEN-PROD-TRAN-V1`, schema version 1): decoded signature and
+contexts, variable and global resolutions, computed formation levels,
+every conversion step and endpoint with computed kernel normal forms,
+binder-local supplements with the DERIVED contexts and premise
+endpoints, censuses, synthesis rule trees with premise and conversion
+identifiers, recomputed synthesis types and dependent application
+results, Q0 mappings with computed categories, fresh-rule
+dispositions, and family payload mappings with computed normalized
+types. `TranscriptRenderV1.agda` renders the same transcript
+independently from the Agda side's own replay machinery (`pinfer`,
+`pnormalize`, `psynthesize-cert` derivations, `resolve-site`), and
+`TranscriptAgreementTestV1.agda` proves the two renderings
+byte-identical by refl on the canonical vector (3174 transcript
+bytes).
+
+The three bridge capabilities have deterministic constructors in
+`production_refinement_wire_authority.rs`:
+`verify_rust_production_replay_v1` (replay plus rendered transcript),
+`verify_agda_production_acceptance_v1` (the pinned Agda 2.8.0 gate
+runs a generated package — the fixed acceptance template plus two
+generated byte-list modules over the exact 21-module wire source tree
+— whose type-checking forces the structural, semantic, typing, and
+inventory verdicts and the transcript agreement by refl; the
+accepted-section mask is emitted by the bridge, never
+caller-supplied), and `verify_production_transcript_agreement_v1`
+(actual byte comparisons of bundle bytes across all three capabilities
+and of the two transcripts, with digests recorded only afterwards).
+The `agda_gate` grew a generated-package variant (owned sources
+threaded through the same pinned discipline with a wider checker
+budget). The end-to-end mint over the genuine bundle is pinned by the
+ignored `phase_g_capabilities_mint_over_genuine_bundle` test, which
+passes under the local pinned runtime.
+
+The canonical authority frontier is now exactly
+`[SinglePrivateCorrespondenceFactory]`: safe-Agda generic bundle
+acceptance, independent Rust kernel replay, and exact normalized
+transcript byte agreement moved to the completed prerequisites.
+
+### 2.17 Current validation snapshot
 
 At this checkpoint:
 
 - `pen-production-wire`: 7 unit and 6 cross-language pinning tests passed;
-- `pen-semantic-audit --lib`: 166 passed, 6 ignored, 0 failed;
+- `pen-semantic-audit --lib`: 168 passed, 6 ignored, 0 failed; the
+  `canonical_bundle_vectors` integration suite proves the committed
+  canonical vector builder-derived and replayed, and the
+  `production_replay_vectors` suite pins replay acceptance of the
+  canonical vector, replay rejection of all nineteen committed
+  mutants, and the Rust transcript against the committed Agda literal;
+- the ignored external-gate suite (pinned Agda 2.8.0) passes locally,
+  including the end-to-end
+  `phase_g_capabilities_mint_over_genuine_bundle` mint of all three
+  bridge capabilities;
 - the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`,
   `BundleDecodeTestV1`, `ContextCorrespondenceV1`,
   `ContextTranscriptTestV1`, `NormalizationV1`, `SemanticReplayV1`,
   `SynthesisReplayV1`, `SemanticReplayTestV1`, `TypingReplayV1`,
   `SupplementReplayV1`, `TypingBridgeV1`, `TypingReplayTestV1`,
-  `InventoryReplayV1`, and `InventoryReplayTestV1` entry points and
-  all transitive wire modules type-check from clean interfaces with
-  `--safe --without-K`, which forces the embedded 3796-byte Rust
+  `InventoryReplayV1`, `InventoryReplayTestV1`,
+  `TranscriptRenderV1`, and `TranscriptAgreementTestV1` entry points
+  and all transitive wire modules type-check from clean interfaces
+  with `--safe --without-K`, which forces the embedded 3796-byte Rust
   vector through the full decoder, structural checker, semantic
-  replay, whole-bundle typing verdict, and whole-bundle inventory
-  verdict — and the nineteen structurally-valid mutant vectors (four
-  semantic, seven typing, eight inventory) through their pinned
-  acceptance/rejection tuples — at type-check time;
+  replay, whole-bundle typing verdict, whole-bundle inventory
+  verdict, and transcript-agreement pin — and the nineteen
+  structurally-valid mutant vectors (four semantic, seven typing,
+  eight inventory) through their pinned acceptance/rejection tuples —
+  at type-check time;
 - the new wire/bridge source contains no `postulate`, unsafe pragma,
   termination bypass, or unsolved-hole allowance; and
 - the protected root workspace manifests and issued H3/H4 artifacts remain
@@ -992,22 +1102,30 @@ Exit gate (unchanged, deferred to the Phase H factory):
 
 ### Phase G — Independent replay and canonical transcript agreement
 
-Status: not implemented.
+Status: implemented as of 2026-07-30 (§2.16); all three exit-gate
+capabilities have deterministic constructors and mint end-to-end over
+the genuine builder-derived bundle under the pinned local Agda
+runtime.
 
-Work:
+Completed:
 
-- define one versioned transcript codec;
-- have Rust replay the canonical bundle through the unchanged kernel and
-  synthesis checker;
-- have Agda compute the corresponding transcript from the same bytes;
-- include decoded contexts, resolutions, inferred types, formation levels,
-  conversions, normal forms, synthesis trees, Q0 mappings, fresh-rule
-  dispositions, and family mappings;
-- compare actual canonical bundle bytes;
-- compare actual transcript bytes; and
-- only then record their digests.
+- the versioned transcript codec (`PEN-PROD-TRAN-V1`) with the exact
+  adjudication field list, rendered independently by both sides from
+  their own replay artifacts;
+- independent Rust replay through the unchanged kernel and synthesis
+  checker, trusting no wire field, including the Rust-side supplement
+  replay (discharging the `NestedCongruenceReplayFrontierV2` contract)
+  and the Phase F inventory discipline;
+- the Agda transcript computed from the same bytes and proven
+  byte-identical by refl;
+- actual canonical-bundle byte comparisons across all three
+  capabilities and actual transcript byte comparison, with digests
+  recorded only afterwards; and
+- the canonical vector made genuinely builder-derived from the
+  complete verified-input chain.
 
-Exit gates:
+Exit gates (constructors exist; the mint is pinned by the ignored
+end-to-end test under the pinned Agda runtime):
 
 - `VerifiedRustProductionReplayV1`;
 - `VerifiedAgdaProductionAcceptanceV1`; and
@@ -1328,22 +1446,25 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. independent Rust replay (including the Rust-side supplement replay
-   matching the Agda contract, which discharges
-   `NestedCongruenceReplayFrontierV2` on that side);
-3. canonical transcript agreement; and
-4. the single private minting factory.
+2. the single private minting factory (Phase H), consuming the four
+   bridge capabilities and minting the four correspondence
+   capabilities plus production refinement and the stronger typing
+   metatheory.
 
-Item 1 is additive; items 2–4 remain the ordered theorem frontier.
-Complete safe Agda decoding and structural checking for sections 5–11,
-the Phase D finite context/global correspondence theorem layer, the
+Item 1 is additive; item 2 is the ordered theorem frontier. Complete
+safe Agda decoding and structural checking for sections 5–11, the
+Phase D finite context/global correspondence theorem layer, the
 Phase E semantic replay core, the Phase E typing-judgment bridge
 (endpoint judgments, binder-local supplements, formation levels,
 dependent-result normalization reconciliation, synthesis inductive
-soundness, and the abstract-judgment bridge), and the Phase F
-inventory correspondence (Q0 classification, typed/disjoint fresh
-rules with substitution stability, and exact family payload decoding
-with naturality transport) were discharged on 2026-07-30.
+soundness, and the abstract-judgment bridge), the Phase F inventory
+correspondence (Q0 classification, typed/disjoint fresh rules with
+substitution stability, and exact family payload decoding with
+naturality transport), and the Phase G independent replay, versioned
+transcript, and capability bridge (builder-derived canonical vector,
+unchanged-kernel Rust replay with the Rust-side supplement discharge,
+byte-identical cross-language transcripts, and the three deterministic
+capability constructors) were discharged on 2026-07-30.
 
 In parallel with the bridge (and lawful at any time, since it exposes
 nothing to the registered prefix), the Phase K0

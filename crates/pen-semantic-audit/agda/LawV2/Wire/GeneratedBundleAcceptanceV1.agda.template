@@ -1,0 +1,60 @@
+{-# OPTIONS --safe --without-K #-}
+
+-- Generated-package acceptance entry (fixed template).
+--
+-- The two generated input modules carry the canonical bundle bytes and
+-- the Rust-rendered canonical transcript bytes. Type-checking this
+-- module under --safe --without-K forces, by refl: the full generic
+-- decode of the bundle bytes, the structural checker, the semantic
+-- replay, the whole-bundle typing verdict, the whole-bundle inventory
+-- verdict, and byte equality between the independent Agda transcript
+-- rendering and the supplied transcript bytes. A bundle or transcript
+-- for which any of these fails does not type-check, so the pinned
+-- checker run is the acceptance evidence.
+
+module LawV2.Wire.GeneratedBundleAcceptanceV1 where
+
+open import Agda.Builtin.Bool using (Bool; false; true)
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Agda.Builtin.List using (List; []; _∷_)
+open import Agda.Builtin.Maybe using (Maybe; just; nothing)
+open import Agda.Builtin.Nat using (Nat)
+open import LawV2.Wire.Bytes
+open import LawV2.Wire.ProductionBundleV1
+open import LawV2.Wire.BundleChecker
+  using (check-production-bundle-structure-v1)
+open import LawV2.Wire.SynthesisReplayV1 using (semantic-check-bundle)
+open import LawV2.Wire.SupplementReplayV1 using (typing-check-bundle)
+open import LawV2.Wire.InventoryReplayV1 using (inventory-check-bundle)
+open import LawV2.Wire.TranscriptRenderV1
+  using (render-canonical-transcript)
+open import LawV2.Wire.GeneratedProductionBundleInputV1
+  using (inputBytes)
+open import LawV2.Wire.GeneratedProductionTranscriptInputV1
+  using (transcriptBytes)
+
+decode-verdict : (ProductionBundleSemanticV1 → Bool) → Maybe Bool
+decode-verdict check =
+  maybe-bind (bytes-from-nats inputBytes) (λ bytes →
+  maybe-bind (decode-production-bundle-v1 bytes) (λ bundle →
+  just (check bundle)))
+
+structure-accepted :
+  decode-verdict check-production-bundle-structure-v1 ≡ just true
+structure-accepted = refl
+
+semantic-accepted : decode-verdict semantic-check-bundle ≡ just true
+semantic-accepted = refl
+
+typing-accepted : decode-verdict typing-check-bundle ≡ just true
+typing-accepted = refl
+
+inventory-accepted : decode-verdict inventory-check-bundle ≡ just true
+inventory-accepted = refl
+
+transcript-agrees :
+  maybe-bind (bytes-from-nats inputBytes) (λ bytes →
+  maybe-bind (decode-production-bundle-v1 bytes)
+    render-canonical-transcript)
+  ≡ bytes-from-nats transcriptBytes
+transcript-agrees = refl

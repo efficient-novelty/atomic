@@ -28,6 +28,40 @@ fn id(byte: u8) -> WireIdV1 {
     WireIdV1([byte; 32])
 }
 
+// The six capability-derived digest fields of the genuine canonical
+// bundle. Source of truth: the ignored `regenerate_canonical_digest_fields`
+// test in `pen-semantic-audit/tests/canonical_bundle_vectors.rs`, which
+// constructs the complete verified-input chain (kernel signature, slot
+// table, exact V3 manifest, inventory bridge, predecessor-public delta
+// policy, synthesis identity) and prints these arrays; the
+// `canonical_vector_is_builder_derived` test in the same file requires
+// the committed canonical vector to equal the builder output over that
+// chain byte-for-byte, so a drift in any of these constants fails there.
+const SEMANTIC_MANIFEST_DIGEST: [u8; 32] = [
+    58, 26, 157, 119, 153, 25, 35, 203, 195, 71, 124, 197, 21, 119, 46, 37, 13, 108, 130, 113, 60,
+    114, 125, 80, 249, 20, 34, 5, 252, 178, 148, 117,
+];
+const PRODUCTION_INVENTORY_BRIDGE_DIGEST: [u8; 32] = [
+    218, 203, 112, 45, 148, 239, 116, 185, 67, 221, 90, 121, 81, 68, 174, 9, 52, 188, 88, 164,
+    164, 239, 205, 160, 74, 88, 161, 232, 147, 21, 73, 21,
+];
+const PREDECESSOR_DELTA_POLICY_BINDING_DIGEST: [u8; 32] = [
+    253, 200, 242, 108, 153, 215, 143, 23, 61, 238, 152, 220, 186, 19, 115, 67, 18, 114, 137, 30,
+    241, 43, 193, 231, 66, 251, 175, 118, 129, 160, 131, 166,
+];
+const SIGNATURE_DIGEST: [u8; 32] = [
+    197, 237, 173, 116, 246, 112, 104, 99, 198, 17, 110, 169, 180, 227, 156, 141, 204, 141, 61,
+    178, 117, 33, 165, 51, 164, 112, 236, 162, 89, 87, 10, 112,
+];
+const KERNEL_PROTOCOL_DIGEST: [u8; 32] = [
+    186, 126, 100, 158, 249, 65, 126, 240, 91, 247, 249, 159, 145, 184, 158, 13, 240, 58, 49, 117,
+    226, 63, 24, 100, 197, 40, 154, 124, 70, 57, 210, 197,
+];
+const GLOBAL_SLOT_TABLE_DIGEST: [u8; 32] = [
+    173, 244, 151, 202, 88, 73, 235, 182, 128, 4, 72, 215, 45, 97, 213, 44, 204, 179, 83, 202,
+    107, 251, 220, 116, 45, 243, 186, 85, 181, 191, 110, 40,
+];
+
 fn unit_type() -> WireTermV1 {
     WireTermV1::UnitType
 }
@@ -604,24 +638,26 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
         manifest_surface: V3CorrespondenceManifestWireV1 {
             semantic_schema_version: V3_SEMANTIC_SCHEMA_VERSION,
             profile_id: V3_SEMANTIC_PROFILE_ID.to_vec(),
-            semantic_manifest_digest: id(20),
+            semantic_manifest_digest: WireIdV1(SEMANTIC_MANIFEST_DIGEST),
             authority: ManifestAuthorityWireV1::GenericPrototypeOnly,
             frozen: false,
             live_profile_a_access: false,
-            production_inventory_bridge_digest: id(21),
+            production_inventory_bridge_digest: WireIdV1(PRODUCTION_INVENTORY_BRIDGE_DIGEST),
             public_universe_levels: PUBLIC_UNIVERSE_LEVELS_V1.to_vec(),
             checker_universe_levels: CHECKER_UNIVERSE_LEVELS_V1.to_vec(),
             formation_witness_levels: FORMATION_WITNESS_LEVELS_V1.to_vec(),
             maximum_context_entries: 32,
             synthesis_rule_inventory: EXACT_SYNTHESIS_INVENTORY_V1.to_vec(),
-            predecessor_delta_policy_binding_digest: id(22),
+            predecessor_delta_policy_binding_digest: WireIdV1(
+                PREDECESSOR_DELTA_POLICY_BINDING_DIGEST,
+            ),
             synthesis_protocol_id: SYNTHESIS_PROTOCOL_ID_V2.to_vec(),
             synthesis_schema_version: SYNTHESIS_SCHEMA_VERSION_V2,
         },
         signature: ProductionSignatureWireV1 {
-            signature_digest: id(23),
-            kernel_protocol_digest: id(24),
-            global_slot_table_digest: id(25),
+            signature_digest: WireIdV1(SIGNATURE_DIGEST),
+            kernel_protocol_digest: WireIdV1(KERNEL_PROTOCOL_DIGEST),
+            global_slot_table_digest: WireIdV1(GLOBAL_SLOT_TABLE_DIGEST),
             allowed_transparent_deltas: vec![DeltaPolicyEntryWireV1 {
                 global_slot: 0,
                 global_id_bytes: id(1),

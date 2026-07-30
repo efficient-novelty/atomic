@@ -24,8 +24,10 @@ pub mod production_inventory_bridge;
 pub mod production_refinement;
 pub mod production_refinement_theorem;
 pub mod production_refinement_wire_authority;
+pub mod production_transcript;
 pub mod production_wire_builder;
 pub mod production_wire_input;
+pub mod production_wire_replay;
 pub mod production_wire_slots;
 pub mod provenance;
 pub mod quotient;
@@ -157,8 +159,10 @@ pub use production_refinement_wire_authority::{
     COMPLETED_CANONICAL_PRODUCTION_PREREQUISITES_V1, CanonicalProductionAuthorityFailureV1,
     CanonicalProductionAuthorityFrontierV1, CanonicalProductionAuthorityObligationV1,
     REQUIRED_ACCEPTED_PRODUCTION_SECTIONS_V1, VerifiedAgdaProductionAcceptanceV1,
-    VerifiedCanonicalProductionBundleV1, VerifiedProductionTranscriptAgreementV1,
-    VerifiedRustProductionReplayV1, diagnose_canonical_production_authority_v1,
+    ProductionBridgeFailureV1, VerifiedCanonicalProductionBundleV1,
+    VerifiedProductionTranscriptAgreementV1, VerifiedRustProductionReplayV1,
+    diagnose_canonical_production_authority_v1, verify_agda_production_acceptance_v1,
+    verify_production_transcript_agreement_v1, verify_rust_production_replay_v1,
 };
 pub use production_wire_builder::{
     ProductionBundlePayloadV1, ProductionWireBuilderFailureV1, build_canonical_production_bundle_v1,
@@ -168,6 +172,14 @@ pub use production_wire_input::{
     ProductionBundleInputFailureV1, VerifiedAgdaProductionInputArtifactV1,
     extract_production_bundle_input_bytes_v1, render_production_bundle_input_module_v1,
     verify_agda_production_input_artifact_v1,
+};
+pub use production_transcript::{
+    PRODUCTION_TRANSCRIPT_MAGIC_V1, PRODUCTION_TRANSCRIPT_SCHEMA_VERSION_V1,
+    render_production_transcript_v1,
+};
+pub use production_wire_replay::{
+    ProductionReplayComputedV1, ProductionReplayEvidenceV1, ProductionReplayFailureV1,
+    replay_production_bundle_v1,
 };
 pub use production_wire_slots::{
     ProductionWireSlotFailureV1, derive_global_slot_table_wire_v1, term_to_wire_v1,

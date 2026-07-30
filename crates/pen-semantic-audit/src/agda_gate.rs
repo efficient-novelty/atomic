@@ -25,6 +25,13 @@ const MAX_SOURCE_FILES: u64 = 20_000;
 const MAX_SOURCE_FILE_BYTES: u64 = 64 * 1024 * 1024;
 const MAX_SOURCE_TREE_BYTES: u64 = 1024 * 1024 * 1024;
 const CHECKER_TIMEOUT: Duration = Duration::from_secs(30);
+/// The generated production-acceptance package forces the complete wire
+/// decode, structural, semantic, typing, and inventory verdicts plus the
+/// transcript agreement at type-check time over the full module tree
+/// with interfaces disabled, so it needs a checker budget far above the
+/// 30-second single-module gate. The timeout is a run discipline, not
+/// part of the digested argument protocol.
+const GENERATED_PACKAGE_CHECKER_TIMEOUT: Duration = Duration::from_secs(1800);
 static SCRATCH_COUNTER: AtomicU64 = AtomicU64::new(0);
 
 /// Stage-specific explanation for a fail-closed pinned Agda reference check.
@@ -241,6 +248,56 @@ pub(crate) struct FixedAgdaSourceV1 {
     pub(crate) bytes: &'static [u8],
 }
 
+/// One runtime-generated safe Agda source: the generated production
+/// input modules (canonical bundle bytes, expected transcript bytes)
+/// and the fixed acceptance template that consumes them. Everything
+/// else about the pinned package discipline is identical to the
+/// compile-time-fixed sources.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct GeneratedAgdaSourceV1 {
+    pub(crate) relative_path: String,
+    pub(crate) module_name: String,
+    pub(crate) bytes: Vec<u8>,
+}
+
+/// One package source in exact checker order: compile-time fixed or
+/// runtime generated.
+#[derive(Clone, Debug)]
+pub(crate) enum PackageSourceV1 {
+    Fixed(FixedAgdaSourceV1),
+    Generated(GeneratedAgdaSourceV1),
+}
+
+#[derive(Clone, Copy)]
+struct AgdaSourceViewV1<'source> {
+    relative_path: &'source str,
+    module_name: &'source str,
+    bytes: &'source [u8],
+}
+
+impl FixedAgdaSourceV1 {
+    fn view(&self) -> AgdaSourceViewV1<'_> {
+        AgdaSourceViewV1 {
+            relative_path: self.relative_path,
+            module_name: self.module_name,
+            bytes: self.bytes,
+        }
+    }
+}
+
+impl PackageSourceV1 {
+    fn view(&self) -> AgdaSourceViewV1<'_> {
+        match self {
+            Self::Fixed(source) => source.view(),
+            Self::Generated(source) => AgdaSourceViewV1 {
+                relative_path: &source.relative_path,
+                module_name: &source.module_name,
+                bytes: &source.bytes,
+            },
+        }
+    }
+}
+
 /// Pinned checker result for one compile-time-fixed multi-source package.
 ///
 /// The semantic meaning of the package is deliberately supplied by the
@@ -374,6 +431,33 @@ pub(crate) fn diagnose_pinned_fixed_agda_package_v1(
     sources: &[FixedAgdaSourceV1],
     entry_relative_path: &str,
 ) -> Result<VerifiedFixedAgdaPackageV1, AgdaReferenceFailureV1> {
+    let views = sources.iter().map(FixedAgdaSourceV1::view).collect::<Vec<_>>();
+    diagnose_agda_package_views_v1(&views, entry_relative_path, CHECKER_TIMEOUT)
+}
+
+/// The pinned package gate over an exact checker-ordered mixture of
+/// compile-time-fixed and runtime-generated sources: the safe-Agda
+/// acceptance bridge for generated production input modules. The
+/// discipline is identical to the fixed-package gate; only the source
+/// of the bytes differs, and the source-tree digest covers the exact
+/// generated content.
+pub(crate) fn diagnose_generated_agda_package_v1(
+    sources: &[PackageSourceV1],
+    entry_relative_path: &str,
+) -> Result<VerifiedFixedAgdaPackageV1, AgdaReferenceFailureV1> {
+    let views = sources.iter().map(PackageSourceV1::view).collect::<Vec<_>>();
+    diagnose_agda_package_views_v1(
+        &views,
+        entry_relative_path,
+        GENERATED_PACKAGE_CHECKER_TIMEOUT,
+    )
+}
+
+fn diagnose_agda_package_views_v1(
+    sources: &[AgdaSourceViewV1<'_>],
+    entry_relative_path: &str,
+    checker_timeout: Duration,
+) -> Result<VerifiedFixedAgdaPackageV1, AgdaReferenceFailureV1> {
     let reference = diagnose_pinned_agda_reference_v1()?;
     if sources.is_empty()
         || sources[0].relative_path != entry_relative_path
@@ -401,6 +485,7 @@ pub(crate) fn diagnose_pinned_fixed_agda_package_v1(
         sources,
         entry_relative_path,
         &scratch,
+        checker_timeout,
     );
     if fs::remove_dir_all(&scratch).is_err() {
         return Err(AgdaReferenceFailureV1::ScratchCleanupFailed);
@@ -408,7 +493,7 @@ pub(crate) fn diagnose_pinned_fixed_agda_package_v1(
     result
 }
 
-fn valid_fixed_package_sources(sources: &[FixedAgdaSourceV1]) -> bool {
+fn valid_fixed_package_sources(sources: &[AgdaSourceViewV1<'_>]) -> bool {
     let mut paths = std::collections::BTreeSet::new();
     let mut modules = std::collections::BTreeSet::new();
     sources.iter().all(|source| {
@@ -435,9 +520,10 @@ fn verify_fixed_package_in_scratch(
     executable: &Path,
     executable_before: &[u8],
     executable_digest: Digest,
-    sources: &[FixedAgdaSourceV1],
+    sources: &[AgdaSourceViewV1<'_>],
     entry_relative_path: &str,
     scratch: &Path,
+    checker_timeout: Duration,
 ) -> Result<VerifiedFixedAgdaPackageV1, AgdaReferenceFailureV1> {
     fs::create_dir(scratch.join("agda-app"))
         .map_err(|_| AgdaReferenceFailureV1::ScratchSetupFailed)?;
@@ -520,7 +606,7 @@ fn verify_fixed_package_in_scratch(
         ])
         .arg(scratch)
         .arg(&entry_path);
-    let output = run_command(&mut checker, CHECKER_TIMEOUT).map_err(|failure| match failure {
+    let output = run_command(&mut checker, checker_timeout).map_err(|failure| match failure {
         RunCommandFailure::Spawn => AgdaReferenceFailureV1::CheckerSpawnFailed,
         RunCommandFailure::Timeout => AgdaReferenceFailureV1::CheckerTimedOut,
         RunCommandFailure::Wait => AgdaReferenceFailureV1::CheckerFailed {
@@ -592,7 +678,7 @@ fn verify_fixed_package_in_scratch(
 
 fn canonical_fixed_package_transcript(
     stdout: &str,
-    sources: &[FixedAgdaSourceV1],
+    sources: &[AgdaSourceViewV1<'_>],
     source_paths: &[PathBuf],
 ) -> Option<String> {
     let lines = stdout.lines().collect::<Vec<_>>();
@@ -617,7 +703,7 @@ fn canonical_fixed_package_transcript(
     Some(canonical)
 }
 
-fn fixed_package_source_tree_digest(sources: &[FixedAgdaSourceV1]) -> Digest {
+fn fixed_package_source_tree_digest(sources: &[AgdaSourceViewV1<'_>]) -> Digest {
     let mut ordered = sources.to_vec();
     ordered.sort_by_key(|source| source.relative_path);
     let mut encoder = CanonicalEncoder::new();

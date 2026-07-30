@@ -24,6 +24,20 @@ inputBytes : List Nat\n\
 inputBytes =\n";
 const INPUT_MODULE_SUFFIX_V1: &str = "  []\n";
 
+pub const PRODUCTION_TRANSCRIPT_INPUT_MODULE_NAME_V1: &str =
+    "LawV2.Wire.GeneratedProductionTranscriptInputV1";
+
+const TRANSCRIPT_MODULE_PREFIX_V1: &str = "\
+{-# OPTIONS --safe --without-K #-}\n\
+\n\
+module LawV2.Wire.GeneratedProductionTranscriptInputV1 where\n\
+\n\
+open import Agda.Builtin.List using (List; []; _∷_)\n\
+open import Agda.Builtin.Nat using (Nat)\n\
+\n\
+transcriptBytes : List Nat\n\
+transcriptBytes =\n";
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ProductionBundleInputFailureV1 {
     ResourceExhausted,
@@ -124,6 +138,80 @@ pub fn extract_production_bundle_input_bytes_v1(
         }
     }
     let canonical = render_production_bundle_input_module_v1(&bytes)?;
+    if canonical.as_bytes() != source {
+        return Err(ProductionBundleInputFailureV1::NonCanonicalTemplate);
+    }
+    Ok(bytes)
+}
+
+/// Render the second allowed varying Agda source: the Rust-rendered
+/// canonical transcript bytes, in the same one-value-per-line template
+/// discipline as the bundle input module.
+pub fn render_production_transcript_input_module_v1(
+    transcript_bytes: &[u8],
+) -> Result<String, ProductionBundleInputFailureV1> {
+    if transcript_bytes.len() > MAX_PRODUCTION_BUNDLE_INPUT_BYTES_V1 {
+        return Err(ProductionBundleInputFailureV1::ResourceExhausted);
+    }
+    let body_capacity = transcript_bytes
+        .len()
+        .checked_mul(8)
+        .ok_or(ProductionBundleInputFailureV1::ResourceExhausted)?;
+    let capacity = TRANSCRIPT_MODULE_PREFIX_V1
+        .len()
+        .checked_add(body_capacity)
+        .and_then(|length| length.checked_add(INPUT_MODULE_SUFFIX_V1.len()))
+        .ok_or(ProductionBundleInputFailureV1::ResourceExhausted)?;
+    let mut source = String::with_capacity(capacity);
+    source.push_str(TRANSCRIPT_MODULE_PREFIX_V1);
+    for byte in transcript_bytes {
+        use std::fmt::Write;
+        writeln!(&mut source, "  {byte} ∷")
+            .map_err(|_| ProductionBundleInputFailureV1::ResourceExhausted)?;
+    }
+    source.push_str(INPUT_MODULE_SUFFIX_V1);
+    Ok(source)
+}
+
+/// Extract transcript bytes only from the exact generated template, with
+/// mandatory re-rendering, mirroring the bundle input extractor.
+pub fn extract_production_transcript_input_bytes_v1(
+    source: &[u8],
+) -> Result<Vec<u8>, ProductionBundleInputFailureV1> {
+    let text =
+        std::str::from_utf8(source).map_err(|_| ProductionBundleInputFailureV1::NonUtf8Source)?;
+    let body = text
+        .strip_prefix(TRANSCRIPT_MODULE_PREFIX_V1)
+        .and_then(|text| text.strip_suffix(INPUT_MODULE_SUFFIX_V1))
+        .ok_or(ProductionBundleInputFailureV1::NonCanonicalTemplate)?;
+    let mut bytes = Vec::new();
+    if !body.is_empty() {
+        if !body.ends_with('\n') {
+            return Err(ProductionBundleInputFailureV1::NonCanonicalByteLiteral);
+        }
+        for line in body.split_terminator('\n') {
+            let digits = line
+                .strip_prefix("  ")
+                .and_then(|line| line.strip_suffix(" ∷"))
+                .ok_or(ProductionBundleInputFailureV1::NonCanonicalByteLiteral)?;
+            if digits.is_empty()
+                || !digits.bytes().all(|byte| byte.is_ascii_digit())
+                || (digits.len() > 1 && digits.starts_with('0'))
+            {
+                return Err(ProductionBundleInputFailureV1::NonCanonicalByteLiteral);
+            }
+            let value = digits
+                .parse::<u16>()
+                .map_err(|_| ProductionBundleInputFailureV1::NonCanonicalByteLiteral)?;
+            bytes.push(
+                u8::try_from(value).map_err(|_| ProductionBundleInputFailureV1::ByteOutOfRange)?,
+            );
+            if bytes.len() > MAX_PRODUCTION_BUNDLE_INPUT_BYTES_V1 {
+                return Err(ProductionBundleInputFailureV1::ResourceExhausted);
+            }
+        }
+    }
+    let canonical = render_production_transcript_input_module_v1(&bytes)?;
     if canonical.as_bytes() != source {
         return Err(ProductionBundleInputFailureV1::NonCanonicalTemplate);
     }
