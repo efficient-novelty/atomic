@@ -1,0 +1,20 @@
+[package]
+name = "pen-production-wire"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.88"
+description = "Authority-free canonical cross-language wire for Law V2 production refinement"
+publish = false
+
+[workspace]
+resolver = "2"
+
+[dependencies]
+
+[package.metadata.law-v2]
+role = "authority-free-production-wire"
+serde_authority = false
+oracle_access = false
+diagnostic_access = false
+live_profile_a_access = false

@@ -109,11 +109,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "pen-production-wire"
+version = "0.1.0"
+
+[[package]]
 name = "pen-semantic-audit"
 version = "0.1.0"
 dependencies = [
  "pen-kernel",
  "pen-kernel-synthesis",
+ "pen-production-wire",
  "serde",
  "serde_json",
  "thiserror",

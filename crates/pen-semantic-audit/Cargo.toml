@@ -13,6 +13,7 @@ resolver = "2"
 [dependencies]
 pen-kernel = { path = "../pen-kernel" }
 pen-kernel-synthesis = { path = "../pen-kernel-synthesis" }
+pen-production-wire = { path = "../pen-production-wire" }
 serde = { version = "=1.0.228", features = ["derive"] }
 thiserror = "=2.0.18"
 

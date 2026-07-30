@@ -23,6 +23,10 @@ pub mod ordinary_beta;
 pub mod production_inventory_bridge;
 pub mod production_refinement;
 pub mod production_refinement_theorem;
+pub mod production_refinement_wire_authority;
+pub mod production_wire_builder;
+pub mod production_wire_input;
+pub mod production_wire_slots;
 pub mod provenance;
 pub mod quotient;
 pub mod rewrite_inventory;
@@ -146,6 +150,27 @@ pub use production_refinement_theorem::{
     verify_pinned_production_refinement_agda_foundation_v1,
     verify_predecessor_public_delta_policy_binding_v1,
     verify_v3_predecessor_public_delta_policy_binding_v1,
+};
+pub use production_refinement_wire_authority::{
+    AcceptedProductionSectionMaskV1, AcceptedProductionSectionV1,
+    CANONICAL_PRODUCTION_AUTHORITY_FRONTIER_V1, CANONICAL_PRODUCTION_AUTHORITY_SCHEMA_VERSION_V1,
+    COMPLETED_CANONICAL_PRODUCTION_PREREQUISITES_V1, CanonicalProductionAuthorityFailureV1,
+    CanonicalProductionAuthorityFrontierV1, CanonicalProductionAuthorityObligationV1,
+    REQUIRED_ACCEPTED_PRODUCTION_SECTIONS_V1, VerifiedAgdaProductionAcceptanceV1,
+    VerifiedCanonicalProductionBundleV1, VerifiedProductionTranscriptAgreementV1,
+    VerifiedRustProductionReplayV1, diagnose_canonical_production_authority_v1,
+};
+pub use production_wire_builder::{
+    ProductionBundlePayloadV1, ProductionWireBuilderFailureV1, build_canonical_production_bundle_v1,
+};
+pub use production_wire_input::{
+    MAX_PRODUCTION_BUNDLE_INPUT_BYTES_V1, PRODUCTION_BUNDLE_INPUT_MODULE_NAME_V1,
+    ProductionBundleInputFailureV1, VerifiedAgdaProductionInputArtifactV1,
+    extract_production_bundle_input_bytes_v1, render_production_bundle_input_module_v1,
+    verify_agda_production_input_artifact_v1,
+};
+pub use production_wire_slots::{
+    ProductionWireSlotFailureV1, derive_global_slot_table_wire_v1, term_to_wire_v1,
 };
 pub use provenance::{
     FamilyDependencySupportV1, ProvenanceCertificateV1, derive_family_dependency_support_v1,
