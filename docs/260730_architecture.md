@@ -753,6 +753,41 @@ intrinsic `PTm`/`PCtx` production syntax:
 
 It consumes checker evidence and mints nothing.
 
+#### `SemanticReplayV1.agda`
+
+Phase E conversion-side semantic replay: an intrinsic base-Q0 step
+relation on `PTm` (beta by instantiation, policy-restricted
+transparent delta by the strict-prior signature body, six congruence
+frames), decoded step trees with a Boolean replay checker and a
+soundness theorem into genuine intrinsic steps, chain soundness for
+whole traces, semantic normality with a no-outgoing-step theorem, and
+a bridge from the structural census recomputation. Runs strictly after
+the structural checker and mints nothing.
+
+#### `SynthesisReplayV1.agda`
+
+Phase E synthesis-side semantic recomputation: every code synthesizes
+its intrinsic subject and type (context lookups for variables,
+strict-prior declared types for globals, kernel `max` for pi
+formation, dependent pi types for lambda, and conversion-mediated
+application elimination with intrinsic dependent-result
+instantiation), compared against the certificate. Mediating
+conversions are consumed under the exact protocol V2 side conditions
+(identical derived context, `TypeFormation` endpoints, full semantic
+replay, left endpoint = synthesized type, right endpoint = the
+census-normal common form). One documented delta: the dependent result
+is pinned to the raw intrinsic instantiation, while the kernel records
+the kernel-normalized instantiation. Includes the whole-bundle
+semantic verdict `semantic-check-bundle`.
+
+#### `SemanticReplayTestV1.agda`
+
+Pins the Phase E discriminating vectors: the fixture (with a genuine
+beta conversion and an application-elimination certificate) passes the
+semantic replay by refl; three mutants that pass the complete Rust and
+Agda structural checks are each semantically rejected by refl. The
+Rust side pins the mutants' structural validity and exact bytes.
+
 #### `ContextTranscriptTestV1.agda`
 
 Pins the first cross-language decoded-surface transcript: the Rust side
@@ -995,7 +1030,7 @@ must not enter the source protocol or commits.
 
 As of this document:
 
-- production wire: 7 unit and 3 cross-language pinning tests passed;
+- production wire: 7 unit and 4 cross-language pinning tests passed;
 - semantic-audit library: 166 passed, 6 ignored;
 - safe Agda wire, context-checker, bundle-checker, encode, and
   cross-language vector modules: passed, including refl acceptance of the
@@ -1081,12 +1116,21 @@ Implemented:
   weakening/substitution transports, and a byte-agreed context/global
   transcript pin.
 
+- the Phase E semantic replay core (`SemanticReplayV1.agda`,
+  `SynthesisReplayV1.agda`): conversion traces replay as genuine
+  intrinsic reductions with soundness and normality theorems, and
+  synthesis certificates recompute semantically, pinned by
+  structurally-valid-but-semantically-rejected mutant vectors.
+
 Not yet implemented:
 
 - round trips for the record-shaped payloads and the whole-envelope
   canonical-encode composition;
-- binder-local conversion checking;
-- complete synthesis soundness for decoded payloads;
+- the Phase E typing-judgment bridge: endpoint typing judgments,
+  binder-local conversion-typing supplements (derived contexts along
+  step paths, formation levels), the dependent-result
+  bounded-normalization reconciliation, and the synthesis
+  inductive-relation soundness presentation;
 - Q0/fresh/family payload correspondence;
 - independent Rust replay of a complete canonical bundle;
 - the versioned common normalized transcript;

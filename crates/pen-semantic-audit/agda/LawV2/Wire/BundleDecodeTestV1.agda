@@ -3,15 +3,18 @@
 -- Cross-language decode/check vectors for the eleven-section bundle.
 --
 -- `canonical-vector-v1` is the exact `encode_bundle_v1` output of the
--- cross-language fixture bundle (the canonical `pen-production-wire`
--- fixture extended with one discriminating context whose variable and
--- under-binder Pi entries make ordinal, entry-selection, and shift
--- conventions byte-visible). Rust verdicts for every vector below are
--- pinned by the generating harness: the canonical vector decodes and
--- round-trips; every mutated vector is rejected by `decode_bundle_v1`
--- (Rust folds structural validation into decoding, while this Agda
--- surface separates parse rejection from check rejection). These are
--- development regression vectors, not correspondence authority.
+-- cross-language fixture bundle: the canonical `pen-production-wire`
+-- fixture extended with a discriminating context (variable and
+-- under-binder Pi entries), identity and beta conversion certificates,
+-- and an application-elimination synthesis certificate, so that the
+-- ordinal, entry-selection, shift, reduction, and instantiation
+-- conventions are all byte-visible. Rust verdicts for every vector
+-- below are pinned by the generating harness: the canonical vector
+-- decodes and round-trips; every mutated vector is rejected by
+-- `decode_bundle_v1` (Rust folds structural validation into decoding,
+-- while this Agda surface separates parse rejection from check
+-- rejection). These are development regression vectors, not
+-- correspondence authority.
 
 module LawV2.Wire.BundleDecodeTestV1 where
 
@@ -74,8 +77,8 @@ canonical-vector-v1 =
   0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 
   0 ∷ 0 ∷ 0 ∷ 0 ∷ 6 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
   0 ∷ 6 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 3 ∷ 1 ∷ 1 ∷ 0 ∷ 0 ∷ 
-  0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 5 ∷ 110 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
-  0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 5 ∷ 
+  0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 5 ∷ 166 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 4 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 5 ∷ 
   5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 
   5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 
   5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 5 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
@@ -84,15 +87,52 @@ canonical-vector-v1 =
   0 ∷ 1 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
   7 ∷ 7 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 1 ∷ 
   0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 7 ∷ 7 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 
+  12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 
+  12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 
+  12 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 3 ∷ 6 ∷ 6 ∷ 
+  3 ∷ 6 ∷ 6 ∷ 1 ∷ 3 ∷ 6 ∷ 6 ∷ 3 ∷ 6 ∷ 6 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 3 ∷ 6 ∷ 6 ∷ 3 ∷ 6 ∷ 6 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 3 ∷ 6 ∷ 6 ∷ 3 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 3 ∷ 6 ∷ 6 ∷ 3 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 6 ∷ 6 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 1 ∷ 6 ∷ 6 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 
+  13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 
+  13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 
+  13 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 6 ∷ 6 ∷ 1 ∷ 
+  6 ∷ 6 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 6 ∷ 6 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 6 ∷ 1 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 6 ∷ 6 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 
+  14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 
+  14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 14 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 5 ∷ 4 ∷ 6 ∷ 1 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 7 ∷ 7 ∷ 0 ∷ 6 ∷ 7 ∷ 5 ∷ 4 ∷ 6 ∷ 1 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 5 ∷ 4 ∷ 6 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 7 ∷ 
+  7 ∷ 7 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 1 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
   0 ∷ 0 ∷ 0 ∷ 7 ∷ 7 ∷ 6 ∷ 8 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
-  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 68 ∷ 
-  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 200 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
   0 ∷ 0 ∷ 0 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 
   6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 
   6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 6 ∷ 1 ∷ 
   0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 6 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 
   0 ∷ 6 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 
-  0 ∷ 0 ∷ 0 ∷ 8 ∷ 15 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 
+  15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 
+  15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 15 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 5 ∷ 4 ∷ 6 ∷ 1 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 7 ∷ 6 ∷ 7 ∷ 6 ∷ 1 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ 12 ∷ 12 ∷ 
+  12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 
+  12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 
+  12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 12 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 
+  13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 
+  13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 13 ∷ 
+  13 ∷ 13 ∷ 6 ∷ 8 ∷ 15 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
   7 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 2 ∷ 3 ∷ 
   4 ∷ 5 ∷ 6 ∷ 9 ∷ 80 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 
   1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 7 ∷ 7 ∷ 7 ∷ 7 ∷ 
@@ -185,12 +225,12 @@ public-universe-rejected = refl
 -- Scope mutation: a synthesis subject variable out of context range
 -- decodes but fails the check.
 synthesis-scope-rejected :
-  decode-check-nats (set-at 777 1 canonical-vector-v1) ≡ just false
+  decode-check-nats (set-at 1089 1 canonical-vector-v1) ≡ just false
 synthesis-scope-rejected = refl
 
 -- Inventory mutation: swapping the first two Q0 rules decodes but fails
 -- the exact-inventory check.
 q0-swap-rejected :
   decode-check-nats
-    (set-at 813 0 (set-at 812 1 canonical-vector-v1)) ≡ just false
+    (set-at 1257 0 (set-at 1256 1 canonical-vector-v1)) ≡ just false
 q0-swap-rejected = refl

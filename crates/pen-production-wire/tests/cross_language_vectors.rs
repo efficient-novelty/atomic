@@ -15,6 +15,142 @@ fn id(byte: u8) -> WireIdV1 {
     WireIdV1([byte; 32])
 }
 
+fn beta_redex() -> WireTermV1 {
+    WireTermV1::Apply {
+        function: Box::new(WireTermV1::Lambda {
+            parameter: Box::new(WireTermV1::UnitType),
+            body: Box::new(WireTermV1::Variable { index: 0 }),
+        }),
+        argument: Box::new(WireTermV1::Unit),
+    }
+}
+
+fn unit_pi() -> WireTermV1 {
+    WireTermV1::Pi {
+        parameter: Box::new(WireTermV1::UnitType),
+        body: Box::new(WireTermV1::UnitType),
+    }
+}
+
+fn identity_conversion(
+    conversion_id: WireIdV1,
+    term: WireTermV1,
+    census: Vec<NoRedexEntryWireV1>,
+) -> ConversionCertificateWireV1 {
+    ConversionCertificateWireV1 {
+        conversion_id,
+        context: ProductionContextWireV1::default(),
+        left: term.clone(),
+        right: term.clone(),
+        endpoint_judgment: EndpointJudgmentWireV1::TypeFormation,
+        common_normal_form: term.clone(),
+        left_trace: BaseQ0ReductionTraceWireV1 {
+            start: term.clone(),
+            steps: Vec::new(),
+            end: term.clone(),
+        },
+        right_trace: BaseQ0ReductionTraceWireV1 {
+            start: term.clone(),
+            steps: Vec::new(),
+            end: term,
+        },
+        no_redex_census: NoRedexCensusWireV1 { entries: census },
+    }
+}
+
+/// The semantic exercises: identity conversions mediating the
+/// application elimination, and one genuine beta conversion whose
+/// target the Agda semantic replay recomputes by instantiation.
+fn semantic_conversions() -> Vec<ConversionCertificateWireV1> {
+    use ConversionPathComponentWireV1 as Path;
+    use NoRedexDispositionWireV1 as Disposition;
+    vec![
+        identity_conversion(
+            id(12),
+            unit_pi(),
+            vec![
+                NoRedexEntryWireV1 {
+                    path: Vec::new(),
+                    term: unit_pi(),
+                    disposition: Disposition::Pi,
+                },
+                NoRedexEntryWireV1 {
+                    path: vec![Path::PiParameter],
+                    term: WireTermV1::UnitType,
+                    disposition: Disposition::UnitType,
+                },
+                NoRedexEntryWireV1 {
+                    path: vec![Path::PiBody],
+                    term: WireTermV1::UnitType,
+                    disposition: Disposition::UnitType,
+                },
+            ],
+        ),
+        identity_conversion(
+            id(13),
+            WireTermV1::UnitType,
+            vec![NoRedexEntryWireV1 {
+                path: Vec::new(),
+                term: WireTermV1::UnitType,
+                disposition: Disposition::UnitType,
+            }],
+        ),
+        ConversionCertificateWireV1 {
+            conversion_id: id(14),
+            context: ProductionContextWireV1::default(),
+            left: beta_redex(),
+            right: WireTermV1::Unit,
+            endpoint_judgment: EndpointJudgmentWireV1::HasType {
+                expected_type: WireTermV1::UnitType,
+            },
+            common_normal_form: WireTermV1::Unit,
+            left_trace: BaseQ0ReductionTraceWireV1 {
+                start: beta_redex(),
+                steps: vec![BaseQ0ReductionStepWireV1::Beta {
+                    source: beta_redex(),
+                    target: WireTermV1::Unit,
+                }],
+                end: WireTermV1::Unit,
+            },
+            right_trace: BaseQ0ReductionTraceWireV1 {
+                start: WireTermV1::Unit,
+                steps: Vec::new(),
+                end: WireTermV1::Unit,
+            },
+            no_redex_census: NoRedexCensusWireV1 {
+                entries: vec![NoRedexEntryWireV1 {
+                    path: Vec::new(),
+                    term: WireTermV1::Unit,
+                    disposition: Disposition::Unit,
+                }],
+            },
+        },
+    ]
+}
+
+/// Rewrite every `Unit` endpoint of a one-step conversion to
+/// `UnitType`, coherently, so the mutant stays structurally valid while
+/// the step no longer replays semantically.
+fn replace_unit_with_unit_type(conversion: &mut ConversionCertificateWireV1) {
+    conversion.right = WireTermV1::UnitType;
+    conversion.common_normal_form = WireTermV1::UnitType;
+    match &mut conversion.left_trace.steps[0] {
+        BaseQ0ReductionStepWireV1::Beta { target, .. }
+        | BaseQ0ReductionStepWireV1::TransparentDelta { target, .. } => {
+            *target = WireTermV1::UnitType;
+        }
+        _ => panic!("unexpected step shape"),
+    }
+    conversion.left_trace.end = WireTermV1::UnitType;
+    conversion.right_trace.start = WireTermV1::UnitType;
+    conversion.right_trace.end = WireTermV1::UnitType;
+    conversion.no_redex_census.entries = vec![NoRedexEntryWireV1 {
+        path: Vec::new(),
+        term: WireTermV1::UnitType,
+        disposition: NoRedexDispositionWireV1::UnitType,
+    }];
+}
+
 fn canonical_bundle() -> ProductionRefinementBundleV1 {
     let empty = ProductionContextWireV1::default();
     let one_local = ProductionContextWireV1 {
@@ -109,19 +245,44 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
                     disposition: NoRedexDispositionWireV1::Unit,
                 }],
             },
-        }],
+        }]
+        .into_iter()
+        .chain(semantic_conversions())
+        .collect(),
         conversion_typing_supplements: Vec::new(),
-        synthesis_codes: vec![SynthesisCertificateWireV1 {
-            synthesis_id: id(6),
-            context: one_local.clone(),
-            subject: WireTermV1::Variable { index: 0 },
-            inferred_type: WireTermV1::UnitType,
-            code: SynthesisCodeWireV1::VariableLookup {
-                index: 0,
-                context_ordinal: 0,
-                shift_distance: 1,
+        synthesis_codes: vec![
+            SynthesisCertificateWireV1 {
+                synthesis_id: id(6),
+                context: one_local.clone(),
+                subject: WireTermV1::Variable { index: 0 },
+                inferred_type: WireTermV1::UnitType,
+                code: SynthesisCodeWireV1::VariableLookup {
+                    index: 0,
+                    context_ordinal: 0,
+                    shift_distance: 1,
+                },
             },
-        }],
+            SynthesisCertificateWireV1 {
+                synthesis_id: id(15),
+                context: ProductionContextWireV1::default(),
+                subject: beta_redex(),
+                inferred_type: WireTermV1::UnitType,
+                code: SynthesisCodeWireV1::ApplicationElimination {
+                    function: Box::new(SynthesisCodeWireV1::LambdaIntroduction {
+                        parameter_type: Box::new(SynthesisCodeWireV1::UnitType),
+                        body: Box::new(SynthesisCodeWireV1::VariableLookup {
+                            index: 0,
+                            context_ordinal: 0,
+                            shift_distance: 1,
+                        }),
+                    }),
+                    argument: Box::new(SynthesisCodeWireV1::Unit),
+                    function_conversion_id: id(12),
+                    argument_conversion_id: id(13),
+                    dependent_result_type: WireTermV1::UnitType,
+                },
+            },
+        ],
         q0_inventory: Q0InventoryWireV1 {
             ordered_rules: EXACT_Q0_INVENTORY_V1.to_vec(),
         },
@@ -238,14 +399,14 @@ const PINNED_MUTATIONS: [(&str, usize, u8); 6] = [
     ("manifest-frozen", 105, 1),
     ("public-universe-level", 226, 2),
     ("unknown-term-tag", 478, 255),
-    ("synthesis-variable-scope", 777, 1),
-    ("q0-swap-first", 812, 1),
+    ("synthesis-variable-scope", 1089, 1),
+    ("q0-swap-first", 1256, 1),
 ];
 
 #[test]
 fn canonical_vector_matches_committed_agda_literal() {
     let bytes = encode_bundle_v1(&canonical_bundle()).expect("fixture encodes");
-    assert_eq!(bytes.len(), 1283, "pinned vector length");
+    assert_eq!(bytes.len(), 1727, "pinned vector length");
     assert_eq!(
         bytes,
         committed_agda_vector(),
@@ -272,9 +433,9 @@ fn pinned_mutations_are_rejected_by_rust() {
 
     // The Q0 swap is a two-byte mutation: rules 0 and 1 exchanged.
     let mut q0 = bytes.clone();
-    assert_eq!((q0[812], q0[813]), (0, 1));
-    q0[812] = 1;
-    q0[813] = 0;
+    assert_eq!((q0[1256], q0[1257]), (0, 1));
+    q0[1256] = 1;
+    q0[1257] = 0;
     assert!(decode_bundle_v1(&q0).is_err());
 
     // Truncation by one byte, mirrored by `drop-last` in Agda.
@@ -389,5 +550,44 @@ fn context_transcript_matches_committed_agda_literal() {
         transcript,
         committed_agda_literal(AGDA_TRANSCRIPT_MODULE, "context-transcript-v1 ="),
         "the committed Agda transcript literal must equal the Rust rendering"
+    );
+}
+
+const AGDA_SEMANTIC_MODULE: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../pen-semantic-audit/agda/LawV2/Wire/SemanticReplayTestV1.agda"
+);
+
+/// The Phase E semantic mutants are STRUCTURALLY valid in Rust — the
+/// validator inside `encode_bundle_v1` accepts every one — while the
+/// committed Agda module proves each fails the semantic replay. This
+/// pins both halves of that claim from the repository alone.
+#[test]
+fn semantic_mutants_are_structurally_valid_and_pinned() {
+    let mut delta_wrong_body = canonical_bundle();
+    replace_unit_with_unit_type(&mut delta_wrong_body.conversions[0]);
+    let delta_bytes = encode_bundle_v1(&delta_wrong_body)
+        .expect("delta mutant must stay structurally valid");
+    assert_eq!(
+        delta_bytes,
+        committed_agda_literal(AGDA_SEMANTIC_MODULE, "mutant-delta-wrong-body-v1 ="),
+    );
+
+    let mut beta_wrong_result = canonical_bundle();
+    replace_unit_with_unit_type(&mut beta_wrong_result.conversions[3]);
+    let beta_bytes = encode_bundle_v1(&beta_wrong_result)
+        .expect("beta mutant must stay structurally valid");
+    assert_eq!(
+        beta_bytes,
+        committed_agda_literal(AGDA_SEMANTIC_MODULE, "mutant-beta-wrong-result-v1 ="),
+    );
+
+    let mut lookup_wrong_type = canonical_bundle();
+    lookup_wrong_type.synthesis_codes[0].inferred_type = WireTermV1::Sort { level: 0 };
+    let lookup_bytes = encode_bundle_v1(&lookup_wrong_type)
+        .expect("lookup mutant must stay structurally valid");
+    assert_eq!(
+        lookup_bytes,
+        committed_agda_literal(AGDA_SEMANTIC_MODULE, "mutant-lookup-wrong-type-v1 ="),
     );
 }

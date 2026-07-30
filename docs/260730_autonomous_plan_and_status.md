@@ -56,9 +56,18 @@ contexts, and the chronological slot table decode faithfully onto the
 intrinsic `PTm`/`PCtx` layer with both round trips, the exact
 variable-lookup ordinal and shift-distance equations, strict-prior global
 lookup, and a first cross-language decoded-surface transcript agreed
-byte-for-byte. The next genuine blockers are kernel-level
-conversion/synthesis soundness checking in Agda, independent Rust replay,
-and exact common transcript agreement.
+byte-for-byte. The Phase E semantic replay core is also implemented:
+safe Agda now replays conversion traces as genuine intrinsic reductions
+(beta by instantiation, transparent delta by the exact strict-prior
+signature body under the policy, congruence with binder-local scope) with
+machine-checked soundness into an intrinsic step relation and a
+no-outgoing-step normality theorem, and recomputes every synthesis
+certificate's subject and type semantically, including
+conversion-mediated dependent application results. Structurally valid but
+semantically wrong mutant vectors are now rejected exactly at this layer.
+The next genuine blockers are the endpoint-typing and supplement replay
+(the typing-judgment bridge), independent Rust replay, and exact common
+transcript agreement.
 
 ## 1. Objective hierarchy
 
@@ -449,17 +458,74 @@ count, and the under-binder shift cutoff all byte-visible. Capability
 minting remains deferred to the Phase H factory; nothing here is
 authority.
 
-### 2.13 Current validation snapshot
+### 2.13 Phase E semantic replay core implemented on 2026-07-30
+
+`LawV2/Wire/SemanticReplayV1.agda` closes the conversion-side semantic
+gap the structural checker cannot see:
+
+- an intrinsic base-Q0 step relation `PStepV1` on `PTm` (beta targeting
+  the exact intrinsic instantiation, transparent delta targeting the
+  exact strict-prior signature body restricted to the enabled policy
+  slots, and the six congruence frames with binder-local scope growth);
+- decoded wire step trees replayed by a Boolean checker whose soundness
+  theorem produces genuine `PStepV1` steps between the recorded
+  endpoints;
+- accepted traces yield reflexive-transitive `PStepsV1` chains from both
+  decoded conversion endpoints to the decoded common form; and
+- the accepted common form provably admits no outgoing intrinsic step,
+  with a bridge theorem from the structural census recomputation to
+  semantic normality.
+
+`LawV2/Wire/SynthesisReplayV1.agda` recomputes every synthesis
+certificate semantically: variables synthesize their exact intrinsic
+context lookup (with the ordinal and shift metadata reverified), globals
+their strict-prior declared types, pi formation combines component sort
+levels with the kernel `max`, lambda introduces the dependent pi type,
+and application elimination resolves its function and argument
+conversions by identifier under the exact protocol V2 side conditions —
+identical derived contexts, `TypeFormation` endpoint judgments, full
+semantic conversion replay, left endpoint equal to the synthesized
+type, and right endpoint equal to the census-normal common form, from
+which the pi is destructured — then recomputes the dependent result by
+intrinsic instantiation and compares it against both the embedded
+result term and the certificate's inferred type. One deliberate delta
+from the kernel remains: the recorded dependent result must equal the
+raw intrinsic instantiation, while the kernel records the
+kernel-normalized instantiation; reconciling the two requires the
+bounded-normalization bridge.
+
+`LawV2/Wire/SemanticReplayTestV1.agda` pins the discriminating evidence:
+the extended fixture (a genuine beta conversion, identity conversions,
+and an application-elimination certificate) passes the semantic replay
+by refl, while three mutants that pass the complete Rust and Agda
+STRUCTURAL checks — a delta step to a term that is not the signature
+body, a beta step to a term that is not the instantiation, and a
+variable-lookup certificate whose inferred type is not the context
+lookup — are each semantically rejected by refl. The Rust side pins that
+all three mutants are structurally valid (`encode_bundle_v1` accepts
+them) and byte-identical to the committed literals.
+
+Not yet replayed semantically: endpoint typing judgments, the
+conversion-typing supplements (binder-local context derivation along
+step paths and formation-level recovery), and an inductive-relation
+soundness presentation for the synthesis side. These form the immediate
+Phase E continuation and require the typing-judgment bridge.
+
+### 2.14 Current validation snapshot
 
 At this checkpoint:
 
-- `pen-production-wire`: 7 unit and 3 cross-language pinning tests passed;
+- `pen-production-wire`: 7 unit and 4 cross-language pinning tests passed;
 - `pen-semantic-audit --lib`: 166 passed, 6 ignored, 0 failed;
-- the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`, and
-  `BundleDecodeTestV1` entry points and all transitive wire modules
-  type-check with `--safe --without-K --ignore-interfaces`, which forces
-  the embedded 1258-byte Rust vector through the full decoder and
-  structural checker at type-check time;
+- the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`,
+  `BundleDecodeTestV1`, `ContextCorrespondenceV1`,
+  `ContextTranscriptTestV1`, `SemanticReplayV1`, `SynthesisReplayV1`,
+  and `SemanticReplayTestV1` entry points and all transitive wire
+  modules type-check with `--safe --without-K --ignore-interfaces`,
+  which forces the embedded 1727-byte Rust vector through the full
+  decoder, structural checker, and semantic replay — and the three
+  semantic mutant vectors through structural acceptance and semantic
+  rejection — at type-check time;
 - the new wire/bridge source contains no `postulate`, unsafe pragma,
   termination bypass, or unsolved-hole allowance; and
 - the protected root workspace manifests and issued H3/H4 artifacts remain
@@ -564,29 +630,61 @@ verified Rust slot table and is bound at the capability, not in `PSig`.
 
 ### Phase E — Implement the combined conversion/synthesis checker
 
-Status: open and likely the hardest local theorem phase.
+Status: semantic replay core complete as of 2026-07-30; the
+typing-judgment bridge remains.
 
-Conversion work:
+Conversion work completed:
 
-- replay beta, authorized transparent delta, and congruence;
-- derive nested binder-local contexts instead of trusting supplied outer
-  contexts;
-- check every endpoint judgment and trace link;
-- reduce both sides to one common normal form;
-- recompute the complete no-redex census;
-- recover existential formation levels; and
-- prove exact agreement with predecessor-public delta policy.
+- beta, authorized transparent delta, and congruence replay
+  semantically at the intrinsic level, with soundness into `PStepV1`
+  (beta must target the exact instantiation; delta must target the
+  exact strict-prior signature body and only for policy-enabled slots;
+  congruence frames must fix the unchanged component);
+- every trace link is checked semantically and accepted traces yield
+  intrinsic `PStepsV1` chains reducing both sides to the one common
+  normal form;
+- the complete no-redex census recomputation is bridged to semantic
+  normality: the accepted common form provably admits no outgoing
+  intrinsic step; and
+- delta-policy agreement is semantic: the intrinsic delta relation is
+  defined by the policy-restricted strict-prior body lookup itself.
 
-Synthesis work:
+Conversion work remaining:
 
-- check all eight constructors;
-- reconstruct variable ordinal and shift metadata;
-- resolve globals by finite slot;
-- reconstruct binder contexts;
-- verify application function/argument conversions; and
-- compute and compare dependent result substitution.
+- endpoint typing judgments (`HasType`/`TypeFormation`) are not yet
+  replayed against the typing judgment;
+- binder-local conversion-typing supplements are not yet consumed: the
+  derived nested contexts along step paths and the existential
+  formation-level recovery need the typing-judgment bridge.
 
-Exit gates:
+Synthesis work completed:
+
+- all eight constructors recompute the subject and type semantically;
+- variable ordinal and shift metadata are reverified and the type is
+  the exact intrinsic context lookup;
+- globals resolve by finite slot to their strict-prior declared types;
+- binder contexts are reconstructed during recursion, never trusted;
+- application function/argument conversions are resolved by identifier
+  and consumed under the exact protocol V2 side conditions: identical
+  derived context, `TypeFormation` endpoint judgment, full semantic
+  replay, left endpoint equal to the synthesized type, and right
+  endpoint equal to the census-normal common form (the pi is
+  destructured from the normal form, as in the kernel); and
+- the dependent result substitution is computed by intrinsic
+  instantiation and compared against both the embedded result term and
+  the inferred type.
+
+Synthesis work remaining:
+
+- the dependent-result normalization delta: the kernel records the
+  kernel-normalized instantiation while this layer requires the raw
+  intrinsic instantiation; reconciling them requires the
+  bounded-normalization bridge; and
+- an inductive-relation soundness presentation (mirroring the
+  conversion side's `PStepV1` package) and the bridge to the abstract
+  conversion-typing judgment.
+
+Exit gates (unchanged, deferred to the Phase H factory):
 
 - `VerifiedKernelBaseConversionCorrespondenceV1`; and
 - `VerifiedSynthesisCodeCorrespondenceV1`.
@@ -877,8 +975,9 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. combined conversion/synthesis checking (Phase E), now able to consume
-   the Phase D context/global correspondence;
+2. the Phase E typing-judgment bridge (endpoint judgments, binder-local
+   supplements, formation levels, dependent-result normalization
+   reconciliation, synthesis inductive soundness);
 3. exact Q0/fresh/family correspondence;
 4. independent Rust replay;
 5. canonical transcript agreement; and
@@ -886,8 +985,8 @@ The next work may lawfully continue with:
 
 Item 1 is additive; items 2–6 remain the ordered theorem frontier.
 Complete safe Agda decoding and structural checking for sections 5–11,
-and the Phase D finite context/global correspondence theorem layer, were
-discharged on 2026-07-30.
+the Phase D finite context/global correspondence theorem layer, and the
+Phase E semantic replay core were discharged on 2026-07-30.
 
 The work must stop before native carrier construction or live-profile
 authority if any of those gates remains unavailable.
