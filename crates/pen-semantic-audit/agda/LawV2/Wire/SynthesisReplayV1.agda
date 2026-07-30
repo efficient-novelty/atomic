@@ -25,12 +25,15 @@
 -- type, its right endpoint must equal its own common normal form (so
 -- the pi is destructured from the census-normal form), and its endpoint
 -- judgment must be `TypeFormation`, all in the identical derived
--- context and under full semantic replay. One deliberate remaining
--- delta from the kernel: the recorded dependent result is required to
--- equal the raw intrinsic instantiation, while the kernel records the
--- kernel-normalized instantiation; reconciling the two requires the
--- bounded-normalization bridge and is deferred with the
--- typing-judgment bridge. Nothing here mints authority.
+-- context and under full semantic replay. The dependent result follows
+-- the exact kernel discipline: `finalize_synthesis_node` replays the
+-- raw `substitute_top_v2` instantiation through a kernel
+-- `TypeFormation` judgment and records the kernel-normalized term, so
+-- the recorded result here must equal the bounded-normalization image
+-- of the intrinsic instantiation under the full stored-body delta map
+-- (`psig-delta`, every bodyful slot), computed by the Phase E
+-- bounded-normalization bridge in `NormalizationV1`. Nothing here
+-- mints authority.
 
 module LawV2.Wire.SynthesisReplayV1 where
 
@@ -53,6 +56,8 @@ open import LawV2.LambdaUnit.ProductionSyntaxV1
 open import LawV2.LambdaUnit.ProductionDecodingV1
 open import LawV2.Wire.ContextCorrespondenceV1
 open import LawV2.Wire.SemanticReplayV1
+open import LawV2.Wire.NormalizationV1
+  using (psig-delta; pnormalize; normalization-fuel-v1)
 
 boolean-guard : {A : Set} → Bool → WireMaybe A → WireMaybe A
 boolean-guard false continuation = wire-nothing
@@ -214,12 +219,14 @@ psynthesize globals enabled sig conversions locals context
     (wire-maybe-bind
       (decode-term-checked globals locals dependent-result)
       (λ recorded-result →
-    boolean-guard
-      (ptm-equal recorded-result
+    wire-maybe-bind
+      (pnormalize (psig-delta sig) normalization-fuel-v1
         (pinstantiate (second parts) (first argument-result)))
+      (λ normalized-result →
+    boolean-guard (ptm-equal recorded-result normalized-result)
       (wire-just
         (papp (first function-result) (first argument-result) ,
-         pinstantiate (second parts) (first argument-result))))))))))
+         normalized-result))))))))))
 
 -- Certificate-level semantic verdict: the recomputed subject and type
 -- must equal the decoded recorded subject and inferred type.

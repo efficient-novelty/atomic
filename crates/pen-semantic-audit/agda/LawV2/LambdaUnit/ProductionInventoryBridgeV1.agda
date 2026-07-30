@@ -17,6 +17,12 @@ open import LawV2.LambdaUnit.SubstitutionReduction
     ; beta-step
     ; public-delta-step
     ; fresh-equation-step
+    ; pi-parameter-congruence-step
+    ; pi-body-congruence-step
+    ; lambda-parameter-congruence-step
+    ; lambda-body-congruence-step
+    ; apply-function-congruence-step
+    ; apply-argument-congruence-step
     )
 open import LawV2.LambdaUnit.Substitution using (Tm)
 
@@ -219,10 +225,12 @@ family-code-substitution substitution
   (generic-equation-action equation one-hole-context) =
   refl
 
--- The existing abstract Step relation genuinely supplies only these three
--- constructor classifications. In particular, this does not make fresh
--- equations part of the V2 base conversion trace, and an abstract delta step
--- contains no predecessor-policy authorization.
+-- The abstract Step relation supplies the three rewrite classifications
+-- plus positioned congruence framing. A congruence step performs exactly
+-- the rewrite its premise performs, so its Q0 tag is the premise's tag.
+-- This does not make fresh equations part of the V2 base conversion
+-- trace, and an abstract delta step contains no predecessor-policy
+-- authorization.
 abstract-step-q0-tag :
   {V : Set}
   {left right : Tm V} ->
@@ -237,6 +245,24 @@ abstract-step-q0-tag
 abstract-step-q0-tag
   (fresh-equation-step left right match) =
   q0-fresh-nonrecursive-constructor-computation
+abstract-step-q0-tag
+  (pi-parameter-congruence-step body premise) =
+  abstract-step-q0-tag premise
+abstract-step-q0-tag
+  (pi-body-congruence-step parameter premise) =
+  abstract-step-q0-tag premise
+abstract-step-q0-tag
+  (lambda-parameter-congruence-step body premise) =
+  abstract-step-q0-tag premise
+abstract-step-q0-tag
+  (lambda-body-congruence-step parameter premise) =
+  abstract-step-q0-tag premise
+abstract-step-q0-tag
+  (apply-function-congruence-step argument premise) =
+  abstract-step-q0-tag premise
+abstract-step-q0-tag
+  (apply-argument-congruence-step function premise) =
+  abstract-step-q0-tag premise
 
 abstract-step-classification :
   {V : Set}

@@ -1,11 +1,21 @@
 //! Rust-side pinning of the committed cross-language byte vectors.
 //!
 //! `LawV2/Wire/BundleDecodeTestV1.agda` embeds one canonical bundle byte
-//! vector and proves by refl that safe Agda accepts it and rejects seven
-//! pinned length-preserving mutations. This test makes those claims
-//! reproducible from the repository alone: it rebuilds the same fixture,
-//! re-derives the exact bytes, checks them against the committed Agda
-//! literal, and re-asserts every pinned Rust verdict.
+//! vector and proves by refl that safe Agda accepts it and rejects
+//! pinned mutations. `SemanticReplayTestV1.agda` and
+//! `TypingReplayTestV1.agda` embed structurally valid mutants that the
+//! semantic replay and the typing replay reject. This test makes those
+//! claims reproducible from the repository alone: it rebuilds the same
+//! fixture, re-derives the exact bytes, checks them against the
+//! committed Agda literals, and re-asserts every pinned Rust verdict.
+//!
+//! The fixture is deliberately well typed under the kernel discipline
+//! (every declared type forms a type, every stored body checks, every
+//! context entry is a type) and deliberately discriminating: it
+//! contains congruence conversions with binder-local supplements, a
+//! `TypeFormation` supplement with a recovered formation level, and an
+//! application certificate whose raw instantiation differs from its
+//! kernel-normalized dependent result.
 //!
 //! This is a development regression test, not correspondence authority.
 
@@ -15,34 +25,150 @@ fn id(byte: u8) -> WireIdV1 {
     WireIdV1([byte; 32])
 }
 
-fn beta_redex() -> WireTermV1 {
-    WireTermV1::Apply {
-        function: Box::new(WireTermV1::Lambda {
-            parameter: Box::new(WireTermV1::UnitType),
-            body: Box::new(WireTermV1::Variable { index: 0 }),
-        }),
-        argument: Box::new(WireTermV1::Unit),
+fn unit_type() -> WireTermV1 {
+    WireTermV1::UnitType
+}
+
+fn unit() -> WireTermV1 {
+    WireTermV1::Unit
+}
+
+fn sort(level: u16) -> WireTermV1 {
+    WireTermV1::Sort { level }
+}
+
+fn var(index: u32) -> WireTermV1 {
+    WireTermV1::Variable { index }
+}
+
+fn global(slot: u32) -> WireTermV1 {
+    WireTermV1::GlobalSlot { slot }
+}
+
+fn pi(parameter: WireTermV1, body: WireTermV1) -> WireTermV1 {
+    WireTermV1::Pi {
+        parameter: Box::new(parameter),
+        body: Box::new(body),
     }
 }
 
-fn unit_pi() -> WireTermV1 {
-    WireTermV1::Pi {
-        parameter: Box::new(WireTermV1::UnitType),
-        body: Box::new(WireTermV1::UnitType),
+fn lambda(parameter: WireTermV1, body: WireTermV1) -> WireTermV1 {
+    WireTermV1::Lambda {
+        parameter: Box::new(parameter),
+        body: Box::new(body),
     }
+}
+
+fn apply(function: WireTermV1, argument: WireTermV1) -> WireTermV1 {
+    WireTermV1::Apply {
+        function: Box::new(function),
+        argument: Box::new(argument),
+    }
+}
+
+fn beta_redex() -> WireTermV1 {
+    apply(lambda(unit_type(), var(0)), unit())
+}
+
+fn unit_pi() -> WireTermV1 {
+    pi(unit_type(), unit_type())
+}
+
+/// `(F : UnitType -> Sort 0) -> F Unit`: the declared type of global
+/// slot 2. Its neutral dependent body makes the raw instantiation of an
+/// application differ from the kernel-normalized dependent result.
+fn family_application_pi() -> WireTermV1 {
+    pi(pi(unit_type(), sort(0)), apply(var(0), unit()))
+}
+
+fn unit_family_pi() -> WireTermV1 {
+    pi(unit_type(), sort(0))
+}
+
+fn constant_unit_family() -> WireTermV1 {
+    lambda(unit_type(), unit_type())
+}
+
+fn empty_context() -> ProductionContextWireV1 {
+    ProductionContextWireV1::default()
+}
+
+fn one_local() -> ProductionContextWireV1 {
+    ProductionContextWireV1 {
+        entries_oldest_first: vec![unit_type()],
+    }
+}
+
+/// Recompute the exact no-redex census of a normal form relative to the
+/// enabled delta slot 0, mirroring `expected_no_redex_census`.
+fn census_of(term: &WireTermV1) -> Vec<NoRedexEntryWireV1> {
+    fn walk(
+        term: &WireTermV1,
+        path: &mut Vec<ConversionPathComponentWireV1>,
+        entries: &mut Vec<NoRedexEntryWireV1>,
+    ) {
+        use ConversionPathComponentWireV1 as Path;
+        use NoRedexDispositionWireV1 as Disposition;
+        let disposition = match term {
+            WireTermV1::Sort { .. } => Disposition::Sort,
+            WireTermV1::Variable { .. } => Disposition::Variable,
+            WireTermV1::GlobalSlot { .. } => Disposition::GlobalNotEnabledByPolicy,
+            WireTermV1::Pi { .. } => Disposition::Pi,
+            WireTermV1::Lambda { .. } => Disposition::Lambda,
+            WireTermV1::Apply { .. } => Disposition::NeutralApplication,
+            WireTermV1::UnitType => Disposition::UnitType,
+            WireTermV1::Unit => Disposition::Unit,
+        };
+        entries.push(NoRedexEntryWireV1 {
+            path: path.clone(),
+            term: term.clone(),
+            disposition,
+        });
+        match term {
+            WireTermV1::Pi { parameter, body } => {
+                path.push(Path::PiParameter);
+                walk(parameter, path, entries);
+                path.pop();
+                path.push(Path::PiBody);
+                walk(body, path, entries);
+                path.pop();
+            }
+            WireTermV1::Lambda { parameter, body } => {
+                path.push(Path::LambdaParameter);
+                walk(parameter, path, entries);
+                path.pop();
+                path.push(Path::LambdaBody);
+                walk(body, path, entries);
+                path.pop();
+            }
+            WireTermV1::Apply { function, argument } => {
+                path.push(Path::ApplyFunction);
+                walk(function, path, entries);
+                path.pop();
+                path.push(Path::ApplyArgument);
+                walk(argument, path, entries);
+                path.pop();
+            }
+            _ => {}
+        }
+    }
+    let mut entries = Vec::new();
+    walk(term, &mut Vec::new(), &mut entries);
+    entries
 }
 
 fn identity_conversion(
     conversion_id: WireIdV1,
+    context: ProductionContextWireV1,
     term: WireTermV1,
-    census: Vec<NoRedexEntryWireV1>,
+    endpoint_judgment: EndpointJudgmentWireV1,
 ) -> ConversionCertificateWireV1 {
     ConversionCertificateWireV1 {
         conversion_id,
-        context: ProductionContextWireV1::default(),
+        context,
         left: term.clone(),
         right: term.clone(),
-        endpoint_judgment: EndpointJudgmentWireV1::TypeFormation,
+        endpoint_judgment,
         common_normal_form: term.clone(),
         left_trace: BaseQ0ReductionTraceWireV1 {
             start: term.clone(),
@@ -52,124 +178,316 @@ fn identity_conversion(
         right_trace: BaseQ0ReductionTraceWireV1 {
             start: term.clone(),
             steps: Vec::new(),
-            end: term,
+            end: term.clone(),
         },
-        no_redex_census: NoRedexCensusWireV1 { entries: census },
+        no_redex_census: NoRedexCensusWireV1 {
+            entries: census_of(&term),
+        },
     }
 }
 
-/// The semantic exercises: identity conversions mediating the
-/// application elimination, and one genuine beta conversion whose
-/// target the Agda semantic replay recomputes by instantiation.
-fn semantic_conversions() -> Vec<ConversionCertificateWireV1> {
-    use ConversionPathComponentWireV1 as Path;
-    use NoRedexDispositionWireV1 as Disposition;
+/// A one-step conversion whose right side is already the common form.
+fn one_step_conversion(
+    conversion_id: WireIdV1,
+    context: ProductionContextWireV1,
+    left: WireTermV1,
+    step: BaseQ0ReductionStepWireV1,
+    common: WireTermV1,
+    endpoint_judgment: EndpointJudgmentWireV1,
+) -> ConversionCertificateWireV1 {
+    ConversionCertificateWireV1 {
+        conversion_id,
+        context,
+        left: left.clone(),
+        right: common.clone(),
+        endpoint_judgment,
+        common_normal_form: common.clone(),
+        left_trace: BaseQ0ReductionTraceWireV1 {
+            start: left,
+            steps: vec![step],
+            end: common.clone(),
+        },
+        right_trace: BaseQ0ReductionTraceWireV1 {
+            start: common.clone(),
+            steps: Vec::new(),
+            end: common.clone(),
+        },
+        no_redex_census: NoRedexCensusWireV1 {
+            entries: census_of(&common),
+        },
+    }
+}
+
+fn variable_lookup_code(index: u32, context_len: u32) -> SynthesisCodeWireV1 {
+    SynthesisCodeWireV1::VariableLookup {
+        index,
+        context_ordinal: context_len - 1 - index,
+        shift_distance: index + 1,
+    }
+}
+
+/// `(\y : UnitType. y) x` under `[UnitType]`: the lambda-body congruence
+/// premise certified by supplement A.
+fn inner_beta_redex() -> WireTermV1 {
+    apply(lambda(unit_type(), var(0)), var(0))
+}
+
+/// `(\y : UnitType. UnitType) x` under `[UnitType]`: the pi-body
+/// congruence premise certified by supplement B.
+fn inner_type_redex() -> WireTermV1 {
+    apply(constant_unit_family(), var(0))
+}
+
+fn conversions() -> Vec<ConversionCertificateWireV1> {
     vec![
+        // id 5: transparent delta of the bodyful slot 0.
+        one_step_conversion(
+            id(5),
+            empty_context(),
+            global(0),
+            BaseQ0ReductionStepWireV1::TransparentDelta {
+                source: global(0),
+                target: unit(),
+                global_slot: 0,
+            },
+            unit(),
+            EndpointJudgmentWireV1::HasType {
+                expected_type: unit_type(),
+            },
+        ),
+        // id 12/13: identity mediators for certificate 15 (empty context).
         identity_conversion(
             id(12),
+            empty_context(),
             unit_pi(),
-            vec![
-                NoRedexEntryWireV1 {
-                    path: Vec::new(),
-                    term: unit_pi(),
-                    disposition: Disposition::Pi,
-                },
-                NoRedexEntryWireV1 {
-                    path: vec![Path::PiParameter],
-                    term: WireTermV1::UnitType,
-                    disposition: Disposition::UnitType,
-                },
-                NoRedexEntryWireV1 {
-                    path: vec![Path::PiBody],
-                    term: WireTermV1::UnitType,
-                    disposition: Disposition::UnitType,
-                },
-            ],
+            EndpointJudgmentWireV1::TypeFormation,
         ),
         identity_conversion(
             id(13),
-            WireTermV1::UnitType,
-            vec![NoRedexEntryWireV1 {
-                path: Vec::new(),
-                term: WireTermV1::UnitType,
-                disposition: Disposition::UnitType,
-            }],
+            empty_context(),
+            unit_type(),
+            EndpointJudgmentWireV1::TypeFormation,
         ),
-        ConversionCertificateWireV1 {
-            conversion_id: id(14),
-            context: ProductionContextWireV1::default(),
-            left: beta_redex(),
-            right: WireTermV1::Unit,
-            endpoint_judgment: EndpointJudgmentWireV1::HasType {
-                expected_type: WireTermV1::UnitType,
+        // id 14: a genuine top-level beta conversion.
+        one_step_conversion(
+            id(14),
+            empty_context(),
+            beta_redex(),
+            BaseQ0ReductionStepWireV1::Beta {
+                source: beta_redex(),
+                target: unit(),
             },
-            common_normal_form: WireTermV1::Unit,
-            left_trace: BaseQ0ReductionTraceWireV1 {
-                start: beta_redex(),
-                steps: vec![BaseQ0ReductionStepWireV1::Beta {
-                    source: beta_redex(),
-                    target: WireTermV1::Unit,
-                }],
-                end: WireTermV1::Unit,
+            unit(),
+            EndpointJudgmentWireV1::HasType {
+                expected_type: unit_type(),
             },
-            right_trace: BaseQ0ReductionTraceWireV1 {
-                start: WireTermV1::Unit,
-                steps: Vec::new(),
-                end: WireTermV1::Unit,
+        ),
+        // id 16/17: identity mediators under `[UnitType]` for the
+        // supplement certificates.
+        identity_conversion(
+            id(16),
+            one_local(),
+            unit_pi(),
+            EndpointJudgmentWireV1::TypeFormation,
+        ),
+        identity_conversion(
+            id(17),
+            one_local(),
+            unit_type(),
+            EndpointJudgmentWireV1::TypeFormation,
+        ),
+        // id 18: a lambda-body congruence with a binder-local beta
+        // premise, certified by supplement A.
+        one_step_conversion(
+            id(18),
+            empty_context(),
+            lambda(unit_type(), inner_beta_redex()),
+            BaseQ0ReductionStepWireV1::LambdaBodyCongruence {
+                source: lambda(unit_type(), inner_beta_redex()),
+                target: lambda(unit_type(), var(0)),
+                premise: Box::new(BaseQ0ReductionStepWireV1::Beta {
+                    source: inner_beta_redex(),
+                    target: var(0),
+                }),
             },
-            no_redex_census: NoRedexCensusWireV1 {
-                entries: vec![NoRedexEntryWireV1 {
-                    path: Vec::new(),
-                    term: WireTermV1::Unit,
-                    disposition: Disposition::Unit,
-                }],
+            lambda(unit_type(), var(0)),
+            EndpointJudgmentWireV1::HasType {
+                expected_type: unit_pi(),
+            },
+        ),
+        // id 19: a pi-body congruence with a binder-local type-level
+        // beta premise, certified by supplement B (TypeFormation with a
+        // recovered formation level).
+        one_step_conversion(
+            id(19),
+            empty_context(),
+            pi(unit_type(), inner_type_redex()),
+            BaseQ0ReductionStepWireV1::PiBodyCongruence {
+                source: pi(unit_type(), inner_type_redex()),
+                target: unit_pi(),
+                premise: Box::new(BaseQ0ReductionStepWireV1::Beta {
+                    source: inner_type_redex(),
+                    target: unit_type(),
+                }),
+            },
+            unit_pi(),
+            EndpointJudgmentWireV1::TypeFormation,
+        ),
+        // id 26: identity mediator on the unit family pi under
+        // `[UnitType]`, for supplement B's application certificate.
+        identity_conversion(
+            id(26),
+            one_local(),
+            unit_family_pi(),
+            EndpointJudgmentWireV1::TypeFormation,
+        ),
+        // id 27/28: identity mediators in the empty context for the
+        // dependent-normalization certificate 29.
+        identity_conversion(
+            id(27),
+            empty_context(),
+            family_application_pi(),
+            EndpointJudgmentWireV1::TypeFormation,
+        ),
+        identity_conversion(
+            id(28),
+            empty_context(),
+            unit_family_pi(),
+            EndpointJudgmentWireV1::TypeFormation,
+        ),
+    ]
+}
+
+fn synthesis_codes() -> Vec<SynthesisCertificateWireV1> {
+    vec![
+        SynthesisCertificateWireV1 {
+            synthesis_id: id(6),
+            context: one_local(),
+            subject: var(0),
+            inferred_type: unit_type(),
+            code: variable_lookup_code(0, 1),
+        },
+        SynthesisCertificateWireV1 {
+            synthesis_id: id(15),
+            context: empty_context(),
+            subject: beta_redex(),
+            inferred_type: unit_type(),
+            code: SynthesisCodeWireV1::ApplicationElimination {
+                function: Box::new(SynthesisCodeWireV1::LambdaIntroduction {
+                    parameter_type: Box::new(SynthesisCodeWireV1::UnitType),
+                    body: Box::new(variable_lookup_code(0, 1)),
+                }),
+                argument: Box::new(SynthesisCodeWireV1::Unit),
+                function_conversion_id: id(12),
+                argument_conversion_id: id(13),
+                dependent_result_type: unit_type(),
+            },
+        },
+        // id 29: `global 2` applied to the constant unit family. The raw
+        // instantiation is `(\y:UnitType. UnitType) Unit`, a beta redex;
+        // the recorded dependent result is its kernel normal form
+        // `UnitType`, pinning the bounded-normalization reconciliation.
+        SynthesisCertificateWireV1 {
+            synthesis_id: id(29),
+            context: empty_context(),
+            subject: apply(global(2), constant_unit_family()),
+            inferred_type: unit_type(),
+            code: SynthesisCodeWireV1::ApplicationElimination {
+                function: Box::new(SynthesisCodeWireV1::GlobalLookup { global_slot: 2 }),
+                argument: Box::new(SynthesisCodeWireV1::LambdaIntroduction {
+                    parameter_type: Box::new(SynthesisCodeWireV1::UnitType),
+                    body: Box::new(SynthesisCodeWireV1::UnitType),
+                }),
+                function_conversion_id: id(27),
+                argument_conversion_id: id(28),
+                dependent_result_type: unit_type(),
             },
         },
     ]
 }
 
-/// Rewrite every `Unit` endpoint of a one-step conversion to
-/// `UnitType`, coherently, so the mutant stays structurally valid while
-/// the step no longer replays semantically.
-fn replace_unit_with_unit_type(conversion: &mut ConversionCertificateWireV1) {
-    conversion.right = WireTermV1::UnitType;
-    conversion.common_normal_form = WireTermV1::UnitType;
-    match &mut conversion.left_trace.steps[0] {
-        BaseQ0ReductionStepWireV1::Beta { target, .. }
-        | BaseQ0ReductionStepWireV1::TransparentDelta { target, .. } => {
-            *target = WireTermV1::UnitType;
-        }
-        _ => panic!("unexpected step shape"),
+/// Supplement A: the binder-local beta premise of conversion 18, under
+/// the derived context `[UnitType]`, with a `HasType UnitType` endpoint.
+fn supplement_a() -> ConversionTypingSupplementWireV1 {
+    ConversionTypingSupplementWireV1 {
+        conversion_id: id(18),
+        step_path: vec![0, 0, 0],
+        local_context: one_local(),
+        local_endpoint_judgment: EndpointJudgmentWireV1::HasType {
+            expected_type: unit_type(),
+        },
+        source_typing_code: SynthesisCertificateWireV1 {
+            synthesis_id: id(30),
+            context: one_local(),
+            subject: inner_beta_redex(),
+            inferred_type: unit_type(),
+            code: SynthesisCodeWireV1::ApplicationElimination {
+                function: Box::new(SynthesisCodeWireV1::LambdaIntroduction {
+                    parameter_type: Box::new(SynthesisCodeWireV1::UnitType),
+                    body: Box::new(variable_lookup_code(0, 2)),
+                }),
+                argument: Box::new(variable_lookup_code(0, 1)),
+                function_conversion_id: id(16),
+                argument_conversion_id: id(17),
+                dependent_result_type: unit_type(),
+            },
+        },
+        target_typing_code: SynthesisCertificateWireV1 {
+            synthesis_id: id(31),
+            context: one_local(),
+            subject: var(0),
+            inferred_type: unit_type(),
+            code: variable_lookup_code(0, 1),
+        },
+        formation_level: None,
     }
-    conversion.left_trace.end = WireTermV1::UnitType;
-    conversion.right_trace.start = WireTermV1::UnitType;
-    conversion.right_trace.end = WireTermV1::UnitType;
-    conversion.no_redex_census.entries = vec![NoRedexEntryWireV1 {
-        path: Vec::new(),
-        term: WireTermV1::UnitType,
-        disposition: NoRedexDispositionWireV1::UnitType,
-    }];
+}
+
+/// Supplement B: the binder-local type-level premise of conversion 19,
+/// with a `TypeFormation` endpoint and recovered formation level 0.
+fn supplement_b() -> ConversionTypingSupplementWireV1 {
+    ConversionTypingSupplementWireV1 {
+        conversion_id: id(19),
+        step_path: vec![0, 0, 0],
+        local_context: one_local(),
+        local_endpoint_judgment: EndpointJudgmentWireV1::TypeFormation,
+        source_typing_code: SynthesisCertificateWireV1 {
+            synthesis_id: id(32),
+            context: one_local(),
+            subject: inner_type_redex(),
+            inferred_type: sort(0),
+            code: SynthesisCodeWireV1::ApplicationElimination {
+                function: Box::new(SynthesisCodeWireV1::LambdaIntroduction {
+                    parameter_type: Box::new(SynthesisCodeWireV1::UnitType),
+                    body: Box::new(SynthesisCodeWireV1::UnitType),
+                }),
+                argument: Box::new(variable_lookup_code(0, 1)),
+                function_conversion_id: id(26),
+                argument_conversion_id: id(17),
+                dependent_result_type: sort(0),
+            },
+        },
+        target_typing_code: SynthesisCertificateWireV1 {
+            synthesis_id: id(33),
+            context: one_local(),
+            subject: unit_type(),
+            inferred_type: sort(0),
+            code: SynthesisCodeWireV1::UnitType,
+        },
+        formation_level: Some(0),
+    }
 }
 
 fn canonical_bundle() -> ProductionRefinementBundleV1 {
-    let empty = ProductionContextWireV1::default();
-    let one_local = ProductionContextWireV1 {
-        entries_oldest_first: vec![WireTermV1::UnitType],
-    };
-    // Discriminating context: a variable entry and an under-binder Pi
-    // entry make the transcript's oldest-first ordinal formula, entry
-    // selection, shift iteration count, and shift cutoff byte-visible.
+    // Discriminating and well-typed context: a universe entry, a
+    // variable entry (a type because its own type is that universe),
+    // and an under-binder pi entry, so the transcript's oldest-first
+    // ordinal formula, entry selection, shift iteration count, and
+    // under-binder shift cutoff are byte-visible while every entry
+    // still forms a type under the kernel discipline.
     let discriminating = ProductionContextWireV1 {
-        entries_oldest_first: vec![
-            WireTermV1::UnitType,
-            WireTermV1::Variable { index: 0 },
-            WireTermV1::Pi {
-                parameter: Box::new(WireTermV1::Variable { index: 1 }),
-                body: Box::new(WireTermV1::Variable { index: 0 }),
-            },
-        ],
+        entries_oldest_first: vec![sort(0), var(0), pi(var(1), var(2))],
     };
-    let common = WireTermV1::Unit;
     ProductionRefinementBundleV1 {
         header: WireHeaderV1::canonical(),
         manifest_surface: V3CorrespondenceManifestWireV1 {
@@ -203,86 +521,27 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
                 GlobalSlotEntryWireV1 {
                     slot: 0,
                     global_id_bytes: id(1),
-                    declaration_type: WireTermV1::UnitType,
-                    declaration_body: Some(WireTermV1::Unit),
+                    declaration_type: unit_type(),
+                    declaration_body: Some(unit()),
                 },
                 GlobalSlotEntryWireV1 {
                     slot: 1,
                     global_id_bytes: id(2),
-                    declaration_type: WireTermV1::GlobalSlot { slot: 0 },
+                    declaration_type: unit_type(),
+                    declaration_body: None,
+                },
+                GlobalSlotEntryWireV1 {
+                    slot: 2,
+                    global_id_bytes: id(3),
+                    declaration_type: family_application_pi(),
                     declaration_body: None,
                 },
             ],
         },
-        contexts: vec![empty.clone(), one_local.clone(), discriminating],
-        conversions: vec![ConversionCertificateWireV1 {
-            conversion_id: id(5),
-            context: empty.clone(),
-            left: WireTermV1::GlobalSlot { slot: 0 },
-            right: common.clone(),
-            endpoint_judgment: EndpointJudgmentWireV1::HasType {
-                expected_type: WireTermV1::UnitType,
-            },
-            common_normal_form: common.clone(),
-            left_trace: BaseQ0ReductionTraceWireV1 {
-                start: WireTermV1::GlobalSlot { slot: 0 },
-                steps: vec![BaseQ0ReductionStepWireV1::TransparentDelta {
-                    source: WireTermV1::GlobalSlot { slot: 0 },
-                    target: common.clone(),
-                    global_slot: 0,
-                }],
-                end: common.clone(),
-            },
-            right_trace: BaseQ0ReductionTraceWireV1 {
-                start: common.clone(),
-                steps: Vec::new(),
-                end: common.clone(),
-            },
-            no_redex_census: NoRedexCensusWireV1 {
-                entries: vec![NoRedexEntryWireV1 {
-                    path: Vec::new(),
-                    term: common,
-                    disposition: NoRedexDispositionWireV1::Unit,
-                }],
-            },
-        }]
-        .into_iter()
-        .chain(semantic_conversions())
-        .collect(),
-        conversion_typing_supplements: Vec::new(),
-        synthesis_codes: vec![
-            SynthesisCertificateWireV1 {
-                synthesis_id: id(6),
-                context: one_local.clone(),
-                subject: WireTermV1::Variable { index: 0 },
-                inferred_type: WireTermV1::UnitType,
-                code: SynthesisCodeWireV1::VariableLookup {
-                    index: 0,
-                    context_ordinal: 0,
-                    shift_distance: 1,
-                },
-            },
-            SynthesisCertificateWireV1 {
-                synthesis_id: id(15),
-                context: ProductionContextWireV1::default(),
-                subject: beta_redex(),
-                inferred_type: WireTermV1::UnitType,
-                code: SynthesisCodeWireV1::ApplicationElimination {
-                    function: Box::new(SynthesisCodeWireV1::LambdaIntroduction {
-                        parameter_type: Box::new(SynthesisCodeWireV1::UnitType),
-                        body: Box::new(SynthesisCodeWireV1::VariableLookup {
-                            index: 0,
-                            context_ordinal: 0,
-                            shift_distance: 1,
-                        }),
-                    }),
-                    argument: Box::new(SynthesisCodeWireV1::Unit),
-                    function_conversion_id: id(12),
-                    argument_conversion_id: id(13),
-                    dependent_result_type: WireTermV1::UnitType,
-                },
-            },
-        ],
+        contexts: vec![empty_context(), one_local(), discriminating],
+        conversions: conversions(),
+        conversion_typing_supplements: vec![supplement_a(), supplement_b()],
+        synthesis_codes: synthesis_codes(),
         q0_inventory: Q0InventoryWireV1 {
             ordered_rules: EXACT_Q0_INVENTORY_V1.to_vec(),
         },
@@ -290,13 +549,10 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
             equation_id: id(7),
             owner_slot: 0,
             constructor_slot: 1,
-            parameter_context: one_local,
-            left: WireTermV1::Apply {
-                function: Box::new(WireTermV1::GlobalSlot { slot: 0 }),
-                argument: Box::new(WireTermV1::GlobalSlot { slot: 1 }),
-            },
-            right: WireTermV1::Variable { index: 0 },
-            ty: WireTermV1::UnitType,
+            parameter_context: one_local(),
+            left: apply(global(0), global(1)),
+            right: var(0),
+            ty: unit_type(),
             scrutinee_ordinal: 0,
             arity: 1,
         }],
@@ -308,18 +564,18 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
                 family_id: id(8),
                 source: SeedSourceWireV1::PublicHead { owner_slot: 0 },
                 judgment: FamilyJudgmentWireV1 {
-                    context: empty.clone(),
-                    subject: WireTermV1::Unit,
-                    ty: WireTermV1::UnitType,
+                    context: empty_context(),
+                    subject: unit(),
+                    ty: unit_type(),
                 },
             },
             FamilyPayloadWireV1::Seed {
                 family_id: id(9),
                 source: SeedSourceWireV1::PublicEquation { equation_id: id(7) },
                 judgment: FamilyJudgmentWireV1 {
-                    context: empty.clone(),
-                    subject: WireTermV1::Unit,
-                    ty: WireTermV1::UnitType,
+                    context: empty_context(),
+                    subject: unit(),
+                    ty: unit_type(),
                 },
             },
             FamilyPayloadWireV1::GenericPublicApplication {
@@ -327,9 +583,9 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
                 function_family_id: id(8),
                 argument_family_id: id(9),
                 judgment: FamilyJudgmentWireV1 {
-                    context: empty.clone(),
-                    subject: WireTermV1::Unit,
-                    ty: WireTermV1::UnitType,
+                    context: empty_context(),
+                    subject: unit(),
+                    ty: unit_type(),
                 },
             },
             FamilyPayloadWireV1::GenericEquationAction {
@@ -337,16 +593,148 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
                 equation_id: id(7),
                 source_family_id: id(8),
                 judgment: FamilyJudgmentWireV1 {
-                    context: empty,
-                    subject: WireTermV1::Unit,
-                    ty: WireTermV1::UnitType,
+                    context: empty_context(),
+                    subject: unit(),
+                    ty: unit_type(),
                 },
             },
         ],
     }
 }
 
-/// The committed safe Agda vector modules, resolved relative to this crate.
+// --- Semantic-layer mutants -------------------------------------------------
+
+/// Rewrite every `Unit` endpoint of a one-step conversion to
+/// `UnitType`, coherently, so the mutant stays structurally valid while
+/// the step no longer replays semantically.
+fn replace_unit_with_unit_type(conversion: &mut ConversionCertificateWireV1) {
+    conversion.right = unit_type();
+    conversion.common_normal_form = unit_type();
+    match &mut conversion.left_trace.steps[0] {
+        BaseQ0ReductionStepWireV1::Beta { target, .. }
+        | BaseQ0ReductionStepWireV1::TransparentDelta { target, .. } => {
+            *target = unit_type();
+        }
+        _ => panic!("unexpected step shape"),
+    }
+    conversion.left_trace.end = unit_type();
+    conversion.right_trace.start = unit_type();
+    conversion.right_trace.end = unit_type();
+    conversion.no_redex_census.entries = census_of(&unit_type());
+}
+
+fn mutant_delta_wrong_body() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    replace_unit_with_unit_type(&mut bundle.conversions[0]);
+    bundle
+}
+
+fn mutant_beta_wrong_result() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    replace_unit_with_unit_type(&mut bundle.conversions[3]);
+    bundle
+}
+
+fn mutant_lookup_wrong_type() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.synthesis_codes[0].inferred_type = sort(0);
+    bundle
+}
+
+/// The dependent result of certificate 29 recorded as the RAW
+/// instantiation instead of its kernel normal form: structurally valid
+/// (the wire only requires `dependent_result_type == inferred_type`),
+/// rejected by the reconciled bounded-normalization rule.
+fn mutant_result_not_normalized() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    let raw = apply(constant_unit_family(), unit());
+    bundle.synthesis_codes[2].inferred_type = raw.clone();
+    match &mut bundle.synthesis_codes[2].code {
+        SynthesisCodeWireV1::ApplicationElimination {
+            dependent_result_type,
+            ..
+        } => *dependent_result_type = raw,
+        _ => panic!("unexpected code shape"),
+    }
+    bundle
+}
+
+// --- Typing-layer mutants ---------------------------------------------------
+
+/// Slot 1 declared with the type `global 0`, whose own type is
+/// `UnitType`, not a universe: exactly the ill-typed declaration shape
+/// the kernel signature verification rejects.
+fn mutant_signature_ill_typed() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.global_slot_table.entries[1].declaration_type = global(0);
+    bundle
+}
+
+/// A standalone context whose second entry is a term of `UnitType`
+/// rather than a type: rejected by kernel context verification.
+fn mutant_context_ill_typed() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.contexts[2] = ProductionContextWireV1 {
+        entries_oldest_first: vec![unit_type(), var(0), pi(var(1), var(2))],
+    };
+    bundle
+}
+
+/// Conversion 14's endpoint claims the wrong expected type: the
+/// intermediates check against `UnitType`, not against the unit pi.
+fn mutant_endpoint_wrong_expected() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.conversions[3].endpoint_judgment = EndpointJudgmentWireV1::HasType {
+        expected_type: unit_pi(),
+    };
+    bundle
+}
+
+/// Supplement A's step path addresses the outer congruence step rather
+/// than its premise, so the path fails to resolve and the premise
+/// coverage of conversion 18 is broken.
+fn mutant_supplement_step_path() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.conversion_typing_supplements[0].step_path = vec![0, 0];
+    bundle
+}
+
+/// Supplement B recovers the wrong formation level: its certificates
+/// record `Sort 0`, not `Sort 1`.
+fn mutant_supplement_formation_level() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.conversion_typing_supplements[1].formation_level = Some(1);
+    bundle
+}
+
+/// All supplements dropped: every congruence premise loses its
+/// exactly-one coverage.
+fn mutant_supplement_missing() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.conversion_typing_supplements = Vec::new();
+    bundle
+}
+
+/// Supplement A claims a coherent but wrong binder-local context (the
+/// unit pi instead of `UnitType`): the derived-context comparison
+/// rejects it.
+fn mutant_supplement_derived_context() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    let wrong = ProductionContextWireV1 {
+        entries_oldest_first: vec![unit_pi()],
+    };
+    bundle.conversion_typing_supplements[0].local_context = wrong.clone();
+    bundle.conversion_typing_supplements[0]
+        .source_typing_code
+        .context = wrong.clone();
+    bundle.conversion_typing_supplements[0]
+        .target_typing_code
+        .context = wrong;
+    bundle
+}
+
+// --- Committed Agda literals ------------------------------------------------
+
 const AGDA_VECTOR_MODULE: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/../pen-semantic-audit/agda/LawV2/Wire/BundleDecodeTestV1.agda"
@@ -355,10 +743,18 @@ const AGDA_TRANSCRIPT_MODULE: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/../pen-semantic-audit/agda/LawV2/Wire/ContextTranscriptTestV1.agda"
 );
+const AGDA_SEMANTIC_MODULE: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../pen-semantic-audit/agda/LawV2/Wire/SemanticReplayTestV1.agda"
+);
+const AGDA_TYPING_MODULE: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../pen-semantic-audit/agda/LawV2/Wire/TypingReplayTestV1.agda"
+);
 
 fn committed_agda_literal(path: &str, header: &str) -> Vec<u8> {
-    let source = std::fs::read_to_string(path)
-        .expect("committed Agda vector module must be readable");
+    let source =
+        std::fs::read_to_string(path).expect("committed Agda vector module must be readable");
     let mut bytes = Vec::new();
     let mut in_literal = false;
     for line in source.lines() {
@@ -392,21 +788,68 @@ fn committed_agda_vector() -> Vec<u8> {
     committed_agda_literal(AGDA_VECTOR_MODULE, "canonical-vector-v1 =")
 }
 
-/// The pinned length-preserving mutations mirrored by the Agda module.
-/// Offsets and values must stay identical to `BundleDecodeTestV1.agda`.
-const PINNED_MUTATIONS: [(&str, usize, u8); 6] = [
-    ("magic-flip", 0, 81),
-    ("manifest-frozen", 105, 1),
-    ("public-universe-level", 226, 2),
-    ("unknown-term-tag", 478, 255),
-    ("synthesis-variable-scope", 1089, 1),
-    ("q0-swap-first", 1256, 1),
-];
+// --- Envelope offset derivation ---------------------------------------------
+
+/// Payload byte offsets of the eleven sections, derived by walking the
+/// canonical envelope, so the pinned decode-layer mutation offsets stay
+/// correct when the fixture changes.
+fn section_payload_offsets(bytes: &[u8]) -> Vec<(u8, usize, usize)> {
+    let mut sections = Vec::new();
+    let mut cursor = 16 + 2 + 2;
+    while cursor < bytes.len() {
+        let tag = bytes[cursor];
+        let mut length_bytes = [0u8; 8];
+        length_bytes.copy_from_slice(&bytes[cursor + 1..cursor + 9]);
+        let length = u64::from_le_bytes(length_bytes) as usize;
+        sections.push((tag, cursor + 9, length));
+        cursor += 9 + length;
+    }
+    sections
+}
+
+fn payload_offset(bytes: &[u8], tag: u8) -> usize {
+    section_payload_offsets(bytes)
+        .into_iter()
+        .find(|(section, _, _)| *section == tag)
+        .map(|(_, offset, _)| offset)
+        .expect("section present")
+}
+
+/// The pinned decode-layer mutations, derived from the canonical bytes:
+/// (name, offset, replacement value, decode-level rejection).
+fn pinned_mutations(bytes: &[u8]) -> Vec<(&'static str, usize, u8, bool)> {
+    // Manifest layout prefix is fixed: magic 16, version 2, count 2,
+    // section header 9, schema 2, profile length 8, profile 33,
+    // digest 32 -> the reserved byte at 104 and frozen flag at 105.
+    let manifest = payload_offset(bytes, 1);
+    let frozen = manifest + 2 + 8 + 33 + 32 + 1;
+    // Public universe levels follow frozen, live, two 32-byte digests,
+    // the synthesis protocol string (8 + 35), the synthesis schema u16,
+    // and the list count u64; the second u16 entry's low byte then sits
+    // one past the first entry.
+    let public_level_one = frozen + 1 + 1 + 32 + 32 + 8 + 35 + 2 + 8 + 2;
+    // Global slot table: count u64, then slot u32 + id 32 -> the first
+    // declaration-type tag.
+    let first_declaration_tag = payload_offset(bytes, 3) + 8 + 4 + 32;
+    // Synthesis section: count u64, certificate id 32, context count
+    // u64 + one UnitType entry, subject tag -> the variable index low
+    // byte follows the subject tag.
+    let synthesis_variable_index = payload_offset(bytes, 7) + 8 + 32 + 8 + 1 + 1;
+    // Q0 inventory: count u64, then the seven rule tags.
+    let q0_first_rule = payload_offset(bytes, 8) + 8;
+    vec![
+        ("magic-flip", 0, 81, true),
+        ("manifest-frozen", frozen, 1, false),
+        ("public-universe-level", public_level_one, 2, false),
+        ("unknown-term-tag", first_declaration_tag, 255, true),
+        ("synthesis-variable-scope", synthesis_variable_index, 1, false),
+        ("q0-swap-first", q0_first_rule, 1, false),
+    ]
+}
 
 #[test]
 fn canonical_vector_matches_committed_agda_literal() {
     let bytes = encode_bundle_v1(&canonical_bundle()).expect("fixture encodes");
-    assert_eq!(bytes.len(), 1727, "pinned vector length");
     assert_eq!(
         bytes,
         committed_agda_vector(),
@@ -418,7 +861,7 @@ fn canonical_vector_matches_committed_agda_literal() {
 #[test]
 fn pinned_mutations_are_rejected_by_rust() {
     let bytes = encode_bundle_v1(&canonical_bundle()).expect("fixture encodes");
-    for (name, offset, value) in PINNED_MUTATIONS {
+    for (name, offset, value, _parse_level) in pinned_mutations(&bytes) {
         let mut mutated = bytes.clone();
         assert_ne!(
             mutated[offset], value,
@@ -432,10 +875,11 @@ fn pinned_mutations_are_rejected_by_rust() {
     }
 
     // The Q0 swap is a two-byte mutation: rules 0 and 1 exchanged.
+    let q0_first = payload_offset(&bytes, 8) + 8;
     let mut q0 = bytes.clone();
-    assert_eq!((q0[1256], q0[1257]), (0, 1));
-    q0[1256] = 1;
-    q0[1257] = 0;
+    assert_eq!((q0[q0_first], q0[q0_first + 1]), (0, 1));
+    q0[q0_first] = 1;
+    q0[q0_first + 1] = 0;
     assert!(decode_bundle_v1(&q0).is_err());
 
     // Truncation by one byte, mirrored by `drop-last` in Agda.
@@ -443,6 +887,8 @@ fn pinned_mutations_are_rejected_by_rust() {
     truncated.pop();
     assert!(decode_bundle_v1(&truncated).is_err());
 }
+
+// --- Transcript rendering ---------------------------------------------------
 
 fn shift_term(cutoff: u32, term: &WireTermV1) -> WireTermV1 {
     match term {
@@ -553,41 +999,139 @@ fn context_transcript_matches_committed_agda_literal() {
     );
 }
 
-const AGDA_SEMANTIC_MODULE: &str = concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/../pen-semantic-audit/agda/LawV2/Wire/SemanticReplayTestV1.agda"
-);
+// --- Structurally-valid mutant pinning --------------------------------------
 
-/// The Phase E semantic mutants are STRUCTURALLY valid in Rust — the
-/// validator inside `encode_bundle_v1` accepts every one — while the
-/// committed Agda module proves each fails the semantic replay. This
-/// pins both halves of that claim from the repository alone.
+/// The semantic mutants are STRUCTURALLY valid in Rust — the validator
+/// inside `encode_bundle_v1` accepts every one — while the committed
+/// Agda module proves each fails the semantic replay.
 #[test]
 fn semantic_mutants_are_structurally_valid_and_pinned() {
-    let mut delta_wrong_body = canonical_bundle();
-    replace_unit_with_unit_type(&mut delta_wrong_body.conversions[0]);
-    let delta_bytes = encode_bundle_v1(&delta_wrong_body)
-        .expect("delta mutant must stay structurally valid");
-    assert_eq!(
-        delta_bytes,
-        committed_agda_literal(AGDA_SEMANTIC_MODULE, "mutant-delta-wrong-body-v1 ="),
-    );
+    for (bundle, header) in [
+        (mutant_delta_wrong_body(), "mutant-delta-wrong-body-v1 ="),
+        (mutant_beta_wrong_result(), "mutant-beta-wrong-result-v1 ="),
+        (mutant_lookup_wrong_type(), "mutant-lookup-wrong-type-v1 ="),
+        (
+            mutant_result_not_normalized(),
+            "mutant-result-not-normalized-v1 =",
+        ),
+    ] {
+        let bytes = encode_bundle_v1(&bundle).expect("semantic mutant must stay structurally valid");
+        assert_eq!(
+            bytes,
+            committed_agda_literal(AGDA_SEMANTIC_MODULE, header),
+            "committed semantic mutant literal must match: {header}"
+        );
+    }
+}
 
-    let mut beta_wrong_result = canonical_bundle();
-    replace_unit_with_unit_type(&mut beta_wrong_result.conversions[3]);
-    let beta_bytes = encode_bundle_v1(&beta_wrong_result)
-        .expect("beta mutant must stay structurally valid");
-    assert_eq!(
-        beta_bytes,
-        committed_agda_literal(AGDA_SEMANTIC_MODULE, "mutant-beta-wrong-result-v1 ="),
-    );
+/// The typing mutants are structurally valid AND pass the semantic
+/// replay layer; the committed Agda typing module proves each fails the
+/// typing replay.
+#[test]
+fn typing_mutants_are_structurally_valid_and_pinned() {
+    for (bundle, header) in [
+        (
+            mutant_signature_ill_typed(),
+            "mutant-signature-ill-typed-v1 =",
+        ),
+        (mutant_context_ill_typed(), "mutant-context-ill-typed-v1 ="),
+        (
+            mutant_endpoint_wrong_expected(),
+            "mutant-endpoint-wrong-expected-v1 =",
+        ),
+        (
+            mutant_supplement_step_path(),
+            "mutant-supplement-step-path-v1 =",
+        ),
+        (
+            mutant_supplement_formation_level(),
+            "mutant-supplement-formation-level-v1 =",
+        ),
+        (
+            mutant_supplement_missing(),
+            "mutant-supplement-missing-v1 =",
+        ),
+        (
+            mutant_supplement_derived_context(),
+            "mutant-supplement-derived-context-v1 =",
+        ),
+    ] {
+        let bytes = encode_bundle_v1(&bundle).expect("typing mutant must stay structurally valid");
+        assert_eq!(
+            bytes,
+            committed_agda_literal(AGDA_TYPING_MODULE, header),
+            "committed typing mutant literal must match: {header}"
+        );
+    }
+}
 
-    let mut lookup_wrong_type = canonical_bundle();
-    lookup_wrong_type.synthesis_codes[0].inferred_type = WireTermV1::Sort { level: 0 };
-    let lookup_bytes = encode_bundle_v1(&lookup_wrong_type)
-        .expect("lookup mutant must stay structurally valid");
-    assert_eq!(
-        lookup_bytes,
-        committed_agda_literal(AGDA_SEMANTIC_MODULE, "mutant-lookup-wrong-type-v1 ="),
-    );
+// --- Literal regeneration helper --------------------------------------------
+
+fn agda_literal(bytes: &[u8]) -> String {
+    let mut out = String::new();
+    for chunk in bytes.chunks(12) {
+        out.push_str("  ");
+        for byte in chunk {
+            out.push_str(&format!("{byte} \u{2237} "));
+        }
+        out.push('\n');
+    }
+    out.push_str("  []\n");
+    out
+}
+
+/// Prints every committed Agda literal for this fixture. Run manually
+/// after a fixture change:
+/// `cargo test --manifest-path crates/pen-production-wire/Cargo.toml \
+///    regenerate_agda_literals -- --ignored --nocapture`
+#[test]
+#[ignore]
+fn regenerate_agda_literals() {
+    let canonical = encode_bundle_v1(&canonical_bundle()).expect("fixture encodes");
+    println!("-- canonical-vector-v1 ({} bytes)", canonical.len());
+    println!("canonical-vector-v1 =");
+    print!("{}", agda_literal(&canonical));
+    let transcript = context_global_transcript(&canonical_bundle());
+    println!("-- context-transcript-v1 ({} bytes)", transcript.len());
+    println!("context-transcript-v1 =");
+    print!("{}", agda_literal(&transcript));
+    for (bundle, name) in [
+        (mutant_delta_wrong_body(), "mutant-delta-wrong-body-v1"),
+        (mutant_beta_wrong_result(), "mutant-beta-wrong-result-v1"),
+        (mutant_lookup_wrong_type(), "mutant-lookup-wrong-type-v1"),
+        (
+            mutant_result_not_normalized(),
+            "mutant-result-not-normalized-v1",
+        ),
+        (mutant_signature_ill_typed(), "mutant-signature-ill-typed-v1"),
+        (mutant_context_ill_typed(), "mutant-context-ill-typed-v1"),
+        (
+            mutant_endpoint_wrong_expected(),
+            "mutant-endpoint-wrong-expected-v1",
+        ),
+        (
+            mutant_supplement_step_path(),
+            "mutant-supplement-step-path-v1",
+        ),
+        (
+            mutant_supplement_formation_level(),
+            "mutant-supplement-formation-level-v1",
+        ),
+        (mutant_supplement_missing(), "mutant-supplement-missing-v1"),
+        (
+            mutant_supplement_derived_context(),
+            "mutant-supplement-derived-context-v1",
+        ),
+    ] {
+        let bytes = encode_bundle_v1(&bundle).expect("mutant encodes");
+        println!("-- {name} ({} bytes)", bytes.len());
+        println!("{name} =");
+        print!("{}", agda_literal(&bytes));
+    }
+    println!("-- pinned decode-layer mutation offsets");
+    for (name, offset, value, parse_level) in pinned_mutations(&canonical) {
+        println!("--   {name}: set-at {offset} {value} (parse-level {parse_level})");
+    }
+    let q0_first = payload_offset(&canonical, 8) + 8;
+    println!("--   q0-swap: set-at {} 1 then set-at {} 0", q0_first, q0_first + 1);
 }

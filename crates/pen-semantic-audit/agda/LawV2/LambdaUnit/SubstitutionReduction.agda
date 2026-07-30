@@ -158,6 +158,11 @@ fresh-right-naturality right match σ =
 
 -- Untyped rule-schema stability.  The full production theorem additionally
 -- needs the dependent typing substitution lemma from SubstitutionTyping.
+--
+-- The six congruence constructors close the relation under positioned
+-- rewriting, exactly as the base-Q0 certificate trace grammar does: a
+-- congruence step rewrites one component and fixes the other, and body
+-- congruences carry their premise under the binder.
 data Step {V : Set} : Tm V -> Tm V -> Set₁ where
   beta-step :
     (parameter-type : Tm V) ->
@@ -179,6 +184,42 @@ data Step {V : Set} : Tm V -> Tm V -> Set₁ where
     Step
       (substitute match left)
       (substitute match right)
+
+  pi-parameter-congruence-step :
+    {parameter parameter′ : Tm V} ->
+    (body : Tm (Lift V)) ->
+    Step parameter parameter′ ->
+    Step (pi parameter body) (pi parameter′ body)
+
+  pi-body-congruence-step :
+    (parameter : Tm V) ->
+    {body body′ : Tm (Lift V)} ->
+    Step {Lift V} body body′ ->
+    Step (pi parameter body) (pi parameter body′)
+
+  lambda-parameter-congruence-step :
+    {parameter parameter′ : Tm V} ->
+    (body : Tm (Lift V)) ->
+    Step parameter parameter′ ->
+    Step (lam parameter body) (lam parameter′ body)
+
+  lambda-body-congruence-step :
+    (parameter : Tm V) ->
+    {body body′ : Tm (Lift V)} ->
+    Step {Lift V} body body′ ->
+    Step (lam parameter body) (lam parameter body′)
+
+  apply-function-congruence-step :
+    {function function′ : Tm V} ->
+    (argument : Tm V) ->
+    Step function function′ ->
+    Step (app function argument) (app function′ argument)
+
+  apply-argument-congruence-step :
+    (function : Tm V) ->
+    {argument argument′ : Tm V} ->
+    Step argument argument′ ->
+    Step (app function argument) (app function argument′)
 
 transport-step :
   {V : Set} {left left′ right right′ : Tm V} ->
@@ -211,6 +252,30 @@ substitution-step σ (fresh-equation-step left right match) =
     (sym (fresh-left-naturality left match σ))
     (sym (fresh-right-naturality right match σ))
     (fresh-equation-step left right (match then σ))
+substitution-step σ (pi-parameter-congruence-step body premise) =
+  pi-parameter-congruence-step
+    (substitute (lift-substitution σ) body)
+    (substitution-step σ premise)
+substitution-step σ (pi-body-congruence-step parameter premise) =
+  pi-body-congruence-step
+    (substitute σ parameter)
+    (substitution-step (lift-substitution σ) premise)
+substitution-step σ (lambda-parameter-congruence-step body premise) =
+  lambda-parameter-congruence-step
+    (substitute (lift-substitution σ) body)
+    (substitution-step σ premise)
+substitution-step σ (lambda-body-congruence-step parameter premise) =
+  lambda-body-congruence-step
+    (substitute σ parameter)
+    (substitution-step (lift-substitution σ) premise)
+substitution-step σ (apply-function-congruence-step argument premise) =
+  apply-function-congruence-step
+    (substitute σ argument)
+    (substitution-step σ premise)
+substitution-step σ (apply-argument-congruence-step function premise) =
+  apply-argument-congruence-step
+    (substitute σ function)
+    (substitution-step σ premise)
 
 data Steps {V : Set} : Tm V -> Tm V -> Set₁ where
   steps-refl : (term : Tm V) -> Steps term term

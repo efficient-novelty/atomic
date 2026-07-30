@@ -56,18 +56,29 @@ contexts, and the chronological slot table decode faithfully onto the
 intrinsic `PTm`/`PCtx` layer with both round trips, the exact
 variable-lookup ordinal and shift-distance equations, strict-prior global
 lookup, and a first cross-language decoded-surface transcript agreed
-byte-for-byte. The Phase E semantic replay core is also implemented:
-safe Agda now replays conversion traces as genuine intrinsic reductions
+byte-for-byte. The Phase E semantic replay core is implemented:
+safe Agda replays conversion traces as genuine intrinsic reductions
 (beta by instantiation, transparent delta by the exact strict-prior
 signature body under the policy, congruence with binder-local scope) with
 machine-checked soundness into an intrinsic step relation and a
 no-outgoing-step normality theorem, and recomputes every synthesis
 certificate's subject and type semantically, including
-conversion-mediated dependent application results. Structurally valid but
-semantically wrong mutant vectors are now rejected exactly at this layer.
-The next genuine blockers are the endpoint-typing and supplement replay
-(the typing-judgment bridge), independent Rust replay, and exact common
-transcript agreement.
+conversion-mediated dependent application results. The Phase E
+typing-judgment bridge is now also implemented: a proof-carrying bounded
+normalizer mirrors kernel normalization with genuine reduction chains
+and normality witnesses; the kernel's bidirectional `infer`/`check`
+discipline is mirrored on the intrinsic syntax; slot tables, standalone
+contexts, conversion endpoint judgments (`HasType`/`TypeFormation` over
+every trace intermediate), and synthesis certificates all replay through
+it; binder-local conversion-typing supplements are consumed against
+derived binder-local contexts with existential formation-level recovery
+and exactly-one premise coverage; the dependent-result normalization
+delta is reconciled to the exact kernel discipline; and the intrinsic
+derivations decode into the abstract typing and conversion-typing
+judgments. Structurally valid vectors that are semantically or
+typing-wise wrong are rejected exactly at their layer. The next genuine
+blockers are the Q0/fresh/family payload correspondence, independent
+Rust replay, and exact common transcript agreement.
 
 ## 1. Objective hierarchy
 
@@ -534,27 +545,128 @@ lookup — are each semantically rejected by refl. The Rust side pins that
 all three mutants are structurally valid (`encode_bundle_v1` accepts
 them) and byte-identical to the committed literals.
 
-Not yet replayed semantically: endpoint typing judgments, the
-conversion-typing supplements (binder-local context derivation along
-step paths and formation-level recovery), and an inductive-relation
-soundness presentation for the synthesis side. These form the immediate
-Phase E continuation and require the typing-judgment bridge.
+The endpoint typing judgments, conversion-typing supplements, and the
+inductive-relation soundness presentation were discharged later the same
+day by the typing-judgment bridge (§2.14).
 
-### 2.14 Current validation snapshot
+### 2.14 Phase E typing-judgment bridge completed on 2026-07-30
+
+Five new safe Agda modules close the remaining Phase E obligations:
+
+- `LawV2/Wire/NormalizationV1.agda` is the bounded-normalization
+  bridge: a proof-carrying, fuel-bounded mirror of the kernel
+  normalizer, parameterized by the same delta-map shape as `PStepV1`
+  (kernel callers pass the full stored-body map `psig-delta`;
+  policy-restricted callers pass `policy-body`). Every returned normal
+  form carries a genuine `PStepsV1` reduction chain from the input and
+  a `pdelta-normal` witness, with a no-outgoing-step theorem. Fuel is a
+  per-call tree budget — a documented deviation from the kernel's
+  shared operation/depth/rewrite budget; both sides fail closed on
+  exhaustion, and exhaustion is never a negative theorem.
+- `LawV2/Wire/TypingReplayV1.agda` mirrors the kernel's bidirectional
+  discipline on the intrinsic syntax: `pinfer`/`pcheck` (variables by
+  `lookup-pctx`, globals by strict-prior declared type, pi/lambda with
+  normalized parameters, application by normalized-pi destructuring and
+  raw-argument instantiation, checking by kernel-normal-form equality),
+  `pverify-context` (each entry forms a type under the normalized
+  prefix), and `pcheck-signature` (the wire slot table must be exactly
+  the normalized verified signature the kernel would store: every
+  declared type forms a type under the strictly prior prefix and is its
+  own normal form, and every stored body checks and is its own normal
+  form). `replay-conversion-typing` mirrors the kernel endpoint replay
+  inside `verify_base_q0_conversion_code_v2`: every trace intermediate
+  is replayed through the recorded endpoint judgment, every
+  intermediate kernel-normalizes to the common normal form, and the
+  replay-output closure bounds are mirrored; the certified variant
+  returns kernel-delta `PStepsV1` chains for both endpoints plus
+  normality of the common form. `psynthesize-cert` is the
+  proof-carrying kernel mirror of
+  `verify_code_node`/`finalize_synthesis_node`: every accepted
+  certificate carries a `PSynthesisDerivationV1` derivation — the
+  inductive-relation presentation of the synthesis checker, mirroring
+  the conversion side's `PStepV1` package — whose application rule
+  packages policy-delta conversion mediation under the exact protocol
+  V2 side conditions, kernel-delta parameter self-normality, and the
+  reconciled dependent result (genuine kernel-delta steps from the raw
+  intrinsic instantiation to the recorded kernel-normal type).
+- `LawV2/Wire/SupplementReplayV1.agda` defines and checks the
+  binder-local supplement contract that discharges lesson 4.9 on the
+  Agda side: a step path addresses one congruence premise (trace
+  selector, step ordinal, one zero per premise descent); descending
+  through a pi-body or lambda-body congruence extends the derived
+  context with the source binder's parameter; the supplement's local
+  context must equal the derived context exactly; its two synthesis
+  certificates must have the premise's source and target as subjects
+  and pass the full typed replay in that context; `HasType` endpoints
+  pin both recorded types to the claimed type with no formation level,
+  while `TypeFormation` endpoints recover the existential formation
+  level and pin both recorded types to that exact sort; and every
+  congruence premise of every conversion must be covered by exactly one
+  supplement. `typing-check-bundle` is the whole-bundle typing verdict
+  (signature, standalone contexts, conversion endpoints, synthesis,
+  supplements, coverage), running strictly after the structural checker
+  and the semantic replay.
+- `LawV2/Wire/TypingBridgeV1.agda` carries the intrinsic evidence into
+  the abstract judgments: `PExactTypingV1` (the intrinsic mirror of the
+  abstract syntax-directed judgment, with a strict-prior global rule)
+  decodes to genuine `_⊢_∶_∶_` derivations under an abstract signature
+  built from the same `PSig`; every intrinsic step — including all six
+  congruence frames, for which the abstract `Step` relation was
+  additively extended — decodes to the abstract `Step`;
+  `PTypedStepsV1` decodes to `TypedSteps`; the intrinsic
+  `TypeFormation`/`HasType` equivalence records decode to the abstract
+  replay-mode records and `BaseQ0Equivalent`; and the intrinsic
+  application assembly lands in the abstract conversion-typing judgment
+  `_⊢c_∶_∶_`. The exact-typing hypotheses these theorems consume are
+  the deliberately explicit remaining gap: closing it for
+  algorithmically-accepted, conversion-requiring content is the
+  abstract module's own registered frontier
+  (`full-eight-constructor-decoded-soundness-not-yet-derivable`), which
+  needs conversion-typing subject-reduction metatheory outside Phase E.
+- `LawV2/Wire/TypingReplayTestV1.agda` pins the discriminating
+  vectors, and `SynthesisReplayV1.agda` was reconciled to the exact
+  kernel dependent-result discipline (the recorded result now must be
+  the bounded-normalization image of the raw intrinsic instantiation,
+  not the raw instantiation itself).
+
+Completing the bridge exposed that the previous fixture was itself
+ill typed (lesson 4.13): slot 1 declared the type `global 0` (whose own
+type is `UnitType`, not a universe) and the discriminating context
+contained a term entry. The fixture was repaired to be genuinely well
+typed and extended to be discriminating for the new layer: three
+globals including a dependent family-application declaration, two
+congruence conversions with binder-local supplements (one `HasType`,
+one `TypeFormation` with recovered formation level 0), and an
+application certificate whose raw instantiation is a beta redex that
+kernel-normalizes away, so the reconciled dependent-result rule is
+byte-visible in the accepting direction. All committed cross-language
+literals were regenerated (canonical vector now 3544 bytes), the
+decode-layer mutation offsets are now derived programmatically by the
+Rust harness, and eleven structurally-valid mutants are pinned: four
+rejected by the semantic replay (including the raw-instantiation
+dependent result) and seven rejected only by the typing verdict (slot
+typing, context typing, endpoint expected type, supplement step path,
+formation level, missing supplements, and wrong derived binder-local
+context), each with its structural and semantic acceptance proven by
+refl alongside its typing rejection.
+
+### 2.15 Current validation snapshot
 
 At this checkpoint:
 
-- `pen-production-wire`: 7 unit and 4 cross-language pinning tests passed;
+- `pen-production-wire`: 7 unit and 5 cross-language pinning tests passed;
 - `pen-semantic-audit --lib`: 166 passed, 6 ignored, 0 failed;
 - the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`,
   `BundleDecodeTestV1`, `ContextCorrespondenceV1`,
-  `ContextTranscriptTestV1`, `SemanticReplayV1`, `SynthesisReplayV1`,
-  and `SemanticReplayTestV1` entry points and all transitive wire
-  modules type-check with `--safe --without-K --ignore-interfaces`,
-  which forces the embedded 1727-byte Rust vector through the full
-  decoder, structural checker, and semantic replay — and the three
-  semantic mutant vectors through structural acceptance and semantic
-  rejection — at type-check time;
+  `ContextTranscriptTestV1`, `NormalizationV1`, `SemanticReplayV1`,
+  `SynthesisReplayV1`, `SemanticReplayTestV1`, `TypingReplayV1`,
+  `SupplementReplayV1`, `TypingBridgeV1`, and `TypingReplayTestV1`
+  entry points and all transitive wire modules type-check from clean
+  interfaces with `--safe --without-K`, which forces the embedded
+  3544-byte Rust vector through the full decoder, structural checker,
+  semantic replay, and whole-bundle typing verdict — and the eleven
+  structurally-valid mutant vectors through their pinned
+  acceptance/rejection triples — at type-check time;
 - the new wire/bridge source contains no `postulate`, unsafe pragma,
   termination bypass, or unsolved-hole allowance; and
 - the protected root workspace manifests and issued H3/H4 artifacts remain
@@ -659,8 +771,9 @@ verified Rust slot table and is bound at the capability, not in `PSig`.
 
 ### Phase E — Implement the combined conversion/synthesis checker
 
-Status: semantic replay core complete as of 2026-07-30; the
-typing-judgment bridge remains.
+Status: theorem layer complete as of 2026-07-30 (semantic replay core
+plus the typing-judgment bridge); capability minting remains deferred
+to the Phase H factory.
 
 Conversion work completed:
 
@@ -674,17 +787,23 @@ Conversion work completed:
   normal form;
 - the complete no-redex census recomputation is bridged to semantic
   normality: the accepted common form provably admits no outgoing
-  intrinsic step; and
+  intrinsic step;
 - delta-policy agreement is semantic: the intrinsic delta relation is
-  defined by the policy-restricted strict-prior body lookup itself.
-
-Conversion work remaining:
-
-- endpoint typing judgments (`HasType`/`TypeFormation`) are not yet
-  replayed against the typing judgment;
-- binder-local conversion-typing supplements are not yet consumed: the
-  derived nested contexts along step paths and the existential
-  formation-level recovery need the typing-judgment bridge.
+  defined by the policy-restricted strict-prior body lookup itself;
+- endpoint typing judgments are replayed against the kernel-mirroring
+  typing algorithm: for `HasType` the expected type must form a type
+  and every trace intermediate checks against it; for `TypeFormation`
+  every intermediate infers a universe; every intermediate
+  kernel-normalizes to the common form, with certified `PStepsV1`
+  chains under the full stored-body delta and mirrored replay-output
+  closure bounds; and
+- binder-local conversion-typing supplements are consumed: derived
+  binder-local contexts along step paths (pi-body and lambda-body
+  descents extend by the source binder's parameter), exact
+  derived-context comparison, subject binding, existential
+  formation-level recovery for `TypeFormation` endpoints, full typed
+  replay of both supplement certificates, and exactly-one coverage of
+  every congruence premise.
 
 Synthesis work completed:
 
@@ -698,20 +817,32 @@ Synthesis work completed:
   derived context, `TypeFormation` endpoint judgment, full semantic
   replay, left endpoint equal to the synthesized type, and right
   endpoint equal to the census-normal common form (the pi is
-  destructured from the normal form, as in the kernel); and
-- the dependent result substitution is computed by intrinsic
-  instantiation and compared against both the embedded result term and
-  the inferred type.
-
-Synthesis work remaining:
-
-- the dependent-result normalization delta: the kernel records the
-  kernel-normalized instantiation while this layer requires the raw
-  intrinsic instantiation; reconciling them requires the
-  bounded-normalization bridge; and
-- an inductive-relation soundness presentation (mirroring the
-  conversion side's `PStepV1` package) and the bridge to the abstract
-  conversion-typing judgment.
+  destructured from the normal form, as in the kernel);
+- the dependent-result normalization delta is reconciled: the recorded
+  result must be the bounded-normalization image of the raw intrinsic
+  instantiation under the full stored-body delta, exactly as
+  `finalize_synthesis_node` records the kernel-normalized
+  instantiation, with the reduction chain and normality carried as
+  evidence;
+- the typed replay additionally mirrors `verify_code_node` and
+  `finalize_synthesis_node`: public-level guards, `expect_sort_v2`
+  bounds, kernel-delta parameter self-normality, formation and
+  `HasType` replays of every node with replay-output closure, and the
+  self-normal verified context requirement; and
+- the inductive-relation soundness presentation exists as
+  `PSynthesisDerivationV1` (constructed, not post-hoc: the checker is
+  proof-carrying), and the bridge to the abstract conversion-typing
+  judgment is proven for the exact fragment: intrinsic exact typing
+  decodes to `_⊢_∶_∶_`, intrinsic steps (including congruence, via the
+  additive abstract `Step` extension) decode to `Step`, typed chains
+  decode to `TypedSteps`/`BaseQ0Equivalent`, and the application
+  assembly lands in `_⊢c_∶_∶_`. The one registered remaining gap is
+  the abstract module's own frontier
+  (`full-eight-constructor-decoded-soundness-not-yet-derivable`):
+  turning algorithmic acceptance of conversion-requiring content into
+  exact-typing witnesses needs conversion-typing subject-reduction
+  metatheory, which belongs to the typing-metatheory program, not to
+  this phase's checker obligations.
 
 Exit gates (unchanged, deferred to the Phase H factory):
 
@@ -966,6 +1097,22 @@ implementations. This is a concrete instance of lesson 4.3 and the reason
 the bridge design insists on shared bytes rather than parallel fixtures;
 cross-language byte vectors are now part of the checked Agda surface.
 
+### 4.13 Each verification layer needs fixtures ill formed for exactly that layer
+
+The typing-judgment bridge rejected the previously committed canonical
+fixture: one global slot declared its type as another global whose own
+type is not a universe, and the transcript-discriminating context
+contained a term entry where a type is required. Every earlier layer —
+codec, structural validator, semantic replay, and both language's test
+suites — accepted that fixture, because none of them claims typing.
+The defect was invisible until a layer arrived whose job is exactly
+that claim. The repaired fixture is now well typed and, symmetrically,
+the old ill-typed shapes were converted into pinned negative vectors
+for the new layer. The general rule extends lessons 4.3 and 4.12: when
+a new verification layer is added, the shared fixtures must be
+re-derived against it, and the discriminating mutants must include
+inputs that every earlier layer accepts.
+
 ## 5. Big problems and challenges
 
 ### 5.1 Exact semantic correspondence
@@ -1043,18 +1190,21 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. the Phase E typing-judgment bridge (endpoint judgments, binder-local
-   supplements, formation levels, dependent-result normalization
-   reconciliation, synthesis inductive soundness);
-3. exact Q0/fresh/family correspondence;
-4. independent Rust replay;
-5. canonical transcript agreement; and
-6. the single private minting factory.
+2. exact Q0/fresh/family correspondence;
+3. independent Rust replay (including the Rust-side supplement replay
+   matching the Agda contract, which discharges
+   `NestedCongruenceReplayFrontierV2` on that side);
+4. canonical transcript agreement; and
+5. the single private minting factory.
 
-Item 1 is additive; items 2–6 remain the ordered theorem frontier.
+Item 1 is additive; items 2–5 remain the ordered theorem frontier.
 Complete safe Agda decoding and structural checking for sections 5–11,
-the Phase D finite context/global correspondence theorem layer, and the
-Phase E semantic replay core were discharged on 2026-07-30.
+the Phase D finite context/global correspondence theorem layer, the
+Phase E semantic replay core, and the Phase E typing-judgment bridge
+(endpoint judgments, binder-local supplements, formation levels,
+dependent-result normalization reconciliation, synthesis inductive
+soundness, and the abstract-judgment bridge) were discharged on
+2026-07-30.
 
 In parallel with the bridge (and lawful at any time, since it exposes
 nothing to the registered prefix), the Phase K0

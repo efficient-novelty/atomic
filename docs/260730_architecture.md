@@ -628,6 +628,13 @@ ProductionBundleV1.agda + ContextChecker + BundleChecker
    + LambdaUnit.ProductionSyntaxV1/ProductionDecodingV1
    → ContextCorrespondenceV1.agda
    → ContextTranscriptTestV1.agda
+
+ContextCorrespondenceV1 → SemanticReplayV1.agda
+   → NormalizationV1.agda → SynthesisReplayV1.agda
+   → TypingReplayV1.agda → SupplementReplayV1.agda
+   → SemanticReplayTestV1.agda / TypingReplayTestV1.agda
+TypingReplayV1 + LambdaUnit typing/conversion modules
+   → TypingBridgeV1.agda
 ```
 
 #### `Bytes.agda`
@@ -713,10 +720,11 @@ capability.
 
 #### `BundleDecodeTestV1.agda`
 
-Embeds the exact 1258-byte `encode_bundle_v1` output of the canonical Rust
-fixture plus seven pinned length-preserving mutations, and proves by refl
-that the composed decode/check surface accepts the genuine vector and
-rejects each mutation at the same composed boundary as Rust. These are
+Embeds the exact 3544-byte `encode_bundle_v1` output of the canonical Rust
+fixture plus seven pinned mutations, and proves by refl that the
+composed decode/check surface accepts the genuine vector and rejects
+each mutation at the same composed boundary as Rust. The mutation
+offsets are derived programmatically by the Rust harness. These are
 development regression vectors, not correspondence authority.
 
 #### `BundleEncode.agda`
@@ -764,6 +772,17 @@ whole traces, semantic normality with a no-outgoing-step theorem, and
 a bridge from the structural census recomputation. Runs strictly after
 the structural checker and mints nothing.
 
+#### `NormalizationV1.agda`
+
+The Phase E bounded-normalization bridge: a proof-carrying,
+fuel-bounded mirror of the kernel normalizer, parameterized by the
+same delta-map shape as `PStepV1` (`psig-delta` for the kernel's full
+stored-body unfolding; `policy-body` for the policy-restricted view).
+Accepted results carry a genuine `PStepsV1` chain and a
+`pdelta-normal` witness with a no-outgoing-step theorem. Fuel is a
+per-call tree budget; exhaustion fails closed on both sides but the
+budget shapes are not byte-identical to the kernel's shared budget.
+
 #### `SynthesisReplayV1.agda`
 
 Phase E synthesis-side semantic recomputation: every code synthesizes
@@ -775,18 +794,72 @@ instantiation), compared against the certificate. Mediating
 conversions are consumed under the exact protocol V2 side conditions
 (identical derived context, `TypeFormation` endpoints, full semantic
 replay, left endpoint = synthesized type, right endpoint = the
-census-normal common form). One documented delta: the dependent result
-is pinned to the raw intrinsic instantiation, while the kernel records
-the kernel-normalized instantiation. Includes the whole-bundle
-semantic verdict `semantic-check-bundle`.
+census-normal common form). The dependent result follows the exact
+kernel discipline: the recorded result must equal the
+bounded-normalization image of the raw intrinsic instantiation under
+the full stored-body delta. Includes the whole-bundle semantic verdict
+`semantic-check-bundle`.
+
+#### `TypingReplayV1.agda`
+
+The Phase E typing-judgment bridge, algorithmic layer: the kernel's
+bidirectional `infer`/`check` mirrored on the intrinsic syntax,
+`pverify-context` (kernel context verification with normalized
+prefixes), `pcheck-signature` (the wire slot table must replay as the
+exact normalized verified signature), the conversion endpoint replay
+(`HasType`/`TypeFormation` over every trace intermediate, with
+kernel-delta normalization to the common form and mirrored
+replay-output closure bounds), and the proof-carrying synthesis
+checker `psynthesize-cert`, whose accepted certificates carry
+`PSynthesisDerivationV1` derivations — the inductive-relation
+presentation of the typed checker, with conversion mediation and the
+reconciled dependent result as semantic premises.
+
+#### `SupplementReplayV1.agda`
+
+Binder-local conversion-typing supplements: step paths address
+congruence premises; derived binder-local contexts are recomputed
+along descents (pi-body/lambda-body extend by the source binder's
+parameter) and compared exactly; supplement certificates bind the
+premise's source and target and pass the full typed replay; `HasType`
+endpoints pin both recorded types with no formation level;
+`TypeFormation` endpoints recover the existential formation level; and
+every congruence premise of every conversion needs exactly one
+supplement. Exposes the whole-bundle typing verdict
+`typing-check-bundle`.
+
+#### `TypingBridgeV1.agda`
+
+The abstract layer of the typing bridge: `PExactTypingV1` decodes to
+the abstract judgment `_⊢_∶_∶_` under an abstract signature built from
+`PSig`; intrinsic steps (including congruence frames, via the additive
+abstract `Step` extension in `SubstitutionReduction.agda`) decode to
+`Step`; `PTypedStepsV1` decodes to `TypedSteps`; intrinsic equivalence
+records decode to `TypeFormationEquivalentV2`/`HasTypeEquivalentV2`
+and `BaseQ0Equivalent`; and the application assembly lands in
+`_⊢c_∶_∶_`. Exact-typing hypotheses remain explicit: discharging them
+for conversion-requiring content is the registered
+`full-eight-constructor-decoded-soundness-not-yet-derivable` frontier.
 
 #### `SemanticReplayTestV1.agda`
 
-Pins the Phase E discriminating vectors: the fixture (with a genuine
-beta conversion and an application-elimination certificate) passes the
-semantic replay by refl; three mutants that pass the complete Rust and
-Agda structural checks are each semantically rejected by refl. The
-Rust side pins the mutants' structural validity and exact bytes.
+Pins the Phase E semantic discriminating vectors: the fixture passes
+the semantic replay by refl; four mutants that pass the complete Rust
+and Agda structural checks (wrong delta body, wrong beta result, wrong
+lookup type, and a dependent result recorded as the raw rather than
+kernel-normalized instantiation) are each semantically rejected by
+refl. The Rust side pins the mutants' structural validity and exact
+bytes.
+
+#### `TypingReplayTestV1.agda`
+
+Pins the typing-bridge vectors: the fixture passes
+`typing-check-bundle` by refl, and seven mutants that are structurally
+valid AND pass the semantic replay (ill-typed slot declaration,
+ill-typed standalone context, wrong endpoint expected type, wrong
+supplement step path, wrong formation level, missing supplements, and
+wrong derived binder-local context) are each rejected only by the
+typing verdict, with all three verdicts proven per vector.
 
 #### `ContextTranscriptTestV1.agda`
 
@@ -986,9 +1059,14 @@ The wire tests cover:
 An integration test additionally pins the cross-language vectors: it
 re-derives the canonical fixture bytes, requires exact equality with the
 byte literal committed in `BundleDecodeTestV1.agda`, re-asserts the Rust
-rejection of every pinned mutation, and renders the context/global
-lookup transcript for exact comparison with the literal committed in
-`ContextTranscriptTestV1.agda`.
+rejection of every pinned decode-layer mutation (with offsets derived
+programmatically from the envelope), renders the context/global lookup
+transcript for exact comparison with the literal committed in
+`ContextTranscriptTestV1.agda`, and re-derives every structurally-valid
+semantic and typing mutant for exact comparison with the literals
+committed in `SemanticReplayTestV1.agda` and `TypingReplayTestV1.agda`.
+An ignored `regenerate_agda_literals` test reprints all committed
+literals and offsets after a fixture change.
 
 ### 11.2 Semantic audit
 
@@ -1015,12 +1093,24 @@ embedded Rust byte vector through the full decode/check surface at
 type-check time. `BundleEncode` checks the round-trip theorem layer.
 `ContextTranscriptTestV1` transitively checks the Phase D correspondence
 module and forces the cross-language transcript agreement at type-check
-time:
+time. `SemanticReplayTestV1` forces the semantic replay verdicts, and
+`TypingReplayTestV1` transitively checks the normalization, typing
+replay, and supplement modules and forces the whole-bundle typing
+verdicts; `TypingBridgeV1` checks the abstract-judgment bridge:
 
 ```powershell
 agda --safe --without-K --ignore-interfaces `
   -i crates/pen-semantic-audit/agda `
   crates/pen-semantic-audit/agda/LawV2/Wire/ContextTranscriptTestV1.agda
+agda --safe --without-K --ignore-interfaces `
+  -i crates/pen-semantic-audit/agda `
+  crates/pen-semantic-audit/agda/LawV2/Wire/SemanticReplayTestV1.agda
+agda --safe --without-K --ignore-interfaces `
+  -i crates/pen-semantic-audit/agda `
+  crates/pen-semantic-audit/agda/LawV2/Wire/TypingReplayTestV1.agda
+agda --safe --without-K --ignore-interfaces `
+  -i crates/pen-semantic-audit/agda `
+  crates/pen-semantic-audit/agda/LawV2/Wire/TypingBridgeV1.agda
 ```
 
 Generated `.agdai`, `.orig`, and `.rej` files are build/edit artifacts and
@@ -1030,12 +1120,16 @@ must not enter the source protocol or commits.
 
 As of this document:
 
-- production wire: 7 unit and 4 cross-language pinning tests passed;
+- production wire: 7 unit and 5 cross-language pinning tests passed;
 - semantic-audit library: 166 passed, 6 ignored;
-- safe Agda wire, context-checker, bundle-checker, encode, and
-  cross-language vector modules: passed, including refl acceptance of the
-  genuine 1258-byte Rust fixture vector and refl rejection of seven pinned
-  mutations; and
+- safe Agda wire, context-checker, bundle-checker, encode,
+  correspondence, semantic-replay, typing-replay, supplement, bridge,
+  and cross-language vector modules: passed from clean interfaces,
+  including refl acceptance of the genuine 3544-byte Rust fixture
+  vector through the structural, semantic, and typing verdicts, refl
+  rejection of seven pinned decode-layer mutations, and refl
+  three-verdict pins for eleven structurally-valid semantic/typing
+  mutants; and
 - forbidden-marker scan over new wire/bridge code: clean.
 
 This is development evidence, not adoption or live-profile authority.
@@ -1122,15 +1216,28 @@ Implemented:
   synthesis certificates recompute semantically, pinned by
   structurally-valid-but-semantically-rejected mutant vectors.
 
+- the Phase E typing-judgment bridge (`NormalizationV1.agda`,
+  `TypingReplayV1.agda`, `SupplementReplayV1.agda`,
+  `TypingBridgeV1.agda`): the proof-carrying bounded normalizer, the
+  kernel-mirroring typing algorithms, signature/context/endpoint/
+  synthesis typing replay, the dependent-result normalization
+  reconciliation, binder-local supplement consumption with premise
+  coverage, the proof-carrying synthesis derivation relation, and the
+  decode bridge into the abstract typing and conversion-typing
+  judgments, pinned by mutants that are structurally and semantically
+  valid but typing-rejected.
+
 Not yet implemented:
 
 - round trips for the record-shaped payloads and the whole-envelope
   canonical-encode composition;
-- the Phase E typing-judgment bridge: endpoint typing judgments,
-  binder-local conversion-typing supplements (derived contexts along
-  step paths, formation levels), the dependent-result
-  bounded-normalization reconciliation, and the synthesis
-  inductive-relation soundness presentation;
+- exact-typing witnesses for algorithmically-accepted,
+  conversion-requiring content (the registered
+  `full-eight-constructor-decoded-soundness-not-yet-derivable`
+  frontier, needing conversion-typing subject-reduction metatheory);
+- the Rust-side supplement replay matching the Agda contract
+  (discharging `NestedCongruenceReplayFrontierV2` on the Rust side,
+  part of the Phase G independent replay);
 - Q0/fresh/family payload correspondence;
 - independent Rust replay of a complete canonical bundle;
 - the versioned common normalized transcript;

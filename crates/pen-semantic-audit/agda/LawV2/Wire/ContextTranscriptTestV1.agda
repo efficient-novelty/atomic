@@ -7,9 +7,9 @@
 -- stored declaration, and for every context and variable index the
 -- oldest-first ordinal, the shift distance, and the looked-up type
 -- computed by iterated de Bruijn shifting. The fixture includes a
--- discriminating context ([unit-type, variable 0, pi (variable 1)
--- (variable 0)]) whose lookups make the ordinal formula, the
--- oldest-first entry selection, the shift iteration count, and the
+-- discriminating well-typed context ([sort 0, variable 0, pi
+-- (variable 1) (variable 2)]) whose lookups make the ordinal formula,
+-- the oldest-first entry selection, the shift iteration count, and the
 -- under-binder shift cutoff all byte-visible: a convention error in any
 -- of them changes the pinned bytes. This module recomputes the same
 -- transcript from the intrinsic side — `lookup-psig-type`,
@@ -38,17 +38,18 @@ open import LawV2.Wire.BundleDecodeTestV1 using (canonical-vector-v1)
 
 context-transcript-v1 : List Nat
 context-transcript-v1 =
-  2 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
-  6 ∷ 1 ∷ 7 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
-  0 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
-  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
-  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷
-  0 ∷ 6 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
-  0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 3 ∷ 1 ∷
-  2 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷
-  0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 2 ∷ 0 ∷
-  0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 3 ∷ 0 ∷
-  0 ∷ 0 ∷ 6 ∷
+  3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
+  6 ∷ 1 ∷ 7 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 6 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷
+  0 ∷ 3 ∷ 3 ∷ 6 ∷ 0 ∷ 0 ∷ 0 ∷ 5 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷
+  0 ∷ 7 ∷ 0 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷
+  0 ∷ 0 ∷ 0 ∷ 6 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
+  0 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷
+  3 ∷ 1 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷ 3 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷
+  0 ∷ 0 ∷ 0 ∷ 1 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 1 ∷
+  2 ∷ 0 ∷ 0 ∷ 0 ∷ 2 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
+  3 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷ 0 ∷
   []
 
 -- Small-value little-endian rendering: every numeric field of the
