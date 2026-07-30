@@ -44,12 +44,15 @@ bytes to independent Rust and Agda checkers, and requires byte-identical
 normalized transcripts before any correspondence capability can be minted.
 
 The canonical Rust wire, exact Rust-to-Agda input transport, slot-derived
-bundle construction, fail-closed capability frontier, safe Agda envelope
-decoder, and safe Agda checking of the manifest/signature/global-slot/context
-surface are now implemented. The next genuine blockers are the semantic
-Agda decoding and soundness checks for conversions, synthesis, Q0, fresh
-rules, and family payloads; independent Rust replay; and exact common
-transcript agreement.
+bundle construction, fail-closed capability frontier, and safe Agda envelope
+decoder are implemented. As of the 2026-07-30 continuation, safe Agda now
+generically decodes the complete eleven-section bundle with Rust-equivalent
+resource bounds and structurally checks it against the exact `validate.rs`
+invariants; one genuine Rust-encoded bundle byte vector is accepted
+end-to-end by refl, and pinned mutation vectors are rejected at the same
+boundaries as Rust. The next genuine blockers are the finite context/global
+correspondence, kernel-level conversion/synthesis soundness checking in
+Agda, independent Rust replay, and exact common transcript agreement.
 
 ## 1. Objective hierarchy
 
@@ -346,17 +349,63 @@ The new safe Agda modules provide:
   strict-prior globals, oldest-first contexts, and predecessor-public delta
   entries.
 
-The envelope retains all remaining sections exactly, but sections 5–11 do not
-yet have their full semantic Agda decoders/checkers.
+The envelope retains all remaining sections exactly. The first four sections
+received semantic parsing and structural checking in the initial wire
+foundation.
 
-### 2.11 Current validation snapshot
+### 2.11 Safe Agda sections 5–11 decode/check completed on 2026-07-30
+
+The continuation extended the safe Agda surface to the complete bundle:
+
+- `ProductionBundleV1.agda` now decodes all eleven sections: conversion
+  certificates with reduction traces, steps, endpoint judgments, and
+  no-redex censuses; binder-local conversion-typing supplements; all eight
+  synthesis-code payloads; the Q0 inventory; fresh-rule schemas; the family
+  inventory; and family payloads. Decoding enforces the exact Rust resource
+  bounds: one million sequence items, 64 MiB bundle/byte-string limits, and
+  the single shared 256-level recursion budget threaded through terms,
+  reduction steps, and synthesis codes exactly as the Rust reader threads
+  its one depth counter.
+- `BundleChecker.agda` mirrors `validate.rs` over the decoded bundle:
+  role-aware universe bounds, 32-entry context caps on every context
+  surface, conversion-id uniqueness, trace chaining and endpoint equalities,
+  complete no-redex census recomputation against enabled transparent-delta
+  slots, synthesis shape/metadata/code checks, supplement binding, exact
+  Q0 and family inventories, the exact fresh-rule pattern, and
+  strictly-prior family references.
+- `BundleDecodeTestV1.agda` embeds the exact `encode_bundle_v1` bytes of
+  the canonical Rust fixture and proves by refl that safe Agda decodes and
+  accepts them, and that seven pinned mutation vectors (magic, truncation,
+  unknown tag, frozen authority, universe level, variable scope, Q0 order)
+  are rejected at the same composed boundary as Rust. These are regression
+  vectors, not correspondence authority.
+- `BundleEncode.agda` begins the canonicality program: canonical
+  structures carrying exact little-endian words, fuel-generalized
+  parse/encode round trips for all three recursive payloads (terms,
+  reduction steps, and synthesis codes, including embedded conversion
+  identifiers and the dependent-result term), generic counted-list round
+  trips under the exact resource-bound hypotheses, and complete
+  section-payload round trips for contexts, the Q0 inventory, and the
+  family inventory.
+
+The work also found and repaired a genuine latent defect: the original
+Agda manifest parser read fields in the Rust struct-declaration order,
+while the codec encodes the delta-policy digest, synthesis protocol, and
+schema version before the universe lists. The committed parser would have
+rejected every genuine Rust manifest. The cross-language byte vector now
+pins the corrected order.
+
+### 2.12 Current validation snapshot
 
 At this checkpoint:
 
-- `pen-production-wire`: 7 tests passed;
+- `pen-production-wire`: 7 unit and 2 cross-language pinning tests passed;
 - `pen-semantic-audit --lib`: 166 passed, 6 ignored, 0 failed;
-- the safe Agda `ContextChecker` entry point and all transitive wire modules
-  type-check with `--safe --without-K --ignore-interfaces`;
+- the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`, and
+  `BundleDecodeTestV1` entry points and all transitive wire modules
+  type-check with `--safe --without-K --ignore-interfaces`, which forces
+  the embedded 1258-byte Rust vector through the full decoder and
+  structural checker at type-check time;
 - the new wire/bridge source contains no `postulate`, unsafe pragma,
   termination bypass, or unsolved-hole allowance; and
 - the protected root workspace manifests and issued H3/H4 artifacts remain
@@ -399,19 +448,30 @@ identical byte string; all malformed variants fail closed.
 
 ### Phase C — Complete safe Agda structural decoding
 
-Status: first four semantic sections implemented.
+Status: decoding and structural checking complete for all eleven sections;
+canonicality theorems partially complete.
+
+Completed on 2026-07-30:
+
+1. conversions and every reduction-step payload decode;
+2. binder-local conversion-typing supplements decode;
+3. all eight synthesis-code payloads decode;
+4. Q0, fresh schemas, family inventory, and family payloads decode;
+5. the Rust resource and full-consumption bounds are enforced (sequence
+   caps, byte caps, and the shared 256-level recursion budget); and
+6. round-trip/canonicality theorems exist for identifiers, terms,
+   reduction steps, synthesis codes, counted lists, and the context, Q0,
+   and family-inventory section payloads, plus a genuine Rust byte vector
+   accepted end-to-end and seven rejected mutation vectors.
 
 Remaining work:
 
-1. decode conversions and every reduction-step payload;
-2. decode binder-local conversion-typing supplements;
-3. decode all eight synthesis-code payloads;
-4. decode Q0, fresh schemas, family inventory, and family payloads;
-5. enforce the same resource and full-consumption bounds as Rust; and
-6. add round-trip/canonicality theorems for every remaining semantic section.
+1. round-trip theorems for the record-shaped payloads (conversions,
+   synthesis certificates, supplements, fresh rules, family payloads); and
+2. the whole-envelope canonical-encode composition.
 
-Exit gate: safe Agda generically parses the complete eleven-section bundle and
-rejects every malformed tag, length, order, scope, and universe mutation.
+Exit gate: reached for parsing and structural rejection; the remaining
+canonicality theorems are additive.
 
 ### Phase D — Prove finite context/global correspondence
 
@@ -656,6 +716,18 @@ Experimental theorem crates therefore use nested workspaces. This creates
 some operational friction, but prevents unrelated dependency changes from
 silently changing the identity of earlier results.
 
+### 4.12 Field order must be proven against the codec, not the struct
+
+The safe Agda manifest parser was originally written against the Rust
+struct-declaration order. The codec writes three of those fields in a
+different position, so both sides were internally consistent, fully tested,
+and mutually incompatible: every genuine Rust manifest would have been
+rejected by Agda. The defect was invisible to per-language test suites and
+became obvious the moment one canonical byte vector was fed to both
+implementations. This is a concrete instance of lesson 4.3 and the reason
+the bridge design insists on shared bytes rather than parallel fixtures;
+cross-language byte vectors are now part of the checked Agda surface.
+
 ## 5. Big problems and challenges
 
 ### 5.1 Exact semantic correspondence
@@ -732,13 +804,17 @@ reached a precise ordered implementation/theorem frontier.
 
 The next work may lawfully continue with:
 
-1. complete safe Agda decoding for sections 5–11;
+1. the remaining record-payload and whole-envelope canonicality theorems;
 2. finite context/global correspondence;
 3. combined conversion/synthesis checking;
 4. exact Q0/fresh/family correspondence;
 5. independent Rust replay;
 6. canonical transcript agreement; and
 7. the single private minting factory.
+
+Item 1 is additive; items 2–7 remain the ordered theorem frontier. Complete
+safe Agda decoding and structural checking for sections 5–11 was discharged
+on 2026-07-30.
 
 The work must stop before native carrier construction or live-profile
 authority if any of those gates remains unavailable.

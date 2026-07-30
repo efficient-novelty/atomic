@@ -618,8 +618,12 @@ Decoder.agda
 Envelope.agda
    ↓
 ProductionBundleV1.agda
-   ↓
-ContextChecker.agda
+   ↓            ↓
+ContextChecker  BundleChecker.agda
+   .agda           ↓
+                BundleDecodeTestV1.agda
+
+ProductionBundleV1.agda → BundleEncode.agda
 ```
 
 #### `Bytes.agda`
@@ -650,16 +654,21 @@ the whole-envelope round trip.
 
 #### `ProductionBundleV1.agda`
 
-Defines the wire-term mirror and currently parses the first four semantic
-sections:
+Defines the wire-term mirror and parses all eleven semantic sections:
 
-- manifest;
-- signature;
-- global-slot table; and
-- contexts.
+- manifest, signature, global-slot table, and contexts;
+- conversion certificates with reduction traces, steps, endpoint
+  judgments, and no-redex censuses;
+- binder-local conversion-typing supplements;
+- synthesis certificates with all eight code payloads;
+- the Q0 inventory and family inventory as range-guarded tag lists; and
+- fresh-rule schemas and family payloads.
 
-The remaining seven section payloads are retained as exact raw envelope
-bytes, not discarded.
+Decoding enforces the exact Rust bounds: one million sequence items,
+64 MiB bundle and byte-string limits, and one shared 256-level recursion
+budget threaded through terms, reduction steps, and synthesis codes,
+mirroring the single Rust reader depth counter. The raw envelope remains
+available for byte-exact retention.
 
 #### `ContextChecker.agda`
 
@@ -678,6 +687,43 @@ Checks:
 
 It returns dependent evidence that the computed structural check equals
 `true`. It does not yet mint production acceptance.
+
+#### `BundleChecker.agda`
+
+Mirrors `validate.rs` over the fully decoded bundle:
+
+- role-aware universe bounds (public `{0,1}`, checker-produced `{0,1,2}`);
+- 32-entry caps and public scoping for every context surface;
+- conversion-id uniqueness, trace chaining, and endpoint equalities;
+- complete no-redex census recomputation against enabled delta slots;
+- synthesis shape, exact variable-lookup metadata, and code checks;
+- supplement conversion binding, formation levels, and context equality;
+- exact Q0 and family inventories;
+- the exact left-linear non-recursive fresh-rule pattern; and
+- strictly-prior family references.
+
+It returns dependent Boolean-equality evidence in the `ContextChecker`
+style. On decodable bundles its verdict is intended to equal the Rust
+validator verdict; this parity is checked by vectors, not yet minted as a
+capability.
+
+#### `BundleDecodeTestV1.agda`
+
+Embeds the exact 1258-byte `encode_bundle_v1` output of the canonical Rust
+fixture plus seven pinned length-preserving mutations, and proves by refl
+that the composed decode/check surface accepts the genuine vector and
+rejects each mutation at the same composed boundary as Rust. These are
+development regression vectors, not correspondence authority.
+
+#### `BundleEncode.agda`
+
+Canonical encoders and parse/encode round-trip theorems in the
+`CanonicalSizedBytes` style: canonical structures carry exact
+little-endian words, erasure computes semantic values, and fuel-indexed
+witnesses mirror the shared recursion budget. Complete for identifiers,
+terms, reduction steps, synthesis codes, generic counted lists, and the
+context, Q0, and family-inventory section payloads; the record-shaped
+payloads and the whole-envelope composition remain open.
 
 ### 7.3 Generated input boundary
 
@@ -861,6 +907,11 @@ The wire tests cover:
 - conversion, no-redex, synthesis, and formation mutations; and
 - Q0, family, and fresh-rule mutations.
 
+An integration test additionally pins the cross-language vectors: it
+re-derives the canonical fixture bytes, requires exact equality with the
+byte literal committed in `BundleDecodeTestV1.agda`, and re-asserts the
+Rust rejection of every pinned mutation.
+
 ### 11.2 Semantic audit
 
 The isolated library suite exercises the existing V1/V2/V3 manifest,
@@ -874,11 +925,16 @@ All new wire modules are checked with:
 ```powershell
 agda --safe --without-K --ignore-interfaces `
   -i crates/pen-semantic-audit/agda `
-  crates/pen-semantic-audit/agda/LawV2/Wire/ContextChecker.agda
+  crates/pen-semantic-audit/agda/LawV2/Wire/BundleDecodeTestV1.agda
+agda --safe --without-K --ignore-interfaces `
+  -i crates/pen-semantic-audit/agda `
+  crates/pen-semantic-audit/agda/LawV2/Wire/BundleEncode.agda
 ```
 
-`ContextChecker` transitively checks the new byte, decoder, envelope, and
-bundle modules.
+`BundleDecodeTestV1` transitively checks the byte, decoder, envelope,
+bundle, context-checker, and bundle-checker modules, and forces the
+embedded Rust byte vector through the full decode/check surface at
+type-check time. `BundleEncode` checks the round-trip theorem layer.
 
 Generated `.agdai`, `.orig`, and `.rej` files are build/edit artifacts and
 must not enter the source protocol or commits.
@@ -887,9 +943,12 @@ must not enter the source protocol or commits.
 
 As of this document:
 
-- production wire: 7 passed;
+- production wire: 7 unit and 2 cross-language pinning tests passed;
 - semantic-audit library: 166 passed, 6 ignored;
-- safe Agda wire/context checker: passed; and
+- safe Agda wire, context-checker, bundle-checker, encode, and
+  cross-language vector modules: passed, including refl acceptance of the
+  genuine 1258-byte Rust fixture vector and refl rejection of seven pinned
+  mutations; and
 - forbidden-marker scan over new wire/bridge code: clean.
 
 This is development evidence, not adoption or live-profile authority.
@@ -953,12 +1012,20 @@ Implemented:
 - exact fixed Agda input transport;
 - opaque authority frontier;
 - safe Agda bytes, primitive decoder, envelope, and round trips;
-- safe Agda semantic parsing/checking of manifest, signature, slots, and
-  contexts.
+- safe Agda semantic parsing of all eleven sections with exact Rust
+  resource bounds;
+- safe Agda structural checking of the complete bundle mirroring
+  `validate.rs`;
+- cross-language byte vectors: refl acceptance of a genuine Rust-encoded
+  bundle and refl rejection of pinned mutations; and
+- canonical-encode round trips for identifiers, terms, reduction steps,
+  synthesis codes, counted lists, and the context/Q0/family-inventory
+  payloads.
 
 Not yet implemented:
 
-- semantic Agda decoding of sections 5–11;
+- round trips for the record-shaped payloads and the whole-envelope
+  canonical-encode composition;
 - full finite context/global correspondence to `PTm`/`PCtx`;
 - binder-local conversion checking;
 - complete synthesis soundness for decoded payloads;
