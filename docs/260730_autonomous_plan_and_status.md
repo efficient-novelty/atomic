@@ -782,6 +782,33 @@ Required sequence:
 11. independent review and freeze; and
 12. only then a separately locked Profile A adapter.
 
+### Phase K0 — Formulate and freeze the contextual-internalization profile
+
+Status: registered as a research direction on 2026-07-30
+(`docs/260730_contextual_internalization_frontier.md`); formulation
+open; not frozen; execution blocked behind Phases E–H.
+
+The H3 direct-eliminator halt is rediagnosed there: the frozen profile
+read the unit type as an ordinary finite inductive datatype, and under
+that reading the direct eliminator was exactly the correct discharge.
+The candidate successor principle — Constitutive Self-Containment
+("no operation essential to the formation, substitution, or comparison
+of public possibilities may remain permanently external to the world
+once it acts nontrivially on sealed public structure") — reads the
+first acts as arena-founding and compiles a larger principal debt: the
+internalization of reindexing along sealed extensions by its least
+universal public interface, stated by universal properties only.
+
+The expected identification of the dischargers with dependent sum and
+product is REGISTERED AS A HELD-OUT PREDICTION in that document and
+must not inform demand compilation, generation, acceptance,
+quotienting, or halting. Work items before any live run: the formal
+target-neutral demand schema, the trigger condition, the
+least-universal-interface statement in the GF2 fragment, the kernel
+Sigma-fragment decision, adversarial review, and the pre-exposure
+freeze — all per §5.7 and §12.3. Formulation may proceed in parallel
+with the bridge; execution may not precede it.
+
 ### Phase K — Resume autonomous Genesis research
 
 Once the semantic and theorem stack is authoritative:
@@ -811,6 +838,14 @@ produced a unique direct eliminator, and the H4 continuation then halted. A
 longer sequence requires additional, independently motivated constitutive
 structure; it cannot be added retrospectively because the observed halt was
 unwelcome.
+
+As of 2026-07-30 a candidate for exactly such independently motivated
+structure is registered (Phase K0 and
+`docs/260730_contextual_internalization_frontier.md`): the H3 profile
+operated at the datatype level of abstraction, and the
+contextual-internalization reading assigns the arena-founding acts a
+larger principal debt. The registration keeps the anticipated
+identification of its dischargers strictly held out.
 
 ### 4.3 Similar implementations are not a correspondence theorem
 
@@ -987,6 +1022,13 @@ Item 1 is additive; items 2–6 remain the ordered theorem frontier.
 Complete safe Agda decoding and structural checking for sections 5–11,
 the Phase D finite context/global correspondence theorem layer, and the
 Phase E semantic replay core were discharged on 2026-07-30.
+
+In parallel with the bridge (and lawful at any time, since it exposes
+nothing to the registered prefix), the Phase K0
+contextual-internalization formulation may proceed: the target-neutral
+demand schema, trigger condition, least-universal-interface statement,
+kernel-fragment decision, adversarial review, and pre-exposure freeze.
+Its execution remains blocked behind Phases E–H without exception.
 
 The work must stop before native carrier construction or live-profile
 authority if any of those gates remains unavailable.
