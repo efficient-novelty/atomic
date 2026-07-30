@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "registry_id": "law-v2-profile-registry-v1",
+  "profiles": [
+    {
+      "id": "gsc-inductive-completion-core-v1",
+      "execution_profile_ids": [
+        "gsc-inductive-completion-core-v1",
+        "law-v2-owner-specific-inductive-continuation-v1"
+      ],
+      "status": "frozen_executed",
+      "semantic_manifest_digests": [
+        "blake3:d61458ebd47036861e48af9ef458df1b2b3dc890194069958ef2f14d4afdd11e",
+        "blake3:00d97ce3446442d91b8572557c16dd0576f7281260b5c000e64f41323323c7e2"
+      ],
+      "result_digests": [
+        "blake3:f43acaf6f0b0b9e51dc9a55829eedbc1fb2f7cf1090260ac2d244d1616a27d03",
+        "blake3:20f8940f305a71802728af3c9206b7f0d0c126c4528459e9274f878a7dd324b8"
+      ],
+      "result": "direct_eliminator_then_debt_free_halt",
+      "termination": "HaltedDebtFree",
+      "artifact_paths": [
+        "docs/law_v2_h3_inductive_completion_v1.json",
+        "docs/law_v2_h4_continuation_v1.json"
+      ],
+      "privileged_candidate_fixtures": []
+    },
+    {
+      "id": "gsc-contextual-internalization-v1",
+      "execution_profile_ids": [
+        "gsc-contextual-internalization-v1"
+      ],
+      "status": "proposed_not_adopted",
+      "semantic_manifest_digests": [],
+      "result_digests": [],
+      "result": null,
+      "termination": null,
+      "artifact_paths": [],
+      "privileged_candidate_fixtures": []
+    },
+    {
+      "id": "selective-productive-discharge-v1",
+      "execution_profile_ids": [
+        "selective-productive-discharge-v1"
+      ],
+      "status": "proposed_not_adopted",
+      "semantic_manifest_digests": [],
+      "result_digests": [],
+      "result": null,
+      "termination": null,
+      "artifact_paths": [],
+      "privileged_candidate_fixtures": []
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+[package]
+name = "pen-contextual-completion"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.85"
+description = "Generic finite prototype for proposed Law V2 contextual completion"
+publish = false
+
+[workspace]
+resolver = "2"
+
+[dependencies]
+pen-kernel = { path = "../pen-kernel" }
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.149"
+thiserror = "=2.0.18"
+
+[package.metadata.law-v2]
+role = "research-prototype"
+authority = "proposed-generic-only"
+live_profile_a_access = false
+registered_prefix_access = false
+candidate_generation = false
+production_payment_authorized = false

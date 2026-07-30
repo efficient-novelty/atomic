@@ -9,6 +9,7 @@
 
 mod census;
 mod certificate;
+pub mod gsc;
 mod model;
 mod scheme;
 

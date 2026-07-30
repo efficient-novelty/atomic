@@ -444,7 +444,8 @@ fn verify_registered_bootstrap(
     })
 }
 
-fn registered_source_extensions() -> [UncheckedSignature; REGISTERED_BOOTSTRAP_ACT_COUNT] {
+pub(crate) fn registered_source_extensions() -> [UncheckedSignature; REGISTERED_BOOTSTRAP_ACT_COUNT]
+{
     let universe = registered_global_id(1);
     let registered_type = registered_global_id(2);
     let witness = registered_global_id(3);

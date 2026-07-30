@@ -1479,3 +1479,284 @@ remedy of this probe. The next lawful step is therefore adopted
 descriptor/history authority, derived support and completeness evidence, exact
 compiler verification goals, and a typed response adapter—not GSC adoption or
 response-cone selection.
+
+## Execution checkpoint — H3 inductive completion, 2026-07-28
+
+The preceding H3 census stop is retained as historical context but has now
+been discharged for the deliberately narrow
+`gsc-inductive-completion-core-v1` vertical slice.
+
+Before inspecting a live response, the
+[semantic adjudication](LAW_V2_H3_SEMANTIC_ADJUDICATION_V1.md) froze the
+generic finite closed-inductive `G-Use`/`G-Compute` profile at
+`blake3:d61458ebd47036861e48af9ef458df1b2b3dc890194069958ef2f14d4afdd11e`.
+The implementation now provides:
+
+* a digest-bound exact export sidecar for the unchanged registered bootstrap;
+* verified events, anchors, declaration origins, cutoffs, an exhaustive active
+  demand inventory, and an empty origin-cutoff Q3 registry;
+* exact multi-output `PortKey` sharing between generated use and computation
+  families;
+* the restricted `FreshEliminatorBeta` equation grammar with exact
+  substitution-preservation checking;
+* finite typed operational derivability with complete `Underived`
+  certification and fail-closed `Unknown`;
+* an exhaustive response carrier and complete Q0/Q2/Q3 quotient; and
+* a pinned Rust/safe-Agda reference-agreement verifier whose primitive runtime
+  is privately snapshotted and digest-bound.
+
+The issued
+[H3 result](LAW_V2_H3_INDUCTIVE_COMPLETION_RESULT.md) is `Proven`, with result
+digest
+`blake3:f43acaf6f0b0b9e51dc9a55829eedbc1fb2f7cf1090260ac2d244d1616a27d03`.
+There is one exhaustive live candidate and one complete quotient class: the
+compiler-generated direct eliminator with equation
+\(r(P,m,g_3)\mapsto m\), where `g3` is the public alias and the artifact's
+normalized constructor is `unit`. The pre-response goals are completely
+`Underived`, the Q3 registry is empty, archived candidates were not loaded,
+and contextual internalization was not adopted.
+
+This owner-specific profile therefore does not recover the archived four-way
+Pi/Sigma result. The vertical slice stops at a new semantic-authority blocker,
+not an H3 implementation gap: either the Genesis sequence must accept this
+profile-relative revision, or a separately motivated, versioned, and frozen
+`ContextualInternalization` profile must be authorized. The completed H3
+manifest cannot lawfully be changed after observing its result.
+
+## Execution checkpoint — revised Act 4 continuation, 2026-07-29
+
+The direct eliminator has now been accepted as the revised fourth act. Before
+running its prospective successor census, the
+[H4 continuation adjudication](LAW_V2_H4_CONTINUATION_ADJUDICATION_V1.md)
+froze an additive transition profile at
+`blake3:00d97ce3446442d91b8572557c16dd0576f7281260b5c000e64f41323323c7e2`.
+It changes no H3 rule and introduces no new demand generator. It specifies
+only exact singleton free sealing, active-window extraction, cumulative
+derivability, expiration, and debt-free halt.
+
+The resulting
+[H4 continuation certificate](LAW_V2_H4_CONTINUATION_RESULT.md) has result
+digest
+`blake3:20f8940f305a71802728af3c9206b7f0d0c126c4528459e9274f878a7dd324b8`.
+The fourth event adds exactly the bodyless direct eliminator and its generated
+constructor equation. In the new width-two window, the exhaustive prospective
+Step-5 inventory contains the same `G-Use` and `G-Compute` ports. Both replay
+as `Derived`; extraction, derivability, and expiration are complete; and the
+live-orbit count is zero.
+
+Consequently, the revised owner-specific `G-Use`/`G-Compute` sequence halts
+after four sealed acts. No fifth structure is generated. This supersedes the
+historical expectation of autonomous continuation to fifteen only for this
+explicitly frozen narrow profile; it makes no unrestricted semantic claim.
+Any experiment intended to continue further now requires a separately
+motivated, versioned, and pre-frozen structure-producing principle. Adding
+contextual internalization, action, comparison, mate, horn, or any other rule
+to the completed H3/H4 profile after observing this halt is prohibited.
+
+## Execution checkpoint — window-register audit, 2026-07-29
+
+The completed H3/H4 experiment is now registered as immutable Profile A:
+owner-specific `G-Use`/`G-Compute` constitutive demand, total discharge, a
+unique direct eliminator, and then `HaltedDebtFree`. The
+[profile registry](LAW_V2_PROFILE_REGISTRY.md) pins both semantic digests and
+both result digests, reserves the contextual and productive profiles as
+`proposed_not_adopted`, and exports the typed
+`StructuralRunTermination` vocabulary. No registry entry exports a privileged
+candidate fixture.
+
+The required
+[Acts 1–4 semantic-register audit](LAW_V2_WINDOW_REGISTER_AUDIT_V1.md) binds
+the exact registered events, checked boundary extensions, Act-4 free seal,
+typed demand families, response quotient, provenance digests, and halt
+certificate. It consumes no legacy structural vector or archived result.
+
+Its outcome is `UndefinedAudit`. The checked kernel and demand evidence does
+not contain the distinct proof objects required to issue any
+\((\kappa_i,\nu_i)\) pair: first-irreducible kernel bases, complete pre/post
+GF2 semantic-family carriers, typed family weakening, SR2 provenance
+injections, and the family-versus-instance quotient all remain open. The
+formal appendix itself records the finite GF2 schema carrier, checker, and
+completeness certificate as unimplemented. Therefore both the previous-window
+bar and the direct act's efficiency remain undefined, and no productivity
+experiment is authorized.
+
+In parallel, the requested
+[self-containment adjudication](LAW_V2_CONSTITUTIVE_SELF_CONTAINMENT_ADJUDICATION_V1.md)
+has been drafted without adoption or implementation. It recommends testing
+two-sided anonymous universal completion
+\(L\dashv\pi^\ast\dashv R\), retains the local `G-Use`/`G-Compute` debt,
+specifies generic non-Genesis tests and falsifiers, and requires independent
+review, complete contextual infrastructure, Rust/Agda agreement, and a
+pre-run semantic freeze before the registered prefix may be exposed.
+
+Execution stops at the window-audit blocker set. The non-adopted contextual
+draft may be reviewed in parallel, but neither a productivity-gated run nor a
+live contextual H3 run is lawful from the current evidence.
+
+## Execution checkpoint — semantic-audit core prototype closeout, 2026-07-29
+
+The definition-and-theorem blocker identified by the window-register audit has
+now been explored only through an isolated generic prototype. The
+[prototype result](LAW_V2_SEMANTIC_AUDIT_CORE_V1_PROTOTYPE_RESULT.md) records
+the current `pen-semantic-audit` surface and validation snapshot. Both
+semantic and cost manifests remain unfrozen and `proposed_not_adopted`; the
+crate has no live Profile A adapter and has issued no Acts 1--4 values.
+
+The prototype does not yet supply the proof objects required for adoption.
+In particular, the repaired fresh-constructor cost path now returns
+`Unknown(MissingFreeCompletionTheorem)` pending an exact free-completion
+theorem bound to a verified predecessor/public inventory and a pre-existing
+typed demand contract. Complete public-inventory coverage, typed family
+weakening and restriction, a digest-bound verified-empty Q3 registry,
+replayable carrier/quotient evidence, and executable Rust/safe-Agda agreement
+also remain open.
+
+At this documentation checkpoint, the generic Rust tests reported 31 passes
+with the independently pinned live Agda check ignored; clippy with warnings
+denied passed; and the nested-workspace isolation checker and its two unit
+tests passed. The ignored-by-default live gate was also invoked explicitly and
+passed with reference digest
+`blake3:33f78fa03eac42a22950a209fb8669ccdeec325c799473b01606115bab3f4c32`,
+and a separate direct safe-Agda typecheck passed. These are prototype
+regression, fixed-reference, pinning, and isolation facts only; they do not
+establish Rust/Agda output agreement, theorem completion, or manifest freeze.
+
+The parallel isolated contextual prototype reported 12 Rust tests passed,
+with formatting, clippy, isolation, and its two isolation unit tests also
+passing. It remains a bounded generic falsification fixture with no registered
+prefix access or adopted semantic authority.
+
+The issued Profile A H3 result, H4 continuation and halt result, and
+`LAW_V2_WINDOW_REGISTER_AUDIT_V1` remain unchanged. Its outcome is still
+`UndefinedAudit`, and no provisional \((\kappa,\nu)\), ratio, or Selective-Law
+benchmark is introduced.
+
+Execution on the critical path therefore stops at the verified
+predecessor/public-inventory and exact free-completion theorem blocker. The
+non-adopted generic contextual track may continue independently under its
+existing restrictions, but neither this prototype nor that track may be used
+for a live Profile A valuation or continuation.
+
+## Execution checkpoint — kernel-cost V2 and generic inventory, 2026-07-29
+
+The unadopted V1 fresh-equation cost proposal has now been superseded, as a
+proposal only, by
+[`gf2-kernel-cost-core-v2`](LAW_V2_KERNEL_COST_ADJUDICATION_V2.md). A
+separately sealed equation owned by a bodyless fresh head is a separate paid
+public clause unless its exact normalized equation is predecessor-public or a
+complete Q2 witness proves it is a duplicate. Demand specification, compiler
+generation, and role metadata do not make the equation cost-free.
+
+The isolated generic workspace now mints a private
+`VerifiedPublicAuditInventoryV1` by replay. Relative to its supplied ledger it
+checks exact predecessor and successor boundaries, cumulative event censuses,
+group/declaration/equation/demand coverage, source-normal pairs, strict-prior
+exact `PortKey` associations, dependency-derived availability, a canonical
+dependency DAG, a verified-empty supplied Q3 registry, and a typed
+forced-projection census. The inventory binds full contents and the kernel
+normalizer protocol into its coverage identity. It has no live Profile A
+access.
+
+The public V2 cost entry point now requires that opaque inventory. Caller
+availability labels and predecessor-equation claims are replayed from it,
+closure for negative evidence is recomputed, and V2 duplicate evidence is
+schema-separated from V1. The generic bodyless-head/fresh-equation vector can
+therefore charge the two clauses separately without invoking the removed V1
+free-completion theorem. Descriptor-driven projection reconstruction remains
+fail-closed until a verified descriptor and projection-reduction theorem
+exists. Inventory-backed ordinary beta likewise requires verifier-minted
+reduction provenance, and an ambient-shaped declaration requires an
+authoritative first-export census; those paths now return explicit `Unknown`
+reasons rather than silently charging a clause.
+
+Q0-aware carrier/quotient replay and kernel-checked family specialization have
+also been connected. A private `VerifiedTypedRewriteInventoryV1` requires an
+exact one-to-one match between successor-new sealed equations and the
+restricted, reconstructed fresh rules. It accepts only a verified-empty
+projection census and deliberately does not mint rewrite-system authority.
+
+Execution now stops at the next ordered theorem gate:
+`Unknown(MissingRewriteAdmissibilityTheorem)`. Local shape checks do not prove
+substitution stability, combined termination/confluence and critical-pair
+closure, predecessor conservativity, or independent safe-Agda transcript
+agreement. A separate demand-specialization theorem is likewise required
+before a strict-prior `PortKey` association can be treated as semantic
+realization or discharge.
+
+The generic ledger is not an issued-history oracle. A later, separately locked
+Profile A adapter must independently anchor it to the issued H3/H4 history and
+the authoritative Q3 registry, after the generic profiles and transcript
+agreement are complete and frozen. Until then, the registered H3/H4 results,
+the debt-free halt, and the Window Audit V1 `UndefinedAudit` outcome remain
+unchanged, and no \((\kappa,\nu)\) value is issued.
+
+At this checkpoint the isolated semantic workspace reports 70 tests passed,
+none failed, and one pinned-runtime test ignored by default; its explicit
+pinned Agda example passed with the unchanged reference digest. Formatting,
+clippy, semantic/contextual isolation, the contextual 12-test suite, the
+firewall isolation build, 15 Law-V2 checker tests, the 7-test oracle suite,
+and the registered Window Audit replay all passed. The separately launched
+legacy all-workspace suite remained actively computing in `pen_search` when
+its 15-minute timeout expired and emitted no failure diagnostic; this is
+recorded as legacy runtime latency, not theorem evidence or a Law-V2 blocker.
+
+## Execution checkpoint — projection-free lambda/unit theorem prototype, 2026-07-29
+
+The next generic critical-path layer has now been explored under separately
+versioned, unfrozen successor proposals:
+
+```text
+gf2-semantic-audit-lambda-unit-v1
+gf2-kernel-cost-lambda-unit-v2
+```
+
+The broader semantic and V2 cost proposals remain unchanged. The successors
+exclude records and projections, omit `DescriptorForcedProjection` from
+their Q0 and cost-free manifests, and recursively reject projection syntax as
+`OutsideFragment(DescriptorProjection)`. They have no Profile A access and
+issue no live value.
+
+The isolated prototype now supplies verifier-minted ambient public-export
+classes, exact ordinary delta/beta derivations, and a syntactic pre-Q0
+rank-0/1/2 carrier. Ambient first exports are class-valued and order
+independent; predecessor re-exports remain distinct. Ordinary beta binds the
+definition, equation, sequential substitution, result type, and replayed
+reduction path. The pre-Q0 carrier does not normalize or deduplicate by Q0 and
+records typed negative equation-hole dispositions.
+
+The finite rewrite attempt has reached a new definition-and-theorem blocker.
+Embedding-lift and forced-newest substitutions do not have a finite syntactic
+closure under unrestricted composition: a small generic vector generates
+ever-growing endomorphism images and exhausts the manifest bound. Truncation
+would turn omitted substitutions into false negative evidence. In addition,
+the diagnostic graph still lacks recursively typed subterm/binder-local rule
+instances, an independently reconstructed predecessor node universe, and an
+explicit census of every same-position, nested, and disjoint immediate-edge
+pair.
+
+The public finite-rewrite entry point therefore validates manifest bindings,
+exact seed term subjects, and the complete lambda/unit fragment boundary, and
+then deliberately returns:
+
+```text
+Unknown(MissingRewriteAdmissibilityTheorem)
+```
+
+No `VerifiedRewriteSystemV1` can currently be minted. Full semantic seed
+authority is also still absent: the public inventory alone cannot derive cost
+clause identities, demand-orbit anchors, or historical predecessor
+presentations from caller-independent evidence. These blockers keep Q0,
+Q1/Q2/Q3 quotient completion, the cost basis, weakening, marginals, SR2,
+Rust/safe-Agda transcript agreement, adoption/freeze, and the Profile A
+adapter downstream.
+
+The detailed generic result is recorded in
+[LAW_V2_LAMBDA_UNIT_FINITE_THEOREM_PROTOTYPE_RESULT.md](LAW_V2_LAMBDA_UNIT_FINITE_THEOREM_PROTOTYPE_RESULT.md).
+The isolated workspace reports 107 tests passed, none failed, and one pinned
+live-Agda test ignored by default; formatting, clippy with warnings denied,
+the isolation checker, and its unit tests also pass.
+
+The issued H3/H4 artifacts, Profile Registry, Window Audit V1, V1 cost
+artifact, and prior V2 public-inventory result remain unchanged. The Window
+Audit V1 outcome remains `UndefinedAudit`; no provisional \(\kappa\),
+\(\nu\), ratio, or productivity result is introduced.

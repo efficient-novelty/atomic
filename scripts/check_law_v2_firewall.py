@@ -233,6 +233,14 @@ def isolated_build(packages: dict[str, pathlib.Path], closure: set[str]) -> None
         # would have to prune those members in this reduced workspace, so the
         # isolation lane has its own reviewed lock and can run with --locked.
         shutil.copy2(ISOLATION_LOCKFILE, isolated / "Cargo.lock")
+        # Production provenance embeds the reviewed isolation lock at its
+        # repository-relative path as well as using it as the temporary
+        # workspace lock.
+        (isolated / "scripts").mkdir()
+        shutil.copy2(
+            ISOLATION_LOCKFILE,
+            isolated / "scripts" / ISOLATION_LOCKFILE.name,
+        )
         shutil.copy2(REPO / "rust-toolchain.toml", isolated / "rust-toolchain.toml")
         (isolated / ".cargo").mkdir()
         shutil.copy2(REPO / ".cargo" / "config.toml", isolated / ".cargo" / "config.toml")

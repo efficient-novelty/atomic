@@ -498,6 +498,7 @@ dependencies = [
 name = "pen-demand"
 version = "0.1.0"
 dependencies = [
+ "pen-gf2-agda",
  "pen-kernel",
  "schemars",
  "serde",
@@ -508,6 +509,8 @@ dependencies = [
 name = "pen-engine"
 version = "0.1.0"
 dependencies = [
+ "pen-demand",
+ "pen-gf2",
  "pen-kernel",
  "pen-law",
  "schemars",
@@ -534,7 +537,9 @@ dependencies = [
 name = "pen-gf2"
 version = "0.1.0"
 dependencies = [
+ "pen-demand",
  "pen-kernel",
+ "pen-law",
  "schemars",
  "serde",
  "serde_json",

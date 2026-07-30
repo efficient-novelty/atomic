@@ -7,7 +7,9 @@ rust-version.workspace = true
 description = "Oracle-free finite-fragment contract and verifier adapter"
 
 [dependencies]
+pen-demand = { path = "../pen-demand" }
 pen-kernel = { path = "../pen-kernel" }
+pen-law = { path = "../pen-law" }
 schemars.workspace = true
 serde.workspace = true
 thiserror.workspace = true

@@ -18,10 +18,35 @@ jobs:
       - name: Verify dependency and source firewall
         run: python scripts/check_law_v2_firewall.py --isolation-build --json
       - name: Test firewall bypass detection
-        run: python -m unittest discover -s scripts -p "test_check_law_v2_firewall.py"
-      - name: Verify legacy testimony freeze bindings
-        run: python scripts/check_legacy_bar_v1_freeze.py
+        run: python -m unittest discover -s scripts -p "test_check_law_v2*.py"
+      - name: Verify frozen profile and window-audit bindings
+        run: python scripts/check_law_v2_window_register_audit_v1.py
+      - name: Verify proposed semantic-audit isolation
+        run: python scripts/check_semantic_audit_isolation.py --json
+      - name: Test semantic-audit isolation bypass detection
+        run: python -m unittest scripts.test_check_semantic_audit_isolation
+      - name: Test proposed generic semantic-audit core
+        run: cargo test --manifest-path crates/pen-semantic-audit/Cargo.toml --locked
+      - name: Verify proposed contextual-track isolation
+        run: python scripts/check_contextual_completion_isolation.py --json
+      - name: Test contextual isolation bypass detection
+        run: python -m unittest scripts.test_check_contextual_completion_isolation
+      - name: Test proposed generic contextual completion
+        run: cargo test --manifest-path crates/pen-contextual-completion/Cargo.toml --locked
       - name: Test quarantined oracle testimony
         run: cargo test --locked -p pen-oracle
       - name: Test lawful packages in the full workspace
         run: cargo test --locked -p pen-kernel -p pen-gf2 -p pen-gf2-agda -p pen-demand -p pen-law -p pen-engine
+
+  legacy-forensic:
+    # The pre-existing testimony drift is a quarantined forensic track. It has
+    # no authority over, and must not suppress evidence from, the Law-V2 lane.
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify legacy testimony freeze bindings
+        run: python scripts/check_legacy_bar_v1_freeze.py

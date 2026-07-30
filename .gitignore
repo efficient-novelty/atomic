@@ -42,6 +42,7 @@ __pycache__/
 # Generated Agda exports
 /agda/Generated/*
 !/agda/Generated/.gitkeep
+*.agdai
 
 # Local sqlite and telemetry scratch copies outside the tracked run tree
 *.sqlite
