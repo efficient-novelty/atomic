@@ -635,6 +635,8 @@ ContextCorrespondenceV1 → SemanticReplayV1.agda
    → SemanticReplayTestV1.agda / TypingReplayTestV1.agda
 TypingReplayV1 + LambdaUnit typing/conversion modules
    → TypingBridgeV1.agda
+TypingReplayV1 + LambdaUnit inventory-bridge/family modules
+   → InventoryReplayV1.agda → InventoryReplayTestV1.agda
 ```
 
 #### `Bytes.agda`
@@ -861,6 +863,47 @@ supplement step path, wrong formation level, missing supplements, and
 wrong derived binder-local context) are each rejected only by the
 typing verdict, with all three verdicts proven per vector.
 
+#### `InventoryReplayV1.agda`
+
+The Phase F inventory correspondence for sections 8–11: wire Q0 tags
+decode onto `AbstractQ0TagV1` with round trips and the accepted
+inventory provably decodes to the exact seven abstract rules with the
+proven representation/base-semantic/runtime-public category list
+(discharging `rust-q0-tag-erasure-not-mechanized`), plus step-tag
+membership for every abstract reduction step. Fresh-rule schemas get
+the semantics the wire cannot see: typed replay of both equation
+sides and the recorded type under the verified parameter context,
+distinct bodyless owner/constructor, arity at least two, pairwise
+`(owner, constructor)` disjointness, decoded-term non-recursion
+transport, and substitution stability by genuine
+`fresh-equation-step`/`substitution-step` instances; constructor-set
+coverage is registered as a native-carrier obligation. Family
+payloads decode to genuine `Family` values (seeds bind their public
+heads at exact declared types; `PublicEquation` seeds and equation
+components bind the equation's owner head; applications compose
+their components' subjects in one shared context; actions preserve
+their source's type), the wire tag provably equals the abstract
+`family-code` (discharging
+`rust-family-payload-erasure-not-mechanized`), and the naturality
+package — code substitution invariance, functor laws, constructor
+commutation — is instantiated at decoded values. Exposes the
+whole-bundle verdict `inventory-check-bundle`, which runs strictly
+after the structural, semantic, and typing verdicts. The wire's
+dropped `hole_ordinal`/`context_witness` fields are registered gaps
+routed to the Phase J rewrite authority.
+
+#### `InventoryReplayTestV1.agda`
+
+Pins the Phase F vectors: the fixture passes the inventory verdict by
+refl, its six family payloads decode to `Family` values with pinned
+code tags, its fresh rule is demonstrated as a genuine abstract
+fresh-equation step instance, and eight mutants that pass the
+structural, semantic, AND typing layers (ill-typed rule, bodyful
+owner, duplicate pair, seed subject mismatch, seed type merely
+convertible, application subject mismatch, application context
+mismatch, action type change) are each rejected only by the
+inventory verdict, with all four verdicts proven per vector.
+
 #### `ContextTranscriptTestV1.agda`
 
 Pins the first cross-language decoded-surface transcript: the Rust side
@@ -1063,8 +1106,9 @@ rejection of every pinned decode-layer mutation (with offsets derived
 programmatically from the envelope), renders the context/global lookup
 transcript for exact comparison with the literal committed in
 `ContextTranscriptTestV1.agda`, and re-derives every structurally-valid
-semantic and typing mutant for exact comparison with the literals
-committed in `SemanticReplayTestV1.agda` and `TypingReplayTestV1.agda`.
+semantic, typing, and inventory mutant for exact comparison with the
+literals committed in `SemanticReplayTestV1.agda`,
+`TypingReplayTestV1.agda`, and `InventoryReplayTestV1.agda`.
 An ignored `regenerate_agda_literals` test reprints all committed
 literals and offsets after a fixture change.
 
@@ -1096,7 +1140,9 @@ module and forces the cross-language transcript agreement at type-check
 time. `SemanticReplayTestV1` forces the semantic replay verdicts, and
 `TypingReplayTestV1` transitively checks the normalization, typing
 replay, and supplement modules and forces the whole-bundle typing
-verdicts; `TypingBridgeV1` checks the abstract-judgment bridge:
+verdicts; `TypingBridgeV1` checks the abstract-judgment bridge;
+`InventoryReplayTestV1` transitively checks the Phase F inventory
+module and forces the whole-bundle inventory verdicts:
 
 ```powershell
 agda --safe --without-K --ignore-interfaces `
@@ -1111,6 +1157,9 @@ agda --safe --without-K --ignore-interfaces `
 agda --safe --without-K --ignore-interfaces `
   -i crates/pen-semantic-audit/agda `
   crates/pen-semantic-audit/agda/LawV2/Wire/TypingBridgeV1.agda
+agda --safe --without-K --ignore-interfaces `
+  -i crates/pen-semantic-audit/agda `
+  crates/pen-semantic-audit/agda/LawV2/Wire/InventoryReplayTestV1.agda
 ```
 
 Generated `.agdai`, `.orig`, and `.rej` files are build/edit artifacts and
@@ -1120,16 +1169,16 @@ must not enter the source protocol or commits.
 
 As of this document:
 
-- production wire: 7 unit and 5 cross-language pinning tests passed;
+- production wire: 7 unit and 6 cross-language pinning tests passed;
 - semantic-audit library: 166 passed, 6 ignored;
 - safe Agda wire, context-checker, bundle-checker, encode,
   correspondence, semantic-replay, typing-replay, supplement, bridge,
-  and cross-language vector modules: passed from clean interfaces,
-  including refl acceptance of the genuine 3544-byte Rust fixture
-  vector through the structural, semantic, and typing verdicts, refl
-  rejection of seven pinned decode-layer mutations, and refl
-  three-verdict pins for eleven structurally-valid semantic/typing
-  mutants; and
+  inventory, and cross-language vector modules: passed from clean
+  interfaces, including refl acceptance of the genuine 3796-byte Rust
+  fixture vector through the structural, semantic, typing, and
+  inventory verdicts, refl rejection of seven pinned decode-layer
+  mutations, and refl multi-verdict pins for nineteen
+  structurally-valid semantic/typing/inventory mutants; and
 - forbidden-marker scan over new wire/bridge code: clean.
 
 This is development evidence, not adoption or live-profile authority.
@@ -1227,6 +1276,16 @@ Implemented:
   judgments, pinned by mutants that are structurally and semantically
   valid but typing-rejected.
 
+- the Phase F inventory correspondence (`InventoryReplayV1.agda`):
+  the mechanized Q0 tag erasure with the proven
+  representation/base-semantic/runtime-public classification and
+  step-tag membership, the typed/bodyless/disjoint fresh-rule layer
+  with genuine substitution-stable abstract step instances, exact
+  family payload decoding onto `Family` values with the tag-level
+  erasure theorem and the transported naturality package, and the
+  whole-bundle inventory verdict, pinned by mutants that pass the
+  structural, semantic, and typing layers and are inventory-rejected.
+
 Not yet implemented:
 
 - round trips for the record-shaped payloads and the whole-envelope
@@ -1238,7 +1297,9 @@ Not yet implemented:
 - the Rust-side supplement replay matching the Agda contract
   (discharging `NestedCongruenceReplayFrontierV2` on the Rust side,
   part of the Phase G independent replay);
-- Q0/fresh/family payload correspondence;
+- the equation-action rewrite-step relation (the wire drops
+  `hole_ordinal`/`context_witness`; Phase J rewrite authority) and
+  carrier-derived constructor-set coverage for fresh rules;
 - independent Rust replay of a complete canonical bundle;
 - the versioned common normalized transcript;
 - exact transcript-byte agreement;

@@ -75,10 +75,21 @@ derived binder-local contexts with existential formation-level recovery
 and exactly-one premise coverage; the dependent-result normalization
 delta is reconciled to the exact kernel discipline; and the intrinsic
 derivations decode into the abstract typing and conversion-typing
-judgments. Structurally valid vectors that are semantically or
-typing-wise wrong are rejected exactly at their layer. The next genuine
-blockers are the Q0/fresh/family payload correspondence, independent
-Rust replay, and exact common transcript agreement.
+judgments. The Phase F inventory correspondence is now also
+implemented: the wire Q0 tags decode onto the abstract inventory codes
+with round trips and the proven
+representation/base-semantic/runtime-public classification; fresh-rule
+schemas are replayed through the typing layer with bodyless
+owner/constructor discipline, pairwise pattern disjointness, and
+substitution stability via genuine abstract fresh-equation steps; and
+family payloads decode to genuine `Family` values — seeds bind their
+public heads at their exact declared types, applications compose their
+components' subjects in a shared context, equation actions preserve
+their source's type — with the wire tag equal to the abstract family
+code and naturality transported through the decoding. Structurally
+valid vectors that are semantically, typing-wise, or inventory-wise
+wrong are rejected exactly at their layer. The next genuine blockers
+are independent Rust replay and exact common transcript agreement.
 
 ## 1. Objective hierarchy
 
@@ -650,23 +661,113 @@ formation level, missing supplements, and wrong derived binder-local
 context), each with its structural and semantic acceptance proven by
 refl alongside its typing rejection.
 
-### 2.15 Current validation snapshot
+### 2.15 Phase F inventory correspondence implemented on 2026-07-30
+
+`LawV2/Wire/InventoryReplayV1.agda` closes the sections 8–11 semantic
+gap, organized around the plan's five Phase F work items:
+
+- the exact seven-rule Q0 inventory decodes onto the abstract
+  `AbstractQ0TagV1` codes with round trips in both directions, and
+  the checker-accepted section 8 provably decodes to exactly the
+  seven abstract rules in order — the mechanized Rust-tag erasure
+  named by the `rust-q0-tag-erasure-not-mechanized` frontier marker;
+- the representation/base-semantic/runtime-public classification is
+  proven as the exact category list of the decoded inventory
+  (`[Rep, Rep, BaseSem, BaseSem, BaseSem, Rep, RuntimePublic]`), each
+  element carrying its `Q0ClassificationV1` record, and every
+  abstract reduction step's Q0 tag is proven a member of the decoded
+  inventory (congruence frames inherit their premise's tag);
+- fresh-rule schemas receive the semantic discipline the wire cannot
+  see: both equation sides replay against the recorded type under the
+  verified parameter context through the kernel-mirroring typing
+  layer, the recorded type forms a type, owner and constructor must
+  be distinct bodyless declarations (the kernel normalizer's
+  fresh-head discipline; bodylessness also keeps owners outside every
+  delta policy), arity is at least two, and no two rules share an
+  `(owner, constructor)` pair — the pairwise pattern disjointness of
+  the restricted-Q0 confluence certificate. The decoded rule yields
+  genuine abstract `fresh-equation-step` instances for every match
+  substitution with stability inherited from `substitution-step`, the
+  composed-match equations from the fresh naturality lemmas, and the
+  structural owner-freeness of the right-hand side transported to the
+  decoded term. Constructor-set coverage is explicitly registered as
+  NOT stateable from the wire (no datatype registry) and deferred to
+  the native-carrier phase;
+- exactly `Seed`, `GenericPublicApplication`, and
+  `GenericEquationAction` decode, with new semantic content per kind:
+  `PublicHead` seeds must judge `global slot` at its exact declared
+  type (not merely a convertible presentation), `PublicEquation`
+  seeds must judge the referenced equation's owner head (mirroring
+  the Rust seed subject `Equation { owner_head, .. }`), applications
+  must judge the application of their components' subjects with all
+  three judgments in one shared context (the wire image of the
+  dropped `context_witness`), and equation actions must preserve
+  their source family's type; every judgment replays through the
+  typing layer; and
+- family naturality transports through the exact payload decoding:
+  decoded payloads build genuine `Family` values over the judgment
+  context's variable set (equation references enter as owner-head
+  seeds), the wire payload tag provably equals the abstract
+  `family-code` of the decoded value — discharging
+  `rust-family-payload-erasure-not-mechanized` — the decoded code is
+  invariant under every substitution of the decoded value, and the
+  identity/composition functor laws and constructor-commutation
+  naturality equations are instantiated at decoded values.
+
+Two wire/Rust asymmetries are registered rather than papered over:
+the wire drops `hole_ordinal`/`context_witness` from
+`GenericEquationAction`, so the rewrite-step relation between an
+action's subject and its source's subject belongs to the Phase J
+rewrite authority; and heterogeneous judgment contexts across
+independent family trees decode per-tree at that tree's context.
+
+`inventory-check-bundle` is the whole-bundle Phase F verdict, running
+strictly after the structural, semantic, and typing verdicts —
+sections 9 and 11 are invisible to those layers, so this verdict is
+the first semantic claim about them.
+
+Completing the layer exposed that the fixture was again ill formed
+for exactly this layer (lesson 4.13, second instance): the committed
+fresh rule's left-hand side applied a non-function (`global 0` of
+type `UnitType`) under a bodyful owner, and all four family payloads
+carried the same degenerate `⊢ unit : UnitType` judgment unrelated to
+their sources or components. The fixture was repaired to a genuine
+well-typed unit-eliminator rule `uelim b unit = b` under a new
+bodyless pi-typed slot 3, and a six-payload family chain (two seeds,
+the constructor seed, partial and saturated applications, and an
+equation action whose source subject is exactly the rule's left-hand
+side instantiated at `b := global 0` and whose subject is the rewrite
+result `global 0`). The old degenerate shapes became pinned negative
+vectors. All committed literals were regenerated (canonical vector
+now 3796 bytes) and `InventoryReplayTestV1.agda` pins the canonical
+acceptance, the decoded family code tags, a genuine abstract
+fresh-equation step instance of the fixture rule, and eight mutants
+that pass the structural, semantic, AND typing layers and are
+rejected only by the inventory verdict: ill-typed rule, bodyful
+owner, duplicate `(owner, constructor)` pair, seed subject mismatch,
+seed type merely convertible to the declared type, application
+subject mismatch, application context mismatch, and action type
+change — each with all four verdicts proven by refl.
+
+### 2.16 Current validation snapshot
 
 At this checkpoint:
 
-- `pen-production-wire`: 7 unit and 5 cross-language pinning tests passed;
+- `pen-production-wire`: 7 unit and 6 cross-language pinning tests passed;
 - `pen-semantic-audit --lib`: 166 passed, 6 ignored, 0 failed;
 - the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`,
   `BundleDecodeTestV1`, `ContextCorrespondenceV1`,
   `ContextTranscriptTestV1`, `NormalizationV1`, `SemanticReplayV1`,
   `SynthesisReplayV1`, `SemanticReplayTestV1`, `TypingReplayV1`,
-  `SupplementReplayV1`, `TypingBridgeV1`, and `TypingReplayTestV1`
-  entry points and all transitive wire modules type-check from clean
-  interfaces with `--safe --without-K`, which forces the embedded
-  3544-byte Rust vector through the full decoder, structural checker,
-  semantic replay, and whole-bundle typing verdict — and the eleven
-  structurally-valid mutant vectors through their pinned
-  acceptance/rejection triples — at type-check time;
+  `SupplementReplayV1`, `TypingBridgeV1`, `TypingReplayTestV1`,
+  `InventoryReplayV1`, and `InventoryReplayTestV1` entry points and
+  all transitive wire modules type-check from clean interfaces with
+  `--safe --without-K`, which forces the embedded 3796-byte Rust
+  vector through the full decoder, structural checker, semantic
+  replay, whole-bundle typing verdict, and whole-bundle inventory
+  verdict — and the nineteen structurally-valid mutant vectors (four
+  semantic, seven typing, eight inventory) through their pinned
+  acceptance/rejection tuples — at type-check time;
 - the new wire/bridge source contains no `postulate`, unsafe pragma,
   termination bypass, or unsolved-hole allowance; and
 - the protected root workspace manifests and issued H3/H4 artifacts remain
@@ -851,19 +952,43 @@ Exit gates (unchanged, deferred to the Phase H factory):
 
 ### Phase F — Complete Q0, fresh-rule, and family correspondence
 
-Status: inventories exist independently; payload relation remains open.
+Status: theorem layer complete as of 2026-07-30 (§2.15); capability
+minting remains deferred to the Phase H factory.
 
-Work:
+Completed:
 
-- decode the exact seven-rule Q0 inventory;
-- prove the representation/base-semantic/runtime-public classification;
-- check fresh owner/constructor slots, typing, left-linearity, non-recursion,
-  scrutinee occurrence, coverage, and substitution stability;
-- decode exactly `Seed`, `GenericPublicApplication`, and
-  `GenericEquationAction`; and
-- transport family naturality through exact payload decoding.
+- the exact seven-rule Q0 inventory decodes onto the abstract codes
+  with round trips, and the accepted section 8 provably decodes to
+  the exact abstract inventory;
+- the representation/base-semantic/runtime-public classification is
+  proven as the exact category list, with per-rule classification
+  records and step-tag membership for every abstract reduction step;
+- fresh rules: owner/constructor slots resolve to distinct bodyless
+  declarations, both equation sides and the recorded type replay
+  through the kernel-mirroring typing layer under the verified
+  parameter context, left-linearity and scrutinee occurrence are the
+  structural pattern (restated intrinsically through the decode),
+  non-recursion transports to the decoded right-hand side, coverage
+  is pinned as telescope coverage plus pairwise
+  `(owner, constructor)` disjointness — constructor-set coverage is
+  registered as a native-carrier obligation, not silently claimed —
+  and substitution stability is discharged by genuine
+  `fresh-equation-step`/`substitution-step` instances;
+- exactly `Seed`, `GenericPublicApplication`, and
+  `GenericEquationAction` decode, with exact seed binding, shared
+  application contexts, subject composition, and action type
+  preservation; and
+- family naturality is transported through the exact payload
+  decoding: decoded payloads are genuine `Family` values, the wire
+  tag equals the abstract `family-code`, the code is substitution
+  invariant, and the functor laws hold at decoded values.
 
-Exit gate: `VerifiedV3InventoryCorrespondenceV1`.
+Registered gaps for later phases: the wire's dropped
+`hole_ordinal`/`context_witness` (the action rewrite-step relation is
+Phase J rewrite authority) and per-tree judgment contexts.
+
+Exit gate (unchanged, deferred to the Phase H factory):
+`VerifiedV3InventoryCorrespondenceV1`.
 
 ### Phase G — Independent replay and canonical transcript agreement
 
@@ -1113,6 +1238,19 @@ a new verification layer is added, the shared fixtures must be
 re-derived against it, and the discriminating mutants must include
 inputs that every earlier layer accepts.
 
+### 4.14 Convertible is not exact
+
+The typing layer compares by kernel normal form, so it accepts any
+convertible presentation of a type. Binding disciplines — a seed
+judging its head at the DECLARED type, a policy naming an exact
+digest — need syntactic equality, which is a strictly stronger claim
+that must be checked separately and given its own discriminating
+mutant. The `mutant-seed-type-convertible-v1` vector (a beta redex
+that normalizes to the declared type) passes the structural, semantic,
+and typing layers and is rejected only by the exactness check. When a
+new layer states an exactness requirement, a convertible-but-inexact
+vector belongs in its pinned mutants.
+
 ## 5. Big problems and challenges
 
 ### 5.1 Exact semantic correspondence
@@ -1190,21 +1328,22 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. exact Q0/fresh/family correspondence;
-3. independent Rust replay (including the Rust-side supplement replay
+2. independent Rust replay (including the Rust-side supplement replay
    matching the Agda contract, which discharges
    `NestedCongruenceReplayFrontierV2` on that side);
-4. canonical transcript agreement; and
-5. the single private minting factory.
+3. canonical transcript agreement; and
+4. the single private minting factory.
 
-Item 1 is additive; items 2–5 remain the ordered theorem frontier.
+Item 1 is additive; items 2–4 remain the ordered theorem frontier.
 Complete safe Agda decoding and structural checking for sections 5–11,
 the Phase D finite context/global correspondence theorem layer, the
-Phase E semantic replay core, and the Phase E typing-judgment bridge
+Phase E semantic replay core, the Phase E typing-judgment bridge
 (endpoint judgments, binder-local supplements, formation levels,
 dependent-result normalization reconciliation, synthesis inductive
-soundness, and the abstract-judgment bridge) were discharged on
-2026-07-30.
+soundness, and the abstract-judgment bridge), and the Phase F
+inventory correspondence (Q0 classification, typed/disjoint fresh
+rules with substitution stability, and exact family payload decoding
+with naturality transport) were discharged on 2026-07-30.
 
 In parallel with the bridge (and lawful at any time, since it exposes
 nothing to the registered prefix), the Phase K0

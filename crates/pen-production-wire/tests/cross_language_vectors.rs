@@ -13,9 +13,12 @@
 //! (every declared type forms a type, every stored body checks, every
 //! context entry is a type) and deliberately discriminating: it
 //! contains congruence conversions with binder-local supplements, a
-//! `TypeFormation` supplement with a recovered formation level, and an
+//! `TypeFormation` supplement with a recovered formation level, an
 //! application certificate whose raw instantiation differs from its
-//! kernel-normalized dependent result.
+//! kernel-normalized dependent result, a well-typed fresh computation
+//! rule `uelim b unit = b` under a bodyless owner, and a six-payload
+//! family chain whose equation action records a genuine rewrite of
+//! the saturated application's subject.
 //!
 //! This is a development regression test, not correspondence authority.
 
@@ -85,6 +88,14 @@ fn unit_family_pi() -> WireTermV1 {
     pi(unit_type(), sort(0))
 }
 
+/// `(b : UnitType) -> (u : UnitType) -> UnitType`: the declared type of
+/// the bodyless fresh head at slot 3. The scrutinee is the final
+/// telescope parameter, matching the kernel normalizer's
+/// `expected_scrutinee = arity - 1` discipline.
+fn uelim_pi() -> WireTermV1 {
+    pi(unit_type(), pi(unit_type(), unit_type()))
+}
+
 fn constant_unit_family() -> WireTermV1 {
     lambda(unit_type(), unit_type())
 }
@@ -97,6 +108,106 @@ fn one_local() -> ProductionContextWireV1 {
     ProductionContextWireV1 {
         entries_oldest_first: vec![unit_type()],
     }
+}
+
+/// `[scrutinee : UnitType, b : UnitType]` oldest-first: the fresh
+/// rule's parameter context. Under the wire pattern convention the
+/// scrutinee variable is the oldest entry (it never occurs on the left,
+/// where the constructor sits in its spine position) and the branch
+/// parameter `b` is `Variable 0`.
+fn two_locals() -> ProductionContextWireV1 {
+    ProductionContextWireV1 {
+        entries_oldest_first: vec![unit_type(), unit_type()],
+    }
+}
+
+/// The genuine well-typed fresh computation rule `uelim b unit = b`:
+/// owner slot 3 (`uelim`, bodyless), constructor slot 1 (the opaque
+/// unit-typed constant), left `uelim b constructor`, right `b`, type
+/// `UnitType`. Both sides check against the type under the parameter
+/// context, the pattern is left-linear with the constructor in the
+/// scrutinee position, and the right side never mentions the owner.
+fn fresh_unit_eliminator_rule() -> FreshRuleSchemaWireV1 {
+    FreshRuleSchemaWireV1 {
+        equation_id: id(7),
+        owner_slot: 3,
+        constructor_slot: 1,
+        parameter_context: two_locals(),
+        left: apply(apply(global(3), var(0)), global(1)),
+        right: var(0),
+        ty: unit_type(),
+        scrutinee_ordinal: 1,
+        arity: 2,
+    }
+}
+
+/// The six family payloads form one genuine derivation chain, all in
+/// the empty context: two seeds (the bodyful unit constant and the
+/// fresh equation's owner head), a partial application, the
+/// constructor seed, the saturated application — whose subject is
+/// exactly the fresh rule's left-hand side instantiated with
+/// `b := global 0` — and the equation action rewriting that subject to
+/// `global 0` with its type preserved.
+fn family_payloads() -> Vec<FamilyPayloadWireV1> {
+    vec![
+        FamilyPayloadWireV1::Seed {
+            family_id: id(8),
+            source: SeedSourceWireV1::PublicHead { owner_slot: 0 },
+            judgment: FamilyJudgmentWireV1 {
+                context: empty_context(),
+                subject: global(0),
+                ty: unit_type(),
+            },
+        },
+        FamilyPayloadWireV1::Seed {
+            family_id: id(9),
+            source: SeedSourceWireV1::PublicEquation { equation_id: id(7) },
+            judgment: FamilyJudgmentWireV1 {
+                context: empty_context(),
+                subject: global(3),
+                ty: uelim_pi(),
+            },
+        },
+        FamilyPayloadWireV1::GenericPublicApplication {
+            family_id: id(10),
+            function_family_id: id(9),
+            argument_family_id: id(8),
+            judgment: FamilyJudgmentWireV1 {
+                context: empty_context(),
+                subject: apply(global(3), global(0)),
+                ty: unit_pi(),
+            },
+        },
+        FamilyPayloadWireV1::Seed {
+            family_id: id(35),
+            source: SeedSourceWireV1::PublicHead { owner_slot: 1 },
+            judgment: FamilyJudgmentWireV1 {
+                context: empty_context(),
+                subject: global(1),
+                ty: unit_type(),
+            },
+        },
+        FamilyPayloadWireV1::GenericPublicApplication {
+            family_id: id(36),
+            function_family_id: id(10),
+            argument_family_id: id(35),
+            judgment: FamilyJudgmentWireV1 {
+                context: empty_context(),
+                subject: apply(apply(global(3), global(0)), global(1)),
+                ty: unit_type(),
+            },
+        },
+        FamilyPayloadWireV1::GenericEquationAction {
+            family_id: id(37),
+            equation_id: id(7),
+            source_family_id: id(36),
+            judgment: FamilyJudgmentWireV1 {
+                context: empty_context(),
+                subject: global(0),
+                ty: unit_type(),
+            },
+        },
+    ]
 }
 
 /// Recompute the exact no-redex census of a normal form relative to the
@@ -536,6 +647,12 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
                     declaration_type: family_application_pi(),
                     declaration_body: None,
                 },
+                GlobalSlotEntryWireV1 {
+                    slot: 3,
+                    global_id_bytes: id(4),
+                    declaration_type: uelim_pi(),
+                    declaration_body: None,
+                },
             ],
         },
         contexts: vec![empty_context(), one_local(), discriminating],
@@ -545,60 +662,11 @@ fn canonical_bundle() -> ProductionRefinementBundleV1 {
         q0_inventory: Q0InventoryWireV1 {
             ordered_rules: EXACT_Q0_INVENTORY_V1.to_vec(),
         },
-        fresh_rule_schemas: vec![FreshRuleSchemaWireV1 {
-            equation_id: id(7),
-            owner_slot: 0,
-            constructor_slot: 1,
-            parameter_context: one_local(),
-            left: apply(global(0), global(1)),
-            right: var(0),
-            ty: unit_type(),
-            scrutinee_ordinal: 0,
-            arity: 1,
-        }],
+        fresh_rule_schemas: vec![fresh_unit_eliminator_rule()],
         family_inventory: FamilyInventoryWireV1 {
             ordered_codes: EXACT_FAMILY_INVENTORY_V1.to_vec(),
         },
-        family_payloads: vec![
-            FamilyPayloadWireV1::Seed {
-                family_id: id(8),
-                source: SeedSourceWireV1::PublicHead { owner_slot: 0 },
-                judgment: FamilyJudgmentWireV1 {
-                    context: empty_context(),
-                    subject: unit(),
-                    ty: unit_type(),
-                },
-            },
-            FamilyPayloadWireV1::Seed {
-                family_id: id(9),
-                source: SeedSourceWireV1::PublicEquation { equation_id: id(7) },
-                judgment: FamilyJudgmentWireV1 {
-                    context: empty_context(),
-                    subject: unit(),
-                    ty: unit_type(),
-                },
-            },
-            FamilyPayloadWireV1::GenericPublicApplication {
-                family_id: id(10),
-                function_family_id: id(8),
-                argument_family_id: id(9),
-                judgment: FamilyJudgmentWireV1 {
-                    context: empty_context(),
-                    subject: unit(),
-                    ty: unit_type(),
-                },
-            },
-            FamilyPayloadWireV1::GenericEquationAction {
-                family_id: id(11),
-                equation_id: id(7),
-                source_family_id: id(8),
-                judgment: FamilyJudgmentWireV1 {
-                    context: empty_context(),
-                    subject: unit(),
-                    ty: unit_type(),
-                },
-            },
-        ],
+        family_payloads: family_payloads(),
     }
 }
 
@@ -733,6 +801,116 @@ fn mutant_supplement_derived_context() -> ProductionRefinementBundleV1 {
     bundle
 }
 
+// --- Inventory-layer mutants ------------------------------------------------
+//
+// Every inventory mutant is structurally valid, invisible to the
+// semantic replay (which covers only conversions and synthesis), and
+// invisible to the typing replay (which covers the signature, standalone
+// contexts, conversions, synthesis, and supplements). Only the Phase F
+// inventory layer inspects sections 9 and 11 semantically.
+
+/// The good rule with its type changed to `Sort 0`: the pattern is
+/// intact but neither side checks against the recorded type.
+fn mutant_fresh_ill_typed() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    bundle.fresh_rule_schemas[0].ty = sort(0);
+    bundle
+}
+
+/// The old fixture shape: owner slot 0 is bodyful (and delta-enabled),
+/// which the kernel normalizer forbids for a fresh head. The pattern
+/// stays exact, so every earlier layer accepts it.
+fn mutant_fresh_owner_bodyful() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    let rule = &mut bundle.fresh_rule_schemas[0];
+    rule.owner_slot = 0;
+    rule.left = apply(apply(global(0), var(0)), global(1));
+    bundle
+}
+
+/// Two rules for the same `(owner, constructor)` pair under distinct
+/// equation identities: structural dedup is by equation id only, but
+/// the inventory layer requires pairwise-disjoint constructor patterns.
+fn mutant_fresh_duplicate_pair() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    let mut duplicate = fresh_unit_eliminator_rule();
+    duplicate.equation_id = id(34);
+    bundle.fresh_rule_schemas.push(duplicate);
+    bundle
+}
+
+/// The old degenerate seed shape: subject `Unit` instead of the public
+/// head `global 0`. It still types, but the seed judgment no longer
+/// binds the declared head.
+fn mutant_seed_subject_mismatch() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    match &mut bundle.family_payloads[0] {
+        FamilyPayloadWireV1::Seed { judgment, .. } => judgment.subject = unit(),
+        _ => panic!("unexpected payload shape"),
+    }
+    bundle
+}
+
+/// A seed type that is merely CONVERTIBLE to the declared type: the
+/// beta redex `(\y:UnitType. UnitType) Unit` normalizes to `UnitType`,
+/// so the typed replay accepts it, but the inventory layer demands the
+/// exact declared type.
+fn mutant_seed_type_convertible() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    match &mut bundle.family_payloads[0] {
+        FamilyPayloadWireV1::Seed { judgment, .. } => {
+            judgment.ty = apply(constant_unit_family(), unit());
+        }
+        _ => panic!("unexpected payload shape"),
+    }
+    bundle
+}
+
+/// An application family whose subject applies the wrong argument: it
+/// still types (`global 1` is also unit-typed), but the subject is not
+/// the application of its components' subjects.
+fn mutant_application_subject_mismatch() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    match &mut bundle.family_payloads[2] {
+        FamilyPayloadWireV1::GenericPublicApplication { judgment, .. } => {
+            judgment.subject = apply(global(3), global(1));
+        }
+        _ => panic!("unexpected payload shape"),
+    }
+    bundle
+}
+
+/// An application family judged in a different context than its
+/// components: everything is closed so the typed replay accepts it,
+/// but the shared-context discipline (the wire image of the dropped
+/// `context_witness`) is broken.
+fn mutant_application_context_mismatch() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    match &mut bundle.family_payloads[2] {
+        FamilyPayloadWireV1::GenericPublicApplication { judgment, .. } => {
+            judgment.context = one_local();
+        }
+        _ => panic!("unexpected payload shape"),
+    }
+    bundle
+}
+
+/// An equation action that changes the judged type: subject and type
+/// are replaced by a coherent but different judgment
+/// (`UnitType : Sort 0`), breaking type preservation against the
+/// source family.
+fn mutant_action_type_changed() -> ProductionRefinementBundleV1 {
+    let mut bundle = canonical_bundle();
+    match &mut bundle.family_payloads[5] {
+        FamilyPayloadWireV1::GenericEquationAction { judgment, .. } => {
+            judgment.subject = unit_type();
+            judgment.ty = sort(0);
+        }
+        _ => panic!("unexpected payload shape"),
+    }
+    bundle
+}
+
 // --- Committed Agda literals ------------------------------------------------
 
 const AGDA_VECTOR_MODULE: &str = concat!(
@@ -750,6 +928,10 @@ const AGDA_SEMANTIC_MODULE: &str = concat!(
 const AGDA_TYPING_MODULE: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/../pen-semantic-audit/agda/LawV2/Wire/TypingReplayTestV1.agda"
+);
+const AGDA_INVENTORY_MODULE: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../pen-semantic-audit/agda/LawV2/Wire/InventoryReplayTestV1.agda"
 );
 
 fn committed_agda_literal(path: &str, header: &str) -> Vec<u8> {
@@ -1065,6 +1247,46 @@ fn typing_mutants_are_structurally_valid_and_pinned() {
     }
 }
 
+/// The inventory mutants are structurally valid AND pass both the
+/// semantic replay and the typing replay; the committed Agda inventory
+/// module proves each fails the Phase F inventory layer.
+#[test]
+fn inventory_mutants_are_structurally_valid_and_pinned() {
+    for (bundle, header) in [
+        (mutant_fresh_ill_typed(), "mutant-fresh-ill-typed-v1 ="),
+        (mutant_fresh_owner_bodyful(), "mutant-fresh-owner-bodyful-v1 ="),
+        (
+            mutant_fresh_duplicate_pair(),
+            "mutant-fresh-duplicate-pair-v1 =",
+        ),
+        (
+            mutant_seed_subject_mismatch(),
+            "mutant-seed-subject-mismatch-v1 =",
+        ),
+        (
+            mutant_seed_type_convertible(),
+            "mutant-seed-type-convertible-v1 =",
+        ),
+        (
+            mutant_application_subject_mismatch(),
+            "mutant-application-subject-mismatch-v1 =",
+        ),
+        (
+            mutant_application_context_mismatch(),
+            "mutant-application-context-mismatch-v1 =",
+        ),
+        (mutant_action_type_changed(), "mutant-action-type-changed-v1 ="),
+    ] {
+        let bytes =
+            encode_bundle_v1(&bundle).expect("inventory mutant must stay structurally valid");
+        assert_eq!(
+            bytes,
+            committed_agda_literal(AGDA_INVENTORY_MODULE, header),
+            "committed inventory mutant literal must match: {header}"
+        );
+    }
+}
+
 // --- Literal regeneration helper --------------------------------------------
 
 fn agda_literal(bytes: &[u8]) -> String {
@@ -1122,6 +1344,29 @@ fn regenerate_agda_literals() {
             mutant_supplement_derived_context(),
             "mutant-supplement-derived-context-v1",
         ),
+        (mutant_fresh_ill_typed(), "mutant-fresh-ill-typed-v1"),
+        (mutant_fresh_owner_bodyful(), "mutant-fresh-owner-bodyful-v1"),
+        (
+            mutant_fresh_duplicate_pair(),
+            "mutant-fresh-duplicate-pair-v1",
+        ),
+        (
+            mutant_seed_subject_mismatch(),
+            "mutant-seed-subject-mismatch-v1",
+        ),
+        (
+            mutant_seed_type_convertible(),
+            "mutant-seed-type-convertible-v1",
+        ),
+        (
+            mutant_application_subject_mismatch(),
+            "mutant-application-subject-mismatch-v1",
+        ),
+        (
+            mutant_application_context_mismatch(),
+            "mutant-application-context-mismatch-v1",
+        ),
+        (mutant_action_type_changed(), "mutant-action-type-changed-v1"),
     ] {
         let bytes = encode_bundle_v1(&bundle).expect("mutant encodes");
         println!("-- {name} ({} bytes)", bytes.len());
