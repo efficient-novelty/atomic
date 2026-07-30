@@ -90,6 +90,35 @@ An external decoder may later identify the anonymous output with familiar
 mathematical structures. That decoder must not influence generation,
 acceptance, quotienting, or halt.
 
+### 1.1a Division of labor (registered 2026-07-30)
+
+The program's fixed philosophical input is the two-law architecture:
+there must be two irreducible laws, one for admissibility (constitutive)
+and one for selection (actualization). The program's objective is to
+reverse engineer known physics — with the historical Genesis sequence
+and recognizable physical structures as held-out evidence — to find
+strong candidates for a precise and philosophically meaningful
+articulation of those two laws.
+
+Everything below that commitment is research-internal. Specific
+formulation questions (for example the Phase K0 trigger condition,
+interface statements, ledger composition, and fragment routes) are the
+program's own questions, to be resolved inside the program by its own
+discipline, not by consulting the held-out evidence and not by
+deferring to external preference. The resolution procedure for such
+questions is:
+
+1. resolve by argument from the already-registered principles (the
+   constitutive requirements and their consequences), never by which
+   choice produces an anticipated discharger;
+2. document the rationale and submit it to adversarial review before
+   the freeze; and
+3. where the registered principles genuinely underdetermine a choice,
+   either carry the alternatives as branching profiles or register the
+   underdetermination itself — mirroring, at the meta level, the
+   Selective Law's demand that silence be proved rather than papered
+   over.
+
 ### 1.2 First realistic theorem target
 
 The first realistic target is B2, trace-blind discovery over a fixed anonymous
@@ -804,10 +833,14 @@ product is REGISTERED AS A HELD-OUT PREDICTION in that document and
 must not inform demand compilation, generation, acceptance,
 quotienting, or halting. Work items before any live run: the formal
 target-neutral demand schema, the trigger condition, the
-least-universal-interface statement in the GF2 fragment, the kernel
-Sigma-fragment decision, adversarial review, and the pre-exposure
-freeze — all per §5.7 and §12.3. Formulation may proceed in parallel
-with the bridge; execution may not precede it.
+least-universal-interface statement in the GF2 fragment, the
+certificate-fragment decision, adversarial review, and the
+pre-exposure freeze — all per §5.7 and §12.3. Per §1.1a these
+formulation questions are research-internal: the program resolves them
+by argument from the registered principles under adversarial review,
+and registers any genuine underdetermination instead of resolving it
+by preference. Formulation may proceed in parallel with the bridge;
+execution may not precede it.
 
 ### Phase K — Resume autonomous Genesis research
 

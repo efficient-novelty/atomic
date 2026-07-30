@@ -15,6 +15,16 @@ held-out evidence rather than encoded targets. Philosophical motivation
 (the book's two-law architecture) is reference material; it must never
 enter the production dependency graph.
 
+Division of labor (registered 2026-07-30, plan §1.1a): the fixed
+philosophical input is only the two-law commitment itself — one law for
+admissibility, one for selection — together with the
+reverse-engineering objective. Every specific formulation question in
+this document is research-internal: the program resolves it by argument
+from the registered principles, under adversarial review, with genuine
+underdeterminations registered rather than resolved by preference. The
+questions in §6 are the program's own research questions, not items
+awaiting external adjudication.
+
 ## 2. The H3/H4 result, rediagnosed
 
 The frozen `gsc-inductive-completion-core-v1` profile produced exactly
@@ -127,7 +137,13 @@ semantic authority the lawful executable requires. Formulation,
 review, and freezing may proceed in parallel with the bridge;
 execution may not.
 
-## 6. Open design questions
+## 6. Open research questions (owned by the program)
+
+Each question below is to be resolved by argument from the registered
+principles — never by which answer produces the anticipated
+dischargers — with the rationale documented and adversarially reviewed
+before the freeze, and with genuine underdeterminations registered as
+such (carried as branching profiles where executable).
 
 1. Trigger condition: does the internalization debt attach at the
    sealing of the extension itself, or at the first act whose
