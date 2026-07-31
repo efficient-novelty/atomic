@@ -399,6 +399,165 @@ fn phase_g_capabilities_mint_over_genuine_bundle() {
     assert_eq!(agreement.transcript_bytes(), replay.rust_transcript());
 }
 
+/// The complete Phase H mint: the single private correspondence factory
+/// consumes the four bridge capabilities plus the pinned abstract and
+/// production Agda foundations, re-checks the complete identity surface
+/// and the actual bytes, and mints the four correspondence capabilities,
+/// the combined production refinement, and the combined typing
+/// metatheory in one call. Adversarial variants then show a mismatched
+/// verified input cannot mint. Requires the pinned local Agda runtime.
+#[test]
+#[ignore]
+fn phase_h_factory_mints_all_six_capabilities_over_genuine_bundle() {
+    let committed = committed_agda_literal(AGDA_VECTOR_MODULE, "canonical-vector-v1 =");
+    let decoded = decode_bundle_v1(&committed).expect("committed vector decodes");
+    let capabilities = genuine_capabilities();
+    let payload = ProductionBundlePayloadV1 {
+        contexts: decoded.contexts.clone(),
+        conversions: decoded.conversions.clone(),
+        conversion_typing_supplements: decoded.conversion_typing_supplements.clone(),
+        synthesis_codes: decoded.synthesis_codes.clone(),
+        fresh_rule_schemas: decoded.fresh_rule_schemas.clone(),
+        family_payloads: decoded.family_payloads.clone(),
+    };
+    let bundle = build_canonical_production_bundle_v1(
+        &capabilities.manifest_v3,
+        &capabilities.signature,
+        &capabilities.slots,
+        &capabilities.bridge,
+        &capabilities.delta_policy,
+        &capabilities.synthesis,
+        payload,
+    )
+    .expect("genuine canonical bundle");
+    let replay = pen_semantic_audit::verify_rust_production_replay_v1(&bundle)
+        .expect("independent Rust replay capability");
+    let acceptance = pen_semantic_audit::verify_agda_production_acceptance_v1(&bundle, &replay)
+        .expect("safe-Agda acceptance capability");
+    let agreement = pen_semantic_audit::verify_production_transcript_agreement_v1(
+        &bundle,
+        &acceptance,
+        &replay,
+    )
+    .expect("transcript agreement capability");
+    let AuditDecision::Proven(abstract_foundation) =
+        pen_semantic_audit::verify_pinned_lambda_unit_typing_foundation_v1()
+    else {
+        panic!("pinned abstract typing foundation");
+    };
+    let production_agda_foundation =
+        pen_semantic_audit::diagnose_pinned_production_refinement_agda_foundation_v1()
+            .expect("pinned production Agda foundation");
+
+    let input = pen_semantic_audit::ProductionCorrespondenceFactoryInputV1 {
+        manifest: &capabilities.manifest_v3,
+        kernel: &capabilities.kernel,
+        signature: &capabilities.signature,
+        abstract_foundation: &abstract_foundation,
+        production_agda_foundation: &production_agda_foundation,
+        delta_policy_binding: &capabilities.delta_policy,
+        bundle: &bundle,
+        acceptance: &acceptance,
+        replay: &replay,
+        agreement: &agreement,
+    };
+    let minted = pen_semantic_audit::mint_production_correspondences_v1(&input)
+        .expect("the single private factory mints over the genuine chain");
+
+    // The six capabilities are mutually bound to the one manifest,
+    // signature chain, and evidence core.
+    let manifest_digest = capabilities.manifest_v3.candidate_digest();
+    assert_eq!(
+        minted.production_refinement().semantic_manifest_digest(),
+        manifest_digest
+    );
+    assert_eq!(
+        minted.production_refinement().context_correspondence(),
+        minted.context_correspondence()
+    );
+    assert_eq!(
+        minted.production_refinement().conversion_correspondence(),
+        minted.conversion_correspondence()
+    );
+    assert_eq!(
+        minted.production_refinement().synthesis_correspondence(),
+        minted.synthesis_correspondence()
+    );
+    assert_eq!(
+        minted.production_refinement().inventory_correspondence(),
+        minted.inventory_correspondence()
+    );
+    assert_eq!(
+        minted
+            .context_correspondence()
+            .global_slot_table()
+            .digest(),
+        capabilities.slots.digest()
+    );
+    assert_eq!(
+        minted
+            .conversion_correspondence()
+            .predecessor_public_delta_policy()
+            .digest(),
+        capabilities.delta_policy.digest()
+    );
+    assert_eq!(
+        minted
+            .inventory_correspondence()
+            .rust_inventory_bridge()
+            .digest(),
+        capabilities.bridge.digest()
+    );
+    assert_eq!(
+        minted.synthesis_correspondence().context_correspondence(),
+        minted.context_correspondence()
+    );
+    assert_eq!(
+        minted.typing_metatheory().semantic_manifest_digest(),
+        manifest_digest
+    );
+    assert_eq!(
+        minted.typing_metatheory().kernel_protocol_digest(),
+        &capabilities.kernel.kernel_protocol_digest()
+    );
+    assert_eq!(
+        minted.typing_metatheory().synthesis_protocol_digest(),
+        &pen_kernel_synthesis::synthesis_protocol_digest_v2()
+    );
+
+    // The factory is deterministic: a second mint over the same inputs
+    // is the identical value.
+    let reminted = pen_semantic_audit::mint_production_correspondences_v1(&input)
+        .expect("deterministic remint");
+    assert_eq!(reminted, minted);
+
+    // Adversarial: a different verified signature (one extra bodyless
+    // declaration) cannot mint against the genuine bundle even though
+    // every capability is genuine.
+    let mut extended = declarations();
+    extended.push(Declaration {
+        id: wire_global(5),
+        ty: unit_type(),
+        body: None,
+    });
+    let other_signature = capabilities
+        .kernel
+        .verify_signature(&UncheckedSignature {
+            declarations: extended,
+        })
+        .expect("extended signature");
+    let mismatched = pen_semantic_audit::ProductionCorrespondenceFactoryInputV1 {
+        signature: &other_signature,
+        ..input
+    };
+    assert!(matches!(
+        pen_semantic_audit::mint_production_correspondences_v1(&mismatched),
+        Err(
+            pen_semantic_audit::ProductionCorrespondenceFactoryFailureV1::SignatureBindingMismatch
+        )
+    ));
+}
+
 /// Prints the six capability-derived digest fields as 32-byte arrays
 /// for `cross_language_vectors.rs`. Run manually after any capability
 /// or fixture change:

@@ -93,6 +93,64 @@ impl From<WireErrorV1> for ProductionWireBuilderFailureV1 {
     }
 }
 
+/// Derive the exact section-1 manifest surface from the verified
+/// capability chain. Shared by the canonical builder and the private
+/// correspondence factory so the factory's expectation is literally the
+/// builder's derivation, compared against independently decoded bytes.
+pub(crate) fn derive_manifest_surface_wire_v1(
+    manifest: &VerifiedSemanticAuditManifestV3,
+    inventory: &VerifiedProductionInventoryBridgeV1,
+    delta_policy: &VerifiedV3PredecessorPublicDeltaPolicyBindingV1,
+    synthesis: &VerifiedProductionSynthesisProtocolIdentityV2,
+) -> Result<V3CorrespondenceManifestWireV1, ProductionWireSlotFailureV1> {
+    let manifest_wire = manifest.manifest();
+    Ok(V3CorrespondenceManifestWireV1 {
+        semantic_schema_version: manifest_wire.schema_version,
+        profile_id: manifest_wire.profile_id.as_bytes().to_vec(),
+        semantic_manifest_digest: digest_wire_id(manifest.candidate_digest())?,
+        authority: ManifestAuthorityWireV1::GenericPrototypeOnly,
+        frozen: manifest_wire.frozen,
+        live_profile_a_access: manifest_wire.live_profile_a_access,
+        production_inventory_bridge_digest: digest_wire_id(inventory.digest())?,
+        public_universe_levels: manifest_wire.universe_levels.clone(),
+        checker_universe_levels: CHECKER_UNIVERSE_LEVELS_V1.to_vec(),
+        formation_witness_levels: FORMATION_WITNESS_LEVELS_V1.to_vec(),
+        maximum_context_entries: manifest_wire.maximum_context_entries,
+        synthesis_rule_inventory: EXACT_SYNTHESIS_INVENTORY_V1.to_vec(),
+        predecessor_delta_policy_binding_digest: digest_wire_id(delta_policy.digest())?,
+        synthesis_protocol_id: synthesis.protocol_id().as_bytes().to_vec(),
+        synthesis_schema_version: synthesis.schema_version(),
+    })
+}
+
+/// Derive the exact section-2 signature surface (signature, kernel
+/// protocol, slot-table digest, and predecessor-public delta entries)
+/// from the verified capability chain. Shared like
+/// [`derive_manifest_surface_wire_v1`].
+pub(crate) fn derive_signature_surface_wire_v1(
+    signature: &VerifiedSignature,
+    slots: &VerifiedGlobalSlotTableV1,
+    delta_policy: &VerifiedV3PredecessorPublicDeltaPolicyBindingV1,
+) -> Result<ProductionSignatureWireV1, ProductionWireSlotFailureV1> {
+    let allowed_transparent_deltas = delta_policy
+        .ledger_binding()
+        .exact_ordered_entries()
+        .iter()
+        .map(|entry| {
+            Ok(pen_production_wire::DeltaPolicyEntryWireV1 {
+                global_slot: entry.global_slot,
+                global_id_bytes: digest_wire_id(&entry.id.0)?,
+            })
+        })
+        .collect::<Result<Vec<_>, ProductionWireSlotFailureV1>>()?;
+    Ok(ProductionSignatureWireV1 {
+        signature_digest: digest_wire_id(signature.digest())?,
+        kernel_protocol_digest: digest_wire_id(slots.kernel_protocol_digest())?,
+        global_slot_table_digest: digest_wire_id(slots.digest())?,
+        allowed_transparent_deltas,
+    })
+}
+
 pub fn build_canonical_production_bundle_v1(
     manifest: &VerifiedSemanticAuditManifestV3,
     signature: &VerifiedSignature,
@@ -128,43 +186,15 @@ pub fn build_canonical_production_bundle_v1(
     }
 
     let global_slot_table = derive_global_slot_table_wire_v1(signature, slots)?;
-    let allowed_transparent_deltas = delta_policy
-        .ledger_binding()
-        .exact_ordered_entries()
-        .iter()
-        .map(|entry| {
-            Ok(pen_production_wire::DeltaPolicyEntryWireV1 {
-                global_slot: entry.global_slot,
-                global_id_bytes: digest_wire_id(&entry.id.0)?,
-            })
-        })
-        .collect::<Result<Vec<_>, ProductionWireSlotFailureV1>>()?;
-
     let bundle = ProductionRefinementBundleV1 {
         header: WireHeaderV1::canonical(),
-        manifest_surface: V3CorrespondenceManifestWireV1 {
-            semantic_schema_version: manifest_wire.schema_version,
-            profile_id: manifest_wire.profile_id.as_bytes().to_vec(),
-            semantic_manifest_digest: digest_wire_id(manifest.candidate_digest())?,
-            authority: ManifestAuthorityWireV1::GenericPrototypeOnly,
-            frozen: manifest_wire.frozen,
-            live_profile_a_access: manifest_wire.live_profile_a_access,
-            production_inventory_bridge_digest: digest_wire_id(inventory.digest())?,
-            public_universe_levels: manifest_wire.universe_levels.clone(),
-            checker_universe_levels: CHECKER_UNIVERSE_LEVELS_V1.to_vec(),
-            formation_witness_levels: FORMATION_WITNESS_LEVELS_V1.to_vec(),
-            maximum_context_entries: manifest_wire.maximum_context_entries,
-            synthesis_rule_inventory: EXACT_SYNTHESIS_INVENTORY_V1.to_vec(),
-            predecessor_delta_policy_binding_digest: digest_wire_id(delta_policy.digest())?,
-            synthesis_protocol_id: synthesis.protocol_id().as_bytes().to_vec(),
-            synthesis_schema_version: synthesis.schema_version(),
-        },
-        signature: ProductionSignatureWireV1 {
-            signature_digest: digest_wire_id(signature.digest())?,
-            kernel_protocol_digest: digest_wire_id(slots.kernel_protocol_digest())?,
-            global_slot_table_digest: digest_wire_id(slots.digest())?,
-            allowed_transparent_deltas,
-        },
+        manifest_surface: derive_manifest_surface_wire_v1(
+            manifest,
+            inventory,
+            delta_policy,
+            synthesis,
+        )?,
+        signature: derive_signature_surface_wire_v1(signature, slots, delta_policy)?,
         global_slot_table,
         contexts: payload.contexts,
         conversions: payload.conversions,

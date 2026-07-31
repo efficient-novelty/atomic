@@ -1,10 +1,11 @@
 # Autonomous Genesis: Plan and Status
 
-Date: 2026-07-30
+Date: 2026-07-30 (Phase H continuation recorded 2026-07-31)
 Repository: `pen-atomic`
-Working branch: `codex/law-v2-kernel-cost-v2-inventory`
+Working branch: `codex/law-v2-agda-wire-sections-5-11`
 Status basis: committed history through `a3e30d5` plus the canonical-wire and
-safe-Agda work present in this branch on 2026-07-30
+safe-Agda work present in this branch on 2026-07-30, and the Phase H
+single private correspondence factory implemented on 2026-07-31
 
 ## Executive summary
 
@@ -112,8 +113,32 @@ constructors: `VerifiedRustProductionReplayV1` from the replay,
 a generated package whose acceptance entry forces all four semantic
 verdicts and the transcript agreement at type-check time, and
 `VerifiedProductionTranscriptAgreementV1` from actual byte comparisons
-with digests recorded only afterwards. The remaining frontier is the
+with digests recorded only afterwards. The remaining frontier was the
 single private correspondence factory (Phase H).
+
+Phase H is now also implemented (2026-07-31). The single private
+correspondence factory is a child module of the theorem boundary, so
+the Rust module system itself guarantees no second construction site
+for the correspondence capabilities. It consumes the four bridge
+capabilities plus the pinned abstract and production Agda foundations,
+re-checks the complete identity surface — exact V3 manifest, one
+manifest and one bundle identity across all capabilities, the
+agreement's binding to the exact capability instances, actual
+byte equality of every retained bundle and transcript array, digest
+recomputation from those bytes, signature/slot-table/kernel/synthesis
+protocol identity, the delta-policy binding, a fresh unchanged-kernel
+replay with the transcript re-rendered and byte-compared, a fresh
+structural decode, re-derivation of wire sections 1–3 and the exact
+inventories from the capability chain, the exact accepted-section
+mask, and re-derivation of the generated acceptance package identity —
+and only then mints, in one deterministic call, the four
+correspondence capabilities, `VerifiedLambdaUnitProductionRefinementV1`,
+and `VerifiedLambdaUnitTypingMetatheoryV1`. The end-to-end mint over
+the genuine builder-derived bundle passes under the pinned local Agda
+runtime, remint is bit-deterministic, and a mismatched verified
+signature is rejected. The canonical bridge frontier is now empty; the
+next ordered work is the Phase I native V3 carrier, with the additive
+canonicality theorems and the Phase K0 formulation lawful in parallel.
 
 ## 1. Objective hierarchy
 
@@ -848,12 +873,70 @@ The canonical authority frontier is now exactly
 acceptance, independent Rust kernel replay, and exact normalized
 transcript byte agreement moved to the completed prerequisites.
 
-### 2.17 Current validation snapshot
+### 2.17 Phase H single private correspondence factory implemented on 2026-07-31
+
+`production_correspondence_factory.rs` closes the last bridge
+obligation. Design and discipline:
+
+- single construction site by construction: the factory is mounted as
+  a child module of `production_refinement_theorem`, the only position
+  in the crate from which the private fields of the four
+  correspondence capabilities and the combined refinement are
+  reachable, so the Rust module system — not reviewer vigilance —
+  rules out a second mint path. Two `compile_fail` doc tests pin the
+  privacy boundary from outside the crate. The combined typing
+  metatheory is minted through a crate-private continuation
+  constructor in `typing_metatheory.rs` that structurally requires all
+  four correspondence capabilities, so it is unreachable without the
+  factory having succeeded;
+- the factory consumes the verified canonical bundle, verified Agda
+  acceptance, verified Rust replay, verified transcript agreement, the
+  exact V3 manifest, kernel, verified signature, predecessor-public
+  delta-policy binding, and the two pinned Agda foundations, and
+  re-checks rather than trusts: one manifest and one bundle identity
+  across all capabilities; the agreement's binding to the exact
+  presented capability instances; actual byte equality of the four
+  retained bundle arrays and three retained transcript arrays; digest
+  recomputation from those actual bytes; signature, re-derived
+  slot-table, kernel-protocol, and synthesis-protocol-V2 identity;
+  the delta-policy binding to manifest, signature, and slot table; the
+  public-sort successor and inventory-bridge prerequisites; a fresh
+  unchanged-kernel replay of the canonical bytes with the canonical
+  transcript re-rendered from the fresh artifacts and byte-compared;
+  a fresh structural decode (full validation plus canonical
+  re-encoding); re-derivation of wire sections 1–3 and the exact
+  Q0/family inventories from the capability chain against the decoded
+  bytes; the exact accepted-section mask; and re-derivation of the
+  generated acceptance package (input artifact round trip, source-tree
+  digest, and expected pinned-checker transcript). Every check is
+  fail-closed with its own failure variant; no digest, Boolean, tag,
+  or caller assertion is accepted as evidence;
+- only after all checks pass does it mint, in dependency order, the
+  four correspondence capabilities (each theorem-family digest a
+  domain-separated digest over the factory's evidence core, recorded
+  after the byte comparisons), the combined
+  `VerifiedLambdaUnitProductionRefinementV1`, and the combined
+  `VerifiedLambdaUnitTypingMetatheoryV1`, whose four production
+  obligations are discharged by exactly the four correspondences and
+  whose synthesis-protocol identity is the V2 implementation digest
+  the evidence actually replays;
+- the capability-free diagnostics are unchanged and still fail closed
+  (`MissingProductionCorrespondences`, and the metatheory frontier for
+  callers without capabilities); the wire-authority obligation ledger
+  moves `SinglePrivateCorrespondenceFactory` to the completed
+  prerequisites and the canonical bridge frontier is now empty; and
+- the ignored end-to-end test mints all six capabilities over the
+  genuine builder-derived bundle under the pinned Agda 2.8.0 runtime,
+  proves the mint deterministic on remint, and pins the adversarial
+  rejection of a mismatched verified signature.
+
+### 2.18 Current validation snapshot
 
 At this checkpoint:
 
 - `pen-production-wire`: 7 unit and 6 cross-language pinning tests passed;
-- `pen-semantic-audit --lib`: 168 passed, 6 ignored, 0 failed; the
+- `pen-semantic-audit --lib`: 168 passed, 6 ignored, 0 failed, plus two
+  `compile_fail` doc tests pinning the capability privacy boundary; the
   `canonical_bundle_vectors` integration suite proves the committed
   canonical vector builder-derived and replayed, and the
   `production_replay_vectors` suite pins replay acceptance of the
@@ -861,8 +944,11 @@ At this checkpoint:
   mutants, and the Rust transcript against the committed Agda literal;
 - the ignored external-gate suite (pinned Agda 2.8.0) passes locally,
   including the end-to-end
-  `phase_g_capabilities_mint_over_genuine_bundle` mint of all three
-  bridge capabilities;
+  `phase_g_capabilities_mint_over_genuine_bundle` mint of the three
+  bridge capabilities and the Phase H
+  `phase_h_factory_mints_all_six_capabilities_over_genuine_bundle`
+  mint of the four correspondence capabilities, the production
+  refinement, and the typing metatheory;
 - the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`,
   `BundleDecodeTestV1`, `ContextCorrespondenceV1`,
   `ContextTranscriptTestV1`, `NormalizationV1`, `SemanticReplayV1`,
@@ -947,8 +1033,8 @@ canonicality theorems are additive.
 
 ### Phase D — Prove finite context/global correspondence
 
-Status: theorem layer complete as of 2026-07-30; capability minting
-remains deferred to the Phase H factory.
+Status: theorem layer complete as of 2026-07-30; the capability is
+minted by the Phase H factory as of 2026-07-31.
 
 Completed:
 
@@ -975,16 +1061,16 @@ Completed:
   byte-for-byte on the fixture (development pin, not the Phase G
   versioned transcript).
 
-Remaining for this phase's exit gate: `VerifiedFiniteContextCorrespondenceV1`
-is minted only by the private factory once Phases E–G supply the other
+Exit gate discharged 2026-07-31: `VerifiedFiniteContextCorrespondenceV1`
+is minted only by the private factory (Phase H) with the other
 correspondence legs; the 32-byte `GlobalId`-to-slot binding stays in the
 verified Rust slot table and is bound at the capability, not in `PSig`.
 
 ### Phase E — Implement the combined conversion/synthesis checker
 
 Status: theorem layer complete as of 2026-07-30 (semantic replay core
-plus the typing-judgment bridge); capability minting remains deferred
-to the Phase H factory.
+plus the typing-judgment bridge); the capabilities are minted by the
+Phase H factory as of 2026-07-31.
 
 Conversion work completed:
 
@@ -1055,15 +1141,15 @@ Synthesis work completed:
   metatheory, which belongs to the typing-metatheory program, not to
   this phase's checker obligations.
 
-Exit gates (unchanged, deferred to the Phase H factory):
+Exit gates (discharged by the Phase H factory on 2026-07-31):
 
 - `VerifiedKernelBaseConversionCorrespondenceV1`; and
 - `VerifiedSynthesisCodeCorrespondenceV1`.
 
 ### Phase F — Complete Q0, fresh-rule, and family correspondence
 
-Status: theorem layer complete as of 2026-07-30 (§2.15); capability
-minting remains deferred to the Phase H factory.
+Status: theorem layer complete as of 2026-07-30 (§2.15); the
+capability is minted by the Phase H factory as of 2026-07-31.
 
 Completed:
 
@@ -1097,7 +1183,7 @@ Registered gaps for later phases: the wire's dropped
 `hole_ordinal`/`context_witness` (the action rewrite-step relation is
 Phase J rewrite authority) and per-tree judgment contexts.
 
-Exit gate (unchanged, deferred to the Phase H factory):
+Exit gate (discharged by the Phase H factory on 2026-07-31):
 `VerifiedV3InventoryCorrespondenceV1`.
 
 ### Phase G — Independent replay and canonical transcript agreement
@@ -1133,27 +1219,37 @@ end-to-end test under the pinned Agda runtime):
 
 ### Phase H — Single private minting factory
 
-Status: capability shapes exist; factory cannot yet succeed.
+Status: implemented as of 2026-07-31 (§2.17); both exit-gate
+capabilities mint end-to-end over the genuine builder-derived bundle
+under the pinned local Agda runtime.
 
-The only successful factory must consume:
+Completed:
 
-- the verified canonical bundle;
-- verified Agda acceptance;
-- verified Rust replay; and
-- verified exact transcript agreement.
+- the single factory (`production_correspondence_factory.rs`, a child
+  module of the theorem boundary, so the module system rules out any
+  second construction site) consumes exactly the required inputs: the
+  verified canonical bundle, verified Agda acceptance, verified Rust
+  replay, and verified exact transcript agreement, plus the exact V3
+  manifest, kernel, verified signature, delta-policy binding, and the
+  two pinned Agda foundations;
+- it checks exact V3 manifest, signature, re-derived slot table,
+  kernel protocol, synthesis protocol, delta policy, re-derived
+  acceptance-package source tree and checker transcript, exact
+  accepted sections, exact inventories, and actual byte equality —
+  plus a fresh unchanged-kernel replay with a re-rendered,
+  byte-compared transcript — before minting anything; and
+- it mints the four correspondence capabilities and both exit-gate
+  capabilities in one deterministic call, pinned by the ignored
+  end-to-end test with an adversarial mismatched-signature rejection.
 
-It must check exact V3 manifest, signature, slot table, kernel protocol,
-synthesis protocol, delta policy, source tree, accepted sections, inventories,
-and actual byte equality before minting the four correspondence capabilities.
-
-Exit gates:
+Exit gates (discharged 2026-07-31):
 
 - `VerifiedLambdaUnitProductionRefinementV1`; and
 - `VerifiedLambdaUnitTypingMetatheoryV1`.
 
 ### Phase I — Native V3 carrier and subject completeness
 
-Status: deliberately blocked behind Phase H.
+Status: unblocked as of 2026-07-31 (Phase H discharged); not started.
 
 Work:
 
@@ -1446,10 +1542,8 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. the single private minting factory (Phase H), consuming the four
-   bridge capabilities and minting the four correspondence
-   capabilities plus production refinement and the stronger typing
-   metatheory.
+2. the Phase I native V3 carrier and carrier-derived subject
+   completeness, now unblocked by the discharged bridge.
 
 Item 1 is additive; item 2 is the ordered theorem frontier. Complete
 safe Agda decoding and structural checking for sections 5–11, the
@@ -1464,17 +1558,23 @@ naturality transport), and the Phase G independent replay, versioned
 transcript, and capability bridge (builder-derived canonical vector,
 unchanged-kernel Rust replay with the Rust-side supplement discharge,
 byte-identical cross-language transcripts, and the three deterministic
-capability constructors) were discharged on 2026-07-30.
+capability constructors) were discharged on 2026-07-30. The Phase H
+single private correspondence factory — minting the four
+correspondence capabilities, production refinement, and the stronger
+typing metatheory from the four bridge capabilities — was discharged
+on 2026-07-31.
 
-In parallel with the bridge (and lawful at any time, since it exposes
-nothing to the registered prefix), the Phase K0
-contextual-internalization formulation may proceed: the target-neutral
-demand schema, trigger condition, least-universal-interface statement,
-kernel-fragment decision, adversarial review, and pre-exposure freeze.
-Its execution remains blocked behind Phases E–H without exception.
+In parallel (and lawful at any time, since it exposes nothing to the
+registered prefix), the Phase K0 contextual-internalization
+formulation may proceed: the target-neutral demand schema, trigger
+condition, least-universal-interface statement, kernel-fragment
+decision, adversarial review, and pre-exposure freeze. Its execution
+remains blocked behind the formulation freeze without exception.
 
-The work must stop before native carrier construction or live-profile
-authority if any of those gates remains unavailable.
+The work must still stop before live-profile authority, Profile A
+adapters, or any Phase J rewrite/quotient/audit authority: those gates
+remain unavailable until the Phase I carrier and the Phase J theorem
+sequence are complete.
 
 ## 7. Definition of success for the current plan
 
@@ -1492,6 +1592,15 @@ The current production-refinement plan is complete only when:
 - no authority has been borrowed from Profile A, the native carrier, a
   reference trace, or a caller-provided digest.
 
-That result would not yet prove the full autonomous Genesis theorem, but it
-would remove the most important cross-language trust gap currently blocking
-the semantic and rewrite layers.
+As of 2026-07-31 every bullet is discharged: the complete chain from
+builder-derived canonical bytes through the byte-agreed transcripts to
+the six factory-minted capabilities passes end-to-end under the pinned
+local Agda runtime, with the mint pinned by the ignored external-gate
+tests and no authority borrowed from any excluded source.
+
+This result does not prove the full autonomous Genesis theorem, but it
+removes the cross-language trust gap that was blocking the semantic
+and rewrite layers. The remaining additive canonicality theorems
+(§Phase C) stay open, and the registered typing-metatheory frontier
+(`full-eight-constructor-decoded-soundness-not-yet-derivable`) remains
+a named abstract-module obligation outside the bridge.

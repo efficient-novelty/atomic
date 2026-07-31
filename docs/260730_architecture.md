@@ -483,6 +483,13 @@ several layers.
 - `production_refinement_theorem.rs`: Agda foundation, synthesis identity,
   predecessor-public delta binding, opaque correspondence types, and the
   aggregate fail-closed diagnostic;
+- `production_correspondence_factory.rs`: the Phase H single private
+  correspondence factory, mounted as a child module of
+  `production_refinement_theorem` so the module system itself rules
+  out a second construction site; consumes the four bridge
+  capabilities and mints the four correspondences, production
+  refinement, and the typing metatheory after re-checking the complete
+  identity surface and the actual bytes;
 - `production_refinement_wire_authority.rs`: exact-byte capability
   frontier plus the three Phase G bridge constructors (Rust replay,
   pinned-Agda generated-package acceptance, transcript agreement);
@@ -974,15 +981,16 @@ No expected theorem result or transcript is embedded beside the bytes.
 
 ### 8.1 Opaque capabilities
 
-The current bridge reserves four non-deserializable capability types:
+The bridge defines four non-deserializable capability types:
 
 - `VerifiedCanonicalProductionBundleV1`;
 - `VerifiedAgdaProductionAcceptanceV1`;
 - `VerifiedRustProductionReplayV1`; and
 - `VerifiedProductionTranscriptAgreementV1`.
 
-The final private factory will consume all four and be the only constructor
-for:
+The single private factory
+(`production_refinement_theorem::correspondence_factory`, Phase H)
+consumes all four and is the only constructor for:
 
 - `VerifiedFiniteContextCorrespondenceV1`;
 - `VerifiedKernelBaseConversionCorrespondenceV1`;
@@ -990,6 +998,13 @@ for:
 - `VerifiedV3InventoryCorrespondenceV1`;
 - `VerifiedLambdaUnitProductionRefinementV1`; and
 - `VerifiedLambdaUnitTypingMetatheoryV1`.
+
+Single-constructor status is compiler-enforced, not conventional: the
+factory is the only child of the module holding the private capability
+fields, `compile_fail` doc tests pin the privacy boundary from outside
+the crate, and the typing metatheory is reachable only through a
+crate-private continuation constructor that structurally requires all
+four factory-only correspondence capabilities.
 
 ### 8.2 Authority ordering
 
@@ -1220,7 +1235,11 @@ As of this document:
   nineteen committed mutants at the replay, and pin the Rust
   transcript against the committed Agda literal; the ignored
   external-gate suite (pinned Agda 2.8.0) passes locally including
-  the end-to-end Phase G capability mint;
+  the end-to-end Phase G capability mint and the Phase H factory mint
+  of all six correspondence/refinement/metatheory capabilities with
+  its adversarial mismatched-signature rejection; two `compile_fail`
+  doc tests pin the capability privacy boundary from outside the
+  crate;
 - safe Agda wire, context-checker, bundle-checker, encode,
   correspondence, semantic-replay, typing-replay, supplement, bridge,
   inventory, transcript-render, and cross-language vector modules:
@@ -1346,8 +1365,19 @@ Implemented:
   (`production_transcript.rs` / `TranscriptRenderV1.agda`) rendered
   independently by both sides and byte-agreed by refl; and the three
   deterministic capability constructors with the pinned-Agda
-  generated-package acceptance gate. The canonical authority frontier
-  is now exactly the single private correspondence factory.
+  generated-package acceptance gate.
+
+- the Phase H single private correspondence factory
+  (`production_correspondence_factory.rs`): a child module of the
+  theorem boundary consuming the four bridge capabilities plus the
+  pinned foundations, re-checking the complete identity surface, the
+  actual bundle and transcript bytes, a fresh unchanged-kernel replay
+  with a re-rendered byte-compared transcript, the re-derived wire
+  surfaces, and the re-derived acceptance-package identity, then
+  minting the four correspondence capabilities, production refinement,
+  and the typing metatheory in one deterministic call. The canonical
+  bridge frontier is empty; the ordered frontier is the Phase I native
+  carrier.
 
 Not yet implemented:
 
@@ -1360,8 +1390,6 @@ Not yet implemented:
 - the equation-action rewrite-step relation (the wire drops
   `hole_ordinal`/`context_witness`; Phase J rewrite authority) and
   carrier-derived constructor-set coverage for fresh rules;
-- the single successful correspondence factory;
-- production refinement and stronger typing metatheory;
 - native V3 carrier and carrier-derived subject completeness;
 - verified rewrite system, quotient, weakening/marginals, provenance, SR2,
   adoption, freeze, and live Profile A adapter.

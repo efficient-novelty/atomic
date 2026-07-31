@@ -5,13 +5,26 @@
 //! declaration-order global slots, the advertised synthesis protocol V2
 //! identity, the exact Rust inventory bridge, and two pinned safe-Agda
 //! foundation packages. None of those facts proves Rust/Agda correspondence.
-//! The four requested correspondence capabilities therefore have no
-//! constructor or deserialization path, and the combined production
-//! refinement is never minted here.
+//! The four correspondence capabilities therefore have no deserialization
+//! path, and nothing in this module mints them: their private fields are
+//! reachable only from the child module
+//! [`correspondence_factory`], the single private Phase H factory, which
+//! mints them exclusively from the four bridge capabilities (canonical
+//! bundle, safe-Agda acceptance, independent Rust replay, and exact
+//! transcript agreement). The capability-free diagnostics below continue to
+//! stop at [`LambdaUnitProductionRefinementFailureV1::MissingProductionCorrespondences`]:
+//! their frontier list is call-relative — a caller that presents no bridge
+//! capabilities still has every correspondence unresolved.
 //!
 //! Generic certificate-checker soundness is deliberately separate from
 //! carrier-derived finite subject coverage. This module neither defines nor
 //! issues native-carrier authority.
+
+/// The single private Phase H correspondence factory. Mounted as a child
+/// module so the Rust module system itself guarantees no second
+/// construction site for the correspondence capabilities exists.
+#[path = "production_correspondence_factory.rs"]
+pub mod correspondence_factory;
 
 use crate::agda_gate::{
     AgdaReferenceFailureV1, FixedAgdaSourceV1, VerifiedFixedAgdaPackageV1,

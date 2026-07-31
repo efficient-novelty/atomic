@@ -4,12 +4,16 @@
 //! The fixed package proves a conversion-free declarative calculus with
 //! abstract variables, relational synthesis soundness/completeness, dependent
 //! simultaneous substitution, binder lifting, and typed beta/closed-delta/
-//! fresh-schema stability. It does **not** yet prove that those codes coincide
-//! with the production oldest-first finite de-Bruijn contexts, kernel
-//! conversion/normalization, synthesis derivation codes, or exact Q0/family
-//! inventories. Consequently this module mints only
-//! [`VerifiedLambdaUnitTypingFoundationV1`]; the combined
-//! [`VerifiedLambdaUnitTypingMetatheoryV1`] remains unconstructible.
+//! fresh-schema stability. It does **not** itself prove that those codes
+//! coincide with the production oldest-first finite de-Bruijn contexts,
+//! kernel conversion/normalization, synthesis derivation codes, or exact
+//! Q0/family inventories. Consequently this module's public verifiers mint
+//! only [`VerifiedLambdaUnitTypingFoundationV1`]; the combined
+//! [`VerifiedLambdaUnitTypingMetatheoryV1`] is minted exclusively through
+//! the crate-private Phase H continuation constructor below, which
+//! structurally requires all four production correspondence capabilities —
+//! themselves constructible only by the single private correspondence
+//! factory — so the factory remains the sole effective mint path.
 
 use crate::agda_gate::{
     AgdaReferenceFailureV1, FixedAgdaSourceV1, VerifiedFixedAgdaPackageV1,
@@ -18,6 +22,10 @@ use crate::agda_gate::{
 use crate::manifest::{
     AuditDecision, AuditUnknownReason, SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V3,
     VerifiedSemanticAuditManifestV3,
+};
+use crate::production_refinement_theorem::{
+    VerifiedFiniteContextCorrespondenceV1, VerifiedKernelBaseConversionCorrespondenceV1,
+    VerifiedSynthesisCodeCorrespondenceV1, VerifiedV3InventoryCorrespondenceV1,
 };
 use pen_kernel::{CanonicalEncode, CanonicalEncoder, Digest, Kernel};
 
@@ -391,6 +399,103 @@ pub fn verify_lambda_unit_typing_metatheory_v1(
             AuditDecision::Unknown(AuditUnknownReason::MissingLambdaUnitTypingMetatheory)
         }
     }
+}
+
+/// Phase H continuation constructor: mint the combined typing
+/// metatheory from the four production correspondence capabilities.
+///
+/// This is deliberately `pub(crate)` and consumes the four
+/// correspondence capabilities, which have no constructor outside the
+/// single private correspondence factory
+/// (`production_refinement_theorem::correspondence_factory`). A caller
+/// therefore cannot reach this function without the factory having
+/// succeeded over one canonical bundle; the factory is the only caller.
+/// Each of the four typing-production obligations in
+/// [`TYPING_PRODUCTION_CORRESPONDENCE_FRONTIER_V1`] is discharged by the
+/// corresponding capability:
+///
+/// - `OldestFirstFiniteDeBruijnContexts` by the finite-context
+///   correspondence;
+/// - `KernelConversionAndNormalization` by the base-conversion
+///   correspondence;
+/// - `RustSynthesisTermAndDerivationCodes` by the synthesis-code
+///   correspondence; and
+/// - `TypedQ0AndFamilyInventories` by the V3 inventory correspondence.
+///
+/// The four theorem digests bind the factory's evidence-core digest and
+/// the discharging capability digests; they are recorded only after the
+/// factory's actual byte comparisons succeeded. The synthesis protocol
+/// digest is the protocol V2 implementation digest — the protocol the
+/// correspondence evidence actually replays — not the historical V1
+/// digest the pre-H diagnostic bound and discarded.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn mint_lambda_unit_typing_metatheory_from_production_correspondences_v1(
+    manifest: &VerifiedSemanticAuditManifestV3,
+    kernel: &Kernel,
+    foundation: &VerifiedLambdaUnitTypingFoundationV1,
+    context: &VerifiedFiniteContextCorrespondenceV1,
+    conversion: &VerifiedKernelBaseConversionCorrespondenceV1,
+    synthesis: &VerifiedSynthesisCodeCorrespondenceV1,
+    inventory: &VerifiedV3InventoryCorrespondenceV1,
+    synthesis_protocol_digest: &Digest,
+    correspondence_evidence_digest: &Digest,
+) -> VerifiedLambdaUnitTypingMetatheoryV1 {
+    let theorem_digest = |domain: &str, discharging: &[&Digest]| {
+        let mut encoder = CanonicalEncoder::new();
+        encoder.u16(1);
+        correspondence_evidence_digest.encode_canonical(&mut encoder);
+        encoder.u64(discharging.len() as u64);
+        for digest in discharging {
+            digest.encode_canonical(&mut encoder);
+        }
+        Digest::of_domain_bytes(domain, encoder.as_bytes())
+    };
+    let mut verified = VerifiedLambdaUnitTypingMetatheoryV1 {
+        semantic_manifest_digest: manifest.candidate_digest().clone(),
+        kernel_protocol_digest: kernel.kernel_protocol_digest(),
+        synthesis_protocol_digest: synthesis_protocol_digest.clone(),
+        typing_rule_inventory_digest: fixed_inventory_digest(
+            "pen-semantic-audit/lambda-unit-typing-rule-inventory/v1",
+            ABSTRACT_TYPING_RULE_INVENTORY,
+        ),
+        substitution_rule_inventory_digest: fixed_inventory_digest(
+            "pen-semantic-audit/lambda-unit-substitution-rule-inventory/v1",
+            ABSTRACT_SUBSTITUTION_THEOREM_INVENTORY,
+        ),
+        q0_schema_inventory_digest: Digest::of_canonical(
+            "pen-semantic-audit/lambda-unit-q0-schema-inventory/v3",
+            &CanonicalSlice(&manifest.manifest().q0_rules),
+        ),
+        family_constructor_inventory_digest: Digest::of_canonical(
+            "pen-semantic-audit/lambda-unit-family-constructor-inventory/v3",
+            &CanonicalSlice(&manifest.manifest().ordered_derivation_rules),
+        ),
+        synthesis_soundness_digest: theorem_digest(
+            "pen-semantic-audit/lambda-unit-metatheory/synthesis-soundness/v1",
+            &[synthesis.digest(), context.digest()],
+        ),
+        synthesis_completeness_digest: theorem_digest(
+            "pen-semantic-audit/lambda-unit-metatheory/synthesis-completeness/v1",
+            &[synthesis.digest()],
+        ),
+        substitution_typing_digest: theorem_digest(
+            "pen-semantic-audit/lambda-unit-metatheory/substitution-typing/v1",
+            &[context.digest()],
+        ),
+        reduction_stability_digest: theorem_digest(
+            "pen-semantic-audit/lambda-unit-metatheory/reduction-stability/v1",
+            &[conversion.digest(), inventory.digest()],
+        ),
+        agda_source_tree_digest: foundation.agda_source_tree_digest.clone(),
+        agda_checker_transcript_digest: foundation.agda_checker_transcript_digest.clone(),
+        pinned_agda_package_digest: foundation.pinned_agda_package_digest.clone(),
+        digest: Digest::of_bytes(b"pending lambda/unit typing metatheory"),
+    };
+    verified.digest = Digest::of_canonical(
+        "pen-semantic-audit/verified-lambda-unit-typing-metatheory/v1",
+        &verified,
+    );
+    verified
 }
 
 fn foundation_from_package(

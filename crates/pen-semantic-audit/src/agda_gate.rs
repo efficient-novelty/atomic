@@ -453,6 +453,34 @@ pub(crate) fn diagnose_generated_agda_package_v1(
     )
 }
 
+/// Deterministic recomputation of the source-tree digest the pinned
+/// package gate records for an exact package source list. The private
+/// correspondence factory uses this to re-derive — from the actual
+/// canonical bundle and transcript bytes it has already byte-compared —
+/// the source-tree identity a genuine acceptance run must carry. It
+/// performs no checking and mints nothing.
+pub(crate) fn package_source_tree_digest_v1(sources: &[PackageSourceV1]) -> Digest {
+    let views = sources.iter().map(PackageSourceV1::view).collect::<Vec<_>>();
+    fixed_package_source_tree_digest(&views)
+}
+
+/// Deterministic recomputation of the canonical checker-stdout
+/// transcript the pinned package gate records for an exact package
+/// source list: one `Checking <module> (<private-source>).` line per
+/// source, in package order. The gate rejects any run whose stdout does
+/// not normalize to exactly this sequence, so the expected transcript
+/// digest is fully determined by the source list.
+pub(crate) fn package_expected_checker_transcript_v1(sources: &[PackageSourceV1]) -> String {
+    let mut canonical = String::new();
+    for source in sources {
+        let view = source.view();
+        canonical.push_str("Checking ");
+        canonical.push_str(view.module_name);
+        canonical.push_str(" (<private-source>).\n");
+    }
+    canonical
+}
+
 fn diagnose_agda_package_views_v1(
     sources: &[AgdaSourceViewV1<'_>],
     entry_relative_path: &str,

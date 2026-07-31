@@ -130,6 +130,10 @@ pub use production_refinement::{
     diagnose_global_slot_table_v1, verify_global_slot_table_v1,
     verify_lambda_unit_public_sort_successors_v1,
 };
+pub use production_refinement_theorem::correspondence_factory::{
+    MintedProductionCorrespondencesV1, ProductionCorrespondenceFactoryFailureV1,
+    ProductionCorrespondenceFactoryInputV1, mint_production_correspondences_v1,
+};
 pub use production_refinement_theorem::{
     LAMBDA_UNIT_PRODUCTION_REFINEMENT_SCHEMA_VERSION_V1, LambdaUnitProductionRefinementFailureV1,
     PRODUCTION_REFINEMENT_CORRESPONDENCE_FRONTIER_V1,
