@@ -1,11 +1,13 @@
 # Autonomous Genesis: Plan and Status
 
-Date: 2026-07-30 (Phase H continuation recorded 2026-07-31)
+Date: 2026-07-30 (Phase H and Phase I continuations recorded 2026-07-31)
 Repository: `pen-atomic`
 Working branch: `codex/law-v2-agda-wire-sections-5-11`
 Status basis: committed history through `a3e30d5` plus the canonical-wire and
-safe-Agda work present in this branch on 2026-07-30, and the Phase H
-single private correspondence factory implemented on 2026-07-31
+safe-Agda work present in this branch on 2026-07-30, the Phase H
+single private correspondence factory, and the Phase I native carrier,
+carrier-derived root inventory, subject bundle, and typed-occurrence
+census implemented on 2026-07-31
 
 ## Executive summary
 
@@ -136,9 +138,41 @@ correspondence capabilities, `VerifiedLambdaUnitProductionRefinementV1`,
 and `VerifiedLambdaUnitTypingMetatheoryV1`. The end-to-end mint over
 the genuine builder-derived bundle passes under the pinned local Agda
 runtime, remint is bit-deterministic, and a mismatched verified
-signature is rejected. The canonical bridge frontier is now empty; the
-next ordered work is the Phase I native V3 carrier, with the additive
-canonicality theorems and the Phase K0 formulation lawful in parallel.
+signature is rejected. The canonical bridge frontier is empty.
+
+Phase I is now also implemented (2026-07-31). The native rank-0/1/2 V3
+carrier derives its seed wires exclusively from the verified public
+inventory (never from a caller list), exhausts the registered rank-two
+closure through the preserved enumeration engine, reconstructs the
+direct construction-substitution census for every rank-positive
+family, proves an exact one-to-one correspondence between the
+enumeration seeds and the demand-neutral V3 seed census, and consumes
+the two Phase H capabilities per the registered authority order. From
+the carrier, the complete root inventory is derived (every family
+judgment kernel-replayed and deduplicated; equation judgments —
+including every generic-equation-action reduct — enter as equation
+roots), the canonical subject bundle is built as the carrier's exact
+wire projection and accepted by the generic accepted-bundle checker,
+and the carrier-derived typed-occurrence census — the V3 census the
+plan reserved for exactly these prerequisites — is minted over exactly
+the inventory's roots with exact root-set equality. A caller-supplied,
+selected, or empty root list cannot satisfy any constructor. The full
+pipeline passes end-to-end under the pinned Agda runtime on two
+chains: the genuine equationless fixture chain (whose carrier-derived
+subject bundle also passes the complete cross-language gate, including
+a Phase H factory mint over it — the first non-committed bundle
+through the full gate) and a fresh-equation chain exercising equation
+seeds, the wire fresh-rule registry, actions, and reducts. Completing
+the phase surfaced and repaired a latent enumeration-classification
+gap (a dependent type-family head meeting a mismatched argument
+aborted instead of certifying `ArgumentTypeMismatch`) and registered
+one wire asymmetry: context-growing generic equation actions are
+wire-inexpressible (the wire dropped `context_witness`), are recorded
+in the subject bundle's inexpressible census rather than silently
+dropped, and stay covered by the root inventory and census; their wire
+carrier is exactly the Phase J rewrite authority. The next ordered
+work is Phase J, with the additive canonicality theorems and the
+Phase K0 formulation lawful in parallel.
 
 ## 1. Objective hierarchy
 
@@ -930,25 +964,96 @@ obligation. Design and discipline:
   proves the mint deterministic on remint, and pins the adversarial
   rejection of a mismatched verified signature.
 
-### 2.18 Current validation snapshot
+### 2.18 Phase I native carrier and carrier-derived census implemented on 2026-07-31
+
+`native_carrier_v3.rs` and the census constructor in
+`typed_occurrence_v3.rs` discharge the two stages after the typing
+metatheory in the registered V3 authority order.
+
+- `VerifiedNativeRankInductiveCarrierV3`: seed wires are derived
+  exclusively from the verified inventory and clause census (one
+  public-head seed per declaration with body-derived presentation, one
+  public-equation seed per equation; callers cannot supply seeds); the
+  preserved rank-0/1/2 enumeration engine exhausts the registered
+  closure with context-amalgamation witnesses and positive plus
+  certified-negative tuple dispositions; the direct
+  construction-substitution census is reconstructed for every
+  rank-positive family (the exact discharge route the V2 stub
+  documented); the enumeration seeds are matched one-to-one against
+  the demand-neutral V3 seed census on subject, source judgment,
+  origin, structural support, and role; and the Phase H production
+  refinement and typing metatheory are required and bound, honoring
+  `Refinement -> Carrier` and `Metatheory -> Carrier`. The V1/V2/V3
+  manifests are pinned to the exact registered proposals with the
+  carrier-relevant surface proven equal across versions.
+- `VerifiedCarrierRootInventoryV3`: every family judgment is
+  kernel-replayed and deduplicated into typed-occurrence root
+  requests — term judgments as `HasType` roots, equation judgments
+  (equation seeds and generic equation actions) as `Equation` roots,
+  so every action reduct is inside the inventory — with per-root
+  carrier provenance. An empty inventory cannot mint.
+- `VerifiedCarrierSubjectBundleV3`: the carrier's exact wire
+  projection (head seeds with their judgments; equation seeds judging
+  their owner heads at exact declared types with their fresh-shaped
+  equations entering the wire fresh-rule registry; applications with
+  component references; context-preserving actions with reduct
+  subjects) is built through the Phase G canonical builder, decoded
+  back and compared section-by-section, and accepted by the generic
+  accepted-bundle checker (the independent unchanged-kernel replay).
+  Wire-inexpressible families — context-growing generic equation
+  actions (the wire dropped `context_witness`) and non-fresh
+  equations — are recorded in a registered inexpressible census with
+  exact reasons, never silently dropped; their roots remain covered.
+- `VerifiedSynthesisBackedTypedOccurrenceCensusV3` (the exit gate):
+  the synthesis-backed batch runs over exactly the root inventory's
+  requests — the constructor takes no root list — and the batch's
+  verified root set must equal the inventory's set exactly; the three
+  registered census prerequisites (typing metatheory, native carrier,
+  carrier-derived exhaustive root inventory) are consumed as opaque
+  capabilities with full binding checks; empty root sets are rejected.
+
+Completing the phase repaired a genuine latent gap in the V1
+enumeration engine (lesson 4.15): the fixture's dependent type-family
+declaration paired with a mismatched argument produced a candidate
+whose claimed type fails formation with `ExpectedType`, which
+`build_application` aborted on instead of certifying as the
+`ArgumentTypeMismatch` negative the dependent-substitution theorem
+licenses. The classification was refined and pinned by a new engine
+test. The end-to-end pipeline passes under the pinned Agda runtime on
+the genuine equationless chain — whose carrier-projected subject
+bundle also passes the complete cross-language gate including a
+Phase H factory mint over it, the first non-committed bundle through
+the full gate — and on a fresh-equation chain (equation seeds, wire
+fresh-rule registry, actions, reducts), with an adversarial
+cross-chain binding rejection pinned.
+
+### 2.19 Current validation snapshot
 
 At this checkpoint:
 
 - `pen-production-wire`: 7 unit and 6 cross-language pinning tests passed;
-- `pen-semantic-audit --lib`: 168 passed, 6 ignored, 0 failed, plus two
+- `pen-semantic-audit --lib`: 172 passed, 6 ignored, 0 failed, plus two
   `compile_fail` doc tests pinning the capability privacy boundary; the
   `canonical_bundle_vectors` integration suite proves the committed
-  canonical vector builder-derived and replayed, and the
+  canonical vector builder-derived and replayed, the
   `production_replay_vectors` suite pins replay acceptance of the
   canonical vector, replay rejection of all nineteen committed
-  mutants, and the Rust transcript against the committed Agda literal;
+  mutants, and the Rust transcript against the committed Agda literal,
+  and the `native_carrier_vectors` suite pins the native seed-wire
+  enumeration (four seeds close to exactly twenty-four families) with
+  the certified dependent-family negative;
 - the ignored external-gate suite (pinned Agda 2.8.0) passes locally,
   including the end-to-end
   `phase_g_capabilities_mint_over_genuine_bundle` mint of the three
-  bridge capabilities and the Phase H
+  bridge capabilities, the Phase H
   `phase_h_factory_mints_all_six_capabilities_over_genuine_bundle`
   mint of the four correspondence capabilities, the production
-  refinement, and the typing metatheory;
+  refinement, and the typing metatheory, and the Phase I
+  `phase_i_carrier_census_mints_over_genuine_chains` mint of the
+  native carrier, root inventory, subject bundle (through the full
+  cross-language gate including a factory mint over it), and
+  carrier-derived typed-occurrence census on both the equationless
+  and fresh-equation chains;
 - the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`,
   `BundleDecodeTestV1`, `ContextCorrespondenceV1`,
   `ContextTranscriptTestV1`, `NormalizationV1`, `SemanticReplayV1`,
@@ -1249,22 +1354,47 @@ Exit gates (discharged 2026-07-31):
 
 ### Phase I — Native V3 carrier and subject completeness
 
-Status: unblocked as of 2026-07-31 (Phase H discharged); not started.
+Status: implemented as of 2026-07-31 (§2.18); the exit-gate census
+mints end-to-end under the pinned local Agda runtime on both test
+chains.
 
-Work:
+Completed:
 
-1. construct the native rank-0/1/2 V3 carrier;
-2. derive required roots and reducts from that carrier;
-3. build one canonical subject bundle;
-4. prove exact set equality between carrier-required and bundle roots; and
-5. invoke the generic accepted-bundle checker.
+1. the native rank-0/1/2 V3 carrier is constructed from the verified
+   inventory chain, the exhaustive registered enumeration, the direct
+   construction-substitution census, the exact V3 seed-census
+   correspondence, and the two Phase H capabilities;
+2. the required roots and reducts are derived from that carrier as the
+   deduplicated, kernel-replayed root inventory (reducts through
+   equation roots);
+3. one canonical subject bundle is built as the carrier's exact wire
+   projection, with wire-inexpressible families recorded in a
+   registered census rather than silently dropped;
+4. the decoded bundle sections are proven equal to the derived
+   projection and the expressible/inexpressible partition is proven to
+   cover the carrier exactly; the census separately proves exact
+   root-set equality between the batch and the inventory; and
+5. the generic accepted-bundle checker (the independent
+   unchanged-kernel replay) accepts the subject bundle; on the genuine
+   chain the complete cross-language gate — pinned-Agda acceptance,
+   transcript agreement, and a Phase H factory mint — also accepts it.
 
-Exit gate: carrier-derived typed-occurrence completeness. A caller-supplied,
-selected, or empty root list cannot satisfy this phase.
+Exit gate (discharged 2026-07-31): carrier-derived typed-occurrence
+completeness, minted as
+`VerifiedSynthesisBackedTypedOccurrenceCensusV3` with all three
+registered prerequisites consumed as opaque capabilities. A
+caller-supplied, selected, or empty root list cannot satisfy any
+constructor in the phase.
+
+Registered gap routed to Phase J: context-growing generic equation
+actions are wire-inexpressible (the wire dropped
+`hole_ordinal`/`context_witness`), are recorded per bundle, and keep
+full root/census coverage; their wire carrier is the rewrite
+authority.
 
 ### Phase J — Rewrite, quotient, audit, and Law V2 authority
 
-Status: downstream.
+Status: unblocked as of 2026-07-31 (Phase I discharged); not started.
 
 Required sequence:
 
@@ -1465,6 +1595,23 @@ and typing layers and is rejected only by the exactness check. When a
 new layer states an exactness requirement, a convertible-but-inexact
 vector belongs in its pinned mutants.
 
+### 4.15 Negative classifications must be theorem-complete
+
+The V1 carrier enumeration certified an application pair inapplicable
+on `TypeMismatch` and `ExpectedFunction` but aborted on
+`ExpectedType` — the error a dependent type-family head produces when
+a mismatched argument makes the substituted claimed type fail
+formation. The engine had simply never met a dependent codomain whose
+argument slot could be plausibly but wrongly filled until the Phase I
+native derivation fed it the production fixture's family-application
+declaration. By the dependent-substitution theorem, formation failure
+of `subst(body, argument)` under a kernel-established function type
+entails the argument mismatch, so the refinement is licensed, not
+heuristic. The general rule: a certified-negative classification is
+itself a completeness claim over the checker's failure modes, and each
+new input family must re-derive it — the same discipline lesson 4.13
+established for fixtures, applied to error taxonomies.
+
 ## 5. Big problems and challenges
 
 ### 5.1 Exact semantic correspondence
@@ -1542,8 +1689,10 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. the Phase I native V3 carrier and carrier-derived subject
-   completeness, now unblocked by the discharged bridge.
+2. the Phase J rewrite/quotient/audit sequence, now unblocked by the
+   discharged carrier and census (beginning with typed Q0 stability
+   and the wire carrier for the registered context-growing action
+   gap).
 
 Item 1 is additive; item 2 is the ordered theorem frontier. Complete
 safe Agda decoding and structural checking for sections 5–11, the
@@ -1561,7 +1710,9 @@ byte-identical cross-language transcripts, and the three deterministic
 capability constructors) were discharged on 2026-07-30. The Phase H
 single private correspondence factory — minting the four
 correspondence capabilities, production refinement, and the stronger
-typing metatheory from the four bridge capabilities — was discharged
+typing metatheory from the four bridge capabilities — and the Phase I
+native carrier, carrier-derived root inventory, canonical subject
+bundle, and carrier-derived typed-occurrence census were discharged
 on 2026-07-31.
 
 In parallel (and lawful at any time, since it exposes nothing to the
@@ -1571,10 +1722,10 @@ condition, least-universal-interface statement, kernel-fragment
 decision, adversarial review, and pre-exposure freeze. Its execution
 remains blocked behind the formulation freeze without exception.
 
-The work must still stop before live-profile authority, Profile A
-adapters, or any Phase J rewrite/quotient/audit authority: those gates
-remain unavailable until the Phase I carrier and the Phase J theorem
-sequence are complete.
+The work must still stop before live-profile authority or Profile A
+adapters: those gates remain unavailable until the complete Phase J
+theorem sequence (typed Q0 stability through the frozen adapter) is
+discharged.
 
 ## 7. Definition of success for the current plan
 

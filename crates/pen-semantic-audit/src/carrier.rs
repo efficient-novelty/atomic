@@ -1097,7 +1097,20 @@ fn build_application(
         .verify_open_judgment(build.signature, &generic_to_open(&candidate))
     {
         Ok(normalized) => open_to_generic(normalized),
-        Err(KernelError::TypeMismatch | KernelError::ExpectedFunction) => {
+        // `ExpectedType` is a certified argument mismatch, not an abort:
+        // the candidate's claimed type is `subst_top(body, argument)` of a
+        // function type whose formation the function family already
+        // kernel-established. By dependent substitution, a well-typed
+        // argument at the parameter type always yields a well-formed
+        // substituted type, so a formation failure of the claimed type
+        // entails that the argument does not inhabit the parameter type.
+        // This surfaces exactly when a dependent type-family head (a pi
+        // whose body applies its parameter) meets a mismatched argument.
+        Err(
+            KernelError::TypeMismatch
+            | KernelError::ExpectedFunction
+            | KernelError::ExpectedType,
+        ) => {
             return Err(BuildDisposition::CertifiedInapplicable(
                 CertifiedInapplicableReasonV1::ArgumentTypeMismatch,
             ));
@@ -2221,6 +2234,120 @@ mod tests {
 
     fn event(label: &[u8]) -> EventIdV1 {
         EventIdV1(Digest::of_bytes(label))
+    }
+
+    #[test]
+    fn dependent_family_head_with_mismatched_argument_is_a_certified_negative() {
+        // A dependent type-family head `F : (f : UnitType -> Sort 0) -> f unit`
+        // paired with a mismatched argument produces a candidate whose
+        // claimed type `subst_top(f unit, argument)` fails formation with
+        // `ExpectedType`. That must classify as the certified
+        // `ArgumentTypeMismatch` negative, not abort the enumeration.
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let family_head = id(b"carrier/dependent-family");
+        let function_head = id(b"carrier/unit-function");
+        let signature = kernel
+            .verify_signature(&UncheckedSignature {
+                declarations: vec![
+                    Declaration {
+                        id: family_head.clone(),
+                        ty: Term::Pi {
+                            parameter: Box::new(Term::Pi {
+                                parameter: Box::new(Term::UnitType),
+                                body: Box::new(Term::Sort { level: 0 }),
+                            }),
+                            body: Box::new(Term::Apply {
+                                function: Box::new(Term::Var { index: 0 }),
+                                argument: Box::new(Term::Unit),
+                            }),
+                        },
+                        body: None,
+                    },
+                    Declaration {
+                        id: function_head.clone(),
+                        ty: Term::Pi {
+                            parameter: Box::new(Term::UnitType),
+                            body: Box::new(Term::Pi {
+                                parameter: Box::new(Term::UnitType),
+                                body: Box::new(Term::UnitType),
+                            }),
+                        },
+                        body: None,
+                    },
+                ],
+            })
+            .expect("signature");
+        let seed = |head: &GlobalId, ty: Term| {
+            let judgment = GenericJudgmentV1::Term {
+                context: DependentContext::default(),
+                term: Term::Global { id: head.clone() },
+                ty,
+            };
+            SemanticSchemaSeedV1::PublicHead(PublicHeadSeedV1 {
+                declaration: head.clone(),
+                origin_event: event(b"carrier/dependent-family-event"),
+                judgment: SourceNormalizedJudgmentV1 {
+                    source_identity: Digest::of_canonical(
+                        "pen-semantic-audit/inventory-source-judgment/v1",
+                        &judgment,
+                    ),
+                    source: judgment.clone(),
+                    claimed_normalized: judgment,
+                },
+                presentation: HeadPresentationV1::Opaque,
+                claimed_role: LocalRoleV1::KernelHead,
+                public_support: PublicSupportV1 {
+                    events: [event(b"carrier/dependent-family-event")].into_iter().collect(),
+                    declarations: [head.clone()].into_iter().collect(),
+                    demand_outputs: Default::default(),
+                },
+                source_clause: None,
+            })
+        };
+        let seeds = vec![
+            seed(
+                &family_head,
+                Term::Pi {
+                    parameter: Box::new(Term::Pi {
+                        parameter: Box::new(Term::UnitType),
+                        body: Box::new(Term::Sort { level: 0 }),
+                    }),
+                    body: Box::new(Term::Apply {
+                        function: Box::new(Term::Var { index: 0 }),
+                        argument: Box::new(Term::Unit),
+                    }),
+                },
+            ),
+            seed(
+                &function_head,
+                Term::Pi {
+                    parameter: Box::new(Term::UnitType),
+                    body: Box::new(Term::Pi {
+                        parameter: Box::new(Term::UnitType),
+                        body: Box::new(Term::UnitType),
+                    }),
+                },
+            ),
+        ];
+        let AuditDecision::Proven(manifest) = verify_semantic_audit_lambda_unit_manifest_v1(
+            &proposed_semantic_audit_lambda_unit_manifest_v1(),
+        ) else {
+            panic!("lambda/unit V1 manifest");
+        };
+        let AuditDecision::Proven(carrier) =
+            enumerate_pre_q0_raw_families_v1(&kernel, &signature, &manifest, &seeds, &[])
+        else {
+            panic!("dependent-family pairing must enumerate with certified negatives");
+        };
+        assert_eq!(carrier.raw_families().len(), 2);
+        assert!(carrier.tuple_dispositions().iter().any(|disposition| {
+            matches!(
+                disposition.outcome,
+                CarrierTupleOutcomeV1::CertifiedInapplicable {
+                    reason: CertifiedInapplicableReasonV1::ArgumentTypeMismatch
+                }
+            ) && disposition.rule == CarrierRuleV1::GenericPublicApplication
+        }));
     }
 
     #[test]

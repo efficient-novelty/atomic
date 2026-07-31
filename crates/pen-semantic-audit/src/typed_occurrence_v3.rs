@@ -336,9 +336,12 @@ pub fn verify_synthesis_backed_occurrence_batch_v1(
 /// Report the authoritative V3 census frontier without accepting caller roots
 /// as an exhaustiveness witness.
 ///
-/// The eventual constructor must require all entries in
-/// [`SYNTHESIS_BACKED_OCCURRENCE_CENSUS_PREREQUISITES_V3`]. No such
-/// constructor exists while the metatheory and native carrier are unminted.
+/// This capability-free diagnostic is unchanged by Phase I: a manifest
+/// alone can never mint the census. The single constructor is
+/// [`verify_carrier_derived_typed_occurrence_census_v3`], which requires
+/// all entries in [`SYNTHESIS_BACKED_OCCURRENCE_CENSUS_PREREQUISITES_V3`]
+/// as opaque capabilities and derives every root internally from the
+/// native carrier.
 pub fn diagnose_synthesis_backed_typed_occurrence_census_v3(
     manifest: &VerifiedSemanticAuditManifestV3,
 ) -> AuditDecision<()> {
@@ -349,6 +352,240 @@ pub fn diagnose_synthesis_backed_typed_occurrence_census_v3(
         return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
     }
     AuditDecision::Unknown(AuditUnknownReason::MissingSynthesisBackedTypedOccurrenceCensus)
+}
+
+/// The carrier-derived V3 typed-occurrence census: the Phase I exit gate.
+///
+/// Fields are private and there is no `Deserialize` implementation. The
+/// only constructor derives its roots from the native carrier's root
+/// inventory — never from a caller list — and records the discharge of
+/// all three census prerequisites.
+#[derive(Clone, Debug)]
+pub struct VerifiedSynthesisBackedTypedOccurrenceCensusV3 {
+    schema_version: u16,
+    semantic_manifest_digest: Digest,
+    signature_digest: Digest,
+    kernel_protocol_digest: Digest,
+    typing_metatheory_digest: Digest,
+    production_refinement_digest: Digest,
+    carrier_digest: Digest,
+    root_inventory_digest: Digest,
+    root_inventory_roots_digest: Digest,
+    subject_bundle_digest: Digest,
+    subject_bundle_bytes_digest: Digest,
+    batch: VerifiedSynthesisBackedOccurrenceBatchV1,
+    root_equality_digest: Digest,
+    satisfied_prerequisites: [SynthesisBackedOccurrenceCensusPrerequisiteV3; 3],
+    digest: Digest,
+}
+
+impl VerifiedSynthesisBackedTypedOccurrenceCensusV3 {
+    pub fn semantic_manifest_digest(&self) -> &Digest {
+        &self.semantic_manifest_digest
+    }
+
+    pub fn signature_digest(&self) -> &Digest {
+        &self.signature_digest
+    }
+
+    pub fn carrier_digest(&self) -> &Digest {
+        &self.carrier_digest
+    }
+
+    pub fn root_inventory_digest(&self) -> &Digest {
+        &self.root_inventory_digest
+    }
+
+    pub fn subject_bundle_digest(&self) -> &Digest {
+        &self.subject_bundle_digest
+    }
+
+    pub fn batch(&self) -> &VerifiedSynthesisBackedOccurrenceBatchV1 {
+        &self.batch
+    }
+
+    pub fn root_equality_digest(&self) -> &Digest {
+        &self.root_equality_digest
+    }
+
+    pub fn satisfied_prerequisites(&self) -> &[SynthesisBackedOccurrenceCensusPrerequisiteV3; 3] {
+        &self.satisfied_prerequisites
+    }
+
+    pub fn digest(&self) -> &Digest {
+        &self.digest
+    }
+}
+
+impl CanonicalEncode for VerifiedSynthesisBackedTypedOccurrenceCensusV3 {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        encoder.u16(self.schema_version);
+        self.semantic_manifest_digest.encode_canonical(encoder);
+        self.signature_digest.encode_canonical(encoder);
+        self.kernel_protocol_digest.encode_canonical(encoder);
+        self.typing_metatheory_digest.encode_canonical(encoder);
+        self.production_refinement_digest.encode_canonical(encoder);
+        self.carrier_digest.encode_canonical(encoder);
+        self.root_inventory_digest.encode_canonical(encoder);
+        self.root_inventory_roots_digest.encode_canonical(encoder);
+        self.subject_bundle_digest.encode_canonical(encoder);
+        self.subject_bundle_bytes_digest.encode_canonical(encoder);
+        self.batch.encode_canonical(encoder);
+        self.root_equality_digest.encode_canonical(encoder);
+        for prerequisite in &self.satisfied_prerequisites {
+            encoder.tag(match prerequisite {
+                SynthesisBackedOccurrenceCensusPrerequisiteV3::LambdaUnitTypingMetatheory => 0,
+                SynthesisBackedOccurrenceCensusPrerequisiteV3::NativeRankInductiveCarrier => 1,
+                SynthesisBackedOccurrenceCensusPrerequisiteV3::CarrierDerivedExhaustiveRootInventory => 2,
+            });
+        }
+    }
+}
+
+/// Mint the carrier-derived typed-occurrence census (Phase I exit gate).
+///
+/// The roots come exclusively from the carrier-derived root inventory; a
+/// caller-supplied, selected, or empty root list cannot satisfy this
+/// constructor. The synthesis-backed batch is run over exactly those
+/// roots and its verified root set must equal the inventory's root set
+/// exactly. The three census prerequisites are consumed as opaque
+/// capabilities: the Phase H typing metatheory, the native rank-inductive
+/// carrier, and the carrier-derived exhaustive root inventory — with the
+/// carrier-projected canonical subject bundle (accepted by the generic
+/// checker) bound as the coverage evidence.
+#[allow(clippy::too_many_arguments)]
+pub fn verify_carrier_derived_typed_occurrence_census_v3(
+    manifest: &VerifiedSemanticAuditManifestV3,
+    kernel: &Kernel,
+    signature: &VerifiedSignature,
+    typing_metatheory: &crate::typing_metatheory::VerifiedLambdaUnitTypingMetatheoryV1,
+    production_refinement: &crate::production_refinement_theorem::VerifiedLambdaUnitProductionRefinementV1,
+    carrier: &crate::native_carrier_v3::VerifiedNativeRankInductiveCarrierV3,
+    root_inventory: &crate::native_carrier_v3::VerifiedCarrierRootInventoryV3,
+    subject_bundle: &crate::native_carrier_v3::VerifiedCarrierSubjectBundleV3,
+) -> AuditDecision<VerifiedSynthesisBackedTypedOccurrenceCensusV3> {
+    if manifest.manifest().profile_id != SEMANTIC_AUDIT_LAMBDA_UNIT_PROFILE_ID_V3
+        || manifest.manifest().typed_occurrence_census_protocol
+            != TypedOccurrenceCensusProtocolV2::BinderLocalTermsAndJudgmentTypes
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    // One manifest, signature, kernel, and carrier identity across every
+    // presented capability.
+    let manifest_digest = manifest.candidate_digest();
+    if carrier.semantic_manifest_digest() != manifest_digest
+        || root_inventory.semantic_manifest_digest() != manifest_digest
+        || subject_bundle.semantic_manifest_digest() != manifest_digest
+        || typing_metatheory.semantic_manifest_digest() != manifest_digest
+        || production_refinement.semantic_manifest_digest() != manifest_digest
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    if carrier.signature_digest() != signature.digest()
+        || root_inventory.signature_digest() != signature.digest()
+        || subject_bundle.signature_digest() != signature.digest()
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    if carrier.kernel_protocol_digest() != &kernel.kernel_protocol_digest()
+        || typing_metatheory.kernel_protocol_digest() != &kernel.kernel_protocol_digest()
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    if root_inventory.carrier_digest() != carrier.digest()
+        || subject_bundle.carrier_digest() != carrier.digest()
+        || carrier.production_refinement_digest() != production_refinement.digest()
+        || carrier.typing_metatheory_digest() != typing_metatheory.digest()
+    {
+        return AuditDecision::Unknown(AuditUnknownReason::ManifestMismatch);
+    }
+    // An empty root inventory can never carry completeness authority.
+    if root_inventory.roots().is_empty() {
+        return AuditDecision::Unknown(AuditUnknownReason::IncompleteEnumeration);
+    }
+
+    // The batch runs over exactly the carrier-derived roots.
+    let requests = root_inventory.requests();
+    let batch = match verify_synthesis_backed_occurrence_batch_v1(
+        manifest, kernel, signature, &requests,
+    ) {
+        AuditDecision::Proven(batch) => batch,
+        AuditDecision::Unknown(reason) => return AuditDecision::Unknown(reason),
+        AuditDecision::OutsideFragment(reason) => return AuditDecision::OutsideFragment(reason),
+    };
+
+    // Exact root-set equality: every batch root subject is an inventory
+    // request and vice versa, with equal counts.
+    if batch.roots().len() != root_inventory.roots().len() {
+        return AuditDecision::Unknown(AuditUnknownReason::IncompleteEnumeration);
+    }
+    let mut inventory_keys = BTreeSet::new();
+    for request in &requests {
+        let mut encoder = CanonicalEncoder::new();
+        request.encode_canonical(&mut encoder);
+        if !inventory_keys.insert(encoder.as_bytes().to_vec()) {
+            return AuditDecision::Unknown(AuditUnknownReason::IncompleteEnumeration);
+        }
+    }
+    for root in batch.roots() {
+        let mut encoder = CanonicalEncoder::new();
+        root.subject().encode_canonical(&mut encoder);
+        if !inventory_keys.remove(encoder.as_bytes()) {
+            return AuditDecision::Unknown(AuditUnknownReason::IncompleteEnumeration);
+        }
+    }
+    if !inventory_keys.is_empty() {
+        return AuditDecision::Unknown(AuditUnknownReason::IncompleteEnumeration);
+    }
+    let root_equality_digest = Digest::of_canonical(
+        "pen-semantic-audit/carrier-census-root-equality/v3",
+        &RootEqualityMaterialV3 {
+            root_inventory_roots_digest: root_inventory.roots_digest(),
+            batch_roots_digest: batch.roots_digest(),
+            root_count: batch.roots().len() as u64,
+        },
+    );
+
+    let subject_bundle_bytes_digest = Digest::of_domain_bytes(
+        "pen-semantic-audit/carrier-census-subject-bundle-bytes/v3",
+        subject_bundle.bundle().canonical_bytes(),
+    );
+    let mut census = VerifiedSynthesisBackedTypedOccurrenceCensusV3 {
+        schema_version: SYNTHESIS_BACKED_OCCURRENCE_BATCH_SCHEMA_VERSION_V1,
+        semantic_manifest_digest: manifest_digest.clone(),
+        signature_digest: signature.digest().clone(),
+        kernel_protocol_digest: kernel.kernel_protocol_digest(),
+        typing_metatheory_digest: typing_metatheory.digest().clone(),
+        production_refinement_digest: production_refinement.digest().clone(),
+        carrier_digest: carrier.digest().clone(),
+        root_inventory_digest: root_inventory.digest().clone(),
+        root_inventory_roots_digest: root_inventory.roots_digest().clone(),
+        subject_bundle_digest: subject_bundle.digest().clone(),
+        subject_bundle_bytes_digest,
+        batch,
+        root_equality_digest,
+        satisfied_prerequisites: SYNTHESIS_BACKED_OCCURRENCE_CENSUS_PREREQUISITES_V3,
+        digest: Digest::of_bytes(b"pending carrier-derived typed occurrence census v3"),
+    };
+    census.digest = Digest::of_canonical(
+        "pen-semantic-audit/verified-synthesis-backed-typed-occurrence-census/v3",
+        &census,
+    );
+    AuditDecision::Proven(census)
+}
+
+struct RootEqualityMaterialV3<'a> {
+    root_inventory_roots_digest: &'a Digest,
+    batch_roots_digest: &'a Digest,
+    root_count: u64,
+}
+
+impl CanonicalEncode for RootEqualityMaterialV3<'_> {
+    fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        self.root_inventory_roots_digest.encode_canonical(encoder);
+        self.batch_roots_digest.encode_canonical(encoder);
+        encoder.u64(self.root_count);
+    }
 }
 
 #[derive(Clone, Debug)]

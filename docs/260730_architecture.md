@@ -473,7 +473,18 @@ several layers.
 - `semantic_authority_v3.rs`: demand-neutral seed/family identity and deferred
   nonempty demand provenance;
 - `typed_occurrence.rs` and `typed_occurrence_v3.rs`: typed subterm
-  occurrences, with the V3 path retaining synthesis capabilities; and
+  occurrences; the V3 path retains synthesis capabilities and (as of
+  Phase I) the carrier-derived typed-occurrence census, whose only
+  constructor consumes the native carrier, root inventory, subject
+  bundle, and Phase H capabilities and derives every root internally;
+- `native_carrier_v3.rs`: the Phase I native rank-0/1/2 V3 carrier
+  (inventory-derived seed wires, the registered rank-two enumeration,
+  the direct construction-substitution census, and the exact V3
+  seed-census correspondence, gated on the Phase H capabilities), the
+  carrier-derived root inventory (kernel-replayed, deduplicated roots
+  with reducts via equation roots), and the carrier-projected
+  canonical subject bundle with its registered wire-inexpressible
+  census; and
 - `typing_metatheory.rs`: foundation versus stronger production metatheory.
 
 #### Production refinement
@@ -1235,11 +1246,13 @@ As of this document:
   nineteen committed mutants at the replay, and pin the Rust
   transcript against the committed Agda literal; the ignored
   external-gate suite (pinned Agda 2.8.0) passes locally including
-  the end-to-end Phase G capability mint and the Phase H factory mint
+  the end-to-end Phase G capability mint, the Phase H factory mint
   of all six correspondence/refinement/metatheory capabilities with
-  its adversarial mismatched-signature rejection; two `compile_fail`
-  doc tests pin the capability privacy boundary from outside the
-  crate;
+  its adversarial mismatched-signature rejection, and the Phase I
+  carrier/root-inventory/subject-bundle/census mint over both the
+  equationless and fresh-equation chains with an adversarial
+  cross-chain binding rejection; two `compile_fail` doc tests pin the
+  capability privacy boundary from outside the crate;
 - safe Agda wire, context-checker, bundle-checker, encode,
   correspondence, semantic-replay, typing-replay, supplement, bridge,
   inventory, transcript-render, and cross-language vector modules:
@@ -1376,8 +1389,21 @@ Implemented:
   surfaces, and the re-derived acceptance-package identity, then
   minting the four correspondence capabilities, production refinement,
   and the typing metatheory in one deterministic call. The canonical
-  bridge frontier is empty; the ordered frontier is the Phase I native
-  carrier.
+  bridge frontier is empty.
+
+- the Phase I native carrier and carrier-derived census
+  (`native_carrier_v3.rs` plus the census constructor in
+  `typed_occurrence_v3.rs`): the native rank-0/1/2 V3 carrier from
+  inventory-derived seeds with the exact seed-census correspondence
+  and the construction-substitution census, gated on the Phase H
+  capabilities; the deduplicated kernel-replayed root inventory with
+  reducts; the carrier-projected canonical subject bundle accepted by
+  the generic checker (and, on the genuine chain, by the complete
+  cross-language gate including a factory mint over it) with the
+  registered wire-inexpressible census for context-growing actions;
+  and the carrier-derived typed-occurrence census minted over exactly
+  the inventory roots with exact root-set equality. The ordered
+  frontier is the Phase J rewrite sequence.
 
 Not yet implemented:
 
@@ -1387,10 +1413,10 @@ Not yet implemented:
   conversion-requiring content (the registered
   `full-eight-constructor-decoded-soundness-not-yet-derivable`
   frontier, needing conversion-typing subject-reduction metatheory);
-- the equation-action rewrite-step relation (the wire drops
-  `hole_ordinal`/`context_witness`; Phase J rewrite authority) and
-  carrier-derived constructor-set coverage for fresh rules;
-- native V3 carrier and carrier-derived subject completeness;
+- the equation-action rewrite-step relation and the wire carrier for
+  context-growing generic equation actions (the wire drops
+  `hole_ordinal`/`context_witness`; both Phase J rewrite authority),
+  and carrier-derived constructor-set coverage for fresh rules;
 - verified rewrite system, quotient, weakening/marginals, provenance, SR2,
   adoption, freeze, and live Profile A adapter.
 

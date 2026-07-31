@@ -18,6 +18,7 @@ pub mod inventory;
 pub mod inventory_compatibility;
 pub mod manifest;
 pub mod model;
+pub mod native_carrier_v3;
 pub mod normalizer;
 pub mod ordinary_beta;
 pub mod production_inventory_bridge;
@@ -100,6 +101,14 @@ pub use manifest::{
     verify_semantic_audit_lambda_unit_manifest_v3,
 };
 pub use model::*;
+pub use native_carrier_v3::{
+    CarrierRootKindV3, CarrierRootV3, NATIVE_CARRIER_SCHEMA_VERSION_V3, NativeCarrierFailureV3,
+    VerifiedCarrierRootInventoryV3, VerifiedCarrierSubjectBundleV3,
+    VerifiedNativeRankInductiveCarrierV3, WireInexpressibleReasonV3,
+    diagnose_carrier_root_inventory_v3, diagnose_carrier_subject_bundle_v3,
+    diagnose_native_rank_inductive_carrier_v3, verify_carrier_root_inventory_v3,
+    verify_carrier_subject_bundle_v3, verify_native_rank_inductive_carrier_v3,
+};
 pub use normalizer::{
     FreshConstructorClauseV1, FreshConstructorComputationRequestV1, RestrictedQ0CertificateScopeV1,
     RestrictedQ0ConfluenceCertificateV1, RestrictedQ0TerminationCertificateV1,
@@ -229,8 +238,9 @@ pub use typed_occurrence_v3::{
     SYNTHESIS_BACKED_OCCURRENCE_CENSUS_PREREQUISITES_V3,
     SynthesisBackedOccurrenceCensusPrerequisiteV3, TypedOccurrenceIdV2, TypedOccurrencePathV2,
     TypedOccurrenceRootIdV2, VerifiedSynthesisBackedOccurrenceBatchV1,
-    VerifiedTypedOccurrenceRootV2, VerifiedTypedOccurrenceV2,
-    diagnose_synthesis_backed_typed_occurrence_census_v3,
+    VerifiedSynthesisBackedTypedOccurrenceCensusV3, VerifiedTypedOccurrenceRootV2,
+    VerifiedTypedOccurrenceV2, diagnose_synthesis_backed_typed_occurrence_census_v3,
+    verify_carrier_derived_typed_occurrence_census_v3,
     verify_synthesis_backed_occurrence_batch_v1,
 };
 pub use typing_metatheory::{
