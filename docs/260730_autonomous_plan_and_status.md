@@ -1,13 +1,17 @@
 # Autonomous Genesis: Plan and Status
 
-Date: 2026-07-30 (Phase H and Phase I continuations recorded 2026-07-31)
+Date: 2026-07-30 (Phase H and Phase I continuations recorded
+2026-07-31; law-profile factorial programme integrated and Phases
+K1–K3 registered 2026-08-01)
 Repository: `pen-atomic`
 Working branch: `codex/law-v2-agda-wire-sections-5-11`
 Status basis: committed history through `a3e30d5` plus the canonical-wire and
 safe-Agda work present in this branch on 2026-07-30, the Phase H
 single private correspondence factory, and the Phase I native carrier,
 carrier-derived root inventory, subject bundle, and typed-occurrence
-census implemented on 2026-07-31
+census implemented on 2026-07-31; the clean experimental programme for
+law-profile adjudication (`docs/experimental_program_addition.md`) is
+integrated as Phases K0–K3
 
 ## Executive summary
 
@@ -238,6 +242,14 @@ basis. It is already a strong result because the engine may not use:
 - presentation-order tie-breaking;
 - future-trace viability; or
 - baseline parity.
+
+"Bar clearance as acceptance" remains forbidden for the baseline B2
+theorem. The productive-discharge profiles B and D of the registered
+law-profile factorial programme
+(`docs/experimental_program_addition.md`) are separately named,
+pre-frozen experimental Selective-Law profiles adjudicated under that
+programme's own freeze and interpretation rules; they are not silent
+changes to B2, and their windowed gate never ranks survivors.
 
 B3, in which the primitive basis is itself generated from generic extension
 schemas, remains a later research program.
@@ -1411,6 +1423,21 @@ Required sequence:
 11. independent review and freeze; and
 12. only then a separately locked Profile A adapter.
 
+Per the registered factorial programme
+(`docs/experimental_program_addition.md`, §7.1 and §16.8), Phase J
+additionally delivers the semantic-family productivity-register
+surface required by the S1 selective profile: authoritative
+`(kappa, nu)` issuance over complete pre/post family carriers with the
+complete quotient, weakening/restriction, marginal extraction,
+first-irreducible kernel cost, and provenance injection, plus the
+certified register values for the two registered bootstrap acts that
+initialize the first guarded width-two bar (the Phase K1
+bootstrap-window initialization input). Historical structural values
+may not be substituted for missing semantic-family values. If the
+generative-capacity register `gamma` is pursued, its separate theorem
+package is Phase JG, inserted before Phase K1 and forbidden from
+borrowing future-trace evidence.
+
 ### Phase K0 — Formulate and freeze the contextual-internalization profile
 
 Status: registered as a research direction on 2026-07-30
@@ -1442,9 +1469,73 @@ and registers any genuine underdetermination instead of resolving it
 by preference. Formulation may proceed in parallel with the bridge;
 execution may not precede it.
 
-### Phase K — Resume autonomous Genesis research
+Phase K0 is the constitutive-profile freeze gate (`C1`) of the
+registered law-profile factorial programme: see
+`docs/experimental_program_addition.md` (integrated 2026-08-01) for
+the complete two-by-two design (`C0/C1 × S0/S1`), the controlled
+variables, the pre-exposure generic tests and falsifiers, the freeze
+protocol, and the pre-registered interpretation rules that govern it.
 
-Once the semantic and theorem stack is authoritative:
+### Phase K1 — Formulate and freeze productive discharge
+
+Status: registered 2026-08-01 (`docs/experimental_program_addition.md`
+§14); formulation open; blocked behind the Phase J
+productivity-register authority; execution blocked behind the
+programme freeze.
+
+Deliver, per the registered programme:
+
+- the productivity-register theorem package (the semantic-family
+  register `nu/kappa` from Phase J, or a separately frozen register
+  profile if the underdetermination is registered — never metric
+  shopping after results);
+- certified bootstrap initialization values for the first guarded
+  width-two bar;
+- the exact prior-window formula
+  `Bar_M(n) = (M_{n-1} + M_{n-2}) / (kappa_{n-1} + kappa_{n-2})` with
+  strict clearance, branch locality, and the startup convention,
+  frozen before execution (the shifted-window ratchet is a distinct
+  hypothesis, recordable only as a diagnostic or separately frozen
+  profile);
+- branch-local and zero-cost conventions (zero-cost theorem readouts
+  are not positive-cost acts, do not enter the two-act window, and do
+  not restart a halted history);
+- the gate-not-rank theorem (no ranking, no minimal-overshoot
+  selection, enumeration-order permutation invariance of the
+  surviving cone);
+- `SelectivelyBlocked` result semantics added to the Law V2 outcome
+  taxonomy as its own certified state, distinct from `Halted`,
+  `ConstitutivelyBlocked`, `OutsideFragment`, and `Unknown` — a change
+  to the protected root workspace that must ship as an explicit new
+  evidence version per §12.4, never casually;
+- generic tests and falsifiers (§8.2 of the programme);
+- independent adversarial review; and
+- a frozen S1 manifest.
+
+### Phase K2 — Execute and compare the A/B/C/D factorial
+
+Status: registered 2026-08-01; blocked behind Phases J, K0, and K1
+and the single frozen experiment manifest.
+
+Execute the four common-substrate profiles (`A = C0×S0`, `B = C0×S1`,
+`C = C1×S0`, `D = C1×S1`) independently from the same verified
+bootstrap under the programme's execution protocol: complete cones at
+every guarded act, the frozen result-state taxonomy, a common
+resource contract, sealed outputs, and cross-profile comparison plus
+the held-out decoder only after every profile has terminated or
+returned `Unknown`. The frozen A0 baseline (`gsc-inductive-completion-
+core-v1`) is retained unchanged; profile A is its common-substrate
+replication; profile B is the negative control for the selective
+rule; the prospective comparison is C versus D, both frozen before
+contextual exposure. Interpretation follows the programme's
+pre-registered table (§12) without semantic retuning.
+
+### Phase K3 — Resume autonomous Genesis research
+
+Renamed from Phase K on 2026-08-01: follow-on research conditional on
+the factorial result. Only profiles that survive their pre-registered
+falsifiers and interpretation rules may be candidates for longer
+autonomous runs. Once the semantic and theorem stack is authoritative:
 
 - rerun productive profiles only if they were motivated and frozen before
   observing their results;

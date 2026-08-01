@@ -5,6 +5,14 @@ Status: registered research direction; formulation open; NOT frozen;
 NOT exposed to the registered prefix; blocked behind the
 production-refinement bridge (plan §3 Phases E–H) for any live run.
 
+Related programme (2026-08-01): this formulation is the `C1`
+constitutive factor of the registered law-profile factorial
+experiment — see `docs/experimental_program_addition.md` for the
+two-by-two design (`C0/C1 × S0/S1`), the shared-substrate controls,
+the pre-exposure generic tests (§8.1 there subsumes and extends §12
+here), the freeze protocol, and the pre-registered interpretation
+rules. Plan Phases K0–K3 sequence the freeze and execution gates.
+
 ## 1. Overarching research objective (registered restatement)
 
 The two-law research program aims to reverse engineer the constitutive

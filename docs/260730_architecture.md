@@ -1301,6 +1301,17 @@ A new constitutive profile must be:
 - tested on non-Genesis generic examples and falsifiers; and
 - unable to access oracle labels or expected traces.
 
+Comparative profiles carry two further obligations (registered with
+the law-profile factorial programme,
+`docs/experimental_program_addition.md`): every profile in one
+comparison must share one verified common substrate — bootstrap,
+fragment, theorem stack, quotient, free sealing, resource contract —
+differing only in the registered experimental factors, and all
+profiles must be bound by one frozen experiment manifest before any
+of them is exposed to the registered prefix. Outputs stay sealed and
+mutually unavailable until every profile has terminated or returned
+`Unknown`.
+
 ### 12.4 Modifying protected evidence inputs
 
 Do not casually:
