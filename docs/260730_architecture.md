@@ -484,7 +484,16 @@ several layers.
   carrier-derived root inventory (kernel-replayed, deduplicated roots
   with reducts via equation roots), and the carrier-projected
   canonical subject bundle with its registered wire-inexpressible
-  census; and
+  census;
+- `rewrite_authority_v3.rs`: the Phase J head — the V3 rewrite
+  authority over the native carrier: census-seeded typed node
+  universe, beta/delta/fresh edges from the kernel-typed rewrite
+  inventory, the all-pairs overlap census with joins, termination and
+  confluence, one-step-commutation substitution stability against the
+  derivation-local construction witnesses, and predecessor
+  conservativity over the historical empty-equation base; the first
+  module to return the reserved `MissingRewriteSystemV3` stage
+  reason; and
 - `typing_metatheory.rs`: foundation versus stronger production metatheory.
 
 #### Production refinement
@@ -1413,8 +1422,18 @@ Implemented:
   cross-language gate including a factory mint over it) with the
   registered wire-inexpressible census for context-growing actions;
   and the carrier-derived typed-occurrence census minted over exactly
-  the inventory roots with exact root-set equality. The ordered
-  frontier is the Phase J rewrite sequence.
+  the inventory roots with exact root-set equality.
+
+- the Phase J head (`rewrite_authority_v3.rs`): the V3 rewrite
+  authority discharging typed Q0 stability, the complete edge-local
+  reduction graphs, the all-pairs overlap census with joins, and
+  termination/confluence with predecessor conservativity over the
+  exact native carrier, pinned end-to-end on the equationless and
+  fresh-equation chains. The ordered frontier is the Phase J
+  remainder (quotient over the Q0-normalized carrier twin, derived
+  weakening conservativity, the V3-gated cost basis, demand
+  provenance, SR2 bindings, transcript suite, review/freeze,
+  adapter).
 
 Not yet implemented:
 

@@ -32,6 +32,7 @@ pub mod production_wire_replay;
 pub mod production_wire_slots;
 pub mod provenance;
 pub mod quotient;
+pub mod rewrite_authority_v3;
 pub mod rewrite_inventory;
 pub mod semantic_authority;
 pub mod semantic_authority_v3;
@@ -202,6 +203,13 @@ pub use provenance::{
     verify_sr2_injection_v1, verify_sr2_injection_with_support_v1,
 };
 pub use quotient::{QuotientCertificateV1, quotient_families_v1, quotient_families_with_q0_v1};
+pub use rewrite_authority_v3::{
+    OverlapPairV3, OverlapRelationV3, REWRITE_AUTHORITY_SCHEMA_VERSION_V3,
+    RewriteAuthorityFailureV3, RewriteEdgeIdV3, RewriteEdgeV3, RewriteNodeIdV3,
+    RewriteNodeJudgmentV3, RewriteNodeV3, RewritePositionV3, RewriteRuleV3,
+    SubstitutionStabilityV3, VerifiedRewriteAuthorityV3, diagnose_rewrite_authority_v3,
+    verify_rewrite_authority_v3,
+};
 pub use rewrite_inventory::{
     VerifiedTypedRewriteEntryV1, VerifiedTypedRewriteInventoryV1, attempt_rewrite_admissibility_v1,
     compile_typed_rewrite_inventory_lambda_unit_v1, compile_typed_rewrite_inventory_v1,

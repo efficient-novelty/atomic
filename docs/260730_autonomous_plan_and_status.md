@@ -1039,7 +1039,65 @@ the full gate — and on a fresh-equation chain (equation seeds, wire
 fresh-rule registry, actions, reducts), with an adversarial
 cross-chain binding rejection pinned.
 
-### 2.19 Current validation snapshot
+### 2.19 Phase J head discharged on 2026-08-01: the V3 rewrite authority
+
+`rewrite_authority_v3.rs` discharges the first four items of the
+Phase J sequence — typed Q0 stability, complete edge-local reduction
+graphs, the all-pairs overlap census with joins, and
+termination/confluence with predecessor conservativity — as one
+opaque capability over the exact native carrier, closing the three
+certificate-boundary obligations the V1 finite-rewrite prototype
+registered and failed closed on:
+
+- the node universe is seeded from the carrier-derived root inventory
+  and every typed-occurrence-census occurrence (recursively typed
+  subterms WITH their kernel-replayed binder-local contexts), closed
+  under reduction only, every node kernel-replayed;
+- the three semantic Q0 rules generate edges: ordinary beta, public
+  delta for every bodyful normalized inventory declaration, and one
+  fresh rule per sealed equation taken from the kernel-typed rewrite
+  inventory (compiled through the restricted normalizer's fresh
+  program and required exactly when the inventory has equations); the
+  representation rules are recorded as a certified identity census on
+  the kernel term syntax, not silently dropped;
+- every unordered pair of applicable reductions at a node is
+  classified (same-position, nested, disjoint) and joined at the
+  node's unique normal form; termination is topological acyclicity of
+  the finite graph and confluence is the unique-reachable-normal-form
+  witness per node;
+- substitution stability is stated per the registered lesson 4.6
+  discipline: the carrier's derivation-local construction-substitution
+  witnesses are never composed into a global closure; instead every
+  edge is proven to commute IN ONE STEP with every applicable witness
+  (substituted endpoints kernel-checked, the same rule replayed at the
+  same position, exact equality of results) — see lesson 4.16;
+- predecessor conservativity combines the positive empty-equation
+  historical base with an independent reconstruction: every edge
+  between predecessor-supported nodes must be derivable from
+  predecessor resources alone, and no reduction carries a
+  predecessor-supported node to successor-supported content; and
+- the reserved V3 stage reason `MissingRewriteSystemV3` is now live:
+  it names every fail-closed stop of the authority constructor — the
+  first of the seven reserved V3 stage reasons to be wired.
+
+The end-to-end gate covers both chains: the equationless chain (29
+nodes, delta edges, conservative predecessor restriction) and the
+fresh-equation chain (35 nodes, fresh and delta edges, joined
+nested/disjoint overlaps, 32 commutation witnesses), plus adversarial
+rejections (a typed inventory presented against an equation-free
+inventory, a missing typed inventory for an equation-bearing one, and
+the cross-chain census binding).
+
+Two build-out findings are registered: the inventory-side fresh rule
+lives in the restricted normalizer's PREFIX parameter context (the
+scrutinee slot is consumed by the constructor in the spine) while the
+wire schema carries an explicit oldest scrutinee entry — the Phase I
+wire projection now reconciles the two presentations exactly; and the
+act structure required by the typed rewrite inventory (the fresh owner
+as the sole successor-new declaration over the predecessor boundary)
+is now exercised by the fresh-equation test chain.
+
+### 2.20 Current validation snapshot
 
 At this checkpoint:
 
@@ -1406,22 +1464,47 @@ authority.
 
 ### Phase J — Rewrite, quotient, audit, and Law V2 authority
 
-Status: unblocked as of 2026-07-31 (Phase I discharged); not started.
+Status: items 1–4 discharged 2026-08-01 as the V3 rewrite authority
+(§2.19); items 5–12 open, with the exact seams surveyed and
+registered below.
 
 Required sequence:
 
-1. typed Q0 stability;
-2. complete edge-local reduction graphs;
-3. same/nested/disjoint overlap joins;
-4. termination/confluence and predecessor conservativity;
-5. structural family weakening and restriction;
-6. complete family quotient;
-7. semantic cost basis and marginals;
-8. demand provenance and typed realizations;
-9. SR2 provenance injection;
-10. full transcript agreement for the resulting vector suite;
-11. independent review and freeze; and
-12. only then a separately locked Profile A adapter.
+1. typed Q0 stability — DISCHARGED (kernel-replayed edges, one-step
+   commutation with the derivation-local construction substitutions);
+2. complete edge-local reduction graphs — DISCHARGED (per-node
+   position-by-rule dispositions over the census-seeded universe);
+3. same/nested/disjoint overlap joins — DISCHARGED (all-pairs census
+   with join witnesses at unique normal forms);
+4. termination/confluence and predecessor conservativity — DISCHARGED
+   (acyclicity ranks, unique normal forms, historical empty base plus
+   independent predecessor reconstruction);
+5. structural family weakening and restriction — OPEN: the current
+   verifier accepts a caller-supplied `exact_and_conservative` flag on
+   the extension and unbound family-class slices; conservativity must
+   be derived from the rewrite authority's predecessor leg and the
+   classes bound by quotient-certificate digests;
+6. complete family quotient — OPEN: `quotient_families_with_q0_v1`
+   requires the Q0-NORMALIZED carrier bound to its exact fresh
+   program; the native carrier needs its authorized-Q0 twin (same
+   inventory-derived seeds, `AuthorizedQ0` mode) gated on the rewrite
+   authority;
+7. semantic cost basis and marginals — OPEN: the V2 cost auditor's
+   gate requires the V1 rewrite capability that remains
+   deliberately unconstructible; a V3-gated entry must consume the
+   new rewrite authority; the first-irreducible basis must then bind
+   the SR2 injection;
+8. demand provenance and typed realizations — OPEN: the demand
+   orbit and realization censuses are positive only in the empty
+   case; nonempty cases need the typed-reindexing orbit quotient and
+   kernel-replayed family realizations;
+9. SR2 provenance injection — OPEN: the injection discipline exists
+   and is order-independent, but its `first_irreducible_basis` and
+   `preexisting_live_outputs` inputs are unauthenticated sets that
+   must bind to the cost certificate and demand-anchor census;
+10. full transcript agreement for the resulting vector suite — OPEN;
+11. independent review and freeze — OPEN (external by design); and
+12. only then a separately locked Profile A adapter — OPEN.
 
 Per the registered factorial programme
 (`docs/experimental_program_addition.md`, §7.1 and §16.8), Phase J
@@ -1703,6 +1786,23 @@ itself a completeness claim over the checker's failure modes, and each
 new input family must re-derive it — the same discipline lesson 4.13
 established for fixtures, applied to error taxonomies.
 
+### 4.16 Stability is one-step commutation, not closure reachability
+
+The first rewrite-authority draft closed the node universe under the
+carrier's construction substitutions and stated edge stability as
+reachability inside that closure. On the fresh-equation chain this
+reproduced exactly the non-finite composition closure lesson 4.6
+records: one-hole filler witnesses carry open images, so applying
+them as global context-indexed substitutions re-substitutes into
+their own output and the universe grows until a resource cap. The
+witnesses are tuple-local BY DESIGN. The repaired statement is both
+finite and stronger: for every edge and every applicable witness,
+substitute both endpoints, kernel-check them, replay the same rule at
+the same position, and require exact equality — the classical
+substitution lemma, checked instance by instance, with no closure at
+all. When a stability claim seems to need a saturated universe, the
+universe is usually the wrong object.
+
 ## 5. Big problems and challenges
 
 ### 5.1 Exact semantic correspondence
@@ -1780,10 +1880,12 @@ reached a precise ordered implementation/theorem frontier.
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. the Phase J rewrite/quotient/audit sequence, now unblocked by the
-   discharged carrier and census (beginning with typed Q0 stability
-   and the wire carrier for the registered context-growing action
-   gap).
+2. the Phase J remainder (items 5-12): the Q0-normalized native
+   carrier twin and complete family quotient gated on the minted
+   rewrite authority, derived weakening conservativity, the V3-gated
+   cost basis, demand provenance, the SR2 bindings, the transcript
+   suite, and the review/freeze — with the productivity-register
+   surface for Phase K1 assembled from those stages.
 
 Item 1 is additive; item 2 is the ordered theorem frontier. Complete
 safe Agda decoding and structural checking for sections 5–11, the

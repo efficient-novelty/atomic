@@ -279,6 +279,15 @@ impl VerifiedNativeRankInductiveCarrierV3 {
         self.substitution_census.digest()
     }
 
+    /// The direct construction-substitution census reconstructed for
+    /// every rank-positive family. Crate-visible so the Phase J rewrite
+    /// authority can consume the exact finite witness set; the census
+    /// type itself stays opaque.
+    pub(crate) fn substitution_census(&self) -> &VerifiedConstructionSubstitutionCensusV2 {
+        &self.substitution_census
+    }
+
+
     pub fn seed_correspondence_digest(&self) -> &Digest {
         &self.seed_correspondence_digest
     }
@@ -1346,15 +1355,20 @@ fn term_mentions_global(term: &Term, id: &pen_kernel::GlobalId) -> bool {
     }
 }
 
-/// Derive the wire fresh-rule schema from one inventory equation judgment.
+/// Derive the wire fresh-rule schema from one inventory equation judgment
+/// in the restricted normalizer's rule form.
 ///
-/// The judgment must be the exact fresh computation shape mirrored by the
-/// wire validator: context of length `arity >= 2`, left side an
-/// application spine `owner v_{s-1} .. v_0-pattern .. constructor` whose
-/// head is the bodyless owner, whose first `scrutinee` arguments are the
-/// pattern variables in the exact wire order, and whose scrutinee-position
-/// argument is a distinct bodyless constructor global; the right side must
-/// not mention the owner.
+/// The normalizer states a fresh rule in the prefix parameter context
+/// (the scrutinee slot is consumed by the constructor in the spine); the
+/// wire schema carries an explicit never-referenced scrutinee entry as
+/// its oldest context slot. The two presentations are reconciled here:
+/// the judgment must have a prefix context of length `arity - 1 >= 1`,
+/// a left spine `owner v_{p-1} .. v_0 constructor` over exactly the
+/// prefix variables with a distinct bodyless constructor global in the
+/// scrutinee position, and an owner-free right side; the wire context is
+/// the closed scrutinee type (the owner's final telescope parameter)
+/// prepended as the oldest entry, which leaves every de Bruijn index of
+/// the left, right, and type terms unchanged.
 fn derive_fresh_schema(
     equation: &EquationIdV1,
     owner: &pen_kernel::GlobalId,
@@ -1371,28 +1385,28 @@ fn derive_fresh_schema(
     else {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     };
-    let arity = context.0.len();
-    if arity < 2 {
+    let prefix_len = context.0.len();
+    if prefix_len < 1 {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     }
-    let scrutinee = arity - 1;
+    let arity = prefix_len + 1;
     let (head, arguments) = split_spine(left);
     let Term::Global { id: head_id } = head else {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     };
-    if head_id != owner || arguments.len() != scrutinee + 1 {
+    if head_id != owner || arguments.len() != arity {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     }
-    let Term::Global { id: constructor_id } = arguments[scrutinee] else {
+    let Term::Global { id: constructor_id } = arguments[prefix_len] else {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     };
     if constructor_id == owner {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     }
-    for (ordinal, argument) in arguments[..scrutinee].iter().enumerate() {
+    for (ordinal, argument) in arguments[..prefix_len].iter().enumerate() {
         if **argument
             != (Term::Var {
-                index: (scrutinee - ordinal - 1) as u32,
+                index: (prefix_len - ordinal - 1) as u32,
             })
         {
             return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
@@ -1401,28 +1415,75 @@ fn derive_fresh_schema(
     if term_mentions_global(right, owner) {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     }
-    let bodyless = |id: &pen_kernel::GlobalId| {
+    let declaration = |id: &pen_kernel::GlobalId| {
         signature
             .declarations()
             .iter()
-            .any(|declaration| &declaration.id == id && declaration.body.is_none())
+            .find(|declaration| &declaration.id == id)
     };
-    if !bodyless(owner) || !bodyless(constructor_id) {
+    let owner_declaration =
+        declaration(owner).ok_or(NativeCarrierFailureV3::EquationNotFreshShaped)?;
+    let constructor_declaration =
+        declaration(constructor_id).ok_or(NativeCarrierFailureV3::EquationNotFreshShaped)?;
+    if owner_declaration.body.is_some() || constructor_declaration.body.is_some() {
         return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
     }
+    // The scrutinee entry: the owner's final telescope parameter, which
+    // the wire writes as the oldest context slot and therefore must be
+    // closed.
+    let mut telescope_parameters = Vec::new();
+    let mut telescope = &owner_declaration.ty;
+    while let Term::Pi { parameter, body } = telescope {
+        telescope_parameters.push(parameter.as_ref().clone());
+        telescope = body.as_ref();
+    }
+    if telescope_parameters.len() != arity {
+        return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
+    }
+    let scrutinee_type = telescope_parameters[prefix_len].clone();
+    if !term_is_closed(&scrutinee_type) {
+        return Err(NativeCarrierFailureV3::EquationNotFreshShaped);
+    }
+    let mut parameter_entries = vec![scrutinee_type];
+    parameter_entries.extend(context.0.iter().cloned());
+    let parameter_context = DependentContext(parameter_entries);
     Ok(FreshRuleSchemaWireV1 {
         equation_id: digest_wire_id(&equation.0)
             .map_err(|_| NativeCarrierFailureV3::UnsupportedCarrierProjection)?,
         owner_slot: owner_slot_u32(owner, slots)?,
         constructor_slot: owner_slot_u32(constructor_id, slots)?,
-        parameter_context: wire_context(context, slots)?,
+        parameter_context: wire_context(&parameter_context, slots)?,
         left: wire_term(left, slots)?,
         right: wire_term(right, slots)?,
         ty: wire_term(ty, slots)?,
-        scrutinee_ordinal: scrutinee as u32,
+        scrutinee_ordinal: prefix_len as u32,
         arity: u16::try_from(arity)
             .map_err(|_| NativeCarrierFailureV3::UnsupportedCarrierProjection)?,
     })
+}
+
+fn term_is_closed(term: &Term) -> bool {
+    fn walk(term: &Term, depth: u32) -> bool {
+        match term {
+            Term::Var { index } => *index < depth,
+            Term::Pi { parameter, body } | Term::Sigma { parameter, body } => {
+                walk(parameter, depth) && walk(body, depth + 1)
+            }
+            Term::Lambda {
+                parameter_type,
+                body,
+            } => walk(parameter_type, depth) && walk(body, depth + 1),
+            Term::Apply { function, argument } => walk(function, depth) && walk(argument, depth),
+            Term::Pair {
+                sigma_type,
+                first,
+                second,
+            } => walk(sigma_type, depth) && walk(first, depth) && walk(second, depth),
+            Term::First { pair } | Term::Second { pair } => walk(pair, depth),
+            Term::Sort { .. } | Term::Global { .. } | Term::UnitType | Term::Unit => true,
+        }
+    }
+    walk(term, 0)
 }
 
 /// The registered carrier-to-wire projection: fresh-rule schemas from the
@@ -1675,8 +1736,10 @@ mod tests {
     }
 
     fn fresh_equation_judgment(owner: &GlobalId, constructor: &GlobalId) -> GenericJudgmentV1 {
+        // The restricted normalizer's rule form: prefix context [b],
+        // constructor consumed in the spine.
         GenericJudgmentV1::Equation {
-            context: DependentContext(vec![Term::UnitType, Term::UnitType]),
+            context: DependentContext(vec![Term::UnitType]),
             left: Term::Apply {
                 function: Box::new(Term::Apply {
                     function: Box::new(Term::Global { id: owner.clone() }),
@@ -1783,7 +1846,7 @@ mod tests {
                 &equation,
                 &owner,
                 &GenericJudgmentV1::Equation {
-                    context: DependentContext(vec![Term::UnitType, Term::UnitType]),
+                    context: DependentContext(vec![Term::UnitType]),
                     left: Term::Apply {
                         function: Box::new(Term::Apply {
                             function: Box::new(Term::Global { id: owner.clone() }),

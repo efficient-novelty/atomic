@@ -136,14 +136,15 @@ fn declarations() -> Vec<Declaration> {
 }
 
 /// The genuine fresh computation equation `uelim b constructor = b` over
-/// the fixture declarations: owner `wire_global(4)` (uelim, bodyless),
-/// constructor `wire_global(2)` (the opaque unit-typed constant), in the
-/// two-entry parameter context whose oldest entry is the never-referenced
-/// scrutinee variable, exactly matching the wire fresh-pattern
-/// discipline.
+/// the fixture declarations, in the restricted normalizer's exact rule
+/// form: the prefix parameter context `[b : UnitType]` (the scrutinee
+/// slot is consumed by the constructor in the spine, not bound), left
+/// `uelim b constructor`, right `b`, type `UnitType`. Owner
+/// `wire_global(4)` (uelim, bodyless), constructor `wire_global(2)`
+/// (the opaque unit-typed constant).
 fn fresh_equation_judgment() -> GenericJudgmentV1 {
     GenericJudgmentV1::Equation {
-        context: DependentContext(vec![Term::UnitType, Term::UnitType]),
+        context: DependentContext(vec![Term::UnitType]),
         left: Term::Apply {
             function: Box::new(Term::Apply {
                 function: Box::new(Term::Global { id: wire_global(4) }),
@@ -195,18 +196,21 @@ fn source_judgment(judgment: &GenericJudgmentV1) -> SourceNormalizedJudgmentV1 {
 }
 
 /// The verified chain for the fixture content, optionally extended with
-/// the genuine fresh equation. The bodyful unit value is the sole
-/// predecessor-public declaration; the successor event seals the three
-/// bodyless declarations (and, when requested, the equation).
+/// the genuine fresh equation.
+///
+/// Without the equation, the bodyful unit value is the sole
+/// predecessor-public declaration and the successor event seals the
+/// three bodyless declarations. With the equation, the act structure
+/// follows the restricted normalizer's fresh-program discipline: the
+/// predecessor history seals the unit value and then the two opaque
+/// constants, and the successor event seals exactly one new
+/// declaration — the fresh owner `uelim` — together with its sealed
+/// computation equation.
 fn chain_v3(with_equation: bool) -> ChainV3 {
     let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
     let declarations = declarations();
     let predecessor_declaration = declarations[0].clone();
     let predecessor_id = predecessor_declaration.id.clone();
-    let successor_ids: Vec<GlobalId> = declarations[1..]
-        .iter()
-        .map(|declaration| declaration.id.clone())
-        .collect();
     let predecessor_group = GlobalId(Digest::of_bytes(b"native-carrier-chain/predecessor-group"));
     let successor_group = GlobalId(Digest::of_bytes(b"native-carrier-chain/successor-group"));
     let predecessor_event = EventIdV1(Digest::of_bytes(b"native-carrier-chain/predecessor-event"));
@@ -214,47 +218,158 @@ fn chain_v3(with_equation: bool) -> ChainV3 {
     let equation = pen_semantic_audit::EquationIdV1(Digest::of_bytes(
         b"native-carrier-chain/uelim-computation",
     ));
-    let predecessor_boundary = UncheckedSignature {
-        declarations: vec![predecessor_declaration.clone()],
-    };
-    let successor_boundary = UncheckedSignature {
-        declarations: declarations.clone(),
-    };
-    let mut added_equations = Vec::new();
-    let mut equations = Vec::new();
-    let mut availability = Vec::new();
-    let mut dag_edges = Vec::new();
-    if with_equation {
-        added_equations.push(equation.clone());
-        equations.push(UncheckedPublicEquationV1 {
+
+    let (
+        predecessor_history,
+        predecessor_boundary,
+        successor_ids,
+        declaration_wires,
+        declaration_groups,
+        added_equations,
+        equations,
+        availability,
+        dag_edges,
+    ) = if with_equation {
+        let middle_group =
+            GlobalId(Digest::of_bytes(b"native-carrier-chain/middle-group"));
+        let middle_event =
+            EventIdV1(Digest::of_bytes(b"native-carrier-chain/middle-event"));
+        let first_boundary = UncheckedSignature {
+            declarations: vec![predecessor_declaration.clone()],
+        };
+        let predecessor_boundary = UncheckedSignature {
+            declarations: declarations[..3].to_vec(),
+        };
+        let predecessor_history = vec![
+            UncheckedPublicHistoryStepV1 {
+                census: UncheckedPublicEventCensusV1 {
+                    event: predecessor_event.clone(),
+                    added_groups: vec![predecessor_group.clone()],
+                    added_declarations: vec![predecessor_id.clone()],
+                    added_equations: Vec::new(),
+                    added_forced_projections: Vec::new(),
+                    added_demand_contracts: Vec::new(),
+                },
+                successor_boundary: first_boundary,
+            },
+            UncheckedPublicHistoryStepV1 {
+                census: UncheckedPublicEventCensusV1 {
+                    event: middle_event.clone(),
+                    added_groups: vec![middle_group.clone()],
+                    added_declarations: vec![
+                        declarations[1].id.clone(),
+                        declarations[2].id.clone(),
+                    ],
+                    added_equations: Vec::new(),
+                    added_forced_projections: Vec::new(),
+                    added_demand_contracts: Vec::new(),
+                },
+                successor_boundary: predecessor_boundary.clone(),
+            },
+        ];
+        let successor_ids = vec![declarations[3].id.clone()];
+        let declaration_wires = vec![
+            UncheckedPublicDeclarationV1 {
+                declaration: predecessor_id.clone(),
+                origin: predecessor_event.clone(),
+                group: predecessor_group.clone(),
+                source_to_normal: source_declaration(&predecessor_declaration),
+            },
+            UncheckedPublicDeclarationV1 {
+                declaration: declarations[1].id.clone(),
+                origin: middle_event.clone(),
+                group: middle_group.clone(),
+                source_to_normal: source_declaration(&declarations[1]),
+            },
+            UncheckedPublicDeclarationV1 {
+                declaration: declarations[2].id.clone(),
+                origin: middle_event.clone(),
+                group: middle_group.clone(),
+                source_to_normal: source_declaration(&declarations[2]),
+            },
+            UncheckedPublicDeclarationV1 {
+                declaration: declarations[3].id.clone(),
+                origin: successor_event.clone(),
+                group: successor_group.clone(),
+                source_to_normal: source_declaration(&declarations[3]),
+            },
+        ];
+        let declaration_groups = vec![
+            UncheckedPublicGroupV1 {
+                group: predecessor_group.clone(),
+                origin: predecessor_event.clone(),
+                declarations: vec![predecessor_id.clone()],
+            },
+            UncheckedPublicGroupV1 {
+                group: middle_group,
+                origin: middle_event,
+                declarations: vec![declarations[1].id.clone(), declarations[2].id.clone()],
+            },
+            UncheckedPublicGroupV1 {
+                group: successor_group.clone(),
+                origin: successor_event.clone(),
+                declarations: vec![declarations[3].id.clone()],
+            },
+        ];
+        let equations = vec![UncheckedPublicEquationV1 {
             equation: equation.clone(),
             owner_head: wire_global(4),
             origin: successor_event.clone(),
             source_to_normal: source_judgment(&fresh_equation_judgment()),
             demand_port: None,
-        });
+        }];
         // The derived dependency dag contains one edge per global the
-        // equation judgment mentions plus its owner head; both are
-        // successor declarations, so both claims are prior exports.
-        for prerequisite in [wire_global(2), wire_global(4)] {
+        // equation judgment mentions plus its owner head: the
+        // constructor is now predecessor-public, the owner is a prior
+        // export of the same successor event.
+        let mut availability = Vec::new();
+        let mut dag_edges = Vec::new();
+        for (prerequisite, claim) in [
+            (
+                wire_global(2),
+                PublicAvailabilityV1::PredecessorPublicExport {
+                    target: wire_global(2),
+                },
+            ),
+            (
+                wire_global(4),
+                PublicAvailabilityV1::DependencyPriorExport {
+                    target: wire_global(4),
+                },
+            ),
+        ] {
             let dependency = PublicDependencyUseV1 {
                 dependent: PublicSubjectV1::Equation {
                     equation: equation.clone(),
                 },
-                prerequisite: prerequisite.clone(),
+                prerequisite,
             };
             availability.push(UncheckedPublicAvailabilityClaimV1 {
                 dependency: dependency.clone(),
-                claimed: PublicAvailabilityV1::DependencyPriorExport {
-                    target: prerequisite,
-                },
+                claimed: claim,
             });
             dag_edges.push(dependency);
         }
-    }
-    let wire = UncheckedPublicAuditInventoryV1 {
-        schema_version: PUBLIC_AUDIT_INVENTORY_SCHEMA_VERSION,
-        predecessor_history: vec![UncheckedPublicHistoryStepV1 {
+        (
+            predecessor_history,
+            predecessor_boundary,
+            successor_ids,
+            declaration_wires,
+            declaration_groups,
+            vec![equation.clone()],
+            equations,
+            availability,
+            dag_edges,
+        )
+    } else {
+        let predecessor_boundary = UncheckedSignature {
+            declarations: vec![predecessor_declaration.clone()],
+        };
+        let successor_ids: Vec<GlobalId> = declarations[1..]
+            .iter()
+            .map(|declaration| declaration.id.clone())
+            .collect();
+        let predecessor_history = vec![UncheckedPublicHistoryStepV1 {
             census: UncheckedPublicEventCensusV1 {
                 event: predecessor_event.clone(),
                 added_groups: vec![predecessor_group.clone()],
@@ -264,33 +379,11 @@ fn chain_v3(with_equation: bool) -> ChainV3 {
                 added_demand_contracts: Vec::new(),
             },
             successor_boundary: predecessor_boundary.clone(),
-        }],
-        predecessor_boundary,
-        successor_event: UncheckedPublicEventCensusV1 {
-            event: successor_event.clone(),
-            added_groups: vec![successor_group.clone()],
-            added_declarations: successor_ids.clone(),
-            added_equations,
-            added_forced_projections: Vec::new(),
-            added_demand_contracts: Vec::new(),
-        },
-        successor_boundary,
-        declaration_groups: vec![
-            UncheckedPublicGroupV1 {
-                group: predecessor_group.clone(),
-                origin: predecessor_event.clone(),
-                declarations: vec![predecessor_id.clone()],
-            },
-            UncheckedPublicGroupV1 {
-                group: successor_group.clone(),
-                origin: successor_event.clone(),
-                declarations: successor_ids.clone(),
-            },
-        ],
-        declarations: std::iter::once(UncheckedPublicDeclarationV1 {
+        }];
+        let declaration_wires = std::iter::once(UncheckedPublicDeclarationV1 {
             declaration: predecessor_id.clone(),
             origin: predecessor_event.clone(),
-            group: predecessor_group,
+            group: predecessor_group.clone(),
             source_to_normal: source_declaration(&predecessor_declaration),
         })
         .chain(
@@ -303,7 +396,53 @@ fn chain_v3(with_equation: bool) -> ChainV3 {
                     source_to_normal: source_declaration(declaration),
                 }),
         )
-        .collect(),
+        .collect();
+        let declaration_groups = vec![
+            UncheckedPublicGroupV1 {
+                group: predecessor_group.clone(),
+                origin: predecessor_event.clone(),
+                declarations: vec![predecessor_id.clone()],
+            },
+            UncheckedPublicGroupV1 {
+                group: successor_group.clone(),
+                origin: successor_event.clone(),
+                declarations: successor_ids.clone(),
+            },
+        ];
+        (
+            predecessor_history,
+            predecessor_boundary,
+            successor_ids,
+            declaration_wires,
+            declaration_groups,
+            Vec::new(),
+            Vec::new(),
+            Vec::new(),
+            Vec::new(),
+        )
+    };
+
+    let successor_boundary = UncheckedSignature {
+        declarations: declarations.clone(),
+    };
+    let origin_cutoff = predecessor_history
+        .last()
+        .map(|step| step.census.event.clone());
+    let wire = UncheckedPublicAuditInventoryV1 {
+        schema_version: PUBLIC_AUDIT_INVENTORY_SCHEMA_VERSION,
+        predecessor_history,
+        predecessor_boundary,
+        successor_event: UncheckedPublicEventCensusV1 {
+            event: successor_event.clone(),
+            added_groups: vec![successor_group.clone()],
+            added_declarations: successor_ids,
+            added_equations,
+            added_forced_projections: Vec::new(),
+            added_demand_contracts: Vec::new(),
+        },
+        successor_boundary,
+        declaration_groups,
+        declarations: declaration_wires,
         equations,
         forced_projections: Vec::new(),
         predecessor_demand_contracts: Vec::new(),
@@ -311,7 +450,7 @@ fn chain_v3(with_equation: bool) -> ChainV3 {
         dependency_dag: UncheckedPublicDependencyDagV1 { edges: dag_edges },
         q3_registry: UncheckedOriginCutoffQ3RegistryV1 {
             schema_version: ORIGIN_CUTOFF_Q3_SCHEMA_VERSION,
-            origin_cutoff: Some(predecessor_event),
+            origin_cutoff,
             entries: Vec::new(),
         },
     };
@@ -320,10 +459,9 @@ fn chain_v3(with_equation: bool) -> ChainV3 {
     ) else {
         panic!("lambda/unit V1 manifest");
     };
-    let AuditDecision::Proven(inventory) =
-        verify_public_audit_inventory_v1(&v1_manifest, &kernel, &wire)
-    else {
-        panic!("verified public inventory");
+    let inventory = match verify_public_audit_inventory_v1(&v1_manifest, &kernel, &wire) {
+        AuditDecision::Proven(inventory) => inventory,
+        other => panic!("verified public inventory: {other:?}"),
     };
     let AuditDecision::Proven(v2_manifest) = verify_semantic_audit_lambda_unit_manifest_v2(
         &proposed_semantic_audit_lambda_unit_manifest_v2(),
@@ -528,6 +666,42 @@ fn run_phase_i_pipeline(
     (carrier, root_inventory, subject_bundle, census)
 }
 
+/// The Phase J rewrite authority over one chain: complete typed
+/// reduction graph, all-pairs overlap census, termination, confluence,
+/// substitution stability, and predecessor conservativity.
+fn run_phase_j_rewrite_authority(
+    chain: &ChainV3,
+    carrier: &pen_semantic_audit::VerifiedNativeRankInductiveCarrierV3,
+    root_inventory: &pen_semantic_audit::VerifiedCarrierRootInventoryV3,
+    census: &pen_semantic_audit::VerifiedSynthesisBackedTypedOccurrenceCensusV3,
+    subject_bundle: &pen_semantic_audit::VerifiedCarrierSubjectBundleV3,
+    typed_inventory: Option<&pen_semantic_audit::VerifiedTypedRewriteInventoryV1>,
+) -> pen_semantic_audit::VerifiedRewriteAuthorityV3 {
+    let authority = pen_semantic_audit::diagnose_rewrite_authority_v3(
+        &chain.v1_manifest,
+        &chain.v2_manifest,
+        &chain.manifest_v3,
+        &chain.kernel,
+        &chain.inventory,
+        &chain.compatibility,
+        carrier,
+        root_inventory,
+        census,
+        subject_bundle,
+        typed_inventory,
+    )
+    .expect("rewrite authority");
+    assert_eq!(authority.carrier_digest(), carrier.digest());
+    assert_eq!(authority.census_digest(), census.digest());
+    assert!(!authority.nodes().is_empty());
+    // Every node has a unique normal form: the confluence witness.
+    assert_eq!(authority.normal_forms().len(), authority.nodes().len());
+    for node in authority.nodes() {
+        assert!(authority.normal_form_of(node.id()).is_some());
+    }
+    authority
+}
+
 /// Full Phase I mint over the genuine equationless chain and the
 /// fresh-equation chain, with an adversarial cross-chain binding
 /// rejection. Requires the pinned local Agda runtime.
@@ -536,7 +710,7 @@ fn run_phase_i_pipeline(
 fn phase_i_carrier_census_mints_over_genuine_chains() {
     let chain = chain_v3(false);
     let minted = phase_h_capabilities(&chain);
-    let (carrier, root_inventory, subject_bundle, _census) =
+    let (carrier, root_inventory, subject_bundle, census) =
         run_phase_i_pipeline(&chain, &minted);
 
     // The equationless carrier: four seed families plus every admissible
@@ -613,7 +787,7 @@ fn phase_i_carrier_census_mints_over_genuine_chains() {
     // registry populated.
     let equation_chain = chain_v3(true);
     let equation_minted = phase_h_capabilities(&equation_chain);
-    let (equation_carrier, equation_roots, equation_bundle, _equation_census) =
+    let (equation_carrier, equation_roots, equation_bundle, equation_census) =
         run_phase_i_pipeline(&equation_chain, &equation_minted);
     assert!(equation_carrier.families().len() > carrier.families().len());
     assert!(equation_carrier.families().iter().any(|family| matches!(
@@ -680,6 +854,87 @@ fn phase_i_carrier_census_mints_over_genuine_chains() {
             &subject_bundle,
         ),
         AuditDecision::Unknown(_)
+    ));
+
+    // ---- Phase J: the rewrite authority over both chains. ----
+
+    // Equationless chain: no sealed equations, so no typed rewrite
+    // inventory; edges come from delta on the bodyful unit value (and
+    // any beta), and the predecessor restriction is conservative.
+    let authority = run_phase_j_rewrite_authority(
+        &chain,
+        &carrier,
+        &root_inventory,
+        &census,
+        &subject_bundle,
+        None,
+    );
+    assert!(!authority.edges().is_empty());
+    assert!(authority.edges().iter().all(|edge| matches!(
+        edge.rule(),
+        pen_semantic_audit::RewriteRuleV3::OrdinaryBeta
+            | pen_semantic_audit::RewriteRuleV3::PublicDelta { .. }
+    )));
+    assert!(authority.predecessor_node_count() > 0);
+
+    // Fresh-equation chain: the typed rewrite inventory binds the
+    // sealed `uelim b constructor = b` equation through the restricted
+    // normalizer; the authority gains fresh edges, and delta/fresh
+    // interactions appear in the overlap census with joins.
+    let typed_inventory = equation_typed_rewrite_inventory(&equation_chain);
+    let equation_authority = run_phase_j_rewrite_authority(
+        &equation_chain,
+        &equation_carrier,
+        &equation_roots,
+        &equation_census,
+        &equation_bundle,
+        Some(&typed_inventory),
+    );
+    assert!(equation_authority.edges().iter().any(|edge| matches!(
+        edge.rule(),
+        pen_semantic_audit::RewriteRuleV3::FreshEquation { .. }
+    )));
+    assert!(equation_authority.edges().iter().any(|edge| matches!(
+        edge.rule(),
+        pen_semantic_audit::RewriteRuleV3::PublicDelta { .. }
+    )));
+    assert!(!equation_authority.overlap_pairs().is_empty());
+
+    // Adversarial: the equationless chain's inventory has no equations,
+    // so presenting the equation chain's typed inventory must fail
+    // closed; and the equation chain without its typed inventory must
+    // fail closed as missing.
+    assert!(matches!(
+        pen_semantic_audit::diagnose_rewrite_authority_v3(
+            &chain.v1_manifest,
+            &chain.v2_manifest,
+            &chain.manifest_v3,
+            &chain.kernel,
+            &chain.inventory,
+            &chain.compatibility,
+            &carrier,
+            &root_inventory,
+            &census,
+            &subject_bundle,
+            Some(&typed_inventory),
+        ),
+        Err(pen_semantic_audit::RewriteAuthorityFailureV3::FreshInventoryBindingMismatch)
+    ));
+    assert!(matches!(
+        pen_semantic_audit::diagnose_rewrite_authority_v3(
+            &equation_chain.v1_manifest,
+            &equation_chain.v2_manifest,
+            &equation_chain.manifest_v3,
+            &equation_chain.kernel,
+            &equation_chain.inventory,
+            &equation_chain.compatibility,
+            &equation_carrier,
+            &equation_roots,
+            &equation_census,
+            &equation_bundle,
+            None,
+        ),
+        Err(pen_semantic_audit::RewriteAuthorityFailureV3::MissingTypedRewriteInventory)
     ));
 }
 
@@ -762,4 +1017,129 @@ fn native_seed_wires_enumerate_the_rank_two_carrier() {
             .all(|family| family.rank <= 2)
     );
     assert!(!carrier.tuple_dispositions().is_empty());
+}
+
+/// Build the typed rewrite inventory for the fresh-equation chain: the
+/// restricted normalizer's fresh program over the predecessor boundary
+/// (the fresh owner is the sole successor-new declaration), compiled
+/// against the sealed successor equation one-to-one.
+fn equation_typed_rewrite_inventory(
+    chain: &ChainV3,
+) -> pen_semantic_audit::VerifiedTypedRewriteInventoryV1 {
+    let fresh_request = pen_semantic_audit::FreshConstructorComputationRequestV1 {
+        fresh_declaration: declarations()[3].clone(),
+        clauses: vec![pen_semantic_audit::FreshConstructorClauseV1 {
+            constructor: wire_global(2),
+            scrutinee_parameter_ordinal: 1,
+        }],
+    };
+    let fresh_program = match pen_semantic_audit::verify_fresh_constructor_computation_v1(
+        &chain.v1_manifest,
+        &chain.kernel,
+        chain.inventory.predecessor_boundary(),
+        &fresh_request,
+    ) {
+        AuditDecision::Proven(program) => program,
+        other => panic!("fresh constructor computation program: {other:?}"),
+    };
+    match pen_semantic_audit::compile_typed_rewrite_inventory_lambda_unit_v1(
+        &chain.v1_manifest,
+        &chain.inventory,
+        &fresh_program,
+    ) {
+        AuditDecision::Proven(inventory) => inventory,
+        other => panic!("typed rewrite inventory: {other:?}"),
+    }
+}
+
+/// Pure-Rust probe: both chain shapes must produce verified inventories,
+/// and the fresh-equation chain must compile its typed rewrite inventory
+/// through the restricted normalizer.
+#[test]
+fn both_chain_shapes_produce_verified_inventories() {
+    let plain = chain_v3(false);
+    assert!(plain.inventory.equations().is_empty());
+    let with_equation = chain_v3(true);
+    assert_eq!(with_equation.inventory.equations().len(), 1);
+    let typed = equation_typed_rewrite_inventory(&with_equation);
+    assert_eq!(typed.entries().len(), 1);
+}
+
+/// Focused Phase J probe over the equationless chain only (pinned Agda
+/// required for the Phase H capabilities feeding the carrier).
+#[test]
+#[ignore]
+fn phase_j_probe_equationless() {
+    let chain = chain_v3(false);
+    let minted = phase_h_capabilities(&chain);
+    let (carrier, root_inventory, subject_bundle, census) =
+        run_phase_i_pipeline(&chain, &minted);
+    println!(
+        "carrier families {} census occurrences {} roots {}",
+        carrier.families().len(),
+        census.batch().occurrences().len(),
+        root_inventory.roots().len()
+    );
+    match pen_semantic_audit::diagnose_rewrite_authority_v3(
+        &chain.v1_manifest,
+        &chain.v2_manifest,
+        &chain.manifest_v3,
+        &chain.kernel,
+        &chain.inventory,
+        &chain.compatibility,
+        &carrier,
+        &root_inventory,
+        &census,
+        &subject_bundle,
+        None,
+    ) {
+        Ok(authority) => println!(
+            "authority nodes {} edges {} overlaps {} stability {}",
+            authority.nodes().len(),
+            authority.edges().len(),
+            authority.overlap_pairs().len(),
+            authority.substitution_stability().len()
+        ),
+        Err(failure) => panic!("authority failed: {failure}"),
+    }
+}
+
+/// Focused Phase J probe over the fresh-equation chain.
+#[test]
+#[ignore]
+fn phase_j_probe_equation() {
+    let chain = chain_v3(true);
+    let minted = phase_h_capabilities(&chain);
+    let (carrier, root_inventory, subject_bundle, census) =
+        run_phase_i_pipeline(&chain, &minted);
+    let typed_inventory = equation_typed_rewrite_inventory(&chain);
+    println!(
+        "carrier families {} census occurrences {} roots {} witnesses {}",
+        carrier.families().len(),
+        census.batch().occurrences().len(),
+        root_inventory.roots().len(),
+        0
+    );
+    match pen_semantic_audit::diagnose_rewrite_authority_v3(
+        &chain.v1_manifest,
+        &chain.v2_manifest,
+        &chain.manifest_v3,
+        &chain.kernel,
+        &chain.inventory,
+        &chain.compatibility,
+        &carrier,
+        &root_inventory,
+        &census,
+        &subject_bundle,
+        Some(&typed_inventory),
+    ) {
+        Ok(authority) => println!(
+            "authority nodes {} edges {} overlaps {} stability {}",
+            authority.nodes().len(),
+            authority.edges().len(),
+            authority.overlap_pairs().len(),
+            authority.substitution_stability().len()
+        ),
+        Err(failure) => panic!("authority failed: {failure}"),
+    }
 }
