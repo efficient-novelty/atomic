@@ -2,14 +2,23 @@
 
 Date: 2026-07-30 (Phase H and Phase I continuations recorded
 2026-07-31; law-profile factorial programme integrated and Phases
-K1–K3 registered 2026-08-01)
+K1–K3 registered, and the Phase J rewrite, family-quotient,
+weakening/restriction, marginal-family, empty demand-orbit, empty
+demand-realization, restricted-cost, dependency-support, and negative SR2
+authorities recorded
+2026-08-01)
 Repository: `pen-atomic`
 Working branch: `codex/law-v2-agda-wire-sections-5-11`
 Status basis: committed history through `a3e30d5` plus the canonical-wire and
 safe-Agda work present in this branch on 2026-07-30, the Phase H
 single private correspondence factory, and the Phase I native carrier,
 carrier-derived root inventory, subject bundle, and typed-occurrence
-census implemented on 2026-07-31; the clean experimental programme for
+census implemented on 2026-07-31; the Phase J rewrite authority,
+authorized-Q0 semantic-family quotient, derived weakening/restriction,
+exact marginal-family set, exact empty demand-orbit and realization
+censuses, restricted cost basis, exhaustive dependency-support census,
+and SR2 non-injectivity theorem implemented on 2026-08-01; the
+clean experimental programme for
 law-profile adjudication (`docs/experimental_program_addition.md`) is
 integrated as Phases K0–K3
 
@@ -42,13 +51,17 @@ structure at Act 4—a direct unit eliminator with its computation equation—an
 then correctly halted debt-free. This is a real autonomous result for that
 profile, but it is not the historical fifteen-stage sequence.
 
-The current critical path is more foundational. Before the semantic audit,
-kernel cost, rewrite system, quotient, and productivity law can receive
-authority, the project must prove that the concrete Rust certificate system
-and the safe Agda model describe exactly the same production judgments. The
-current work therefore builds one canonical byte bundle, feeds exactly those
-bytes to independent Rust and Agda checkers, and requires byte-identical
-normalized transcripts before any correspondence capability can be minted.
+The foundational Rust/safe-Agda correspondence, native carrier, verified
+rewrite system, complete semantic-family quotient, derived weakening/
+restriction, exact marginal-family set, and the exact empty demand-orbit and
+realization bases, restricted paid basis, and exhaustive pre-SR2 dependency
+support for both registered chains have now received authority. The frozen
+SR2 codomain has also been checked rather than assumed: both vectors carry a
+verified pigeonhole obstruction, so positive SR2 provenance and `nu` are
+undefined on them. General nonempty demand-orbit and typed-realization
+authority, general Q0-minimal cost, and a positive provenance theorem remain
+theorem frontiers. Live selective authority remains additionally blocked by the
+registered `gamma`/trace specification contradiction described below.
 
 The canonical Rust wire, exact Rust-to-Agda input transport, slot-derived
 bundle construction, fail-closed capability frontier, and safe Agda envelope
@@ -174,9 +187,36 @@ one wire asymmetry: context-growing generic equation actions are
 wire-inexpressible (the wire dropped `context_witness`), are recorded
 in the subject bundle's inexpressible census rather than silently
 dropped, and stay covered by the root inventory and census; their wire
-carrier is exactly the Phase J rewrite authority. The next ordered
-work is Phase J, with the additive canonicality theorems and the
-Phase K0 formulation lawful in parallel.
+carrier is exactly the Phase J rewrite authority.
+
+The Phase J rewrite, semantic-family quotient, weakening/restriction,
+exact marginal-family, exact empty demand-census, restricted cost,
+dependency-support, and negative SR2 diagnostic stages are now also
+implemented (2026-08-01). The rewrite capability builds the complete
+census-seeded beta/delta/fresh reduction graph, joins every overlap,
+proves termination/confluence and one-step construction-substitution
+stability, and independently replays the predecessor restriction. The
+family-quotient capability then derives the exact authorized-Q0 seed
+twin internally, checks every normalized constructor tree against the
+rewrite theorem, re-enumerates the fixed carrier, and exhausts Q1/Q2
+with verified-empty Q3. Its public family and class identities inherit
+the demand-neutral V3 seed identities and exclude legacy clause/port
+lineage. The weakening stage independently reconstructs the predecessor
+carrier and quotient and proves an injective class map with an inverse on
+its image. The marginal stage then fixes the exact successor-class
+complement before proving new-event support member by member. The orbit and
+realization stages independently reconstruct the complete demand and
+equation-port obligation surfaces and mint their uniquely empty censuses on
+both registered chains. They deliberately expose no nonempty orbit or
+realization constructor. The restricted cost theorem derives the exact paid
+singleton basis for this restricted projection-/demand-free,
+bodyless/reflexive fragment, and the support census unions clause lineage
+across every raw member. Their combination exposes a genuine law-level
+obstruction: the exact marginal sets admit no typed, role-preserving injection
+into the frozen SR2 tag codomain. The next work is therefore theory
+adjudication of that negative result—not manufacture of a positive `nu`—with
+the general nonempty demand theorem, general cost bridge, additive canonicality
+theorems, and Phase K0 formulation lawful in parallel.
 
 ## 1. Objective hierarchy
 
@@ -1072,10 +1112,12 @@ registered and failed closed on:
   (substituted endpoints kernel-checked, the same rule replayed at the
   same position, exact equality of results) — see lesson 4.16;
 - predecessor conservativity combines the positive empty-equation
-  historical base with an independent reconstruction: every edge
-  between predecessor-supported nodes must be derivable from
-  predecessor resources alone, and no reduction carries a
-  predecessor-supported node to successor-supported content; and
+  historical base with an independent reconstruction from the
+  predecessor signature: every old-language node is kernel-replayed,
+  every position × predecessor beta/delta rule is re-enumerated, the
+  resulting edge set must equal the successor graph's restriction
+  exactly, and the restricted normal-form map is independently
+  recomputed and required to be closed; and
 - the reserved V3 stage reason `MissingRewriteSystemV3` is now live:
   it names every fail-closed stop of the authority constructor — the
   first of the seven reserved V3 stage reasons to be wired.
@@ -1097,12 +1139,247 @@ act structure required by the typed rewrite inventory (the fresh owner
 as the sole successor-new declaration over the predecessor boundary)
 is now exercised by the fresh-equation test chain.
 
-### 2.20 Current validation snapshot
+### 2.20 Phase J semantic-family quotient discharged on 2026-08-01
+
+`family_quotient_v3.rs` now mints the opaque
+`VerifiedFamilyQuotientV3` capability over one exact native-carrier /
+rewrite-authority chain. The constructor:
+
+- derives the complete seed list internally from the verifier-minted
+  pre-Q0 carrier, with no caller-provided seed or vertex surface;
+- normalizes those seeds under the exact fresh program bound by the
+  typed rewrite inventory, then re-enumerates the registered carrier
+  in `AuthorizedQ0` mode;
+- checks both sides of equation judgments and every other family
+  judgment against the rewrite graph's unique normal forms;
+- translates every seed, context witness, and recursively referenced
+  constructor to prove an exact constructor-tree image from the
+  pre-Q0 carrier, rather than pairing equal payloads by presentation;
+- reuses the native carrier's checked `SeedIdV3` correspondence and
+  excludes legacy V1 clause/port lineage from normalized-family and
+  class identity;
+- exhausts Q1/Q2 over that fixed vertex set with the verified-empty
+  Q3 registry and proves exact quotient coverage; and
+- binds the manifests, kernel and normalizer protocols, inventory,
+  native carrier, repaired rewrite theorem, optional typed/fresh
+  authority, authorized carrier, and quotient into one deterministic
+  non-deserializable capability.
+
+This is the semantic-family quotient used by the value audit. It is
+not the later complete quotient of candidate/discharger presentations
+used to form a branch cone. At this stage cost, demand provenance, and SR2
+were downstream; §§2.25–2.27 now discharge the restricted current-chain
+surfaces and refute positive SR2, while live selective authority remains
+closed.
+
+### 2.21 Phase J weakening/restriction discharged on 2026-08-01
+
+`family_weakening_v3.rs` now mints the opaque
+`VerifiedFamilyWeakeningV3` capability without accepting family slices,
+maps, support claims, or a conservativity flag. Its constructor:
+
+- derives the predecessor seed surface from the exact verified inventory
+  and the successor authorized-Q0 carrier;
+- independently re-enumerates the predecessor authorized-Q0 carrier and
+  complete Q1/Q2 quotient under the predecessor signature, with the
+  historical empty-equation boundary explicit;
+- classifies old families recursively from constructor leaves rather than
+  representative support, and requires equality of complete `RawFamilyV1`
+  values with the successor old-leaf restriction;
+- compares the predecessor Q1 identities and the complete old–old Q2
+  disposition multiset exactly and requires both Q3 edge sets empty;
+- preserves the demand-neutral V3 raw-family identities, derives a total
+  injective predecessor-to-successor class map, checks the exact old-member
+  intersection of every successor class, and mints its inverse only on the
+  image; and
+- digest-binds the manifests, kernel and normalizer protocols, inventory,
+  exact extension, predecessor rewrite reconstruction, successor quotient,
+  reconstructed predecessor carrier/quotient, Q1/Q2 transports, and maps.
+
+The equationless vector reconstructs 1 predecessor seed / 1 raw family /
+1 class with 5 Q2 dispositions and a one-class image. The fresh-equation
+vector reconstructs 3 / 3 / 3 with 45 dispositions and a three-class image.
+This stage deliberately mints no marginal complement.
+
+### 2.22 Phase J exact marginal-family set discharged on 2026-08-01
+
+`marginal_family_set_v3.rs` now mints the opaque
+`VerifiedMarginalFamilySetV3` capability from only the exact V3 manifest,
+successor quotient, and verified weakening theorem. It:
+
+- revalidates the class weakening/restriction image and the raw/class
+  commuting square against the exact predecessor member domain;
+- computes the complete successor-class complement before inspecting any
+  support, so support can never filter an inconvenient marginal family;
+- reconstructs and inverts the authorized carrier's V3 raw-family identity
+  map and proves both the class partition and the raw-member partition
+  exact;
+- treats new aliases inside an inherited image class as inherited rather
+  than incorrectly subtracting only the old raw IDs; and
+- proves for every raw member of every marginal class—not merely the class
+  representative—that structural support touches the new event and carries
+  no demand-output authority.
+
+The equationless vector certifies 9 marginal classes with 23 marginal raw
+members; the fresh-equation vector certifies 10 with 26. The exposed
+cardinality is a structural count only: this capability mints no `nu`, cost,
+demand-orbit, realization, SR2, or Selective-Law authority.
+
+### 2.23 Phase J exact empty demand-orbit base discharged on 2026-08-01
+
+`demand_orbit_census_v3.rs` now mints the opaque
+`VerifiedDemandOrbitCensusV3` capability for the exact empty base supported by
+the current registered inventories. Its constructor:
+
+- accepts only the exact V3 manifest, verified public inventory, and exact
+  marginal-family set, then rechecks their complete chain bindings before
+  diagnosing emptiness;
+- derives the complete predecessor demand-contract slice from the inventory
+  and requires its count to agree with the inventory coverage theorem;
+- independently requires the inventory's equation-port metadata surface to be
+  empty, so absence is not inferred from a caller count or selected list;
+- binds predecessor history, exact extension, both boundaries, new event,
+  marginal-family authority and semantic-set digest, and the canonical empty
+  demand census and orbit partition into one deterministic capability; and
+- exposes no nonempty orbit constructor, realization, output, SR2, `nu`, or
+  live selective authority.
+
+Both the equationless and fresh-equation vectors have no predecessor demand
+contracts and no demand-port metadata, so each receives the uniquely empty
+orbit census. This is inventory-relative empty authority, not a global claim
+that future histories or nonempty demand schemes carry no debt. The first
+general-case blocker remains a verifier-defined demand-scheme carrier and a
+complete typed-reindexing quotient/naturality theorem; normalized hashes,
+singleton stand-ins, legacy family IDs, and port keys cannot substitute for
+that theorem.
+
+### 2.24 Phase J exact empty demand-realization base discharged on 2026-08-01
+
+`demand_realization_census_v3.rs` now mints the opaque
+`VerifiedDemandRealizationCensusV3` capability for those same exact empty
+chains. It does not merely inherit emptiness from the orbit capability. The
+constructor:
+
+- binds the exact V3 manifest, inventory, semantic seed-base census,
+  marginal-family set, and demand-orbit census;
+- independently derives the complete equation-to-port obligation map by
+  comparing the verified inventory with the seed census's complete port
+  metadata ledger, rejecting duplicates or a missing/cross-chain ledger;
+- requires the independently derived predecessor demand, realization
+  obligation, and orbit surfaces all to be empty; and
+- records the seed/public-clause census, marginal/orbit/demand digests, exact
+  boundaries and extension, and canonical empty realization relation without
+  exposing family assignments, outputs, SR2, or `nu`.
+
+The two current vectors therefore possess exact empty realization bases. A
+nonempty stage still requires kernel-replayed typed family realizations over
+the exact marginal set, including output-position transport through the
+typed-reindexing quotient. Port association alone is metadata, not that
+realization theorem.
+
+### 2.25 Phase J restricted current-fragment cost basis discharged on 2026-08-01
+
+`restricted_kernel_cost_basis_v3.rs` now mints the opaque
+`VerifiedRestrictedKernelCostBasisV3` capability under the separate unfrozen
+cost-V2 manifest. The word `Restricted` is part of every public capability and
+constructor name because this is deliberately not a general V3/Q0 cost law.
+Its constructor:
+
+- binds the exact cost V2 and semantic V1/V2/V3 manifests, compatibility,
+  inventory, canonical public-clause census, native carrier, and repaired V3
+  rewrite authority;
+- accepts no caller-built cost clause, clause ID, dependency edge, port map,
+  reconstruction, equivalence, negative witness, basis, or count;
+- derives exactly the successor-new declaration clauses and separately sealed
+  successor equations using the canonical census identities, then derives the
+  exact internal dependency DAG and empty demand-port bindings;
+- restricts the theorem to source/normal-reflexive bodyless successor
+  declarations and source/normal-reflexive successor equations owned by those
+  declarations, with no forced projections, predecessor demands, predecessor
+  equations, or duplicate fresh-rule keys;
+- constructs the complete leave-one-out negative evidence internally, invokes
+  the cost-V2 engine through a crate-private component boundary, and requires
+  the returned certificate to be the unique full basis of singleton classes,
+  with every disposition `FirstIrreducible`, no reconstructions, and exact
+  independence; and
+- binds the complete cost input and V2 certificate into a deterministic
+  non-deserializable V3 envelope.
+
+The equationless vector has three paid successor declarations and certifies
+cost 3. The fresh-equation vector has one paid bodyless declaration plus its
+separately sealed equation and certifies cost 2. The equation remains paid
+even though the full rewrite system makes it reflexive: cost V2 charges the
+authority being purchased and deliberately excludes fresh computation from
+its free grammar. This does not prove general independence modulo completed
+Q0, does not identify the cost basis with semantic-family classes, and does
+not issue live `kappa`. The general frontier is a bodyful/non-reflexive
+cost-to-V3 rewrite bridge plus target-rule-removed normalization for any
+claim of a general Q0-minimal basis.
+
+### 2.26 Phase J exhaustive pre-SR2 dependency support discharged on 2026-08-01
+
+`sr2_dependency_support_v3.rs` now mints the opaque
+`VerifiedSr2DependencySupportCensusV3`. It reconstructs the authorized
+carrier and V3 raw-family identities from the exact quotient, verifies the
+complete quotient and marginal partitions, replays V3 seed-to-public-clause
+lineage, and recursively traverses every raw member of every marginal class.
+Application and equation-action supports are unions of their complete child
+supports; the class support is the union of all member witnesses, never the
+representative's convenience source alone. Candidate-local clauses are then
+derived by exact new-event origin. An empty candidate-local set is retained as
+valid support evidence so the later provenance stage can diagnose a missing
+anchor rather than losing the family.
+
+The capability binds the exact manifest, inventory, public-clause and seed
+censuses, quotient, marginal set, empty orbit census, and empty realization
+census. It independently records an empty pre-existing output surface for
+these chains. The two vectors certify exhaustive support for 9 classes / 23
+raw members and 10 / 26 respectively. This is pre-SR2 evidence only: it
+chooses no principal source, assigns no tag, and issues no `nu` or live value.
+
+### 2.27 Phase J SR2 non-injectivity diagnosed on 2026-08-01
+
+`sr2_noninjectivity_v3.rs` now mints the separate opaque diagnostic theorem
+`VerifiedSr2NonInjectivityV3`. From the exact marginal, empty-demand, public-
+clause, and restricted-cost capabilities it derives the frozen SR2 tag
+codomain
+
+\[
+  (\text{paid clause}\times\text{four local roles})
+  \;\sqcup\;\text{pre-existing live demand outputs}.
+\]
+
+The second summand is exactly empty on both registered chains. The verifier
+checks the frozen typed role-preservation premise—a clause tag for a family
+must carry that family's unique verified local role—then partitions the exact
+marginal set by verified role, reconstructs the
+singleton paid-clause basis, enumerates exact `(ClauseIdV1, LocalRoleV1)` tag
+cells, and mints a deterministic role-fiber or total-capacity pigeonhole
+witness only when the strict cardinality inequality is derived internally.
+No fixture digest, expected count, assignment, or selection order is an
+input.
+
+Both current vectors are refuted by the frozen positive SR2 requirement:
+
+- equationless: 6 `SupportAction` marginal classes have only 3 paid-clause
+  tags carrying that role; and
+- fresh-equation: 10 marginal classes have at most `2 * 4 = 8` paid
+  clause-role tags in total.
+
+Therefore neither current vector admits the required total injective SR2
+assignment. Positive provenance and `nu` cannot be minted. This means `nu` is
+undefined, not zero; the theorem does not establish debt freedom, `gamma`, a
+bar comparison, Selective-Law acceptance, structural completion, or halt.
+The obstruction is target-neutral and should be retained as evidence against
+silently adding roles, renaming tags, or substituting structural marginal
+counts for a failed semantic audit.
+
+### 2.28 Current validation snapshot
 
 At this checkpoint:
 
 - `pen-production-wire`: 7 unit and 6 cross-language pinning tests passed;
-- `pen-semantic-audit --lib`: 172 passed, 6 ignored, 0 failed, plus two
+- `pen-semantic-audit --lib`: 204 passed, 6 ignored, 0 failed, plus two
   `compile_fail` doc tests pinning the capability privacy boundary; the
   `canonical_bundle_vectors` integration suite proves the committed
   canonical vector builder-derived and replayed, the
@@ -1123,7 +1400,23 @@ At this checkpoint:
   native carrier, root inventory, subject bundle (through the full
   cross-language gate including a factory mint over it), and
   carrier-derived typed-occurrence census on both the equationless
-  and fresh-equation chains;
+  and fresh-equation chains; the expanded test now also passes through
+  repaired predecessor reconstruction, the complete Phase J family
+  quotient, derived weakening/restriction, exact marginal-family set, exact
+  empty orbit and realization censuses, exhaustive raw-member dependency
+  support, the restricted cost basis, and the negative SR2 theorem.
+  It produces 24 normalized families / 10 classes, a 1-class weakening
+  image, and 9 marginal classes / 23 marginal raw members for the
+  equationless chain; and 29 / 13, a 3-class image, and 10 / 26 for the
+  fresh-equation chain. The restricted paid bases have costs 3 and 2; the
+  support censuses cover 9 / 23 and 10 / 26 class/member surfaces; and both
+  chains mint exact SR2 pigeonhole obstructions. Every capability remints
+  deterministically, missing/wrong/unexpected/cross-chain upstream authority
+  is rejected, and the full pinned test passes 1/1 in 85.58 seconds;
+- `cargo check --tests` and `cargo clippy --lib --tests -- -D warnings`
+  pass, the non-ignored `native_carrier_vectors` suite passes 2/2, and all
+  eight post-rewrite Phase J authority/diagnostic modules pass scoped Rustfmt
+  and diff checks;
 - the safe Agda `ContextChecker`, `BundleChecker`, `BundleEncode`,
   `BundleDecodeTestV1`, `ContextCorrespondenceV1`,
   `ContextTranscriptTestV1`, `NormalizationV1`, `SemanticReplayV1`,
@@ -1464,9 +1757,12 @@ authority.
 
 ### Phase J — Rewrite, quotient, audit, and Law V2 authority
 
-Status: items 1–4 discharged 2026-08-01 as the V3 rewrite authority
-(§2.19); items 5–12 open, with the exact seams surveyed and
-registered below.
+Status: items 1–7 are discharged; the exact empty bases of items 8–9 and
+the restricted current-fragment form of item 10 are discharged on both
+registered chains; exhaustive pre-SR2 support is discharged; and item 11 is
+now negatively adjudicated for both vectors (§§2.19–2.27). The general
+nonempty forms of items 8–9, a general Q0-minimal form of item 10, positive
+item 11, and items 12–14 remain open.
 
 Required sequence:
 
@@ -1478,48 +1774,84 @@ Required sequence:
    with join witnesses at unique normal forms);
 4. termination/confluence and predecessor conservativity — DISCHARGED
    (acyclicity ranks, unique normal forms, historical empty base plus
-   independent predecessor reconstruction);
-5. structural family weakening and restriction — OPEN: the current
-   verifier accepts a caller-supplied `exact_and_conservative` flag on
-   the extension and unbound family-class slices; conservativity must
-   be derived from the rewrite authority's predecessor leg and the
-   classes bound by quotient-certificate digests;
-6. complete family quotient — OPEN: `quotient_families_with_q0_v1`
-   requires the Q0-NORMALIZED carrier bound to its exact fresh
-   program; the native carrier needs its authorized-Q0 twin (same
-   inventory-derived seeds, `AuthorizedQ0` mode) gated on the rewrite
-   authority;
-7. semantic cost basis and marginals — OPEN: the V2 cost auditor's
-   gate requires the V1 rewrite capability that remains
-   deliberately unconstructible; a V3-gated entry must consume the
-   new rewrite authority; the first-irreducible basis must then bind
-   the SR2 injection;
-8. demand provenance and typed realizations — OPEN: the demand
-   orbit and realization censuses are positive only in the empty
-   case; nonempty cases need the typed-reindexing orbit quotient and
-   kernel-replayed family realizations;
-9. SR2 provenance injection — OPEN: the injection discipline exists
-   and is order-independent, but its `first_irreducible_basis` and
-   `preexisting_live_outputs` inputs are unauthenticated sets that
-   must bind to the cost certificate and demand-anchor census;
-10. full transcript agreement for the resulting vector suite — OPEN;
-11. independent review and freeze — OPEN (external by design); and
-12. only then a separately locked Profile A adapter — OPEN.
+   exact independent predecessor replay and restricted normal-form
+   reconstruction);
+5. complete semantic-family quotient — DISCHARGED: the exact native
+   seeds are normalized under the chain-bound fresh authority,
+   re-enumerated in `AuthorizedQ0` mode, proven to form the exact
+   constructor-tree image of the pre-Q0 carrier against the rewrite
+   theorem, and quotiented with exact coverage on the demand-neutral
+   V3 identity surface;
+6. structural family weakening and restriction — DISCHARGED: the
+   predecessor carrier and quotient are reconstructed internally, their
+   complete old restriction is compared exactly, and the resulting class
+   injection carries an inverse on its image;
+7. exact semantic marginal-family set — DISCHARGED: the successor-class
+   complement is fixed before member-level new-event support is proved,
+   with exact class/raw partitions and no caller-provided set;
+8. demand-orbit census — PARTIAL: the constructor derives and certifies the
+   exact empty demand carrier and orbit partition for both current vectors;
+   nonempty cases remain open behind a verifier-defined demand-scheme carrier
+   and the registered complete typed-reindexing orbit quotient/naturality
+   theorem;
+9. typed demand realizations — PARTIAL: an independent seed/inventory
+   equation-port comparison certifies the exact empty realization relation
+   for both current vectors; nonempty authority still needs kernel-replayed
+   family realizations over the exact marginal set and quotient-respecting
+   output transport;
+10. semantic cost basis — PARTIAL under its separate manifest: the exact
+   restricted projection-/demand-free, bodyless/reflexive V3 fragment now
+   derives and binds the full singleton cost-V2 basis (costs 3 and 2);
+   bodyful/non-reflexive chains and any claim
+   of general Q0-minimality remain open behind a cost/rewrite correspondence
+   and target-rule-removed normalization theorem;
+11. SR2 provenance injection — REFUTED FOR BOTH CURRENT VECTORS: exhaustive
+   raw-member dependency support is now authenticated, but the exact empty
+   demand surface leaves only paid clause-role tags. The equationless
+   `SupportAction` role fiber has size 6 with capacity 3, and the fresh-
+   equation total marginal set has size 10 with total capacity 8. Separate
+   opaque pigeonhole certificates therefore prove that no total typed,
+   role-preserving SR2 injection exists; positive SR2 and `nu` remain
+   unavailable rather than becoming zero;
+12. full transcript agreement for the resulting vector suite — OPEN;
+13. independent review and freeze — OPEN (external by design); and
+14. only then a separately locked Profile A adapter — OPEN.
 
-Per the registered factorial programme
-(`docs/experimental_program_addition.md`, §7.1 and §16.8), Phase J
-additionally delivers the semantic-family productivity-register
-surface required by the S1 selective profile: authoritative
-`(kappa, nu)` issuance over complete pre/post family carriers with the
-complete quotient, weakening/restriction, marginal extraction,
-first-irreducible kernel cost, and provenance injection, plus the
-certified register values for the two registered bootstrap acts that
-initialize the first guarded width-two bar (the Phase K1
-bootstrap-window initialization input). Historical structural values
-may not be substituted for missing semantic-family values. If the
-generative-capacity register `gamma` is pursued, its separate theorem
-package is Phase JG, inserted before Phase K1 and forbidden from
-borrowing future-trace evidence.
+Phase J is building the semantic-family `(kappa, nu)` audit surface. The
+structural quotient, weakening image, exact marginal set, exact empty demand
+bases, restricted first-irreducible cost, and exhaustive dependency support
+now exist. They prove that authoritative register issuance fails at positive
+SR2 for both current vectors. Historical structural counts may not be
+substituted for the missing injection, and failed SR2 may not be reported as
+`nu = 0`. A revised positive theorem would require independently motivated
+law changes or a different admissible chain, plus the general nonempty-demand
+and cost bridges. This surface is not Selective-Law authority.
+
+**Mandatory theory-alignment gate — OPEN.** The current Selective-Law
+hypothesis in `C:/DEV/book/chapters/ch04_selective_law.tex` is not
+register-neutral: it defines productive clearance by
+`gamma/kappa`, explicitly calls `nu/kappa` diagnostic, and requires
+two prior sealed acts with certified `(kappa, gamma)` registers. This
+conflicts with `docs/experimental_program_addition.md` §7 and the
+present Phase K1 text, which treat `nu` as an S1 candidate and Phase
+JG as optional.
+
+There is also a direct internal inconsistency in the claimed historical
+trace. Chapter 4 states `0 <= gamma <= nu` and requires every accepted
+positive-cost act to clear a nonnegative inherited bar strictly. Yet
+`C:/DEV/book/chapters/ch_genesis_mathematics.tex` assigns Step 9
+`(kappa, nu) = (4, 0)` and Step 12 `(6, 0)`. Those entries force
+`gamma = 0`, so their efficiency is zero and cannot strictly exceed
+any nonnegative bar. The current Selective Law and the claimed
+fifteen-step ledger therefore cannot both be correct as written.
+
+Phase K1 freeze and Phase K2 execution are blocked until a
+pre-exposure repair is independently motivated, reviewed, and frozen:
+either retain Chapter 4 and make Phase JG mandatory while repairing or
+rejecting the incompatible trace claims, or explicitly revise the law
+and every dependent programme statement to make another register
+authoritative. This gate records the contradiction; it does not choose
+a metric or authorize tuning against the desired sequence.
 
 ### Phase K0 — Formulate and freeze the contextual-internalization profile
 
@@ -1562,16 +1894,16 @@ protocol, and the pre-registered interpretation rules that govern it.
 ### Phase K1 — Formulate and freeze productive discharge
 
 Status: registered 2026-08-01 (`docs/experimental_program_addition.md`
-§14); formulation open; blocked behind the Phase J
-productivity-register authority; execution blocked behind the
-programme freeze.
+§14); formulation open; blocked behind the Phase J audit remainder
+and the mandatory Phase-JG-or-law-repair theory-alignment gate;
+execution blocked behind the programme freeze.
 
 Deliver, per the registered programme:
 
-- the productivity-register theorem package (the semantic-family
-  register `nu/kappa` from Phase J, or a separately frozen register
-  profile if the underdetermination is registered — never metric
-  shopping after results);
+- the productivity-register theorem package selected only after the
+  theory-alignment gate closes: Phase JG if Chapter 4 is retained, or
+  an explicitly repaired, independently reviewed, and re-frozen law
+  and profile — never metric shopping after results;
 - certified bootstrap initialization values for the first guarded
   width-two bar;
 - the exact prior-window formula
@@ -1803,6 +2135,20 @@ substitution lemma, checked instance by instance, with no closure at
 all. When a stability claim seems to need a saturated universe, the
 universe is usually the wrong object.
 
+### 4.17 Complete support does not imply injective provenance
+
+The exact support census can succeed for every marginal family while SR2
+still fails globally. Provenance is not merely a local existence check: its
+typed receipts must form an injection, and a clause receipt must carry the
+family's verified role. On the equationless vector, all six
+`SupportAction` marginals may range over only three paid
+`(clause, SupportAction)` tags; on the fresh-equation vector, ten marginals
+range over at most eight paid clause-role tags once the demand-output summand
+is proven empty. No choice function, digest order, representative, or greedy
+matching can repair a pigeonhole inequality. A failed injectivity theorem
+makes the register undefined; it is not a zero value and not a license to
+expand the codomain after observing the result.
+
 ## 5. Big problems and challenges
 
 ### 5.1 Exact semantic correspondence
@@ -1834,15 +2180,22 @@ completeness claim from roots selected before the carrier.
 ### 5.5 Rewrite admissibility
 
 Local rule-shape checks are far short of a verified rewrite system. The project
-still needs typed stability, complete overlap classification, joins,
-termination/confluence, and predecessor conservativity over the exact native
-carrier.
+now has typed stability, complete overlap classification, joins,
+termination/confluence, and exact predecessor replay over the native carrier.
+Downstream proofs must consume that opaque authority rather than regress to
+rule-shape checks or caller assertions.
 
 ### 5.6 Semantic-family completeness and cost
 
-Issuing `kappa` and `nu` requires complete pre/post family carriers, a decided
-family quotient, weakening/restriction, marginals, and provenance. Historical
-structural values cannot fill these gaps.
+The authorized-Q0 carrier, complete semantic-family quotient, derived
+weakening/restriction, exact marginal-family set, empty demand bases,
+restricted cost basis, and exhaustive support are now decided for the two
+registered chains. The cost theorem remains restricted and does not issue
+live `kappa`; its general Q0 bridge is open. More decisively, the frozen
+typed, role-preserving SR2 injection is impossible on both current chains, so
+`nu` is undefined.
+Historical structural values cannot fill either gap, and changing the role or
+receipt grammar after seeing the obstruction would be target fitting.
 
 ### 5.7 Law/profile adoption
 
@@ -1850,6 +2203,10 @@ Even a correct generic theorem package does not choose the constitutive
 profile that should govern Genesis. Any productive extension beyond the
 four-act halt needs mathematical motivation, adversarial review, and a
 pre-result freeze. Otherwise the experiment becomes target fitting.
+Moreover, the current `gamma`-authoritative Selective Law contradicts the
+two positive-cost, zero-`nu` entries in the claimed Genesis ledger. No live
+profile may be frozen until that specification inconsistency is repaired
+without using recovery of the target trace as the selection criterion.
 
 ### 5.8 Kernel fragment limits
 
@@ -1874,18 +2231,21 @@ an ongoing architectural and CI obligation.
 
 ## 6. Current stop condition
 
-The project has not reached a mathematical impossibility result. It has
-reached a precise ordered implementation/theorem frontier.
+The project has not proved the ultimate Genesis objective impossible. It has,
+however, reached an exact local impossibility result: under the currently
+frozen four-role SR2 codomain, the restricted paid bases and empty demand
+surfaces of both registered V3 vectors admit no typed, role-preserving
+injective provenance assignment. Positive `nu` is therefore undefined on
+those vectors.
 
 The next work may lawfully continue with:
 
 1. the remaining record-payload and whole-envelope canonicality theorems;
-2. the Phase J remainder (items 5-12): the Q0-normalized native
-   carrier twin and complete family quotient gated on the minted
-   rewrite authority, derived weakening conservativity, the V3-gated
-   cost basis, demand provenance, the SR2 bindings, the transcript
-   suite, and the review/freeze — with the productivity-register
-   surface for Phase K1 assembled from those stages.
+2. the Phase J theorem remainder: nonempty demand orbits/realizations, the
+   general cost/rewrite bridge, adjudication of the certified SR2 obstruction,
+   transcript suite, and review/freeze; and
+3. the target-neutral theory work needed to close the mandatory
+   Phase-JG-or-law-repair gate before any Phase K1/K2 freeze or run.
 
 Item 1 is additive; item 2 is the ordered theorem frontier. Complete
 safe Agda decoding and structural checking for sections 5–11, the
@@ -1908,6 +2268,17 @@ native carrier, carrier-derived root inventory, canonical subject
 bundle, and carrier-derived typed-occurrence census were discharged
 on 2026-07-31.
 
+The Phase J rewrite authority, authorized-Q0 semantic-family quotient,
+derived family weakening/restriction, exact marginal-family set, exact empty
+demand bases, restricted paid basis, and exhaustive dependency support were
+discharged on 2026-08-01. Their equationless and fresh-equation vectors bind
+the full chain deterministically. The separate negative SR2 theorem then
+proves that both current vectors fail the frozen typed, role-preserving
+injection rule. The ordered frontier is now theory adjudication: preserve the
+law and reject these
+vectors, or motivate and freeze a general change without consulting the held-
+out target. No positive adapter may be manufactured around the obstruction.
+
 In parallel (and lawful at any time, since it exposes nothing to the
 registered prefix), the Phase K0 contextual-internalization
 formulation may proceed: the target-neutral demand schema, trigger
@@ -1915,10 +2286,11 @@ condition, least-universal-interface statement, kernel-fragment
 decision, adversarial review, and pre-exposure freeze. Its execution
 remains blocked behind the formulation freeze without exception.
 
-The work must still stop before live-profile authority or Profile A
-adapters: those gates remain unavailable until the complete Phase J
-theorem sequence (typed Q0 stability through the frozen adapter) is
-discharged.
+The work must still stop before live-profile authority or Profile A adapters:
+those gates remain unavailable while positive SR2 is refuted for the current
+vectors, the general Phase J theorem sequence is incomplete, and the
+Selective-Law register/trace contradiction has not been repaired,
+independently reviewed, and frozen.
 
 ## 7. Definition of success for the current plan
 
@@ -1943,8 +2315,10 @@ local Agda runtime, with the mint pinned by the ignored external-gate
 tests and no authority borrowed from any excluded source.
 
 This result does not prove the full autonomous Genesis theorem, but it
-removes the cross-language trust gap that was blocking the semantic
-and rewrite layers. The remaining additive canonicality theorems
-(§Phase C) stay open, and the registered typing-metatheory frontier
+removes the cross-language trust gap and has enabled the native carrier,
+rewrite, semantic-family quotient, weakening/restriction, and exact
+marginal-family authorities. The remaining
+additive canonicality theorems (§Phase C) stay open, and the registered
+typing-metatheory frontier
 (`full-eight-constructor-decoded-soundness-not-yet-derivable`) remains
 a named abstract-module obligation outside the bridge.

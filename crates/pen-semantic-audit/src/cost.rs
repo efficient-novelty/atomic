@@ -1414,9 +1414,10 @@ pub fn audit_kernel_cost_lambda_unit_v2(
 
 /// Non-authorizing component integration retained for generic unit tests.
 ///
-/// Only the public wrapper above can expose a cost certificate outside this
-/// module, and it requires an exact verified rewrite-system capability.
-fn audit_kernel_cost_lambda_unit_components_v2(
+/// Public use is mediated either by the wrapper above, which requires the V1
+/// rewrite-system capability, or by the restricted V3 envelope, which derives
+/// this complete input internally and revalidates the returned certificate.
+pub(crate) fn audit_kernel_cost_lambda_unit_components_v2(
     cost_manifest: &VerifiedCostManifestV2,
     semantic_manifest: &VerifiedSemanticAuditManifestV1,
     inventory: &VerifiedPublicAuditInventoryV1,

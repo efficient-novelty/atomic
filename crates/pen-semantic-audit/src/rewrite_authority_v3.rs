@@ -393,7 +393,10 @@ impl std::fmt::Display for RewriteAuthorityFailureV3 {
                 "the inventory has sealed equations but no typed rewrite inventory was presented",
             ),
             Self::HistoricalBase(reason) => {
-                write!(formatter, "the historical rewrite base is unavailable: {reason:?}")
+                write!(
+                    formatter,
+                    "the historical rewrite base is unavailable: {reason:?}"
+                )
             }
             Self::NodeUniverse(reason) => {
                 write!(formatter, "node-universe construction failed: {reason:?}")
@@ -404,25 +407,23 @@ impl std::fmt::Display for RewriteAuthorityFailureV3 {
             Self::KernelReplay(reason) => {
                 write!(formatter, "kernel replay failed: {reason:?}")
             }
-            Self::NonTerminating =>
-
- formatter.write_str(
-                "the finite reduction graph contains a cycle; termination fails",
-            ),
-            Self::NotConfluent => formatter.write_str(
-                "a node reaches two distinct normal forms; confluence fails",
-            ),
-            Self::UnjoinableOverlap => formatter.write_str(
-                "two applicable reductions at one node do not join at its normal form",
-            ),
-            Self::UnstableEdge => formatter.write_str(
-                "an edge is not stable under a carrier construction substitution",
-            ),
+            Self::NonTerminating => formatter
+                .write_str("the finite reduction graph contains a cycle; termination fails"),
+            Self::NotConfluent => {
+                formatter.write_str("a node reaches two distinct normal forms; confluence fails")
+            }
+            Self::UnjoinableOverlap => formatter
+                .write_str("two applicable reductions at one node do not join at its normal form"),
+            Self::UnstableEdge => formatter
+                .write_str("an edge is not stable under a carrier construction substitution"),
             Self::PredecessorNotConservative => formatter.write_str(
                 "the predecessor restriction does not equal its independent reconstruction",
             ),
             Self::ResourceExhausted { stage } => {
-                write!(formatter, "a declared resource bound was exceeded at {stage}")
+                write!(
+                    formatter,
+                    "a declared resource bound was exceeded at {stage}"
+                )
             }
         }
     }
@@ -437,9 +438,9 @@ impl RewriteAuthorityFailureV3 {
             Self::ResourceExhausted { .. } => {
                 AuditDecision::Unknown(AuditUnknownReason::ResourceExhausted)
             }
-            Self::HistoricalBase(reason) | Self::NodeUniverse(reason) | Self::KernelReplay(reason) => {
-                AuditDecision::Unknown(reason)
-            }
+            Self::HistoricalBase(reason)
+            | Self::NodeUniverse(reason)
+            | Self::KernelReplay(reason) => AuditDecision::Unknown(reason),
             Self::ExactManifestIdentityMismatch
             | Self::ChainBindingMismatch
             | Self::CarrierBindingMismatch
@@ -505,6 +506,14 @@ impl VerifiedRewriteAuthorityV3 {
         &self.carrier_digest
     }
 
+    pub fn kernel_protocol_digest(&self) -> &Digest {
+        &self.kernel_protocol_digest
+    }
+
+    pub fn typed_rewrite_inventory_digest(&self) -> Option<&Digest> {
+        self.typed_rewrite_inventory_digest.as_ref()
+    }
+
     pub fn census_digest(&self) -> &Digest {
         &self.census_digest
     }
@@ -551,6 +560,10 @@ impl VerifiedRewriteAuthorityV3 {
 
     pub fn predecessor_edge_count(&self) -> u64 {
         self.predecessor_edge_count
+    }
+
+    pub fn predecessor_reconstruction_digest(&self) -> &Digest {
+        &self.predecessor_reconstruction_digest
     }
 
     pub fn historical_base_digest(&self) -> &Digest {
@@ -620,6 +633,16 @@ struct BuildContext<'a> {
     disposition_limit: usize,
 }
 
+/// Exact independently replayed restriction of the successor graph to the
+/// predecessor language.  This is private proof material: callers receive
+/// only the enclosing rewrite authority, never a constructor from asserted
+/// node or edge sets.
+struct PredecessorReconstructionV3 {
+    nodes: BTreeSet<RewriteNodeIdV3>,
+    edges: BTreeSet<RewriteEdgeIdV3>,
+    digest: Digest,
+}
+
 /// Construct the Phase J rewrite authority over one native carrier.
 #[allow(clippy::too_many_arguments)]
 pub fn diagnose_rewrite_authority_v3(
@@ -673,16 +696,16 @@ pub fn diagnose_rewrite_authority_v3(
     }
 
     // The positive empty-equation historical base for the predecessor.
-    let historical = match verify_historical_rewrite_system_v1(v2_manifest, compatibility, inventory)
-    {
-        AuditDecision::Proven(historical) => historical,
-        AuditDecision::Unknown(reason) => {
-            return Err(RewriteAuthorityFailureV3::HistoricalBase(reason));
-        }
-        AuditDecision::OutsideFragment(reason) => {
-            return Err(RewriteAuthorityFailureV3::OutsideFragment(reason));
-        }
-    };
+    let historical =
+        match verify_historical_rewrite_system_v1(v2_manifest, compatibility, inventory) {
+            AuditDecision::Proven(historical) => historical,
+            AuditDecision::Unknown(reason) => {
+                return Err(RewriteAuthorityFailureV3::HistoricalBase(reason));
+            }
+            AuditDecision::OutsideFragment(reason) => {
+                return Err(RewriteAuthorityFailureV3::OutsideFragment(reason));
+            }
+        };
 
     // Delta rules: all and only the bodyful normalized successor
     // declarations of the verified inventory.
@@ -761,11 +784,11 @@ pub fn diagnose_rewrite_authority_v3(
     let mut queue: VecDeque<usize> = VecDeque::new();
 
     let push_node = |context: DependentContext,
-                         term: Term,
-                         judgment: RewriteNodeJudgmentV3,
-                         nodes: &mut Vec<RewriteNodeV3>,
-                         node_indices: &mut BTreeMap<RewriteNodeIdV3, usize>,
-                         queue: &mut VecDeque<usize>|
+                     term: Term,
+                     judgment: RewriteNodeJudgmentV3,
+                     nodes: &mut Vec<RewriteNodeV3>,
+                     node_indices: &mut BTreeMap<RewriteNodeIdV3, usize>,
+                     queue: &mut VecDeque<usize>|
      -> Result<usize, RewriteAuthorityFailureV3> {
         let node = make_node(context, term, judgment);
         if let Some(index) = node_indices.get(&node.id) {
@@ -777,7 +800,9 @@ pub fn diagnose_rewrite_authority_v3(
             return Ok(*index);
         }
         if nodes.len() >= build.node_limit {
-            return Err(RewriteAuthorityFailureV3::ResourceExhausted { stage: "node universe" });
+            return Err(RewriteAuthorityFailureV3::ResourceExhausted {
+                stage: "node universe",
+            });
         }
         let index = nodes.len();
         node_indices.insert(node.id.clone(), index);
@@ -895,10 +920,11 @@ pub fn diagnose_rewrite_authority_v3(
         // commutation census below.
 
         // Reductions at every position.
-        let positions = enumerate_positions(&node.term, kernel.limits().max_depth as usize)
-            .ok_or(RewriteAuthorityFailureV3::ResourceExhausted {
+        let positions = enumerate_positions(&node.term, kernel.limits().max_depth as usize).ok_or(
+            RewriteAuthorityFailureV3::ResourceExhausted {
                 stage: "position enumeration",
-            })?;
+            },
+        )?;
         for (position, focus) in positions {
             let mut consider = |rule: RewriteRuleV3,
                                 replacement: Option<Term>,
@@ -923,11 +949,14 @@ pub fn diagnose_rewrite_authority_v3(
                     }
                     Some(replacement) => {
                         applicable_count += 1;
-                        let target_term =
-                            replace_at_position(&node.term, position.child_ordinals(), &replacement)
-                                .ok_or(RewriteAuthorityFailureV3::NodeUniverse(
-                                    AuditUnknownReason::MalformedInput,
-                                ))?;
+                        let target_term = replace_at_position(
+                            &node.term,
+                            position.child_ordinals(),
+                            &replacement,
+                        )
+                        .ok_or(RewriteAuthorityFailureV3::NodeUniverse(
+                            AuditUnknownReason::MalformedInput,
+                        ))?;
                         let target_index = push_node(
                             node.context.clone(),
                             target_term,
@@ -937,12 +966,7 @@ pub fn diagnose_rewrite_authority_v3(
                             queue,
                         )?;
                         let target_id = nodes[target_index].id.clone();
-                        let edge = make_edge(
-                            node.id.clone(),
-                            target_id,
-                            position.clone(),
-                            rule,
-                        );
+                        let edge = make_edge(node.id.clone(), target_id, position.clone(), rule);
                         if let Some(previous) = edge_indices.get(&edge.id) {
                             if edges[*previous] != edge {
                                 return Err(RewriteAuthorityFailureV3::NodeUniverse(
@@ -1109,11 +1133,9 @@ pub fn diagnose_rewrite_authority_v3(
                 .ok_or(RewriteAuthorityFailureV3::UnstableEdge)?;
             kernel_check_node(&build, &substituted_source)?;
             kernel_check_node(&build, &substituted_target)?;
-            let focus = subterm_at_position(
-                &substituted_source.term,
-                edge.position.child_ordinals(),
-            )
-            .ok_or(RewriteAuthorityFailureV3::UnstableEdge)?;
+            let focus =
+                subterm_at_position(&substituted_source.term, edge.position.child_ordinals())
+                    .ok_or(RewriteAuthorityFailureV3::UnstableEdge)?;
             let replacement = match &edge.rule {
                 RewriteRuleV3::OrdinaryBeta => match &focus {
                     Term::Apply { function, argument } => match function.as_ref() {
@@ -1153,65 +1175,28 @@ pub fn diagnose_rewrite_authority_v3(
         }
     }
 
-    // Predecessor conservativity: the subgraph of predecessor-supported
-    // nodes, independently rebuilt against the predecessor boundary
-    // (whose historical rewrite base is the verified empty-equation
-    // system), must equal the main graph's restriction exactly.
-    let predecessor_declarations: BTreeSet<GlobalId> = inventory
-        .predecessor_boundary()
-        .declarations()
-        .iter()
-        .map(|declaration| declaration.id.clone())
-        .collect();
-    let predecessor_delta: BTreeMap<GlobalId, Term> = build
-        .delta_bodies
-        .iter()
-        .filter(|(id, _)| predecessor_declarations.contains(*id))
-        .map(|(id, body)| (id.clone(), body.clone()))
-        .collect();
-    let mut predecessor_nodes = BTreeSet::new();
-    for node in &nodes {
-        if node_mentions_only(&node, &predecessor_declarations) {
-            predecessor_nodes.insert(node.id.clone());
-        }
+    // Predecessor conservativity: independently replay beta and every
+    // bodyful predecessor delta at every position, against the predecessor
+    // signature itself, and require exact equality with the main graph's
+    // predecessor restriction. Merely checking that an existing edge has a
+    // predecessor-lawful rule tag would not prove completeness or that its
+    // target is the result of that rule.
+    if historical.inventory_digest() != inventory.digest()
+        || historical.boundary_digest() != inventory.predecessor_boundary().digest()
+    {
+        return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
     }
-    let mut predecessor_edges = BTreeSet::new();
-    for edge in &edges {
-        let source_in = predecessor_nodes.contains(&edge.source);
-        let target_in = predecessor_nodes.contains(&edge.target);
-        if source_in && target_in {
-            // Independent reconstruction: the edge must be derivable from
-            // predecessor resources alone — beta, or delta on a
-            // predecessor declaration. Fresh rules are successor-sealed
-            // (the historical base is verified equation-free), and a
-            // successor delta cannot fire on a predecessor-supported
-            // node.
-            let lawful = match &edge.rule {
-                RewriteRuleV3::OrdinaryBeta => true,
-                RewriteRuleV3::PublicDelta { declaration } => {
-                    predecessor_delta.contains_key(declaration)
-                }
-                RewriteRuleV3::FreshEquation { .. } => false,
-            };
-            if !lawful {
-                return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
-            }
-            predecessor_edges.insert(edge.id.clone());
-        } else if source_in && !target_in {
-            // A reduction may not carry a predecessor-supported node to a
-            // successor-supported term: reducts never introduce new
-            // globals, so this cannot happen in a sound graph.
-            return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
-        }
-    }
-    let predecessor_reconstruction_digest = Digest::of_canonical(
-        "pen-semantic-audit/rewrite-authority-predecessor-reconstruction/v3",
-        &PredecessorMaterial {
-            historical: historical.digest(),
-            nodes: &predecessor_nodes,
-            edges: &predecessor_edges,
-        },
-    );
+    let predecessor = verify_predecessor_conservativity_v3(
+        kernel,
+        inventory.predecessor_boundary(),
+        inventory.digest(),
+        historical.digest(),
+        &nodes,
+        &edges,
+        &normal_forms,
+        kernel.limits().max_depth as usize,
+        build.disposition_limit,
+    )?;
 
     // Representation-rule identity census: the kernel term syntax is
     // de Bruijn-canonical, has no explicit substitution or telescope
@@ -1245,8 +1230,7 @@ pub fn diagnose_rewrite_authority_v3(
         root_inventory_digest: root_inventory.digest().clone(),
         census_digest: census.digest().clone(),
         subject_bundle_digest: subject_bundle.digest().clone(),
-        typed_rewrite_inventory_digest: typed_rewrite_inventory
-            .map(|typed| typed.digest().clone()),
+        typed_rewrite_inventory_digest: typed_rewrite_inventory.map(|typed| typed.digest().clone()),
         historical_base_digest: historical.digest().clone(),
         nodes: Arc::from(nodes.into_boxed_slice()),
         edges: Arc::from(edges.into_boxed_slice()),
@@ -1257,9 +1241,9 @@ pub fn diagnose_rewrite_authority_v3(
         substitution_stability: Arc::from(substitution_stability.into_boxed_slice()),
         normal_forms: Arc::from(sorted_normal_forms.into_boxed_slice()),
         termination_rank_digest,
-        predecessor_node_count: predecessor_nodes.len() as u64,
-        predecessor_edge_count: predecessor_edges.len() as u64,
-        predecessor_reconstruction_digest,
+        predecessor_node_count: predecessor.nodes.len() as u64,
+        predecessor_edge_count: predecessor.edges.len() as u64,
+        predecessor_reconstruction_digest: predecessor.digest,
         digest: Digest::of_bytes(b"pending rewrite authority v3"),
     };
     authority.digest = Digest::of_canonical(
@@ -1403,7 +1387,228 @@ fn kernel_unknown(error: KernelError) -> AuditUnknownReason {
     }
 }
 
-fn node_mentions_only(node: &&RewriteNodeV3, allowed: &BTreeSet<GlobalId>) -> bool {
+#[allow(clippy::too_many_arguments)]
+fn verify_predecessor_conservativity_v3(
+    kernel: &Kernel,
+    predecessor_signature: &VerifiedSignature,
+    inventory_digest: &Digest,
+    historical_digest: &Digest,
+    nodes: &[RewriteNodeV3],
+    edges: &[RewriteEdgeV3],
+    normal_forms: &BTreeMap<RewriteNodeIdV3, RewriteNodeIdV3>,
+    depth_limit: usize,
+    disposition_limit: usize,
+) -> Result<PredecessorReconstructionV3, RewriteAuthorityFailureV3> {
+    // The independent rule inventory comes directly from the predecessor
+    // signature. It is not obtained by filtering the successor rule map.
+    let predecessor_declarations = predecessor_signature
+        .declarations()
+        .iter()
+        .map(|declaration| declaration.id.clone())
+        .collect::<BTreeSet<_>>();
+    let mut predecessor_delta = BTreeMap::new();
+    for declaration in predecessor_signature.declarations() {
+        if let Some(body) = &declaration.body
+            && predecessor_delta
+                .insert(declaration.id.clone(), body.clone())
+                .is_some()
+        {
+            return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
+        }
+    }
+
+    // The restriction is language-based: every context entry, subject, and
+    // result type must mention only predecessor declarations. Recheck every
+    // selected node against the predecessor signature rather than inheriting
+    // its successor-signature typing judgment.
+    let predecessor_candidates = nodes
+        .iter()
+        .filter(|node| node_mentions_only(node, &predecessor_declarations))
+        .map(|node| (node.id.clone(), node))
+        .collect::<BTreeMap<_, _>>();
+    let predecessor_nodes = predecessor_candidates
+        .keys()
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    for node in predecessor_candidates.values() {
+        kernel_check_predecessor_node(kernel, predecessor_signature, node)?;
+    }
+
+    // First form the exact restriction of the already verified successor
+    // graph. Every outgoing edge from an old-language node must remain in the
+    // old language and use only beta or a bodyful predecessor delta rule.
+    let mut restricted_edges = BTreeMap::new();
+    for edge in edges {
+        if !predecessor_nodes.contains(&edge.source) {
+            continue;
+        }
+        if !predecessor_nodes.contains(&edge.target)
+            || match &edge.rule {
+                RewriteRuleV3::OrdinaryBeta => false,
+                RewriteRuleV3::PublicDelta { declaration } => {
+                    !predecessor_delta.contains_key(declaration)
+                }
+                RewriteRuleV3::FreshEquation { .. } => true,
+            }
+        {
+            return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
+        }
+        match restricted_edges.insert(edge.id.clone(), edge.clone()) {
+            Some(previous) if previous != *edge => {
+                return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
+            }
+            _ => {}
+        }
+    }
+
+    // Now rebuild the edge relation from scratch. For every predecessor node,
+    // enumerate every term position and dispose beta plus every bodyful
+    // predecessor delta. Applicable targets are kernel-checked under the
+    // predecessor signature and must already occur in the restricted node
+    // universe. Exact edge equality proves both directions of conservativity.
+    let mut replayed_edges = BTreeMap::new();
+    let mut disposition_count = 0_u64;
+    for (source_id, source) in &predecessor_candidates {
+        let positions = enumerate_positions(&source.term, depth_limit).ok_or(
+            RewriteAuthorityFailureV3::ResourceExhausted {
+                stage: "predecessor position enumeration",
+            },
+        )?;
+        for (position, focus) in positions {
+            let beta = match &focus {
+                Term::Apply { function, argument } => match function.as_ref() {
+                    Term::Lambda { body, .. } => subst_top(body, argument),
+                    _ => None,
+                },
+                _ => None,
+            };
+            let mut replay = |rule: RewriteRuleV3,
+                              replacement: Option<Term>|
+             -> Result<(), RewriteAuthorityFailureV3> {
+                disposition_count = disposition_count.checked_add(1).ok_or(
+                    RewriteAuthorityFailureV3::ResourceExhausted {
+                        stage: "predecessor rule dispositions",
+                    },
+                )?;
+                if usize::try_from(disposition_count)
+                    .ok()
+                    .is_none_or(|count| count > disposition_limit)
+                {
+                    return Err(RewriteAuthorityFailureV3::ResourceExhausted {
+                        stage: "predecessor rule dispositions",
+                    });
+                }
+                let Some(replacement) = replacement else {
+                    return Ok(());
+                };
+                let target_term =
+                    replace_at_position(&source.term, position.child_ordinals(), &replacement)
+                        .ok_or(RewriteAuthorityFailureV3::PredecessorNotConservative)?;
+                let target =
+                    make_node(source.context.clone(), target_term, source.judgment.clone());
+                kernel_check_predecessor_node(kernel, predecessor_signature, &target)?;
+                let expected_target = predecessor_candidates
+                    .get(&target.id)
+                    .ok_or(RewriteAuthorityFailureV3::PredecessorNotConservative)?;
+                if **expected_target != target {
+                    return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
+                }
+                let edge = make_edge(source_id.clone(), target.id.clone(), position.clone(), rule);
+                match replayed_edges.insert(edge.id.clone(), edge.clone()) {
+                    Some(previous) if previous != edge => {
+                        Err(RewriteAuthorityFailureV3::PredecessorNotConservative)
+                    }
+                    _ => Ok(()),
+                }
+            };
+
+            replay(RewriteRuleV3::OrdinaryBeta, beta)?;
+            for (declaration, body) in &predecessor_delta {
+                let replacement = match &focus {
+                    Term::Global { id } if id == declaration => Some(body.clone()),
+                    _ => None,
+                };
+                replay(
+                    RewriteRuleV3::PublicDelta {
+                        declaration: declaration.clone(),
+                    },
+                    replacement,
+                )?;
+            }
+        }
+    }
+    if replayed_edges != restricted_edges {
+        return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
+    }
+
+    let mut predecessor_normal_forms = BTreeMap::new();
+    for node in &predecessor_nodes {
+        let normal_form = normal_forms
+            .get(node)
+            .ok_or(RewriteAuthorityFailureV3::PredecessorNotConservative)?;
+        if !predecessor_nodes.contains(normal_form) {
+            return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
+        }
+        predecessor_normal_forms.insert(node.clone(), normal_form.clone());
+    }
+
+    // Re-analyze the independently replayed restriction and require its
+    // normal-form map to be exactly the restriction of the main theorem.
+    let predecessor_node_values = predecessor_candidates
+        .values()
+        .map(|node| (*node).clone())
+        .collect::<Vec<_>>();
+    let predecessor_edge_values = replayed_edges.values().cloned().collect::<Vec<_>>();
+    let (_, replayed_normal_forms) =
+        analyze_termination_and_confluence(&predecessor_node_values, &predecessor_edge_values)
+            .map_err(|_| RewriteAuthorityFailureV3::PredecessorNotConservative)?;
+    if replayed_normal_forms != predecessor_normal_forms {
+        return Err(RewriteAuthorityFailureV3::PredecessorNotConservative);
+    }
+
+    let predecessor_edges = replayed_edges.keys().cloned().collect::<BTreeSet<_>>();
+    let digest = Digest::of_canonical(
+        "pen-semantic-audit/rewrite-authority-predecessor-reconstruction/v3",
+        &PredecessorMaterial {
+            inventory: inventory_digest,
+            boundary: predecessor_signature.digest(),
+            historical: historical_digest,
+            nodes: &predecessor_nodes,
+            edges: &predecessor_edges,
+            normal_forms: &predecessor_normal_forms,
+            disposition_count,
+        },
+    );
+    Ok(PredecessorReconstructionV3 {
+        nodes: predecessor_nodes,
+        edges: predecessor_edges,
+        digest,
+    })
+}
+
+fn kernel_check_predecessor_node(
+    kernel: &Kernel,
+    signature: &VerifiedSignature,
+    node: &RewriteNodeV3,
+) -> Result<(), RewriteAuthorityFailureV3> {
+    let judgment = match &node.judgment {
+        RewriteNodeJudgmentV3::HasType { ty } => OpenJudgment::HasType {
+            context: node.context.clone(),
+            term: node.term.clone(),
+            ty: ty.clone(),
+        },
+        RewriteNodeJudgmentV3::TypeFormation => OpenJudgment::TypeFormation {
+            context: node.context.clone(),
+            term: node.term.clone(),
+        },
+    };
+    kernel
+        .verify_open_judgment(signature, &judgment)
+        .map(|_| ())
+        .map_err(|_| RewriteAuthorityFailureV3::PredecessorNotConservative)
+}
+
+fn node_mentions_only(node: &RewriteNodeV3, allowed: &BTreeSet<GlobalId>) -> bool {
     let mut mentions_only = |term: &Term| term_mentions_only(term, allowed);
     node.context.0.iter().all(&mut mentions_only)
         && mentions_only(&node.term)
@@ -1477,7 +1682,10 @@ fn enumerate_positions(term: &Term, depth_limit: usize) -> Option<Vec<(RewritePo
             Term::First { pair } | Term::Second { pair } => {
                 stack.push((position.child(0), pair.as_ref().clone()));
             }
-            Term::Sort { .. } | Term::Var { .. } | Term::Global { .. } | Term::UnitType
+            Term::Sort { .. }
+            | Term::Var { .. }
+            | Term::Global { .. }
+            | Term::UnitType
             | Term::Unit => {}
         }
         positions.push((position, focus));
@@ -1788,8 +1996,10 @@ fn analyze_termination_and_confluence(
     ),
     RewriteAuthorityFailureV3,
 > {
-    let mut adjacency: BTreeMap<&RewriteNodeIdV3, BTreeSet<&RewriteNodeIdV3>> =
-        nodes.iter().map(|node| (&node.id, BTreeSet::new())).collect();
+    let mut adjacency: BTreeMap<&RewriteNodeIdV3, BTreeSet<&RewriteNodeIdV3>> = nodes
+        .iter()
+        .map(|node| (&node.id, BTreeSet::new()))
+        .collect();
     let mut indegree: BTreeMap<&RewriteNodeIdV3, usize> =
         nodes.iter().map(|node| (&node.id, 0)).collect();
     for edge in edges {
@@ -1879,13 +2089,19 @@ impl CanonicalEncode for WitnessKeyMaterial<'_> {
 }
 
 struct PredecessorMaterial<'a> {
+    inventory: &'a Digest,
+    boundary: &'a Digest,
     historical: &'a Digest,
     nodes: &'a BTreeSet<RewriteNodeIdV3>,
     edges: &'a BTreeSet<RewriteEdgeIdV3>,
+    normal_forms: &'a BTreeMap<RewriteNodeIdV3, RewriteNodeIdV3>,
+    disposition_count: u64,
 }
 
 impl CanonicalEncode for PredecessorMaterial<'_> {
     fn encode_canonical(&self, encoder: &mut CanonicalEncoder) {
+        self.inventory.encode_canonical(encoder);
+        self.boundary.encode_canonical(encoder);
         self.historical.encode_canonical(encoder);
         encoder.u64(self.nodes.len() as u64);
         for node in self.nodes {
@@ -1895,6 +2111,12 @@ impl CanonicalEncode for PredecessorMaterial<'_> {
         for edge in self.edges {
             edge.encode_canonical(encoder);
         }
+        encoder.u64(self.normal_forms.len() as u64);
+        for (node, normal_form) in self.normal_forms {
+            node.encode_canonical(encoder);
+            normal_form.encode_canonical(encoder);
+        }
+        encoder.u64(self.disposition_count);
     }
 }
 
@@ -1927,6 +2149,82 @@ impl CanonicalEncode for RankMaterial<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use pen_kernel::{Declaration, KernelLimits, UncheckedSignature};
+
+    struct PredecessorDeltaFixture {
+        kernel: Kernel,
+        signature: VerifiedSignature,
+        declaration: GlobalId,
+        source: RewriteNodeV3,
+        target: RewriteNodeV3,
+        nodes: Vec<RewriteNodeV3>,
+        edge: RewriteEdgeV3,
+        normal_forms: BTreeMap<RewriteNodeIdV3, RewriteNodeIdV3>,
+    }
+
+    fn predecessor_delta_fixture() -> PredecessorDeltaFixture {
+        let kernel = Kernel::new(KernelLimits::default()).expect("kernel");
+        let declaration = GlobalId(Digest::of_bytes(b"rewrite-authority/predecessor-delta"));
+        let signature = kernel
+            .verify_signature(&UncheckedSignature {
+                declarations: vec![Declaration {
+                    id: declaration.clone(),
+                    ty: Term::UnitType,
+                    body: Some(Term::Unit),
+                }],
+            })
+            .expect("predecessor signature");
+        let judgment = RewriteNodeJudgmentV3::HasType { ty: Term::UnitType };
+        let source = make_node(
+            DependentContext::default(),
+            Term::Global {
+                id: declaration.clone(),
+            },
+            judgment.clone(),
+        );
+        let target = make_node(DependentContext::default(), Term::Unit, judgment);
+        let edge = make_edge(
+            source.id.clone(),
+            target.id.clone(),
+            RewritePositionV3::default(),
+            RewriteRuleV3::PublicDelta {
+                declaration: declaration.clone(),
+            },
+        );
+        let normal_forms = BTreeMap::from([
+            (source.id.clone(), target.id.clone()),
+            (target.id.clone(), target.id.clone()),
+        ]);
+        PredecessorDeltaFixture {
+            kernel,
+            signature,
+            declaration,
+            source: source.clone(),
+            target: target.clone(),
+            nodes: vec![source, target],
+            edge,
+            normal_forms,
+        }
+    }
+
+    fn reconstruct_fixture(
+        fixture: &PredecessorDeltaFixture,
+        nodes: &[RewriteNodeV3],
+        edges: &[RewriteEdgeV3],
+        normal_forms: &BTreeMap<RewriteNodeIdV3, RewriteNodeIdV3>,
+    ) -> Result<PredecessorReconstructionV3, RewriteAuthorityFailureV3> {
+        verify_predecessor_conservativity_v3(
+            &fixture.kernel,
+            &fixture.signature,
+            &Digest::of_bytes(b"rewrite-authority/test-inventory"),
+            &Digest::of_bytes(b"rewrite-authority/test-historical"),
+            nodes,
+            edges,
+            normal_forms,
+            fixture.kernel.limits().max_depth as usize,
+            1_024,
+        )
+    }
 
     fn unit_lambda_redex() -> Term {
         Term::Apply {
@@ -1936,6 +2234,92 @@ mod tests {
             }),
             argument: Box::new(Term::Unit),
         }
+    }
+
+    #[test]
+    fn predecessor_reconstruction_replays_the_exact_delta_edge() {
+        let fixture = predecessor_delta_fixture();
+        let reconstruction = reconstruct_fixture(
+            &fixture,
+            &fixture.nodes,
+            std::slice::from_ref(&fixture.edge),
+            &fixture.normal_forms,
+        )
+        .expect("exact predecessor reconstruction");
+        assert_eq!(reconstruction.nodes.len(), 2);
+        assert_eq!(reconstruction.edges.len(), 1);
+        assert!(reconstruction.edges.contains(&fixture.edge.id));
+    }
+
+    #[test]
+    fn predecessor_reconstruction_rejects_a_missing_lawful_edge() {
+        let fixture = predecessor_delta_fixture();
+        assert!(matches!(
+            reconstruct_fixture(&fixture, &fixture.nodes, &[], &fixture.normal_forms),
+            Err(RewriteAuthorityFailureV3::PredecessorNotConservative)
+        ));
+    }
+
+    #[test]
+    fn predecessor_reconstruction_rejects_a_lawful_tag_with_the_wrong_target() {
+        let fixture = predecessor_delta_fixture();
+        let wrong_target = make_node(
+            DependentContext::default(),
+            unit_lambda_redex(),
+            RewriteNodeJudgmentV3::HasType { ty: Term::UnitType },
+        );
+        let wrong_edge = make_edge(
+            fixture.source.id.clone(),
+            wrong_target.id.clone(),
+            RewritePositionV3::default(),
+            RewriteRuleV3::PublicDelta {
+                declaration: fixture.declaration.clone(),
+            },
+        );
+        let nodes = vec![
+            fixture.source.clone(),
+            fixture.target.clone(),
+            wrong_target.clone(),
+        ];
+        let normal_forms = BTreeMap::from([
+            (fixture.source.id.clone(), fixture.target.id.clone()),
+            (fixture.target.id.clone(), fixture.target.id.clone()),
+            (wrong_target.id.clone(), fixture.target.id.clone()),
+        ]);
+        assert!(matches!(
+            reconstruct_fixture(&fixture, &nodes, &[wrong_edge], &normal_forms),
+            Err(RewriteAuthorityFailureV3::PredecessorNotConservative)
+        ));
+    }
+
+    #[test]
+    fn predecessor_reconstruction_rejects_a_normal_form_outside_the_old_language() {
+        let fixture = predecessor_delta_fixture();
+        let successor = GlobalId(Digest::of_bytes(b"rewrite-authority/successor"));
+        let successor_node = make_node(
+            DependentContext::default(),
+            Term::Global { id: successor },
+            RewriteNodeJudgmentV3::HasType { ty: Term::UnitType },
+        );
+        let nodes = vec![
+            fixture.source.clone(),
+            fixture.target.clone(),
+            successor_node.clone(),
+        ];
+        let normal_forms = BTreeMap::from([
+            (fixture.source.id.clone(), successor_node.id.clone()),
+            (fixture.target.id.clone(), fixture.target.id.clone()),
+            (successor_node.id.clone(), successor_node.id.clone()),
+        ]);
+        assert!(matches!(
+            reconstruct_fixture(
+                &fixture,
+                &nodes,
+                std::slice::from_ref(&fixture.edge),
+                &normal_forms,
+            ),
+            Err(RewriteAuthorityFailureV3::PredecessorNotConservative)
+        ));
     }
 
     #[test]
@@ -1954,10 +2338,7 @@ mod tests {
         // (lambda. Var1) applied under one outer binder: body Var1 refers
         // to the context variable and must become Var0 after contraction.
         let body = Term::Var { index: 1 };
-        assert_eq!(
-            subst_top(&body, &Term::Unit),
-            Some(Term::Var { index: 0 })
-        );
+        assert_eq!(subst_top(&body, &Term::Unit), Some(Term::Var { index: 0 }));
     }
 
     #[test]

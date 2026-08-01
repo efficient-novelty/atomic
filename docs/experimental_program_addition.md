@@ -242,9 +242,36 @@ Zero-cost theorem readouts are not positive-cost acts, do not enter the two-act 
 
 The productive profile cannot be frozen merely by writing down a threshold. It requires an authoritative local register for every bootstrap and candidate act used by the bar.
 
-### 7.1 Semantic-family productivity
+### 7.0 Mandatory theory-alignment blocker (registered 2026-08-01)
 
-The first candidate register is the existing semantic-family quantity:
+This experimental proposal is not currently aligned with the book's stated
+Selective Law. Chapter 4 makes `gamma/kappa` authoritative, calls
+`nu/kappa` diagnostic, and requires two prior certified `(kappa, gamma)`
+acts before selective jurisdiction. Sections 7.1–7.3 below instead register
+`nu` and `gamma` as competing candidates. Phase K1 and every live factorial
+run are therefore blocked until the law and programme are reconciled by an
+independently reviewed pre-exposure decision.
+
+The inconsistency is stronger than a naming mismatch. Chapter 4 states
+`0 <= gamma <= nu` and requires strict clearance of the nonnegative
+width-two bar for every positive-cost accepted act. The Genesis mathematics
+chapter records Step 9 as `(kappa, nu) = (4, 0)` and Step 12 as `(6, 0)`.
+Both force `gamma = 0`; neither can strictly exceed any nonnegative bar.
+Consequently the current Selective Law and the claimed fifteen-step ledger
+cannot both be correct as written.
+
+Permissible repairs must be frozen without consulting which alternative
+recovers the desired trace. If Chapter 4 is retained, Phase JG becomes
+mandatory and the incompatible trace claims must be repaired or rejected.
+If another register is to govern selection, Chapter 4 and every dependent
+programme statement must be explicitly revised, reviewed, and re-frozen.
+This section records the blocker and authorizes neither route.
+
+### 7.1 Semantic-family productivity candidate
+
+The first experimental candidate register is the existing semantic-family
+quantity. Under the current Chapter 4 hypothesis it is diagnostic only and
+cannot be silently promoted to S1:
 
 ```text
 M = nu
@@ -261,11 +288,23 @@ This profile may run only after Phase J provides:
 - provenance injection; and
 - certified values for the two bootstrap acts that initialize the first guarded bar.
 
+The carrier, quotient, derived weakening/restriction, exact marginal set,
+exact empty demand bases, restricted current-fragment cost, and exhaustive
+dependency support are now discharged for both registered vectors. They do
+not issue `nu`. Instead, the frozen SR2 codomain has now been checked and both
+vectors carry a certified pigeonhole obstruction: no total typed,
+role-preserving injective provenance assignment exists. Consequently `nu` is
+undefined, not zero, and this profile may not run on either vector without an
+independently motivated and pre-exposure-frozen law change. The obstruction is
+evidence against changing roles or receipts to fit a held-out trace.
+
 Historical structural values may not be substituted for missing semantic-family values.
 
-### 7.2 Generative-capacity productivity
+### 7.2 Generative-capacity productivity required by current Chapter 4
 
-A second research candidate is a proof-bearing generative-capacity register. A target-neutral provisional definition is:
+The current Chapter 4 hypothesis requires a proof-bearing
+generative-capacity register, but no authoritative theorem package exists
+yet. A target-neutral provisional definition is:
 
 ```text
 GCap_2(H)
@@ -504,14 +543,21 @@ The experiment depends on the following ordered gates.
 
 Complete the currently registered sequence:
 
-- typed rewrite stability;
-- overlap joins;
-- termination, confluence, and predecessor conservativity;
-- family weakening/restriction;
-- complete quotient;
-- kernel cost and semantic marginals;
-- demand provenance and typed realizations;
-- SR2 provenance injection;
+- typed rewrite stability — discharged;
+- overlap joins — discharged;
+- termination, confluence, and exact predecessor reconstruction — discharged;
+- authorized-Q0 semantic-family carrier and complete quotient — discharged;
+- derived family weakening/restriction — discharged;
+- exact semantic marginal-family set — discharged;
+- demand-orbit census — exact empty bases discharged; nonempty theorem open;
+- typed demand realizations — exact empty bases discharged; nonempty theorem open;
+- separately manifested V3-gated kernel cost — restricted projection-/
+  demand-free, bodyless/reflexive basis discharged; general Q0-minimal theorem
+  open;
+- exhaustive pre-SR2 dependency support — discharged;
+- typed, role-preserving SR2 provenance injection — refuted for both current
+  vectors by exact pigeonhole certificates; positive authority and `nu`
+  unavailable;
 - transcript agreement;
 - independent review and freeze.
 
@@ -527,7 +573,8 @@ Add a new plan phase:
 
 Deliver:
 
-- the productivity-register theorem package;
+- closure of the §7.0 theory-alignment blocker, followed by the
+  independently selected productivity-register theorem package;
 - certified bootstrap initialization values;
 - the exact prior-window formula and strictness;
 - branch-local and zero-cost conventions;
@@ -537,7 +584,10 @@ Deliver:
 - independent review; and
 - a frozen S1 manifest.
 
-If `gamma` is pursued, insert a Phase JG theorem package before K1. It must not borrow future-trace evidence.
+If Chapter 4 is retained, insert a mandatory Phase JG theorem package before
+K1 and explicitly adjudicate the zero-`nu` trace contradiction. If the law is
+revised instead, the replacement must be independently reviewed and frozen.
+Neither route may borrow future-trace evidence.
 
 ### Phase K2 — Execute the clean factorial experiment
 
@@ -557,7 +607,8 @@ The clean experimental programme is complete only when:
 
 1. A0 remains unchanged and replayable;
 2. A–D share one verified substrate and differ only in the two registered factors;
-3. C1 and S1 were frozen before contextual H3 exposure;
+3. the §7.0 law/register/trace contradiction was explicitly resolved,
+   independently reviewed, and frozen before S1 or contextual H3 exposure;
 4. generic examples and falsifiers passed before exposure;
 5. every run retained complete quotient cones;
 6. no profile used a target label, expected structure, expected count, expected value, future trace, or historical candidate;
@@ -579,5 +630,7 @@ When integrating this file:
 6. extend architecture rule §12.3 with a requirement that comparative profiles share a common substrate and be bound by one experiment manifest;
 7. cross-link this programme from `docs/260730_contextual_internalization_frontier.md`;
 8. add the productivity-register authority and bootstrap-window initialization to Phase J/K1 deliverables; and
-9. preserve the frozen H3/H4 evidence and all oracle-firewall rules unchanged.
-
+9. preserve the frozen H3/H4 evidence and all oracle-firewall rules unchanged;
+   and
+10. record the §7.0 theory-alignment gate as blocking Phase K1/K2 until
+    an independently motivated law/profile repair is reviewed and frozen.

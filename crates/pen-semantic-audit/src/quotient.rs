@@ -144,12 +144,20 @@ impl QuotientCertificateV1 {
         &self.fixed_vertices
     }
 
+    pub(crate) fn q1_identity_edges(&self) -> &[Digest] {
+        &self.q1_identity_edges
+    }
+
     pub fn q2_pair_dispositions(&self) -> &[Q2PairDispositionV1] {
         &self.q2_pair_dispositions
     }
 
     pub fn q3_registry_verified_empty(&self) -> bool {
         self.q3_registry_verified_empty
+    }
+
+    pub(crate) fn q3_edges(&self) -> &[Digest] {
+        &self.q3_edges
     }
 
     pub fn classes(&self) -> &[FamilyClassV1] {

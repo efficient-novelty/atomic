@@ -44,9 +44,9 @@ use crate::manifest::{
     proposed_semantic_audit_lambda_unit_manifest_v3,
 };
 use crate::model::{
-    EquationIdV1, FamilyConstructorV1, GenericJudgmentV1, LocalRoleV1, RawFamilyIdV1, RawFamilyV1,
-    SeedIdV1, SemanticSchemaSeedV1, HeadPresentationV1, PublicHeadSeedV1, PublicEquationSeedV1,
-    SourceNormalizedJudgmentV1, semantic_seed_id,
+    EquationIdV1, FamilyConstructorV1, GenericJudgmentV1, HeadPresentationV1, LocalRoleV1,
+    PublicEquationSeedV1, PublicHeadSeedV1, RawFamilyIdV1, RawFamilyV1, SeedIdV1,
+    SemanticSchemaSeedV1, SourceNormalizedJudgmentV1, semantic_seed_id,
 };
 use crate::production_inventory_bridge::VerifiedProductionInventoryBridgeV1;
 use crate::production_refinement::VerifiedGlobalSlotTableV1;
@@ -55,16 +55,18 @@ use crate::production_refinement_theorem::{
     VerifiedV3PredecessorPublicDeltaPolicyBindingV1,
 };
 use crate::production_refinement_wire_authority::VerifiedCanonicalProductionBundleV1;
-use crate::production_wire_builder::{ProductionBundlePayloadV1, build_canonical_production_bundle_v1};
+use crate::production_wire_builder::{
+    ProductionBundlePayloadV1, build_canonical_production_bundle_v1,
+};
 use crate::production_wire_replay::replay_production_bundle_v1;
 use crate::production_wire_slots::{digest_wire_id, term_to_wire_v1};
 use crate::semantic_authority::VerifiedPublicClauseCensusV1;
-use crate::semantic_authority_v3::VerifiedSemanticSeedBaseCensusV3;
+use crate::semantic_authority_v3::{SeedIdV3, VerifiedSemanticSeedBaseCensusV3};
 use crate::typed_occurrence::TypedOccurrenceRootRequestV1;
 use crate::typing_metatheory::VerifiedLambdaUnitTypingMetatheoryV1;
 use pen_kernel::{
-    CanonicalEncode, CanonicalEncoder, DependentContext, Digest, Kernel, KernelError,
-    OpenJudgment, ResourceKind, Term, VerifiedSignature,
+    CanonicalEncode, CanonicalEncoder, DependentContext, Digest, Kernel, KernelError, OpenJudgment,
+    ResourceKind, Term, VerifiedSignature,
 };
 use pen_production_wire::{
     FamilyJudgmentWireV1, FamilyPayloadWireV1, FreshRuleSchemaWireV1, ProductionContextWireV1,
@@ -232,6 +234,7 @@ pub struct VerifiedNativeRankInductiveCarrierV3 {
     typing_metatheory_digest: Digest,
     carrier: PreQ0RawCarrierCertificateV1,
     substitution_census: VerifiedConstructionSubstitutionCensusV2,
+    seed_correspondence: Arc<[(SeedIdV1, SeedIdV3)]>,
     seed_correspondence_digest: Digest,
     equation_registry: Arc<[(SeedIdV1, EquationIdV1, pen_kernel::GlobalId)]>,
     head_registry: Arc<[(SeedIdV1, pen_kernel::GlobalId)]>,
@@ -253,6 +256,14 @@ impl VerifiedNativeRankInductiveCarrierV3 {
 
     pub fn inventory_digest(&self) -> &Digest {
         &self.inventory_digest
+    }
+
+    pub fn inventory_compatibility_digest(&self) -> &Digest {
+        &self.inventory_compatibility_digest
+    }
+
+    pub fn public_clause_census_digest(&self) -> &Digest {
+        &self.public_clause_census_digest
     }
 
     pub fn seed_census_digest(&self) -> &Digest {
@@ -287,6 +298,23 @@ impl VerifiedNativeRankInductiveCarrierV3 {
         &self.substitution_census
     }
 
+    /// The verifier-minted pre-Q0 carrier that supplied this native V3
+    /// capability. This stays crate-private: downstream authority stages may
+    /// re-run registered transformations over the exact native seeds, but an
+    /// external caller cannot extract those seeds and replace the carrier by
+    /// a selected list.
+    pub(crate) fn pre_q0_carrier(&self) -> &PreQ0RawCarrierCertificateV1 {
+        &self.carrier
+    }
+
+    /// Resolve a legacy carrier seed onto the demand-neutral semantic seed
+    /// identity that was checked when this capability was minted.
+    pub(crate) fn v3_seed_id(&self, seed: &SeedIdV1) -> Option<&SeedIdV3> {
+        self.seed_correspondence
+            .iter()
+            .find(|(legacy, _)| legacy == seed)
+            .map(|(_, semantic)| semantic)
+    }
 
     pub fn seed_correspondence_digest(&self) -> &Digest {
         &self.seed_correspondence_digest
@@ -320,7 +348,8 @@ impl CanonicalEncode for VerifiedNativeRankInductiveCarrierV3 {
         self.signature_digest.encode_canonical(encoder);
         self.kernel_protocol_digest.encode_canonical(encoder);
         self.inventory_digest.encode_canonical(encoder);
-        self.inventory_compatibility_digest.encode_canonical(encoder);
+        self.inventory_compatibility_digest
+            .encode_canonical(encoder);
         self.public_clause_census_digest.encode_canonical(encoder);
         self.seed_census_digest.encode_canonical(encoder);
         self.production_refinement_digest.encode_canonical(encoder);
@@ -328,6 +357,11 @@ impl CanonicalEncode for VerifiedNativeRankInductiveCarrierV3 {
         self.carrier.encode_canonical(encoder);
         self.carrier.digest().encode_canonical(encoder);
         self.substitution_census.encode_canonical(encoder);
+        encoder.u64(self.seed_correspondence.len() as u64);
+        for (legacy, semantic) in self.seed_correspondence.iter() {
+            legacy.encode_canonical(encoder);
+            semantic.encode_canonical(encoder);
+        }
         self.seed_correspondence_digest.encode_canonical(encoder);
         encoder.u64(self.equation_registry.len() as u64);
         for (seed, equation, owner) in self.equation_registry.iter() {
@@ -602,6 +636,7 @@ pub fn diagnose_native_rank_inductive_carrier_v3(
         typing_metatheory_digest: typing_metatheory.digest().clone(),
         carrier,
         substitution_census,
+        seed_correspondence: Arc::from(correspondence.into_boxed_slice()),
         seed_correspondence_digest,
         equation_registry: Arc::from(equation_registry.into_boxed_slice()),
         head_registry: Arc::from(head_registry.into_boxed_slice()),
@@ -1515,14 +1550,13 @@ fn derive_wire_projection(
     let mut family_payloads = Vec::with_capacity(carrier.families().len());
     let mut inexpressible: Vec<(RawFamilyIdV1, WireInexpressibleReasonV3)> = Vec::new();
     let mut inexpressible_ids: BTreeSet<RawFamilyIdV1> = BTreeSet::new();
-    let skip =
-        |family: &RawFamilyV1,
-         reason: WireInexpressibleReasonV3,
-         inexpressible: &mut Vec<(RawFamilyIdV1, WireInexpressibleReasonV3)>,
-         inexpressible_ids: &mut BTreeSet<RawFamilyIdV1>| {
-            inexpressible.push((family.id.clone(), reason));
-            inexpressible_ids.insert(family.id.clone());
-        };
+    let skip = |family: &RawFamilyV1,
+                reason: WireInexpressibleReasonV3,
+                inexpressible: &mut Vec<(RawFamilyIdV1, WireInexpressibleReasonV3)>,
+                inexpressible_ids: &mut BTreeSet<RawFamilyIdV1>| {
+        inexpressible.push((family.id.clone(), reason));
+        inexpressible_ids.insert(family.id.clone());
+    };
 
     for family in carrier.families() {
         let family_id = digest_wire_id(&family.id.0)
@@ -1532,8 +1566,7 @@ fn derive_wire_projection(
                 let head = carrier
                     .head_for_seed(seed)
                     .ok_or(NativeCarrierFailureV3::UnsupportedCarrierProjection)?;
-                let GenericJudgmentV1::Term { context, term, ty } = &family.generic_judgment
-                else {
+                let GenericJudgmentV1::Term { context, term, ty } = &family.generic_judgment else {
                     return Err(NativeCarrierFailureV3::UnsupportedCarrierProjection);
                 };
                 FamilyPayloadWireV1::Seed {
@@ -1609,8 +1642,7 @@ fn derive_wire_projection(
                     );
                     continue;
                 }
-                let GenericJudgmentV1::Term { context, term, ty } = &family.generic_judgment
-                else {
+                let GenericJudgmentV1::Term { context, term, ty } = &family.generic_judgment else {
                     return Err(NativeCarrierFailureV3::UnsupportedCarrierProjection);
                 };
                 FamilyPayloadWireV1::GenericPublicApplication {

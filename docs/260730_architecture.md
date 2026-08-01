@@ -463,7 +463,7 @@ several layers.
 - `finite_rewrite.rs` and `rewrite_inventory.rs`: typed finite rewrite
   assembly;
 - `quotient.rs`: Q2/family quotienting;
-- `weakening.rs`: family weakening/restriction and marginal support;
+- `weakening.rs`: legacy V1 caller-supplied weakening/marginal prototype;
 - `provenance.rs`: dependency support and SR2; and
 - `cost.rs`: kernel-cost decisions.
 
@@ -491,9 +491,41 @@ several layers.
   inventory, the all-pairs overlap census with joins, termination and
   confluence, one-step-commutation substitution stability against the
   derivation-local construction witnesses, and predecessor
-  conservativity over the historical empty-equation base; the first
+  conservativity by exact position-by-rule replay under the
+  predecessor signature, edge-set equality, and independent
+  restricted normal-form reconstruction over the historical
+  empty-equation base; the first
   module to return the reserved `MissingRewriteSystemV3` stage
-  reason; and
+  reason;
+- `family_quotient_v3.rs`: the Phase J semantic-family quotient,
+  deriving the authorized-Q0 carrier twin from the exact native
+  carrier, checking its recursive constructor-tree image against the
+  rewrite authority, inheriting canonical demand-neutral V3 seed
+  identity, exhausting the fixed Q1/Q2 quotient with verified-empty
+  Q3, and minting a deterministic opaque capability with no
+  caller-selected seeds, vertices, or classes;
+- `family_weakening_v3.rs`: derived predecessor carrier/quotient
+  reconstruction, exact old-family Q1/Q2 transport, and the injective
+  V3 class weakening map with its inverse on the image;
+- `marginal_family_set_v3.rs`: the exact successor-class complement of
+  that image, with complete class/raw partitions and member-level
+  new-event support proved only after the complement is fixed;
+- `demand_orbit_census_v3.rs`: the exact inventory-relative empty
+  demand carrier and orbit partition for the two registered chains, with no
+  nonempty constructor or live-debt authority;
+- `demand_realization_census_v3.rs`: an independently derived empty
+  realization relation after exact seed/inventory equation-port comparison;
+- `restricted_kernel_cost_basis_v3.rs`: the separate cost-V2 theorem for
+  the exact projection-/demand-free, bodyless/reflexive V3 fragment, deriving
+  canonical clauses, negative evidence, and the full singleton paid basis
+  internally;
+- `sr2_dependency_support_v3.rs`: exhaustive recursive public-clause
+  support across every raw member of every exact marginal class, before any
+  principal-source choice or provenance assignment;
+- `sr2_noninjectivity_v3.rs`: the target-neutral pigeonhole theorem showing
+  that neither current exact marginal set admits a typed, role-preserving
+  injection into the frozen clause-role plus empty-demand-output SR2 codomain;
+  and
 - `typing_metatheory.rs`: foundation versus stronger production metatheory.
 
 #### Production refinement
@@ -1045,7 +1077,16 @@ flowchart TD
   Meta["typing metatheory"]
   Carrier["native V3 carrier"]
   Coverage["carrier-derived subject completeness"]
-  Rewrite["verified rewrite system / quotient / audit"]
+  Rewrite["verified V3 rewrite authority"]
+  Quotient["authorized-Q0 carrier twin + semantic-family quotient"]
+  Weakening["derived family weakening + restriction"]
+  Marginals["exact marginal-family set"]
+  Orbit["exact demand-orbit census"]
+  Realization["exact demand-realization census"]
+  Support["exhaustive pre-SR2 dependency support"]
+  Cost["restricted V3-gated cost-V2 basis"]
+  PositiveSR2["positive SR2 assignment (blocked)"]
+  Obstruction["SR2 non-injectivity diagnostic"]
 
   Manifest --> Bundle
   Signature --> Bundle
@@ -1065,6 +1106,19 @@ flowchart TD
   Meta --> Carrier
   Carrier --> Coverage
   Coverage --> Rewrite
+  Rewrite --> Quotient
+  Quotient --> Weakening
+  Weakening --> Marginals
+  Marginals --> Orbit
+  Orbit --> Realization
+  Realization --> Support
+  Rewrite --> Cost
+  Support --> PositiveSR2
+  Cost --> PositiveSR2
+  Marginals --> Obstruction
+  Orbit --> Obstruction
+  Realization --> Obstruction
+  Cost --> Obstruction
 ```
 
 The arrows are authority dependencies, not just data flow. Downstream objects
@@ -1248,7 +1302,7 @@ must not enter the source protocol or commits.
 As of this document:
 
 - production wire: 7 unit and 6 cross-language pinning tests passed;
-- semantic-audit library: 168 passed, 6 ignored; the
+- semantic-audit library: 204 passed, 6 ignored; the
   `canonical_bundle_vectors` and `production_replay_vectors`
   integration suites prove the committed canonical vector
   builder-derived, replay it through the unchanged kernel, reject all
@@ -1259,8 +1313,12 @@ As of this document:
   of all six correspondence/refinement/metatheory capabilities with
   its adversarial mismatched-signature rejection, and the Phase I
   carrier/root-inventory/subject-bundle/census mint over both the
-  equationless and fresh-equation chains with an adversarial
-  cross-chain binding rejection; two `compile_fail` doc tests pin the
+  equationless and fresh-equation chains, now continued through exact
+  rewrite/quotient/weakening/marginal authority, empty demand bases,
+  restricted costs 3 and 2, exhaustive dependency support, and certified
+  negative SR2 pigeonhole results, with adversarial cross-chain binding
+  rejections; the pinned full-chain test passes 1/1 in 85.58 seconds and two
+  `compile_fail` doc tests pin the
   capability privacy boundary from outside the crate;
 - safe Agda wire, context-checker, bundle-checker, encode,
   correspondence, semantic-replay, typing-replay, supplement, bridge,
@@ -1429,11 +1487,66 @@ Implemented:
   reduction graphs, the all-pairs overlap census with joins, and
   termination/confluence with predecessor conservativity over the
   exact native carrier, pinned end-to-end on the equationless and
-  fresh-equation chains. The ordered frontier is the Phase J
-  remainder (quotient over the Q0-normalized carrier twin, derived
-  weakening conservativity, the V3-gated cost basis, demand
-  provenance, SR2 bindings, transcript suite, review/freeze,
-  adapter).
+  fresh-equation chains. Its predecessor theorem replays every old
+  node under the predecessor signature, independently enumerates every
+  position × old beta/delta rule, requires exact edge equality, and
+  reconstructs the restricted normal-form map.
+
+- the Phase J semantic-family quotient (`family_quotient_v3.rs`): the
+  exact native seeds are normalized under the chain-bound fresh
+  program, re-enumerated in `AuthorizedQ0` mode, checked inductively
+  against the rewrite theorem, and completely quotiented on a V3
+  identity surface that inherits `SeedIdV3` and excludes legacy
+  clause/port lineage. The equationless chain has 24 normalized
+  families / 10 classes and the fresh-equation chain 29 / 13.
+
+- Phase J weakening/restriction (`family_weakening_v3.rs`): the
+  predecessor authorized-Q0 carrier and quotient are reconstructed
+  internally, complete raw equality and exact old–old Q1/Q2 transport
+  are checked, and an injective V3 class map plus inverse on its image
+  are minted. The two chains reconstruct predecessor surfaces of
+  1 seed / 1 raw / 1 class / 5 Q2 dispositions and 3 / 3 / 3 / 45.
+
+- Phase J marginal-family authority (`marginal_family_set_v3.rs`): the
+  successor-class complement is computed before support validation,
+  its class and raw-member partitions are exhaustive, and every
+  marginal raw member is proved to touch the new event with empty
+  demand-output support. The two chains certify 9 classes / 23 raw
+  members and 10 / 26. This stage issues no cost, demand, `nu`, SR2, or
+  Selective-Law authority.
+
+- Phase J exact empty demand bases (`demand_orbit_census_v3.rs` and
+  `demand_realization_census_v3.rs`): both chains independently certify
+  complete empty demand, port-obligation, orbit, and realization surfaces.
+  These are inventory-relative bases and expose no nonempty constructor,
+  output, live debt verdict, or `nu`.
+
+- Phase J restricted paid basis (`restricted_kernel_cost_basis_v3.rs`):
+  canonical successor clauses, DAG, port map, and negative evidence are
+  derived internally and replayed through cost V2. The equationless and
+  fresh-equation chains certify full singleton bases of size 3 and 2. This is
+  purchasing authority in the restricted projection-/demand-free,
+  bodyless/reflexive fragment, not a general Q0-minimal theorem or live
+  `kappa`.
+
+- Phase J pre-SR2 support (`sr2_dependency_support_v3.rs`): every raw member
+  of every marginal class is recursively traversed and its public-clause
+  support included in the class union. Empty candidate-local support remains
+  evidence for downstream failure rather than being filtered out.
+
+- Phase J negative SR2 theorem (`sr2_noninjectivity_v3.rs`): exact role
+  fibers, singleton paid clauses, the frozen four-role vocabulary, and the
+  exact empty demand-output summand yield a pigeonhole obstruction on both
+  chains under SR2's typed role-preservation rule (a family's clause tag must
+  carry that family's verified role). The equationless `SupportAction` fiber
+  is 6 > 3; the fresh-equation total domain/codomain comparison is 10 > 8.
+  Positive provenance and `nu` are therefore unavailable, not zero.
+
+The ordered V3 frontier is now theory adjudication of this exact negative
+result, plus the general nonempty-demand and general cost/Q0 bridges. The
+transcript suite, review/freeze, and any adapter remain open. The architecture
+must not enlarge the role vocabulary, rename receipts, or substitute the
+structural marginal count merely to recover a desired positive result.
 
 Not yet implemented:
 
@@ -1443,12 +1556,26 @@ Not yet implemented:
   conversion-requiring content (the registered
   `full-eight-constructor-decoded-soundness-not-yet-derivable`
   frontier, needing conversion-typing subject-reduction metatheory);
-- the equation-action rewrite-step relation and the wire carrier for
-  context-growing generic equation actions (the wire drops
-  `hole_ordinal`/`context_witness`; both Phase J rewrite authority),
-  and carrier-derived constructor-set coverage for fresh rules;
-- verified rewrite system, quotient, weakening/marginals, provenance, SR2,
-  adoption, freeze, and live Profile A adapter.
+- a direct wire encoding and Rust/Agda correspondence for context-growing
+  generic equation actions (the current wire drops
+  `hole_ordinal`/`context_witness`; their native carrier, root/census coverage,
+  construction-substitution witnesses, and Phase J rewrite authority are
+  discharged), and full carrier-derived constructor-set coverage for fresh
+  rules;
+- nonempty demand-orbit/typed-realization authority, a general V3/Q0-minimal
+  cost theorem, positive SR2 under an independently justified law, adoption,
+  freeze, and a live Profile A adapter.
+
+No authority edge currently runs from the structural marginal count—or the
+eventual semantic-family `nu` audit—to Phase K1. Chapter 4 of the book
+requires `gamma`, while its stated
+bound `0 <= gamma <= nu` makes the positive-cost, zero-`nu` Genesis
+Steps 9 and 12 unable to clear any nonnegative strict bar. Selective
+authority must therefore pass through either a verified mandatory
+Phase JG package plus an explicit repair/adjudication of those trace
+claims, or an independently reviewed pre-exposure repair and refreeze
+of the law and profile documents. The architecture must not choose a
+route by asking which one recovers the target sequence.
 
 The architecture is therefore in a healthy fail-closed state: the lower-level
 wire and structural boundaries can be developed and tested, while all
