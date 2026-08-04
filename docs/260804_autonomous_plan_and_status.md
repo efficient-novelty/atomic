@@ -12,9 +12,13 @@ boundaries — S1a/D1 through S1c4 (record §10.20) plus ledger items 5-6
 checked and both OPEN-AT-S1C4 deferrals discharged); the roots/runtime cut
 closed the same day as record §14 (RT-A/RT-B/RT-C, all fourteen §13.3
 ledger lines checked, seven registered decisions RD-RT-A-1 through
-RD-RT-C-4), completing A4-R2d at the compiler-plan boundary; A4-R3, the
-failure/resource machine (§7.1 item 6), is the active implementation
-frontier. The current
+RD-RT-C-4), completing A4-R2d at the compiler-plan boundary; A4-R3 closed
+2026-08-05 as its own record
+(`docs/260804_jg2b2b2a_a4_r3_failure_resource_machine.md`: total
+reservation census, failure/kernel/cardinality/account lanes, all thirteen
+§13.4 ledger lines checked, fourteen registered decisions RD-R3-A-1
+through RD-R3-C-6); A4-R2e, the registry/source join (§7.1 item 7), is the
+active implementation frontier. The current
 full-projection preservation subjects are typed proposition syntax only:
 full-projection action equality is impossible for every nonempty action, and a
 separately versioned preservation-law corrigendum is mandatory before universal
@@ -678,24 +682,38 @@ Closed inputs:
   (RD-RT-C-2), the tag-4 owner-checked references (RD-RT-C-3), the joined
   five-way root `0xe3` honoring the R2a scheduling corrigendum, and the
   five-tag `R2dSemanticOpcodeV1` closure (RD-RT-C-4). All R3 positions
-  reserved, not filled; numerical TypeIds remain R2e.
+  reserved, not filled; numerical TypeIds remain R2e; and
+- the A4-R3 failure/resource/meter machine
+  (`docs/260804_jg2b2b2a_a4_r3_failure_resource_machine.md`, closed
+  2026-08-05): the total sixty-row reservation census; the closed
+  `FalseReasonV1`/`AbortReasonV1` taxonomy with exact subordinate payload
+  widths and the lesson-11 completeness re-audit; shared
+  `CheckedFalseReceiptV1`/`AbortReceiptV1` types with internal locus
+  discrimination and checked binding equations (RD-R3-A-1/2); the
+  eleven-role `KernelCallRoleV1`, call-identity-only
+  `KernelSuccessReceiptV1`, in-field kernel-error realization, and
+  scope-tagged `StructuralCardinalityReceiptV1` (RD-R3-B-1..4); the three
+  account families over the fourteen-counter window vector with `0xfa`
+  policy references, frozen per-counter units, `Acct_R3`/`Aggregate_R3`
+  conservation, and the thirteen-variant `AccountScopeV1`
+  (RD-R3-C-1..6); Unknown registered as exactly the absence of a
+  disposition plus the unprivileged abort diagnostic (RD-R3-A-4).
 
 Active deliverable:
 
-> Close A4-R3 (§7.1 item 6): freeze the exact failure, resource, and meter
-> machine, filling the already qualified `R3::` positions reserved
-> throughout record sections 4--14 under their frozen outer tags —
-> including `AbortReceiptV1`, `CheckedFalseReceiptV1`, and the
-> `ActionResourceAccountV1` reservation registered by RD-RT-C-2 — changing
-> no closed grammar, topology, or registered decision. Record sections
-> 10.11--14 and all QG1/QG2 bytes are immutable inputs, consumed
-> read-only. Per §5.7, an enumerated closure ledger for the R3 cut must be
-> registered in this plan before its work starts.
+> Close A4-R2e (§7.1 item 7): assign the dynamic registry `TypeIdV1`
+> values and close the implementation-source join. R2e may not change an
+> edge, reorder a predecessor, add a hidden operation, choose a name, add,
+> remove, or reorder a field, or change any layout (record §12 constraint;
+> RD-RT-C-4 and the §10.21.3 R2e cap): it lowers the closed symbolic
+> schemas, assigns numerical IDs, and performs the registry/source join
+> with representative-byte comparison. The R2d and R3 records and all
+> QG1/QG2/QG3 bytes are immutable inputs, consumed read-only. Per §5.7,
+> an enumerated closure ledger for the R2e cut must be registered in this
+> plan before its work starts.
 
 Not yet materialized:
 
-- the R3 failure/resource/meter field contents (every `R3::` position is
-  reserved under its frozen outer tag, not filled);
 - final numerical `TypeIdV1` assignments and the R2e registry/source join;
 - regenerated R4 fixtures and mutations;
 - executable JG2b2b2 authority; and
@@ -857,11 +875,14 @@ selective-profile authority exists yet.
    coverage/dispositions, base-relative action rebuild, action trace/image,
    roots `0xfd`, `0xe7`–`0xe9`, `0xfe`, `0xff`, joined root `0xe3`, and
    slots 9–11, under the §13.3 ledger with seven registered decisions.
-6. **R3 — active.** Freeze the exact failure, resource, and meter machine,
-   filling only the already qualified reserved positions under their frozen
-   outer tags.
-7. **R2e.** Assign the dynamic registry TypeIds and close the implementation-
-   source join.
+6. **R3 — closed (2026-08-05,
+   `docs/260804_jg2b2b2a_a4_r3_failure_resource_machine.md`).** The exact
+   failure, resource, and meter machine, filling only the already qualified
+   reserved positions under their frozen outer tags, under the §13.4 ledger
+   with fourteen registered decisions.
+7. **R2e — active.** Assign the dynamic registry TypeIds and close the
+   implementation-source join, under the section-12 no-edge-change
+   constraint and RD-RT-C-4's numerical-IDs-only cap.
 8. **R4.** Regenerate canonical fixtures and layer-specific mutations; require
    deterministic reminting and exact replay before release.
 
@@ -1580,7 +1601,10 @@ The detailed contracts live in these records:
 - `docs/260730_architecture.md` — repository architecture and dependency lanes;
 - `docs/260804_autonomous_plan_and_status.md` — this consolidated forward plan;
 - `docs/260802_jg2b2b2a_a4_r2d_quotient_outcome_coverage_action_schemas.md` —
-  active A4-R2d schema and compiler frontier;
+  closed A4-R2d record (QG1-QG3 and the roots/runtime section 14);
+- `docs/260804_jg2b2b2a_a4_r3_failure_resource_machine.md` — closed A4-R3
+  record (census, failure/kernel/cardinality/account lanes, fourteen
+  registered decisions);
 - `docs/260802_jg2b2b2a_a4_r2c_envelope_evidence_support_subject_schemas.md` —
   frozen envelope/evidence/support/subject schemas;
 - `docs/260802_jg2b2b2a_a3_c1_expected_judgment_corrigendum.md` — frozen
@@ -1658,15 +1682,18 @@ The current packet may package the three preservation descriptors, but it must
 not prove, assume, classify by, or derive `GCap` from their truth. The exact
 nonempty-action obstruction is a frozen input to later TC work.
 
-The next autonomous work item is **A4-R3, the failure/resource machine
-(§7.1 item 6)**, beginning with its §5.7 closure-ledger registration. A4-R2d
-is complete: QG3 closed 2026-08-04 (records §§10.20-10.22, reviewed as
-recorded above), and the roots/runtime cut closed the same day as record
-§14 — RT-A/RT-B/RT-C authored sequentially, each adversarially verified
-and revised (RT-B's two verifiers returned zero defects; RT-C's blocking
-`final_payload` receipt-freedom contradiction was re-decided inside
-RD-RT-C-2), then a final fourteen-line ledger audit passed every line with
-all seven catalogued underdeterminations decided by registered decisions.
+The next autonomous work item is **A4-R2e, the registry/source join (§7.1
+item 7)**, beginning with its §5.7 closure-ledger registration. A4-R3
+closed 2026-08-05 as
+`docs/260804_jg2b2b2a_a4_r3_failure_resource_machine.md`: the F-A/F-B/F-C
+sub-cuts were authored sequentially against the pre-registered §13.4
+ledger, each adversarially verified and revised (eleven findings total,
+two blocking — a role-enum derivation error in RD-R3-B-1 and a no-change
+audit that omitted the cut's own decisions — all fixed and re-verified),
+then the final thirteen-line ledger audit passed every line with an
+independent two-notation census re-verification and all fourteen §13.4a
+underdeterminations decided by registered decisions. A4-R2d closed
+2026-08-04 as recorded above (records §§10.20-10.22 and §14).
 
 ### 13.1 Parallel formulation lane (registered 2026-08-04)
 
@@ -2109,12 +2136,12 @@ Cut-global lines (checked at each sub-cut close and at cut close):
 
 ### 13.4 Enumerated closure ledger for the A4-R3 failure/resource/meter cut (registered 2026-08-04, per §5.7)
 
-Registered before any R3 work. The three sub-cuts F-A (failure receipts),
-F-B (kernel-role/replay and cardinality receipts), and F-C (accounts, meter,
-and cut-global closure) are named here in advance and never count as
-unplanned sub-cuts under binding decision 6; residue routes
-F-A -> F-B -> F-C -> the named R2e/R4 boundaries, never to a new
-sub-alphabet. The cut must register explicit decisions, argued from the
+Registered before any R3 work; the cut closed 2026-08-05 (the R3 record)
+with every line below checked by the final ledger audit and zero residue
+carried. The pre-named sub-cuts F-A (failure receipts), F-B
+(kernel-role/replay and cardinality receipts), and F-C (accounts, meter,
+and cut-global closure) never counted as unplanned sub-cuts under binding
+decision 6; the registered residue routing was not needed. The cut must register explicit decisions, argued from the
 frozen records, for the underdeterminations catalogued at registration
 (§13.4a). The R3 record is a fresh document
 (`docs/260804_jg2b2b2a_a4_r3_failure_resource_machine.md`); record §§4-14,

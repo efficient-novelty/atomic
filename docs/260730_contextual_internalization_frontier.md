@@ -222,8 +222,9 @@ freezes structural declaration roots, term-node paths, deterministic
   lineage, independent footprints, the group-6 support package, the shared
   eight-group schema, and the second transitive scan); the roots/runtime cut
   closed the same day (record section 14), completing A4-R2d at the
-  compiler-plan boundary. The chain
-  `R3 -> R2e -> R4` must still bind A1, the A2-O
+  compiler-plan boundary; A4-R3 closed 2026-08-05
+  (260804_jg2b2b2a_a4_r3_failure_resource_machine.md). The chain
+  `R2e -> R4` must still bind A1, the A2-O
   substrate, and A3-O into the canonical complete profile transcript/resource/
   non-authority contract; `JG2b2b2b` remains blocked by
   A4-R4 before it can implement the closed executable Rust grammar and
