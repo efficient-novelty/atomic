@@ -1971,6 +1971,119 @@ canonical fixtures, repeat those checks, and mutation-test the closed
 translation table. Those later checks are not QG3 inputs and cannot be used to
 select its support, disposition, lineage, or action-subject values.
 
+### 13.3 Enumerated closure ledger for the A4-R2d roots/runtime cut (registered 2026-08-04, per §5.7)
+
+Registered before any roots/runtime work: the cut is closed exactly when every
+line below checks; residue routes RT-A -> RT-B -> RT-C -> the named R3/R2e
+boundaries, never to a new sub-alphabet. The three sub-cuts RT-A/RT-B/RT-C are
+named here in advance and therefore never count as unplanned sub-cuts under
+binding decision 6. The cut must also register explicit decisions, argued from
+the frozen records, for the seven underdeterminations catalogued at
+registration: the `QuotientKeyV1` embedding form; the outcome-tag order
+mapping between A4-O §2.4 and the repaired `0xe7` order; the slot-10 opcode
+list and predecessor topology; the `0xfe`/`0xff` typed layouts and their
+R3-qualified boundary; the reference form of the tag-4 owned fields; the
+content boundary of root `0xe8`; and the closer of the final
+`R2dSemanticOpcodeV1` tags.
+
+Sub-cut RT-A — quotient key and comparison:
+
+- LR.1 root `0xfd` materializes the final encoded `QuotientSemanticProjectionV1`
+  as exactly the record-§11 grammar `0xfd || little_endian_u16(1) || group_1 ..
+  group_8` — no sum tag, extra outer record/version, outer or whole-key digest;
+  nested use omits `0xfd,u16=1`; no group, position, name, field order, or
+  encoding fixed by record §§10.11–10.22 is added, removed, reordered, or
+  renamed; encoded candidate and total identity-action projections remain
+  byte-identical, and distinct raw leaves may share one complete key;
+- LR.2 full key comparison (slot `9[1]`) closes on the complete decoded value
+  and full rooted bytes, equivalent to A4-O §6.2 full-key-byte equality for
+  `approx_(env,c)`, with lexicographic class order, `FirstDifferenceV1`
+  retaining offset/bytes/decoded field paths, and digest equality or
+  inequality never a quotient witness;
+- LR.3 the open `QuotientKeyV1` position in both leaf-outcome sums closes
+  against the encoded projection with a registered embedding decision
+  (nested-omitting-prefix, full-rooted-bytes, or owner-checked reference), and
+  the record-§4 cross-leaf equations (K byte-identical to the unique
+  successful `9[0]` output for the same C) are preserved;
+
+Sub-cut RT-B — checked outcomes, classes, coverage, dispositions:
+
+- LR.4 root `0xe7` `CheckedLeafOutcomeV1` closes with exactly
+  `CandidateMatch=0, CheckedFalse=1` (the repaired order superseding rejected
+  RC1), bytes `0xe7 || u16(1) || variant_tag || payload`, the success branch
+  retaining the complete final pair via R2c §10's `CandidateMatchOutputV1`
+  unchanged, and the qualified `R3::CheckedFalseReceiptV1` position reserved,
+  not filled;
+- LR.5 slot `11[0]` closes the record-§3/§4 complete all-raw pass: one
+  terminal leaf per raw ordinal with no gap/duplicate/reorder, dense checked
+  `rho` ranks, arena vectors of length `m <= 262,144` in ascending successful
+  raw ordinal, both references carrying the same `rho(j)`, first-false
+  continues, any abort suppresses the whole pair; no success-only vector,
+  claimed prefix count, insertion order, pointer identity, or digest-only
+  lookup;
+- LR.6 quotient classes admit `CandidateMatch` leaves only, membership is full
+  key-byte equality, classes sort lexicographically by full canonical key
+  bytes, members by canonical raw ordinal, representative = least canonical
+  raw ordinal, and several raw matches may inhabit one class;
+- LR.7 root `0xe8` `PairCoverage` closes consistent with the frozen
+  `CompleteCoverageGrammarV1` (A4-O §2.4): every raw code visited exactly
+  once, no-gap/no-duplicate evidence, `abort_is_certificate_member = false`,
+  and a registered mapping between the grammar's `[CheckedFalse,Match]`
+  outcome-tag vector and the repaired `0xe7` variant order that changes
+  neither frozen artifact;
+- LR.8 root `0xe9` and slot `11[1]` close the exact three-disposition sum
+  `{CertifiedNoMatch, UniquePositive, TypedAmbiguity}` in the frozen §2.4 tag
+  order with A4-O §5.5 preconditions, class-not-raw-match counting, no early
+  exit or ambiguity tie break, and any abort yielding diagnostic
+  `NoDisposition`, never a rooted disposition;
+
+Sub-cut RT-C — action runtime and the joined Level-II root:
+
+- LR.9 slot `ActionNormalizationAndRebuild=10` closes as action-only with its
+  exact opcode list and predecessor vectors fixed for the first time, every
+  action flattening and rebuilding from the original base (A4-O rules 24–26),
+  action support recomputed from final roots, `SubjectProjectionSourceBundleV1`
+  retained byte-identically, and action images entering no raw universe,
+  outcome vector, partition, or disposition;
+- LR.10 roots `0xfe`/`0xff` close `ActionTraceV1` and `ActionImageV1` with
+  exactly the A4-O §6.3 inventories (trace: base binding, unflattened steps,
+  flattened canonical action, endpoints, logical account with R3-qualified
+  resource positions reserved; image: profile/base binding, schema tag, base
+  anchor, flattened action, final payload, full final quotient key,
+  action-trace commitment), both representative evidence outside the quotient
+  key, with the private constructor enforcing A3-O `CanonicalActionResult_c`;
+- LR.11 the Level-II tag-4 payload replaces every remaining mathematical name
+  of R2b's `CheckedActionImage=4` by a complete typed value or checked
+  owner-local reference; then and only then the five-way
+  `CheckedOrdinaryLevelTwoV1` sum node is created and root `0xe3` mapped, with
+  tags 0–4 and semantic field order byte-identical to the R2b freeze, R2c's
+  tag-3 `CheckedCandidateEnvelopePayloadV1` used unchanged, nested payloads
+  encoded directly after the variant tag, and no variant a pair disposition
+  or occurrence classification;
+
+Cut-global lines (checked at each sub-cut close and at cut close):
+
+- LR.12 every named slot-9/10/11 input/output runtime type closes; the
+  record-§12 slot-9/11 rows, including `11[0]`'s displayed fourteen-predecessor
+  vector, are byte-identical inputs — no edge changed, predecessor reordered,
+  or hidden operation added; numerical TypeIds stay open for R2e under that
+  same constraint;
+- LR.13 zero new admission values beyond QG2's two; no support-to-lineage or
+  footprint-to-owner back-edge, R3 account or receipt, copied
+  raw/source/owner/class ordinal, construction transcript, replay, evidence
+  target, representative, semantic SR2 result, or `nu` is consumed; fresh
+  ordinals appear only as checked positions in independently reconstructed
+  values; a transitive forbidden-input scan over the cut's sections passes; and
+- LR.14 stop boundary: the cut fills no R3 failure/resource field (qualified
+  positions keep their frozen outer tags and positions), assigns no numerical
+  `TypeIdV1` and performs no registry/source join (R2e), regenerates no
+  fixtures or mutations (R4; RC1 coverage fixtures may not be copied), mints
+  no executable authority and no theorem; the three preservation descriptors
+  remain uninhabited typed syntax and the record-§10.19.6 truth-audit gate
+  persists unweakened; roots `0xfb`/`0xfc` and every §§10.11–10.22 byte remain
+  immutable; the work stops fail-closed on any grammar, topology, or audit
+  failure.
+
 ## 14. Definition of success for this plan
 
 This plan succeeds when:
