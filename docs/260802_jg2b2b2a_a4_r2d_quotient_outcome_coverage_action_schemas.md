@@ -2,11 +2,13 @@
 
 Date: 2026-08-04
 
-Status: **A4-R2d ACTIVE AT ROOTS/RUNTIME (PLAN §7.1 ITEM 5); QG1, QG2, AND
-QG3 CLOSED AT THEIR STATED REPRESENTATION BOUNDARIES — QG3-S1a/D1 THROUGH
-S1c4 PLUS LEDGER ITEMS 5-6 (SECTIONS 10.21-10.22, CLOSED 2026-08-04);
-A4-R2a+C2, A4-R2b,
-A3-C1, AND A4-R2c+C2 FROZEN; A4-R3 BLOCKED BY R2d.** This active record fixes the
+Status: **A4-R2d CLOSED AT THE COMPILER-PLAN BOUNDARY (2026-08-04): QG1,
+QG2, QG3 (SECTIONS 10.11-10.22), AND THE ROOTS/RUNTIME CUT RT-A/RT-B/RT-C
+(SECTION 14, PLAN §13.3 LEDGER LR.1-LR.14 ALL CHECKED, SEVEN REGISTERED
+DECISIONS RD-RT-A-1 THROUGH RD-RT-C-4); A4-R2a+C2, A4-R2b,
+A3-C1, AND A4-R2c+C2 FROZEN; A4-R3 IS THE NEXT PHASE, NO LONGER BLOCKED BY
+R2d DEFINITION WORK; NUMERICAL TYPEIDS AND THE REGISTRY JOIN REMAIN R2e;
+FIXTURES REMAIN R4.** This active record fixes the
 first lawful R2d cut: a
 rank-free R2c match projects its semantic quotient before complete all-raw
 coverage assigns candidate-arena ranks. It also fixes the two independent
@@ -15199,20 +15201,2260 @@ roots `0xfe`/`0xff`, Level-II tag 4, joined root `0xe3`, and all slot-10/11
 runtime types. R3 then fills the already qualified failure/resource fields; R2e
 assigns final TypeIds and joins the registry; R4 regenerates fixtures.
 
-The next lawful R2d move is the roots/runtime cut (plan §7.1 item 5): full
-key comparison, rooted outcomes and classes under the root-`0xe7`
-`CheckedLeafOutcomeV1` encoding, root `0xe8` coverage, root `0xe9`
-dispositions, the base-relative action rebuild with the action trace/image,
-roots `0xfd`, `0xfe`, and `0xff`, Level-II tag 4, joined root `0xe3`, and
-all slot-9/10/11 runtime types, materializing the section-10.21 symbolic
-schema as the encoded `QuotientSemanticProjectionV1`. Sections 10.11--10.22
-and all QG1/QG2 bytes are immutable inputs. Subject syntax is not proof
-evidence: the section-10.19.6 preservation-truth obstruction remains a
-mandatory theory corrigendum before any later universal authority may use
-those equalities. The work must reject every support-to-lineage or
-footprint-to-owner back-edge, R3 account, copied raw/source/owner/class
-ordinal, construction transcript, replay, receipt, evidence target,
-representative, semantic SR2 result, or `nu`.
+## 14. Roots/runtime closure
+
+This section executes the roots/runtime cut mandated by section 13 after the
+QG1–QG3 closures: QG1 closed at schema-candidate level, QG2 closed, and QG3
+closed 2026-08-04 at the compiler-plan boundary (sections 10.11–10.22). The
+cut is enumerated in advance by plan §13.3 (ledger LR.1–LR.14) and proceeds
+in the three pre-named sub-cuts RT-A (quotient key and comparison), RT-B
+(checked outcomes, classes, coverage, dispositions), and RT-C (action runtime
+and the joined Level-II root), in that order; residue routes
+RT-A -> RT-B -> RT-C -> the named R3/R2e/R4 boundaries and never to a new
+sub-alphabet.
+
+Immutable byte-for-byte inputs: sections 1–13 of this record, including every
+byte of sections 10.11–10.22 and the section-11/section-12 reservations; the
+R2a wire and root table; the R2b five-tag `CheckedOrdinaryLevelTwoV1`
+contract; the R2c envelope/evidence/support/subject freeze including
+`RankFreeCandidateMatchOutputV1`, `CandidateMatchOutputV1`,
+`CheckedCandidateEnvelopePayloadV1`, `ExactEvidenceRefV1`, and
+`CandidateEnvelopeRefV1`; and the A4-O ordinary-profile closure. The rejected
+A4-O RC1 document remains failure testimony only.
+
+The cut is compiler-plan only. It fixes full byte grammars and typed value
+schemas. It assigns no numerical `TypeIdV1` (R2e), fills no R3
+failure/resource field (qualified positions keep their frozen outer tags and
+positions), performs no registry/source join (R2e), regenerates no fixtures
+or mutations (R4), mints no executable authority, and proves no theorem. The
+three preservation descriptors remain uninhabited typed syntax; the
+section-10.19.6 truth-audit gate persists unweakened. Roots `0xfb`/`0xfc`
+and every section-10.11–10.22 byte remain immutable. Fail-closed discipline
+is total: every violation named below aborts and mints nothing, and an
+unknown or undetermined input is an outcome, never permission. The
+forbidden-input list of section 13's post-QG3 mandate binds every
+construction below.
+
+### 14.1 RT-A: the encoded quotient key and full-key comparison
+
+RT-A closes plan §13.3 lines LR.1–LR.3 and the slot-9 portion of
+LR.12–LR.14: the root-`0xfd` materialization of the final encoded
+`QuotientSemanticProjectionV1`, the slot-`9[1]` full-key comparison, the
+registered `QuotientKeyV1` embedding decision, and the slot-9 runtime types.
+Under section 13, root `0xfd` and slot `9[0]` may freeze only after QG1–QG3;
+that precondition is now met.
+
+#### 14.1.1 Root `0xfd` materialization (LR.1)
+
+The name reserved by section 11 is now declared. The final encoded
+`QuotientSemanticProjectionV1` is the root-`0xfd` materialization of the
+closed section-10.21 symbolic composition, position for position:
+
+```text
+QuotientSemanticProjectionV1 =
+  the encoded value whose composition is exactly
+  QuotientSemanticProjectionPlanSharedV1 (section 10.21.1),
+  with the same eight positions, the same position names, and the
+  same frozen per-group occupants; no position is added, removed,
+  reordered, or renamed.
+```
+
+Its rooted byte grammar is exactly the section-11 reservation:
+
+```text
+0xfd || little_endian_u16(1)
+     || group_1_binding
+     || group_2_realizations
+     || group_3_replay_boundaries
+     || group_4_lineage
+     || group_5_footprints
+     || group_6_support
+     || group_7_field_dispositions
+     || group_8_obligations_and_subjects.
+```
+
+Group-by-group, each concatenation segment is the canonical R2a-wire
+encoding of the exact frozen per-group type, by frozen name:
+
+| Group | Segment | Encoded type | Frozen by |
+| --- | --- | --- | --- |
+| 1 | `group_1_binding` | `QuotientBindingCandidateV1` | §8 |
+| 2 | `group_2_realizations` | `QuotientGroupTwoRealizationsCandidateV1` | §9.2 |
+| 3 | `group_3_replay_boundaries` | `QuotientReplayBoundariesAndContextsCandidateV1` | §9.3 |
+| 4 | `group_4_lineage` | `QuotientLineageGroupPlanSharedV1`, encoding `principal || fields || output || action_introduced` | §9.4, §10.20.1, §10.21.2 |
+| 5 | `group_5_footprints` | `QuotientFootprintsCandidateV1`, fields `(implementation, current_output, prior_support)` | §9.4 |
+| 6 | `group_6_support` | `QuotientSemanticSupportPlanSharedV1`, encoding `graph || footprint_agreement || preservation_subjects` | §10.20.4, §10.21.3 |
+| 7 | `group_7_field_dispositions` | `QuotientPublicFieldDispositionsCandidateV1` | §10.11.4 |
+| 8 | `group_8_obligations_and_subjects` | `QuotientObligationsAndSubjectsGroupPlanSharedV1`, encoding `obligations || primary_subjects || instantiated_action_subject` | §10.3.4/§10.8, §10.10, §10.16.2/§10.17, §10.21.1 |
+
+Encoding rules, all inherited and none new:
+
+- every scalar, tag, vector count, and field order follows the section-2 R2a
+  wire; vectors carry their own `u64` element count and nothing else;
+- the three cut wrappers (`QuotientSemanticProjectionPlanSharedV1`,
+  `QuotientLineageGroupPlanSharedV1`,
+  `QuotientObligationsAndSubjectsGroupPlanSharedV1`) contribute no version
+  field, tag byte, count certificate, or digest of their own; each encodes as
+  the in-order concatenation of its positions' canonical values (§10.21.1);
+- there is no sum tag, no outer candidate/action discriminator, no extra
+  outer record or version beyond the displayed root prefix, and no extra
+  outer or whole-key digest; the A4-O §2.6 `CodecDomainBindingV1` row
+  (`QuotientKey`, `0xfd`, `law-v2/jg2b2b2a/ordinary-envelope-quotient-key/v1`)
+  binds a digest domain for external indexing only and licenses no stored
+  whole-key digest field;
+- nested use omits `0xfd,u16=1`; no value below the single outer prefix
+  carries a root or local version byte (§10.21.2); and
+- decode is exact and total on valid bytes: every rooted `0xfd` object
+  decodes to exactly one complete eight-group value, re-encodes to the
+  identical bytes, and trailing or missing bytes are an abort.
+
+The transitive digest whitelist is unchanged: exactly the section-9.3
+closure by type and path (items 1–5: the frozen exact-identity digest
+leaves; `QSig.normalized_digest`; `QCtx.signature_digest`;
+`QBirth.exact_stage_evidence_digest`; the exact R1 opaque-signature digest
+fields and frozen `GlobalId` leaves). The whitelisted identity and
+normalized-boundary digests remain fields of their exact enclosing values;
+they are neither a ninth group nor a replacement key. A digest leaf outside
+the whitelist is an invariant abort, not an extension point.
+
+The section-11 occupancy rules now hold at the encoded-byte level:
+
+- the encoded candidate projection and the encoded total identity-action
+  projection are byte-identical complete values; the section-10.21.4
+  per-group witnesses compose, and since no position carries a
+  candidate/action discriminator there exists no byte at which the two
+  encodings could differ;
+- a nonempty total action uses the same eight-group grammar; its only
+  additional top-level action-owned bytes are group 4's fourth position
+  (`action_introduced`, a bare vector, `[]` for candidate/identity) and
+  group 8's third position (`instantiated_action_subject`, `None` for
+  candidate/identity, exactly one `Some` for a nonempty total action); every
+  common position is rebuilt from the original base and total flattened
+  action under the section-10.21.5 audit; and
+- distinct raw leaves may share the same complete key: several raw matches
+  may inhabit one quotient class, and nothing in the grammar embeds a raw
+  ordinal, raw code, rank, owner-local index, or any other per-leaf
+  coordinate (section 7's two eliminations) that would force singleton
+  classes.
+
+Aborts of this subsection: a ninth or missing group; any group reordering;
+a sum tag or discriminator at any boundary; an extra outer record, version,
+count, or digest; a whole-key or outer digest; a nested `0xfd` or version
+byte; a digest leaf outside the section-9.3 whitelist; a stored
+`QuotientSupportRootFramePlanCandidateV1` or root vector; an occupant type
+other than the exact frozen per-group value; a byte difference between the
+encoded candidate and total identity-action projections; trailing bytes,
+truncation, or re-encode disagreement; any added, removed, reordered, or
+renamed group, position, name, field order, or encoding relative to
+sections 10.11–10.22.
+
+#### 14.1.2 Full-key comparison (LR.2): slot `9[1]` `CompareQuotientKeys`
+
+Define, for a complete decoded key `K`:
+
+```text
+FullRootedBytes(K) = 0xfd || little_endian_u16(1) || Encode_nested(K)
+```
+
+where `Encode_nested(K)` is the canonical nested (prefix-omitting) encoding
+of subsection 14.1.1. `CompareQuotientKeys` consumes two complete decoded
+keys produced by successful `QuotientProjectionAndComparison[0]` invocations
+under the same `PairEvaluationBindingV1` and closes on the complete decoded
+value and full rooted bytes:
+
+```text
+K_l = K_r as complete decoded values
+  <=> FullRootedBytes(K_l) = FullRootedBytes(K_r)
+  <=> full canonical key-byte equality in the sense of A4-O §6.2
+  <=> approx_(env,c)                       (A4-O §5.4: the frozen canonical
+                                            key encoder makes the A3-O
+                                            relation equivalent to full
+                                            key-byte equality)
+```
+
+The first equivalence is exactness of the canonical codec (deterministic
+encode, exact decode); the last two are the frozen A4-O closure. Root `0xfd`
+here is the same root A4-O §6.2 assigns to `QuotientKeyBytesV1_c`: the
+materialized grammar of 14.1.1 is the receipt-free, representative-free R2d
+semantic form of the complete A3-O `QuotientKeyV1_c` and nothing else.
+
+Ordering. The class order frozen by A4-O §2.4
+(`class_order : FullQuotientKeyBytesLexicographic`) is byte-lexicographic on
+`FullRootedBytes`. Because the canonical codec is self-delimiting, a
+complete rooted encoding is never a strict prefix of a different complete
+rooted encoding of the same type; two distinct keys therefore always differ
+at a least byte offset present in both encodings, and that offset lies at or
+after the three prefix bytes. The unsigned byte comparison at that offset
+decides the lexicographic order. RT-B consumes this order for class sorting;
+`9[1]` itself mints no class, membership, or representative.
+
+First difference. The A4-O §5.4 witness inventory — the first unequal
+full-key byte offset, the two bytes, and the decoded field paths — receives
+its typed layout:
+
+```text
+FirstDifferenceV1 =
+  (offset:u64,
+   left_byte:u8,
+   right_byte:u8,
+   left_field_path:QuotientKeyFieldPathV1,
+   right_field_path:QuotientKeyFieldPathV1)
+
+QuotientKeyFieldPathV1 = vector<QuotientKeyPathStepV1>
+
+QuotientKeyPathStepV1 ::=
+  Field=0(field_ordinal:u16)
+| Element=1(index:u64)
+| Variant=2(tag:u8)
+```
+
+`offset` is the zero-based position in `FullRootedBytes` (byte offsets are
+`u64` per the section-2 wire); `left_byte`/`right_byte` are the operands'
+bytes at `offset`; each field path is the exact decode path from the
+top-level eight-position record (first step: `Field` with the group's
+zero-based ordinal) to the innermost typed position whose encoding contains
+`offset` in that operand. Path steps use the frozen wire widths
+(record-field ordinals `u16`, vector indices `u64`, sum tags `u8`). The
+witness is deterministic and recomputable from the two operands; it is
+returned, never stored inside any key group, and no second copy, stored
+order tag, or reordered view exists — the order is derived from
+`left_byte`/`right_byte` by the displayed rule, so no separately stored
+order value can disagree with its witness.
+
+The comparison output is the two-variant sum:
+
+```text
+QuotientKeyComparisonOutputV1 ::=
+  Equal=0
+| Unequal=1(FirstDifferenceV1)
+```
+
+with `Equal` exactly on full-rooted-byte equality and `Unequal` carrying the
+unique least-offset witness. Comparing a key with itself is `Equal`.
+
+Digest discipline (unchanged, restated as closed): a key digest may index
+the comparison but cannot decide equality or inequality by itself (A4-O
+§6.2); digest equality or inequality is never a quotient witness (section
+11); pairwise digest inequality is not an inequivalence witness (A4-O
+§5.4). Equality and inequality conclusions exist only through the complete
+decoded value and full rooted bytes, and the only inequality witness form is
+`FirstDifferenceV1`.
+
+Rank invariance extends to comparison: `9[1]` depends only on `9[0]`
+(section 12) and precedes `11[0]` in the section-1 dependency cut, so no
+arena rank, `rho`, owner-local index, or reference exists at comparison
+time; consulting one is impossible by topology and forbidden by
+construction.
+
+Aborts of this subsection: operands under different
+`PairEvaluationBindingV1` values; an operand that fails decode or whose
+re-encode disagrees with its presented bytes; digest-decided equality or
+inequality; an equality or ordering conclusion on partial bytes, a group
+subset, or a whitelisted digest; a `FirstDifferenceV1` whose offset, bytes,
+or field paths fail recomputation from the operands; a stored order tag or
+second witness copy; any consultation of an arena rank, owner-local index,
+receipt, transcript, or other section-13 forbidden input. Per section 4,
+any comparison abort suppresses the entire pair.
+
+#### 14.1.3 REGISTERED DECISION RD-RT-A-1: the `QuotientKeyV1` embedding form (LR.3)
+
+The underdetermination, catalogued at plan-§13.3 registration and assigned
+to RT-A: the open `QuotientKeyV1` position in both leaf-outcome sums
+(`RankFreeCheckedLeafOutcomeV1`, section 4; `CheckedLeafOutcomeV1`, section
+6) must close against the encoded projection, choosing among
+(a) nested-omitting-prefix, (b) full-rooted-bytes, and (c) owner-checked
+reference, and deciding whether `QuotientKeyV1` IS the
+`QuotientSemanticProjectionV1` payload or merely names it.
+
+Decision (registered):
+
+```text
+QuotientKeyV1 = QuotientSemanticProjectionV1
+```
+
+as a transparent naming equation — one schema node, two frozen spellings, no
+wrapper record, no newtype, no added byte — and every `quotient_key`
+position embeds it in nested-omitting-prefix form (a). The argument is from
+the frozen record, not from downstream convenience:
+
+1. Against (c) owner-checked reference. The section-1 dependency cut makes
+   `9[0]` rank invariant: `K` exists inside
+   `RankFreeCheckedLeafOutcomeV1.CandidateMatch.quotient_key` before
+   `11[0]` assigns any `rho` or materializes any arena, so no owner-local
+   index exists that a reference could carry at construction time. The
+   frozen `PairCandidateArenaV1` owns exactly two vectors
+   (`exact_evidence`, `candidates`) sharing one index domain; there is no
+   key arena, and minting one would add an ownership edge and hidden
+   operation forbidden by LR.12 and section 12. Section 7's second
+   elimination strips "successful-leaf rank and every owner-local index"
+   from the quotient frontier precisely so that the key is
+   coordinate-free. And a section-2 owned reference is usable only under
+   its exact owner, which would chain the publishable rooted `0xe7` value
+   — and RT-B's class sorting by full canonical key bytes — to a private
+   arena. Every clause excludes (c).
+2. Against (b) full-rooted-bytes. The section-2 wire rule makes
+   prefix omission the default: "a nested root-mapped value omits its root
+   byte and root-local version unless a field explicitly retains full
+   rooted bytes". Section 11 and subsections 10.21.1–10.21.2 state
+   categorically that nested use omits `0xfd,u16=1` — an omission stated
+   without exception — and no frozen text declares an explicit
+   full-rooted-bytes retention for any `quotient_key` field, so (b)
+   would rest on a retention declaration this decision would have to
+   invent rather than read. The prefix is the constant
+   `0xfd || little_endian_u16(1)`: retaining it per successful leaf — up
+   to `CompleteRawCodesPerPair = 262,144` leaves per pair — stores zero
+   information, and the comparison-time `FullRootedBytes` of 14.1.2 is a
+   deterministic recomputation, so nothing is lost by omission. (b) is
+   excluded.
+3. For the naming equation (IS, not names-a-distinct-type). A4-O §2.6
+   binds root `0xfd` to the single object `QuotientKey`, and section 11
+   requires root `0xfd` to encode exactly the eight-group
+   `QuotientSemanticProjectionV1`; one root maps to one root-mapped type,
+   so the two frozen spellings must denote one type. A wrapper or newtype
+   between them would be an extra outer record, which section 11 and LR.1
+   forbid. The record's own discipline resolves exactly such closures by
+   transparent equation, never by wrapper: section 8's
+   `QuotientProfileIdentityV1 = ProfileManifestIdV1`, subsection 10.21.2's
+   `QuotientOutputLineageEntryCandidateV1 = OutputLineageEntryV1`, R2b's
+   payload equations. The style-setting group-6 decision (10.21.3)
+   likewise retired a placeholder in favor of the one name that types
+   every occupancy; here the two names already coexist in frozen text
+   (sections 4/6 type the position `quotient_key:QuotientKeyV1`; section
+   11 reserves the encoded name), so the only closure that adds, removes,
+   and renames nothing is the identity between them.
+
+Preservation of the section-4 cross-leaf equations (LR.3). With this
+embedding, the stored `K` and the `9[0]` output are both canonical nested
+encodings of the same node, so the frozen equations hold literally: for
+`P[j] = CandidateMatch(j_u32,r,C,K)`, `K` is byte-identical to the key
+returned by the unique successful `QuotientProjectionAndComparison[0]`
+invocation on that same `C`, and cross-leaf substitution of a match or
+quotient key remains forbidden even when the substituted values are
+separately valid. The projection of section 5 carries the same `K`
+unchanged into `O[j] = CandidateMatch(j_u32,r,(Q_j,L_j),K)`; the rooted
+`0xfd` prefix appears exactly when a key is published as a top-level rooted
+object or recomputed as `FullRootedBytes` for comparison and class order.
+
+Aborts of this subsection: any wrapper record, newtype, version byte, tag,
+count, or digest interposed between `QuotientKeyV1` and the eight-group
+value; a `quotient_key` position carrying the `0xfd,u16=1` prefix; an
+owner-checked or digest-valued `quotient_key` position; a key arena or key
+ownership edge; a leaf whose stored `K` differs by any byte from its own
+`9[0]` output; any cross-leaf key or match substitution.
+
+#### 14.1.4 Slot-9 runtime types (LR.12), forbidden inputs (LR.13), and closure
+
+The section-12 slot-9 rows are byte-identical inputs — no edge changed, no
+predecessor reordered, no hidden operation added. The runtime types close
+against them as follows; the two predecessor cells reproduce section 12
+exactly:
+
+| Protocol slot | Local | Opcode | Input | Result | Exact predecessors |
+| --- | ---: | --- | --- | --- | --- |
+| `QuotientProjectionAndComparison=9` | 0 | `ProjectCandidateQuotient` | `QuotientProjectionInputV1` | `QuotientProjectionResultV1` | `SubjectConstruction[2]` |
+| `QuotientProjectionAndComparison=9` | 1 | `CompareQuotientKeys` | `QuotientKeyComparisonInputV1` | `QuotientKeyComparisonResultV1` | `QuotientProjectionAndComparison[0]` |
+
+```text
+QuotientProjectionInputV1 =
+  (match:RankFreeCandidateMatchOutputV1)
+
+QuotientProjectionOutputV1 =
+  (quotient_key:QuotientKeyV1)
+
+QuotientProjectionResultV1 ::=
+  Success=0(QuotientProjectionOutputV1)
+| Abort=1(R3::AbortReceiptV1)
+
+QuotientKeyComparisonInputV1 =
+  (left:QuotientKeyV1,
+   right:QuotientKeyV1)
+
+QuotientKeyComparisonResultV1 ::=
+  Success=0(QuotientKeyComparisonOutputV1)
+| Abort=1(R3::AbortReceiptV1)
+```
+
+`QuotientProjectionInputV1.match` is exactly the success payload of the
+frozen R2c `CandidateMatchResultV1` produced by
+`SubjectConstruction[2]`/`CheckCandidateMatch`, consumed directly per
+section 1: `9[0]` cannot inspect an arena rank, `ExactEvidenceRefV1`,
+`CandidateEnvelopeRefV1`, final checked candidate, tag-3 payload, checked
+leaf outcome, class, coverage value, or disposition.
+`QuotientKeyComparisonOutputV1` and `FirstDifferenceV1` are as fixed in
+14.1.2. Neither result partition has a `False` variant: section 4 routes
+every quotient-projection, encoding, and comparison failure as an abort
+that suppresses the entire pair, and `9[0]`'s domain is already-successful
+rank-free matches, so a checked false position would be uninhabitable by
+construction. The `R3::AbortReceiptV1` positions are R3-qualified
+reservations with frozen outer tags; R3 fills them without moving them.
+Numerical TypeIds for these types stay open for R2e under the same
+no-edge-change constraint; the final `R2dSemanticOpcodeV1` tags remain open
+for RT-C (their closer is a registered decision assigned there).
+
+Forbidden inputs (LR.13), binding on every equation of 14.1 and restated
+from section 13 and subsection 10.21.6: any support-to-lineage,
+footprint-to-owner, or lineage-to-stream back-edge; any R3 account or
+receipt consumed as input; a copied raw, source, owner, or class ordinal
+from R2c or a representative; a construction transcript; a replay; an
+evidence target; a representative path, support, or ordinal; a semantic SR2
+result; `nu`; any `GCap`, `gamma`, or semantic-novelty datum; any QG2
+stored route vector; any source or syntax copy; any numerical `TypeIdV1`.
+Zero new admission values beyond QG2's two. Fresh ordinals appear only as
+checked positions in independently reconstructed values. The fresh RT-A
+types (`QuotientProjectionInputV1`, `QuotientProjectionOutputV1`,
+`QuotientProjectionResultV1`, `QuotientKeyComparisonInputV1`,
+`QuotientKeyComparisonOutputV1`, `QuotientKeyComparisonResultV1`,
+`FirstDifferenceV1`, `QuotientKeyFieldPathV1`,
+`QuotientKeyPathStepV1`) have leaf fields drawn
+only from the frozen key node, wire scalars, and the reserved
+`R3::AbortReceiptV1` position; none carries a forbidden family, and holding
+the pair inputs fixed while varying only forbidden material leaves every
+RT-A value byte-unchanged. The cut-global transitive forbidden-input scan
+over the cut's sections runs at each sub-cut close and at cut close per
+LR.13.
+
+Closing statement. RT-A fixes exactly: the declared final encoded
+`QuotientSemanticProjectionV1` as the root-`0xfd` materialization of the
+section-10.21 composition under the exact section-11 grammar, with the
+nested-use rule, the unchanged section-9.3 digest whitelist, byte-identical
+candidate/total-identity encodings, and the shared-key rule for distinct
+raw leaves (LR.1); the slot-`9[1]` full-key comparison on the complete
+decoded value and full rooted bytes, equivalent to A4-O §6.2 full-key-byte
+equality for `approx_(env,c)`, with the lexicographic order rule and the
+typed `FirstDifferenceV1` witness with offset/bytes/decoded field paths and
+digest-never-a-witness (LR.2); the registered decision RD-RT-A-1 closing
+both `QuotientKeyV1` leaf-outcome positions by the transparent equation
+`QuotientKeyV1 = QuotientSemanticProjectionV1` in nested-omitting-prefix
+form, preserving the section-4 cross-leaf equations (LR.3); and the slot-9
+input/output runtime types over the byte-identical section-12 rows (the
+slot-9 portion of LR.12), under the LR.13 forbidden-input discipline and
+the LR.14 stop boundary. It does NOT close: RT-B — root `0xe7`
+`CheckedLeafOutcomeV1` finalization (LR.4), slot `11[0]` (LR.5), quotient
+classes (LR.6), root `0xe8` `PairCoverage` with the registered outcome-tag
+order mapping and `0xe8` content-boundary decisions (LR.7), root `0xe9` and
+slot `11[1]` dispositions (LR.8);
+RT-C — slot 10 with its registered opcode-list/predecessor-topology
+decision (LR.9), roots `0xfe`/`0xff` with their registered typed-layout and
+R3-qualified-boundary decision (LR.10), the Level-II tag-4 payload with the
+registered owned-field reference-form decision, five-way
+`CheckedOrdinaryLevelTwoV1` creation, and root-`0xe3` mapping (LR.11), and
+the registered `R2dSemanticOpcodeV1` closer decision;
+the slot-10/11 runtime types; R3 failure/resource filling; numerical
+`TypeIdV1` assignment and the registry/source join (R2e); fixture and
+mutation regeneration (R4); any executable authority; and any theorem —
+the three preservation descriptors remain unproved typed proposition
+syntax, and the section-10.19.6 obstruction remains a frozen input to the
+mandatory theory corrigendum. This sub-cut mints no verified profile,
+executable interface, envelope census, pair disposition, occurrence
+classification, theorem, generic law, cubical bridge, `GCap`, `gamma`, or
+selective authority.
+
+### 14.2 RT-B: checked outcomes, classes, coverage, and dispositions
+
+RT-B closes plan §13.3 lines LR.4–LR.8 and the slot-11 portion of
+LR.12–LR.14: the root-`0xe7` `CheckedLeafOutcomeV1` finalization, the
+slot-`11[0]` complete all-raw pass, the quotient classes, root `0xe8`
+`PairCoverage` with the two registered decisions assigned to this sub-cut
+(the outcome-tag order mapping RD-RT-B-1 and the root-`0xe8` content
+boundary RD-RT-B-2), root `0xe9` and the slot-`11[1]` dispositions, and the
+slot-11 runtime types. The sub-cut is compiler-plan only under the same
+stop boundary as RT-A: full byte grammars and typed value schemas are fixed;
+no numerical `TypeIdV1`, no R3 field filling (qualified positions keep their
+frozen outer tags and positions), no registry/source join, no fixtures, no
+executable authority, no theorem. Fail-closed discipline is total, and the
+forbidden-input list of section 13's post-QG3 mandate binds every
+construction below.
+
+#### 14.2.1 Root `0xe7` `CheckedLeafOutcomeV1` finalization (LR.4)
+
+The section-6 outer reservation now closes as a schema. The final outcome
+sum is exactly the reserved value, with no tag, field, name, or position
+changed:
+
+```text
+CheckedLeafOutcomeV1 ::=
+  CandidateMatch=0(
+    raw_ordinal:u32,
+    raw_code:RawConstructorCodeV1,
+    match:CandidateMatchOutputV1,
+    quotient_key:QuotientKeyV1)
+| CheckedFalse=1(
+    raw_ordinal:u32,
+    raw_code:RawConstructorCodeV1,
+    receipt:R3::CheckedFalseReceiptV1).
+```
+
+What closes it now, position by position:
+
+- `quotient_key:QuotientKeyV1` closes by registered decision RD-RT-A-1
+  (subsection 14.1.3): `QuotientKeyV1 = QuotientSemanticProjectionV1` as a
+  transparent naming equation, embedded in nested-omitting-prefix form with
+  no wrapper, newtype, version byte, tag, count, or digest;
+- `match:CandidateMatchOutputV1` is the frozen R2c §10 type used unchanged:
+  `(candidate:CheckedCandidateEnvelopeV1,
+  level_two_payload:CheckedCandidateEnvelopePayloadV1)`. The success branch
+  therefore retains the complete final pair reserved by R2c; it does not
+  silently discard the checked candidate and keep only the tag-3 payload;
+- `raw_ordinal:u32` and `raw_code:RawConstructorCodeV1` are the checked
+  section-4 positions, bound by the section-4/5 equations restated in
+  14.2.2; and
+- `receipt:R3::CheckedFalseReceiptV1` is the R3-qualified position,
+  reserved, not filled. R3 may fill its qualified receipt type but may not
+  change these tags or field positions. Per R2a §12, no final root
+  containing an R3-owned value has complete canonical bytes until R3
+  supplies its schema; the grammar below is nevertheless fixed now.
+
+The rooted bytes are exactly the section-6 reservation:
+
+```text
+0xe7 || little_endian_u16(1) || variant_tag || variant_payload
+```
+
+with `variant_tag` a `u8` in displayed zero-based order and, per variant:
+
+```text
+CandidateMatch=0:
+  raw_ordinal:u32
+  || raw_code            (canonical nested RawConstructorCodeV1 encoding,
+                          root-0xe4 prefix omitted)
+  || match               (canonical nested CandidateMatchOutputV1 encoding)
+  || quotient_key        (canonical nested encoding of subsection 14.1.1,
+                          0xfd,u16=1 omitted per RD-RT-A-1)
+
+CheckedFalse=1:
+  raw_ordinal:u32
+  || raw_code            (as above)
+  || receipt             (R3-qualified reservation at this frozen position).
+```
+
+`Abort` is absent from the sum: per section 4 and A4-O §5.3, any abort
+suppresses the entire pair and mints no leaf outcome. A leaf outcome nested
+inside a containing value (the ordered vector `O`, any runtime output)
+omits `0xe7,u16=1` per the section-2 wire rule; the rooted prefix appears
+exactly when a leaf outcome is published as a top-level rooted object under
+the R2a §9 `CheckedLeafOutcome` root/domain row
+(`law-v2/jg2b2b2a/ordinary-checked-leaf-outcome/v1`).
+
+The displayed `CandidateMatch=0, CheckedFalse=1` order is the repaired
+order: section 6 records that it deliberately supersedes the opposite order
+in rejected A4-O RC1. R4 must bind this repaired order explicitly and may
+not regenerate coverage fixtures by copying RC1. The relation between this
+wire order and the frozen A4-O §2.4 grammar vector `[CheckedFalse,Match]`
+is closed by registered decision RD-RT-B-1 in 14.2.4; no equation in this
+record ever crosses the two tag spaces by numeric identity.
+
+Aborts of this subsection: any added, removed, reordered, or renamed
+variant, field, or position; an `Abort` or third variant; a swapped variant
+order (the rejected RC1 order); a success payload other than the unchanged
+frozen `CandidateMatchOutputV1`; a `quotient_key` position violating
+RD-RT-A-1 (wrapper, prefix, owner-checked or digest-valued form); a filled
+or moved R3 receipt position; a nested leaf outcome carrying the
+`0xe7,u16=1` prefix; trailing bytes, truncation, or re-encode disagreement
+on the closed positions.
+
+#### 14.2.2 Slot `11[0]` complete all-raw pass (LR.5)
+
+Slot `11[0]` `EvaluatePairCoverage` executes the record-§3/§4 construction
+exactly. Let `R` be `RawEnumerationV1.codes` for the fixed pair,
+`n = R.len <= CompleteRawCodesPerPair = 262,144`, and let `P` be the
+complete internal `RankFreeCheckedLeafOutcomeV1` vector. The frozen
+equations hold literally and close here:
+
+```text
+P.len = n
+
+P[j].raw_ordinal = checked_u32(j)
+P[j].raw_code    = R[j]
+
+rho(j) = checked_u32(
+  count { i:u64 | i < j and P[i] is CandidateMatch })
+
+m = count { j:u64 | j < n and P[j] is CandidateMatch }
+
+candidate_arena.exact_evidence.len = m
+candidate_arena.candidates.len     = m
+
+candidates[k].exact_evidence = exact_evidence[k]   for every checked k < m.
+```
+
+There is exactly one terminal leaf value at every `j < n`, with no gap,
+duplicate, deletion, reorder, or success-only substitute, including a
+checked false from the first rejecting pipeline operation; decoder false
+never prunes a structural subtree. For a successful leaf `j`, `rho(j)` is
+its dense zero-based arena rank. Both `PairCandidateArenaV1` vectors have
+`u64` length `m <= 262,144`, are ordered by ascending successful raw
+ordinal, and share one index domain; there is no separately ordered
+evidence arena. The `checked_u32` conversions are checked before
+allocation.
+
+The final R2c materialization uses the frozen section-5 equations without
+reinterpretation: for `P[j] = CandidateMatch(j_u32,r,C,K)` the conversion
+produces `(Q_j,L_j):CandidateMatchOutputV1` at the shared rank `rho(j)`,
+with
+
+```text
+M.derive.exact_evidence = ExactEvidenceRefV1(
+  owner_local_index = rho(j),
+  full_identity     = M_0.derive.exact_evidence_identity)
+
+L.envelope = CandidateEnvelopeRefV1(
+  owner_local_index = rho(j),
+  full_identity     = E)
+
+candidate_arena.exact_evidence[rho(j)] = X
+candidate_arena.candidates[rho(j)]     = Q
+```
+
+so both references carry the same `rho(j)`; neither digest nor full
+identity chooses the rank. The final ordered vector `O` is exactly the
+section-5 projection:
+
+```text
+O.len = P.len = n
+
+P[j] = CheckedFalse(j_u32,r,f)      => O[j] = CheckedFalse(j_u32,r,f)
+P[j] = CandidateMatch(j_u32,r,C,K)  => O[j] = CandidateMatch(j_u32,r,(Q_j,L_j),K)
+
+O[j].match.candidate.match_evidence.derive.raw_ordinal = j_u32
+O[j].match.candidate.match_evidence.derive.raw_code    = r
+O[j].match.level_two_payload.raw_code                  = r.
+```
+
+The section-4 cross-leaf equations are preserved as closed by RD-RT-A-1:
+`K` is byte-identical to the key returned by the unique successful
+`QuotientProjectionAndComparison[0]` invocation on that same `C`, and
+cross-leaf substitution of a match or quotient key remains forbidden even
+when the substituted values are separately valid. The two arena vectors
+contain exactly the successful leaf values so constructed, and `O` contains
+exactly the displayed projection of every `P[j]`; no extra arena value or
+final outcome exists.
+
+The first checked false excludes only that raw leaf and evaluation
+continues. Any abort from raw preflight, an invoked per-raw operation,
+quotient projection or encoding, integer conversion, allocation/resource
+accounting, comparison, arena materialization, or final outcome encoding
+suppresses the entire pair: on abort no complete census, class partition,
+pair coverage, or disposition exists, and a partially filled buffer has no
+canonical status. An empty `R` lawfully produces an empty `P` and empty
+arena if all census/cardinality checks complete.
+
+The forbidden shortcut list is restated as binding on `11[0]`: a
+success-only vector, a claimed prefix count, ambient insertion order,
+pointer identity, and a digest-only lookup are each forbidden. In
+particular no count field of any RT-B value is an input to density: density
+is checked against `R.len` and the constructed vectors themselves, never
+against a claimed or received count.
+
+Aborts of this subsection: a gap, duplicate, deletion, or reorder in `P` or
+`O`; a success-only or prefix substitute; a `rho` that is not the displayed
+dense count; arena vectors whose lengths differ from `m` or whose order is
+not ascending successful raw ordinal; a reference pair carrying different
+ranks; a digest- or pointer-chosen rank; a cross-leaf match or key
+substitution; any abort listed above (which suppresses the whole pair).
+
+#### 14.2.3 Quotient classes (LR.6)
+
+The match-to-class partition receives its typed layout:
+
+```text
+PairQuotientClassV1 =
+  (class_ordinal:u32,
+   representative_raw_ordinal:u32,
+   members:vector<u32>)
+```
+
+encoding as `class_ordinal:u32 || representative_raw_ordinal:u32 ||
+members (u64 element count, then u32 member raw ordinals)`. For the
+complete partition vector `classes` with `c = classes.len`:
+
+- membership is `CandidateMatch`-only: every member ordinal `i` satisfies
+  `O[i] is CandidateMatch` (A4-O §5.4: only match outcomes enter the
+  partition). No `CheckedFalse` leaf, action image, or aborted value has a
+  class;
+- two successful leaves `i`, `i'` share a class exactly when their complete
+  decoded keys are equal, equivalently
+  `FullRootedBytes(O[i].quotient_key) = FullRootedBytes(O[i'].quotient_key)`,
+  equivalently `Equal` from `CompareQuotientKeys` (subsection 14.1.2),
+  equivalently full key-byte equality for `approx_(env,c)` (A4-O §§5.4,
+  6.2). Digest equality or inequality is never a membership witness;
+- `classes[k].class_ordinal = checked_u32(k)`;
+- `classes[k].members` is nonempty and sorted by canonical raw ordinal
+  ascending (`member_order : CanonicalRawOrdinalAscending`);
+- `classes[k].representative_raw_ordinal = classes[k].members[0]`, the
+  least canonical raw ordinal of the class
+  (`representative_rule : LeastCanonicalRawOrdinal`) — not the first value
+  found by an implementation and not a digest minimum;
+- the member sets are pairwise disjoint and their union is exactly
+  `{ j | P[j] is CandidateMatch }`, each successful ordinal in exactly one
+  class, so `c <= m`;
+- classes sort lexicographically by full canonical key bytes
+  (`class_order : FullQuotientKeyBytesLexicographic`): for `k < k'`,
+  `FullRootedBytes(key(k))` strictly precedes `FullRootedBytes(key(k'))`
+  under the subsection-14.1.2 ordering rule, where `key(k)` is the common
+  `quotient_key` of the members of `classes[k]`. The order is derived by
+  recomputation from the member leaves; no stored order tag, stored class
+  key copy, or second view exists that could disagree; and
+- several raw matches may inhabit one class (record §7; A4-O §5.5:
+  multiple raw codes in one class count once), and classification counts
+  full quotient classes, not raw matches (A4-O rules 30–31,
+  `ClassificationCountsFullQuotientClassesNotRawMatches`,
+  `ClassRepresentativeUsesCanonicalRawOrdinal`).
+
+The partition is a component of the root-`0xe8` value fixed in 14.2.4;
+classes have no root of their own (the frozen R2a §9 namespace allocates
+none), and `9[1]` mints no class, membership, or representative — `11[0]`
+constructs the partition from the comparison closure.
+
+Aborts of this subsection: a member whose leaf is not `CandidateMatch`; an
+empty, unsorted, or duplicated member vector; a representative other than
+the least member; overlapping classes or a successful ordinal in no class;
+a class order not strictly ascending on recomputed `FullRootedBytes`; a
+membership or order conclusion from a digest, rank, owner-local index, or
+stored order value; a `class_ordinal` differing from its checked position.
+
+#### 14.2.4 Root `0xe8` `PairCoverage` (LR.7) and the two registered decisions
+
+##### 14.2.4.1 REGISTERED DECISION RD-RT-B-1: the outcome-tag order mapping
+
+The underdetermination, catalogued at plan-§13.3 registration and assigned
+to RT-B: the frozen A4-O §2.4 grammar fixes
+`outcome_tags : [CheckedFalse,Match]` — a tag vector with `u64` count and
+zero-based `u8` members, so `CheckedFalse` is grammar tag `0` and `Match`
+is grammar tag `1` — while the repaired root-`0xe7` order fixes wire
+variant tags `CandidateMatch=0, CheckedFalse=1`. Both artifacts are
+immutable; the relation between them must close without changing either.
+
+Decision (registered): the two tag assignments are distinct frozen tag
+spaces related by exactly this registered table, and by nothing else:
+
+```text
+| A4-O §2.4 grammar tag | A4-O name      | Root-0xe7 variant tag | Record name      |
+| --------------------- | -------------- | --------------------- | ---------------- |
+| 0                     | `CheckedFalse` | 1                     | `CheckedFalse`   |
+| 1                     | `Match`        | 0                     | `CandidateMatch` |
+```
+
+Grammar tag space governs every position typed by the frozen
+`CompleteCoverageGrammarV1`: the certificate outcome vector of 14.2.4.3 and
+the disposition tag order of 14.2.5. Wire tag space governs every leaf-
+outcome sum tag: root `0xe7` and the internal
+`RankFreeCheckedLeafOutcomeV1` partition. A tag byte crosses between the
+two spaces only through this table; crossing by numeric identity is an
+abort. The name correspondence is `Match <-> CandidateMatch` and
+`CheckedFalse <-> CheckedFalse` (A4-O §5.3's `MatchV1`/`CheckedFalseV1`
+outcome family against the record's variant names).
+
+The argument is from the frozen records, not from downstream convenience:
+
+1. Both orders are immutable. The §2.4 vector encodes inside field 15 of
+   the frozen static profile definition; changing its bytes requires a
+   version change and reminting under A4-O rule 44
+   (`AnyByteOrSemanticChangeRequiresVersionChange`). The `0xe7` order is
+   the deliberate repair: section 6 states it supersedes the opposite
+   order in rejected RC1, and R4 must bind the repaired order explicitly
+   and may not regenerate coverage fixtures by copying RC1. Reordering
+   either artifact to match the other is therefore forbidden twice over.
+2. The frozen record itself establishes that the two spaces are
+   independent. Under RC1 the leaf-outcome order was the opposite one —
+   numerically coincident with the §2.4 vector — and that coincidence died
+   with RC1's rejection. Reading the two spaces as one numeric space is
+   exactly the assumption the repair deliberately broke; after the repair,
+   only an explicit translation can connect them without silently
+   reintroducing the rejected coincidence.
+3. The only closure that changes neither artifact is a registered mapping
+   held as data. Plan §13.3 (LR.7) demands precisely this form: "a
+   registered mapping ... that changes neither frozen artifact". The table
+   above is total, injective, and involutive on the two-element tag space;
+   it is registered here once and consumed by the equations of 14.2.4.3,
+   14.2.5, and 14.2.6; no second copy of the mapping is stored in any
+   value, so no stored mapping can disagree with this registration.
+
+The companion question for dispositions closes with no residue: the §2.4
+vector `disposition_tags : [CertifiedNoMatch,UniquePositive,TypedAmbiguity]`
+and the root-`0xe9` sum of 14.2.5 use the same order, so the disposition
+mapping is the identity on `{0,1,2}`; this identity is registered here
+alongside the outcome table to make the crossing rule total.
+
+The certificate tag space is realized as the typed sum:
+
+```text
+CoverageOutcomeTagV1 ::=        // A4-O §2.4 grammar tag space
+  CheckedFalse=0
+| Match=1
+```
+
+whose displayed zero-based order is byte-identical to the frozen §2.4
+vector members. It has deliberately no `Abort` variant: an abort has no tag
+in the outcome or disposition vectors (A4-O §2.4), realizing
+`abort_is_certificate_member : false` structurally.
+
+##### 14.2.4.2 REGISTERED DECISION RD-RT-B-2: the root-`0xe8` content boundary
+
+The underdetermination, catalogued at plan-§13.3 registration and assigned
+to RT-B: root `0xe8` could encode the full `CompleteEnumerationV1`
+inventory of A4-O §5.3, or a coverage certificate that references the
+pair's already-constructed arena/outcome values. The choice must be argued
+from the frozen texts.
+
+Decision (registered): root `0xe8` encodes the pair-coverage certificate —
+the pair binding, the dense grammar-space leaf-outcome tag vector, the
+exact match-to-class partition, and the R3-qualified pair logical-account
+reservation — and does not embed the full `CompleteEnumerationV1`
+inventory. Arena values, the outcome vector's payloads, source census,
+codec/cardinality derivation, and per-stage evidence are referenced through
+checked positions and the pair binding, never copied under `0xe8`.
+
+The argument is from the frozen records:
+
+1. A4-O itself separates the two notions. §2.4 fixes coverage as a
+   certificate with members (`abort_is_certificate_member : false`; rule
+   29, `CoverageVisitsEveryRawCodeExactlyOnce`), while §5.3's
+   `CompleteEnumerationV1` retains "complete no-gap/no-duplicate coverage
+   evidence" as one item of a twelve-item inventory. Coverage is a
+   component of the enumeration, not the reverse; the root that A4-O §2.6
+   and R2a §9 name `PairCoverage` under domain
+   `law-v2/jg2b2b2a/ordinary-pair-coverage/v1` must encode the coverage
+   notion, and encoding the strictly larger enumeration under it would
+   bind the root's frozen name and digest domain to the wrong object.
+2. The record's section-7 first elimination classifies "checked candidate,
+   outcome, coverage, disposition, action-trace, and action-image
+   ownership data" as representative evidence, and section 2 fixes the
+   authority boundary: a coverage record is canonical data, not authority;
+   authority remains in the privately constructed `VerifiedEnvelopeCensus`
+   and its owned arenas. The full inventory — complete source census,
+   arena values, per-stage evidence, resource accounts — is census-owned
+   authority material; embedding it under a public data root would move
+   ownership across that frozen boundary, which no RT-B construction may
+   do.
+3. Section 5 closes with "no extra arena value or final outcome exists". A
+   full-inventory `0xe8` would embed a second copy of every final outcome
+   (the §5.3 item "all outcomes in canonical raw ordinal order" is exactly
+   `O`), and a second copy can disagree with its original; the certificate
+   boundary instead references outcomes by checked position with agreement
+   equations, satisfying the same no-second-copy discipline that fixes
+   `FirstDifferenceV1` and the class order.
+4. R2a §9 makes the boundary load-bearing for R3 containment. Root `0xe8`
+   is on the frozen R3 root-containment list, so the certificate keeps
+   exactly its own qualified R3 position (the R2a §12 "pair ... resource
+   accounts and aggregate meter receipts" family) reserved; root `0xe9` is
+   absent from that list, so no R3 value may nest under it — which is
+   satisfiable only if the disposition consumes a receipt-free coverage
+   form (14.2.5). R2a §9 further demands the embed-versus-reference choice
+   be explicit ("a bare digest, opaque bytes, or an unstated choice is
+   forbidden"); this decision states it. A4-O's closed failure taxonomy
+   agrees: `AbortReasonV1` is outside every coverage certificate and
+   disposition.
+
+Nothing in the §5.3 retention list is lost by this boundary; every item
+remains realized at its frozen owner:
+
+```text
+| CompleteEnumerationV1 item (A4-O §5.3)        | Owner under this boundary                          |
+| --------------------------------------------- | -------------------------------------------------- |
+| profile binding, history binding, anchor,     | `PairEvaluationBindingV1` (certificate `binding`   |
+|   constructor                                 |   field, agreeing with the arena binding)          |
+| complete source census                        | `VerifiedEnvelopeCensus` (private authority)       |
+| codec/cardinality derivation                  | `RawEnumerationV1` and its R3-qualified            |
+|                                               |   `R3::StructuralCardinalityReceiptV1`             |
+| total prefix-node count                       | R3 count-only traversal evidence family (R2a §12)  |
+| total raw-leaf count                          | `n` as the element count of `enumeration.codes`    |
+|                                               |   and of `leaf_outcome_tags`, never stored twice   |
+| all outcomes in canonical raw ordinal order   | `O` / root-`0xe7` leaves (`11[0]` output)          |
+| the exact match-to-class partition            | certificate `classes` vector (14.2.3)              |
+| aggregate deterministic logical resource      | R3-qualified `logical_account` position under      |
+|   account                                     |   `0xe8`, reserved, not filled                     |
+| complete no-gap/no-duplicate coverage         | certificate `leaf_outcome_tags` density plus the   |
+|   evidence                                    |   checked equations of 14.2.4.3                    |
+```
+
+##### 14.2.4.3 Root `0xe8` typed layout and equations
+
+```text
+PairCoverageCoreV1 =
+  (binding:PairEvaluationBindingV1,
+   leaf_outcome_tags:vector<CoverageOutcomeTagV1>,
+   classes:vector<PairQuotientClassV1>)
+
+PairCoverageV1 =
+  (core:PairCoverageCoreV1,
+   logical_account:R3::PairResourceAccountV1)
+```
+
+`R3::PairResourceAccountV1` names the R3-qualified reservation for the
+R2a §12 "pair ... resource accounts and aggregate meter receipts" family,
+exactly as R2c names `R3::EnvelopeResourceAccountV1` for the envelope
+family: R3 owns its schema; this record freezes only its outer tag and
+position, and fills nothing. Per R2a §12, root `0xe8` has complete
+canonical bytes only after R3 supplies that schema.
+
+The rooted byte grammar is:
+
+```text
+0xe8 || little_endian_u16(1)
+     || binding              (canonical nested PairEvaluationBindingV1)
+     || leaf_outcome_tags    (u64 element count n, then n u8 grammar tags)
+     || classes              (u64 element count c, then c PairQuotientClassV1
+                              rows as in 14.2.3)
+     || logical_account      (R3-qualified reservation at this frozen
+                              position).
+```
+
+The wrappers contribute no version field, tag byte, count certificate, or
+digest of their own; each record encodes as the in-order concatenation of
+its fields' canonical values. Equations, all checked at construction:
+
+```text
+binding = candidate_arena.binding                        (full canonical bytes)
+
+leaf_outcome_tags.len = n = R.len
+
+O[j] is CandidateMatch  => leaf_outcome_tags[j] = Match          (grammar tag 1)
+O[j] is CheckedFalse    => leaf_outcome_tags[j] = CheckedFalse   (grammar tag 0)
+
+m = count { j | leaf_outcome_tags[j] = Match }
+classes = the exact 14.2.3 partition of { j | O[j] is CandidateMatch }.
+```
+
+The tag agreement equations cross the two tag spaces exactly through the
+RD-RT-B-1 table. Density is the coverage evidence: position `j` is raw
+ordinal `j`, the vector's own `u64` count equals `R.len`, and exactly one
+tag exists per position — every raw code visited exactly once, no gap, no
+duplicate (A4-O rule 29). No count `n`, `m`, or `c` is stored as a
+separate certificate field: each is the respective vector's own element
+count or a checked recomputation, so no claimed count can disagree with
+the vector it describes. The governing `CompleteCoverageGrammarV1` value
+is not copied into the certificate: it is the frozen field 15 of the
+static definition of the profile identified by `binding.profile_binding`,
+and a checked equation requires the certificate's shape to satisfy every
+row of that grammar (`raw_comparator : StructuralRawOrder` is the frozen
+complete A3 structural order of `R`; the remaining rows are 14.2.3 and
+RD-RT-B-1).
+
+Aborts of this subsection: a tag vector whose length differs from `R.len`;
+a tag disagreeing with its leaf under the registered mapping; a tag-space
+crossing outside the RD-RT-B-1 table; an `Abort` tag or third tag value; a
+stored `n`, `m`, `c`, grammar copy, whole-certificate digest, or second
+outcome/partition copy; an embedded arena value, outcome payload, source
+census, or per-stage evidence; a filled or moved `logical_account`
+position; a binding differing from the arena binding; trailing bytes,
+truncation, or re-encode disagreement on the closed positions.
+
+#### 14.2.5 Root `0xe9` and slot `11[1]` dispositions (LR.8)
+
+The exact three-disposition sum, in the frozen A4-O §2.4 tag order
+(`disposition_tags : [CertifiedNoMatch,UniquePositive,TypedAmbiguity]`;
+the wire and grammar disposition tag spaces coincide by the RD-RT-B-1
+companion registration):
+
+```text
+PairDispositionV1 ::=
+  CertifiedNoMatch=0(
+    coverage:PairCoverageCoreV1)
+| UniquePositive=1(
+    coverage:PairCoverageCoreV1)
+| TypedAmbiguity=2(
+    coverage:PairCoverageCoreV1,
+    class_differences:vector<ClassKeyFirstDifferenceV1>)
+
+ClassKeyFirstDifferenceV1 =
+  (left_class_ordinal:u32,
+   right_class_ordinal:u32,
+   difference:FirstDifferenceV1)
+```
+
+`PairDispositionV1` is the type name the R2a §7 boundary already reserves
+in its forbidden-literal list; it closes here. The rooted bytes are:
+
+```text
+0xe9 || little_endian_u16(1) || variant_tag || variant_payload
+```
+
+with `variant_tag` a `u8` in the displayed zero-based order and each
+payload the in-order concatenation of its fields' canonical nested values.
+
+Containment (the R2a §9 explicit choice, forced by frozen text): each
+payload retains complete coverage as the receipt-free
+`PairCoverageCoreV1`, byte-identical to `core` of the pair's unique
+root-`0xe8` value, with the deterministic owner coordinate of that
+pair-unique value being its complete `PairEvaluationBindingV1` (a field of
+the core) and resolution of the full receipt-bearing `PairCoverageV1`
+occurring only under its census owner. Embedding the full receipt-bearing
+value is forbidden: root `0xe9` is absent from the R2a §9 R3
+root-containment list, so no R3 value — in particular the
+`logical_account` position — may nest under it; a bare digest, opaque
+bytes, or an unstated choice is equally forbidden. Consistently, no field
+of `PairDispositionV1` is R3-qualified, and `AbortReasonV1` remains
+outside every coverage certificate and disposition.
+
+Preconditions and per-variant equations (A4-O §5.5, after complete
+nonaborting enumeration and partitioning; `c = coverage.classes.len`):
+
+```text
+CertifiedNoMatch=0:
+  every leaf_outcome_tags[j] = CheckedFalse
+  coverage.classes = []                                  (c = 0, m = 0)
+  -- complete enumeration with zero match outcomes and every raw leaf
+  -- checked false (rule 32). Zero raw leaves (n = 0) is a lawful
+  -- completely covered no-match only if census, cardinality, and empty
+  -- enumeration all completed within resources.
+
+UniquePositive=1:
+  c = 1
+  -- the sole quotient class, its canonical representative, and every
+  -- equivalent member are the single 14.2.3 class row; the one-class
+  -- uniqueness certificate is the checked conjunction of c = 1 with the
+  -- partition-completeness equations of 14.2.3 (rule 33).
+
+TypedAmbiguity=2:
+  c >= 2
+  class_differences.len = c*(c-1)/2
+  class_differences ordered lexicographically ascending by
+    (left_class_ordinal, right_class_ordinal), left < right, one entry per
+    unordered class pair
+  class_differences[t].difference =
+    the unique least-offset FirstDifferenceV1 witness recomputed from
+    FullRootedBytes(key(left)) and FullRootedBytes(key(right))
+  class_differences[t].difference.left_byte <
+    class_differences[t].difference.right_byte
+  -- every sorted quotient class, every member and representative, and all
+  -- pairwise FirstDifferenceV1 witnesses are retained (rule 34); the
+  -- last inequality is the checked consistency of the witnesses with the
+  -- strictly ascending class order of 14.2.3.
+```
+
+Classification counts full quotient classes, not raw matches: `m` may
+exceed `1` under `UniquePositive`, because multiple raw codes in one class
+count once (A4-O §5.5, rule 30). Enumeration never stops at the first or
+second match and never chooses among ambiguous classes: early exit and
+ambiguity tie breaks are forbidden (rule 35), and `TypedAmbiguity` retains
+every covered class, never a selection.
+
+Abort discipline: any abort suppresses the whole pair disposition (rule
+28, record §4). The A4-O §5.3 unprivileged diagnostic
+`NoDisposition(AbortReasonV1)` is realized as the `Abort` arm of the
+slot-`11[1]` result partition of 14.2.6 — an R3-qualified reservation, per
+the R2a §12 pairing of `CheckedFalseReceiptV1` with unprivileged
+`NoDisposition` diagnostics — and is never a rooted `0xe9` value, never a
+fourth variant, and never a promotion of a completed prefix.
+
+Aborts of this subsection: a disposition minted from an incomplete or
+aborted enumeration or partition; a variant whose coverage core differs by
+any byte from the pair's `0xe8` core; an embedded receipt-bearing
+`PairCoverageV1`, R3 account, digest-only coverage identity, or opaque
+bytes; a `CertifiedNoMatch` with any `Match` tag or nonempty class vector;
+a `UniquePositive` with `c` other than `1`; a `TypedAmbiguity` with
+`c < 2`, a missing, duplicated, reordered, or extra pairwise witness, or a
+witness that fails recomputation or contradicts the class order; any tie
+break, early exit, or class selection; an `Abort` or `NoDisposition`
+variant inside the sum.
+
+#### 14.2.6 Slot-11 runtime types (LR.12), forbidden inputs (LR.13), and closure
+
+The section-12 slot-11 rows are byte-identical inputs — no edge changed,
+no predecessor reordered, no hidden operation added. The runtime types
+close against them as follows; the two predecessor cells, including
+`11[0]`'s displayed fourteen-predecessor vector, reproduce section 12
+exactly:
+
+| Protocol slot | Local | Opcode | Input | Result | Exact predecessors |
+| --- | ---: | --- | --- | --- | --- |
+| `OutcomePartitionAndCoverage=11` | 0 | `EvaluatePairCoverage` | `PairCoverageInputV1` | `PairCoverageResultV1` | `RawGeneration[0]`, `Decode[1]`, `Build[0]`, `PublicLeavesAndLineage[0]`, `Normalization[0]`, `SupportAndOwnerResolution[0]`, `SupportAndOwnerResolution[1]`, `SupportAndOwnerResolution[2]`, `FieldDisposition[0]`, `SubjectConstruction[0]`, `SubjectConstruction[1]`, `SubjectConstruction[2]`, `QuotientProjectionAndComparison[0]`, `QuotientProjectionAndComparison[1]` |
+| `OutcomePartitionAndCoverage=11` | 1 | `ClassifyPairDisposition` | `PairDispositionInputV1` | `PairDispositionResultV1` | `OutcomePartitionAndCoverage[0]` |
+
+The section-12 exclusions hold unchanged: the `11[0]` vector does not add
+`SourceResolution[0]` (transitive through `Decode[1]` and support owner
+resolution), `Decode[0]`/`CheckCarrier` (the independent carrier Level-II
+lane), slot 10 (action-only), or a rank-bearing producer (rank
+materialization occurs inside `11[0]`).
+
+```text
+RawLeafResultsV1 =
+  (raw_ordinal:u32,
+   decode:DecodeRawResultV1,
+   build:Option<BuildDecodedResultV1>,
+   pre_evidence:Option<PreEvidenceProjectionResultV1>,
+   normalization:Option<NormalizationResultV1>,
+   support_shape:Option<SupportShapeResultV1>,
+   support_owners:Option<SupportOwnerResolutionResultV1>,
+   support_closure:Option<SupportClosureResultV1>,
+   field_dispositions:Option<FieldDispositionResultV1>,
+   subjects:Option<SubjectConstructionResultV1>,
+   assembly:Option<EnvelopeAssemblyResultV1>,
+   match:Option<CandidateMatchResultV1>,
+   projection:Option<QuotientProjectionResultV1>)
+
+PairCoverageInputV1 =
+  (binding:PairEvaluationBindingV1,
+   enumeration:RawEnumerationV1,
+   leaves:vector<RawLeafResultsV1>,
+   comparisons:vector<QuotientKeyComparisonResultV1>)
+
+PairCoverageOutputV1 =
+  (outcomes:vector<CheckedLeafOutcomeV1>,
+   coverage:PairCoverageV1)
+
+PairCoverageResultV1 ::=
+  Success=0(PairCoverageOutputV1)
+| Abort=1(R3::AbortReceiptV1)
+
+PairDispositionInputV1 =
+  (evaluated:PairCoverageOutputV1)
+
+PairDispositionOutputV1 =
+  (disposition:PairDispositionV1)
+
+PairDispositionResultV1 ::=
+  Success=0(PairDispositionOutputV1)
+| Abort=1(R3::AbortReceiptV1)
+```
+
+The per-leaf stage fields consume exactly the frozen result families of
+the per-raw predecessor operations, by frozen name: `Decode[1]` ->
+`DecodeRawResultV1`, `Build[0]` -> `BuildDecodedResultV1`,
+`PublicLeavesAndLineage[0]` -> `PreEvidenceProjectionResultV1`,
+`Normalization[0]` -> `NormalizationResultV1`,
+`SupportAndOwnerResolution[0]` -> `SupportShapeResultV1`,
+`SupportAndOwnerResolution[1]` -> `SupportOwnerResolutionResultV1`,
+`SupportAndOwnerResolution[2]` -> `SupportClosureResultV1`,
+`FieldDisposition[0]` -> `FieldDispositionResultV1`,
+`SubjectConstruction[0]` -> `SubjectConstructionResultV1`,
+`SubjectConstruction[1]` -> `EnvelopeAssemblyResultV1`,
+`SubjectConstruction[2]` -> `CandidateMatchResultV1`, and
+`QuotientProjectionAndComparison[0]` -> `QuotientProjectionResultV1`. The
+pair-level predecessors are consumed at pair level: `RawGeneration[0]`
+through the successful `enumeration` payload, and
+`QuotientProjectionAndComparison[1]` through `comparisons`.
+
+Input equations and presence law:
+
+```text
+leaves.len = enumeration.codes.len = n
+leaves[j].raw_ordinal = checked_u32(j)
+```
+
+A stage field of `leaves[j]` is `Some` exactly when every per-leaf
+predecessor entry of that stage (per the frozen R2b/R2c operation tables)
+is present with a `Success` arm, and `None` otherwise; the leaf terminates
+as `CheckedFalse` at its first `False` arm, checked in the frozen A4-O
+§5.3 first-failure order, and terminates as `CandidateMatch` exactly when
+`projection` is `Some(Success)`. The internal partition is constructed
+from the input, never received:
+
+```text
+first False arm of leaves[j] carries f
+  => P[j] = CheckedFalse(checked_u32(j), R[j], f)
+
+leaves[j].match       = Some(Success(C)) and
+leaves[j].projection  = Some(Success(quotient_key = K))
+  => P[j] = CandidateMatch(checked_u32(j), R[j], C, K).
+```
+
+An `Abort` arm anywhere in the input is an abort of `11[0]` and mints
+nothing. `comparisons` carries the complete family of `9[1]` results
+invoked for the fixed pair under the same `PairEvaluationBindingV1`; the
+partition and class order are nevertheless fixed by full-key-byte equality
+and the lexicographic rule alone, so an implementation may schedule
+comparisons only where it produces the identical certificate (A4-O §5.3's
+identical-outcome optimization rule). The `PairCandidateArenaV1` is
+materialized as census-owned private state, never an output field:
+`PairCoverageOutputV1` carries canonical data only, with `outcomes` the
+ordered `O` vector in nested (prefix-omitting) encoding.
+
+Neither result partition has a `False` variant: a leaf-level false is a
+`CheckedFalse` outcome — data inside a successful pass — and every failure
+of the pass or classification itself is an abort that suppresses the whole
+pair, so a checked false position at pair level would be uninhabitable by
+construction. The `R3::AbortReceiptV1` positions are R3-qualified
+reservations with frozen outer tags; the `11[1]` abort arm is the
+`NoDisposition` realization fixed in 14.2.5. Numerical TypeIds for these
+types stay open for R2e under the same no-edge-change constraint; the
+final `R2dSemanticOpcodeV1` tags remain open for RT-C (their closer is a
+registered decision assigned there).
+
+Forbidden inputs (LR.13), binding on every equation of 14.2 and restated
+from section 13 and subsection 10.21.6: any support-to-lineage,
+footprint-to-owner, or lineage-to-stream back-edge; any R3 account or
+receipt consumed as a decision input; a copied raw, source, owner, or
+class ordinal from R2c or a representative; a construction transcript; a
+replay; an evidence target; a representative path, support, or ordinal; a
+semantic SR2 result; `nu`; any `GCap`, `gamma`, or semantic-novelty datum;
+any QG2 stored route vector; any source or syntax copy; any numerical
+`TypeIdV1`. Zero new admission values beyond QG2's two. Fresh ordinals
+appear only as checked positions in independently reconstructed values —
+exactly the `raw_ordinal`, `rho`, `class_ordinal`, and member positions
+displayed above. The R3-qualified material that lawfully appears inside
+RT-B values (`CheckedFalse` receipts, the enumeration's cardinality
+receipt, the reserved pair account) is carried into its frozen reserved
+positions and never interpreted: no certificate tag, density check, class
+membership, class order, count, or disposition depends on receipt bytes —
+density is checked against `enumeration.codes.len`, never against the
+cardinality receipt — and holding the pair inputs fixed while varying only
+receipt/account material leaves every quotient key, tag vector, class row,
+class order, witness, and disposition value byte-unchanged. The fresh RT-B
+types (`CoverageOutcomeTagV1`, `PairQuotientClassV1`,
+`PairCoverageCoreV1`, `PairCoverageV1`, `ClassKeyFirstDifferenceV1`,
+`PairDispositionV1`, `RawLeafResultsV1`, `PairCoverageInputV1`,
+`PairCoverageOutputV1`, `PairCoverageResultV1`, `PairDispositionInputV1`,
+`PairDispositionOutputV1`, `PairDispositionResultV1`) have leaf fields
+drawn only from frozen R2b/R2c/RT-A values, wire scalars, checked
+positions, and reserved R3-qualified positions; none carries a forbidden
+family. The cut-global transitive forbidden-input scan over the cut's
+sections runs at each sub-cut close and at cut close per LR.13.
+
+Closing statement. RT-B fixes exactly: the root-`0xe7`
+`CheckedLeafOutcomeV1` schema in the repaired `CandidateMatch=0,
+CheckedFalse=1` order with exact rooted bytes, the success branch
+retaining the complete final pair via the unchanged R2c
+`CandidateMatchOutputV1` and the R3-qualified `CheckedFalseReceiptV1`
+position reserved, not filled (LR.4); the slot-`11[0]` complete all-raw
+pass with one terminal leaf per raw ordinal, dense checked `rho` ranks,
+arena vectors of length `m <= 262,144` in ascending successful raw
+ordinal, both references carrying the same `rho(j)`, first-false
+continuation, whole-pair abort suppression, and the restated forbidden
+shortcut list (LR.5); the typed quotient classes with
+`CandidateMatch`-only membership by full key-byte equality, lexicographic
+class order, ascending member order, and least-canonical-raw-ordinal
+representatives (LR.6); root `0xe8` as the pair-coverage certificate
+consistent with the frozen `CompleteCoverageGrammarV1`, under the two
+registered decisions RD-RT-B-1 (the outcome-tag order mapping table,
+changing neither frozen artifact) and RD-RT-B-2 (the certificate content
+boundary, with the `CompleteEnumerationV1` inventory realized at its
+frozen owners and the R3-qualified pair account reserved) (LR.7); root
+`0xe9` as the exact three-disposition sum in the frozen §2.4 tag order
+with A4-O §5.5 preconditions, class-not-raw-match counting, the pairwise
+witness inventory, the explicit receipt-free containment choice, and every
+abort yielding the diagnostic `NoDisposition` realization, never a rooted
+disposition (LR.8); and the slot-11 input/output runtime types over the
+byte-identical section-12 rows, including `11[0]`'s displayed
+fourteen-predecessor vector (the slot-11 portion of LR.12), under the
+LR.13 forbidden-input discipline and the LR.14 stop boundary. It does NOT
+close: RT-C — slot 10 with its registered opcode-list/predecessor-topology
+decision (LR.9), roots `0xfe`/`0xff` with their registered typed-layout
+and R3-qualified-boundary decision (LR.10), the Level-II tag-4 payload
+with the registered owned-field reference-form decision, five-way
+`CheckedOrdinaryLevelTwoV1` creation, and root-`0xe3` mapping (LR.11), the
+slot-10 runtime types, and the registered `R2dSemanticOpcodeV1` closer
+decision; R3 failure/resource filling (until which no root containing an
+R3-qualified position has complete canonical bytes); numerical `TypeIdV1`
+assignment and the registry/source join (R2e); fixture and mutation
+regeneration (R4; the repaired `0xe7` order must be bound explicitly and
+RC1 coverage fixtures may not be copied); any executable authority; and
+any theorem — the three preservation descriptors remain unproved typed
+proposition syntax, and the section-10.19.6 truth-audit gate persists
+unweakened as a frozen input to the mandatory theory corrigendum. This
+sub-cut mints no verified profile, executable interface, envelope census,
+occurrence classification, theorem, generic law, cubical bridge, `GCap`,
+`gamma`, or selective authority; the rooted `PairDispositionV1` values it
+schematizes are canonical data whose construction remains owned by the
+private census under the frozen section-2 authority boundary.
+
+### 14.3 RT-C: the action runtime and the joined Level-II root
+
+RT-C closes plan §13.3 lines LR.9–LR.11 and, at cut close, the cut-global
+lines LR.12–LR.14: the slot-`ActionNormalizationAndRebuild=10` action runtime
+with the registered opcode-list/predecessor-topology decision RD-RT-C-1; roots
+`0xfe`/`0xff` with the two registered decisions RD-RT-C-2(i) (the
+`ActionTraceV1`/`ActionImageV1` typed layouts and the exact R3-qualified
+boundary) and RD-RT-C-2(ii) (both roots as representative evidence outside the
+quotient key under the private A3-O `CanonicalActionResult_c` constructor);
+the Level-II tag-4 payload with the registered owned-field reference-form
+decision RD-RT-C-3, the five-way `CheckedOrdinaryLevelTwoV1` creation, and the
+root-`0xe3` mapping; and the registered closer decision RD-RT-C-4 for the
+final `R2dSemanticOpcodeV1` tags, together with the slot-10 runtime types and
+the cut-level closing statement. The sub-cut is compiler-plan only under the
+same stop boundary as RT-A and RT-B: full byte grammars and typed value
+schemas are fixed; no numerical `TypeIdV1`, no R3 field filling (qualified
+positions keep their frozen outer tags and positions), no registry/source
+join, no fixtures, no executable authority, no theorem. Fail-closed
+discipline is total, and the forbidden-input list of section 13's post-QG3
+mandate binds every construction below.
+
+#### 14.3.1 Slot `ActionNormalizationAndRebuild=10` (LR.9) and REGISTERED DECISION RD-RT-C-1: the opcode list and predecessor topology
+
+##### 14.3.1.1 The underdetermination and the decision
+
+The underdetermination, catalogued at plan-§13.3 registration and assigned
+to RT-C: slot 10's opcode list and predecessor topology are fixed here for
+the first time. Section 12 fixes slot-9/11 rows only; R2b freezes exactly
+the slot-10 precursor `10[0]` `CheckFormalActionSyntax` with no
+predecessor; nothing yet fixes how many further locals slot 10 has, what
+they are named, or what their predecessor vectors are (for example a
+decomposition into separate flatten/normalize, rebuild, and
+trace/image-emission locals is a priori conceivable).
+
+Decision (registered): slot 10 has exactly two locals and gains exactly one
+new operation —
+
+```text
+| Protocol slot | Local | Opcode | Exact predecessors |
+| --- | ---: | --- | --- |
+| `ActionNormalizationAndRebuild=10` | 0 | `CheckFormalActionSyntax` | none |
+| `ActionNormalizationAndRebuild=10` | 1 | `NormalizeAndRebuildAction` | `SubjectConstruction[2]`, `QuotientProjectionAndComparison[0]`, `ActionNormalizationAndRebuild[0]` |
+```
+
+with the `10[0]` row the byte-identical R2b freeze restated (opcode, input
+`FormalActionSyntaxCheckInputV1`, result `FormalActionSyntaxCheckResultV1`,
+no predecessor), and `10[1]` `NormalizeAndRebuildAction` the single
+appended base-relative normalization/rebuild operation, whose predecessor
+vector is exactly the three displayed entries in ascending
+(protocol-slot, local) order. Beyond the displayed vector no edge touches
+slot 10: slot 10 contributes no edge into slot 9 or slot 11, no slot-11
+edge into slot 10 exists, and `9[1]` is not a predecessor.
+
+The argument is from the frozen records, not from downstream convenience:
+
+1. One appended local, not several. R2b §10 states in the singular:
+   "`CheckFormalActionSyntax` is only the slot-10 precursor. R2d must
+   append the base-relative normalization/rebuild operation at local
+   ordinal 1." The frozen mandate names one operation and names its local
+   ordinal. Independently, A4-O rule 24
+   (`ActionImagesAreOpaqueDependentConstructions`) and A3-O make the
+   construction "the single deterministic constructor"
+   `CanonicalActionResult_c`, whose failure "constructs no object";
+   A4-O §6.3 gives bounded action construction "one aggregate account".
+   A decomposition into separately invokable flatten, rebuild, and
+   trace/image-emission locals would publish intermediate stepwise
+   endpoints and partial flattenings as operation outputs — exactly the
+   values subsection 10.22.4 forbids binding to ("Binding any action value
+   to a stepwise endpoint, caller association, intermediate action image,
+   or partial flattening is an abort") — and would need per-local resource
+   accounts against the frozen one-aggregate-account rule. Flattening,
+   normalization, epsilon replay, base-relative rebuild, support
+   recomputation, and trace/image emission are therefore internal phases
+   of the one operation `10[1]`, never separate schedulable locals.
+2. `ActionNormalizationAndRebuild[0]` is a predecessor. R2b checks each
+   proposed substitution and the base-independent shared endpoints, and
+   defers exactly one check to R2d: "Full square applicability is relative
+   to the base substitution `theta` projected from the acted-on payload
+   and is therefore checked only in R2d. There the fourth pointwise
+   comparison `epsilon` is derived and independently replayed" (R2b §4).
+   `10[1]` therefore consumes checked `10[0]` outputs — never raw
+   `FormalActionSyntaxV1` — and completes the deferred base-relative
+   square check itself.
+3. `SubjectConstruction[2]` is a predecessor, and no slot-11 producer is.
+   A4-O rule 26 (`ActionsFlattenAndRebuildFromTheOriginalBase`) and the
+   frozen A3-O accessor law `Base(ActionImage_c(B,...)) = B` bind every
+   action to its original base candidate; acting on an existing image
+   concatenates its stored normalized action and "rebuilds directly from
+   the original base candidate, never from an intermediate key". The
+   original checked candidate is the `SubjectConstruction[2]`
+   (`CheckCandidateMatch`) success output — the rank-free
+   `RankFreeCandidateMatchOutputV1` of the section-1 dependency cut. The
+   rank-bearing final pair exists only inside `11[0]`; consuming it would
+   chain the action lane to pair completion and to `rho`, while section 12
+   records slot 10 as action-only and excludes it from `11[0]`'s frozen
+   fourteen-predecessor vector. The action lane is therefore rank
+   invariant by topology, exactly as `9[0]` is: no arena rank, owner-local
+   arena index, or reference exists at `10[1]` time. Symmetrically, A4-O
+   rule 25 (`ActionImagesNeverEnterCandidatesOrDispositions`) and §5.5
+   ("Action images never enter the raw universe, outcome vector,
+   partition, or disposition") forbid any `10[1] -> 11` edge; the two
+   lanes never rejoin.
+4. `QuotientProjectionAndComparison[0]` is a predecessor. The frozen
+   identity case is literal: `CanonicalActionResult_c(B,[]) =
+   (Payload_c(B), QuotientKeyV1_c(B))` — "the displayed empty case is
+   literal and bypasses no candidate check" (A3-O), and A4-O §6.3 repeats
+   "Identity uses the literal base payload/key". The base key is produced
+   by exactly one site, the unique successful `9[0]` invocation on the
+   base match (section 4's cross-leaf equations, closed by RD-RT-A-1). To
+   carry the literal base key rather than a second, independently
+   recomputed copy — a second key-production site that could disagree with
+   its original, against the record's no-second-copy discipline — `10[1]`
+   consumes the `9[0]` output for its base. For a nonempty action the
+   final key is not a `9[0]` output at all: it is the encoded
+   `QAction(B,A)` produced inside `10[1]` by the frozen `(B,A)`-bound
+   compilers (subsection 10.22.4: `CompileActionIntroducedLineage(B,A)`,
+   `CompileSharedActionGraphCore(B,A)`,
+   `CompileInstantiatedActionSubject(B,A)`, and every common-position
+   rebuild `Rebuild_p(B,A)` take `(B,A)` and nothing else), so no further
+   slot-9 edge exists and `9[1]` is not a predecessor — the action
+   runtime compares nothing and mints no class, membership, or
+   representative.
+
+The decision adds no edge to any section-12 row: the slot-9/11 rows and
+`11[0]`'s displayed fourteen-predecessor vector are byte-identical inputs,
+and the new `10[1]` row extends the topology strictly by one
+lexicographically-later definition whose predecessors are all earlier,
+satisfying the R2b joined-DAG validation rule.
+
+##### 14.3.1.2 The `10[1]` construction equations
+
+Let `B` be the original base candidate (the `SubjectConstruction[2]`
+success payload consumed as `base_match`) and `K_B` the base quotient key
+(the unique successful `9[0]` output on `base_match`). The operation
+executes the record-frozen base-relative construction exactly:
+
+```text
+checked_steps[i] = the Success payload of the unique 10[0] invocation on
+                   the i-th proposed step, under the same
+                   evaluation_binding, in proposal order
+                   (no subset, reorder, or substitution)
+
+base_quotient_key = K_B, byte-identical to the unique successful
+                    QuotientProjectionAndComparison[0] output on
+                    base_match                       (cross-lane equation,
+                                                      RD-RT-A-1 form)
+
+A = the one complete flattened total action:
+    the frozen A3-O ActionNF/SquareNF program over the concatenated
+    checked steps — identities flatten to [], primitive substitutions to
+    singletons, composition to list concatenation in the one fixed
+    right-associated order (squares: the one fixed left-to-right tree,
+    both vertical composites recomputed, the pointwise pasted epsilon
+    syntax constructed) — with A.primitives.len <= 4,096 (A4-O §6.3) and
+    the action-kind header agreeing with every primitive and composition
+    (R2b §4)
+
+epsilon: for every context-square primitive, the fourth pointwise
+    comparison epsilon is derived from the base substitution theta
+    projected from the acted-on payload and independently replayed here;
+    it is never raw syntax and never caller supplied
+
+(canonical_schema_payload_c, final_key) = CanonicalActionResult_c(B, A)
+    computed by the frozen (B,A)-bound compilers of subsection 10.22.4
+    and the section-10.21.5 rebuild equations; final_key is the encoded
+    eight-group QAction(B,A) in the subsection-14.1.1 grammar; the
+    identity case is the literal (Payload_c(B), K_B)
+
+action support is recomputed exhaustively from the final normalized
+    roots (A3-O CanonicalActionResult_c clauses; R2c §13): every
+    dependency edge contributed by the action is added, formal
+    subject-variable dependencies remain
+    FormalActionSupport(FormalActionIdV1,ExpectedJudgmentV1) classes,
+    no candidate support owner is reinterpreted, and roots 0xfb/0xfc
+    are immutable
+
+the action subject retains the frozen R2c
+    SubjectProjectionSourceBundleV1 byte-identically as its
+    base-candidate environment and denotes the final image only through
+    a formal-action-bound reindexing node; it may not reinterpret
+    SourceCandidate or replace the bundle's schema_payload with final
+    action-image bytes                                  (R2c §13)
+```
+
+The identity laws of subsection 10.22.4 hold literally and are checked:
+`QAction(B,[]) = QCandidate(B)` and `QAction(B,A ++ []) = QAction(B,A)`;
+appending an identity preserves the existing image and never resets a
+projection to the base candidate. The candidate itself invokes `10[1]`
+not at all — slot 10 is action-only, and the candidate/total-identity
+top-level action-owned values `[]`/`None` are supplied by the closed
+eight-group schema, not by this operation.
+
+On success the operation materializes the `CheckedActionImage` owner —
+the R2a §10 authority owning exactly one original checked candidate, one
+full `ActionTraceV1`, and one `ActionImageV1` — as private state, never
+an output field, exactly as `11[0]` materializes the census-owned
+`PairCandidateArenaV1`; the operation's output carries canonical data
+only (subsection 14.3.4). Failure discipline is the frozen A3-O split: a
+caller-proposed base/domain/codomain/arity/typing/square failure at the
+action locus is a checked `False` (the exact A4-R3
+`FalseReasonV1::Action` family, receipt reserved); failure of an
+internally reconstructed trace, parent, normalization, resource account,
+or canonical result is an `Abort`; either constructs no trace, no image,
+no owner, and no partial value.
+
+Aborts of this subsection: a caller-supplied `checked_action_trace` or
+trace fragment; an action bound to a stepwise endpoint, caller
+association, intermediate action image, or partial flattening; a checked
+step consumed under a different evaluation binding, out of proposal
+order, or bypassing `10[0]`; more than `4,096` flattened primitives or
+any other frozen ceiling exceeded; an action-kind disagreement; a base
+quotient key differing by any byte from the unique `9[0]` output; a
+second key-production site for the identity case; an action image or
+trace entering the raw universe, an outcome vector, a partition, a
+coverage certificate, or a disposition; consultation of `rho`, an arena,
+an owner-local arena index, a class, a coverage value, or a disposition;
+a reinterpreted candidate support owner; any mutation of roots
+`0xfb`/`0xfc`; a replaced `schema_payload` or reinterpreted
+`SourceCandidate`; an internal failure routed as `False` or a
+caller-locus failure routed as `Abort`; any section-13 forbidden input.
+
+#### 14.3.2 Roots `0xfe`/`0xff` (LR.10) and the two registered decisions
+
+##### 14.3.2.1 REGISTERED DECISION RD-RT-C-2(i): the typed layouts and the exact R3-qualified boundary
+
+The underdetermination, catalogued at plan-§13.3 registration and
+assigned to RT-C: A4-O §6.3 fixes the two root inventories in prose only
+— trace: "the base candidate binding, exact unflattened step sequence,
+flattened canonical action, all sequential/direct endpoints, and
+deterministic logical action-resource account"; image: "the profile/base
+binding, schema tag, base anchor, canonical flattened action, final
+payload, full final quotient key, and action-trace commitment" — and the
+exact typed layouts, field orders, and the R3-qualified boundary inside
+the trace's logical account are open.
+
+Decision (registered): the typed layouts are exactly
+
+```text
+CanonicalFlattenedActionV1 =
+  (action_kind:ActionKindV1,
+   primitives:vector<CheckedPrimitiveActionSyntaxV1>)
+
+ActionEndpointPairV1 =
+  (sequential:ActionEndpointV1,
+   direct:ActionEndpointV1)
+
+ActionBaseCandidateRefV1 =
+  (owner_local_index:u32,
+   full_identity:RawCapabilityEnvelopeV1)
+
+ActionBaseBindingV1 =
+  (profile_binding:EnvelopeProfileRefV1,
+   history_binding:EnvelopeHistoryRefV1,
+   evaluation_binding:EvaluationBindingRefV1,
+   constructor:ConstructorTagV1,
+   base_anchor:OccurrenceId14V1,
+   base_candidate:ActionBaseCandidateRefV1)
+
+ActionTraceV1 =
+  (base_binding:ActionBaseBindingV1,
+   unflattened_steps:vector<CheckedFormalActionSyntaxV1>,
+   flattened_action:CanonicalFlattenedActionV1,
+   endpoints:vector<ActionEndpointPairV1>,
+   logical_account:R3::ActionResourceAccountV1)
+
+ActionTraceCommitmentV1 = semantic newtype over Digest
+
+ActionImageV1 =
+  (profile_binding:EnvelopeProfileRefV1,
+   history_binding:EnvelopeHistoryRefV1,
+   evaluation_binding:EvaluationBindingRefV1,
+   constructor:ConstructorTagV1,
+   base_anchor:OccurrenceId14V1,
+   flattened_action:CanonicalFlattenedActionV1,
+   final_payload:QuotientNormalizedSchemaPayloadCandidateV1,
+   final_quotient_key:QuotientKeyV1,
+   trace_commitment:ActionTraceCommitmentV1)
+```
+
+with rooted byte grammars
+
+```text
+0xfe || little_endian_u16(1) || base_binding || unflattened_steps
+     || flattened_action || endpoints || logical_account
+
+0xff || little_endian_u16(1) || profile_binding || history_binding
+     || evaluation_binding || constructor || base_anchor
+     || flattened_action || final_payload || final_quotient_key
+     || trace_commitment
+```
+
+under the frozen R2a wire (vectors carry their own `u64` element count;
+each record encodes as the in-order concatenation of its fields'
+canonical nested values; nested use of either root omits its
+`root,u16=1` prefix; the rooted prefix appears exactly when a value is
+published as a top-level rooted object under the A4-O §2.6/R2a §9 rows
+`ActionTrace`/`0xfe`/`law-v2/jg2b2b2a/ordinary-action-trace/v1` and
+`ActionImage`/`0xff`/`law-v2/jg2b2b2a/ordinary-action-image/v1`).
+
+Field-by-field realization of the frozen §6.3 prose, position by
+position:
+
+- trace `base_binding` realizes "the base candidate binding": the five
+  binding positions mirror the frozen tag-3/`PairEvaluationBindingV1`
+  binding family by exact type, and `base_candidate` retains the base
+  candidate's kappa-canonical identity, which A3-O requires to be
+  "separately retained in the action trace". It is the exact
+  `OwnedRef(CheckedActionImage, RankFreeCheckedCandidateEnvelopeV1,
+  RawCapabilityEnvelopeV1)` specialization: the R2a §5 canonical
+  `OwnedRef` value `(owner_local_index:u32, full_typed_identity)`, with
+  the index range checked against the owner's one-element original-
+  checked-candidate domain (R2a §10) and the referenced object's freshly
+  encoded envelope byte-identical to `full_identity`. The referenced
+  object is the rank-free candidate: by RD-RT-C-1 the action lane is
+  rank invariant, so no rank-bearing `CheckedCandidateEnvelopeV1` and no
+  arena index exists at construction time;
+- trace `unflattened_steps` realizes "exact unflattened step sequence":
+  the checked `10[0]` outputs in proposal order, each the complete
+  frozen R2b `CheckedFormalActionSyntaxV1` (retaining `raw_syntax`,
+  `normalized_primitives`, and `replay_evidence` unchanged);
+- trace `flattened_action` and image `flattened_action` realize
+  "flattened canonical action"/"canonical flattened action": the one
+  complete flattened total action `A` of subsection 14.3.1.2, stored
+  once per root, byte-identical between the pair's trace and image, with
+  `primitives.len <= 4,096`;
+- trace `endpoints` realizes "all sequential/direct endpoints": each
+  endpoint is the frozen R2a §8 nonrecursive shape `ActionEndpointV1 =
+  (canonical_schema_payload:CanonicalSchemaPayloadV1,
+  semantic_key_projection:QuotientSemanticProjectionV1)`, used
+  unchanged (its `semantic_key_projection` is the nested
+  prefix-omitting key form of RD-RT-A-1), and
+  `endpoints.len = flattened_action.primitives.len`.
+  `endpoints[k].direct` is the `ActionEndpointV1` whose payload and key
+  projection are the two projections of
+  `CanonicalActionResult_c(B, A[..k+1])` (the direct rebuild from the
+  original base at every prefix, so the last direct endpoint carries
+  the full `canonical_schema_payload_c` and the image's
+  `final_quotient_key` by the same constructor invocation, and the
+  image's `final_payload` is the section-9.2 `QPayload` projection of
+  that last direct payload); `endpoints[k].sequential` is the stepwise
+  presentation endpoint obtained by acting with `A[k]` on the previous
+  sequential endpoint (the base payload and base key before the first
+  step). Per R2a §8 the endpoints never contain an action image and
+  root `0xfe` owns the representative route and endpoints; per A3-O the
+  current intermediate payload is used only to type-check the newly
+  appended action, the sequential presentation is retained as an
+  identity/composition endpoint, it is never stored as the canonical
+  payload, and the trace supplies no equality proof: no equation between
+  `sequential` and `direct` is asserted, checked, or minted — direct and
+  iterated rebuild "use the same payload/key constructor before their
+  equality is proved", and that equality belongs to the mandatory theory
+  corrigendum, not to this cut;
+- trace `logical_account` realizes "deterministic logical
+  action-resource account" and is the exact newly declared R3-qualified
+  boundary: it is the single R3-qualified position this subsection
+  newly declares under root `0xfe`, named
+  `R3::ActionResourceAccountV1` for the R2a §12 "pair/envelope/action
+  resource accounts and aggregate meter receipts" family, exactly as R2c
+  names `R3::EnvelopeResourceAccountV1` and RT-B names
+  `R3::PairResourceAccountV1` for the sibling families. R3 owns its
+  schema; this record freezes only its outer tag and last position and
+  fills nothing. It is one aggregate account (A4-O §6.3) whose content
+  R3 must draw from frozen counters, limits, and before/after deltas
+  only — no wall clock, allocation address, scheduler state, platform
+  text, or map order (A4-O §5.3). Every other trace position, and every
+  image position, is fully typed by this subsection now. It is not the
+  only R3-reaching position under root `0xfe`: R3-owned material also
+  reaches the trace transitively through exactly three frozen inherited
+  channels, none of which moves —
+  `base_binding.base_candidate.full_identity` (a complete
+  seventeen-field `RawCapabilityEnvelopeV1`, whose fields retain
+  receipts directly and transitively per the R2c §9.3 corrigendum),
+  each `unflattened_steps` element's `replay_evidence` vector of
+  `KernelSuccessReplayV1` values inside `CheckedFormalActionSyntaxV1`,
+  and each endpoint's
+  `canonical_schema_payload:CanonicalSchemaPayloadV1`, whose checked
+  raw carrier values contain R3-qualified kernel receipt positions (the
+  same transitive channel the R2c §9.3 corrigendum records for A1
+  field 16). Root `0xfe` is on the R2a §9 containment list; these three
+  inherited channels plus `logical_account` are its exact R3
+  containment. No image position, by contrast, reaches any R3-owned
+  material (RD-RT-C-2(i) below);
+- image `profile_binding`/`history_binding`/`evaluation_binding` realize
+  "profile/base binding", `constructor` realizes "schema tag" (with the
+  checked equation `constructor = final_payload.variant_tag`, the frozen
+  R2c source-candidate law), and `base_anchor` realizes "base anchor"
+  (with `base_anchor = sel(B)`, the frozen A3-O anchor projection). The
+  image deliberately carries no `RawCapabilityEnvelopeV1`, no candidate
+  reference, and no checked raw carrier: root `0xff` is absent from the
+  exhaustive R2a §9 R3 root-containment list, so no R3-bearing value —
+  in particular the seventeen-field base envelope, whose A1 fields
+  retain replay/normalization/resource evidence under `0xfb`, and the
+  receipt-bearing `CanonicalSchemaPayloadV1` carrier tuple, whose
+  checked raw carrier values contain R3 kernel receipts transitively
+  per the R2c §9.3 corrigendum — may nest under it, directly or
+  transitively; the base identity lives in the trace, and the image
+  reaches it only through `trace_commitment`;
+- image `final_payload` realizes "final payload" in the receipt-free
+  arm that the R2a §9 mandate leaves lawful for root `0xff`: it is
+  typed by the frozen section-9.2
+  `QuotientNormalizedSchemaPayloadCandidateV1`, and its value is the
+  frozen section-9.2 projection `QPayload` applied to the first
+  projection of `CanonicalActionResult_c(B,A)` (the frozen
+  "canonical_schema_payload_c" — the displayed reindexed carrier tuple
+  for `c`, which A3-O spells a private `schema_payload` projection).
+  The full `CanonicalSchemaPayloadV1` carrier tuple cannot inhabit this
+  position: its checked raw carrier values contain R3 kernel receipts
+  transitively (R2c §9.3 corrigendum), root `0xff` is excluded from the
+  exhaustive R2a §9 containment list, and embedding a receipt-bearing
+  value is exactly the alternative arm R2a forbids for `0xff` ("places
+  R3 transitively under that root"). The stripped material is exactly
+  the two section-7 eliminations already frozen for the quotient root
+  `0xfd` (representative evidence including kernel replay vectors by
+  the first list; checked raw presentations by the second), whose
+  group-2 realizations take this same normalized form; by the
+  section-10.21.5 common-position rebuild the value is checked
+  byte-identical to `final_quotient_key`'s
+  `group_2_realizations.canonical_payload` segment for the same
+  constructor invocation, and the receipt-bearing carrier tuple itself
+  remains resolvable only under the owner-resolved trace on root
+  `0xfe`, a containment-list root: through its last direct endpoint
+  payload for a nonempty action, and through the base candidate
+  envelope retained inside `base_binding.base_candidate.full_identity`
+  for the identity case, whose empty action yields an empty `endpoints`
+  vector.
+  `final_quotient_key` realizes "full final quotient key": the complete
+  eight-group `QuotientKeyV1` (RD-RT-A-1: one node,
+  nested-omitting-prefix form, no wrapper, no digest), the second
+  projection `FinalActionKey_c`; R2a §8 licenses exactly this position
+  ("Root `0xff` may contain the final full quotient key because the
+  quotient key contains no action image or final-key literal"); for the
+  identity case `final_quotient_key` is the literal base key `K_B` and
+  `final_payload` is `QPayload` of the literal base payload
+  `Payload_c(B)`, byte-identical to `K_B`'s group-2 `canonical_payload`
+  segment; and
+- image `trace_commitment` realizes "action-trace commitment":
+  `ActionTraceCommitmentV1` is a semantic newtype over `Digest`,
+  mirroring the frozen `EvidenceCommitmentV1` pattern, whose value is
+  `Digest::of_domain_bytes` under the frozen `ActionTrace` domain of the
+  complete rooted `0xfe` bytes of the pair's unique trace.
+
+Per R2a §12, root `0xfe` has complete canonical bytes only after R3
+supplies the schemas its reserved positions carry — the
+`logical_account` position and the three inherited receipt channels
+named above; consequently the `trace_commitment` value — and with it
+complete canonical `0xff` bytes — is computable only after R3, even
+though, by the RD-RT-C-2(i) layout, no R3 value nests under `0xff`
+directly or transitively and every `0xff` position other than
+`trace_commitment` is computable now. This is a value dependency
+through the frozen `R2d -> R3 -> R2e` integration order, not a
+containment edge; the schemas, positions, and domains close now.
+
+##### 14.3.2.2 REGISTERED DECISION RD-RT-C-2(ii): representative evidence outside the quotient key, private constructor, and the `0xff` containment choice
+
+Decision (registered): rooted `0xfe` and `0xff` values are representative
+evidence — canonical data outside the quotient key — and their only
+lawful constructor is the private `CheckedActionImage` owner's
+construction inside `10[1]`, which enforces the complete A3-O
+`CanonicalActionResult_c` contract. Concretely:
+
+- neither root, and no field of either root, is a quotient-key group,
+  class-membership input, coverage-certificate member, or disposition
+  input: the section-7 first elimination already strips "checked
+  candidate, outcome, coverage, disposition, action-trace, and
+  action-image ownership data" from root `0xfd`, A4-O §6.3 declares the
+  trace "representative evidence outside the quotient key", and A4-O
+  §5.5 with rules 24–25 keeps images out of the raw universe, outcome
+  vector, partition, and disposition. The image's `final_quotient_key`
+  is a key value carried by evidence, not evidence entering a key;
+- no caller supplies a `checked_action_trace` (A3-O); construction
+  checks that the trace starts at `B`, has flattened action `nf(a)`, and
+  contains exactly the well-typed step/sequential endpoints used to form
+  that action; failure constructs no object, so malformed anchors,
+  payloads, or keys do not inhabit either root;
+- the R2a acceptance condition "no action endpoint or trace contains an
+  action image" holds structurally: `ActionTraceV1`,
+  `ActionEndpointPairV1`, and `CanonicalFlattenedActionV1` contain no
+  `ActionImageV1` position; and
+- the still-open R2a §9 `0xff` containment choice is hereby made
+  explicit, in the form R2a demands (never a bare digest standing for an
+  unstated choice): root `0xff` keeps R3 evidence only in its owner. The
+  image contains no receipt-bearing value — every position is
+  receipt-free by the RD-RT-C-2(i) layout, with `final_payload` the
+  section-9.2 normalized projection rather than the receipt-bearing
+  `CanonicalSchemaPayloadV1` carrier tuple; the full receipt-bearing
+  trace (checked steps, endpoint payloads, base envelope identity,
+  reserved account) is resolvable only under the `CheckedActionImage`
+  owner; and the
+  image's `trace_commitment` is the frozen §6.3 inventory field whose
+  resolution rule is stated here — it identifies the owner-resolved
+  trace under the frozen `ActionTrace` digest domain and decides
+  nothing: not equality, inequality, ownership, completeness, or
+  classification (section 2; A4-O rules 4, 38, 39). The companion `0xe9`
+  choice closed in RT-B subsection 14.2.5; no open containment choice
+  remains.
+
+Aborts of this subsection: any added, removed, reordered, or renamed
+field or position of either root; an action image nested inside a trace,
+endpoint, or flattened action; a filled or moved `logical_account`
+position, or a second (non-aggregate) account position; a
+`base_candidate` reference that is rank-bearing, arena-indexed, out of
+its owner, or whose referenced object's freshly encoded envelope differs
+from `full_identity`; a trace whose `flattened_action` differs by any
+byte from its image's; a `final_payload` carrying any checked raw
+carrier, kernel replay vector, or other receipt-bearing value (in
+particular a full `CanonicalSchemaPayloadV1`), or differing by any byte
+from the section-9.2 `QPayload` projection of the constructor's first
+projection or from the final key's group-2 `canonical_payload` segment;
+an `endpoints` vector whose length differs from
+the flattened primitive count; a sequential endpoint stored as a
+canonical payload; an asserted, stored, or consumed
+sequential-versus-direct equality; a caller-supplied trace; an identity
+image with a nonempty flattened action, a final key differing from the
+literal base key, or a final payload differing from `QPayload` of the
+literal base payload; a `constructor` differing from
+`final_payload.variant_tag` or a `base_anchor` differing from `sel(B)`;
+a commitment computed over partial or non-rooted bytes, under a
+different domain, or used to decide any conclusion; a trace or image
+entering any quotient key, class, coverage certificate, or disposition;
+a nested value carrying the `0xfe,u16=1` or `0xff,u16=1` prefix;
+trailing bytes, truncation, or re-encode disagreement on the closed
+positions.
+
+#### 14.3.3 The Level-II tag-4 payload and joined root `0xe3` (LR.11)
+
+##### 14.3.3.1 REGISTERED DECISION RD-RT-C-3: the reference form of the tag-4 owned fields
+
+The underdetermination, catalogued at plan-§13.3 registration and
+assigned to RT-C: R2b freezes the tag-4 semantic field order as
+`CheckedActionImage=4(kappa,H,o,Sigma(H,o),c,owned base candidate,
+normalized action,owned trace,image)` and mandates that R2d "replace
+every mathematical name in variants 3 and 4 by a complete typed value or
+checked owner-local reference carrying its full identity". The tag-3
+precedent realizes its owned field `E` as the owner-checked
+`CandidateEnvelopeRefV1`, but nothing forces the analogue for tag 4: for
+each of the four non-binding names the complete-value arm and the
+reference arm are both a priori available.
+
+Decision (registered): the arms split by the frozen ownership spelling —
+the two fields R2b writes as "owned" close as checked owner-local
+references into the `CheckedActionImage` owner, and the two unqualified
+fields close as complete typed values:
+
+```text
+ActionTraceRefV1 =
+  (owner_local_index:u32,
+   full_identity:ActionTraceCommitmentV1)
+
+CheckedActionImagePayloadV1 =
+  (profile_binding:EnvelopeProfileRefV1,             // kappa
+   history_binding:EnvelopeHistoryRefV1,             // H
+   anchor:OccurrenceId14V1,                          // o
+   evaluation_binding:EvaluationBindingRefV1,        // Sigma(H,o)
+   constructor:ConstructorTagV1,                     // c
+   base_candidate:ActionBaseCandidateRefV1,          // owned base candidate
+   normalized_action:CanonicalFlattenedActionV1,     // normalized action
+   trace:ActionTraceRefV1,                           // owned trace
+   image:ActionImageV1)                              // image
+```
+
+`ActionTraceRefV1` is the exact `OwnedRef(CheckedActionImage,
+ActionTraceV1, ActionTraceCommitmentV1)` specialization;
+`ActionBaseCandidateRefV1` is the subsection-14.3.2.1 specialization
+reused unchanged. The argument is from the frozen records:
+
+1. The five binding fields are forced, not chosen: they realize the same
+   five mathematical names `kappa,H,o,Sigma(H,o),c` that tag 3 realizes,
+   and R2b freezes the semantic field order across the five-tag
+   contract, so the types and order
+   (`profile_binding, history_binding, anchor, evaluation_binding,
+   constructor`) are the byte-identical tag-3 realization.
+2. "Owned" is R2a §10's vocabulary, and it selects the reference arm.
+   The two names R2b qualifies as "owned" are exactly two of the three
+   objects R2a §10 assigns to the `CheckedActionImage` owner ("owns
+   exactly one original checked candidate, one full `ActionTraceV1`, and
+   one `ActionImageV1`"). Section 2's reference law — a reference is
+   usable only under its exact owner and always retains its complete
+   typed identity — makes the checked owner-local reference precisely
+   the form that publishes the owner's object without moving ownership
+   material across the frozen authority boundary. The tag-3 precedent
+   realizes the same split: its owned name `E` became the reference
+   `CandidateEnvelopeRefV1`, while its unowned semantic content (`r`,
+   `Match evidence`) became complete values. R2a acceptance condition 9
+   ("every checked reference contains both deterministic index and full
+   identity") fixes the two-field reference shape.
+3. The reference identity types are forced by frozen precedent, not
+   invented. For the base candidate, the frozen candidate-reference
+   specialization carries `full_identity:RawCapabilityEnvelopeV1` (R2c
+   §10); reusing `ActionBaseCandidateRefV1` keeps one reference form per
+   referenced family. For the trace, the frozen evidence-reference
+   precedent is exact: `ExactEvidenceRefV1 = (owner_local_index:u32,
+   full_identity:EvidenceCommitmentV1)` — R2c identifies the
+   representative evidence transcript by its domain-bound commitment
+   newtype, and A4-O §6.1/§6.3 build the same commitment pattern into A1
+   field 17 and the action image. `ActionTraceV1` is the action analogue
+   of `ExactEvidenceTranscriptV1` (both representative evidence, both
+   R3-account-bearing, both commitment-identified), so
+   `ActionTraceRefV1` carries `ActionTraceCommitmentV1` as its full
+   typed identity. Embedding the full trace instead would nest a
+   receipt-bearing value under `0xe3` at a position the R2a §9
+   containment corrigendum never enumerated, and would create the
+   second-copy channel the record forbids: A4-O §6.1's own rule for the
+   candidate analogue is that "the full exact evidence remains owned by
+   the census/envelope. The commitment does not replace it" — retained
+   in full under its owner, identified elsewhere.
+4. `image` is a complete typed value. The variant is named
+   `CheckedActionImage`: the image is the semantic content the variant
+   exists to publish, and a reference is usable only under its exact
+   private owner, so an image-by-reference `0xe3` value would chain the
+   publishable joined Level-II root to private state — the RD-RT-A-1
+   clause-1 exclusion verbatim. The embedded image is receipt-free by
+   the RD-RT-C-2(i) layout (its `final_payload` is the section-9.2
+   normalized projection, never the receipt-bearing carrier tuple),
+   consistent with root `0xff`'s absence from the exhaustive R2a §9 R3
+   root-containment list, so it places no new R3 material under `0xe3`.
+   R2b's spelling agrees: the field is "image", not "owned image".
+5. `normalized_action` is a complete typed value. It is the one complete
+   flattened total action `A` — pure `(B,A)` data to which subsection
+   10.22.4 binds every action value — and it appears in no R2a §10
+   ownership edge: there is no owner under which a reference to it could
+   resolve, so the reference arm is uninhabitable and the complete value
+   is the only lawful closure.
+
+Agreement equations, all checked at construction (mirroring the frozen
+tag-3 rule that every repeated value agrees with the referenced
+candidate by full bytes):
+
+```text
+profile_binding    = image.profile_binding
+history_binding    = image.history_binding
+evaluation_binding = image.evaluation_binding
+constructor        = image.constructor
+anchor             = image.base_anchor            ( = sel(B) )
+
+base_candidate     = the trace's base_binding.base_candidate,
+                     byte-identical, resolving to the owner's one
+                     original checked candidate
+
+normalized_action  = image.flattened_action
+                   = the owner-resolved trace's flattened_action
+                     (byte-identical)
+
+trace.full_identity = image.trace_commitment
+                    = the recomputed ActionTraceCommitmentV1 of the
+                      owner-resolved trace
+
+image              = the owner's one ActionImageV1, by full bytes
+```
+
+##### 14.3.3.2 The five-way `CheckedOrdinaryLevelTwoV1` sum and root `0xe3`
+
+With `CheckedActionImagePayloadV1` closed, every mathematical name of
+R2b's variants 3 and 4 is replaced, and the five payload types —
+`CheckedCarrierPayloadV1`, `CheckedDecodedV1`, `CheckedBuiltV1`,
+`CheckedCandidateEnvelopePayloadV1` (the R2c type used unchanged), and
+`CheckedActionImagePayloadV1` — are all topologically earlier than the
+sum node. Only now, honoring the R2a §2 scheduling corrigendum ("the
+root-`0xe3` definition is now materialized only after all five payload
+types are topologically earlier") and the R2b gate allocation ("R2d:
+action-image payload types, then the topological root-`0xe3` TypeDef"),
+the sum node is created and the root mapped:
+
+```text
+CheckedOrdinaryLevelTwoV1 ::=
+  CheckedCarrier=0(CheckedCarrierPayloadV1)
+| CheckedDecoded=1(CheckedDecodedV1)
+| CheckedBuilt=2(CheckedBuiltV1)
+| CheckedCandidateEnvelope=3(CheckedCandidateEnvelopePayloadV1)
+| CheckedActionImage=4(CheckedActionImagePayloadV1)
+```
+
+with tags 0–4 and semantic field order byte-identical to the R2b freeze,
+and rooted bytes
+
+```text
+0xe3 || little_endian_u16(1) || variant_tag || payload fields
+```
+
+under the R2a §9 row `CheckedLevelTwo`/`0xe3`/
+`law-v2/jg2b2b2a/ordinary-checked-level-two/v1`. The R2b nesting rule
+holds for every variant: each nested payload's schema fields are encoded
+directly after the Level-II variant tag, and no `0xe5`, `0xe6`,
+candidate, `0xfe`, or `0xff` root-and-version header is duplicated
+inside root `0xe3` (in particular the tag-4 `image` field is the nested
+prefix-omitting `ActionImageV1` encoding, and its `final_quotient_key`
+is the nested key form of RD-RT-A-1). No Level-II variant is a pair
+disposition or occurrence classification (R2b §9). No forward
+`TypeIdV1`, digest-only substitute, opaque byte placeholder, or
+incomplete `0xe3` object exists at any point of the construction; R2d
+still assigns no numerical `TypeIdV1` — the sum closes as a schema node
+and R2e assigns its ID only after R3, under the frozen
+no-edge-change constraint.
+
+R3 containment under root `0xe3` is exactly the transitive closure of
+its payloads' frozen reserved positions, enumerated by variant: the R2b
+success receipts inside the tag-0–2 checked compounds; under tag 3, the
+four frozen R2c channels — `envelope.full_identity` (a complete
+seventeen-field `RawCapabilityEnvelopeV1`), `match_evidence.derive.core`
+(a complete `EnvelopeCoreV1`, receipt-bearing directly and transitively
+per the R2c §9.3 corrigendum),
+`match_evidence.derive.checked_built.full_identity` (a complete
+`CheckedBuiltV1` retaining R2b success receipts), and the two
+`ReplayBoundariesAndContextsV1` positions
+`match_evidence.compatibility.derived_replay_boundaries` and
+`match_evidence.compatibility.retained_replay_boundaries` (each
+retaining `R3::` call-role and receipt positions through the checked
+signature/context replays of their birth boundaries and source-history
+replay vectors); and under tag 4, exactly
+`base_candidate.full_identity` (a complete `RawCapabilityEnvelopeV1`) —
+by RD-RT-C-2(i) and RD-RT-C-3 the embedded `image`, the
+`normalized_action`, the binding references, and the
+commitment-identified `trace` reference are receipt-free. The sum
+itself mints no new R3-qualified position, and root `0xe3` remains on
+the R2a §9 containment list solely through those inherited positions.
+
+Aborts of this subsection: any variant tag, name, payload type, or
+semantic field order differing by any byte from the R2b freeze; a
+modified tag-3 payload; a tag-4 field violating RD-RT-C-3 (an embedded
+full trace, an image or normalized action by reference, a rank-bearing
+or arena-indexed base-candidate reference, a bare digest in place of a
+checked reference); any agreement equation of 14.3.3.1 failing; a
+duplicated nested root or version header; a sixth variant or an
+`Abort`/disposition/classification variant; an `0xe3` object encoded
+before all five payload types exist; a forward or numerical `TypeIdV1`;
+trailing bytes, truncation, or re-encode disagreement on the closed
+positions.
+
+#### 14.3.4 REGISTERED DECISION RD-RT-C-4, slot-10 runtime types (LR.12), forbidden inputs (LR.13), and the cut-level closing statement
+
+##### 14.3.4.1 REGISTERED DECISION RD-RT-C-4: the closer of the final `R2dSemanticOpcodeV1` tags
+
+The underdetermination, catalogued at plan-§13.3 registration and
+assigned to RT-C: section 12 leaves "the input/output TypeIds and final
+`R2dSemanticOpcodeV1` tags ... open until the named value types close",
+and either this cut or R2e could conceivably be their closer.
+
+Decision (registered): this cut closes the final `R2dSemanticOpcodeV1`
+tags; R2e closes only the numerical TypeIds. The closed sum, in the
+R2b/R2c precedent order (ascending protocol slot, then local ordinal, of
+each opcode's defining contribution), is:
+
+```text
+R2dSemanticOpcodeV1 ::=
+  ProjectCandidateQuotient=0
+| CompareQuotientKeys=1
+| NormalizeAndRebuildAction=2
+| EvaluatePairCoverage=3
+| ClassifyPairDisposition=4
+```
+
+The argument is from the frozen records:
+
+1. Section 12's own condition has lapsed. The tags "remain open until
+   the named value types close"; RT-A, RT-B, and subsections 14.3.1–
+   14.3.3 close the last named slot-9/10/11 value types, so the stated
+   openness condition is exhausted at RT-C close. Leaving the tags open
+   past that point would route residue to R2e for something R2e does not
+   own, against plan §13.3's residue rule (residue routes only to a
+   named boundary that owns it).
+2. R2b mandates R2d as the closer explicitly: "After all R2c/R2d opcodes
+   exist, R2d must close, without yet assigning TypeIds,
+   `JoinedSemanticOpcodeV1` ..." — the joined wrapper cannot close while
+   its `R2d=2` arm is an open sum, so the same mandate closes
+   `R2dSemanticOpcodeV1` inside R2d, and RT-C is the last R2d sub-cut.
+3. R2e's enumerated authority excludes the choice. The R2e edge
+   constraint (section 12; LR.12) forbids changing an edge, reordering a
+   predecessor, or adding a hidden operation while assigning IDs, and
+   subsection 10.21.3 caps R2e at symbolic-schema lowering, numerical
+   `TypeIdV1` assignment, and reconstruction/byte-comparison: "It may
+   not choose a name". Opcode tags are names in displayed zero-based
+   order; choosing them is schema authorship, which R2e lacks. The
+   R2b/R2c precedent agrees: each register closed its own opcode sum at
+   its own cut.
+
+Accordingly the R2d static contribution closes now, without TypeIds:
+
+```text
+R2dOperationDefinitionV1 =
+  (slot_local_ordinal:u32,
+   opcode:R2dSemanticOpcodeV1,
+   input_type:TypeIdV1,
+   output_type:TypeIdV1,
+   predecessor_rules:vector<DefinitionRulePathV1>)
+
+R2dOperationSlotContributionV1 =
+  (protocol_slot:ProtocolSlotV1,
+   definitions:vector<R2dOperationDefinitionV1>)
+
+R2dOperationDefinitionContributionV1 =
+  (slots:vector<R2dOperationSlotContributionV1>)
+```
+
+The `slots` vector has exactly the three entries `9,10,11` in that
+order. The slot-9 and slot-11 definition vectors are contiguous from
+local ordinal `0` and carry exactly the section-12 rows byte-identically
+(RT-A 14.1.4, RT-B 14.2.6); the slot-10 definition vector contains
+exactly the one appended definition at `slot_local_ordinal = 1`
+(RD-RT-C-1), joining after the R2b precursor at local `0` under R2b's
+join-in-local-ordinal-order rule. `JoinedSemanticOpcodeV1`,
+`JoinedOperationDefinitionV1`, `JoinedOperationSlotV1`, and
+`JoinedOperationDefinitionDagV1` are hereby closed exactly as displayed
+in R2b §10 — all three opcode arms (`R2b=0`, `R2c=1`, `R2d=2`) are now
+closed sums; twelve joined slots, `slots[i].protocol_slot` of tag `i`;
+every predecessor lexicographically earlier — with every `TypeIdV1`
+position still unassigned for R2e under the no-edge-change constraint.
+
+##### 14.3.4.2 Slot-10 runtime types (LR.12)
+
+The `10[0]` input/result types are the byte-identical R2b freeze
+(`FormalActionSyntaxCheckInputV1`, `FormalActionSyntaxCheckResultV1`).
+The `10[1]` types close as:
+
+```text
+ActionRebuildInputV1 =
+  (base_match:RankFreeCandidateMatchOutputV1,
+   base_quotient_key:QuotientKeyV1,
+   checked_steps:vector<CheckedFormalActionSyntaxV1>)
+
+ActionRebuildOutputV1 =
+  (trace:ActionTraceV1,
+   level_two_payload:CheckedActionImagePayloadV1)
+
+ActionRebuildResultV1 ::=
+  Success=0(ActionRebuildOutputV1)
+| False=1(R3::CheckedFalseReceiptV1)
+| Abort=2(R3::AbortReceiptV1)
+```
+
+`base_match` is exactly the success payload of the frozen R2c
+`CandidateMatchResultV1` produced by
+`SubjectConstruction[2]`/`CheckCandidateMatch`; `base_quotient_key` is
+the `9[0]` output bound by the cross-lane equation of 14.3.1.2;
+`checked_steps` carries the complete ordered family of `10[0]` success
+payloads for the proposed action and is nonempty (a caller with no
+action invokes slot 10 not at all). The result partition has all three
+arms, unlike the slot-9/11 partitions: the A3-O action locus has a
+genuine checked-false family (the exact A4-R3 `FalseReasonV1::Action`
+variant for caller-proposed base/domain/codomain/arity/typing/square
+failures), while every internal reconstruction failure is an abort; the
+`R3::CheckedFalseReceiptV1` and `R3::AbortReceiptV1` positions are
+R3-qualified reservations with frozen outer tags, filled by R3 without
+moving them. `ActionRebuildOutputV1` carries canonical data only: the
+pair's rooted-publishable trace (nested prefix-omitting encoding) and
+the Level-II tag-4 payload; the `CheckedActionImage` owner itself, like
+the `PairCandidateArenaV1`, is private state and never an output field.
+A `10[1]` `False` or `Abort` constructs no trace, image, owner, or
+payload and suppresses nothing outside the action lane: pair coverage
+and dispositions are unaffected by construction, since no slot-11 edge
+exists in either direction.
+
+With these types, every named slot-9/10/11 input/output runtime type of
+the cut is closed; the section-12 slot-9/11 rows, including `11[0]`'s
+displayed fourteen-predecessor vector, were consumed byte-identically
+(no edge changed, no predecessor reordered, no hidden operation added),
+and the single new `10[1]` row is the registered RD-RT-C-1 topology.
+Numerical TypeIds for every RT-A/RT-B/RT-C type stay open for R2e under
+that same constraint; the `R2dSemanticOpcodeV1` tags are closed by
+RD-RT-C-4 and are not R2e residue.
+
+##### 14.3.4.3 Forbidden inputs (LR.13)
+
+Binding on every equation of 14.3 and restated from section 13 and
+subsection 10.21.6: any support-to-lineage, footprint-to-owner, or
+lineage-to-stream back-edge; any R3 account or receipt consumed as a
+decision input; a copied raw, source, owner, or class ordinal from R2c
+or a representative; a construction transcript; a replay; an evidence
+target; a representative path, support, or ordinal; a semantic SR2
+result; `nu`; any `GCap`, `gamma`, or semantic-novelty datum; any QG2
+stored route vector; any source or syntax copy; any numerical
+`TypeIdV1`. Zero new admission values beyond QG2's two. Fresh ordinals
+appear only as checked positions in independently reconstructed values —
+here exactly the range-checked `owner_local_index` positions of the two
+owner references and the vector positions of the step, primitive, and
+endpoint vectors. The R3-qualified material that lawfully appears inside
+RT-C values (the replay evidence retained inside checked steps; the
+receipt positions reachable through every embedded
+`RawCapabilityEnvelopeV1` identity — the trace's
+`base_binding.base_candidate.full_identity` and the tag-4
+`base_candidate.full_identity`; the receipt positions inside every
+trace endpoint's `canonical_schema_payload:CanonicalSchemaPayloadV1`
+checked raw carriers; under the joined root, the tag-0–2 R2b success
+receipts and the four tag-3 channels enumerated in 14.3.3.2; the
+reserved action account; and the reserved false/abort receipts) is
+carried into its frozen reserved positions and never interpreted: no
+flattening, epsilon replay, rebuild, support recomputation, trace,
+image, commitment, payload, or opcode value consumes a receipt or
+account byte as an input, and by the RD-RT-C-2(i) layout no such
+material reaches root `0xff` or the image's `final_payload` at all.
+Holding `(B,A)` and the applicable formal semantic environment fixed
+while varying only receipt/account material leaves every receipt-free
+RT-C value — the image with its `final_payload` and
+`final_quotient_key`, every flattened action, and every opcode and
+comparison value — byte-unchanged, and changes a receipt-carrying RT-C
+value only at the frozen reserved positions embedding the varied bytes
+verbatim (and, downstream of them, the `trace_commitment` digest of the
+complete rooted `0xfe` bytes) — the frozen 10.22.4 independence result
+extended to the action runtime boundary. The fresh RT-C types
+(`CanonicalFlattenedActionV1`, `ActionEndpointPairV1`,
+`ActionBaseCandidateRefV1`, `ActionBaseBindingV1`, `ActionTraceV1`,
+`ActionTraceCommitmentV1`, `ActionImageV1`, `ActionTraceRefV1`,
+`CheckedActionImagePayloadV1`, `CheckedOrdinaryLevelTwoV1`,
+`ActionRebuildInputV1`, `ActionRebuildOutputV1`,
+`ActionRebuildResultV1`, `R2dOperationDefinitionV1`,
+`R2dOperationSlotContributionV1`,
+`R2dOperationDefinitionContributionV1`, and the closed
+`R2dSemanticOpcodeV1`) have leaf fields drawn only from frozen
+R2a/R2b/R2c values, the frozen section-9 quotient mirror types of this
+record, RT-A values, wire scalars, checked positions, and reserved
+R3-qualified positions; none carries a forbidden family. The cut-global
+transitive forbidden-input scan over the cut's sections runs now at
+RT-C close and once more at cut close per LR.13.
+
+##### 14.3.4.4 Cut-level closing statement
+
+RT-C fixes exactly: slot `ActionNormalizationAndRebuild=10` as
+action-only with the registered decision RD-RT-C-1 — the two-local
+opcode list (`CheckFormalActionSyntax` restated byte-identically;
+`NormalizeAndRebuildAction` appended at local ordinal 1) and the exact
+three-entry predecessor vector `SubjectConstruction[2]`,
+`QuotientProjectionAndComparison[0]`,
+`ActionNormalizationAndRebuild[0]` — with every action flattening and
+rebuilding from the original base by the frozen `(B,A)`-bound equations,
+the deferred epsilon square check replayed here, action support
+recomputed from final roots, `SubjectProjectionSourceBundleV1` retained
+byte-identically, and action images entering no raw universe, outcome
+vector, partition, or disposition (LR.9); roots `0xfe`/`0xff` under the
+registered decisions RD-RT-C-2(i) and RD-RT-C-2(ii) — the exact
+`ActionTraceV1`/`ActionImageV1` typed layouts realizing the A4-O §6.3
+inventories position for position, the image's `final_payload` closed
+as the receipt-free section-9.2 normalized projection with the
+receipt-bearing carrier tuple retained only under the owner-resolved
+trace, the single newly declared R3-qualified
+`R3::ActionResourceAccountV1` boundary reserved not filled, both roots
+representative evidence outside the quotient key, the private
+`CheckedActionImage` constructor enforcing `CanonicalActionResult_c`,
+and the explicit `0xff` containment choice (LR.10); the Level-II tag-4
+payload under the registered decision RD-RT-C-3 — the owned fields as
+checked owner-local references with frozen identity types, the image and
+normalized action as complete typed values, every R2b mathematical name
+replaced — followed by the creation of the five-way
+`CheckedOrdinaryLevelTwoV1` sum with tags 0–4 and field order
+byte-identical to the R2b freeze, the R2c tag-3 payload unchanged,
+nested payloads directly after the variant tag, and root `0xe3` mapped
+only after all five payload types are topologically earlier (LR.11);
+and, under the registered decision RD-RT-C-4, the closed
+`R2dSemanticOpcodeV1` and joined opcode/definition sums with the slot-10
+runtime types (completing LR.12 over the byte-identical section-12
+rows), the LR.13 forbidden-input discipline with the transitive scan,
+and the LR.14 stop boundary.
+
+With RT-A (LR.1–LR.3), RT-B (LR.4–LR.8), and RT-C (LR.9–LR.11) closed
+and the cut-global lines LR.12–LR.14 checked, every line of the plan
+§13.3 ledger checks and the A4-R2d roots/runtime cut is complete at the
+compiler-plan boundary: the final encoded `QuotientSemanticProjectionV1`
+under root `0xfd`, full-key comparison, the rooted outcome/class/
+coverage/disposition family under roots `0xe7`–`0xe9`, the action
+trace/image family under roots `0xfe`/`0xff`, the joined Level-II root
+`0xe3`, and all slot-9/10/11 runtime types are fixed as full byte
+grammars and typed value schemas with seven registered decisions
+(RD-RT-A-1, RD-RT-B-1, RD-RT-B-2, RD-RT-C-1 through RD-RT-C-4)
+discharging the seven catalogued underdeterminations.
+
+The completed cut does NOT close: R3 failure/resource filling — every
+qualified position (`R3::CheckedFalseReceiptV1`, `R3::AbortReceiptV1`,
+`R3::StructuralCardinalityReceiptV1`, `R3::PairResourceAccountV1`,
+`R3::ActionResourceAccountV1`, and the positions inherited through
+frozen R2b/R2c values) keeps its frozen outer tag and position, and
+until R3 supplies those schemas no root containing one — and therefore
+no `trace_commitment` value — has complete canonical bytes; numerical
+`TypeIdV1` assignment and the registry/source join (R2e, which may not
+change an edge, reorder a predecessor, add a hidden operation, or choose
+a name); fixture and mutation regeneration (R4, which must bind the
+repaired `0xe7` order explicitly and may not copy RC1 coverage
+fixtures); any executable JG2b2b2b authority; and any theorem — the
+three preservation descriptors remain unproved typed proposition syntax,
+the sequential-versus-direct and full-projection equalities remain
+unminted, and the section-10.19.6 truth-audit gate persists unweakened
+as a frozen input to the mandatory separately versioned theory
+corrigendum. Roots `0xfb`/`0xfc` and every byte of sections 10.11–10.22
+remain immutable. This sub-cut and the completed cut mint no verified
+profile, executable interface, envelope census, pair disposition,
+occurrence classification, action image instance, theorem, generic law,
+cubical bridge, `GCap`, `gamma`, or selective authority. The next lawful
+move is A4-R3, the failure/resource parameter closure, per the plan
+§6.4 implementation-lane chain
+(`R2d roots and runtime closure -> A4-R3 failure/resource machine ->
+A4-R2e registry/source join -> A4-R4 fixtures and mutations`).
+
+The roots/runtime cut closed 2026-08-04 as section 14 (RT-A the encoded
+quotient key and full-key comparison; RT-B checked outcomes, classes,
+coverage, and dispositions; RT-C the action runtime and joined Level-II
+root), with plan §13.3 ledger lines LR.1--LR.14 all checked and the seven
+catalogued underdeterminations decided by registered decisions RD-RT-A-1,
+RD-RT-B-1, RD-RT-B-2, RD-RT-C-1, RD-RT-C-2(i)/(ii), RD-RT-C-3, and
+RD-RT-C-4. A4-R2d is closed at the compiler-plan boundary.
+
+The next lawful move is A4-R3: fill the already qualified failure, resource,
+and meter positions reserved throughout sections 4--14 under their frozen
+outer tags, changing no closed grammar, topology, or registered decision.
+R2e then assigns numerical TypeIds and performs the registry/source join
+under the section-12 no-edge-change constraint; R4 regenerates fixtures and
+mutations. Subject syntax is not proof evidence: the section-10.19.6
+preservation-truth obstruction remains a mandatory theory corrigendum before
+any later universal authority may use those equalities. All later work must
+reject every support-to-lineage or footprint-to-owner back-edge, copied
+raw/source/owner/class ordinal, construction transcript, replay, evidence
+target, representative, semantic SR2 result, or `nu`.
 
 This record selects no history, occurrence, constructor, raw code, match,
 class, action, or result. It mints no verified profile, executable interface,

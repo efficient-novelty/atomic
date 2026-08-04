@@ -9,8 +9,12 @@ Repository: `pen-atomic`
 Status: **A4-R2d QG1, QG2, and QG3 are closed at their stated representation
 boundaries — S1a/D1 through S1c4 (record §10.20) plus ledger items 5-6
 (record §§10.21-10.22, closed 2026-08-04 with all eleven §13.2 ledger lines
-checked and both OPEN-AT-S1C4 deferrals discharged); the R2d roots/runtime
-cut (§7.1 item 5) is the active implementation frontier. The current
+checked and both OPEN-AT-S1C4 deferrals discharged); the roots/runtime cut
+closed the same day as record §14 (RT-A/RT-B/RT-C, all fourteen §13.3
+ledger lines checked, seven registered decisions RD-RT-A-1 through
+RD-RT-C-4), completing A4-R2d at the compiler-plan boundary; A4-R3, the
+failure/resource machine (§7.1 item 6), is the active implementation
+frontier. The current
 full-projection preservation subjects are typed proposition syntax only:
 full-projection action equality is impossible for every nonempty action, and a
 separately versioned preservation-law corrigendum is mandatory before universal
@@ -662,25 +666,38 @@ Closed inputs:
   census with the fail-closed rebuild audit, the seventeen-family second
   transitive scan, the QG2 two-admission and `5*PR_c` reproofs, the
   independent `3*PR_c` proof, and the frozen fail-closed
-  arithmetic/ordering/independence/action-base disciplines.
+  arithmetic/ordering/independence/action-base disciplines; and
+- the roots/runtime cut (record §14, RT-A/RT-B/RT-C): the encoded
+  `QuotientKeyV1 = QuotientSemanticProjectionV1` with full-key comparison
+  and typed `FirstDifferenceV1`; root `0xe7` outcomes in the repaired
+  order, the slot-11[0] all-raw pass with dense `rho` ranks, quotient
+  classes, root `0xe8` coverage as a certificate (RD-RT-B-2) with the
+  registered outcome-tag mapping (RD-RT-B-1), and root `0xe9` three-way
+  dispositions; the two-local slot 10, roots `0xfe`/`0xff` typed
+  action-trace/image layouts with their R3-qualified boundaries
+  (RD-RT-C-2), the tag-4 owner-checked references (RD-RT-C-3), the joined
+  five-way root `0xe3` honoring the R2a scheduling corrigendum, and the
+  five-tag `R2dSemanticOpcodeV1` closure (RD-RT-C-4). All R3 positions
+  reserved, not filled; numerical TypeIds remain R2e.
 
 Active deliverable:
 
-> Close the R2d roots/runtime cut (§7.1 item 5): full key comparison, rooted
-> outcomes and classes under the root-`0xe7` `CheckedLeafOutcomeV1`
-> encoding, root `0xe8` coverage, root `0xe9` dispositions, the
-> base-relative action rebuild with the action trace/image, roots `0xfd`,
-> `0xfe`, and `0xff`, Level-II tag 4, joined root `0xe3`, and all
-> slot-9/10/11 runtime types, materializing the §10.21 symbolic schema as
-> the encoded `QuotientSemanticProjectionV1`. Record sections 10.11--10.22
-> and all QG1/QG2 bytes are immutable inputs, consumed read-only.
+> Close A4-R3 (§7.1 item 6): freeze the exact failure, resource, and meter
+> machine, filling the already qualified `R3::` positions reserved
+> throughout record sections 4--14 under their frozen outer tags —
+> including `AbortReceiptV1`, `CheckedFalseReceiptV1`, and the
+> `ActionResourceAccountV1` reservation registered by RD-RT-C-2 — changing
+> no closed grammar, topology, or registered decision. Record sections
+> 10.11--14 and all QG1/QG2 bytes are immutable inputs, consumed
+> read-only. Per §5.7, an enumerated closure ledger for the R3 cut must be
+> registered in this plan before its work starts.
 
 Not yet materialized:
 
-- the final shared-typed placement of the instantiated action subject;
-- the shared candidate/action eight-group projection;
-- root `0xfd`;
-- final numerical `TypeIdV1` assignments;
+- the R3 failure/resource/meter field contents (every `R3::` position is
+  reserved under its frozen outer tag, not filled);
+- final numerical `TypeIdV1` assignments and the R2e registry/source join;
+- regenerated R4 fixtures and mutations;
 - executable JG2b2b2 authority; and
 - a provable transported/equivariant replacement for the currently unproved
   full-projection renaming and reindexing proposition descriptors. That theory
@@ -835,11 +852,14 @@ selective-profile authority exists yet.
    shared eight-group schema and §10.22 the second transitive scan and
    reproofs, completing QG3 against the §13.2 ledger. This is GCap
    infrastructure, not semantic-novelty measurement.
-5. **R2d roots/runtime.** Close quotient projection and keys, checked outcomes
-   and classes, coverage/dispositions, base-relative action rebuild, action
-   trace/image, roots `0xfd`, `0xe7`–`0xe9`, `0xfe`, `0xff`, joined root `0xe3`,
-   and slots 9–11.
-6. **R3.** Freeze the exact failure, resource, and meter machine.
+5. **R2d roots/runtime — closed (record §14, 2026-08-04).** Quotient
+   projection and keys, checked outcomes and classes,
+   coverage/dispositions, base-relative action rebuild, action trace/image,
+   roots `0xfd`, `0xe7`–`0xe9`, `0xfe`, `0xff`, joined root `0xe3`, and
+   slots 9–11, under the §13.3 ledger with seven registered decisions.
+6. **R3 — active.** Freeze the exact failure, resource, and meter machine,
+   filling only the already qualified reserved positions under their frozen
+   outer tags.
 7. **R2e.** Assign the dynamic registry TypeIds and close the implementation-
    source join.
 8. **R4.** Regenerate canonical fixtures and layer-specific mutations; require
@@ -1638,13 +1658,15 @@ The current packet may package the three preservation descriptors, but it must
 not prove, assume, classify by, or derive `GCap` from their truth. The exact
 nonempty-action obstruction is a frozen input to later TC work.
 
-The next autonomous work item is **the A4-R2d roots/runtime cut (§7.1 item
-5)**. QG3 is complete: S1c4 closed 2026-08-04 as record §10.20 after
-independent review (four P1 findings and one P2 finding corrected, then a
-focused re-review with one further blocking field-name correction); ledger
-items 5-6 closed the same day as record §§10.21-10.22 after per-item
-three-verifier adversarial review, revision, and a final eleven-line ledger
-audit (all lines pass; both OPEN-AT-S1C4 deferrals discharged).
+The next autonomous work item is **A4-R3, the failure/resource machine
+(§7.1 item 6)**, beginning with its §5.7 closure-ledger registration. A4-R2d
+is complete: QG3 closed 2026-08-04 (records §§10.20-10.22, reviewed as
+recorded above), and the roots/runtime cut closed the same day as record
+§14 — RT-A/RT-B/RT-C authored sequentially, each adversarially verified
+and revised (RT-B's two verifiers returned zero defects; RT-C's blocking
+`final_payload` receipt-freedom contradiction was re-decided inside
+RD-RT-C-2), then a final fourteen-line ledger audit passed every line with
+all seven catalogued underdeterminations decided by registered decisions.
 
 ### 13.1 Parallel formulation lane (registered 2026-08-04)
 
@@ -1973,9 +1995,10 @@ select its support, disposition, lineage, or action-subject values.
 
 ### 13.3 Enumerated closure ledger for the A4-R2d roots/runtime cut (registered 2026-08-04, per §5.7)
 
-Registered before any roots/runtime work: the cut is closed exactly when every
-line below checks; residue routes RT-A -> RT-B -> RT-C -> the named R3/R2e
-boundaries, never to a new sub-alphabet. The three sub-cuts RT-A/RT-B/RT-C are
+Registered before any roots/runtime work; the cut closed 2026-08-04 (record
+§14) with every line below checked by the final ledger audit and no residue
+carried. The registered routing rule (residue RT-A -> RT-B -> RT-C -> the
+named R3/R2e boundaries, never a new sub-alphabet) was not needed. The three sub-cuts RT-A/RT-B/RT-C are
 named here in advance and therefore never count as unplanned sub-cuts under
 binding decision 6. The cut must also register explicit decisions, argued from
 the frozen records, for the seven underdeterminations catalogued at
