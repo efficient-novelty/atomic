@@ -7,9 +7,10 @@ Plan version: 2026-08-04 rev 2
 Repository: `pen-atomic`
 
 Status: **A4-R2d QG2, QG3-S1a/D1 through QG3-S1b3, the QG3 preservation
-kernel, and QG3-S1c0 through QG3-S1c3 are closed at their stated
-representation boundaries; QG3-S1c4 action lineage, footprint agreement, and
-support packaging are the active implementation frontier. The current
+kernel, and QG3-S1c0 through QG3-S1c4 are closed at their stated
+representation boundaries (S1c4 closed 2026-08-04 as record §10.20 after
+independent review); the QG3 shared eight-group schema and second transitive
+scan (§13.2 ledger items 5-6) are the active implementation frontier. The current
 full-projection preservation subjects are typed proposition syntax only:
 full-projection action equality is impossible for every nonempty action, and a
 separately versioned preservation-law corrigendum is mandatory before universal
@@ -642,26 +643,34 @@ Closed inputs:
   Its truth audit proves that the current `Full` reindexing equality is
   uninhabited for every nonempty action because edge 28 forces distinct formal
   keys absent from the candidate endpoint. The subject is typed proposition
-  syntax, not a proved preservation law.
+  syntax, not a proved preservation law; and
+- QG3-S1c4's minimal action-introduced lineage row and container, the
+  byte-identical empty candidate/total-identity lineage value with the
+  identity-append law, the independent paired-census rerun with agreement by
+  pure-compiler functional determinism, current-output seeds from the
+  reindexed output-lineage slots only, the three independently recomputed
+  footprints with stored values as final equality targets, and the group-6
+  package `(graph, footprint agreement, preservation subjects)` with the
+  10.19.6 truth-audit gate retained (record §10.20, closed 2026-08-04 after
+  independent review).
 
 Active deliverable:
 
-> Independently replay the frozen paired native/edge-27 event census to derive
-> candidate-empty and action-nonempty `ActionIntroduced` lineage. Recompute
-> implementation, prior-support, and current-output footprints from the shared
-> graph and the exact reindexed output-lineage slots, using stored footprints
-> only as final equality targets. Then package the candidate/action group-6
-> support around the shared graph, coverage/projection, footprint agreement,
-> and three typed preservation descriptors. Preserve QG2, candidate `M_nf`,
-> S1b3, the preservation kernel, and S1c0--S1c3 byte-for-byte. Admit no support-
-> to-lineage or footprint-to-owner back-edge, representative, copied raw/
-> source/owner/class ordinal, receipt, R3 payload, semantic SR2 result, or
-> `nu`.
+> Close §13.2 ledger items 5 and 6. Item 5: the shared eight-group schema —
+> the frozen section-11 `0xfd` layout, byte-identical candidate/
+> total-identity projections, group-4 lineage and the group-8 optional
+> action subject as the only additional top-level action-owned fields, every
+> common position deterministically rebuilt from the original base, and the
+> final group-6 name, field order/encoding, and placement left open by
+> §10.20.4 (L5.1--L5.5). Item 6: the second transitive
+> no-R3/no-representative/no-forbidden-raw scan, the QG2 two-admission and
+> `5*PR_c` reproofs, the independent QG3 `3*PR_c` proof, and frozen
+> fail-closed arithmetic, ordering, independence, and action-base binding
+> (L6.1--L6.6). Preserve QG2, candidate `M_nf`, S1b3, the preservation
+> kernel, and S1c0--S1c4 byte-for-byte.
 
 Not yet materialized:
 
-- QG3 action-introduced lineage, independently recomputed action footprint
-  agreement, and the final candidate/action group-6 support package;
 - the final shared-typed placement of the instantiated action subject;
 - the shared candidate/action eight-group projection;
 - root `0xfd`;
@@ -695,8 +704,10 @@ The exact consequences are:
   action;
 - normalization remains definitional through the quotient normal-form
   eliminator;
-- nontrivial exact-identifier renaming also requires transport rather than
-  literal byte equality;
+- nontrivial exact-identifier renaming generally requires transport rather
+  than literal byte equality (a setwise-projection-stabilizing renaming may
+  satisfy the untransported renaming subject; the generic law still requires
+  equivariant transport);
 - the three stored subjects remain typed proposition syntax storing no
   inhabitant, proof/evidence value, or theorem authority (uninhabitedness is
   proved only for the nonempty full-action equality; the normalization and
@@ -792,8 +803,9 @@ selective-profile authority exists yet.
    partition, and full transitive two-copy admission invariant are closed at
    compiler-plan level. Numerical TypeId lowering and representative-byte path
    comparison remain deferred to R2e/R4.
-4. **QG3 — active; S1a/D1 through S1b3, the preservation kernel, and
-   S1c0--S1c3 are closed at their stated representation boundaries.** The
+4. **QG3 — active at ledger items 5-6; S1a/D1 through S1b3, the preservation
+   kernel, and S1c0--S1c4 are closed at their stated representation
+   boundaries.** The
    exact R2c projection inventory, seven semantic roots, graph/coverage ABI,
    payload-free ordinary
    `Primitive` compiler, corrected four-way virtual-locus ABI, canonical
@@ -811,10 +823,12 @@ selective-profile authority exists yet.
    concrete typing and denotation of the three preservation-subject
    descriptors. It proves no
    preservation theorem; its exact nonempty-action formal-key obstruction is a
-   later theory-corrigendum gate. The active cut closes action-introduced
-   lineage, footprint agreement, and the candidate/action support package.
-   The remaining ordered QG3 cut then closes the shared eight-group shape.
-   This is GCap infrastructure, not semantic-novelty measurement.
+   later theory-corrigendum gate. S1c4 (record §10.20) closes
+   action-introduced lineage, footprint agreement, and the candidate/action
+   support package at the compiler-plan boundary. The remaining ordered QG3
+   cuts close the shared eight-group shape and the second transitive scan
+   (§13.2 ledger). This is GCap infrastructure, not semantic-novelty
+   measurement.
 5. **R2d roots/runtime.** Close quotient projection and keys, checked outcomes
    and classes, coverage/dispositions, base-relative action rebuild, action
    trace/image, roots `0xfd`, `0xe7`–`0xe9`, `0xfe`, `0xff`, joined root `0xe3`,
@@ -1618,8 +1632,11 @@ The current packet may package the three preservation descriptors, but it must
 not prove, assume, classify by, or derive `GCap` from their truth. The exact
 nonempty-action obstruction is a frozen input to later TC work.
 
-The next autonomous work item is **A4-R2d QG3-S1c4: action-introduced
-lineage, footprint agreement, and candidate/action support packaging**.
+The next autonomous work item is **A4-R2d QG3 ledger items 5-6: the shared
+eight-group schema and the second transitive scan (§13.2)**. QG3-S1c4 closed
+2026-08-04 as record §10.20 after independent review (four P1 findings and
+one P2 finding corrected, then a focused re-review with one further blocking
+field-name correction).
 
 ### 13.1 Parallel formulation lane (registered 2026-08-04)
 
@@ -1853,9 +1870,20 @@ Required sequence:
    generic preservation template and close `RenamedSeed` and `ReindexedSeed`
    against the shared projection type as typed, denoted proposition
    descriptors, without claiming equality or proof authority;
-4. **Active -- S1c4.** Close candidate-side empty action-introduced lineage and
-   action-side lineage/support/footprints rebuilt from the original base and
-   total flattened action without support/raw/class-coordinate back-edges;
+4. **Closed -- S1c4 (record §10.20, 2026-08-04).** Candidate-side empty
+   action-introduced lineage and action-side lineage/support/footprints
+   rebuilt from the original base and total flattened action without
+   support/raw/class-coordinate back-edges: the minimal lineage row
+   `(lineage_ordinal, primitive, dependency_path, expected_judgment)` with
+   constant-`Term`/both-companions-`None`/primitive-path-correspondence
+   admission constraints; census agreement by pure-compiler functional
+   determinism on identical `(B,A,S_A)` with no stored or exposed census;
+   the transaction order census -> graph -> lineage -> footprints ->
+   comparison -> packaging; descriptors packaged as typed syntax storing no
+   inhabitant, proof/evidence value, or theorem authority; and two
+   OPEN-AT-S1C4 deferrals (group-4 wrapper encoding; group-6
+   name/field/layout) to ledger item 5, with R2e limited to symbolic
+   lowering, `TypeIdV1` assignment, and representative comparison;
 5. close the shared eight-group schema. Candidate and total identity-action
    projections are byte-identical. For a nonempty action, the only additional
    top-level action-owned fields are lineage and the optional action subject;
@@ -1880,8 +1908,8 @@ it does not reset the projection to the base candidate.
 
 ### 13.2 Enumerated closure ledger for the remaining QG3 cuts (registered 2026-08-04, per §5.7)
 
-S1c4 closes exactly on its item-4 statement above. Items 5 and 6 close
-exactly when every line below checks; any residue moves to R2d
+S1c4 closed on its item-4 statement above (record §10.20). Items 5 and 6
+close exactly when every line below checks; any residue moves to R2d
 roots/runtime, never to a new S1c5/S1d sub-alphabet.
 
 Item 5 — shared eight-group schema:

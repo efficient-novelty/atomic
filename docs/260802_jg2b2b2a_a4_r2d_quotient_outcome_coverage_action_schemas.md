@@ -2,9 +2,10 @@
 
 Date: 2026-08-04
 
-Status: **A4-R2d ACTIVE AT QG3-S1c4 ACTION LINEAGE, FOOTPRINTS, AND SUPPORT PACKAGING;
+Status: **A4-R2d ACTIVE AT THE QG3 SHARED EIGHT-GROUP SCHEMA AND SECOND
+TRANSITIVE SCAN (PLAN §13.2 LEDGER ITEMS 5-6);
 QG1, QG2, QG3-S1a/D1, QG3-S1b1, QG3-S1b2, QG3-S1b3, THE QG3
-PRESERVATION KERNEL, AND QG3-S1c0 THROUGH QG3-S1c3 CLOSED AT THEIR STATED
+PRESERVATION KERNEL, AND QG3-S1c0 THROUGH QG3-S1c4 CLOSED AT THEIR STATED
 REPRESENTATION BOUNDARIES; A4-R2a+C2, A4-R2b,
 A3-C1, AND A4-R2c+C2 FROZEN; A4-R3 BLOCKED BY R2d.** This active record fixes the
 first lawful R2d cut: a
@@ -13484,6 +13485,602 @@ the three typed descriptors. It must retain the truth audit above as an
 explicit future theorem/corrigendum gate and must not reinterpret subject
 syntax as evidence.
 
+## 10.20 QG3-S1c4: action-introduced lineage, independent footprints, and the candidate/action group-6 support package
+
+This cut executes item 4 of the plan's required QG3 sequence. It closes, at
+the compiler-plan boundary only, the group-4 action-introduced-lineage value
+left open by subsections 10.11.5 and 10.18.2, the independent recomputation of
+the implementation, prior-support, and current-output footprints over the
+shared graph, and the packaging of the candidate/action group-6 support value
+around the shared graph, its coverage/projection, the footprint agreement, and
+the three typed preservation-subject descriptors.
+
+It deliberately closes nothing else. The shared eight-group schema and the
+final group-4/group-8 placement (ledger items L5.1–L5.5), the second
+transitive no-R3/no-representative/no-forbidden-raw scan and its reproofs
+(L6.1–L6.6), root `0xfd`, numerical `TypeIdV1` assignments, executable
+JG2b2b2 authority, and every preservation theorem remain outside this cut.
+The subsection-10.19.6 truth audit is retained unchanged as an explicit
+future theorem/corrigendum gate: this section packages the three descriptors
+but proves, assumes, classifies by, and derives nothing from their truth.
+
+The immutable inputs, byte-for-byte and never regenerated or changed, are:
+candidate `M_nf` with its seventeen tags; the S1b3 no-formal graph `G0` and
+its footprint-agreement value; the section-10.15 preservation kernel; the
+S1c0–S1c3 closures, including the frozen S1c2 action stream, paired edge-27
+census, nineteen-node `M_shared`, symbolic candidate embedding, shared
+locus/judgment/binder/referent/owner/key sums, shared graph ABI,
+`CompileSharedActionGraphCore`, and the three subject descriptors; and all
+QG2 bytes, including the exact `5*PR_c` route partition and the two admission
+values.
+
+The frozen dependency direction of subsections 10.16 and 10.18,
+
+```text
+action pass-A stream -> shared manifest -> shared support -> group-4 lineage,
+```
+
+is preserved. Lineage is a projection of the same primary compiler events; it
+is never an input to the stream, the manifest, the resolver, the graph, or
+the footprints, and no stored lineage value can select an action row, origin,
+referent, owner, class, or output seed.
+
+### 10.20.1 Candidate-side lineage: the exact empty group-4 action-introduced-lineage value
+
+Subsection 10.11.5 fixes that the only additional top-level action-owned
+positions of the eventual eight-group value are group 4's `action_introduced`
+vector and group 8's optional instantiated action subject, and that the total
+flattened identity action sets those positions to `[]` and `None`. Section
+9.4 fixes that action-introduced lineage does not occur in a candidate. This
+subsection closes the value those statements constrain.
+
+The lineage row and container are fresh compiler-plan wire values over the
+frozen shared sums:
+
+```text
+QuotientActionIntroducedLineageRowPlanSharedV1 =
+  (lineage_ordinal:u32,
+   primitive:QuotientSupportFormalActionIdPlanSharedV1,
+   dependency_path:QuotientSupportPathPlanSharedV1,
+   expected_judgment:QuotientSupportExpectedJudgmentPlanSharedV1)
+
+QuotientActionIntroducedLineagePlanSharedV1 =
+  (rows:vector<QuotientActionIntroducedLineageRowPlanSharedV1>).
+```
+
+These are symbolic compiler-plan schemas; no numerical `TypeIdV1` is assigned
+and no `0xfd` byte layout is claimed. `lineage_ordinal` is a checked
+contiguous `u32` equal to the row's physical position, following the exact
+group-4 ordinal discipline of `FieldLineageV1.field_ordinal` and
+`OutputLineageEntryV1.output_ordinal`. `primitive` is the exact enclosing
+`CanonicalPrimitive(i)` identity of the projected event, wrapped through the
+frozen `FormalId` newtype with
+`binder=CanonicalCompositeNaturalityBinder`; no other binder tag, action-kind
+copy, subject path, square-field owner sublocus, or value-node coordinate is
+admitted. The remaining two fields are exactly the census event's lowered
+dependency path and expected judgment; the row is minimal, storing no field
+whose value is a checked constant of every admissible edge-27 event.
+
+The edge byte is deliberately not a row field. This is the fresh R2d
+canonicalization of this cut: the container is by construction the projection
+of exactly the `ActionIntroduced=27` events, the projector requires
+`edge=ActionIntroduced=27` on every projected event before emitting a row,
+and a stored per-row constant would duplicate that check without adding a
+coordinate. Likewise deliberately excluded, because subsection 10.19.4 erases
+them with no wire image: the referent recipe, the owner-resolution recipe,
+the action binder identity, the term provenance, the decorated environments,
+the preflight vector, and the paired-row relation
+(`paired_native_position`). Also excluded, because they belong to support
+resolution and their inclusion would be a support-to-lineage back-edge: the
+resolved referent, resolved owner, support key, class ordinal, dependency
+ordinal, coverage position, and every footprint. A lineage row records that
+action introduced a dependency event; it does not record how support resolved
+it.
+
+Checked row admission requires, over the row and its independently projected
+census event:
+
+```text
+event.path_bindings.dependency.root            = ActionArguments
+event.path_bindings.dependency.result_schema   = Term
+event.result_schema                            = Term
+event.path_bindings.grammar_companion          = None
+event.path_bindings.operation_record_companion = None
+row.dependency_path      = event.path_bindings.dependency
+row.expected_judgment    = event.expected_judgment
+row.primitive            = FormalId of the unique enclosing
+                           CanonicalPrimitive(i) of event's dependency path
+row.lineage_ordinal      = the row's physical position
+row                      = the complete projection of exactly that event;
+                           no field may differ from the event's projected
+                           value.
+```
+
+The `Term` requirements are exact: subsection 10.18.2 fixes that every
+paired native descendant locus has nominal schema `Term`, and the companion
+copies its paired row's `nominal_result_schema` byte-for-byte, which lowering
+carries to the lowered `result_schema`. Under the frozen lowering law
+`lowered.result_schema = lowered.path_bindings.dependency.result_schema`,
+the two `Term` requirements coincide; both are stated for fail-closed
+redundancy. The two
+`None` requirements are exact: edge-27 companions arise only from paired
+native edges `{1,2,4,5,21}`, whose events carry no grammar or
+operation-record companion path under the frozen binding rule. Because
+`result_schema` is the constant `Term` and already occurs inside the stored
+dependency path, and both companion options are the constant `None`, none of
+the three is a row field; each is a checked admission constraint on the
+event, and a violating event is a fail-closed abort, never a row.
+
+The candidate and the total identity action supply the exact empty value:
+
+```text
+ActionIntroducedLineage_candidate =
+  QuotientActionIntroducedLineagePlanSharedV1(rows=[])
+
+CompileActionIntroducedLineage(B,[])
+  = QuotientActionIntroducedLineagePlanSharedV1(rows=[])
+
+CompileActionIntroducedLineage(B,A ++ [])
+  = CompileActionIntroducedLineage(B,A).
+```
+
+The proof obligation of this subsection is that the first two values are
+byte-identical, not merely isomorphic: both are the same fresh shared row
+type with a zero-length row vector, both canonically encode the zero length,
+and neither carries an option tag, sum tag, count field, digest, or
+candidate/action discriminator. This is the group-4 component of ledger item
+L5.2's literal-equality positive control. The third equation is the group-4
+image of the frozen `QAction` append law: appending an identity to an
+existing nonempty action changes no S1c2 stream segment, hence no projected
+event, hence no lineage row; it does not reset a nonempty lineage to `[]`.
+
+Wire-level shape at this boundary: the value is a bare vector, not an
+`Option`. Subsection 10.11.5 fixes `[]`, not `None`, as the identity/candidate
+occupancy of the group-4 position; the group-8 subject option retains `None`
+separately. An `Option`-wrapped lineage, a missing position, a
+candidate-schema variant without the position, or a nonempty candidate value
+is a fail-closed abort.
+
+OPEN-AT-S1C4: the enclosing four-position group-4 wrapper — the exact byte
+concatenation of principal, field, output, and action-introduced lineage
+inside `group_4_lineage` of root `0xfd` — is not fixed here. Section 11 fixes
+the group order and this section fixes the fourth position's value; the
+wrapper encoding, its interaction with the nested-use rule, and its final
+placement close only with ledger item 5 (the shared eight-group schema).
+
+### 10.20.2 Action-side lineage: independent census rerun and exact edge-27 projection
+
+For a retained base quotient context `B` and complete nonempty total
+flattened action `A` of the checked constructor kind, the lineage compiler
+independently reruns subsection 10.18.2's paired native/edge-27 event census
+and projects exactly the edge-27 events, in order, into lineage rows:
+
+```text
+CompileActionIntroducedLineage(B,A):
+  require B is the complete admitted candidate context of subsection 10.15.1
+  require A is the checked total flattened action of the constructor kind
+
+  if A.primitives=[]:
+    return QuotientActionIntroducedLineagePlanSharedV1(rows=[])
+
+  S_A = CompileInstantiatedActionSubject(B,A)
+  I_A = CompileActionPassA(B,A,S_A)
+  L_A = map(LowerActionPassA,I_A)
+
+  rows = []
+  for checked k in [0,L_A.len):
+    if I_A[k].edge=ActionIntroduced=27:
+      require I_A[k] is the exact IntroCompanion(i,r) of its earlier paired
+        native row r at the same local-vector index, where i is the checked
+        ordinal of the unique enclosing CanonicalPrimitive(i), with every
+        non-edge field byte-identical to r
+      require L_A[k].path_bindings.grammar_companion          = None
+      require L_A[k].path_bindings.operation_record_companion = None
+      require L_A[k].result_schema                            = Term
+      require L_A[k].path_bindings.dependency.result_schema   = Term
+      require the unique enclosing primitive of
+        L_A[k].path_bindings.dependency = CanonicalPrimitive(i)
+      rows.push(
+        (lineage_ordinal=checked_u32(rows.len),
+         primitive=FormalId(p_i),
+         dependency_path=L_A[k].path_bindings.dependency,
+         expected_judgment=L_A[k].expected_judgment))
+
+  require rows.len = N_27 = D_A
+  return QuotientActionIntroducedLineagePlanSharedV1(rows=rows).
+```
+
+The census rerun is primary, not a replay of a stored vector: the events are
+re-emitted by the frozen pure S1c2 pass-A compiler from `(B,A,S_A)` and
+lowered through the frozen nineteen-node `M_shared`. The frozen
+`CompileSharedActionGraphCore` reruns the same pure compilers internally
+from the same `(B,A,S_A)` and returns only the graph; no per-action census
+is stored, exposed, or compared, and census agreement between lineage
+projection and graph construction is exactly the functional determinism of
+the frozen pure compilers on identical inputs. Refactoring the graph core to
+accept or expose a census would reopen frozen S1c3 and is rejected. A stored
+lineage, graph, or eight-group value is never traversed to generate an
+event. `p_i` is the frozen locus of `CanonicalPrimitive(i)`, and
+`FormalId(p_i)` applies the frozen `EmbedActionPrimitiveLocus`, which
+rechecks `binder=CanonicalCompositeNaturalityBinder`,
+`primitive=CanonicalPrimitive(i)`, and the complete checked primitive
+ordinal; no compiler-only wrapper or provenance product is encoded in the
+row.
+
+The row order is the exact stream order. Root-6 order is, for each primitive:
+its one leading `ActionArgument=28` row, which is never projected, followed
+by the paired descendant walk in which every visited node emits its complete
+native local incidence vector `V` and then `[IntroCompanion(i,r) | r in V]`
+in the same order before recursing through children. The lineage vector is
+the subsequence of edge-27 events of that stream in stream order;
+`lineage_ordinal` renumbers contiguously within the subsequence and copies no
+stream position, dependency ordinal, or class ordinal.
+
+The exact counts are symbolic and inherited unchanged from subsection
+10.18.2 and the plan's §13 S1c2 closed-item ledger, which names the
+edge-27 count `N_27` (`N_27=D_A`): with `m=s.images.len`,
+
+```text
+TR(Var) = TR(Global) = 1
+TR(Sort) = TR(UnitType) = TR(Unit) = 0
+TR(Pi(x,y)) = TR(Sigma(x,y)) = TR(Lambda(x,y))
+            = TR(Apply(x,y)) = 2 + TR(x) + TR(y)
+TR(Pair(x,y,z)) = 3 + TR(x) + TR(y) + TR(z)
+TR(First(x)) = TR(Second(x)) = 1 + TR(x)
+
+D_sub(s) = checked_add(checked_mul(2,m),
+                       sum_(0<=k<m) TR(s.images[k]))
+
+D_A = sum_(0<=i<n) D_sub(theta_i)                    (substitution)
+D_A = sum_(0<=i<n) (D_sub(rho_i)+D_sub(sigma_i)
+                    +D_sub(theta_prime_i))           (context square)
+
+rows.len = N_27 = D_A
+total root-6 direct rows = n + 2*D_A.
+```
+
+Every arithmetic step is checked before vector reservation. The paired
+native edge image is exactly `{1,2,4,5,21}`; a projected event paired with an
+edge-27 row, an edge-28 row, a closure row (`24..26`), a wrapper, an endpoint
+context, a standalone-subject row, or any root `0..5` row is a fail-closed
+abort, because subsection 10.18.2 forbids such companions from existing.
+
+The no-support-read constraint is absolute. The projector may not inspect
+published group-6 dependencies, dependency or class ordinals, coverage rows,
+support keys, resolved referents or owners, any footprint, the preservation
+subjects, or a previously packaged support value. It reads the census events
+and nothing downstream of them. Symmetrically, no later step of this section
+reads the lineage value: the graph, closure, classes, coverage, projection,
+and footprints of subsections 10.20.3–10.20.4 take no lineage input. This
+retains the S1c2 noncircular boundary in both directions.
+
+Fail-closed aborts of this subsection: a census or lowering byte drift from
+the frozen S1c2/S1c3 values; a missing, extra, duplicated, reordered, or
+relabeled edge-27 event; a companion whose non-edge fields differ from its
+paired native row; a projected row whose fields differ from its event's
+lowered fields; `rows.len != D_A`; a nonempty row vector for an identity
+action; a noncontiguous or nonpositional `lineage_ordinal`; a support,
+footprint, class, coverage, or stored-lineage read during projection; or
+checked-arithmetic failure. No partial lineage value is published.
+
+### 10.20.3 Current-output seeds and the three independently recomputed footprints
+
+The three footprints are recomputed from the shared graph and the reindexed
+output-lineage slots only, mirroring the candidate pattern of subsection
+10.14.4 field-for-field. A stored footprint is never a selector; stored
+footprints are final equality targets only; and footprint comparison happens
+only after the complete shared graph exists.
+
+Let `G_A` be the complete shared graph value
+
+```text
+G_A = the complete QuotientSupportGraphPlanSharedV1 produced by
+      CompileSharedActionGraphCore(B,A), the subsection-10.19.4
+      current-owner-only closure suffix, and the frozen shared
+      key/class/coverage/projection equations
+```
+
+with the frozen identity laws
+
+```text
+CompileSharedActionGraphCore(B,[])    = EmbedCandidateGraph(B.G0)
+CompileSharedActionGraphCore(B,A++[]) = CompileSharedActionGraphCore(B,A).
+```
+
+The current and older projections are recomputed from the complete owner map
+of `G_A`, direct rows and closure suffix alike:
+
+```text
+current_projection = ExactOccurrenceFootprintV1(sort_unique([
+  q | entry in G_A.owner_map and entry.owner=Current(q,_)]))
+
+older_projection = ExactOlderPublicFootprintV1(sort_unique([
+  OlderPublicFootprintEntryV1(e,p)
+  | entry in G_A.owner_map and entry.owner=Older(e,p)]))
+```
+
+`Structural` owners enter neither value, exactly as in the candidate.
+`FormalAction` owners enter neither value and seed no closure: subsection
+10.16.3 freezes that formal owners seed no `Cl_b` suffix and enter none of
+the implementation, current-output, or prior-support footprints. Erasing a
+formal owner to smuggle its material into a history footprint, or filtering
+the owner map through a stored footprint, is a fail-closed abort.
+
+Current-output seeds are derived only from the reindexed output-lineage
+slots and the action-origin current occurrences actually reached there:
+
+```text
+OutLin_A = the exact output-lineage vector of the action-rebuilt
+  IndexedOutput realization, recomputed once from (B,A) by the frozen
+  A3 CanonicalActionResult equations and the receipt-free QG1c lineage
+  mirror; OutLin_[] = B.QLineage.output by complete ordered bytes
+
+OutputSeeds_A =
+  { entry.occurrence | entry in OutLin_A,
+    after checking its output ordinal, field path, raw leaf path,
+    and private-history-authenticated occurrence under Q1 }
+
+output_projection = ExactOccurrenceFootprintV1(
+  sort_unique(Cl_b(H_B,OutputSeeds_A))).
+```
+
+`H_B` is the unique Q1-bound private-history authority of subsection
+10.14.2 as generalized by 10.19.4; it is a dependent capability, not a field
+of `B` or an encoded handle. Each entry of `OutLin_A` has the frozen
+`OutputLineageEntryV1` shape `(output_ordinal, field_path, raw_leaf_path,
+occurrence)`; its occurrences are current-history occurrences authenticated
+under `Q1`, including those of action origin that the rebuilt output slots
+actually reach. Subsection 10.18.2's prohibition is enforced literally:
+projecting every root-6 edge-27 owner into the output seeds would
+incorrectly admit unused action material and is a fail-closed abort. The
+output projection is not a filter of the `IndexedOutput` coverage root or of
+whichever closure rows inherited that root; it is a separate traversal of
+the recomputed output lineage through the same exact `Cl_b`.
+
+The stored equality targets are read only after all three left sides exist.
+For the candidate and total identity action the target is the frozen
+`B.QFootprints`. For a nonempty action the target is the action-rebuilt
+group-5 footprint value
+
+```text
+QFootprints_A = the footprint value rebuilt once from (B,A) by the frozen
+  A3 CanonicalActionResult equations and the QG1c mirror
+  (QFootprints_[] = B.QFootprints by complete ordered bytes),
+```
+
+computed independently of the graph and of this section's lineage value.
+Only after `G_A`, `current_projection`, `older_projection`, and
+`output_projection` all exist does the compiler compare, in this order:
+
+```text
+current_projection = QFootprints_A.implementation
+older_projection   = QFootprints_A.prior_support
+output_projection  = QFootprints_A.current_output.
+```
+
+Any earlier read of `QFootprints_A` — as a selector of a recipe, terminal,
+closure seed or witness, class, coverage row, owner, or output seed — is an
+invariant abort. A comparison mismatch is a fail-closed abort publishing no
+partial graph, lineage, agreement, package, receipt, or R3 account.
+
+The agreement value is a fresh shared-typed copy of the candidate agreement
+shape, containing the three independently computed left sides:
+
+```text
+QuotientSupportFootprintAgreementPlanSharedV1 =
+  (current_projection:ExactOccurrenceFootprintV1,
+   older_projection:ExactOlderPublicFootprintV1,
+   output_projection:ExactOccurrenceFootprintV1).
+```
+
+For the total identity action, the frozen literal-equality law
+`CompileSharedActionGraphCore(B,[]) = EmbedCandidateGraph(B.G0)` plus the
+byte-identity of `OutLin_[]` with `B.QLineage.output` make all three left
+sides byte-identical to the candidate's subsection-10.14.4 values, because
+the fieldwise candidate graph embedding maps each owner variant to the same
+variant, preserves every `Current` owner's occurrence component and every
+`Older` owner payload byte-for-byte, and introduces no formal owner. A
+`Current` owner's location component is embedded, not byte-copied — an
+`AuxiliaryPath` location's symbolic `result_schema` tag shifts under the
+strict `0->0,1..10->+1,11..16->+2` mapping — but neither footprint
+comprehension reads it: the current projection reads only the occurrence
+`q` of `Current(q,_)` and the older projection only the `(e,p)` payload of
+`Older(e,p)`. The identity-action agreement value therefore equals the
+stored S1b3 agreement value fieldwise. This is the group-5/group-6 component of the L5.2 positive
+control.
+
+### 10.20.4 The candidate/action group-6 support package
+
+Subsection 10.11.2 fixes that group 6 stores only the semantic
+graph/projection, its receipt-free footprint agreement, and — after S1b3 and
+the preservation cut — the three separate preservation subjects. This
+subsection closes that composition at the compiler-plan boundary:
+
+```text
+QuotientSemanticSupportPlanSharedV1 =
+  (graph:QuotientSupportGraphPlanSharedV1,
+   footprint_agreement:QuotientSupportFootprintAgreementPlanSharedV1,
+   preservation_subjects:QuotientSupportPreservationSubjectsPlanSharedV1).
+```
+
+Coverage and projection travel inside `graph` as its frozen `coverage` and
+`projection` fields; no second copy, digest, count certificate, or reordered
+view is stored. `preservation_subjects` is the exact frozen S1c3 aggregate
+with fields `normalization`, `admissible_renaming`, and `reindexing` in that
+order, each containing its own physical `Seed_c`, and no byte of any
+template changes. The packaging census is inherited unchanged from
+subsection 10.19.5 and this cut adds zero to it:
+
+```text
+subjects                      = 3
+physical seeds                = 3
+preservation source paths     = 3*PR_c
+binder declarations           = 5
+endpoint modes                = 6
+PureSupportFunctionProjection = 6
+Equality nodes                = 3
+total proposition nodes       = 9
+admission-premise values      = 0
+proof/evidence values         = 0,
+```
+
+with `3*PR_c = [60,63,63,63,60,63,75+3*h_6]` in constructor order `0..6`,
+QG2's separate census remaining exactly `5*PR_c`, and the enclosing quotient
+retaining exactly its two admission values.
+
+The candidate/action packaging difference is structural, not schematic.
+There is one package type with no outer candidate/action sum tag. The
+candidate and total identity action supply
+
+```text
+package_candidate =
+  (graph=EmbedCandidateGraph(B.G0),
+   footprint_agreement=the identity agreement value of
+     subsection 10.20.3, fieldwise equal to the stored S1b3 agreement,
+   preservation_subjects=the frozen S1c3 aggregate),
+```
+
+and a nonempty action supplies the fully rebuilt
+
+```text
+package_action =
+  (graph=G_A,
+   footprint_agreement=the subsection-10.20.3 action agreement,
+   preservation_subjects=the frozen S1c3 aggregate).
+```
+
+Group 6 is a common position of the eventual eight-group value: it gains no
+top-level action-owned field. The only top-level action-owned positions
+remain group 4's `action_introduced` vector (subsection 10.20.1) and group
+8's optional instantiated action subject. For a nonempty action the common
+group-6 bytes may nevertheless differ from the candidate's, and may contain
+nested action-only variants — `ActionDereferenced/ActionProject/
+ActionProjectGrammar` loci, `Formal` binders, `FormalAction` referents,
+owners, and keys, and edge-27/28 rows — exactly as section 11 provides. A
+rebuild difference not accounted for by a nested action-only variant is
+ledger item L5.4's fail-closed abort, checked at item 5, not here.
+
+The subsection-10.19.6 truth-audit gate is retained explicitly and
+unchanged. The three packaged descriptors are typed proposition syntax and
+store no inhabitant, proof/evidence value, or theorem authority.
+Uninhabitedness is proved only for the nonempty full-action reindexing
+equality: the normalization subject holds definitionally through the
+quotient normal-form eliminator, the total-identity-action reindexing
+subject holds literally, and a renaming that setwise stabilizes the
+projection may satisfy the renaming subject — none of which mints, stores,
+or licenses any proof value here. The renaming subject is
+not a generic equivariance theorem; the current full-projection reindexing
+equality `Full(ProjectSeed)=Full(ReindexedSeed)` is uninhabited for every
+nonempty action, because every primitive contributes a formal-action key
+absent from the candidate endpoint. Nothing in this section — and no later
+compiler, classifier, selector, provenance calculation, footprint criterion,
+class relation, `GCap` audit, or authority — may use either unproved
+equality as a compiler fact. Packaging asserts concrete typing and
+denotation only. A separately versioned theory corrigendum (equivariant
+renaming; transported/restricted/extension/support-delta action
+reconstruction) remains mandatory before JG2b2b3 may mint universal
+preservation authority; this section makes no choice among those relations.
+
+OPEN-AT-S1C4: the final encoded group-6 name — including whether the
+eventual frozen record retires the S1a placeholder name
+`QuotientSemanticSupportCandidateV1` in favor of this shared plan shape —
+its field order and encoding, and its sixth-group placement under root
+`0xfd` are determined by ledger item 5, which alone freezes names, fields,
+and layout. R2e is limited to symbolic-schema lowering, numerical `TypeIdV1`
+assignment, and representative-byte comparison; it may not choose a name,
+add, remove, or reorder a field, or change layout. This subsection fixes the
+exact three-field composition and its occupancy; it does not encode root
+`0xfd`.
+
+### 10.20.5 Forbidden inputs, back-edge audit, transaction boundary, and later cuts
+
+Construction is one transaction in this order:
+
+1. validate the immutable inputs byte-for-byte: candidate `M_nf`, `G0` and
+   its agreement, the preservation kernel, S1c0–S1c3 (stream, census,
+   `M_shared`, embeddings, shared sums, graph core, subject aggregate), and
+   all QG2 bytes;
+2. rerun the paired native/edge-27 event census (`I_A`, `L_A`) by the frozen
+   pure S1c2 compilers from `(B,A,S_A)`; agreement with the census rerun
+   inside step-3 graph construction is the functional determinism of the
+   same pure compilers on identical inputs, never a comparison against
+   stored or exposed graph-core state;
+3. construct the complete shared graph `G_A` by the frozen subsection-10.19.4
+   core, closure suffix, and key/class/coverage/projection equations;
+4. project exactly the edge-27 events into the group-4
+   action-introduced-lineage value (zero rows for the candidate/identity),
+   preserving the frozen dependency direction `shared support -> group-4
+   lineage`; no step reads this value, and it is committed only in step 7;
+5. recompute `current_projection`, `older_projection`, and
+   `output_projection` from `G_A`'s owner map, the reindexed output-lineage
+   slots, and `Cl_b`;
+6. compare the three values against the stored targets, in the fixed order,
+   only now reading `QFootprints_A`;
+7. package `(graph, footprint_agreement, preservation_subjects)` as the
+   group-6 support value and pair it with the group-4 lineage value; and
+8. stop. The shared eight-group schema, the second transitive scan, root
+   `0xfd`, and `TypeIdV1` assignment are later cuts.
+
+Fail-closed rejections, each an abort with no partial publication: any
+support-to-lineage back-edge (a lineage row, order, count, or field selected
+by a published dependency, class, coverage row, support key, resolved
+referent/owner, or footprint); any footprint-to-owner back-edge (an owner,
+closure seed, witness, class, or output seed selected by a stored
+footprint); any lineage-to-stream back-edge (a stored lineage vector
+traversed to generate or select an edge-27 event); an R3 account; a copied
+raw, source, owner, or class ordinal from R2c or a representative; a
+construction transcript; a replay; a receipt; an evidence target; a
+representative path, support, or ordinal; a semantic SR2 result; or `nu`.
+The compiler likewise reads no `GCap`, `gamma`, or semantic-novelty datum,
+no QG2 stored route vector, no source or syntax copy, and no numerical
+`TypeIdV1`.
+
+Fresh quotient ordinals appear only as checked positions in the
+independently reconstructed values: `lineage_ordinal` renumbers the
+projected subsequence, and every graph ordinal is the frozen shared
+reconstruction. Copying an R2c raw/source/owner coordinate, or letting any
+such coordinate select a lineage row, seed, or package field, is invalid.
+
+Holding `(B,A)` and the applicable formal semantic environment fixed while
+changing only forbidden material — caller association, identity postfixes,
+intermediate action images, representative traces, receipts, transcripts,
+R3 payloads, semantic SR2 results, `nu` — leaves the rerun census, every
+lineage row byte, the shared graph, all three recomputed footprints, the
+agreement value, and the complete package byte-unchanged. Together with
+step 1's byte-for-byte input validation and the subsection-10.20.2
+census/lowering byte-drift aborts, this extends the S1b3/S1c3
+representative-independence theorems to the lineage and package boundary.
+
+The second transitive no-R3/no-representative/no-forbidden-raw scan is not
+run here. It remains ledger item 6, after item 5's shared eight-group
+schema, together with the QG2 two-admission and `5*PR_c` reproofs and the
+independent QG3 `3*PR_c` proof. Running a partial scan at this cut and
+citing it later would double-count an audit and is itself a defect.
+
+This closes QG3-S1c4 at the compiler-plan boundary. It fixes exactly: the
+`QuotientActionIntroducedLineageRowPlanSharedV1` and
+`QuotientActionIntroducedLineagePlanSharedV1` shapes and their field
+admission checks; the byte-identical empty candidate/identity lineage value
+and the identity-append law; the independent census-rerun projector with
+exact stream order, `rows.len=N_27=D_A`, and the no-support-read constraint;
+the three footprint recomputation equations over the shared graph and the
+reindexed output-lineage slots, with stored footprints demoted to final
+equality targets read only after the complete shared graph exists; the
+`QuotientSupportFootprintAgreementPlanSharedV1` value and its
+identity-action literal equality with the stored S1b3 agreement; the
+three-field `QuotientSemanticSupportPlanSharedV1` group-6 composition for
+both candidate and action; and the retained, unweakened 10.19.6
+theorem/corrigendum gate. It does NOT close: the shared eight-group schema
+or any `group_4` wrapper encoding (ledger item 5, L5.1–L5.5); the second
+transitive scan or any reproof (item 6, L6.1–L6.6); root `0xfd`; numerical
+`TypeIdV1` assignments; executable JG2b2b2 authority; or any theorem — the
+three preservation descriptors remain unproved typed proposition syntax,
+and the nonempty-action obstruction to full-projection equality remains a
+frozen input to the mandatory theory corrigendum. This section mints no
+verified profile, executable interface, envelope census, pair disposition,
+occurrence classification, theorem, generic law, cubical bridge, `GCap`,
+`gamma`, or selective authority.
+
 ## 11. Eight-group root-`0xfd` frontier
 
 A3 fixes exactly these ordered semantic groups:
@@ -13582,7 +14179,7 @@ Root `0xfd` and slot `9[0]` may freeze only after:
    and the exact 8/11 primary subject programs with neutral square subjects,
    exact `5*PR_c` route copies, and exactly two admission values.
 3. **QG3 — support and action — ACTIVE; S1a/D1, S1b1, S1b2, S1b3, THE
-   PRESERVATION KERNEL, AND S1c0--S1c3 CLOSED AT THEIR STATED REPRESENTATION
+   PRESERVATION KERNEL, AND S1c0--S1c4 CLOSED AT THEIR STATED REPRESENTATION
    BOUNDARIES.** Section
    10.11 fixes the exact R2c field disposition, seven semantic support roots,
    fresh graph/coverage ABI, and complete payload-free ordinary field-
@@ -13612,10 +14209,12 @@ Root `0xfd` and slot `9[0]` may freeze only after:
    candidate embedding, total action graph/projection core, and concrete
    typing and denotation of the three preservation-subject descriptors. It
    proves no preservation theorem and records the exact nonempty-action
-   obstruction to the current full-projection equality. Action-introduced
-   lineage, footprint agreement, support packaging, and the shared eight-group
-   shape remain. QG3 then requires a second transitive no-R3/no-
-   representative scan.
+   obstruction to the current full-projection equality. Section 10.20 closes
+   action-introduced lineage, the three independently recomputed footprints
+   and their agreement, and the candidate/action group-6 support package at
+   the compiler-plan boundary. The shared eight-group shape remains (plan
+   ledger item 5). QG3 then requires a second transitive no-R3/no-
+   representative scan (plan ledger item 6).
 
 After QG1--QG3, R2d must close full key comparison, rooted outcomes and classes,
 root `0xe8` coverage, root `0xe9` dispositions, base-relative action rebuild,
@@ -13623,24 +14222,25 @@ roots `0xfe`/`0xff`, Level-II tag 4, joined root `0xe3`, and all slot-10/11
 runtime types. R3 then fills the already qualified failure/resource fields; R2e
 assigns final TypeIds and joins the registry; R4 regenerates fixtures.
 
-The next lawful R2d move is QG3-S1c4's action lineage, footprint, and support
-package. It must independently rerun subsection 10.18.2's paired-event census
-and project exactly the edge-27 events into action-introduced lineage, with the
-candidate and total identity supplying the exact empty value. It must derive
-current-output seeds only from the reindexed output-lineage slots and action-
-origin current occurrences actually reached there; recompute implementation,
-prior-support, and current-output footprints without using a stored footprint
-as a selector; compare those results only after the complete shared graph
-exists; and package the graph, coverage/projection, footprint agreement, and
-three typed preservation descriptors as the candidate/action group-6 support.
-Candidate `M_nf`, the S1b3 graph, the preservation kernel, S1c0--S1c3, and all
-QG2 bytes are immutable inputs. Subject syntax is not proof evidence: the
-section-10.19.6 preservation-truth obstruction remains a mandatory theory
-corrigendum before any later universal authority may use those equalities.
-The work must reject every support-to-lineage or footprint-to-owner back-edge,
-R3 account, copied raw/source/owner/class ordinal, construction transcript,
-replay, receipt, evidence target, representative, semantic SR2 result, or
-`nu`.
+The next lawful R2d move is QG3 ledger items 5 and 6 (plan §13.2). Item 5
+closes the shared eight-group schema: the frozen section-11 `0xfd` layout
+with byte-identical candidate/total-identity projections, group-4 lineage
+and the group-8 optional action subject as the only additional top-level
+action-owned fields, and every common position deterministically rebuilt
+from the original base (L5.1--L5.5), including the final group-6 name, field
+order/encoding, and sixth-group placement left open by subsection 10.20.4.
+Item 6 runs the second transitive no-R3/no-representative/no-forbidden-raw
+scan, reproves QG2's exactly two admissions and exact `5*PR_c` route
+partition, independently proves the QG3 `3*PR_c` partition, and freezes
+fail-closed arithmetic, ordering, independence, and action-base binding
+(L6.1--L6.6). Candidate `M_nf`, the S1b3 graph, the preservation kernel,
+S1c0--S1c4, and all QG2 bytes are immutable inputs. Subject syntax is not
+proof evidence: the section-10.19.6 preservation-truth obstruction remains a
+mandatory theory corrigendum before any later universal authority may use
+those equalities. The work must reject every support-to-lineage or
+footprint-to-owner back-edge, R3 account, copied raw/source/owner/class
+ordinal, construction transcript, replay, receipt, evidence target,
+representative, semantic SR2 result, or `nu`.
 
 This record selects no history, occurrence, constructor, raw code, match,
 class, action, or result. It mints no verified profile, executable interface,
