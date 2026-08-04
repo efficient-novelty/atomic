@@ -1,9 +1,19 @@
 # Clean Experimental Programme for Law-Profile Adjudication
 
-**Status:** integrated into the plan on 2026-08-01 (plan Phases K0–K3,
-amended B2 statement, Phase J productivity-register deliverable,
-architecture §12.3 extension, and the frontier-document cross-link);
-no semantic or live-run authority  
+**Status:** integrated and theory-repaired on 2026-08-01, with the Phase JG
+frontier updated through particular-instance JG2b2b1, discharged JG2b2b2-P0
+and JG2b2b2a-A0 audits, the frozen A1 common envelope, frozen A2-O ordinary
+carrier/action substrate, frozen A3-O ordinary constructor realization/
+classifier specification, A4-R1 ordinary signature/source closure, and A4-R2a
+acyclic schema foundation, frozen A4-R2b level-relation schemas, rejected A4-O
+RC1, active A4-R2c envelope/evidence/support/subject schema closure, and open A2-C cubical
+ontologies on 2026-08-02 (independent
+semantic-novelty and generative-capacity registers, mandatory Phase JG, six
+profiles across `C0/C1 × {S0,S+,S↑}`, and a held-out Genesis ledger); no live-run
+authority. **Amended 2026-08-04 (§17): the registered experiment is now the
+two-by-four `C0/C1 × {S0,S_W,S+,S↑}` eight-profile design; the 2x3 design in
+the body of this document is superseded and retained as history.**
+
 **Insertion realized:** after `Phase K0 — Formulate and freeze the contextual-internalization profile`; the prior `Phase K — Resume autonomous Genesis research` is renamed `Phase K3` and made conditional on the factorial result.
 
 This addition turns the existing profile-adoption discipline into a controlled comparative experiment. It does not alter the frozen H3/H4 result, does not make the historical fifteen-step corpus production evidence, and does not grant a windowed bar or contextual internalization canonical law status in advance of the experiment.
@@ -13,18 +23,19 @@ This addition turns the existing profile-adoption discipline into a controlled c
 The next scientific question is not merely whether one proposed profile can continue beyond the four-act halt. It is which explanatory work is done by:
 
 1. the **constitutive interpretation of debt**; and
-2. the **selective requirement of productive discharge**.
+2. the **strength of the selective predicate**: discharge, positive
+   generativity, or windowed acceleration.
 
-These hypotheses must be varied independently. Otherwise a continuing result cannot tell us whether richer structure arose because the world owed a richer public interface, because a productivity gate rejected sterile payments, or because both were needed.
+These hypotheses must be varied independently. Otherwise a continuing result cannot tell us whether richer structure arose because the world owed a richer public interface, because a generative-capacity gate rejected zero-gain payments, or because both were needed.
 
-The programme therefore uses a controlled two-by-two profile design:
+The programme therefore uses a controlled two-by-three profile design:
 
 ```text
-                              Selective profile
-                       total discharge    productive discharge
+                                  Selective profile
+                         S0 discharge   S+ gamma>0   S↑ acceleration
 Constitutive profile
-local completion              A                    B
-contextual internalization    C                    D
+local completion               L0           L+            L↑
+contextual internalization     I0           I+            I↑
 ```
 
 The historical Genesis sequence and recognizable mathematical or physical structures remain held-out interpretation evidence. They may be compared with sealed anonymous outputs only after every profile in the experiment has completed.
@@ -44,15 +55,15 @@ This result is not rerun or rewritten.
 
 ### 2.2 Common-substrate replication A
 
-For a clean factorial comparison, profile A should also be replicated on the same expanded certificate fragment, candidate grammar, theorem stack, quotient, and resource contract used by profiles C and D. The frozen A0 artifact remains the historical baseline; the common-substrate A run is a new replication profile.
+For a clean factorial comparison, profile `L0` should also be replicated on the same expanded certificate fragment, candidate grammar, theorem stack, quotient, and resource contract used by all contextual profiles. The frozen A0 artifact remains the historical baseline; the common-substrate `L0` run is a new replication profile.
 
-This is necessary because contextual internalization may require a richer certificate surface, for example Sigma-shaped syntax. A/C and B/D cannot be causally compared if the contextual rows have access to a richer basis than the local-completion rows.
+This is necessary because contextual internalization may require a richer certificate surface, for example Sigma-shaped syntax. No local/contextual pair can be causally compared if the contextual row has access to a richer basis.
 
-### 2.3 Negative-control status of B
+### 2.3 Negative-control status of L+ and L↑
 
-Profile B is an implementation and discrimination control, not independent confirmation of the productivity hypothesis. It is designed after the direct-eliminator result is known. Its role is to establish that the frozen productive-discharge checker behaves exactly as specified when applied to the local-completion cone.
+Profiles `L+` and `L↑` are implementation and discrimination controls, not independent confirmation of either generative hypothesis. They are designed after the direct-eliminator result is known. Their role is to establish that the positive-gain and acceleration checkers behave exactly as specified on the local-completion cone.
 
-The main prospective comparison is therefore C versus D, frozen before either contextual profile is exposed to the registered Genesis prefix.
+The main prospective comparison is therefore `I0` versus `I+` versus `I↑`, frozen before any contextual profile is exposed to the registered Genesis prefix.
 
 ## 3. Factorial profile matrix
 
@@ -65,7 +76,8 @@ Each profile identity is the tuple
   theorem_stack_digest,
   constitutive_manifest_digest,
   selective_manifest_digest,
-  productivity_register_digest,
+  generative_capability_grammar_digest,
+  generative_audit_protocol_digest,
   quotient_digest,
   free_sealing_digest,
   resource_contract_digest
@@ -76,10 +88,12 @@ No profile may differ from another in an unrecorded component.
 
 | Profile | Constitutive manifest | Selective manifest | Scientific role |
 | --- | --- | --- | --- |
-| **A — Local / Discharge** | owner-specific inductive use and computation completion | total discharge only | common-substrate replication of the frozen local profile |
-| **B — Local / Productive** | identical to A | total discharge plus the frozen windowed productivity gate | negative control for the selective rule |
-| **C — Contextual / Discharge** | constitutive self-containment and least public internalization of reindexing | total discharge only | tests whether contextual debt alone creates a self-propagating world |
-| **D — Contextual / Productive** | identical to C | identical productive gate to B | tests whether both richer debt and productive selection are needed |
+| **L0 — Local / Discharge** | owner-specific inductive use and computation completion | total discharge only | common-substrate replication of the frozen local profile |
+| **L+ — Local / Positive gain** | identical to L0 | total discharge plus certified `gamma > 0` | known local-control test for positive generativity |
+| **L↑ — Local / Acceleration** | identical to L0 | total discharge plus strict windowed `gamma/kappa` clearance | known local-control test for the acceleration ratchet |
+| **I0 — Contextual / Discharge** | constitutive self-containment and least public internalization of reindexing | total discharge only | tests whether contextual debt alone creates a self-propagating world |
+| **I+ — Contextual / Positive gain** | identical to I0 | identical positive-gain gate to L+ | tests whether contextual payments enlarge reusable capacity |
+| **I↑ — Contextual / Acceleration** | identical to I0 | identical acceleration gate to L↑ | tests whether strict acceleration adds explanatory discrimination |
 
 Target-neutral working identifiers:
 
@@ -87,19 +101,22 @@ Target-neutral working identifiers:
 C0 = constitutive-local-completion-v1
 C1 = constitutive-contextual-internalization-v1
 S0 = selective-total-discharge-v1
-S1 = selective-productive-discharge-window2-v1
+S+ = selective-positive-generative-gain-v1
+S↑ = selective-generative-acceleration-window2-v1
 
-A = C0 × S0
-B = C0 × S1
-C = C1 × S0
-D = C1 × S1
+L0 = C0 × S0
+L+ = C0 × S+
+L↑ = C0 × S↑
+I0 = C1 × S0
+I+ = C1 × S+
+I↑ = C1 × S↑
 ```
 
 The identifiers must not mention expected dischargers, the number fifteen, Pi, Sigma, physics, or an anticipated outcome.
 
 ## 4. Controlled variables
 
-All four profiles must use the same:
+All six profiles must use the same:
 
 - registered Law V2A bootstrap bytes;
 - anonymous public basis;
@@ -109,17 +126,20 @@ All four profiles must use the same:
 - candidate-construction grammar, except where a constitutive manifest lawfully determines which demand ports are live;
 - rewrite authority;
 - semantic-family and cost authority;
+- generative-capability grammar, carrier, quotient, weakening, marginal,
+  strict-enlargement, and provenance authorities;
 - equivalence quotient;
 - free-sealing operation;
 - resource bounds;
 - canonical ordering used only for enumeration and serialization;
 - oracle firewall; and
-- branch-local width-two memory convention.
+- sealed-interface support/activation policy shared across profiles, with a
+  branch-local two-positive-act baseline only for `S↑`.
 
 Only two factors may vary:
 
 1. `C0` versus `C1`, which changes the obligation profile; and
-2. `S0` versus `S1`, which changes acceptance after complete discharger enumeration.
+2. `S0` versus `S+` versus `S↑`, which changes acceptance after complete discharger enumeration.
 
 A profile-specific candidate list, expected family inventory, expected cost, expected value, future-viability rule, or target-shaped grammar invalidates the comparison.
 
@@ -147,7 +167,8 @@ Before freeze, `C1` must decide and document:
 - whether contextual debt replaces or composes with local inductive-completion debt;
 - the finite universal-property port grammar;
 - the mediating-map and uniqueness contract;
-- interaction with the width-two window;
+- opaque-export support factorization and its separation from the `S↑`
+  two-act productivity statistic;
 - behavior for trivial or equivalence-to-identity reindexing;
 - support, origin, weakening, and expiration; and
 - the exact certificate-fragment boundary.
@@ -158,7 +179,12 @@ If the relation between local and contextual ledgers is underdetermined by the r
 
 ### 6.1 S0 — Total discharge
 
-For a nonempty live obligation profile `O_H`, `S0` accepts every quotient class `x` satisfying:
+First compute the complete positive activation carrier from the sealed public
+grammar. Classify each activation independently as
+`Derivable(witness)`, `Underivable(complete_negative_certificate)`, or
+`Unknown`; only the certified-underivable residual forms `O_H`, and any
+`Unknown` blocks a complete ledger claim. For a nonempty `O_H`, `S0` accepts
+every quotient class `x` satisfying:
 
 ```text
 ConstitutivelyAdmissible(H, x)
@@ -169,60 +195,64 @@ and FreeSealingAvailable(H, x)
 
 All accepted inequivalent classes survive as branches. There is no ranking, maximizing, minimal-positive-overshoot rule, hash tie-breaker, or preferred branch.
 
-### 6.2 S1 — Productive discharge
+### 6.2 S+ — Positive generativity
 
-`S1` requires every condition in `S0` and additionally requires the candidate to clear a pre-frozen branch-local productivity standard.
-
-For an adopted productivity register `M`, define:
-
-```text
-rho_M(H, x) = M_H(x) / kappa_H(x)
-```
-
-for positive-cost acts, and define the prior width-two weighted standard on a branch by:
+`S+` requires every condition in `S0` and a complete independent
+generative-capacity audit proving:
 
 ```text
-Bar_M(n) = (M_{n-1} + M_{n-2}) / (kappa_{n-1} + kappa_{n-2}).
+gamma_H(x) > 0
 ```
 
-The primary proposed gate is:
+It tests whether every constitutive act must enlarge reusable operational
+capacity. It imposes no acceleration condition and no ranking.
+
+### 6.3 S↑ — Windowed generative acceleration
+
+`S↑` requires every condition in `S0`, a certified positive candidate cost,
+and complete `gamma` authority. Its branch-local prior standard is:
 
 ```text
-rho_M(H_n, x) > Bar_M(n).
+Bar_gamma(n) =
+  (gamma_{n-1} + gamma_{n-2})
+  / (kappa_{n-1} + kappa_{n-2})
 ```
 
-The strict inequality, prior-window formula, branch-locality, and startup convention must be frozen before execution. The shifted-window ratchet
+and the frozen gate is:
 
 ```text
-(M_H(x) + M_n) / (kappa_H(x) + kappa_n)
-    >
-(M_n + M_{n-1}) / (kappa_n + kappa_{n-1})
+gamma_Hn(x) / kappa_Hn(x) > Bar_gamma(n)
 ```
 
-is a distinct hypothesis and may be recorded as a diagnostic or separately frozen profile, but it must not be substituted after observing a result.
+The strict inequality, prior-window formula, branch-locality, nonzero
+denominator, and startup convention must be frozen before execution. JG9 must
+issue both prior `(kappa,gamma)` pairs; startup values may not be assigned by
+hand.
 
-The gate has no ranking authority:
+Neither generative gate has ranking authority:
 
 - every complete discharger that clears survives;
 - no score orders survivors;
 - no candidate is selected by minimal or maximal overshoot; and
 - if no complete discharger clears, the result is a certified selective blockage, not permission to choose the least failure.
 
-The bar never generates candidates or debts. It can reject a complete payment; it cannot manufacture a richer payment.
+The predicates never generate candidates or debts. They can reject a complete
+payment; they cannot manufacture a richer payment.
 
-### 6.3 Distinct outcomes
+### 6.4 Distinct outcomes
 
 The engine must distinguish:
 
 ```text
 Halted
-  the complete live obligation profile is empty before selection;
+  activation coverage and derivability classification are complete, no row is
+  Unknown, and every activation is certified derivable before selection;
 
 ConstitutivelyBlocked
   live debt exists, complete enumeration succeeded, and no total discharger exists;
 
 SelectivelyBlocked
-  total dischargers exist, but none pass the frozen productive gate;
+  total dischargers exist, but none pass the frozen S+ or S↑ gate;
 
 OutsideFragment
   a required demand, candidate, audit, or quotient lies outside the frozen fragment;
@@ -234,117 +264,125 @@ Advanced(cone)
   one or more quotient classes satisfy the profile and are freely sealed.
 ```
 
-Search failure, resource exhaustion, or an undefined bar may yield only `Unknown`.
+Search failure, resource exhaustion, missing mandatory `gamma`, or an undefined
+bar may yield only `Unknown`. An undefined optional `nu` diagnostic does not
+make selection `Unknown`.
 
-Zero-cost theorem readouts are not positive-cost acts, do not enter the two-act window, and do not restart a halted history.
+Zero-cost theorem readouts are not positive-cost acts, do not enter the `S↑`
+two-positive-cost-act baseline, and do not restart a halted history.
 
-## 7. Productivity-register adjudication
+## 7. Independent-register adjudication
 
-The productive profile cannot be frozen merely by writing down a threshold. It requires an authoritative local register for every bootstrap and candidate act used by the bar.
+### 7.0 Theory-alignment decision (adjudicated 2026-08-01)
 
-### 7.0 Mandatory theory-alignment blocker (registered 2026-08-01)
-
-This experimental proposal is not currently aligned with the book's stated
-Selective Law. Chapter 4 makes `gamma/kappa` authoritative, calls
-`nu/kappa` diagnostic, and requires two prior certified `(kappa, gamma)`
-acts before selective jurisdiction. Sections 7.1–7.3 below instead register
-`nu` and `gamma` as competing candidates. Phase K1 and every live factorial
-run are therefore blocked until the law and programme are reconciled by an
-independently reviewed pre-exposure decision.
-
-The inconsistency is stronger than a naming mismatch. Chapter 4 states
-`0 <= gamma <= nu` and requires strict clearance of the nonnegative
-width-two bar for every positive-cost accepted act. The Genesis mathematics
-chapter records Step 9 as `(kappa, nu) = (4, 0)` and Step 12 as `(6, 0)`.
-Both force `gamma = 0`; neither can strictly exceed any nonnegative bar.
-Consequently the current Selective Law and the claimed fifteen-step ledger
-cannot both be correct as written.
-
-Permissible repairs must be frozen without consulting which alternative
-recovers the desired trace. If Chapter 4 is retained, Phase JG becomes
-mandatory and the incompatible trace claims must be repaired or rejected.
-If another register is to govern selection, Chapter 4 and every dependent
-programme statement must be explicitly revised, reviewed, and re-frozen.
-This section records the blocker and authorizes neither route.
-
-### 7.1 Semantic-family productivity candidate
-
-The first experimental candidate register is the existing semantic-family
-quantity. Under the current Chapter 4 hypothesis it is diagnostic only and
-cannot be silently promoted to S1:
+The prior blocker exposed a category error: generative gain had been described
+as reusable operational capacity but defined as a subset of semantic novelty.
+The adopted repair is:
 
 ```text
-M = nu
-rho_nu = nu / kappa.
+nu    = marginal classes in the independent Sem_2 quotient
+gamma = marginal classes in the independent GCap_2 quotient
+
+no universal ordering is imposed between nu and gamma
 ```
 
-This profile may run only after Phase J provides:
+Semantic novelty is an optional diagnostic. Generative gain is authoritative
+only for `S+` and `S↑`. The semantic SR2 theorem and its four-role vocabulary
+remain unchanged: both current vectors still have `nu = UndefinedAudit`, not
+zero. That failure does not veto selection and may not be bypassed by reusing
+or enlarging semantic roles for `gamma`.
 
-- complete pre/post semantic-family carriers;
-- a complete family quotient;
-- weakening and restriction;
-- marginal-family extraction;
-- first-irreducible kernel cost;
-- provenance injection; and
-- certified values for the two bootstrap acts that initialize the first guarded bar.
+The Genesis chapter now records Steps 9 and 12 only as historical manuscript
+interpretations with `nu_historical = 0`. Their Law-V2 semantic values are
+uncertified and their generative values are `Unknown`.
 
-The carrier, quotient, derived weakening/restriction, exact marginal set,
-exact empty demand bases, restricted current-fragment cost, and exhaustive
-dependency support are now discharged for both registered vectors. They do
-not issue `nu`. Instead, the frozen SR2 codomain has now been checked and both
-vectors carry a certified pigeonhole obstruction: no total typed,
-role-preserving injective provenance assignment exists. Consequently `nu` is
-undefined, not zero, and this profile may not run on either vector without an
-independently motivated and pre-exposure-frozen law change. The obstruction is
-evidence against changing roles or receipts to fit a held-out trace.
+### 7.1 Optional semantic diagnostic
 
-Historical structural values may not be substituted for missing semantic-family values.
+The existing Phase J semantic carrier, quotient, weakening, marginal, and SR2
+layers remain valuable diagnostic evidence. Their result type is:
 
-### 7.2 Generative-capacity productivity required by current Chapter 4
+```text
+nu_H(x) in Natural | UndefinedAudit
+```
 
-The current Chapter 4 hypothesis requires a proof-bearing
-generative-capacity register, but no authoritative theorem package exists
-yet. A target-neutral provisional definition is:
+Neither `S0`, `S+`, nor `S↑` consumes `nu`. Historical structural counts may
+not substitute for an undefined semantic audit, and the exact negative SR2
+certificate remains sealed evidence against post-result role changes.
+
+### 7.2 Mandatory generative-capacity authority
+
+Define independently:
 
 ```text
 GCap_2(H)
-  = the complete finite quotient of reusable demand/compiler-family
-    capabilities enabled by H under the frozen scheme calculus;
+  = the complete finite quotient of irreducible reusable operational
+    capabilities enabled by H under the frozen capability grammar;
 
 gamma_H(x)
-  = |GCap_2(I(H, x)) setminus image(weakening_x)|;
-
-rho_gamma(H, x)
-  = gamma_H(x) / kappa_H(x).
+  = |GCap_2(I(H, x)) setminus image(wk_GCap_x)|.
 ```
 
-`gamma` must measure immediately certified reusable capacity, not the observed length or content of the future trace. It must not count an actual later success, anticipated physics, target similarity, or an oracle-defined notion of interestingness.
+The mandatory Phase JG sequence is:
 
-Before `gamma` can receive selective authority it needs a separate theorem stack:
+1. **JG1 capability grammar:** freeze exact roles, admission obligations, and
+   receipt-source forms without Genesis access;
+2. **JG2 native carrier:** first freeze the finite constructor/interface
+   grammar and exact stage surface (JG2a); derive a replayed contiguous chain
+   and birth index relative to the supplied chain (JG2b1a); freeze the
+   prospective sealed-log protocol (JG2b1b0), own every append in a linear
+   producer (JG2b1b1), and independently certify the exact finite history
+   through its producer-designated finalized head (JG2b1b2); freeze the
+   substitution/naturality entry protocol (JG2b2a), freeze the history-free
+   structural occurrence grammar (JG2b2b0), derive particular open typed
+   substitutions/context morphisms through two aggregate kernel batches--first
+   exact raw contexts/images at internally derived raw types, then a rebuilt
+   normalized proposal--without a universal claim (JG2b2b1), audit the
+   cubical-adequacy boundary (JG2b2b2a-A0), freeze the common proof-carrying
+   envelope protocol (A1), freeze the ordinary carrier/action substrate with
+   sort-owned structure for nine ordered sorts and its constructor-parametric
+   finite proposal operator (A2-O), register but keep open the distinct cubical
+   claim-contract ontologies (A2-C), freeze constructor-owned ordinary
+   telescopes, slot grammars, checked realization/classifier predicates,
+   principal-root selectors, and naturality subjects for seven ordered
+   constructors (A3-O), close the selectable ordinary profile's canonical
+   transcript and resource contract (A4-O), then implement the closed executable
+   Rust grammar and particular
+   fail-closed operations (JG2b2b2b), prove generic substitution with exact Rust/Agda
+   correspondence (JG2b2b3a), the nine functor laws (JG2b2b3b), and the seven
+   constructor squares plus combined universal authority (JG2b2b3c),
+   derive the complete history-bound occurrence-by-constructor disposition
+   matrix and concrete theorem-application census (JG2b2c), and then
+   birth-local closure
+   plus typed paid/prior-output support (JG2b3); and finally exhaustively derive
+   the complete finite raw carrier (JG2c) from verified public structure;
+3. **JG3 quotient:** decide normalization, naturality, presentation
+   equivalence, interderivability, and origin-admissible equivalence;
+4. **JG4 weakening/conservativity:** prove an injective predecessor map;
+5. **JG5 exact marginal:** compute the successor complement before desirability
+   is inspected;
+6. **JG6 strict enlargement:** prove predecessor-unavailability,
+   successor-availability, stage genericity, naturality, and new-act support;
+7. **JG7 provenance:** inject marginal capabilities into paid clause-role
+   receipts or prior live generative outputs;
+8. **JG8 correspondence:** independently replay Rust and safe-Agda canonical
+   transcripts; and
+9. **JG9 bootstrap:** issue the two certified `(kappa,gamma)` pairs needed by
+   the first `S↑` bar.
 
-- finite carrier completeness;
-- quotient completeness;
-- weakening/restriction;
-- marginal extraction;
-- provenance;
-- renaming and presentation invariance;
-- alias and instance invariance; and
-- independent Rust/safe-Agda agreement.
+`gamma` measures immediately certified reusable capacity, never observed future
+success, anticipated physics, target similarity, or interestingness.
 
-### 7.3 No metric shopping
+### 7.3 No profile shopping
 
-The programme must not choose between `nu`, `gamma`, or another register by asking which one recovers the desired sequence.
-
-Before contextual H3 exposure, the programme must either:
-
-1. select one register by independent philosophical and mathematical argument and freeze it as `S1`; or
-2. register the underdetermination and execute each register as a separately named, pre-frozen selective profile.
-
-A second metric introduced after seeing C or D is a new experiment, not a repair of the first one.
+The register ontology is decided; the remaining underdetermination concerns
+the selective predicate. `S0`, `S+`, and `S↑` are all pre-registered and must
+be executed. A predicate introduced or altered after observing any contextual
+result starts a new experiment and cannot repair this one.
 
 ## 8. Pre-exposure generic tests and falsifiers
 
-Before `C1`, `S1`, or their combination sees the registered Genesis prefix, the exact manifests must pass a target-neutral test suite.
+Before `C1`, `S+`, `S↑`, or their combinations see the registered Genesis
+prefix, the exact manifests must pass a target-neutral test suite.
 
 ### 8.1 Contextual-internalization tests
 
@@ -361,24 +399,43 @@ At minimum:
 9. **No expected-realizer vocabulary:** compiler source and manifests pass a forbidden-marker audit.
 10. **Outside-fragment behavior:** unsupported universal-property structure returns `OutsideFragment`, not refutation or an approximated demand.
 
-### 8.2 Productive-discharge tests
+### 8.2 Independent-register quadrant tests
 
 At minimum:
 
-1. **One passing discharger:** it advances.
-2. **Several passing inequivalent dischargers:** all survive.
-3. **Complete dischargers, none passing:** `SelectivelyBlocked`.
-4. **No total discharger:** `ConstitutivelyBlocked`, not selective failure.
-5. **Empty debt:** `Halted` before the bar is consulted.
-6. **Undefined prior value:** `Unknown`.
-7. **Resource exhaustion during audit:** `Unknown`.
-8. **Alias/presentation invariance:** values and pass/fail decisions are unchanged.
-9. **Instance/family distinction:** repeated specializations do not mint extra productivity.
-10. **No future dependence:** changing unavailable future artifacts cannot change the current value.
-11. **Branch locality:** different branch histories compute their own two-act standards.
-12. **Gate-not-rank:** permutation of enumeration order does not change the surviving quotient cone.
+1. **Alias or redundant theorem:** certified `(nu,gamma) = (0,0)`.
+2. **Blind owner-specific addition:** certified `nu > 0, gamma = 0`; the known
+   unit-eliminator is a regression control, not the independent fixture.
+3. **Generic universal interface:** certified `nu > 0, gamma > 0`.
+4. **Integrative bridge:** certified `nu = 0, gamma > 0`. This is decisive; an
+   undefined `nu` does not pass the quadrant test.
+5. **Presentation and specialization invariance:** neither quotient count is
+   multiplied by aliases or repeated instances.
+6. **Receipt separation:** semantic roles cannot mint generative receipts and
+   capability roles cannot repair semantic SR2.
 
-### 8.3 Shared-substrate controls
+All four expected dispositions are registered before implementation. Failure
+of the integrative bridge falsifies the proposed GCap calculus rather than
+licensing a new role after inspection.
+
+### 8.3 Selective-profile tests
+
+1. **One S0 discharger:** it advances even if optional `nu` is undefined.
+2. **Several passing inequivalent dischargers:** all survive the applicable
+   profile.
+3. **S0 advances, S+ blocks:** the frozen capability audit proves `gamma = 0`.
+4. **S+ advances, S↑ blocks:** positive gain exists but acceleration fails.
+5. **No total discharger:** `ConstitutivelyBlocked`, not selective failure.
+6. **Empty debt:** `Halted` before any generative predicate is consulted.
+7. **Undefined mandatory gamma or prior bar:** `Unknown` for S+/S↑.
+8. **Undefined optional nu:** recorded as a diagnostic; selection is unchanged.
+9. **Resource exhaustion during a mandatory audit:** `Unknown`.
+10. **No future dependence:** unavailable future artifacts cannot change a
+    current register or verdict.
+11. **Branch locality:** each S↑ branch computes its own two-act standard.
+12. **Gate-not-rank:** enumeration order does not change the surviving cone.
+
+### 8.4 Shared-substrate controls
 
 The common expanded fragment must be tested with C0 as well as C1. Merely adding Pi-, Sigma-, path-, or modal-capable syntax must not create new debt or candidates in C0 unless the frozen C0 compiler demands them.
 
@@ -386,13 +443,15 @@ The common expanded fragment must be tested with C0 as well as C1. Merely adding
 
 No live comparative run may begin until a single experiment manifest binds:
 
-- the four profile identifiers;
+- the six profile identifiers;
 - the common bootstrap;
 - the common fragment and candidate grammar;
 - constitutive manifests C0 and C1;
-- selective manifests S0 and S1;
-- the productivity register and exact window formula;
-- cost, semantic, rewrite, quotient, and free-sealing authorities;
+- selective manifests S0, S+, and S↑;
+- the independent semantic and generative-capability manifests and role
+  vocabularies;
+- the exact S↑ window formula;
+- cost, semantic, generative, rewrite, quotient, and free-sealing authorities;
 - resource bounds;
 - generic test vectors and falsifiers;
 - mutation tests;
@@ -403,15 +462,18 @@ No live comparative run may begin until a single experiment manifest binds:
 
 Required sequence:
 
-1. formulate C1 without Genesis-prefix access;
-2. formulate S1 and its register without contextual-result access;
-3. run generic examples and falsifiers;
+1. complete JG1–JG9 and formulate C1 without Genesis-prefix access; those two
+   workstreams may proceed in parallel but may not consume one another's live
+   or held-out results;
+2. freeze S0, S+, and S↑ without contextual-result access;
+3. run all quadrant examples and falsifiers;
 4. conduct an independent adversarial review;
-5. resolve objections or register genuine underdetermination as separate profiles;
-6. freeze all semantic manifests and exact bytes;
+5. resolve objections before exposure, never from the held-out trace;
+6. freeze all manifests and exact bytes;
 7. record source, toolchain, test, and review digests;
-8. expose the frozen profiles to the registered prefix only after the freeze; and
-9. prohibit semantic-manifest changes until all profiles have sealed results.
+8. expose the six frozen profiles to the registered prefix only after the
+   freeze; and
+9. prohibit manifest changes until all profiles have sealed results.
 
 Implementation defects may be repaired only through a new evidence version that preserves the frozen mathematical contract. A semantic change starts a new experiment.
 
@@ -419,24 +481,29 @@ Implementation defects may be repaired only through a new evidence version that 
 
 ### 10.1 Independent runs
 
-Run A, B, C, and D independently from the same verified bootstrap. No run may consume another profile's candidates, quotient, selected branches, values, or continuation artifacts.
+Run `L0`, `L+`, `L↑`, `I0`, `I+`, and `I↑` independently from the same verified
+bootstrap. No run may consume another profile's candidates, quotient, selected
+branches, values, or continuation artifacts.
 
 ### 10.2 Complete cones
 
 At every guarded act:
 
-1. compute the complete live demand quotient;
-2. compute the complete finite response carrier;
-3. certify total discharge and demand-connectedness;
-4. compute the complete candidate quotient;
-5. issue `kappa` and the frozen productivity register;
-6. apply S0 or S1 exactly as frozen;
-7. freely seal every surviving class; and
-8. continue each branch independently.
+1. compute the complete positive activation quotient from the sealed grammar;
+2. classify every activation as derivable, certified underivable, or unknown;
+3. stop with `Unknown` unless classification coverage is complete, then form
+   the certified-underivable residual debt;
+4. compute the complete finite response carrier;
+5. certify total discharge and demand-connectedness;
+6. compute the complete candidate quotient;
+7. issue `kappa` and `gamma`; issue optional `nu` or `UndefinedAudit`;
+8. apply S0, S+, or S↑ exactly as frozen;
+9. freely seal every surviving class; and
+10. continue each branch independently.
 
 ### 10.3 Stop conditions
 
-A run ends only in one of the certified result states in Section 6.3. There is no configured target length, no “stop after fifteen,” and no future-viability pruning.
+A run ends only in one of the certified result states in Section 6.4. There is no configured target length, no “stop after fifteen,” and no future-viability pruning.
 
 ### 10.4 Common resource contract
 
@@ -457,24 +524,31 @@ docs/experiments/law-profile-factorial-v1/
   adversarial_review.md
   freeze_record.json
   shared_substrate.json
+  generative_capability_freeze.json
   generic_test_report.md
 
-  profile-A/
+  profile-L0/
     profile_manifest.json
     result.json
     branch_cone.json
     demand_censuses/
     response_certificates/
-    cost_and_productivity/
+    cost_and_registers/
     transcripts/
 
-  profile-B/
+  profile-L-plus/
     ...
 
-  profile-C/
+  profile-L-up/
     ...
 
-  profile-D/
+  profile-I0/
+    ...
+
+  profile-I-plus/
+    ...
+
+  profile-I-up/
     ...
 
   sealed_cross_profile_comparison.md
@@ -490,18 +564,19 @@ The following interpretations are fixed before execution.
 
 | Observed result | Interpretation |
 | --- | --- |
-| A common-substrate replication differs from A0 | investigate substrate or evidence-version drift before using the factorial comparison; do not alter A0 |
-| B rejects the A discharger while A accepts it | confirms implementation of the productivity gate on the known negative control; not independent evidence that S1 is true |
-| B accepts despite the frozen audit placing the candidate below the bar | implementation/certificate inconsistency; repair only without changing the frozen semantic contract |
-| C reproduces A's eliminator and halt | contextual internalization is inert, redundant, or not triggered under C1 |
-| C continues while A halts | evidence that constitutive self-containment adds genuine structure-producing debt |
-| C continues and D produces the same cone | C1 may be sufficient; S1 has not shown additional explanatory work on the observed cone |
-| C has both sterile and productive complete dischargers, while D retains the productive classes and rejects only the sterile classes | strongest evidence for complementary constitutive and selective roles |
-| C continues but D blocks every branch | the frozen S1 instance is too restrictive or its register is unsuitable; record the negative result and do not tune it in place |
-| C or D returns `OutsideFragment` | extend the fragment only through a new pre-frozen evidence version, or retain the result as outside the current theorem boundary |
-| C and D both halt or block early | contextual self-containment as formulated is insufficient for open-ended Genesis |
-| C or D yields a rich but historically different cone | support or refutation is assessed against pre-registered target-neutral endpoints first; divergence is a result, not a defect |
-| D anonymously matches held-out mathematical structures after sealing | abductive support for the combined profile, not a proof of uniqueness or finality |
+| L0 common-substrate replication differs from A0 | investigate substrate or evidence-version drift before using the factorial comparison; do not alter A0 |
+| L+ or L↑ rejects the known local discharger while L0 accepts it | implementation control only; not independent evidence for either selective hypothesis |
+| I0 halts like L0 | contextual internalization adds no effective debt under the frozen C1 compiler |
+| I0 continues but I+ blocks | contextual completion exists but adds no reusable capacity under the frozen GCap calculus |
+| I+ continues but I↑ blocks | positive generativity is supported; strict acceleration is the additional source of failure |
+| I↑ continues | evidence for the full generative-acceleration hypothesis |
+| I0 contains sterile and generative branches while I+ removes only sterile branches | strong evidence that positive generativity adds explanatory discrimination |
+| I+ retains several branches while I↑ retains a strict subset | evidence that the windowed ratchet adds explanatory discrimination |
+| All contextual profiles block or halt like the local row | the contextual principle or certificate fragment is inadequate for open-ended Genesis |
+| Any profile returns `OutsideFragment` | extend the fragment only through a new pre-frozen evidence version, or retain the result as outside the current theorem boundary |
+| A contextual profile yields a rich but historically different cone | assess target-neutral endpoints first; divergence is a result, not a defect |
+| I↑ anonymously matches held-out mathematical structures after sealing | abductive support for the combined strongest profile, not proof of uniqueness or finality |
+| A historical step fails under every frozen profile | reject that historical step or sequence; do not repair profiles in place |
 | Only post-result changes make a profile match the held-out sequence | invalid target fitting; the changed profile is a new experiment |
 
 ## 13. Primary and secondary endpoints
@@ -515,9 +590,10 @@ For each profile and branch:
 - result state at each act;
 - positive-cost act count before certified halt/blockage/unknown;
 - branch-cone width and survival;
-- `kappa`, the adopted productivity register, `rho`, and bar decision;
+- `kappa`, certified `gamma`, optional `nu | UndefinedAudit`, and the exact S0,
+  S+, or S↑ decision;
 - whether an accepted act produces a nonempty next live obligation;
-- marginal reusable demand/compiler capacity when an authoritative register exists;
+- exact marginal reusable operational-capability classes and receipts;
 - presentation and renaming invariance; and
 - exact reason for every rejected or unclassified candidate.
 
@@ -539,7 +615,7 @@ Held-out agreement can support a profile abductively. It cannot retroactively ch
 
 The experiment depends on the following ordered gates.
 
-### Phase J — Common semantic authority
+### Phase J — Common semantic diagnostic and discharge substrate
 
 Complete the currently registered sequence:
 
@@ -561,6 +637,35 @@ Complete the currently registered sequence:
 - transcript agreement;
 - independent review and freeze.
 
+Positive semantic SR2 is not a selection prerequisite. The remaining general
+cost and nonempty-demand work is still required by live discharge and Phase JG,
+not to manufacture `nu`.
+
+### Phase JG — Mandatory generative-capacity authority
+
+Complete JG1–JG9 in the order fixed by §7.2. JG1, JG2a, and the relative-chain
+gate JG2b1a were discharged on 2026-08-01 by the isolated
+`pen-generative-audit` authorities; the kernel-only `pen-sealed-history`
+authority discharged JG2b1b0, and `pen-generative-audit` then discharged the
+process-local producer JG2b1b1, consuming complete-through-head replay
+JG2b1b2, protocol-only naturality entry gate JG2b2a, and history-independent
+structural occurrence grammar JG2b2b0, and particular-instance open typed
+substitution/context-morphism gate JG2b2b1. JG2b2b2-P0 and JG2b2b2a-A0
+audits are discharged, the A1 common proof-carrying envelope protocol and the
+  A2-O nine-sort carrier/action substrate, and A3-O's seven ordinary constructor
+  realization/classifier schemas, A4-R1 signature/source census, and A4-R2a
+  acyclic schema/path/ownership foundation are frozen. A4-O RC1 was rejected;
+  A4-R2b is frozen and A4-R2c is active; R2d, R3, the R2e integration join, and R4 follow,
+  A2-C remains open, and
+  JG2b2b2b is blocked by A4-R4; full JG2 and
+JG3–JG9 remain open. JG2b1b2, JG2b2a, and JG2b2b0 issue no
+global/latest/actual-current history fact, carrier, `gamma`, provenance,
+bootstrap, or selection authority; JG2b2b0 additionally mints no occurrence,
+substitution, or naturality fact. JG2b2b1 issues only particular replay facts:
+it proves no complete substitution universe, generic substitution law, indexed
+functor law, or naturality square, and JG2b2c may not consume caller-minted b1
+tokens as census evidence. No S+ or S↑ profile may freeze before JG9.
+
 ### Phase K0 — Constitutive profile freeze
 
 Complete and freeze C1, including the trigger, universal-property grammar, ledger composition, fragment decision, generic tests, and review.
@@ -569,33 +674,28 @@ Complete and freeze C1, including the trigger, universal-property grammar, ledge
 
 Add a new plan phase:
 
-> **Phase K1 — Formulate and freeze productive discharge.**
+> **Phase K1 — Formulate and freeze S0, S+, and S↑.**
 
 Deliver:
 
-- closure of the §7.0 theory-alignment blocker, followed by the
-  independently selected productivity-register theorem package;
-- certified bootstrap initialization values;
+- the already adjudicated independent-register ontology;
+- JG9-certified bootstrap initialization values;
 - the exact prior-window formula and strictness;
 - branch-local and zero-cost conventions;
 - gate-not-rank theorem;
 - `SelectivelyBlocked` result semantics;
 - generic tests and falsifiers;
 - independent review; and
-- a frozen S1 manifest.
-
-If Chapter 4 is retained, insert a mandatory Phase JG theorem package before
-K1 and explicitly adjudicate the zero-`nu` trace contradiction. If the law is
-revised instead, the replacement must be independently reviewed and frozen.
-Neither route may borrow future-trace evidence.
+- three frozen selective manifests with `nu` absent from their input types.
 
 ### Phase K2 — Execute the clean factorial experiment
 
 Add a new plan phase:
 
-> **Phase K2 — Execute and compare A/B/C/D.**
+> **Phase K2 — Execute and compare L0/L+/L↑/I0/I+/I↑.**
 
-No profile may run until the common experiment manifest is frozen. Comparison and decoding occur only after all four artifacts are sealed.
+No profile may run until the common experiment manifest is frozen. Comparison
+and decoding occur only after all six artifacts are sealed.
 
 ### Phase K3 — Resume autonomous Genesis research
 
@@ -606,14 +706,17 @@ Rename or reinterpret the current Phase K as follow-on research after the factor
 The clean experimental programme is complete only when:
 
 1. A0 remains unchanged and replayable;
-2. A–D share one verified substrate and differ only in the two registered factors;
-3. the §7.0 law/register/trace contradiction was explicitly resolved,
-   independently reviewed, and frozen before S1 or contextual H3 exposure;
+2. all six profiles share one verified substrate and differ only in the two
+   registered factors;
+3. the §7.0 independent-register decision was explicitly reviewed and frozen,
+   and JG1–JG9 were discharged, before any S+, S↑, or contextual H3 exposure;
 4. generic examples and falsifiers passed before exposure;
 5. every run retained complete quotient cones;
 6. no profile used a target label, expected structure, expected count, expected value, future trace, or historical candidate;
 7. `Halted`, `ConstitutivelyBlocked`, `SelectivelyBlocked`, `OutsideFragment`, and `Unknown` remained distinct;
-8. all cost/productivity values were issued by authoritative theorem layers;
+8. all cost and generative-gain values were issued by authoritative theorem
+   layers, while an undefined optional semantic diagnostic never changed a
+   selection result;
 9. all results were sealed before cross-profile comparison;
 10. the held-out decoder remained downstream; and
 11. the final report applied the pre-registered interpretation table without semantic retuning.
@@ -625,12 +728,78 @@ When integrating this file:
 1. retain the current Phase K0 text and add a link to this programme;
 2. insert Phase K1 and Phase K2 from Section 14;
 3. rename the current Phase K continuation to Phase K3 or make it explicitly conditional on the factorial result;
-4. amend the B2 statement so that “bar clearance as acceptance” remains forbidden for the baseline B2 theorem, while B and D are clearly separate experimental Selective-Law profiles rather than silent changes to B2;
+4. amend the B2 statement so that “bar clearance as acceptance” remains
+   forbidden for the baseline B2 theorem, while S0, S+, and S↑ are explicitly
+   separate experimental Selective-Law profiles rather than silent changes to
+   B2;
 5. add `SelectivelyBlocked` to the Law V2 outcome taxonomy;
 6. extend architecture rule §12.3 with a requirement that comparative profiles share a common substrate and be bound by one experiment manifest;
 7. cross-link this programme from `docs/260730_contextual_internalization_frontier.md`;
-8. add the productivity-register authority and bootstrap-window initialization to Phase J/K1 deliverables; and
-9. preserve the frozen H3/H4 evidence and all oracle-firewall rules unchanged;
-   and
-10. record the §7.0 theory-alignment gate as blocking Phase K1/K2 until
-    an independently motivated law/profile repair is reviewed and frozen.
+8. insert mandatory Phase JG and add the independent generative-capacity
+   authority plus certified bootstrap-window initialization to its JG1–JG9
+   deliverables;
+9. preserve the frozen negative semantic SR2 result, H3/H4 evidence, and all
+   oracle-firewall rules unchanged; and
+10. record §7.0 as adjudicated: `nu` and `gamma` are independent audits, `nu`
+    is optional and non-selective, and live profile execution remains blocked
+    by the unfinished authority and freeze gates rather than by positive SR2.
+
+## 17. Registration amendment: two-by-four design (2026-08-04)
+
+This dated amendment supersedes the two-by-three selective factor registered
+in the body of this document. The body above is retained unchanged as the
+historical registration record; where it conflicts with this section, this
+section governs. No K-phase authority existed at amendment time, so no live
+or sealed result is affected.
+
+### 17.1 What changes
+
+1. The selective factor becomes four separately frozen hypotheses:
+
+   ```text
+   S0   = selective-total-discharge-v1
+   S_W  = selective-extension-maximal-discharge-v1
+   S+   = selective-positive-gcap-v1
+   S↑   = selective-window2-gcap-acceleration-v1   (written S_up in the plan)
+   ```
+
+2. The registered experiment becomes `{C0,C1} × {S0,S_W,S+,S↑}`: eight
+   profiles from one verified common substrate, mutually sealed until all
+   eight runs terminate or return `Unknown`.
+3. Phase K1 freezes four selective manifests, not three; every reference in
+   the body to "three frozen selective manifests", "all six profiles", or
+   `L0/L+/L↑/I0/I+/I↑` extends accordingly (adding `LW = C0 × S_W` and
+   `IW = C1 × S_W`).
+4. New KW gates (KW0 task-language freeze, KW1 task-extension authority,
+   KW2 extension falsifiers, KW3 `S_W` freeze, KW4 sealed profile-level
+   extension adjudication) are inserted per
+   `docs/260804_autonomous_plan_and_status.md` §8.4, which is the operative
+   phase-ordering source for this amendment.
+
+### 17.2 What does not change
+
+- The constitutive factor `C0/C1`, the shared-substrate controls, the
+  oracle firewall, the freeze protocol, the independent-register
+  adjudication (§7), and the pre-registered interpretation discipline all
+  remain in force and extend to the two new cells.
+- `nu` remains non-selective and on hold; `gamma` remains gated by JG1–JG9.
+- The frozen H3/H4 results and the held-out ledger status are untouched.
+
+### 17.3 Status of `S_W`
+
+`S_W` (extension-maximal discharge) is registered pre-exposure as a candidate
+Selective-Law profile that is epistemically motivated, vocabulary-relative,
+and ontologically underdetermined (plan binding decisions 3 and 9). It may
+receive authority only after the finite target-neutral task language,
+quotient, correctness relation, and extension-completeness theorem are frozen
+and verified (KW0–KW3), and KW4/KW5 interpretation rules may not silently
+promote its survival into ontological law-support.
+
+### 17.4 Successor artifacts
+
+The operative forward registration for the eight-profile experiment is:
+
+- `docs/260804_autonomous_plan_and_status.md` §§1, 3, 8 (binding decisions,
+  extension programme, profiles, and phase ordering); and
+- `docs/experiments/law-profile-2x4-v1/preregistration.md` (skeleton;
+  freezes at K1).

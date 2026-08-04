@@ -1,8 +1,18 @@
 # `pen-atomic` Architecture
 
-Date: 2026-07-30
+Date: 2026-07-30 (JG2b2b2-P0, JG2b2b2a-A0 adequacy correction, A1 common
+envelope freeze, A2-O ordinary carrier/action-substrate freeze, A3-O ordinary
+constructor-schema base freeze, frozen post-R2b A3-C1 expected-judgment
+corrigendum, A2-C cubical claim contracts, A4-O ordinary RC1 release rejection,
+frozen A4-R1 signature/source repair, frozen A4-R2a+C2 acyclic schema foundation,
+frozen A4-R2b level-relation and A4-R2c+C2 envelope/evidence/support/subject
+schemas, and A4-R2d QG1 plus QG2 entry, semantic-view, obligation
+core/stable-row, QG2-O2a carrier, complete O2b operation closures, QG2-O2c
+primary-route-census closure, item-2 complete unrooted-obligation closure,
+item-3 source-bundle/symbolic-path closure, and item-4 exact 8/11 subject
+closure, with QG3 support/action mirrors active; recorded 2026-08-03)
 Scope: the complete repository, with emphasis on the current Law V2
-production-refinement plan
+generative-capacity and selective-profile plan
 
 ## 1. Architectural overview
 
@@ -32,32 +42,69 @@ laboratory. The Law V2 lane is the candidate implementation of the repaired
 two-law theorem. Until every proof layer exists, the lawful executable returns
 `Unknown`.
 
-The current critical path is a bridge inside the Law V2 research layer:
+The production-refinement bridge is now established development evidence. The
+current critical path is the independent generative-capacity programme, with
+the general demand/cost bridges and profile freeze proceeding alongside it:
 
 ```text
-verified Rust objects
-        │
-        ▼
-one canonical production bundle
-        │
-        ├───────────────┐
-        ▼               ▼
-independent Rust     safe Agda
-kernel replay        decode/check
-        │               │
-        └───────┬───────┘
-                ▼
-      exact transcript bytes
-                │
-                ▼
-  opaque correspondence capabilities
-                │
-                ▼
- production refinement / typing metatheory
+JG1 frozen target-neutral role/obligation/receipt grammar — implemented
+  -> JG2a finite constructor grammar + exact stage surface — implemented
+  -> JG2b1a relative contiguous chain + declaration births — implemented
+  -> JG2b1b0 sealed-log authority protocol — implemented
+  -> JG2b1b1 owned linear append producer — implemented
+  -> JG2b1b2 independent complete-through-head replay — implemented
+  -> JG2b2a substitution/naturality entry protocol — implemented
+  -> JG2b2b0 structural occurrence grammar — implemented
+  -> JG2b2b1 particular open typed substitution/context morphisms — implemented
+  -> JG2b2b2-P0 indexed-interface ontology audit — discharged
+  -> JG2b2b2a-A0 adequacy correction — discharged
+  -> JG2b2b2a-A1 common envelope protocol — frozen
+  -> JG2b2b2a-A2-O ordinary carrier/action substrate — frozen
+  -> JG2b2b2a-A3-O ordinary constructor schemas — base frozen
+  -> JG2b2b2a-A4-R0 RC1 release audit — discharged/rejected
+  -> JG2b2b2a-A4-R1 signature + noncircular source census — frozen
+  -> JG2b2b2a-A4-R2a+C2 acyclic schema/path/ownership foundation — frozen
+  -> JG2b2b2a-A4-R2b Level-I/raw/decoded/built + early Level-II payloads/tags — frozen
+  -> JG2b2b2a-A3-C1 structural/construction expected-judgment corrigendum — frozen with R2c
+  -> JG2b2b2a-A4-R2c+C2 envelope/evidence/support/subject schemas — frozen
+  -> JG2b2b2a-A4-R2d QG1 semantic mirrors — closed at schema-candidate level
+  -> JG2b2b2a-A4-R2d QG2 entry/view/core + O2a/O2b/O2c + items 2–4 — closed
+  -> JG2b2b2a-A4-R2d QG3 support/disposition/action mirrors — active
+  -> JG2b2b2a-A4-R3 failure/resource machine
+  -> JG2b2b2a-A4-R2e registry/source-integration join
+  -> JG2b2b2a-A4-R4 regenerated fixtures + mutations
+  -> JG2b2b2b exact kernel metering + closed executable Rust grammar + particular operations
+  -> JG2b2b3a generic substitution proof + exact Rust/Agda correspondence
+  -> JG2b2b3b nine functor laws
+  -> JG2b2b3c selector totality/stability + seven constructor squares + combined universal authority
+  -> JG2b2c complete disposition matrix + theorem-application census
+  -> JG2b3 birth-local closure + typed support
+  -> JG2c exhaustive finite raw GCap carrier
+  -> JG3 GCap quotient
+  -> JG4 predecessor weakening
+  -> JG5 marginal GCap set
+  -> JG6 strict-enlargement theorem
+  -> JG7 generative provenance
+  -> JG8 Rust/Agda agreement
+  -> JG9 bootstrap and two-positive-act prior baseline
+
+parallel specification lane from A1, with no ordinary authority edge:
+  JG2b2b2a-A1 -> JG2b2b2a-A2-C cubical indexed ontologies — open
+
+total demand-connected discharge --------------------------> S0
+certified gamma from JG2–JG8 -------------------------------> S+
+certified gamma/kappa plus frozen two-positive-act baseline -> S↑
 ```
 
-No digest-only, Boolean-only, generated-answer, or caller-asserted path may
-cross this boundary.
+Here `S0` is the total-discharge profile, `S+` additionally requires
+`gamma > 0`, and `S↑` additionally requires generative acceleration over
+the frozen width-two prior `gamma/kappa` bar. The experiment shares one GCap
+stack across all profiles, but the logical `S0` decision consumes no `gamma`
+predicate. Semantic novelty `nu` is an optional diagnostic and has no
+authority edge into any selection profile.
+
+No digest-only, Boolean-only, generated-answer, caller-asserted, or semantic-
+novelty path may cross these authority boundaries.
 
 ## 2. Repository topology
 
@@ -159,6 +206,8 @@ Several theorem experiments are deliberately not root workspace members:
 | Workspace | Role | Direct local dependencies |
 | --- | --- | --- |
 | `pen-contextual-completion` | bounded generic prototype for a proposed contextual-completion principle | `pen-kernel` |
+| `pen-sealed-history` | kernel-only JG2b1b0 sealed-log lifecycle and authority protocol; no producer or history token | `pen-kernel` |
+| `pen-generative-audit` | isolated JG1 through particular-instance JG2b2b1 foundations, including the JG2b1b1 producer, JG2b1b2 complete-through-head verifier, protocol-only JG2b2a naturality entry gate, history-independent structural occurrence grammar, and two-aggregate-batch particular open typed substitution/context-morphism verifier; JG2b2b2-P0 and JG2b2b2a-A0 discharged, A1 common envelope, A2-O carrier/action substrate, A3-O constructor schemas, A4-R1 signature/source census, A4-R2a+C2 acyclic foundation, A4-R2b level-relation schemas, A3-C1, and A4-R2c+C2 frozen; A4-O RC1 rejected; A4-R2d QG1 and complete QG2, including the entry/semantic-view/obligation core-stable cuts, QG2-O2a carrier table, complete O2b operation cuts, QG2-O2c primary-route census, item-2 unrooted obligations, item-3 source-bundle/path translator, and item-4 exact 8/11 subjects, closed; QG3 support/disposition/action mirrors active; two cubical claim contracts open at A2-C, JG2b2b2b blocked by A4-R4, and no indexed-interface executable authority yet; planned ordinary JG2b2b2b--JG9 GCap stack | `pen-kernel`, `pen-sealed-history` |
 | `pen-kernel-synthesis` | proof-carrying lambda/unit synthesis successor | `pen-kernel` |
 | `pen-production-wire` | dependency-free canonical cross-language byte grammar | none |
 | `pen-semantic-audit` | generic semantic, cost, rewrite, production-refinement, and correspondence prototype | `pen-kernel`, `pen-kernel-synthesis`, `pen-production-wire` |
@@ -173,7 +222,28 @@ Nested crates are built by manifest path, for example:
 cargo test --manifest-path crates/pen-production-wire/Cargo.toml
 cargo test --manifest-path crates/pen-kernel-synthesis/Cargo.toml --locked
 cargo test --manifest-path crates/pen-semantic-audit/Cargo.toml --locked
+cargo test --manifest-path crates/pen-sealed-history/Cargo.toml --locked
+cargo test --manifest-path crates/pen-generative-audit/Cargo.toml --locked
 ```
+
+`pen-sealed-history` and `pen-generative-audit` are isolated workspaces. JG1,
+JG2a, JG2b1a, the protocol-only JG2b1b0 gate, the process-local JG2b1b1
+producer, JG2b1b2 complete-through-head replay, and the protocol-only JG2b2a
+entry gate, grammar-only JG2b2b0, and particular-instance JG2b2b1 are
+implemented; JG2b2b2-P0 and JG2b2b2a-A0 are discharged; the A1 common
+envelope, A2-O ordinary carrier/action substrate, A3-O constructor schemas,
+A4-R1 signature/source census, A4-R2a+C2 acyclic foundation, A4-R2b, A3-C1, and
+A4-R2c+C2 are frozen; A4-O RC1 was rejected; A4-R2d QG1, the QG2 entry,
+semantic-view, obligation core/stable-row, QG2-O2a carrier, all O2b operation
+cuts, QG2-O2c's exact primary-route census, and item-2's complete unrooted
+obligation compiler, item-3 source-bundle/symbolic-path translator, and item-4
+exact 8/11 subject compiler are closed; QG3 support/disposition/action mirrors
+are active; JG2b2b2b ordinary
+implementation is blocked by A4-R4; and the cubical A2-C
+ontology lanes remain open, while
+full JG2 and JG3--JG9 remain open. Neither workspace may be
+folded into the semantic-family quotient or its SR2 role vocabulary merely to
+reuse existing machinery.
 
 ## 3. Legacy lane
 
@@ -317,7 +387,8 @@ that the repaired two laws derived the stored sequence.
 
 `pen-kernel` is independent of the legacy structural core. It defines:
 
-- `Term`: sort, unit type, unit, variables, globals, `Pi`, lambda, and apply;
+- `Term`: sort, variables, globals, `Pi`, `Sigma`, lambda, application, pairs,
+  projections, unit type, and unit;
 - dependent contexts and signatures;
 - stable 32-byte `GlobalId` values;
 - open judgments;
@@ -327,7 +398,11 @@ that the repaired two laws derived the stored sequence.
   specializations.
 
 The kernel is intentionally not a complete cubical type theory. Unsupported
-features fail closed.
+features fail closed. In particular, normalization-based definitional
+equality is not a public path/equivalence comparison, and opaque globals named
+`transp`, `hcomp`, or `hfill` would provide identities rather than checked
+cubical computation. The exact depth-two result can transfer only through a
+separately proved cubical adequacy/correspondence bridge.
 
 The trust pattern is:
 
@@ -343,14 +418,14 @@ opaque capability with private fields
 
 Verified capability types are not deserializable.
 
-### 4.2 `pen-demand`: finite relative census and GSC slice
+### 4.2 `pen-demand`: finite relative census and legacy H3/H4 GSC slice
 
 The base module computes a deterministic census relative to explicitly
 supplied:
 
 - verified signature;
 - finite demand domain;
-- opaque width-two window;
+- the profile-specific opaque width-two H3/H4 window;
 - finite rules;
 - library seeds; and
 - resource limits.
@@ -369,18 +444,28 @@ slice used for H3:
 - quotient/disposition; and
 - pinned safe-Agda reference agreement.
 
+The width-two item here describes the implemented narrow H3/H4 profile. It is
+not the generic constitutive semantics. The generic successor must compile
+positive activations from the current sealed public grammar, retain exact
+opaque-export support without a chronological cutoff, classify derivability
+separately, and treat `Unknown` as neither debt nor completion.
+
 ### 4.3 `pen-law`: contracts, history, and profile registry
 
 `pen-law` contains:
 
-- the distinction between semantic-family and legacy structural registers;
-- the fixed width-two demand window;
+- the distinction between the optional semantic-family register, the separate
+  generative-capacity register, and legacy structural diagnostics;
+- the fixed legacy H3/H4 width-two demand window;
 - the exact registered Law V2A bootstrap and export;
 - history/profile types;
 - H3/H4 profile/result registry entries; and
 - fail-closed certificate contracts.
 
 It must not depend on the legacy evaluator, search engine, or oracle.
+In particular, it must not derive generative gain `gamma` from semantic
+novelty `nu`, impose an order between those quotients, or require a defined
+`nu` before evaluating a selective predicate.
 
 ### 4.4 `pen-gf2`: finite-fragment boundary
 
@@ -404,7 +489,8 @@ specialized, frozen H3/H4 execution:
 
 - H3 exhausts the narrow response carrier and yields the unique direct
   eliminator class;
-- H4 seals it, recomputes the width-two inventory, and proves debt-free halt.
+- H4 seals it, recomputes that profile's width-two inventory, and proves its
+  profile-relative debt-free halt.
 
 This specialized result does not grant the generic engine an `Advance` or
 `Halt` constructor for arbitrary profiles.
@@ -464,7 +550,7 @@ several layers.
   assembly;
 - `quotient.rs`: Q2/family quotienting;
 - `weakening.rs`: legacy V1 caller-supplied weakening/marginal prototype;
-- `provenance.rs`: dependency support and SR2; and
+- `provenance.rs`: semantic-family dependency support and SR2; and
 - `cost.rs`: kernel-cost decisions.
 
 #### V2/V3 authority ordering
@@ -556,8 +642,9 @@ several layers.
 - `production_transcript.rs`: the versioned canonical transcript
   renderer over the replay's computed artifacts.
 
-The crate has no live Profile A adapter. Its manifests remain unfrozen and
-`proposed_not_adopted`.
+The crate has no live six-profile adapter. Its manifests remain unfrozen and
+`proposed_not_adopted`. Its exact negative SR2 result belongs only to the
+semantic-family register; it neither computes nor obstructs generative gain.
 
 ### 5.3 `pen-contextual-completion`
 
@@ -565,6 +652,255 @@ This is a parallel, bounded generic falsification prototype for a possible
 two-sided contextual-completion principle. It has no registered-prefix access,
 candidate-generation authority, or production-payment authority. It is not on
 the current production-refinement critical path.
+
+### 5.4 Independent generative audit and sealed-history protocol
+
+The isolated theorem workspace is `pen-generative-audit`; its target-neutral
+history protocol is the separate kernel-only `pen-sealed-history` workspace.
+The implemented JG1 grammar, JG2a constructor/stage authorities, JG2b1a
+relative-chain authority, and JG2b1b0 lifecycle protocol are definitionally
+separate from the semantic-family grammar. The planned carrier and quotient
+will likewise remain separate. Their ordered scope is:
+
+1. JG1: freeze the target-neutral seven-role capability grammar and its eight
+   admission obligations;
+2. JG2: derive the finite GCap carrier, internally ordered as JG2a finite
+   constructor grammar and exact stage surface; JG2b1a relative contiguous
+   chain and birth index; JG2b1b0 sealed-log ontology/protocol; JG2b1b1 owned
+   linear producer; JG2b1b2 independent complete-through-finalized-head replay;
+   optional JG2b1b3 live/persistent integration if actual-current authority is
+   required; JG2b2a substitution/naturality entry protocol; JG2b2b0 structural
+   occurrence grammar; JG2b2b1 particular open typed substitution/context-
+   morphism substrate; JG2b2b2-P0 ontology audit; JG2b2b2a-A0 supplied-theory
+   adequacy correction; A1 common proof-carrying envelope protocol; A2-O
+   ordinary carrier/action substrate; A3-O seven ordinary constructor
+   realization/classifier schemas; A4-O complete ordinary profile canonical
+   transcript/resource closure; JG2b2b2b closed
+   executable Rust grammar and
+   particular fail-closed operations; JG2b2b3a generic substitution
+   proof and exact Rust/Agda correspondence; JG2b2b3b nine functor laws;
+   JG2b2b3c selector totality/stability, seven constructor squares, and
+   combined universal authority; JG2b2c
+   complete occurrence-by-constructor disposition matrix and
+   concrete theorem-application census; JG2b3 birth-local closure and typed
+   support; and JG2c exhaustive raw-carrier mint. The cubical A2-C ontology
+   work proceeds as a parallel claim-specific lane with no authority edge into
+   this ordinary executable chain;
+3. JG3: form the GCap quotient;
+4. JG4: prove predecessor weakening;
+5. JG5: derive the marginal GCap set;
+6. JG6: prove strict enlargement where claimed;
+7. JG7: assign independent generative provenance;
+8. JG8: bind Rust computation to safe Agda replay; and
+9. JG9: issue the bootstrap and frozen prior-width-two comparison baseline.
+
+JG1 freezes exactly the roles `Formation`, `Abstraction`, `Aggregation`,
+`Transport`, `Comparison`, `Compiler`, and `DischargeTransformer`; there is no
+string-valued or `Other` escape. Admission requires a stage-generic operation,
+naturality under every admissible substitution, a finite public typed
+interface, checkability from the present sealed grammar, absence from the
+predecessor closure, presence after sealing, support by either a new paid
+clause or a prior live generative-requirement output, and independent later or
+held-out evidence. Its only receipt forms are a new paid clause paired with
+one frozen role, or an unroled prior live generative-requirement output.
+
+JG1 was implemented on 2026-08-01 as the closed, canonical
+`VerifiedPreExposureGenerativeCapabilityGrammarV1`: its exact vocabulary,
+order, bytes, and deterministic digest are mutation-tested. The crate issues
+no semantic-SR2 authority, and semantic novelty `nu` cannot mint a GCap class,
+a generative provenance receipt, or a selective verdict. JG1 by itself issues
+no carrier, quotient, `gamma`, provenance, bootstrap, or selection authority.
+
+The JG2 entry audit showed that JG1 had fixed roles and obligations, but not a
+finite executable constructor/interface calculus; `VerifiedSignature` cannot
+infer the seven roles, `VerifiedClosedSpecialization` proves only one
+substitution rather than universal naturality, and no opaque generative paid/
+prior-output support inventory yet exists. JG2a repairs only the finite
+abstract-vocabulary part of the first premise.
+`VerifiedGenerativeCapabilityConstructorGrammarV1` freezes seven disjoint
+finite interface shapes with roles derived from constructors and binds them to
+JG1. `VerifiedGenerativeCapabilityStageSurfaceV1` binds an exact nonempty
+candidate to a trusted free-sealing scope, verified predecessor,
+independently replayed normalized successor, and exact kernel identities. It
+does not promote the scope's supplied history digest into verified history.
+Its nine interface sorts are deliberately not kernel terms, and its disjoint
+abstract shapes do not derive an occurrence classifier or executable
+reindexing action.
+
+JG2b remains active. Its relative-chain and protocol gates are discharged.
+`VerifiedContiguousGenerativeStageChainV1` starts from a kernel-verified empty
+boundary, requires exact adjacency, independently replays every normalized
+extension, derives normalized transition IDs separately from history-relative
+event IDs, and proves exact equality between declaration-birth keys and the
+terminal boundary. Its jurisdiction is strictly relative to the supplied
+chain: a valid tail truncation is a valid shorter chain, while split and
+coalesced segmentations may both verify as distinct chains.
+
+JG2b1b0 resolves the completeness ontology before any history token exists.
+A finite transcript cannot distinguish a stopped writer from the same prefix
+followed by another event when every alleged EOF/count/root input is caller-
+computable. The correct theorem is therefore completeness through an opaque,
+producer-designated finalized head, never globally latest history.
+`pen-sealed-history` freezes ten canonical rules: kernel-verified empty genesis,
+one append/one event, strict parent ordering, sole private-writer ingress,
+distinct writer epochs, no retrospective transcript promotion, kernel-bound
+fail-closed resources, consuming close, producer-only head origin, and
+independent replay. Its cloneable protocol token contains no writer, head,
+finalization, or history authority.
+
+JG2b1b1 implements a non-cloneable same-process writer, internally reconstructs
+exactly one JG2a stage per atomic append, and derives separate normalized
+log-head and exact-evidence commitments. Infallible consuming close mints a
+distinct producer-finalized-head commitment without claiming independent
+replay or global EOF. JG2b1b2 now consumes the closed producer evidence by
+value with an independently supplied identity-matching kernel, reconstructs
+the exact full JG2a and JG2b1a range, and compares all retained fields, rolling
+heads, resource totals, terminal boundary, births, and the producer-finalized
+commitment before minting the opaque complete-through-head history token. A
+caller transcript, frame slice, EOF Boolean, count, terminal digest,
+scope `history_digest`, `UncheckedHistory`, or the registered-prefix
+`pen-law::VerifiedHistory` is not that authority. The JG2b2 entry audit then
+proved that no finite sample of substitutions establishes the required
+parametric theorem and that a particular closed specialization is not
+universal naturality. JG2b2a now freezes a nineteen-rule protocol requiring an
+executable structural occurrence/path grammar, kernel-checked interface
+realizations, derived birth occurrences and contexts, dependently typed
+arbitrary substitutions, generic identity/composition/binder-lifting/typing/
+typed-equality/normalization laws, seven constructor naturality squares, exact
+occurrence-by-constructor matrix coverage, and full concrete theorem-
+instantiation evidence for every positive census row. Its remintable token
+mints no occurrence, theorem schema, substitution, or naturality fact.
+JG2b2b0 now freezes the history-independent structural grammar: exactly the
+`DeclarationType`/optional `DeclarationBody` roots, twelve term-node kinds,
+nodes, thirteen field edges, deterministic parent-before-child preorder,
+binder entry only on `PiBody`, `SigmaBody`, and `LambdaBody`, and separate
+normalized-structural/exact-authority comparison domains plus fourteen ordered
+future identity fields. Its implemented
+opaque token is `VerifiedGenerativeStructuralOccurrenceGrammarV1`. It takes no
+history and mints no occurrence, substitution, or naturality fact.
+The non-authoritative traversal checks resource bounds before computing any
+subject identity, then hashes each retained node once by a bottom-up,
+field-ordered Merkle pass; no recursive encoding of unchecked caller syntax is
+inside the authority path.
+
+JG2b2b1 now supplies only particular open typed substitution/context-morphism
+evidence. Its closed sixteen-rule
+`VerifiedParticularOpenTypedSubstitutionProtocolV1` freezes the exact upstream
+bindings and reviewed resource ceilings but is not itself factual evidence. For
+a morphism from domain `Delta` to codomain
+`Gamma = (A_0,...,A_{n-1})`, its images are complete and oldest-codomain-entry
+first, and image `theta_i` is checked at the internally derived type
+`A_i[theta_{<i}]` in `Delta`. Verification uses two aggregate kernel batches.
+After bounded preflight and internal raw-type derivation, batch one checks the
+exact raw contexts and images at those raw derived types under one shared
+kernel budget, rather than resetting a budget per image. The verifier then
+rebuilds the proposal from batch-one normalized contexts and images; after a
+second bounded preflight, batch two independently checks that complete
+normalized proposal. No evidence is minted unless both batches finish.
+Identity and composition derive their results and call that base two-batch
+verifier. Binder lift additionally replays the codomain parameter's exact
+source `TypeFormation` and its derived domain `TypeFormation` before the base
+verifier, while judgment reindexing batches the
+exact source and internally derived target judgments together. These
+constructors prove no generic law. In particular, no successful set of these
+tokens establishes identity, composition, lift, typing/equality preservation,
+normalization/reindexing compatibility, a complete admissible substitution
+universe, indexed functor laws, or naturality. Caller-minted JG2b2b1 tokens are
+also not inputs from which JG2b2c may manufacture its census; that gate must
+derive each required particular instance internally from the combined theorem
+package and opaque history.
+
+Combined JG2b2b remains open after its discharged JG2b2b2-P0 and
+JG2b2b2a-A0 audits. A0 records that the canonical depth-two theorem is about a
+fixed opaque CCHM-style public-signature calculus: binary comparison is
+path/equivalence-sensitive, higher replacement is witnessed, and current
+`pen-kernel` definitional equality is not an adequacy bridge. A1 freezes the
+common proof-carrying envelope protocol. A structural occurrence is only an
+anchor for a complete finite typed implementation footprint; role
+classification consumes its normalized interface, support, realization, and
+primitive/derived evidence. Complete enumeration yields zero, one, or
+multiple canonical envelope classes; incomplete/resource failure yields no
+disposition. A2-O has now frozen the executable-target ordinary nine-sort
+carrier/action substrate and parametric finite proposal operator. A3-O has
+frozen the seven dependent constructor-instance families, finite source-slot
+grammars, realization predicates, principal-root selectors, exact candidate
+universes, and later theorem subjects. Post-R2b A3-C1 appends only the missing
+structural-record and construction-rule expected judgments, under the acyclic
+  order `A3-O base -> R2a+C2 -> R2b -> A3-C1 -> R2c+C2`, and froze with R2c+C2. The A4-O RC1 attempt at the complete
+definition-closed `ordinary-dependent-envelope-v1` transcript was byte-
+reproducible but failed release. A4-R1 independently froze the exact opaque
+evaluation signature and noncircular source census; A4-R2a independently froze
+the acyclic schema/path/ownership foundation; A4-R2b independently froze the
+  level-relation and constructor-intermediate schemas in
+  `docs/260802_jg2b2b2a_a4_r2b_level_relation_schemas.md`. A3-C1 and A4-R2c+C2
+  are independently frozen. A4-R2d QG1 and the QG2 entry, semantic-view,
+  obligation core/stable-row, QG2-O2a carrier, complete O2b operation cuts, and
+  QG2-O2c's exact primary-route census, item-2's complete eight-group unrooted-
+  obligation compiler, item-3's ten-role source bundle and symbolic path
+  translator, and item-4's exact 8/11 quotient-primary subject compiler are
+  independently closed. QG2 is complete and QG3 support/disposition/action
+  mirrors are active. No root `0xfd` or final numerical `TypeId` assignment is
+  materialized at this cut. QG3 is followed by
+  `R2d roots/runtime -> R3 -> R2e -> R4`. The
+  cubical support-arity and recent-factorization entries
+are immutable claim contracts whose closed nine-carrier ontologies remain open
+  at A2-C. The ordinary specification frontier is A4-R2d; JG2b2b2b is blocked by
+A4-R4. No entry mints an interface member or theorem fact.
+
+One A3-O schema per constructor proves neither totality nor disjointness and
+mints no occurrence-classification fact: JG2b2c
+may still derive a unique match, zero matches, or typed ambiguity. After A4-R4,
+JG2b2b2b must implement the closed executable
+Rust grammar and particular fail-closed operations; no executable JG2b2b2
+authority exists yet. JG2b2b3a must prove the
+generic substitution laws over unbounded formal derivations with exact
+Rust/Agda correspondence, while bounded Rust replay remains conditional and
+resource exhaustion mints no fact; JG2b2b3b must
+prove all nine functor laws; and JG2b2b3c must prove all seven constructor
+squares before minting combined universal authority. JG2b2c must then derive
+the complete history-bound matrix and aggregate census. JG2b3 must
+establish birth-local closure and typed paid/prior-live-output support before
+JG2c can enumerate the raw carrier. A later complete carrier may be empty;
+completeness comes from an admitted/certified-negative disposition for every
+finite tuple, not from nonemptiness.
+
+The exact P0 conditions are recorded in
+`docs/260802_jg2b2b2_indexed_interface_ontology_audit.md`; the A0 adequacy
+correction and frozen A1 envelope protocol are recorded in
+`docs/260802_jg2b2b2a_adequacy_and_envelope_protocol.md`; the A2-O substrate
+plus A2-C claim contracts are recorded in
+`docs/260802_jg2b2b2a_indexed_ontology_profiles.md`; and the A3-O ordinary
+constructor schemas are recorded in
+`docs/260802_jg2b2b2a_a3_ordinary_constructor_schemas.md`. The rejected A4-O
+RC1, its release audit, the frozen R1 signature/source repair, frozen R2a/R2b
+schema foundations, frozen A3-C1/R2c repairs, and active R2d frontier are
+recorded
+in `docs/260802_jg2b2b2a_a4_ordinary_profile_closure.md`,
+`docs/260802_jg2b2b2a_a4_rc1_release_audit.md`,
+`docs/260802_jg2b2b2a_a4_r1_signature_source_census.md`,
+`docs/260802_jg2b2b2a_a4_r2a_acyclic_schema_foundation.md`,
+`docs/260802_jg2b2b2a_a4_r2b_level_relation_schemas.md`,
+`docs/260802_jg2b2b2a_a3_c1_expected_judgment_corrigendum.md`,
+`docs/260802_jg2b2b2a_a4_r2c_envelope_evidence_support_subject_schemas.md`, and
+`docs/260802_jg2b2b2a_a4_r2d_quotient_outcome_coverage_action_schemas.md`.
+
+The phase records are
+`docs/260801_jg1_pre_exposure_generative_capability_grammar.md`,
+`docs/260801_jg2a_constructor_and_stage_surface.md`,
+`docs/260801_jg2b1a_contiguous_generative_stage_chain.md`,
+`docs/260801_jg2b1b0_target_neutral_sealed_log_protocol.md`,
+`docs/260801_jg2b1b1_process_local_linear_append_producer.md`,
+`docs/260801_jg2b1b2_complete_through_head_replay.md`,
+`docs/260801_jg2b2a_substitution_naturality_protocol.md`,
+`docs/260802_jg2b2b0_structural_occurrence_grammar.md`, and
+`docs/260802_jg2b2b1_particular_open_typed_substitution.md`, followed by the
+non-authority P0 record
+`docs/260802_jg2b2b2_indexed_interface_ontology_audit.md`, the A0/A1 record
+`docs/260802_jg2b2b2a_adequacy_and_envelope_protocol.md`, the A2 record
+`docs/260802_jg2b2b2a_indexed_ontology_profiles.md`, and the A3-O record
+`docs/260802_jg2b2b2a_a3_ordinary_constructor_schemas.md`, followed by the A4-O
+candidate, audit, and complete R1-through-active-R2d repair records named
+above.
 
 ## 6. Canonical production-wire architecture
 
@@ -1085,7 +1421,7 @@ flowchart TD
   Realization["exact demand-realization census"]
   Support["exhaustive pre-SR2 dependency support"]
   Cost["restricted V3-gated cost-V2 basis"]
-  PositiveSR2["positive SR2 assignment (blocked)"]
+  PositiveSR2["positive semantic SR2 assignment (blocked optional audit)"]
   Obstruction["SR2 non-injectivity diagnostic"]
 
   Manifest --> Bundle
@@ -1123,6 +1459,76 @@ flowchart TD
 
 The arrows are authority dependencies, not just data flow. Downstream objects
 must not be used to manufacture an upstream proof.
+
+The selective authority graph is separate and currently planned:
+
+```mermaid
+flowchart LR
+  Total["total demand-connected discharge"]
+  JG1["JG1 frozen GCap grammar"]
+  JG2a["JG2a constructor + exact stage"]
+  JG2b1a["JG2b1a relative chain + births"]
+  JG2b1b0["JG2b1b0 sealed-log protocol"]
+  JG2b1b1["JG2b1b1 linear producer"]
+  JG2b1b2["JG2b1b2 complete-through-head replay"]
+  JG2b2a["JG2b2a naturality protocol"]
+  JG2b2b0["JG2b2b0 structural occurrence grammar"]
+  JG2b2b1["JG2b2b1 particular typed context morphisms"]
+  JG2b2b2P0["JG2b2b2-P0 ontology audit"]
+  JG2b2b2aA0["JG2b2b2a-A0 adequacy correction"]
+  JG2b2b2aA1["JG2b2b2a-A1 common envelope"]
+  JG2b2b2aA2O["JG2b2b2a-A2-O ordinary substrate"]
+  JG2b2b2aA2C["JG2b2b2a-A2-C cubical ontologies open"]
+  JG2b2b2aA3O["JG2b2b2a-A3-O base schemas frozen"]
+  JG2b2b2aA4R2a["A4-R2a+C2 acyclic foundation frozen"]
+  JG2b2b2aA4R2b["A4-R2b early level-relation schemas frozen"]
+  JG2b2b2aA3C1["A3-C1 expected-judgment corrigendum frozen"]
+  JG2b2b2aA4R2c["A4-R2c+C2 envelope/evidence schemas frozen"]
+  JG2b2b2aA4R2d["A4-R2d QG1 + QG2 closed; QG3 support/action active"]
+  JG2b2b2aA4R3["A4-R3 failure/resource machine"]
+  JG2b2b2aA4R2e["A4-R2e registry/source join"]
+  JG2b2b2aA4R4["A4-R4 fixtures and mutations"]
+  JG2b2b2b["JG2b2b2b executable Rust grammar blocked by A4-R4"]
+  JG2b2b3a["JG2b2b3a generic substitution + Rust/Agda"]
+  JG2b2b3b["JG2b2b3b nine functor laws"]
+  JG2b2b3c["JG2b2b3c seven squares + universal authority"]
+  JG2b2c["JG2b2c disposition matrix + application census"]
+  JG2b3["JG2b3 closure + typed support"]
+  JG2c["JG2c exhaustive raw carrier"]
+  JG3["JG3 quotient"]
+  JG4["JG4 weakening"]
+  JG5["JG5 marginal"]
+  JG6["JG6 strict enlargement"]
+  JG7["JG7 generative provenance"]
+  JG8["JG8 Rust/Agda agreement"]
+  JG9["JG9 bootstrap + two-positive-act prior baseline"]
+  Gamma["certified gamma"]
+  Kappa["certified kappa"]
+  Prior["frozen two-positive-act prior gamma/kappa"]
+  S0["S0"]
+  SPlus["S+"]
+  SUp["S↑"]
+
+  Total --> S0
+  JG1 --> JG2a --> JG2b1a --> JG2b1b0 --> JG2b1b1 --> JG2b1b2 --> JG2b2a --> JG2b2b0 --> JG2b2b1 --> JG2b2b2P0 --> JG2b2b2aA0 --> JG2b2b2aA1 --> JG2b2b2aA2O --> JG2b2b2aA3O --> JG2b2b2aA4R2a --> JG2b2b2aA4R2b --> JG2b2b2aA3C1 --> JG2b2b2aA4R2c --> JG2b2b2aA4R2d --> JG2b2b2aA4R3 --> JG2b2b2aA4R2e --> JG2b2b2aA4R4 --> JG2b2b2b --> JG2b2b3a --> JG2b2b3b --> JG2b2b3c --> JG2b2c --> JG2b3 --> JG2c --> JG3 --> JG4 --> JG5 --> JG6 --> JG7 --> JG8 --> JG9
+  JG2b2b2aA1 --> JG2b2b2aA2C
+  JG8 --> Gamma
+  JG9 --> Prior
+  S0 --> SPlus
+  Gamma --> SPlus
+  S0 --> SUp
+  Gamma --> SUp
+  Kappa --> SUp
+  Prior --> SUp
+```
+
+There is intentionally no arrow from the semantic quotient, semantic SR2, or
+`nu` into this graph. `nu` has type `N | UndefinedAudit` and may accompany a
+verdict as a diagnostic; an undefined semantic audit does not make `S0`, `S+`,
+or `S↑` `Unknown`. Missing generative authority does make `S+` and `S↑`
+`Unknown`, while `S0` consumes only the total-discharge predicate. The shared
+six-profile experiment may still compute the same frozen GCap substrate in
+every cell so that profile comparisons differ only in their registered axes.
 
 ### 8.3 Generic soundness versus carrier completeness
 
@@ -1357,7 +1763,7 @@ New authority must:
 - be composed only after its dependencies; and
 - have adversarial tests showing that caller claims cannot mint it.
 
-### 12.3 Adding a productive profile
+### 12.3 Adding or comparing a selective profile
 
 A new constitutive profile must be:
 
@@ -1372,12 +1778,35 @@ Comparative profiles carry two further obligations (registered with
 the law-profile factorial programme,
 `docs/experimental_program_addition.md`): every profile in one
 comparison must share one verified common substrate — bootstrap,
-fragment, theorem stack, quotient, free sealing, resource contract —
+fragment, theorem stack, semantic diagnostic, GCap stack, free sealing, and
+resource contract —
 differing only in the registered experimental factors, and all
 profiles must be bound by one frozen experiment manifest before any
 of them is exposed to the registered prefix. Outputs stay sealed and
 mutually unavailable until every profile has terminated or returned
 `Unknown`.
+
+The registered comparison is the frozen `2 x 3` factorial:
+
+| Context factor | `S0`: total discharge | `S+`: `S0` and `gamma > 0` | `S↑`: `S0` and accelerated `gamma/kappa` |
+| --- | --- | --- | --- |
+| `C0`: local | `L0` | `L+` | `L↑` |
+| `C1`: contextual | `I0` | `I+` | `I↑` |
+
+For `S↑`, acceleration means that the present `gamma/kappa` strictly exceeds
+the frozen width-two prior `gamma/kappa` bar. `S0` does not consume `gamma`;
+`S+` and `S↑` require certified generative gain from the independent GCap
+quotient. None of the three predicates consumes `nu`, and a missing optional
+semantic audit must be recorded as `UndefinedAudit`, not converted into a
+selection failure. The six outcomes are interpreted only after every cell is
+sealed; selecting a profile after seeing which one recovers the historical
+trace is forbidden.
+
+Before Genesis exposure, generic fixtures must realize all four certified
+register quadrants: `(nu, gamma) = (0, 0)`, `(>0, 0)`, `(>0, >0)`, and
+`(0, >0)`. The last, integrative quadrant is decisive: rejecting it would
+silently restore the disallowed assumption that generative capacity is
+ordered by semantic novelty.
 
 ### 12.4 Modifying protected evidence inputs
 
@@ -1542,11 +1971,29 @@ Implemented:
   is 6 > 3; the fresh-equation total domain/codomain comparison is 10 > 8.
   Positive provenance and `nu` are therefore unavailable, not zero.
 
-The ordered V3 frontier is now theory adjudication of this exact negative
-result, plus the general nonempty-demand and general cost/Q0 bridges. The
-transcript suite, review/freeze, and any adapter remain open. The architecture
-must not enlarge the role vocabulary, rename receipts, or substitute the
-structural marginal count merely to recover a desired positive result.
+Theory adjudication now preserves this exact negative result and narrows its
+jurisdiction: it is a theorem about the semantic-family quotient and frozen
+semantic SR2 vocabulary. It is no longer a prerequisite for selection and
+must not be repaired by enlarging that vocabulary, renaming its receipts, or
+substituting the structural marginal count. The separate GCap quotient has its
+own carrier, weakening map, marginal, role grammar, and provenance theorem.
+There is no inequality or authority map between its `gamma` and semantic
+novelty `nu`.
+
+The ordered ordinary frontier is therefore
+`A4-R2d(QG3 -> roots/runtime) -> R3 -> R2e -> R4`, JG2b2b2b, JG2b2b3a,
+JG2b2b3b, JG2b2b3c, JG2b2c, JG2b3, JG2c, then JG3--JG9,
+building on the completed JG1, JG2a, relative-chain JG2b1a, protocol-only
+JG2b1b0, process-local linear-producer JG2b1b1, complete-through-head JG2b1b2,
+protocol-only JG2b2a, grammar-only JG2b2b0, and particular-instance JG2b2b1
+authorities, the non-authority JG2b2b2-P0/JG2b2b2a-A0 audits, and the frozen
+A1 common envelope, A2-O ordinary substrate, and A3-O constructor schemas.
+The A4-O RC1 profile candidate was rejected. The cubical specification lane
+remains open at A2-C and cannot feed the ordinary downstream chain.
+The general nonempty-demand and general cost/Q0 bridges proceed alongside this
+work.
+Cross-language evidence, review/freeze, the common six-profile manifest, and
+every live adapter remain open.
 
 Not yet implemented:
 
@@ -1563,21 +2010,44 @@ Not yet implemented:
   discharged), and full carrier-derived constructor-set coverage for fresh
   rules;
 - nonempty demand-orbit/typed-realization authority, a general V3/Q0-minimal
-  cost theorem, positive SR2 under an independently justified law, adoption,
-  freeze, and a live Profile A adapter.
+  cost theorem;
+- JG2b2b2b--JG2c and JG3--JG9 generative-capacity authority in the isolated
+  `pen-generative-audit` workspace (JG1 through particular-instance JG2b2b1
+  plus the non-authority JG2b2b2-P0/JG2b2b2a-A0 audits, A1 envelope freeze,
+  A2-O ordinary substrate freeze, A3-O schema freeze, A4-R1 signature/source
+  freeze, A4-R2a+C2 acyclic-foundation freeze, A4-R2b level-relation freeze,
+  A3-C1 freeze, and A4-R2c+C2 freeze are complete; after rejection of A4-O RC1,
+  A4-R2d QG1, the QG2 entry, semantic-view, obligation core/stable-row,
+  QG2-O2a carrier, all O2b operation cuts, QG2-O2c's exact primary-route census,
+  item-2's complete unrooted-obligation compiler, item-3's source-bundle/
+  symbolic-path translator, and item-4's exact subject compiler are closed;
+  QG3 support/disposition/action mirrors are active; A2-C remains open and no
+  executable JG2b2b2 authority
+  exists yet);
+- the JG9 bootstrap and frozen two-positive-act prior `gamma/kappa` baseline;
+  and
+- adoption/freeze of the common two-by-three manifest and the six live
+  `L0`/`L+`/`L↑`/`I0`/`I+`/`I↑` adapters.
 
-No authority edge currently runs from the structural marginal count—or the
-eventual semantic-family `nu` audit—to Phase K1. Chapter 4 of the book
-requires `gamma`, while its stated
-bound `0 <= gamma <= nu` makes the positive-cost, zero-`nu` Genesis
-Steps 9 and 12 unable to clear any nonnegative strict bar. Selective
-authority must therefore pass through either a verified mandatory
-Phase JG package plus an explicit repair/adjudication of those trace
-claims, or an independently reviewed pre-exposure repair and refreeze
-of the law and profile documents. The architecture must not choose a
-route by asking which one recovers the target sequence.
+No authority edge runs from the structural marginal count, the semantic
+quotient, semantic SR2, or the optional `nu` audit to selection. The adopted
+book repair defines semantic novelty and generative gain as independent finite
+quotients. Historical `nu = 0` annotations for Genesis Steps 9 and 12 remain
+manuscript interpretations only; under Law V2 their `nu` is uncertified and
+their `gamma` is `Unknown` until JG authority exists. This does not refute the
+possibility of the decisive integrative quadrant `nu = 0, gamma > 0`; it is
+exactly the generic case the independent-register fixtures must test before
+Genesis is exposed.
+
+At the selective boundary, `S0` consumes only certified total
+demand-connected discharge. `S+` also consumes certified `gamma > 0`.
+`S↑` also consumes a certified present `gamma/kappa` ratio and the frozen
+width-two prior ratio. Missing `nu` never produces a selection `Unknown`;
+missing GCap authority produces `Unknown` only where a profile consumes
+`gamma`. The experiment may still require the common JG stack to be completed
+before all six cells run, so that their substrates remain identical.
 
 The architecture is therefore in a healthy fail-closed state: the lower-level
-wire and structural boundaries can be developed and tested, while all
-semantic and live-run authority remains unavailable until the ordered theorem
-gates are complete.
+wire, structural, and optional semantic-audit boundaries can be developed and
+tested, while generative and live-run authority remains unavailable until the
+ordered JG, demand/cost, manifest, and freeze gates are complete.

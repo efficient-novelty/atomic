@@ -21,6 +21,22 @@ jobs:
         run: python -m unittest discover -s scripts -p "test_check_law_v2*.py"
       - name: Verify frozen profile and window-audit bindings
         run: python scripts/check_law_v2_window_register_audit_v1.py
+      - name: Verify generative and sealed-history isolation
+        run: python scripts/check_generative_audit_isolation.py --json
+      - name: Test generative isolation bypass detection
+        run: python -m unittest scripts.test_check_generative_audit_isolation
+      - name: Check target-neutral sealed-history formatting
+        run: cargo fmt --check --manifest-path crates/pen-sealed-history/Cargo.toml
+      - name: Test target-neutral sealed-history protocol grammar
+        run: cargo test --manifest-path crates/pen-sealed-history/Cargo.toml --locked
+      - name: Lint target-neutral sealed-history protocol grammar
+        run: cargo clippy --manifest-path crates/pen-sealed-history/Cargo.toml --locked --all-targets -- -D warnings
+      - name: Check frozen JG1 through JG2b2b1 formatting
+        run: cargo fmt --check --manifest-path crates/pen-generative-audit/Cargo.toml
+      - name: Test frozen JG1 through JG2b2b1 generative foundations
+        run: cargo test --manifest-path crates/pen-generative-audit/Cargo.toml --locked
+      - name: Lint frozen JG1 through JG2b2b1 generative foundations
+        run: cargo clippy --manifest-path crates/pen-generative-audit/Cargo.toml --locked --all-targets -- -D warnings
       - name: Verify proposed semantic-audit isolation
         run: python scripts/check_semantic_audit_isolation.py --json
       - name: Test semantic-audit isolation bypass detection
