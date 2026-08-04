@@ -2107,6 +2107,156 @@ Cut-global lines (checked at each sub-cut close and at cut close):
   immutable; the work stops fail-closed on any grammar, topology, or audit
   failure.
 
+### 13.4 Enumerated closure ledger for the A4-R3 failure/resource/meter cut (registered 2026-08-04, per §5.7)
+
+Registered before any R3 work. The three sub-cuts F-A (failure receipts),
+F-B (kernel-role/replay and cardinality receipts), and F-C (accounts, meter,
+and cut-global closure) are named here in advance and never count as
+unplanned sub-cuts under binding decision 6; residue routes
+F-A -> F-B -> F-C -> the named R2e/R4 boundaries, never to a new
+sub-alphabet. The cut must register explicit decisions, argued from the
+frozen records, for the underdeterminations catalogued at registration
+(§13.4a). The R3 record is a fresh document
+(`docs/260804_jg2b2b2a_a4_r3_failure_resource_machine.md`); record §§4-14,
+all QG1/QG2/QG3 bytes, R2a-R2c, A4-O, and R1 are immutable read-only
+inputs.
+
+- LF.1 the cut opens with a total reservation census: every qualified `R3::`
+  position in the frozen records (the eight named families at their exact
+  R2b/R2c/R2d positions, plus the R2a §12 count-only-traversal and
+  loci/payload families) is enumerated with location and outer tag; every
+  position later filled is on the census, no position is invented, none is
+  missed, and the census agrees with R2a §12 and the R2d closing-statement
+  enumeration (the census must sweep both the `R3::` notation and the
+  prose-named families of R2a/A4-O/RC1);
+- LF.2 the reason taxonomy closes bound: `FalseReasonV1`/`AbortReasonV1`
+  with exactly the A4-O §2.3 variant sums, orders, and total kernel-error
+  map unchanged; all subordinate locus/payload schemas (profile-boundary,
+  arithmetic, resource, codec-object) close with exact widths per the RC1
+  §2.5 repair rules; every locus is a validated typed path, no `Other`, no
+  free diagnostic payload, no platform text; unknown or unmapped failure is
+  `Abort`, never `False`;
+- LF.3 lesson-11 completeness re-audit: every input family of every
+  slot-9/10/11 operation and every R2b/R2c result partition is re-audited
+  against the closed taxonomy — each `False` arm inhabited only by a
+  genuine caller-proposal failure, every internal/replay failure an abort,
+  the slot-9/11 no-`False` partitions proved uninhabitable as recorded, and
+  `10[1]` `False` exactly the `FalseReasonV1::Action` family;
+- LF.4 `CheckedFalseReceiptV1` closes as the exact RC1 §2.5 record
+  (complete raw code, constructor/raw ordinal, closed stage/locus/reason,
+  optional expected/actual checked judgments, optional kernel error, exact
+  relevant input bytes, deterministic resource deltas), with the
+  outer-variant binding equations registered, and `False` minted only after
+  the relevant computation completed without infrastructure uncertainty;
+- LF.5 `AbortReceiptV1` closes fail-closed: `BudgetExhausted` carries the
+  exact `ResourceCounterV1` tag plus `used:u64`/`limit:u64`; the dedicated
+  duplicate-census receipt exists; the `NoDisposition` realization remains
+  exactly the frozen `11[1]` abort arm; abort receipts stay outside every
+  coverage certificate and disposition; exhaustion, overflow, and
+  allocation failure yield no disposition and are never evidence (Unknown
+  is successful safety — lessons 1 and 5);
+- LF.6 `KernelCallRoleV1` closes as the closed role enum realizing the
+  total A4-O false/abort role map; `KernelSuccessReceiptV1` closes with
+  receipt vectors exhaustive in deterministic call order and reconciled
+  with the one aggregate account; no error string, optional receipt, or
+  implementation counter is added to any frozen field;
+- LF.7 `StructuralCardinalityReceiptV1` and the count-only traversal
+  evidence family close per the RC1 §2.6 repair: one event per attempted
+  decision, count-only equals emitting traversal, prefix-node count
+  realized inside a reserved position without a new outer position, no
+  semantic decoder in the count-only pass; `0xe8` density remains checked
+  against `enumeration.codes.len`, never against receipt bytes;
+- LF.8 the three account families (`EnvelopeResourceAccountV1`,
+  `PairResourceAccountV1`, `ActionResourceAccountV1`) close over frozen
+  counters, limits, and before/after deltas only — checked `u64`
+  arithmetic, no silent wrap, no wall clock, allocation address, scheduler
+  state, platform text, or map order; `Acct_R3`/`Aggregate_R3` conservation
+  is proved with the exact frozen R2c scope tags, event orders,
+  child-account orders, and opaque-span treatment; the material-size
+  recursion and the exact fourteen-counter mapping close; accounting is
+  deterministic (identical outcome, locus, counters, transcript); the
+  field-17 commitment metering equals its frozen reservation;
+- LF.9 receipts are never decision inputs: no quotient key, tag vector,
+  class, count, disposition, flattening, rebuild, or opcode value depends
+  on receipt/account bytes; the frozen 10.22.4/RT-A/RT-B/RT-C independence
+  results extend verbatim to the filled schemas; receipts and accounts
+  remain non-quotient fields (rule 23);
+- LF.10 containment unchanged: filled material nests exactly under the
+  twelve R2a §9 corrigendum roots; `0xfd`, `0xe9`, and `0xff` remain
+  receipt-free; the three inherited `0xfe` channels and the per-variant
+  root-`0xe3` containment are unchanged; the cut mints zero new
+  R3-qualified positions;
+- LF.11 no closed grammar byte, tag, field order, ownership edge, scalar
+  width, opcode, predecessor vector, or registered decision (RD-RT-A-1
+  through RD-RT-C-4, and every earlier registered decision) changes; every
+  R3 type is defined topologically earlier under the R2 scalar codec, after
+  which — and only after which — the roots holding qualified positions
+  (including `trace_commitment` and complete `0xff` bytes) become
+  canonically byte-complete;
+- LF.12 stop boundary: no numerical `TypeIdV1` and no registry/source join
+  (R2e), no fixture or mutation regeneration (R4), no metered batch API,
+  executable authority, or verified profile token (JG2b2b2b; the meter is
+  unavailable), no theorem — the three preservation descriptors remain
+  uninhabited typed syntax and the record-§10.19.6 truth-audit gate
+  persists unweakened; and
+- LF.13 zero new admission values beyond QG2's two; no forbidden input
+  (representative, copied ordinal, transcript, replay-as-input, semantic
+  SR2 result, `nu`, `GCap`/`gamma` datum, numerical TypeId) is consumed by
+  any R3 definition; a transitive forbidden-input scan over the new
+  record's sections passes at each sub-cut close and at cut close.
+
+### 13.4a Registered underdetermination catalogue for the R3 cut
+
+Each item below is genuinely undetermined by the frozen records and must be
+decided by a registered decision argued from frozen text (assignments:
+F-A decides 1, 2, 11, 12; F-B decides 3, 4, 5, 6; F-C decides 7, 8, 9, 10,
+13, 14):
+
+1. shared versus per-position receipt types for
+   `CheckedFalseReceiptV1`/`AbortReceiptV1` across heterogeneous loci, and
+   the locus-discrimination mechanism (R2b's "one exact earlier local type"
+   bears on this);
+2. false-receipt/outer-variant redundancy: duplication versus checked
+   binding equations for `raw_ordinal`/`raw_code` carried by both the
+   `0xe7` variant and the RC1-prescribed receipt;
+3. the exact `KernelCallRoleV1` variant inventory and its alignment with
+   the A4-O kernel-error map rows;
+4. `KernelSuccessReceiptV1` content under the meter tension: per-call meter
+   deltas versus call identity only versus reserved meter fields (RC1
+   demands deterministic resource deltas; R2b forbids implementation
+   counters; A4-O records that the current kernel returns no usage
+   receipt);
+5. the error-receipt realization: no `R3::KernelErrorReceiptV1` position
+   exists, so error receipts must be realized inside the false/abort
+   families' "optional kernel error" field — register the exact form;
+6. the `StructuralCardinalityReceiptV1` field inventory, the count-only
+   realization, where the total prefix-node count lives, and whether one
+   scope-tagged type serves all five positions;
+7. account internal layout: full fourteen-counter vector versus
+   scope-relevant subset; deltas versus totals; embedded limits versus
+   `0xfa` policy references; the fixed encoded length of a finalized opaque
+   account span;
+8. meter unit/granularity and the charge schema per event kind, including
+   the per-envelope counter reset at raw-leaf start;
+9. the exact `Aggregate_R3` conservation equation; whether
+   `PairResourceAccountV1` aggregates per-envelope accounts (rule 36) with
+   which child list/order; the aggregate structure of
+   `ActionResourceAccountV1` over its bounded steps;
+10. the closed scope-tag enum and the encoding of the parameterized
+    `EmptyReplacementField(i)`;
+11. the registered statement that Unknown is exactly the absence of a
+    disposition plus the unprivileged abort diagnostic — no Unknown marker,
+    fourth variant, or rooted diagnostic at any position;
+12. loci payload bounding: exact widths of profile-boundary, codec-object,
+    and arithmetic payloads; whether optional judgments and relevant input
+    bytes in false receipts are complete or ceiling-bounded, and their
+    charging counter;
+13. whether the material/depth recurrence family becomes distinct receipt
+    types or account-internal fields; and
+14. the exact form of the static failure/resource definitions nested by
+    value under `0xe0`/`0xf8`/`0xf9` and their reconciliation with the
+    frozen A4-O field-13 tag tables without changing any A4-O byte.
+
 ## 14. Definition of success for this plan
 
 This plan succeeds when:
