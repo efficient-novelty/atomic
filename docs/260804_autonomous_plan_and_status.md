@@ -697,8 +697,11 @@ The exact consequences are:
   eliminator;
 - nontrivial exact-identifier renaming also requires transport rather than
   literal byte equality;
-- the three stored subjects remain typed proposition syntax with no inhabitant,
-  proof value, or theorem authority;
+- the three stored subjects remain typed proposition syntax storing no
+  inhabitant, proof/evidence value, or theorem authority (uninhabitedness is
+  proved only for the nonempty full-action equality; the normalization and
+  identity-action subjects hold definitionally/literally without any stored
+  proof value);
 - no compiler, classifier, selector, provenance calculation, `GCap` audit, or
   future proof may assume those equalities merely because the descriptors are
   present; and
