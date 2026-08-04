@@ -1,0 +1,34 @@
+[package]
+name = "pen-sealed-history"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.88"
+description = "Kernel-only target-neutral sealed-log protocol grammar for Law V2"
+publish = false
+
+[workspace]
+resolver = "2"
+
+[dependencies]
+pen-kernel = { path = "../pen-kernel" }
+
+[dev-dependencies]
+# Keep the standalone lock aligned with pen-kernel's reviewed production
+# closure; schemars otherwise selects a newer compatible serde_json release.
+serde_json = "=1.0.149"
+
+[package.metadata.law-v2]
+role = "jg2b1b0-target-neutral-sealed-log-protocol-grammar"
+oracle_access = false
+diagnostic_access = false
+law_profile_access = false
+live_profile_access = false
+storage_access = false
+producer_authority = false
+history_authority = false
+eof_authority = false
+finalization_authority = false
+capability_carrier_authority = false
+generative_gain_authority = false
+selection_authority = false

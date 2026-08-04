@@ -1,0 +1,45 @@
+[package]
+name = "pen-generative-audit"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.88"
+description = "Isolated pre-exposure foundations for Law V2 generative-capacity authority"
+publish = false
+
+[workspace]
+resolver = "2"
+
+[dependencies]
+pen-kernel = { path = "../pen-kernel" }
+pen-sealed-history = { path = "../pen-sealed-history" }
+
+[dev-dependencies]
+# Keep the standalone verifier graph aligned with pen-kernel's reviewed pin.
+serde_json = "=1.0.149"
+
+[package.metadata.law-v2]
+role = "jg1-jg2b2b1-pre-exposure-generative-capacity-foundations"
+oracle_access = false
+diagnostic_access = false
+live_profile_access = false
+process_local_log_producer = true
+complete_through_producer_finalized_head_authority = true
+jg2b2_entry_protocol_grammar = true
+jg2b2b0_structural_occurrence_grammar = true
+derived_public_occurrence_authority = false
+particular_open_typed_substitution_authority = true
+complete_admissible_substitution_universe_authority = false
+full_kernel_typed_substitution_metatheory = false
+generic_identity_composition_lifting_authority = false
+generic_typing_equality_preservation_authority = false
+normalization_reindexing_compatibility_authority = false
+executable_indexed_interface_authority = false
+indexed_interface_functor_law_authority = false
+universal_naturality_authority = false
+globally_latest_history_authority = false
+actual_current_branch_authority = false
+eof_authority = false
+capability_carrier_authority = false
+generative_gain_authority = false
+selection_authority = false
