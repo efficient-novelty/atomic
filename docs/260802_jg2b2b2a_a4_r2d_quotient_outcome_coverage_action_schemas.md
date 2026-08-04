@@ -2,11 +2,10 @@
 
 Date: 2026-08-04
 
-Status: **A4-R2d ACTIVE AT THE QG3 SHARED EIGHT-GROUP SCHEMA AND SECOND
-TRANSITIVE SCAN (PLAN §13.2 LEDGER ITEMS 5-6);
-QG1, QG2, QG3-S1a/D1, QG3-S1b1, QG3-S1b2, QG3-S1b3, THE QG3
-PRESERVATION KERNEL, AND QG3-S1c0 THROUGH QG3-S1c4 CLOSED AT THEIR STATED
-REPRESENTATION BOUNDARIES; A4-R2a+C2, A4-R2b,
+Status: **A4-R2d ACTIVE AT ROOTS/RUNTIME (PLAN §7.1 ITEM 5); QG1, QG2, AND
+QG3 CLOSED AT THEIR STATED REPRESENTATION BOUNDARIES — QG3-S1a/D1 THROUGH
+S1c4 PLUS LEDGER ITEMS 5-6 (SECTIONS 10.21-10.22, CLOSED 2026-08-04);
+A4-R2a+C2, A4-R2b,
 A3-C1, AND A4-R2c+C2 FROZEN; A4-R3 BLOCKED BY R2d.** This active record fixes the
 first lawful R2d cut: a
 rank-free R2c match projects its semantic quotient before complete all-raw
@@ -14081,6 +14080,978 @@ verified profile, executable interface, envelope census, pair disposition,
 occurrence classification, theorem, generic law, cubical bridge, `GCap`,
 `gamma`, or selective authority.
 
+## 10.21 QG3 ledger item 5: the shared candidate/action eight-group schema
+
+This section closes plan §13.2 ledger item 5 (L5.1–L5.5) at the
+compiler-plan boundary: the complete shared candidate/action eight-group
+value composition over the frozen section-11 group order. It consumes, as
+immutable byte-for-byte inputs, the closed QG1 semantic mirrors (sections
+8–9.4), all QG2 bytes (sections 10.1–10.10), and the closed QG3 cuts
+S1a/D1 through S1c4 (sections 10.11–10.20), and it discharges exactly the
+two `OPEN-AT-S1C4` tags left by subsections 10.20.1 and 10.20.4. It is
+symbolic only: it materializes no root-`0xfd` byte layout, assigns no
+numerical `TypeIdV1`, runs no transitive scan, and proves no theorem. The
+second transitive no-R3/no-representative/no-forbidden-raw scan and its
+reproofs remain ledger item 6 (L6.1–L6.6); root `0xfd` and slot `9[0]`
+freeze only in the later R2d roots/runtime cut, after QG1–QG3 close;
+`TypeIdV1` lowering and representative-byte comparison remain R2e/R4. Every
+count below is symbolic and inherited (`n`, `D_A`, `N_27`, `PR_c`, `h_6`,
+`m_5`, `m_6`, `p_6`, `Cl_b`, `M_nf`, `M_shared`); this section introduces no
+numeral not already frozen upstream. Fail-closed discipline is total: every
+violation named below aborts and mints nothing, and an unknown or
+undetermined input is an outcome, never permission.
+
+### 10.21.1 The complete eight-group value composition
+
+The shared value occupies exactly the eight ordered semantic groups of
+section 11, in that order, with no new group, no reordering, no sum tag, no
+outer candidate/action discriminator, no extra outer record or version
+beyond the section-11 root prefix, and no extra digest (L5.1). The
+compiler-plan composition is the fresh symbolic record
+
+```text
+QuotientSemanticProjectionPlanSharedV1 =
+  (group_1_binding:
+     QuotientBindingCandidateV1,
+   group_2_realizations:
+     QuotientGroupTwoRealizationsCandidateV1,
+   group_3_replay_boundaries:
+     QuotientReplayBoundariesAndContextsCandidateV1,
+   group_4_lineage:
+     QuotientLineageGroupPlanSharedV1,
+   group_5_footprints:
+     QuotientFootprintsCandidateV1,
+   group_6_support:
+     QuotientSemanticSupportPlanSharedV1,
+   group_7_field_dispositions:
+     QuotientPublicFieldDispositionsCandidateV1,
+   group_8_obligations_and_subjects:
+     QuotientObligationsAndSubjectsGroupPlanSharedV1).
+```
+
+The eight position names are exactly the section-11 concatenation labels.
+The per-group occupants are the exact frozen values, by frozen name:
+
+| Group | Section-11 role | Occupying frozen value | Fixed by |
+| --- | --- | --- | --- |
+| 1 | profile/version/parent/history/evaluation binding, anchor, constructor | `QuotientBindingCandidateV1` (= `Q1`) | §8 |
+| 2 | normalized carrier, index, input, output, public-interface, implementation realizations | `QuotientGroupTwoRealizationsCandidateV1` (= `Q2`) | §9.2 |
+| 3 | normalized predecessor/birth/successor boundaries and local contexts | `QuotientReplayBoundariesAndContextsCandidateV1` (= `Q3`) | §9.3 |
+| 4 | principal, field, output, and action-introduced lineage | the four-position wrapper of subsection 10.21.2 | §9.4, §10.20.1, this cut |
+| 5 | implementation, current-output, and prior-support footprints | `QuotientFootprintsCandidateV1` (= `QFootprints`), fields `(implementation, current_output, prior_support)` | §9.4 |
+| 6 | complete semantic support, owner map, dependency edges, quotient, coverage, preservation subjects | `QuotientSemanticSupportPlanSharedV1` per subsection 10.21.3 | §10.20.4, this cut |
+| 7 | ordered semantic field-disposition vector | `QuotientPublicFieldDispositionsCandidateV1` | §10.11.4 |
+| 8 | quotient-lifted obligations, the frozen QG2 primary subject-slot family, and the QG3 instantiated-action-subject option | the three-position wrapper of this subsection | §10.3.4/§10.8, §10.10, §10.16.2/§10.17, this cut |
+
+The group-8 wrapper is the fresh symbolic record
+
+```text
+QuotientObligationsAndSubjectsGroupPlanSharedV1 =
+  (obligations:QuotientObligationsCandidateV1,
+   primary_subjects:QuotientEnvelopeSubjectsCandidateV1,
+   instantiated_action_subject:
+     Option<QuotientInstantiatedActionSubjectPlanCandidateV1>).
+```
+
+`obligations` is the complete closed item-2 value (`QObligations`, section
+10.8), with its eight obligation groups — an internal census unrelated to
+the eight semantic groups here — checked prefix sums, preserved
+repetitions, and closed empty-group behavior unchanged. `primary_subjects`
+is the complete closed item-4 value (`QPrimarySubjects =
+QuotientEnvelopeSubjectsCandidateV1`, section 10.10), containing its
+`syntax` and `root_projection` with the ten-role source bundle and the
+exact 8/11 subject slots; subsection 10.18.1 already fixes that the
+standalone action program is "still stored separately in group 8", i.e. in
+the third position, and that the base primary programs remain
+byte-identical to `B.QPrimarySubjects`. `instantiated_action_subject` is
+the frozen group-8 option of subsections 10.16.2 and 10.17: the field name
+is the frozen locus segment `group_8.instantiated_action_subject`, the
+payload type is the closed
+`QuotientInstantiatedActionSubjectPlanCandidateV1`, and the occupancy law
+is exactly `None` iff `n=0` and `Some(S_A)` with exactly one value iff
+`n>0`.
+
+Structural rules, all inherited from section 11 and restated as closed:
+
+- there is no ninth group, no optional group, no repeated group, and no
+  group order other than `1..8`;
+- there is no sum tag, no outer candidate/action discriminator, no extra
+  outer record/version, and no extra outer or whole-key digest; the
+  whitelisted identity and normalized-boundary digests of section 9.3
+  remain fields of their exact enclosing values and are neither a ninth
+  group nor a replacement key;
+- equality, lexicographic ordering, and first difference use the complete
+  decoded value and full rooted bytes; digest equality or inequality is
+  never a quotient witness; distinct raw leaves may share the same
+  complete key;
+- the seven-root support frame
+  `QuotientSupportRootFramePlanCandidateV1` is a compiler input only and
+  is not stored in any group; and
+- the record wrappers minted at this cut
+  (`QuotientSemanticProjectionPlanSharedV1`,
+  `QuotientLineageGroupPlanSharedV1`,
+  `QuotientObligationsAndSubjectsGroupPlanSharedV1`) carry no version
+  field, tag byte, count certificate, or digest of their own; each encodes
+  as the in-order concatenation of its positions' canonical values.
+
+This is the symbolic schema only. The byte grammar remains exactly the
+section-11 reservation — `0xfd || little_endian_u16(1)` followed by the
+eight group encodings in order, with nested use omitting `0xfd,u16=1` —
+and its materialization, together with the final encoded name (section 11
+reserves `QuotientSemanticProjectionV1`, still undeclared) and the
+`slot 9[0]` freeze, is the R2d roots/runtime cut after QG1–QG3 close.
+Numerical `TypeIdV1` assignment and representative-byte path comparison
+are R2e/R4. Neither later cut may add, remove, reorder, or rename a group
+or position fixed here.
+
+Aborts of this subsection: a ninth or missing group; any reordering; a sum
+tag or candidate/action discriminator at any group boundary; an extra
+outer record, version, count, or digest; a stored support frame or root
+vector; a digest-bearing value outside the section-9.3 whitelist; an
+occupant type other than the exact frozen value named above.
+
+### 10.21.2 The group-4 wrapper: four-position lineage concatenation
+
+Group 4 is the exact four-position value
+
+```text
+QuotientLineageGroupPlanSharedV1 =
+  (principal:QuotientPrincipalRootLineageCandidateV1,
+   fields:vector<QuotientFieldLineageCandidateV1>,
+   output:vector<QuotientOutputLineageEntryCandidateV1>,
+   action_introduced:QuotientActionIntroducedLineagePlanSharedV1)
+```
+
+whose eventual byte image inside `group_4_lineage` is the concatenation
+
+```text
+principal || fields || output || action_introduced
+```
+
+in exactly that order, with no sum tag, no option wrapper at any position,
+no local version or root byte, no count field beyond each vector's own
+canonical length, and no digest. The wrapper obeys the nested-use rule
+by construction: it contributes no `0xfd` or version prefix of its own;
+the only root prefix in the eventual encoding is the outer
+`0xfd,u16=1` of the complete eight-group value, and nested use of that
+complete value omits even that.
+
+The first three positions are the frozen QG1c base, not a re-wrapped copy:
+the base record is recovered by exact projection, and the projecting side
+binds it byte-for-byte,
+
+```text
+Base(g4) =
+  QuotientCandidateLineageBaseCandidateV1(
+    principal=g4.principal,
+    fields=g4.fields,
+    output=g4.output)
+
+Base(g4) = QLineage
+g4.principal = QLineage.principal
+g4.fields    = QLineage.fields
+g4.output    = QLineage.output
+```
+
+with `QuotientOutputLineageEntryCandidateV1 = OutputLineageEntryV1` and
+every §9.4 concordance equation (field-ordinal contiguity, field-path
+agreement, `principal_source =
+SourceRefV1::Current(QLineage.principal.exact_anchor)`) unchanged. The
+group-4 ordinal discipline remains that of `FieldLineageV1.field_ordinal`
+and `OutputLineageEntryV1.output_ordinal`, extended by the contiguous
+`lineage_ordinal` of the fourth position. For a nonempty action the first
+three positions are the action-side `QLineage` rebuilt from `(B,A)` by the
+frozen A3 `CanonicalActionResult` equations and the receipt-free QG1c
+mirror, exactly as subsection 10.20.3 already consumes them
+(`OutLin_A`); for the candidate and total identity action they are
+`B.QLineage` by complete ordered bytes.
+
+The fourth position holds exactly the S1c4 container
+`QuotientActionIntroducedLineagePlanSharedV1` of subsection 10.20.1, with
+rows of type `QuotientActionIntroducedLineageRowPlanSharedV1 =
+(lineage_ordinal, primitive:QuotientSupportFormalActionIdPlanSharedV1,
+dependency_path:QuotientSupportPathPlanSharedV1,
+expected_judgment:QuotientSupportExpectedJudgmentPlanSharedV1)` and every
+10.20.1/10.20.2 admission check unchanged. Its occupancy is:
+
+```text
+g4.action_introduced = CompileActionIntroducedLineage(B,A)
+
+candidate / total identity (n=0):
+  g4.action_introduced =
+    QuotientActionIntroducedLineagePlanSharedV1(rows=[])
+
+nonempty action (n>0):
+  g4.action_introduced.rows.len = N_27 = D_A.
+```
+
+The position is a bare vector container, never an `Option`: subsection
+10.11.5 fixes `[]`, not `None`, as the identity/candidate occupancy, and
+the group-8 subject option retains `None` separately. `QLineage.principal`
+and `QLineage.fields` additionally serve as owner-resolution context in
+support compilation (subsection 10.11.1) and are not repeated in group 6;
+group 4 is their single stored location.
+
+This discharges the first `OPEN-AT-S1C4` tag (subsection 10.20.1): the
+enclosing four-position group-4 wrapper, its exact concatenation order
+`(principal, fields, output, action_introduced)`, its interaction with the
+nested-use rule (no local root or version byte anywhere below the single
+outer prefix), and its final placement as the fourth group of the
+section-11 order are now fixed. Nothing about the fourth position's value
+was open — subsection 10.20.1 fixed it — and nothing about it changes
+here.
+
+Aborts of this subsection: an `Option`-wrapped or missing fourth position;
+a candidate-schema variant without the position; a nonempty
+`action_introduced` for the candidate or a total identity action; any
+position order other than the displayed one; a re-encoded nested
+`QuotientCandidateLineageBaseCandidateV1` record header, second lineage
+copy, tag, count certificate, or digest inside group 4; a group-4 value
+not equal to its deterministic rebuild from `(B,A)`; any
+support-to-lineage back-edge (a lineage row, order, count, or field
+selected by a published dependency, class, coverage row, support key,
+resolved referent/owner, or footprint).
+
+### 10.21.3 The group-6 decision: final name, field order, encoding, and placement
+
+Decision: the final compiler-plan group-6 occupant is
+`QuotientSemanticSupportPlanSharedV1`, exactly as composed in subsection
+10.20.4. The S1a placeholder name `QuotientSemanticSupportCandidateV1` is
+retired: subsection 10.11.3 reserved it ("no final
+`QuotientSemanticSupportCandidateV1` is declared at this cut") and it was
+never declared; it is now never declared. The argument is from the frozen
+record, not preference:
+
+1. Section 11 and subsection 10.11.5 require one identical eight-group
+   schema for candidate and action with no outer candidate/action sum
+   tag. The group-6 occupant must therefore be a single type that types
+   both occupancies. A `CandidateV1`-named occupant would either demand a
+   second action-side type — a forbidden second schema or sum — or
+   misname the action occupancy it types.
+2. Subsection 10.20.4 already fixes the exact three-field composition
+   under the shared name, and its candidate occupancy is already
+   expressed in shared types: `package_candidate` carries
+   `graph=EmbedCandidateGraph(B.G0)`, the S1b3 candidate graph entering
+   only through the frozen order-preserving embedding of subsection
+   10.19.3. There is no candidate-typed group-6 value anywhere in the
+   frozen record to name.
+3. The record's naming discipline marks every final shared compiler-plan
+   value `PlanSharedV1` (the 10.19.1–10.19.3 sums and graph, the 10.20
+   lineage and package values); final encoded names and TypeIds remain
+   blocked by the still-open complete root (§8). Retiring the placeholder
+   in favor of the shared name is the only choice consistent with that
+   discipline.
+
+The field order and encoding are exactly the frozen 10.20.4 composition:
+
+```text
+QuotientSemanticSupportPlanSharedV1 =
+  (graph:QuotientSupportGraphPlanSharedV1,
+   footprint_agreement:QuotientSupportFootprintAgreementPlanSharedV1,
+   preservation_subjects:QuotientSupportPreservationSubjectsPlanSharedV1)
+```
+
+encoded as the in-order concatenation `graph || footprint_agreement ||
+preservation_subjects` with no sum tag, discriminator, count certificate,
+or digest. Inside it, every field order is the frozen one: `graph` has
+`(dependencies, owner_map, classes, coverage, projection)` per subsection
+10.19.3, with coverage and projection travelling inside `graph` and no
+second copy, digest, count certificate, or reordered view stored;
+`footprint_agreement` has `(current_projection:ExactOccurrenceFootprintV1,
+older_projection:ExactOlderPublicFootprintV1,
+output_projection:ExactOccurrenceFootprintV1)` per subsection 10.20.3;
+`preservation_subjects` has `(normalization, admissible_renaming,
+reindexing)` in that order per subsection 10.19.5, each a
+`QuotientSupportPreservationSubjectPlanSharedV1` containing its own
+physical `Seed_c`, with no template byte changed and the packaging census
+inherited unchanged (`3` subjects, `3` seeds, `3*PR_c =
+[60,63,63,63,60,63,75+3*h_6]` preservation source paths, `9` proposition
+nodes, `0` admission-premise values, `0` proof/evidence values).
+
+The placement is the sixth group of the section-11 order, between
+`group_5_footprints` and `group_7_field_dispositions`, and nowhere else;
+group 6 remains a common position with no top-level action-owned field.
+Occupancy is exactly the 10.20.4 `package_candidate` for the candidate and
+total identity action and `package_action = (G_A, the subsection-10.20.3
+action agreement, the frozen S1c3 aggregate)` for a nonempty action.
+
+R2e's authority over this value is limited to symbolic-schema lowering,
+numerical `TypeIdV1` assignment, and reconstruction/byte-comparison of
+physically encoded paths from a supplied validated representative. It may
+not choose a name, add, remove, or reorder a field, change an encoding, or
+change layout; the same restriction binds the roots/runtime cut apart from
+the root-`0xfd` byte grammar itself.
+
+This discharges the second `OPEN-AT-S1C4` tag (subsection 10.20.4): the
+final group-6 name (`QuotientSemanticSupportPlanSharedV1`, with the S1a
+placeholder retired unnamed), its field order and encoding, and its
+sixth-group placement under root `0xfd` are now fixed.
+
+Aborts of this subsection: any declaration or use of
+`QuotientSemanticSupportCandidateV1`; a candidate/action sum tag or
+discriminator on the package; a second coverage/projection copy, digest,
+count certificate, or reordered view; any field order other than
+`(graph, footprint_agreement, preservation_subjects)` or
+`(normalization, admissible_renaming, reindexing)`; a changed template
+byte; group-6 placement anywhere but sixth; an R2e or roots/runtime
+rename, field change, or relayout.
+
+### 10.21.4 The identity-action positive control
+
+Ledger line L5.2 is the literal-equality positive control: the candidate
+projection and the total identity-action projection are byte-identical
+complete eight-group values, not merely isomorphic. The frozen base law is
+subsection 10.11.5's
+
+```text
+QAction(B,[])      = QCandidate(B)
+QAction(B,A ++ []) = QAction(B,A)
+```
+
+and the per-group witnesses, each already frozen upstream, compose to the
+full-value byte identity:
+
+- groups 1–3: `Q1`, `Q2`, `Q3` are functions of the retained base only;
+  the identity action rebuilds nothing and reproduces them by complete
+  ordered bytes;
+- group 4: positions 1–3 are `B.QLineage` on both sides;
+  position 4 is `CompileActionIntroducedLineage(B,[]) =
+  QuotientActionIntroducedLineagePlanSharedV1(rows=[])`, byte-identical to
+  `ActionIntroducedLineage_candidate` with no option tag, sum tag, count
+  field, digest, or candidate/action discriminator (subsection 10.20.1);
+- group 5: `QFootprints_[] = B.QFootprints` by complete ordered bytes
+  (subsection 10.20.3);
+- group 6: `CompileSharedActionGraphCore(B,[]) = EmbedCandidateGraph(B.G0)`
+  and `OutLin_[] = B.QLineage.output` make all three recomputed
+  projections byte-identical to the candidate's subsection-10.14.4 values,
+  the identity agreement value equals the stored S1b3 agreement fieldwise,
+  and both sides supply the same `package_candidate` with the same frozen
+  S1c3 aggregate (subsections 10.20.3–10.20.4);
+- group 7: identity gives literal equality of the disposition vector
+  (subsection 10.11.4); and
+- group 8: `obligations` and `primary_subjects` are the same closed
+  `QObligations` and `B.QPrimarySubjects` values, and
+  `InstantiatedActionSubject(B,[]) = None` (subsection 10.16.2).
+
+Since no position carries a candidate/action discriminator, there exists
+no byte at which the two projections could differ; L5.2 is checked as byte
+identity of the complete decoded value and full rooted bytes, never
+per-field isomorphism and never digest comparison.
+
+The append-identity law is restated with its per-position images, all
+frozen:
+
+```text
+QAction(B,A ++ []) = QAction(B,A)
+
+CompileActionIntroducedLineage(B,A ++ [])
+  = CompileActionIntroducedLineage(B,A)
+CompileSharedActionGraphCore(B,A ++ [])
+  = CompileSharedActionGraphCore(B,A)
+CompileInstantiatedActionSubject(B,A ++ [])
+  = CompileInstantiatedActionSubject(B,A)
+InstantiatedActionSubject(B,A ++ [])
+  = InstantiatedActionSubject(B,A).
+```
+
+Appending an identity to an existing nonempty action preserves that
+image's nonempty lineage, nested action-support values, and
+`Some(action_subject)`; it never resets any group to the base candidate,
+and it never resets a nonempty lineage to `[]`.
+
+Aborts: any byte difference between the candidate and total
+identity-action projections; an identity action populating either
+action-owned position; a digest- or isomorphism-based identity check
+substituted for byte identity.
+
+### 10.21.5 The nonempty-action rule: top-level census and rebuild audit
+
+Ledger line L5.3: for a nonempty total action the complete value uses the
+same eight-group schema, and its only additional top-level action-owned
+fields are group 4's `action_introduced` vector (fourth position,
+subsection 10.21.2) and group 8's `instantiated_action_subject` option
+(third position, subsection 10.21.1). Every other position of every group
+is a common position. The candidate and total identity action carry the
+two action-owned positions as the closed empty/absent values `[]` and
+`None` — present positions with closed occupancies, never missing
+positions. No other action-only field, position, tag, or variant is
+admitted at top level; admitting one is a fail-closed abort.
+
+Ledger line L5.4: every common position is deterministically rebuilt from
+the original base and the one complete flattened total action, by the
+frozen equations and nothing else: the A3 `CanonicalActionResult`
+equations and QG1c mirror for the action-side realizations, lineage base,
+and `QFootprints_A`; `CompileQObligations` and `CompileQPrimarySubjects`
+over the action-side inputs; `CompileQFieldDispositions` over the
+action-side `Q2` (group 7 is rebuilt from the final action-side `Q2`, not
+inherited); and `CompileSharedActionGraphCore(B,A)` with the
+subsection-10.20.3 recomputations for group 6. Common bytes may therefore
+differ from the candidate, exactly as subsection 10.11.5 corrects.
+
+The item-5 rebuild audit is a check, not a stored value, and has two
+clauses over each common position `p` in the frozen order:
+
+```text
+rebuilt_p = Rebuild_p(B,A)            -- the frozen equations above
+require value_p = rebuilt_p           -- complete-byte equality
+
+for each maximal constituent c of value_p differing from the
+    candidate's corresponding position:
+  require c is, or lies within, a nested action-only variant of the
+    frozen enumeration below, or c is the exact deterministic rebuild
+    image of the frozen (B,A)-equations at that constituent's typed
+    position
+  -- otherwise: fail-closed abort (L5.4), nothing minted, no partial
+  -- publication, no diff transcript, certificate, or receipt stored
+```
+
+The frozen nested action-only enumeration — the only constituents
+admitted in a common position that lie outside the candidate value
+universe — is exactly the section-11/10.20.4 provision:
+`ActionDereferenced=4`, `ActionProject=5`, and `ActionProjectGrammar=6`
+loci of `QuotientSupportLocusPlanSharedV1`; `Formal=2` binders of
+`QuotientSupportBinderPlanSharedV1`; `FormalAction=5` referents of
+`QuotientSupportReferentPlanSharedV1`; `FormalAction=3` owners and keys of
+`QuotientSupportOwnerPlanSharedV1` and `QuotientSupportKeyPlanSharedV1`;
+`ActionIntroduced=27` and `ActionArgument=28` rows; and dependency
+paths rooted at root 6 (`ActionArguments`) descending into the nonempty
+same-tag action vector — the section-11 nested action-only roots. The
+candidate emits no such path because its same-tag root-6 vector is
+empty, and the action vector itself remains a compiler input stored in
+no group. A common position
+exhibiting any other non-candidate constituent — a new tag, variant,
+field, or root — is L5.4's fail-closed abort. A rebuild difference inside
+the candidate universe is admissible only as the deterministic image of
+the frozen equations (for example the rebuilt normalized fields of groups
+2 and 7); a difference not reproduced by the rebuild aborts. Patching,
+splicing, or carrying forward a candidate byte into a common position in
+place of its rebuild is likewise an abort: the rebuild is primary and
+total, and equality with it is mandatory.
+
+The formal-footprint exclusion of subsection 10.16.3 is unchanged:
+`FormalAction` owners seed no `Cl_b` suffix and enter no footprint; the
+audit never launders a formal owner through a common position's history
+footprint.
+
+### 10.21.6 Packaging discipline, forbidden inputs, and closure
+
+Ledger line L5.5: the three preservation descriptors travel exclusively as
+typed proposition syntax inside `group_6_support.preservation_subjects`.
+They store no inhabitant, no proof or evidence value, and no theorem
+authority; their census remains `admission-premise values = 0` and
+`proof/evidence values = 0`. The subsection-10.19.6 truth-audit gate is
+retained explicitly and unweakened: uninhabitedness is proved only for the
+nonempty full-action reindexing equality
+`Full(ProjectSeed)=Full(ReindexedSeed)` — every primitive contributes a
+formal-action key absent from the candidate endpoint — while the
+normalization subject holds definitionally, the total-identity reindexing
+subject holds literally, and a projection-stabilizing renaming may satisfy
+the renaming subject, none of which mints, stores, or licenses any proof
+value. Nothing in this section — and no later compiler, classifier,
+selector, provenance calculation, footprint criterion, class relation,
+`GCap` audit, or authority — may use either unproved equality as a
+compiler fact, class relation, footprint criterion, or authority. The
+separately versioned theory corrigendum remains mandatory before JG2b2b3
+may mint universal preservation authority; this section makes no choice
+among the corrigendum's candidate relations and appears in no compiler
+fact.
+
+Forbidden inputs, unchanged from subsection 10.20.5 and binding on every
+equation of this section: any support-to-lineage or footprint-to-owner
+back-edge; any lineage-to-stream back-edge; an R3 account; a copied raw,
+source, owner, or class ordinal from R2c or a representative; a
+construction transcript; a replay; a receipt; an evidence target; a
+representative path, support, or ordinal; a semantic SR2 result; `nu`;
+any `GCap`, `gamma`, or semantic-novelty datum; any QG2 stored route
+vector; any source or syntax copy; any numerical `TypeIdV1`. Fresh
+quotient ordinals appear only as checked positions in the independently
+reconstructed values. Holding
+`(B,A)` and the applicable formal semantic environment fixed while varying
+only forbidden material leaves the complete eight-group value
+byte-unchanged; this extends the S1b3/S1c3/S1c4
+representative-independence results to the eight-group boundary, subject
+to item 6's independent scan.
+
+This closes QG3 ledger item 5 at the compiler-plan boundary. It fixes
+exactly: the `QuotientSemanticProjectionPlanSharedV1` eight-position
+composition over the frozen section-11 order with the exact frozen
+per-group occupants (L5.1); the four-position group-4 wrapper
+`QuotientLineageGroupPlanSharedV1` with concatenation
+`(principal, fields, output, action_introduced)` and the discharge of the
+first `OPEN-AT-S1C4` tag; the final group-6 name
+`QuotientSemanticSupportPlanSharedV1` with the S1a placeholder
+`QuotientSemanticSupportCandidateV1` retired undeclared, its
+`(graph, footprint_agreement, preservation_subjects)` field
+order/encoding, its sixth-group placement, and the discharge of the second
+`OPEN-AT-S1C4` tag; the three-position group-8 wrapper
+`QuotientObligationsAndSubjectsGroupPlanSharedV1` with the frozen option
+law; the byte-identical candidate/total-identity positive control and
+restated append-identity law (L5.2); the exact two-position top-level
+action-owned census and the two-clause fail-closed rebuild audit with the
+frozen nested action-only enumeration (L5.3, L5.4); and the
+typed-syntax-only packaging of the three preservation descriptors with the
+retained 10.19.6 gate (L5.5). Both S1c4 `OPEN-AT-S1C4` tags are
+discharged; no `OPEN-AT-ITEM5` tag is registered, and per plan §13.2 any
+residue belongs to R2d roots/runtime, never to a new sub-alphabet. It does
+NOT close: the second transitive no-R3/no-representative/no-forbidden-raw
+scan, the QG2 two-admission and `5*PR_c` reproofs, the independent QG3
+`3*PR_c` proof, or the frozen fail-closed arithmetic, ordering,
+independence, and action-base binding (ledger item 6, L6.1–L6.6); root
+`0xfd`, slot `9[0]`, or the final encoded `QuotientSemanticProjectionV1`
+(roots/runtime); numerical `TypeIdV1` assignments (R2e); executable
+JG2b2b2 authority; or any theorem — the three preservation descriptors
+remain unproved typed proposition syntax, and the nonempty-action
+obstruction remains a frozen input to the mandatory theory corrigendum.
+This section mints no verified profile, executable interface, envelope
+census, pair disposition, occurrence classification, theorem, generic law,
+cubical bridge, `GCap`, `gamma`, or selective authority.
+
+## 10.22 QG3 ledger item 6: the second transitive scan, route-partition reproofs, and fail-closed closure
+
+This section closes plan §13.2 ledger item 6 (L6.1–L6.6) at the
+compiler-plan boundary: the second transitive
+no-R3/no-representative/no-forbidden-raw scan, the QG2 two-admission and
+`5*PR_c` reproofs, the independent QG3 `3*PR_c` proof, and the freeze of
+fail-closed arithmetic, ordering, independence, and action-base binding.
+It consumes, as immutable byte-for-byte inputs, the closed QG1 semantic
+mirrors (sections 8–9.4), all QG2 bytes (sections 10.1–10.10), the closed
+QG3 cuts S1a/D1 through S1c4 (sections 10.11–10.20), and the closed
+item-5 shared eight-group schema (section 10.21). It is symbolic only: it
+materializes no root-`0xfd` byte layout, assigns no numerical `TypeIdV1`,
+declares no new value, field, group, or compiler, and proves no
+preservation theorem. Root `0xfd` and slot `9[0]` freeze only in the
+later R2d roots/runtime cut, after QG1–QG3 close; `TypeIdV1` lowering and
+representative-byte comparison remain R2e/R4. Every count below is
+symbolic and inherited (`n`, `D_A`, `N_27`, `PR_c`, `h_6`, `m_5`, `m_6`,
+`p_6`, `Cl_b`, `M_nf`, `M_shared`); this section introduces no numeral
+not already frozen upstream. Fail-closed discipline is total: every
+violation named below aborts and mints nothing, and an unknown or
+undetermined input is an outcome, never permission.
+
+### 10.22.1 The second transitive no-R3/no-representative/no-forbidden-raw scan (L6.1)
+
+The first transitive scans are QG1's: section 13 gate 1 records that
+groups 1–5, every checked-value helper, the replay boundary, the digest
+whitelist, and the lineage/footprint maps passed independent transitive
+no-receipt/no-owner/no-forbidden-raw-presentation scans at the QG1
+schema-candidate closure. This second scan is the superset audit those
+scans deferred: its family list is the union of every rejection list of
+sections 10.11–10.21, and its domain is everything QG3 and item 5 added
+after QG1 closed. Subsection 10.20.5 explicitly deferred it — running a
+partial scan at S1c4 and citing it later would have double-counted an
+audit — so this subsection is the scan's first and only run; no earlier
+partial result is cited, reused, or aggregated.
+
+The scanned domain is exactly every value, compiler, resolver, embedding,
+and package of sections 10.11–10.21, transitively through every consumed
+field:
+
+- §10.11: the R2c field-disposition image, the seven-root tag sum
+  `QuotientSupportRootTagPlanCandidateV1`, the fresh graph/coverage ABI
+  declarations, and `CompileQFieldDispositions` with
+  `QuotientPublicFieldDispositionsCandidateV1`;
+- §10.12: the corrected virtual-locus ABI, the canonical symbolic-schema
+  generator, the finite-manifest rule, and the nine-case
+  expected-judgment surface with its contiguous eventual wire shape;
+- §10.13: the projected-grammar companion locus, the total
+  ambient/origin compilers, the exact seven-root traversal, every
+  deterministic path role, the nominal incidence image, and the
+  seventeen-node candidate manifest `M_nf` with its lowering;
+- §10.14: the candidate-only binder/referent/owner/key sums, the
+  resolver authority and preflight context, owner resolution, the exact
+  occurrence closure, `Cl_b`, classes, coverage, projection, the
+  receipt-free footprint agreement, and the no-formal graph `G0`;
+- §10.15: the preservation route/seed factorization, the three physical
+  seeds `Seed_c`, the reflexive quotient `NormalizedSeed` semantics
+  (`NF_Q_c`), the generic clause wire, and the parametric shared-result
+  contract;
+- §10.16: the instantiated-action anchor, the empty/nonempty subject
+  skeleton and option law, the semantic binder anchor, the
+  one-per-primitive root-6 spine, and the two-schema primitive delta;
+- §10.17: the endpoint-minimal total-action component forest, the
+  completed standalone naturality subject, its source/node census, and
+  the semantic primitive-occurrence blocks;
+- §10.18: the combined action stream, the action-only provenance
+  product, the paired edge-27 overlay, the exact root-6 counts, the
+  nineteen-node `M_shared`, and the symbolic candidate embedding;
+- §10.19: the shared locus/judgment/binder/referent/owner/key/projection
+  sums, the shared graph ABI, `EmbedCandidateGraph`,
+  `CompileSharedActionGraphCore`, the concrete projection sort, the
+  three typed preservation-subject descriptors, and the aggregate
+  `QuotientSupportPreservationSubjectsPlanSharedV1`;
+- §10.20: `QuotientActionIntroducedLineageRowPlanSharedV1` and
+  `QuotientActionIntroducedLineagePlanSharedV1`,
+  `CompileActionIntroducedLineage` with its independent census rerun,
+  the three recomputed footprints and
+  `QuotientSupportFootprintAgreementPlanSharedV1`, and the
+  `QuotientSemanticSupportPlanSharedV1` package with
+  `package_candidate`/`package_action`; and
+- §10.21: `QuotientSemanticProjectionPlanSharedV1`,
+  `QuotientLineageGroupPlanSharedV1`,
+  `QuotientObligationsAndSubjectsGroupPlanSharedV1`, the identity-action
+  positive control, the two-clause rebuild audit, and the frozen nested
+  action-only enumeration.
+
+The forbidden-input family list is the union of every rejection list in
+those sections, enumerated exactly:
+
+1. R3 accounts and resource material: `resource_account`,
+   `shape_cardinality`, `resolution_cardinality`, meters, and limits
+   (§§10.11.1, 10.14–10.20);
+2. receipts of every kind, including empty-enumeration, cardinality,
+   contract, node-check, and checked-false receipts (§10.11.4;
+   §§10.11–10.21);
+3. replays and traces: action traces, typing replays, kernel replays,
+   and any replay-derived vector (§§10.11.4, 10.13–10.20);
+4. transcripts and worklists: construction transcripts, resolution
+   transcripts, hop transcripts, search transcripts, and closure
+   worklists (§§10.11.4, 10.13, 10.14, 10.15, 10.19, 10.20.5), and
+   spans (§§10.1–10.10, inherited QG2 lists);
+5. representative material: representative paths, supports, ordinals,
+   traces, and records; replay positions (§10.4.4, inherited);
+   `E.structural_support`; `FullLocalPathV1`; `SubjectPathV1`
+   (§§10.11.1, 10.13, 10.14, 10.19, 10.20.5);
+6. copied raw/work/source/owner/class ordinals and coordinates from R2c
+   or a representative, owner-resolution hop paths, and owner hops
+   (§§10.11.1, 10.13, 10.14, 10.19, 10.20.5);
+7. raw presentation: presentation fields, raw codes, raw field values,
+   raw paste syntax, and raw postfix/association syntax (§§10.13,
+   10.15, 10.16, 10.17);
+8. evidence: evidence targets, evidence commitments and values,
+   replacement evidence, normalization witnesses, and proof values
+   (§§10.11.4, 10.13–10.15, 10.20.5; the preservation census keeps
+   `proof/evidence values = 0`);
+9. numerical `TypeIdV1` in any role — copied, guessed, zero, or
+   duplicate (§§10.11.1, 10.13, 10.15, 10.16, 10.19, 10.20.5);
+10. semantic SR2 / `Sem` results (§§10.13–10.20);
+11. `nu` (§§10.13–10.20);
+12. `GCap`, `gamma`, and every semantic-novelty datum (§§10.15–10.20);
+13. QG2 stored route vectors, QG2 path occurrences, copied source
+    bundles, and source or syntax copies (§§10.17–10.20.5);
+14. back-edges used as selectors: support-to-lineage (a lineage row,
+    order, count, or field selected by a published dependency, class,
+    coverage row, support key, resolved referent/owner, or footprint);
+    footprint-to-owner (an owner, closure seed, witness, class, or
+    output seed selected by a stored footprint); lineage-to-stream (a
+    stored lineage vector traversed to generate or select an edge-27
+    event); support-to-stream and support-to-row (a stream event,
+    companion, manifest node, embedding, action row, or owner selected
+    by a stored lineage, support dependency, class, coverage row,
+    footprint, or preservation subject; §§10.18.4, 10.19.7);
+    preservation back-edges (§10.15.5); group-7 back-edges (§10.10.6,
+    inherited); and `QFootprints` read in any role before its
+    final-equality position (§§10.14, 10.18, 10.19, 10.20.5);
+15. intermediate action material: intermediate action images, identity
+    postfixes, caller association and parentheses, stepwise
+    payloads/endpoints, newly appended stepwise endpoints, and checked
+    wrappers or checked actions used as routes (§§10.15–10.19, 10.20.5);
+16. final-image subject environments: the rebuilt final-image source
+    bundle, final payload, final key, support graph, or action lineage
+    used as a subject environment, and any copied final-image
+    environment (§§10.16.2, 10.16.5); and
+17. later-cut selectors: later registry state, R2e/R4 comparison
+    results, and held-out results (§10.13; the QG2 rejection lists are
+    inherited unchanged).
+
+The scan discipline is transitive and typed: every consumed field of
+every scanned value, compiler input, resolver context, embedding, and
+package is traversed to its leaves, not just the top level; a value is a
+hit if any transitive constituent is of a forbidden family, is copied
+from one, or is selected by one. A symbolic result tag or path that
+merely denotes a forbidden schema is not an occurrence — exactly as a
+symbolic admission tag is not an embedded admission value (subsection
+10.10.6) — but a physical value, a copied coordinate, or a selector edge
+is. A field whose type or provenance cannot be determined is an unknown,
+and unknown is a fail-closed abort, never a pass.
+
+Result, recorded over the frozen record at this cut: the scan passes.
+Every family above appears in sections 10.11–10.21 only inside rejection
+lists, abort clauses, disposition tables marking `no image`/`forbidden`,
+and the erasure discipline — never as a consumed field, stored position,
+or selector of any closed value. The seven-root support frame remains a
+compiler input stored in no group; the action vector remains a compiler
+input stored in no group; stored footprints are read only as final
+equality targets after the complete shared graph exists.
+
+The independence statement is thereby extended and discharged: holding
+`(B,A)` and the applicable formal semantic environment fixed while
+varying only forbidden material — caller association, identity
+postfixes, intermediate action images, representative traces, receipts,
+transcripts, R3 payloads, semantic SR2 results, `nu`, `GCap`, `gamma` —
+leaves every closed value of sections 10.11–10.21, including the
+complete eight-group `QuotientSemanticProjectionPlanSharedV1` value,
+byte-unchanged. Subsection 10.21.6 stated this subject to item 6's
+independent scan; that condition is now discharged, and the
+S1b3/S1c3/S1c4 representative-independence theorems extend to the
+eight-group boundary without remainder.
+
+Aborts of this subsection: any transitive occurrence of families 1–17 in
+a consumed field of a scanned value; any selector edge from a forbidden
+family; an untypable or provenance-unknown field; a scan run over less
+than the full 10.11–10.21 domain presented as this scan; citation of any
+earlier partial scan as this scan's result.
+
+### 10.22.2 The QG2 reproofs: exactly two admission values and the exact `5*PR_c` route partition (L6.2, L6.3)
+
+The frozen QG2 values are restated exactly. Subsection 10.10.6 proves
+that a typed value-schema traversal of the complete item-4 value
+`QuotientEnvelopeSubjectsCandidateV1` finds
+`QuotientCandidateAdmissionPremiseCandidateV1` values at exactly
+
+```text
+root_projection.source_bundle.selector_inputs.match_premise
+root_projection.source_bundle.source_candidate.match_premise
+```
+
+and nowhere else, both byte-identical to item 3's `A`: the full family,
+not merely its bundle, has exactly two physical admission values. With
+the frozen per-constructor route census
+
+```text
+PR_c = [20,21,21,21,20,21,25+h_6]
+```
+
+in constructor order `0..6`, the typed traversal partitions every
+embedded `QuotientSubjectProjectionSourcePathPlanCandidateV1` occurrence
+as
+
+```text
+3 * PR_c  in the three group-5 preservation rows inside QObligations
+1 * PR_c  in root_projection.subjects
+1 * PR_c  in the byte-identical syntax value prefix
+0         everywhere else,
+```
+
+with full transitive totals `[100,105,105,105,100,105,125+5h_6]`, no
+deduplication, interning, or common-subexpression elimination, and
+semantic projection plans excluded as a distinct type.
+
+The reproof obligation is that the closed QG3 structures — everything in
+sections 10.11–10.21 — neither added nor removed an admission value or a
+route copy from this frozen QG2 census. It is discharged by the frozen
+per-cut facts, each already recorded and none new:
+
+- QG2 bytes are immutable inputs to every QG3 cut (§10.20's input list,
+  plan §13.2); no cut regenerates, edits, or re-encodes them, so no copy
+  can be removed;
+- the QG2 census counts occurrences of the QG2 path-plan type and the
+  QG2 admission type. Subsection 10.15.1 fixes that the fresh
+  preservation path-plan type is a distinct plan type, not a type alias
+  or a QG2 value reference, so it never enters the QG2 census;
+  subsection 10.15.4 fixes that the three QG3 seeds contain the
+  occurrences of that fresh type and that the frozen QG2 family still
+  contains exactly `5*PR_c` occurrences of its QG2 path-plan type;
+- the preservation family contains zero admission-premise values
+  (§10.15.4), and the aggregate census of subsection 10.19.5 keeps
+  `admission-premise values = 0` and `proof/evidence values = 0`;
+- the standalone action subject generates all routes from the
+  subsection-10.9.4 role table, does not copy the QG2 route vector, and
+  adds zero admission values (§10.17);
+- S1c2 leaves all QG2 bytes, the exact `5*PR_c` census, and the two
+  admission values unchanged (§10.18); S1c3 and S1c4 restate the same
+  (`QG2's separate census remains 5*PR_c`, `the enclosing quotient
+  still has exactly the two admission values proved in subsection
+  10.10.6`; §§10.19.5, 10.20.4); and
+- item 5 stores `QObligations` and `QPrimarySubjects` as the unchanged
+  closed values in group 8 (§10.21.1), and the L6.1 scan confirms no
+  QG3 or item-5 value consumes a QG2 stored route vector or syntax copy
+  through which a copy could be silently added.
+
+Therefore L6.2 and L6.3 hold: the enclosing quotient family has exactly
+two physical admission values, at the two loci above, byte-identical to
+item 3's `A`; and the exact `5*PR_c` route partition, with `PR_c` and the
+displayed five-copy decomposition and totals, is unchanged by all of
+QG3. Aborts: any third admission value or missing copy under the typed
+retraversal; any route-copy count differing from the displayed
+partition; any QG3 value entering the QG2 census; any mutation of a QG2
+byte.
+
+### 10.22.3 The independent QG3 `3*PR_c` proof (L6.4)
+
+The QG3 preservation census is proved independently of the QG2 census,
+over fresh paths of a fresh type. The frozen vector, per subsections
+10.19.5 and 10.20.4, in constructor order `0..6`, is
+
+```text
+3*PR_c = [60,63,63,63,60,63,75+3*h_6],
+```
+
+carried inside the aggregate
+
+```text
+subjects                         = 3
+physical seeds                   = 3
+preservation source paths        = 3*PR_c
+binder declarations              = 1+2+2 = 5
+endpoint modes                   = 6
+PureSupportFunctionProjection    = 6
+Equality nodes                   = 3
+total proposition nodes          = 9
+admission-premise values         = 0
+proof/evidence values            = 0,
+```
+
+with the three subjects `(normalization, admissible_renaming,
+reindexing)` in that order, each containing its own physical `Seed_c`,
+and no template byte changed by S1c4's packaging or item 5's group-6
+placement (§§10.20.4, 10.21.3).
+
+Independence from the QG2 census has three legs, each frozen upstream:
+
+1. **Fresh type.** The occurrences counted are of the fresh preservation
+   path-plan type, not the QG2
+   `QuotientSubjectProjectionSourcePathPlanCandidateV1` census type;
+   neither census counts the other's occurrences (§10.15.4).
+2. **Fresh paths.** Construction of each fresh seed independently reruns
+   the QG3 route compiler; the `RequirementOf(subject)` comparison
+   against the decoded `SupportProjectionRequirement` payloads at group-5
+   local rows `5,6,7` is a cross-check, neither stored in the subject
+   nor followed as a pointer (§10.15.4), and no stored
+   `QPrimaryRouteCensus(c)` vector — the QG2 stored route vector of the
+   §§10.19.7/10.20.5 forbidden-input lists — is read or copied
+   (§§10.15.1, 10.15.4). Every repetition remains physical and ordered.
+3. **Zero new admissions.** Endpoint modes and proposition syntax
+   contain zero source paths of either census type, the preservation
+   family contains zero admission-premise values, and the combined
+   quotient family therefore still has exactly the two physical
+   admission values of subsection 10.10.6 (§10.15.4) — the QG3 proof
+   adds nothing to, and borrows nothing from, the QG2 count.
+
+Therefore L6.4 holds: the QG3 preservation source-path census is exactly
+`3*PR_c = [60,63,63,63,60,63,75+3*h_6]`, proved by the independent
+per-seed rerun, not by citing the QG2 partition. Aborts: a seed whose
+rerun census differs from `PR_c` in any constructor position; a shared
+seed across subjects; a route copied from a QG2 stored vector; a
+requirement payload followed as a pointer; any admission-premise or
+proof/evidence value in the preservation family.
+
+### 10.22.4 Frozen fail-closed arithmetic, ordering, independence, and action-base binding (L6.5)
+
+**Arithmetic.** Every count, prefix sum, ordinal, and length computation
+in sections 10.11–10.21 uses the frozen checked family and nothing else:
+`checked_add_u64`, `checked_sub_u64`, `checked_add`, `checked_mul`,
+`checked_u16`, `checked_u32`, and exact `u16`/`u32` conversions. Any overflow, inexact
+conversion, bounds failure, or allocation failure is an abort; there is
+no silent wrap, saturation, or modular reduction anywhere in the closed
+compilers, and no unchecked arithmetic may be introduced by a later
+lowering of these plans. This discipline is now frozen for the complete
+quotient boundary.
+
+**Ordering.** The canonical orderings closed by 10.14, 10.19, and 10.21
+are frozen as the only orderings, split exactly by construction: the
+closure suffix is `sort_unique_full_occurrence_bytes` over complete
+occurrence bytes (§§10.14.3, 10.19.4); the three footprints are
+`sort_unique` over their occurrence and entry values (§§10.14.4,
+10.20.3); classes, coverage, and `projection.keys` — including the
+concrete S1c3 projection sort — are `sort_unique` over fresh complete
+semantic keys under the frozen case-rank comparator
+`Current < Older < Structural`, then lexicographic full canonical
+payload bytes within the case (§10.14.4), extended by the shared
+comparator `Current < Older < Structural < FormalAction` (§10.19.3);
+and equality, lexicographic ordering, and first difference over
+the complete value use the complete decoded value and full rooted bytes
+(§10.21.1). Digest equality or inequality is never a quotient witness;
+equal paths and repeated rows remain physical, ordered, and never
+deduplicated, interned, or common-subexpression eliminated; no
+alternative sort key, collation, or ordering view may be stored or
+substituted.
+
+**Independence.** The representative-independence extension of 10.20 is
+frozen at the eight-group boundary: with the L6.1 scan passed, holding
+`(B,A)` and the applicable formal semantic environment fixed while
+varying only forbidden material leaves the rerun census, every lineage
+row byte, the shared graph, all three recomputed footprints, the
+agreement value, the complete group-6 package, and the complete
+eight-group value byte-unchanged. The subsection-10.21.6 condition
+("subject to item 6's independent scan") is discharged; no residual
+independence condition remains open at the compiler-plan level.
+
+**Action-base binding.** Every action value is bound to its original
+base `B` and the one complete flattened total action `A`, never to an
+intermediate image: `CompileActionIntroducedLineage(B,A)`,
+`CompileSharedActionGraphCore(B,A)`,
+`CompileInstantiatedActionSubject(B,A)`, `InstantiatedActionSubject(B,A)`,
+and every common-position rebuild `Rebuild_p(B,A)` of subsection 10.21.5
+take `(B,A)` and nothing else. The frozen identity laws
+
+```text
+QAction(B,[])      = QCandidate(B)
+QAction(B,A ++ []) = QAction(B,A)
+```
+
+and their per-compiler images (§§10.20.1, 10.19, 10.16.2, 10.21.4) are
+frozen: appending an identity preserves the existing image and never
+resets a projection to the base candidate; a candidate or total identity
+action supplies exactly the closed empty/absent action-owned values `[]`
+and `None`. Binding any action value to a stepwise endpoint, caller
+association, intermediate action image, or partial flattening is an
+abort.
+
+Aborts of this subsection: any unchecked or wrapping arithmetic; any
+stored or substituted alternative ordering, digest witness, or
+deduplicated view; any byte of any closed value that varies with
+forbidden material under fixed `(B,A)` and environment; any action value
+bound to an intermediate image or partial action.
+
+### 10.22.5 Zero new admission values (L6.6) and closure
+
+L6.6 is the conjunction already discharged piecewise: sections
+10.11–10.21 add zero admission values. The preservation kernel adds zero
+(§10.15.4); the aggregate keeps `admission-premise values = 0`
+(§§10.19.5, 10.20.4); the standalone action subject adds zero (§10.17);
+S1c2, S1c3, S1c4, and item 5 each leave the two subsection-10.10.6
+values as the enclosing quotient's only physical admission values
+(§§10.18, 10.19.5, 10.20.4, 10.21); and the L6.1 scan finds no channel —
+no QG2 route-vector copy, no syntax copy, no back-edge — through which
+an admission value could enter unrecorded. The complete quotient family
+therefore has exactly two physical admission values, unchanged from QG2,
+and zero introduced by QG3.
+
+This closes QG3 ledger item 6 at the compiler-plan boundary, and with it
+QG3: items 1–4 closed as S1a/D1 through S1c4 (sections 10.11–10.20),
+item 5 closed as section 10.21, and item 6 closed here; every §13.2
+ledger line L5.1–L5.5 and L6.1–L6.6 is checked, and no residue moves to
+a new S1c5/S1d sub-alphabet. This section fixes exactly: the second
+transitive no-R3/no-representative/no-forbidden-raw scan over the full
+10.11–10.21 domain with the seventeen-family forbidden-input union, its
+pass result, and the discharged eight-group independence statement
+(L6.1); the reproved QG2 census — exactly two admission values at the
+two frozen loci and the exact `5*PR_c` partition with
+`PR_c = [20,21,21,21,20,21,25+h_6]` and totals
+`[100,105,105,105,100,105,125+5h_6]` (L6.2, L6.3); the independently
+proved QG3 census `3*PR_c = [60,63,63,63,60,63,75+3*h_6]` with zero new
+admissions (L6.4); the frozen checked-arithmetic family, the canonical
+10.14/10.19/10.21 orderings, the eight-group representative-independence
+freeze, and total `(B,A)` action-base binding (L6.5); and zero new
+admission values (L6.6).
+
+QG3's completion unlocks exactly one next lawful move: the R2d
+roots/runtime cut (plan §7.1 item 5) — root-`0xfd` materialization of
+the frozen section-11 grammar, the final encoded
+`QuotientSemanticProjectionV1` name, slot `9[0]` and the slot-9–11
+runtime types, full key comparison, rooted outcomes and classes under
+the root-`0xe7` `CheckedLeafOutcomeV1` encoding, root `0xe8` coverage,
+root `0xe9` dispositions, base-relative action rebuild with the action
+trace/image, roots `0xfe`/`0xff`, Level-II tag 4, and joined root
+`0xe3` — under the
+frozen constraint that no group, position, name, field order, or
+encoding fixed by sections 10.11–10.22 may be added, removed, reordered,
+or renamed. It does NOT unlock: root `0xfd` or any byte layout within
+this record (roots/runtime only); numerical `TypeIdV1` assignment or the
+registry/source join (R2e); R3's failure/resource machine; R4's fixture
+regeneration and mutation testing; executable JG2b2b2 authority; or any
+theorem. The three preservation descriptors remain unproved typed
+proposition syntax storing no inhabitant, proof/evidence value, or
+theorem authority; the subsection-10.19.6 truth-audit gate persists
+unweakened — the nonempty full-action reindexing equality
+`Full(ProjectSeed)=Full(ReindexedSeed)` remains uninhabited, and nothing
+may use either unproved equality as a compiler fact, class relation,
+footprint criterion, or authority before the mandatory separately
+versioned theory corrigendum. This section mints no verified profile,
+executable interface, envelope census, pair disposition, occurrence
+classification, theorem, generic law, cubical bridge, `GCap`, `gamma`,
+or selective authority.
+
 ## 11. Eight-group root-`0xfd` frontier
 
 A3 fixes exactly these ordered semantic groups:
@@ -14133,9 +15104,11 @@ Every common field is rebuilt from the original base and total flattened
 action and may differ from the candidate; common fields such as group 6 may
 contain nested action-only roots, referents, owners, keys, or edges. The
 candidate and total identity supply the closed empty/absent top-level
-action-owned values. The group-4 action-introduced-lineage value and the final
-group-4/group-8 placement and package remain later QG3 closure items; the
-instantiated-action-subject type itself is already closed.
+action-owned values. The group-4 action-introduced-lineage value closed at
+section 10.20; the group-4 wrapper, the final group-4/group-8 placement, and
+the complete symbolic eight-group schema closed at section 10.21; the
+instantiated-action-subject type was already closed. The final encoded
+`QuotientSemanticProjectionV1` remains reserved for the roots/runtime cut.
 
 ## 12. Exact slot topology fixed now
 
@@ -14178,9 +15151,9 @@ Root `0xfd` and slot `9[0]` may freeze only after:
    complete ten-role source bundle, the exact-on-symbolic-image path translator,
    and the exact 8/11 primary subject programs with neutral square subjects,
    exact `5*PR_c` route copies, and exactly two admission values.
-3. **QG3 — support and action — ACTIVE; S1a/D1, S1b1, S1b2, S1b3, THE
-   PRESERVATION KERNEL, AND S1c0--S1c4 CLOSED AT THEIR STATED REPRESENTATION
-   BOUNDARIES.** Section
+3. **QG3 — support and action — CLOSED (2026-08-04); S1a/D1, S1b1, S1b2,
+   S1b3, THE PRESERVATION KERNEL, S1c0--S1c4, AND LEDGER ITEMS 5-6 CLOSED AT
+   THEIR STATED REPRESENTATION BOUNDARIES.** Section
    10.11 fixes the exact R2c field disposition, seven semantic support roots,
    fresh graph/coverage ABI, and complete payload-free ordinary field-
    disposition mirror. Section 10.12 fixes the provisional virtual-locus
@@ -14212,9 +15185,13 @@ Root `0xfd` and slot `9[0]` may freeze only after:
    obstruction to the current full-projection equality. Section 10.20 closes
    action-introduced lineage, the three independently recomputed footprints
    and their agreement, and the candidate/action group-6 support package at
-   the compiler-plan boundary. The shared eight-group shape remains (plan
-   ledger item 5). QG3 then requires a second transitive no-R3/no-
-   representative scan (plan ledger item 6).
+   the compiler-plan boundary. Section 10.21 closes the shared eight-group
+   schema, discharging both OPEN-AT-S1C4 deferrals (plan ledger item 5,
+   L5.1--L5.5). Section 10.22 records the second transitive no-R3/no-
+   representative/no-forbidden-raw scan, the QG2 two-admission and `5*PR_c`
+   reproofs, the independent QG3 `3*PR_c` proof, and the fail-closed
+   arithmetic/ordering/independence/action-base freezes (plan ledger item 6,
+   L6.1--L6.6). QG3 is closed at the compiler-plan boundary.
 
 After QG1--QG3, R2d must close full key comparison, rooted outcomes and classes,
 root `0xe8` coverage, root `0xe9` dispositions, base-relative action rebuild,
@@ -14222,20 +15199,15 @@ roots `0xfe`/`0xff`, Level-II tag 4, joined root `0xe3`, and all slot-10/11
 runtime types. R3 then fills the already qualified failure/resource fields; R2e
 assigns final TypeIds and joins the registry; R4 regenerates fixtures.
 
-The next lawful R2d move is QG3 ledger items 5 and 6 (plan §13.2). Item 5
-closes the shared eight-group schema: the frozen section-11 `0xfd` layout
-with byte-identical candidate/total-identity projections, group-4 lineage
-and the group-8 optional action subject as the only additional top-level
-action-owned fields, and every common position deterministically rebuilt
-from the original base (L5.1--L5.5), including the final group-6 name, field
-order/encoding, and sixth-group placement left open by subsection 10.20.4.
-Item 6 runs the second transitive no-R3/no-representative/no-forbidden-raw
-scan, reproves QG2's exactly two admissions and exact `5*PR_c` route
-partition, independently proves the QG3 `3*PR_c` partition, and freezes
-fail-closed arithmetic, ordering, independence, and action-base binding
-(L6.1--L6.6). Candidate `M_nf`, the S1b3 graph, the preservation kernel,
-S1c0--S1c4, and all QG2 bytes are immutable inputs. Subject syntax is not
-proof evidence: the section-10.19.6 preservation-truth obstruction remains a
+The next lawful R2d move is the roots/runtime cut (plan §7.1 item 5): full
+key comparison, rooted outcomes and classes under the root-`0xe7`
+`CheckedLeafOutcomeV1` encoding, root `0xe8` coverage, root `0xe9`
+dispositions, the base-relative action rebuild with the action trace/image,
+roots `0xfd`, `0xfe`, and `0xff`, Level-II tag 4, joined root `0xe3`, and
+all slot-9/10/11 runtime types, materializing the section-10.21 symbolic
+schema as the encoded `QuotientSemanticProjectionV1`. Sections 10.11--10.22
+and all QG1/QG2 bytes are immutable inputs. Subject syntax is not proof
+evidence: the section-10.19.6 preservation-truth obstruction remains a
 mandatory theory corrigendum before any later universal authority may use
 those equalities. The work must reject every support-to-lineage or
 footprint-to-owner back-edge, R3 account, copied raw/source/owner/class

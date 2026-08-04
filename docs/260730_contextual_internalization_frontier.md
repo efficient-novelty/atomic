@@ -218,8 +218,10 @@ freezes structural declaration roots, term-node paths, deterministic
   translator are closed. Item 4's fresh quotient-primary compiler retains the
   exact subject counts, independent nominal/implementation projections, five-
   endpoint square subjects, `5*PR_c` route copies, and exactly two admission
-  values. QG3 support/disposition/action mirrors are active. The chain
-  `QG3 -> R2d roots/runtime -> R3 -> R2e -> R4` must still bind A1, the A2-O
+  values. QG3 closed on 2026-08-04 (record sections 10.20-10.22: action
+  lineage, independent footprints, the group-6 support package, the shared
+  eight-group schema, and the second transitive scan). The chain
+  `R2d roots/runtime -> R3 -> R2e -> R4` must still bind A1, the A2-O
   substrate, and A3-O into the canonical complete profile transcript/resource/
   non-authority contract; `JG2b2b2b` remains blocked by
   A4-R4 before it can implement the closed executable Rust grammar and

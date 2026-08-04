@@ -6,11 +6,11 @@ Plan version: 2026-08-04 rev 2
 
 Repository: `pen-atomic`
 
-Status: **A4-R2d QG2, QG3-S1a/D1 through QG3-S1b3, the QG3 preservation
-kernel, and QG3-S1c0 through QG3-S1c4 are closed at their stated
-representation boundaries (S1c4 closed 2026-08-04 as record §10.20 after
-independent review); the QG3 shared eight-group schema and second transitive
-scan (§13.2 ledger items 5-6) are the active implementation frontier. The current
+Status: **A4-R2d QG1, QG2, and QG3 are closed at their stated representation
+boundaries — S1a/D1 through S1c4 (record §10.20) plus ledger items 5-6
+(record §§10.21-10.22, closed 2026-08-04 with all eleven §13.2 ledger lines
+checked and both OPEN-AT-S1C4 deferrals discharged); the R2d roots/runtime
+cut (§7.1 item 5) is the active implementation frontier. The current
 full-projection preservation subjects are typed proposition syntax only:
 full-projection action equality is impossible for every nonempty action, and a
 separately versioned preservation-law corrigendum is mandatory before universal
@@ -652,22 +652,28 @@ Closed inputs:
   footprints with stored values as final equality targets, and the group-6
   package `(graph, footprint agreement, preservation subjects)` with the
   10.19.6 truth-audit gate retained (record §10.20, closed 2026-08-04 after
-  independent review).
+  independent review); and
+- QG3 ledger items 5-6 (record §§10.21-10.22): the complete symbolic
+  eight-group schema `QuotientSemanticProjectionPlanSharedV1` in the frozen
+  section-11 group order with the four-position group-4 wrapper and the
+  adopted group-6 name `QuotientSemanticSupportPlanSharedV1` (S1a
+  placeholder retired; both OPEN-AT-S1C4 deferrals discharged), per-group
+  identity-action byte-identity witnesses, the two-position action-owned
+  census with the fail-closed rebuild audit, the seventeen-family second
+  transitive scan, the QG2 two-admission and `5*PR_c` reproofs, the
+  independent `3*PR_c` proof, and the frozen fail-closed
+  arithmetic/ordering/independence/action-base disciplines.
 
 Active deliverable:
 
-> Close §13.2 ledger items 5 and 6. Item 5: the shared eight-group schema —
-> the frozen section-11 `0xfd` layout, byte-identical candidate/
-> total-identity projections, group-4 lineage and the group-8 optional
-> action subject as the only additional top-level action-owned fields, every
-> common position deterministically rebuilt from the original base, and the
-> final group-6 name, field order/encoding, and placement left open by
-> §10.20.4 (L5.1--L5.5). Item 6: the second transitive
-> no-R3/no-representative/no-forbidden-raw scan, the QG2 two-admission and
-> `5*PR_c` reproofs, the independent QG3 `3*PR_c` proof, and frozen
-> fail-closed arithmetic, ordering, independence, and action-base binding
-> (L6.1--L6.6). Preserve QG2, candidate `M_nf`, S1b3, the preservation
-> kernel, and S1c0--S1c4 byte-for-byte.
+> Close the R2d roots/runtime cut (§7.1 item 5): full key comparison, rooted
+> outcomes and classes under the root-`0xe7` `CheckedLeafOutcomeV1`
+> encoding, root `0xe8` coverage, root `0xe9` dispositions, the
+> base-relative action rebuild with the action trace/image, roots `0xfd`,
+> `0xfe`, and `0xff`, Level-II tag 4, joined root `0xe3`, and all
+> slot-9/10/11 runtime types, materializing the §10.21 symbolic schema as
+> the encoded `QuotientSemanticProjectionV1`. Record sections 10.11--10.22
+> and all QG1/QG2 bytes are immutable inputs, consumed read-only.
 
 Not yet materialized:
 
@@ -803,9 +809,9 @@ selective-profile authority exists yet.
    partition, and full transitive two-copy admission invariant are closed at
    compiler-plan level. Numerical TypeId lowering and representative-byte path
    comparison remain deferred to R2e/R4.
-4. **QG3 — active at ledger items 5-6; S1a/D1 through S1b3, the preservation
-   kernel, and S1c0--S1c4 are closed at their stated representation
-   boundaries.** The
+4. **QG3 — closed (2026-08-04); S1a/D1 through S1b3, the preservation
+   kernel, S1c0--S1c4, and ledger items 5-6 (record §§10.21-10.22) are
+   closed at their stated representation boundaries.** The
    exact R2c projection inventory, seven semantic roots, graph/coverage ABI,
    payload-free ordinary
    `Primitive` compiler, corrected four-way virtual-locus ABI, canonical
@@ -825,10 +831,10 @@ selective-profile authority exists yet.
    preservation theorem; its exact nonempty-action formal-key obstruction is a
    later theory-corrigendum gate. S1c4 (record §10.20) closes
    action-introduced lineage, footprint agreement, and the candidate/action
-   support package at the compiler-plan boundary. The remaining ordered QG3
-   cuts close the shared eight-group shape and the second transitive scan
-   (§13.2 ledger). This is GCap infrastructure, not semantic-novelty
-   measurement.
+   support package at the compiler-plan boundary. Record §10.21 closes the
+   shared eight-group schema and §10.22 the second transitive scan and
+   reproofs, completing QG3 against the §13.2 ledger. This is GCap
+   infrastructure, not semantic-novelty measurement.
 5. **R2d roots/runtime.** Close quotient projection and keys, checked outcomes
    and classes, coverage/dispositions, base-relative action rebuild, action
    trace/image, roots `0xfd`, `0xe7`–`0xe9`, `0xfe`, `0xff`, joined root `0xe3`,
@@ -1632,11 +1638,13 @@ The current packet may package the three preservation descriptors, but it must
 not prove, assume, classify by, or derive `GCap` from their truth. The exact
 nonempty-action obstruction is a frozen input to later TC work.
 
-The next autonomous work item is **A4-R2d QG3 ledger items 5-6: the shared
-eight-group schema and the second transitive scan (§13.2)**. QG3-S1c4 closed
-2026-08-04 as record §10.20 after independent review (four P1 findings and
-one P2 finding corrected, then a focused re-review with one further blocking
-field-name correction).
+The next autonomous work item is **the A4-R2d roots/runtime cut (§7.1 item
+5)**. QG3 is complete: S1c4 closed 2026-08-04 as record §10.20 after
+independent review (four P1 findings and one P2 finding corrected, then a
+focused re-review with one further blocking field-name correction); ledger
+items 5-6 closed the same day as record §§10.21-10.22 after per-item
+three-verifier adversarial review, revision, and a final eleven-line ledger
+audit (all lines pass; both OPEN-AT-S1C4 deferrals discharged).
 
 ### 13.1 Parallel formulation lane (registered 2026-08-04)
 
@@ -1884,17 +1892,18 @@ Required sequence:
    OPEN-AT-S1C4 deferrals (group-4 wrapper encoding; group-6
    name/field/layout) to ledger item 5, with R2e limited to symbolic
    lowering, `TypeIdV1` assignment, and representative comparison;
-5. close the shared eight-group schema. Candidate and total identity-action
-   projections are byte-identical. For a nonempty action, the only additional
-   top-level action-owned fields are lineage and the optional action subject;
-   every common position is deterministically rebuilt from the original base
-   and may change or contain nested action-only variants;
-6. run the second transitive no-R3/no-representative/no-forbidden-raw scan,
-   reprove QG2's exactly two admissions and exact `5*PR_c` route partition,
-   independently prove the QG3 `3*PR_c` route partition, and freeze fail-closed
+5. **Closed -- item 5 (record §10.21, 2026-08-04).** The shared eight-group
+   schema: byte-identical candidate/total-identity projections, the
+   two-position action-owned census with the fail-closed rebuild audit, the
+   four-position group-4 wrapper, and the adopted group-6 name
+   `QuotientSemanticSupportPlanSharedV1`, discharging both OPEN-AT-S1C4
+   deferrals;
+6. **Closed -- item 6 (record §10.22, 2026-08-04).** The second transitive
+   seventeen-family scan, the QG2 two-admission and exact `5*PR_c` reproofs,
+   the independent QG3 `3*PR_c` proof, and the frozen fail-closed
    arithmetic, ordering, independence, and action-base binding; and
-7. update the architecture/frontier ledgers only after all of QG3 passes, then
-   advance to R2d roots/runtime.
+7. **Done (2026-08-04).** Architecture/frontier ledgers updated on QG3
+   completion; the plan advances to R2d roots/runtime.
 
 “Identity” in item 5 means that the **total** flattened action is empty:
 
@@ -1909,8 +1918,10 @@ it does not reset the projection to the base candidate.
 ### 13.2 Enumerated closure ledger for the remaining QG3 cuts (registered 2026-08-04, per §5.7)
 
 S1c4 closed on its item-4 statement above (record §10.20). Items 5 and 6
-close exactly when every line below checks; any residue moves to R2d
-roots/runtime, never to a new S1c5/S1d sub-alphabet.
+closed 2026-08-04 (record §§10.21-10.22) with every line below checked by a
+final ledger audit; no residue was carried, and the rule that residue moves
+to R2d roots/runtime — never to a new S1c5/S1d sub-alphabet — was not
+needed.
 
 Item 5 — shared eight-group schema:
 

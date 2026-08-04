@@ -10,7 +10,8 @@ schemas, and A4-R2d QG1 plus QG2 entry, semantic-view, obligation
 core/stable-row, QG2-O2a carrier, complete O2b operation closures, QG2-O2c
 primary-route-census closure, item-2 complete unrooted-obligation closure,
 item-3 source-bundle/symbolic-path closure, and item-4 exact 8/11 subject
-closure, with QG3 support/action mirrors active; recorded 2026-08-03)
+closure, with QG3 closed 2026-08-04 (record sections 10.20-10.22) and the
+R2d roots/runtime cut active; recorded 2026-08-03, updated 2026-08-04)
 Scope: the complete repository, with emphasis on the current Law V2
 generative-capacity and selective-profile plan
 
@@ -69,7 +70,8 @@ JG1 frozen target-neutral role/obligation/receipt grammar — implemented
   -> JG2b2b2a-A4-R2c+C2 envelope/evidence/support/subject schemas — frozen
   -> JG2b2b2a-A4-R2d QG1 semantic mirrors — closed at schema-candidate level
   -> JG2b2b2a-A4-R2d QG2 entry/view/core + O2a/O2b/O2c + items 2–4 — closed
-  -> JG2b2b2a-A4-R2d QG3 support/disposition/action mirrors — active
+  -> JG2b2b2a-A4-R2d QG3 support/disposition/action mirrors — closed
+  -> JG2b2b2a-A4-R2d roots/runtime — active
   -> JG2b2b2a-A4-R3 failure/resource machine
   -> JG2b2b2a-A4-R2e registry/source-integration join
   -> JG2b2b2a-A4-R4 regenerated fixtures + mutations
@@ -207,7 +209,7 @@ Several theorem experiments are deliberately not root workspace members:
 | --- | --- | --- |
 | `pen-contextual-completion` | bounded generic prototype for a proposed contextual-completion principle | `pen-kernel` |
 | `pen-sealed-history` | kernel-only JG2b1b0 sealed-log lifecycle and authority protocol; no producer or history token | `pen-kernel` |
-| `pen-generative-audit` | isolated JG1 through particular-instance JG2b2b1 foundations, including the JG2b1b1 producer, JG2b1b2 complete-through-head verifier, protocol-only JG2b2a naturality entry gate, history-independent structural occurrence grammar, and two-aggregate-batch particular open typed substitution/context-morphism verifier; JG2b2b2-P0 and JG2b2b2a-A0 discharged, A1 common envelope, A2-O carrier/action substrate, A3-O constructor schemas, A4-R1 signature/source census, A4-R2a+C2 acyclic foundation, A4-R2b level-relation schemas, A3-C1, and A4-R2c+C2 frozen; A4-O RC1 rejected; A4-R2d QG1 and complete QG2, including the entry/semantic-view/obligation core-stable cuts, QG2-O2a carrier table, complete O2b operation cuts, QG2-O2c primary-route census, item-2 unrooted obligations, item-3 source-bundle/path translator, and item-4 exact 8/11 subjects, closed; QG3 support/disposition/action mirrors active; two cubical claim contracts open at A2-C, JG2b2b2b blocked by A4-R4, and no indexed-interface executable authority yet; planned ordinary JG2b2b2b--JG9 GCap stack | `pen-kernel`, `pen-sealed-history` |
+| `pen-generative-audit` | isolated JG1 through particular-instance JG2b2b1 foundations, including the JG2b1b1 producer, JG2b1b2 complete-through-head verifier, protocol-only JG2b2a naturality entry gate, history-independent structural occurrence grammar, and two-aggregate-batch particular open typed substitution/context-morphism verifier; JG2b2b2-P0 and JG2b2b2a-A0 discharged, A1 common envelope, A2-O carrier/action substrate, A3-O constructor schemas, A4-R1 signature/source census, A4-R2a+C2 acyclic foundation, A4-R2b level-relation schemas, A3-C1, and A4-R2c+C2 frozen; A4-O RC1 rejected; A4-R2d QG1 and complete QG2, including the entry/semantic-view/obligation core-stable cuts, QG2-O2a carrier table, complete O2b operation cuts, QG2-O2c primary-route census, item-2 unrooted obligations, item-3 source-bundle/path translator, and item-4 exact 8/11 subjects, closed; QG3 support/disposition/action mirrors closed 2026-08-04 (record sections 10.20-10.22) with the R2d roots/runtime cut active; two cubical claim contracts open at A2-C, JG2b2b2b blocked by A4-R4, and no indexed-interface executable authority yet; planned ordinary JG2b2b2b--JG9 GCap stack | `pen-kernel`, `pen-sealed-history` |
 | `pen-kernel-synthesis` | proof-carrying lambda/unit synthesis successor | `pen-kernel` |
 | `pen-production-wire` | dependency-free canonical cross-language byte grammar | none |
 | `pen-semantic-audit` | generic semantic, cost, rewrite, production-refinement, and correspondence prototype | `pen-kernel`, `pen-kernel-synthesis`, `pen-production-wire` |
@@ -1484,7 +1486,7 @@ flowchart LR
   JG2b2b2aA4R2b["A4-R2b early level-relation schemas frozen"]
   JG2b2b2aA3C1["A3-C1 expected-judgment corrigendum frozen"]
   JG2b2b2aA4R2c["A4-R2c+C2 envelope/evidence schemas frozen"]
-  JG2b2b2aA4R2d["A4-R2d QG1 + QG2 closed; QG3 support/action active"]
+  JG2b2b2aA4R2d["A4-R2d QG1-QG3 closed; roots/runtime active"]
   JG2b2b2aA4R3["A4-R3 failure/resource machine"]
   JG2b2b2aA4R2e["A4-R2e registry/source join"]
   JG2b2b2aA4R4["A4-R4 fixtures and mutations"]
@@ -2021,7 +2023,7 @@ Not yet implemented:
   QG2-O2a carrier, all O2b operation cuts, QG2-O2c's exact primary-route census,
   item-2's complete unrooted-obligation compiler, item-3's source-bundle/
   symbolic-path translator, and item-4's exact subject compiler are closed;
-  QG3 support/disposition/action mirrors are active; A2-C remains open and no
+  QG3 is closed (2026-08-04); the R2d roots/runtime cut is active; A2-C remains open and no
   executable JG2b2b2 authority
   exists yet);
 - the JG9 bootstrap and frozen two-positive-act prior `gamma/kappa` baseline;
